@@ -3,7 +3,7 @@
 int main()
 {
 	int error;
-	loop = 0;
+	int loop = 0;
   
 	error = 5;
 	
