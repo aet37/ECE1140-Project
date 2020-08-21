@@ -2,7 +2,7 @@
 
 int main()
 {
-	int error
+	int error;
 	loop = 0;
   
 	error = 5;
