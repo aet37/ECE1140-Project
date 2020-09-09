@@ -1,4 +1,4 @@
-#ECE 1140 Project
+# ECE 1140 Project
 
 This is the project for the semester for ECE 1140.
 
