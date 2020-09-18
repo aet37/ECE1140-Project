@@ -8,7 +8,7 @@ int main()
 	error = 5;
 
 	for(int i = 0; i < error; i++)
-	{ 
+	{
 		loop++;
 	}
 }
