@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  Check Coding Standard:
+  Check_Coding_Standard:
 
     runs-on: ubuntu-latest
     continue-on-error: true
