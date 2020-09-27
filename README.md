@@ -6,4 +6,5 @@ This is the first file that was added to the project. It is a README
 
 ## Build Status
 
-![Coding Standard](https://github.com/aet37/ECE1140-Project/workflows/Coding%20Standard/badge.svg)
+![C++ Coding Standard](https://github.com/aet37/ECE1140-Project/blob/badges/.github/badges/cpplint-badge.svg)
+![Python Coding Standard](https://github.com/aet37/ECE1140-Project/blob/badges/.github/badges/pylint-badge.svg)

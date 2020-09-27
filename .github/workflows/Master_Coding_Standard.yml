@@ -3,8 +3,6 @@ name: Coding Standard
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 jobs:
   Check_Coding_Standard:
@@ -20,4 +18,54 @@ jobs:
         python-version: 3.8
     
     - name: Run cpplint
-      run: bash scripts/run_cpplint.sh
+      id: cpplint
+      run: |
+        errors=`bash scripts/run_cpplint.sh | grep 'Total errors found:' | cut -f4 -d " "`
+        echo "##[set-output name=errors;]${errors}"
+        mkdir -p "${BADGE_PATH%/*}"
+        echo "##[set-output name=path;]${BADGE_PATH}"
+      env:
+        BADGE_PATH: .github/badges/cpplint-badge.svg
+
+    - name: Create cpplint badge
+      uses: emibcn/badge-action@v1
+      with:
+        label: 'C++ Coding Standard'
+        status: '${{ steps.cpplint.outputs.errors }} Errors'
+        color: 'green'
+        path: .github/badges/cpplint-badge.svg
+
+    - name: Run pylint
+      id: pylint
+      run: |
+        rating=`bash scripts/run_pylint.sh | grep 'Your code has been rated at' | cut -f7 -d " "`
+        echo "##[set-output name=rating;]${rating}"
+        mkdir -p "${BADGE_PATH%/*}"
+        echo "##[set-output name=path;]${BADGE_PATH}"
+      env:
+        BADGE_PATH: .github/badges/pylint-badge.svg
+
+    - name: Create pylint badge
+      uses: emibcn/badge-action@v1
+      with:
+        label: 'Python Coding Standard'
+        status: ${{ steps.pylint.outputs.rating }}
+        color: 'green'
+        path: .github/badges/pylint-badge.svg
+
+    - name: Commit badges
+      continue-on-error: true
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .github/badges/pylint-badge.svg
+        git add .github/badges/cpplint-badge.svg
+        git commit -m "Update Badges"
+
+    - name: Push badge commit
+      uses: ad-m/github-push-action@master
+      if: ${{ success() }}
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: badges
+        force: true
