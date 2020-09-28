@@ -45,7 +45,7 @@ def upload_sketch(path_to_sketch):
     if (upload_proc.returncode != 0):
         raise BaseException("Upload was not successful")
 
-    logger.info("Uploaded successfully")
+    logger.info("Uploaded successfully") 
 
 def main():
     """Main entry point of script."""
