@@ -88,7 +88,7 @@ def main():
     if args.initialize:
         run_initialization()
 
-    if not args.upload: 
+    if not args.upload:
         build_sketch(args.sketch)
 
     if not args.build:

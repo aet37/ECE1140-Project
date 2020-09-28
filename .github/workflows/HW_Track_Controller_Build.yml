@@ -24,4 +24,4 @@ jobs:
     - name: Build module
       run: |
         cd ${{ github.workspace }}/src/HWTrackController
-        python build_and_upload.py -b Main/
+        python build_and_upload.py -b -i Main/
