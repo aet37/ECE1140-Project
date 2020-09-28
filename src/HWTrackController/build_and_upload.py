@@ -35,9 +35,10 @@ def build_sketch(path_to_sketch):
     :param str path_to_sketch: Path to sketch to build
 
     """
-    logger.info("Building sketch {}".format(path_to_sketch))
+    logger.info("Building sketch %s", path_to_sketch)
 
-    build_proc = subprocess.Popen([ARDUINO_CLI, 'compile', '--fqbn', 'arduino:avr:mega', path_to_sketch])
+    build_proc = subprocess.Popen([ARDUINO_CLI, 'compile', '--fqbn',
+                                   'arduino:avr:mega', path_to_sketch])
     build_proc.wait()
 
     if build_proc.returncode != 0:
@@ -51,13 +52,14 @@ def upload_sketch(path_to_sketch):
     :param str path_to_sketch: Path to sketch to upload
 
     """
-    logger.info("Uploading sketch {}".format(path_to_sketch))
+    logger.info("Uploading sketch %s", path_to_sketch)
 
     board_check = subprocess.check_output([ARDUINO_CLI, 'board', 'list'])
     if board_check == b'No boards found.\n':
         raise BaseException("Board must be connected to upload")
 
-    upload_proc = subprocess.Popen([ARDUINO_CLI, 'upload', '-p', 'COM3', '--fqbn', 'arduino:avr:mega', path_to_sketch])
+    upload_proc = subprocess.Popen([ARDUINO_CLI, 'upload', '-p', 'COM3',
+                                    '--fqbn', 'arduino:avr:mega', path_to_sketch])
     upload_proc.wait()
 
     if upload_proc.returncode != 0:
