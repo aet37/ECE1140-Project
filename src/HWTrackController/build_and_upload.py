@@ -9,7 +9,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 EXIT_SUCCESS = 0
-ARDUINO_CLI = 'arduino-cli.exe'
+ARDUINO_CLI = 'arduino-cli'
 
 def build_sketch(path_to_sketch):
     """Builds the provided sketch using the Arduino CLI.
@@ -59,9 +59,6 @@ def main():
     argument_parser.add_argument('--upload', '-u', action='store_true',
                                  help='Just uploads the sketch')
     args = argument_parser.parse_args()
-
-    if not os.path.isfile(ARDUINO_CLI):
-        raise ValueError("Arduino CLI must be installed")
 
     if not os.path.isdir(args.sketch):
         raise ValueError("Sketch must be a file")

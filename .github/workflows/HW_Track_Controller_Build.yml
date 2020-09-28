@@ -19,12 +19,9 @@ jobs:
         python-version: 3.8
 
     - name: Install arduino-cli
-      run: |
-        cd src/HWTrackController
-        brew install arduino-cli
+      run: brew install arduino-cli
 
     - name: Build module
       run: |
-        pwd
         cd ${{ github.workspace }}/src/HWTrackController
         python build_and_upload.py -b Main/
