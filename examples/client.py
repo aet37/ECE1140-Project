@@ -1,5 +1,5 @@
 """Example client code."""
-import socket 
+import socket
 
 HOST = '3.23.104.34'  # The server's hostname or IP address
 PORT = 1234        # The port used by the server
