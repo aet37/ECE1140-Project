@@ -5,7 +5,7 @@
  */
 
 // SYSTEM INCLUDES
-// (None)
+#include <boost/bind.hpp>
 
 // C++ PROJECT INCLUDES
 #include "Server.hpp" // Header for class
@@ -22,10 +22,10 @@ void Server::HandleAccept(ConnectionHandler::pointer connection, const boost::sy
 void Server::StartAccept()
 {
     // socket
-    ConnectionHandler::pointer connection = ConnectionHandler::create(m_acceptor.get_io_service());
+    ConnectionHandler::pointer connection = ConnectionHandler::Create(m_acceptor.get_io_service());
 
     // asynchronous accept operation and wait for a new connection
-    m_acceptor.async_accept(connection->Socket(),
+    m_acceptor.async_accept(connection->GetSocket(),
                             boost::bind(&Server::HandleAccept, this, connection,
                             boost::asio::placeholders::error));
 }

@@ -7,17 +7,18 @@
 // C++ PROJECT INCLUDES
 #include "Server.hpp"
 
-
 int main()
 {
-	try
+    try
     {
-		boost::asio::io_service io_service;
-		Server server(io_service);
-		io_service.run();
+        boost::asio::io_service io_service;
+        Server server(io_service);
+        io_service.run();
     }
     catch (std::exception& e)
     {
-		std::cerr << e.what() << endl;
+        std::cerr << e.what() << std::endl;
     }
+
+    return 0;
 }

@@ -5,7 +5,7 @@
  */
 
 // SYSTEM INCLUDES
-// (None)
+#include <boost/bind.hpp>
 
 // C++ PROJECT INCLUDES
 #include "ConnectionHandler.hpp" // Header for class
@@ -27,28 +27,28 @@ void ConnectionHandler::Start()
 
 void ConnectionHandler::HandleRead(const boost::system::error_code& rErr, size_t bytesTransferred)
 {
-    if (!err)
+    if (!rErr)
     {
         // Just print out the received data
         std::cout << m_data << std::endl;
     }
     else
     {
-        std::cerr << "error: " << err.message() << std::endl;
+        std::cerr << "error: " << rErr.message() << std::endl;
         m_socket.close();
     }
 }
 
 void ConnectionHandler::HandleWrite(const boost::system::error_code& rErr, size_t bytesTransferred)
 {
-    if (!err)
+    if (!rErr)
     {
         // Just print out a message
         std::cout << "Server sent Hello Message!" << std::endl;
     }
     else
     {
-        std::cerr << "error: " << err.message() << endl;
+        std::cerr << "error: " << rErr.message() << std::endl;
         m_socket.close();
     }
 }
