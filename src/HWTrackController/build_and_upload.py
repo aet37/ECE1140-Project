@@ -13,7 +13,7 @@ ARDUINO_CLI = 'arduino-cli.exe'
 
 def build_sketch(path_to_sketch):
     """Builds the provided sketch using the Arduino CLI.
-    
+
     :param str path_to_sketch: Path to sketch to build
 
     """
@@ -29,7 +29,7 @@ def build_sketch(path_to_sketch):
 
 def upload_sketch(path_to_sketch):
     """Uploads the provided sketch using the Arduino CLI.
-    
+
     :param str path_to_sketch: Path to sketch to upload
 
     """
@@ -45,7 +45,7 @@ def upload_sketch(path_to_sketch):
     if (upload_proc.returncode != 0):
         raise BaseException("Upload was not successful")
 
-    logger.info("Uploaded successfully") 
+    logger.info("Uploaded successfully")
 
 def main():
     """Main entry point of script."""
