@@ -1,0 +1,24 @@
+name: Coding Standard
+
+on:
+  push:
+    paths:
+      'src/HWTrackController/**'
+
+jobs:
+  Build_HW_Track_Controller:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install arduino-cli
+      run: |
+        cd src/HWTrackController
+        brew install arduino-cli
