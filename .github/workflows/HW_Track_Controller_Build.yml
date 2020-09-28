@@ -24,4 +24,7 @@ jobs:
         brew install arduino-cli
 
     - name: Build module
-      run: python build_and_upload.py -b Main/
+      run: |
+        pwd
+        cd ${{ github.workspace }}/src/HWTrackController
+        python build_and_upload.py -b Main/

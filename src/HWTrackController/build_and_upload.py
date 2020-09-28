@@ -68,7 +68,7 @@ def main():
 
     logging.basicConfig(level=logging.INFO)
 
-    if not args.upload:
+    if not args.upload: 
         build_sketch(args.sketch)
 
     if not args.build:
