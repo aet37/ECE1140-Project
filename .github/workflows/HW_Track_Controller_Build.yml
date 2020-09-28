@@ -24,4 +24,4 @@ jobs:
         brew install arduino-cli
 
     - name: Build module
-      run: python build_and_upload -b Main/
+      run: python build_and_upload.py -b Main/
