@@ -58,7 +58,6 @@ def main():
                                  help='Just builds the sketch')
     argument_parser.add_argument('--upload', '-u', action='store_true',
                                  help='Just uploads the sketch')
-    argument_parser.add_argument('--verbose', '-v', action='store_true')
     args = argument_parser.parse_args()
 
     if not os.path.isfile(ARDUINO_CLI):

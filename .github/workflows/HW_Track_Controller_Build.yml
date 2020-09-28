@@ -1,4 +1,4 @@
-name: Coding Standard
+name: HW Track Controller Build
 
 on:
   push:
@@ -22,3 +22,6 @@ jobs:
       run: |
         cd src/HWTrackController
         brew install arduino-cli
+
+    - name: Build module
+      run: python build_and_upload -b Main/
