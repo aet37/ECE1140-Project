@@ -1,0 +1,27 @@
+name: HW Track Controller Build
+
+on:
+  push:
+    paths:
+      'src/HWTrackController/**'
+
+jobs:
+  Build_HW_Track_Controller:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install arduino-cli
+      run: brew install arduino-cli
+
+    - name: Build module
+      run: |
+        cd ${{ github.workspace }}/src/HWTrackController
+        python build_and_upload.py -b -i Main/
