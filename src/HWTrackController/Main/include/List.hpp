@@ -4,8 +4,8 @@
  * @brief Declarations and implementation for 
  * array backed list
 */
-#ifndef ARRAY_LIST_HPP
-#define ARRAY_LIST_HPP
+#ifndef LIST_HPP
+#define LIST_HPP
 
 // SYSTEM INCLUDES
 #include <assert.h>
@@ -28,7 +28,7 @@ public:
      * 
      * @param[in] initialSize Initial size of list
     */
-    List(uint32_t initialSize = 10) :
+    explicit List(uint32_t initialSize = 10) :
         m_length(0),
         m_arraySize(initialSize),
         m_list(new T[initialSize])
@@ -96,9 +96,7 @@ public:
     }
 
 protected:
-
 private:
-
     /// Number of elements in the list
     uint32_t m_length;
 
@@ -123,7 +121,6 @@ private:
         delete[] m_list;
         m_list = newList;
     }
-
 };
 
-#endif
+#endif // LIST_HPP

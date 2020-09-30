@@ -70,9 +70,7 @@ public:
     }
 
 protected:
-
 private:
-
     /// Period of task
     const uint32_t m_periodInMs;
 
@@ -81,7 +79,6 @@ private:
 
     /// Function of task
     TaskFunction m_taskFunction;
-
 };
 
 #endif // TASK_HPP

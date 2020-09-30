@@ -1,6 +1,6 @@
 /**
  * @file Scheduler.cpp
- * 
+ *
  * @brief Implementations of the Scheduler class
 */
 
@@ -22,7 +22,7 @@ void Scheduler::RunTasks()
     {
         Task* pTask = m_taskList[i];
 
-        // If it's 
+        // If it's
         if (currentTimeInMs - pTask->GetTimeLastRun() >= pTask->GetPeriod())
         {
             pTask->operator()();

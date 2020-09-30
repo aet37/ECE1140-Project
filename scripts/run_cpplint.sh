@@ -1,5 +1,5 @@
 pip install cpplint
-cpplint --recursive --filter=-legal/copyright,-whitespace/indent,-whitespace/tab,-whitespace/braces *
+cpplint --recursive --filter=-legal/copyright,-whitespace/indent,-whitespace/tab,-whitespace/braces,-build/header_guard,-whitespace/comments *
 
 # cpplint: https://github.com/cpplint/cpplint
 

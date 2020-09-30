@@ -22,7 +22,6 @@
 class Scheduler
 {
 public:
-
     /**
      * @brief Gets the singleton instance
     */
@@ -49,9 +48,7 @@ public:
     void RunTasks();
 
 protected:
-
 private:
-
     /// List of tasks
     List<Task*> m_taskList;
 
