@@ -8,7 +8,7 @@
 #include <Arduino.h>
 
 // C++ PROJECT INCLUDES
-#include "Scheduler.hpp" // Header for class
+#include "../include/Scheduler.hpp" // Header for class
 
 /// Current system time
 static uint64_t currentTimeInMs;
