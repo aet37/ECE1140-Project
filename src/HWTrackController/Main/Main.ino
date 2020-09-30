@@ -6,7 +6,7 @@
 #include <stdint.h> // For standard types
 
 // C++ PROJECT INCLUDES
-#include "src/Scheduler.hpp" // For Scheduler
+#include "include/Scheduler.hpp" // For Scheduler
 
 static uint64_t currentTime;
 
