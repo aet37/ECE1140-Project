@@ -9,7 +9,8 @@
 
 // C++ PROJECT INCLUDES
 #include "ConnectionHandler.hpp" // Header for class
-#include "RequestManager.hpp"
+#include "RequestManager.hpp" // For HWTrackController::RequestManager
+#include "Request.hpp" // For Request
 
 void ConnectionHandler::Start()
 {
@@ -18,15 +19,6 @@ void ConnectionHandler::Start()
                              shared_from_this(),
                              boost::asio::placeholders::error,
                              boost::asio::placeholders::bytes_transferred));
-
-    if (RequestManager::IsRequest())
-    {
-        m_message = "There's a request";
-    }
-    else
-    {
-        m_message = "fsfsdfs";
-    }
 }
 
 void ConnectionHandler::HandleRead(const boost::system::error_code& rErr, size_t bytesTransferred)
@@ -44,18 +36,12 @@ void ConnectionHandler::HandleRead(const boost::system::error_code& rErr, size_t
     // Just print out the received data
     std::cout << m_data << std::endl;
 
-    Command command;
-    try
-    {
-        command = static_cast<Command>(std::stoi(m_data));
-    }
-    catch (std::exception& e)
-    {
-        std::cerr << "Invalid command " << m_data << std::endl;
-        return;
-    }
+    // Parse the data into the request structure
+    Request req;
+    ParseRequest(req);
 
-    HandleCommand(command);
+    // Determine what needs done for this request
+    HandleRequest(req);
 
     m_socket.async_write_some(boost::asio::buffer(m_message, ConnectionHandler::MAX_LENGTH),
                               boost::bind(&ConnectionHandler::HandleWrite,
@@ -78,18 +64,36 @@ void ConnectionHandler::HandleWrite(const boost::system::error_code& rErr, size_
     }
 }
 
-void ConnectionHandler::HandleCommand(Command command)
+void ConnectionHandler::ParseRequest(Request& rReq)
 {
-    switch (command)
+    try
     {
-        case COMMAND_GET_SWITCH_POSITION:
+        rReq.reqCode = static_cast<RequestCode>(std::stoi(m_data));
+    }
+    catch (std::exception& e)
+    {
+        std::cerr << "Invalid command " << m_data << std::endl;
+        rReq.reqCode = RequestCode::ERROR;
+    }
+}
+
+void ConnectionHandler::HandleRequest(Request& rReq)
+{
+    switch (rReq.reqCode)
+    {
+        case RequestCode::SET_SWITCH_POSITION:
         {
-            RequestManager rm;
+            HWTrackController::RequestManager rm;
+            rm.AddRequest(rReq);
             break;
         }
+        case RequestCode::CHECK_FOR_HW_TRACK_CONTROLLER_REQUEST:
+            std::cout << HWTrackController::RequestManager::IsRequest() << std::endl;
+            m_message = HWTrackController::RequestManager::IsRequest();
+            break;
         default:
-            std::cerr << "Invalid command " << command << " received";
-            m_message = "Invalid Command " + command;
+            std::cerr << "Invalid command " << rReq.reqCode << " received" << std::endl;
+            m_message = "INVALID COMMAND";
             break;
     }
 }

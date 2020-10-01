@@ -4,6 +4,7 @@ find_package(Boost 1.53.0 COMPONENTS system)
 # Set include directory
 include_directories("${PROJECT_SOURCE_DIR}/include/Server")
 include_directories("${PROJECT_SOURCE_DIR}/include/HWTrackController")
+include_directories("${PROJECT_SOURCE_DIR}/include/Common")
 include_directories("${Boost_INCLUDE_DIRS}")
 
 # Add subdirectories

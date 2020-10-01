@@ -10,6 +10,14 @@
 #include <queue>
 
 // C++ PROJECT INCLUDES
+// (None)
+
+// FORWARD DECLARATIONS
+struct Response;
+struct Request;
+
+namespace HWTrackController
+{
 
 /**
  * @class RequestManager
@@ -20,27 +28,6 @@
 class RequestManager
 {
 public:
-
-    /**
-     * @struct Request
-     * 
-     * @brief Structure to hold request information
-    */
-    typedef struct Request
-    {
-        
-    } Request;
-
-    /**
-     * @struct Response
-     * 
-     * @brief Structure to hold response information
-    */
-    typedef struct Response
-    {
-
-    } Response;
-
     /**
      * @brief Constructs a new RequestManager object
     */
@@ -49,10 +36,10 @@ public:
     /**
      * @brief Adds a request to the queue
     */
-    void AddRequest(Request* pRequest);
+    void AddRequest(Request& rRequest);
 
     /**
-     * 
+     * @brief Is there a request on the queue?
     */
     static bool IsRequest()
     {
@@ -68,5 +55,7 @@ private:
     static std::queue<Response*> m_responseQueue;
 
 };
+
+} // namespace HWTrackController
 
 #endif // REQUEST_MANAGER_HPP
