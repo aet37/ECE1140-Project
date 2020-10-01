@@ -39,6 +39,11 @@ public:
     void AddRequest(Request& rRequest);
 
     /**
+     * 
+    */
+    Request* GetNextRequest();
+
+    /**
      * @brief Is there a request on the queue?
     */
     static bool IsRequest()

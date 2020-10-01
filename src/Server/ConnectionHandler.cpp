@@ -87,10 +87,21 @@ void ConnectionHandler::HandleRequest(Request& rReq)
             rm.AddRequest(rReq);
             break;
         }
-        case RequestCode::CHECK_FOR_HW_TRACK_CONTROLLER_REQUEST:
-            std::cout << HWTrackController::RequestManager::IsRequest() << std::endl;
-            m_message = HWTrackController::RequestManager::IsRequest();
+        case RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST:
+        {
+            HWTrackController::RequestManager rm;
+            Request* pNextRequest = rm.GetNextRequest();
+            if (pNextRequest != nullptr)
+            {
+                m_message = pNextRequest->reqCode;
+            }
+            else
+            {
+                m_message = static_cast<uint8_t>(0);
+            }
+            delete pNextRequest;
             break;
+        }
         default:
             std::cerr << "Invalid command " << rReq.reqCode << " received" << std::endl;
             m_message = "INVALID COMMAND";

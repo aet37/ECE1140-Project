@@ -26,4 +26,15 @@ void RequestManager::AddRequest(Request& rReq)
     m_requestQueue.push(pNewRequest);
 }
 
+Request* RequestManager::GetNextRequest()
+{
+    Request* pNextRequest = nullptr;
+    if (m_requestQueue.empty() != true)
+    {
+        pNextRequest = m_requestQueue.front();
+        m_requestQueue.pop();
+    }
+    return pNextRequest;
+}
+
 } // namespace HWTrackController
