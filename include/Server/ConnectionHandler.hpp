@@ -67,10 +67,18 @@ public:
     */
     void HandleWrite(const boost::system::error_code& rErr, size_t bytesTransferred);
 
+    /**
+     * @enum Command
+     * 
+     * @brief List of commands that can be sent to the server
+    */
+    enum Command
+    {
+        COMMAND_GET_SWITCH_POSITION = 0
+    };
+
 protected:
-
 private:
-
     /// TCP socket
     boost::asio::ip::tcp::socket m_socket;
 
@@ -82,6 +90,14 @@ private:
 
     /// Data (Client -> Server)
     char m_data[MAX_LENGTH];
+
+    /**
+     * @brief Determines what actions to take for a given command. This
+     * could include setting the reply message
+     * 
+     * @param command   Command that was received
+    */
+    void HandleCommand(Command command);
 };
 
 #endif // INCLUDE_CONNECTION_HANDLER_HPP_
