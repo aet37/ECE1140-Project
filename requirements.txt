@@ -1,0 +1,4 @@
+PySerial>=3.4
+cpplint>=1.5.4
+pylint>=2.6.0
+polling>=0.3.1
