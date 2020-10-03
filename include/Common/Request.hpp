@@ -35,23 +35,64 @@ enum class RequestCode : uint8_t
     GET_HW_TRACK_CONTROLLER_REQUEST = 3
 };
 
-/// Maximum number of bytes of data in a request.
-const uint16_t MAX_REQUEST_DATA_LENGTH_IN_BYTES = 1023;
-
 /**
- * @struct Request
+ * @class Request
  * 
  * @brief Structure used to hold the request code and
  * additional data
 */
-typedef struct Request
+class Request
 {
-    /// What the request is for
-    RequestCode reqCode;
+public:
+    /**
+     * @brief Constructs a new Request object
+    */
+    Request(RequestCode reqCode, std::string data) :
+        m_reqCode(reqCode),
+        m_data(data)
+    {}
+
+    Request() { Request(RequestCode::ERROR, ""); }
+    Request(RequestCode reqCode) { Request(reqCode, ""); }
+
+    /**
+     * @brief Sets the response code member
+    */
+    void SetRequestCode(RequestCode reqCode) { m_reqCode = reqCode; }
+
+    /**
+     * @brief Sets the data string member
+    */
+    void SetData(std::string data) { m_data = data; }
+
+    /**
+     * @brief Gets the request code member
+    */
+    RequestCode GetRequestCode() { return m_reqCode; }
+
+    /**
+     * @brief Writes data to the data string member
+    */
+    void AppendData(std::string& rData)
+    {
+        if (m_data == "")
+        {
+            m_data = rData;
+        }
+        else
+        {
+            m_data += " " + rData;
+        }
+    }
+
+protected:
+private:
+    /// Request code to designate what the request is for
+    RequestCode m_reqCode;
 
     /// Data to go along with request
-    uint8_t pData[MAX_REQUEST_DATA_LENGTH_IN_BYTES];
-} Request;
+    std::string m_data;
+};
 
 } // namespace Common
 

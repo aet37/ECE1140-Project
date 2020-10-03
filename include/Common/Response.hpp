@@ -35,6 +35,8 @@ enum class ResponseCode
 };
 
 /**
+ * @class Response
+ * 
  * @brief Structure used to hold response code and
  * any additional information for the response
 */

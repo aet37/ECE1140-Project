@@ -21,7 +21,7 @@ std::queue<Common::Response*> RequestManager::m_responseQueue = std::queue<Commo
 
 void RequestManager::HandleRequest(Common::Request& rRequest, Common::Response& rResponse)
 {
-    switch(rRequest.reqCode)
+    switch(rRequest.GetRequestCode())
     {
         case Common::RequestCode::SET_SWITCH_POSITION:
         {
@@ -44,7 +44,7 @@ void RequestManager::HandleRequest(Common::Request& rRequest, Common::Response& 
             break;
         }
         default:
-            std::cerr << "Invalid command " << static_cast<uint16_t>(rRequest.reqCode) << " received" << std::endl;
+            std::cerr << "Invalid command " << static_cast<uint16_t>(rRequest.GetRequestCode()) << " received" << std::endl;
             rResponse.SetData("INVALID COMMAND");
             return;
     }

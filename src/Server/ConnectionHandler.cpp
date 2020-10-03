@@ -69,19 +69,22 @@ void ConnectionHandler::ParseRequest(Common::Request& rReq)
 {
     try
     {
-        rReq.reqCode = static_cast<Common::RequestCode>(std::stoi(m_data));
+        rReq.SetRequestCode(static_cast<Common::RequestCode>(std::stoi(m_data)));
+
+        std::string data = std::string(&m_data[2]);
+        rReq.SetData(data);
     }
     catch (std::exception& e)
     {
         std::cerr << "Invalid command " << m_data << std::endl;
-        rReq.reqCode = Common::RequestCode::ERROR;
+        rReq.SetRequestCode(Common::RequestCode::ERROR);
     }
 }
 
 void ConnectionHandler::HandleRequest(Common::Request& rReq)
 {
     Common::Response resp;
-    switch (rReq.reqCode)
+    switch (rReq.GetRequestCode())
     {
         case Common::RequestCode::SET_SWITCH_POSITION:
         case Common::RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST:
@@ -91,7 +94,7 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
             break;
         }
         default:
-            std::cerr << "Invalid command " << static_cast<uint16_t>(rReq.reqCode) << " received" << std::endl;
+            std::cerr << "Invalid command " << static_cast<uint16_t>(rReq.GetRequestCode()) << " received" << std::endl;
             m_message = "INVALID COMMAND";
             return;
     }
