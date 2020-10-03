@@ -34,23 +34,72 @@ enum class ResponseCode
     SWITCH_POSITION = 1
 };
 
-/// Maximum number of bytes that can be sent in a response
-const uint16_t MAX_RESPONSE_DATA_LENGTH_IN_BYTES = 1023;
-
 /**
- * @struct Response
- * 
- * @brief Structure used to hold the response code and
+ * @brief Structure used to hold response code and
  * any additional information for the response
 */
-typedef struct Response
+class Response
 {
-    /// What the response is of
-    ResponseCode respCode;
+public:
+    /**
+     * @brief Constructs a new Response object
+    */
+    Response(ResponseCode respCode, std::string data) :
+        m_respCode(respCode),
+        m_data(data)
+    {}
 
-    /// Data to go along with response
-    uint8_t pData[MAX_RESPONSE_DATA_LENGTH_IN_BYTES];
-} Response;
+    Response() { Response(ResponseCode::ERROR, ""); }
+    Response(ResponseCode respCode) { Response(respCode, ""); }
+
+    /**
+     * @brief Sets the response code member
+    */
+    void SetResponseCode(ResponseCode respCode) { m_respCode = respCode; }
+
+    /**
+     * @brief Sets the data string member
+    */
+    void SetData(std::string data) { m_data = data; }
+
+    /**
+     * @brief Writes data to the data string member
+    */
+    void AppendData(std::string& rData)
+    {
+        if (m_data == "")
+        {
+            m_data = rData;
+        }
+        else
+        {
+            m_data += " " + rData;
+        }
+    }
+
+    /**
+     * @brief Converts the object to a single string
+    */
+    std::string ToString()
+    {
+        if (m_data == "")
+        {
+            return std::to_string(static_cast<uint8_t>(m_respCode));
+        }
+        else
+        {
+            return std::to_string(static_cast<uint8_t>(m_respCode)) + " " + m_data;
+        }
+    }
+
+protected:
+private:
+    /// Response code associated with the response
+    ResponseCode m_respCode;
+
+    /// Data to go along with the response
+    std::string m_data;
+};
 
 } // namespace Common
 

@@ -26,7 +26,7 @@ void RequestManager::HandleRequest(Common::Request& rRequest, Common::Response& 
         case Common::RequestCode::SET_SWITCH_POSITION:
         {
             AddRequest(rRequest);
-            rResponse.respCode = Common::ResponseCode::SUCCESS;
+            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
         case Common::RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST:
@@ -34,18 +34,18 @@ void RequestManager::HandleRequest(Common::Request& rRequest, Common::Response& 
             Common::Request* pNextRequest = GetNextRequest();
             if (pNextRequest != nullptr)
             {
-                rResponse.respCode = Common::ResponseCode::SUCCESS;
+                rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
                 delete pNextRequest;
             }
             else
             {
-                rResponse.respCode = Common::ResponseCode::ERROR;
+                rResponse.SetResponseCode(Common::ResponseCode::ERROR);
             }
             break;
         }
         default:
             std::cerr << "Invalid command " << static_cast<uint16_t>(rRequest.reqCode) << " received" << std::endl;
-            snprintf(reinterpret_cast<char*>(rResponse.pData), Common::MAX_RESPONSE_DATA_LENGTH_IN_BYTES, "INVALID COMMAND");
+            rResponse.SetData("INVALID COMMAND");
             return;
     }
 }

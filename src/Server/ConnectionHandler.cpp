@@ -96,5 +96,5 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
             return;
     }
 
-    m_message = std::string(reinterpret_cast<char*>(&resp), sizeof(resp));
+    m_message = resp.ToString();
 }
