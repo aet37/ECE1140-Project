@@ -10,7 +10,8 @@
 // C++ PROJECT INCLUDES
 #include "ConnectionHandler.hpp" // Header for class
 #include "RequestManager.hpp" // For HWTrackController::RequestManager
-#include "Request.hpp" // For Request
+#include "Request.hpp" // For Common::Request
+#include "Response.hpp" // For Common::Response
 
 void ConnectionHandler::Start()
 {
@@ -34,10 +35,10 @@ void ConnectionHandler::HandleRead(const boost::system::error_code& rErr, size_t
     m_data[bytesTransferred] = '\0';
 
     // Just print out the received data
-    std::cout << m_data << std::endl;
+    std::cout << "Server recieved " << m_data << std::endl;
 
     // Parse the data into the request structure
-    Request req;
+    Common::Request req;
     ParseRequest(req);
 
     // Determine what needs done for this request
@@ -55,7 +56,7 @@ void ConnectionHandler::HandleWrite(const boost::system::error_code& rErr, size_
     if (!rErr)
     {
         // Just print out a message
-        std::cout << "Server sent Hello Message!" << std::endl;
+        std::cout << "Server sent " << m_message << std::endl;
     }
     else
     {
@@ -64,47 +65,36 @@ void ConnectionHandler::HandleWrite(const boost::system::error_code& rErr, size_
     }
 }
 
-void ConnectionHandler::ParseRequest(Request& rReq)
+void ConnectionHandler::ParseRequest(Common::Request& rReq)
 {
     try
     {
-        rReq.reqCode = static_cast<RequestCode>(std::stoi(m_data));
+        rReq.reqCode = static_cast<Common::RequestCode>(std::stoi(m_data));
     }
     catch (std::exception& e)
     {
         std::cerr << "Invalid command " << m_data << std::endl;
-        rReq.reqCode = RequestCode::ERROR;
+        rReq.reqCode = Common::RequestCode::ERROR;
     }
 }
 
-void ConnectionHandler::HandleRequest(Request& rReq)
+void ConnectionHandler::HandleRequest(Common::Request& rReq)
 {
+    Common::Response resp;
     switch (rReq.reqCode)
     {
-        case RequestCode::SET_SWITCH_POSITION:
+        case Common::RequestCode::SET_SWITCH_POSITION:
+        case Common::RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST:
         {
             HWTrackController::RequestManager rm;
-            rm.AddRequest(rReq);
-            break;
-        }
-        case RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST:
-        {
-            HWTrackController::RequestManager rm;
-            Request* pNextRequest = rm.GetNextRequest();
-            if (pNextRequest != nullptr)
-            {
-                m_message = pNextRequest->reqCode;
-            }
-            else
-            {
-                m_message = static_cast<uint8_t>(0);
-            }
-            delete pNextRequest;
+            rm.HandleRequest(rReq, resp);
             break;
         }
         default:
-            std::cerr << "Invalid command " << rReq.reqCode << " received" << std::endl;
+            std::cerr << "Invalid command " << static_cast<uint16_t>(rReq.reqCode) << " received" << std::endl;
             m_message = "INVALID COMMAND";
-            break;
+            return;
     }
+
+    m_message = std::string(reinterpret_cast<char*>(&resp), sizeof(resp));
 }

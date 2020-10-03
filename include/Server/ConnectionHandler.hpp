@@ -12,7 +12,10 @@
 // (None)
 
 // FORWARD DECLARATIONS
+namespace Common
+{
 struct Request;
+}
 
 class ConnectionHandler : public boost::enable_shared_from_this<ConnectionHandler>
 {
@@ -84,7 +87,7 @@ private:
     /**
      * 
     */
-    void ParseRequest(Request& rReq);
+    void ParseRequest(Common::Request& rReq);
 
     /**
      * @brief Determines what actions to take for a given request. This
@@ -92,7 +95,7 @@ private:
      * 
      * @param rReq   Request that was received
     */
-    void HandleRequest(Request& rReq);
+    void HandleRequest(Common::Request& rReq);
 };
 
 #endif // INCLUDE_CONNECTION_HANDLER_HPP_
