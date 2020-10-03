@@ -48,7 +48,9 @@ def get_response_from_controller():
     :rtype: bytes
     """
     arduino.flushInput()
-    return arduino.readline()
+    response = arduino.readline()
+    logger.info("Response from controller %s", response)
+    return response
 
 def send_reponse_to_server(response):
     """Sends response of the controller back to the server.
@@ -60,7 +62,7 @@ def send_reponse_to_server(response):
         sock.sendall(SEND_HW_TRACK_CONTROLLER_RESPONSE)
         data = sock.recv(1024)
 
-    if data != b'\x00':
+    if data != b'0':
         logger.error("Error response from server")
 
 def main():
@@ -84,7 +86,7 @@ def main():
                                step=0.5,
                                poll_forever=True,
                                ignore_exceptions=ConnectionRefusedError,
-                               check_success=lambda x: x != b'\x00')
+                               check_success=lambda x: x != b'1')
         logger.info("Request found : %s", request)
 
         # Forward the request to the controller
