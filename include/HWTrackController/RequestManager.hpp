@@ -51,7 +51,7 @@ public:
     void AddRequest(Common::Request& rRequest);
 
     /**
-     * 
+     * @brief Obtains the next request from the queue
     */
     Common::Request* GetNextRequest();
 
@@ -70,7 +70,6 @@ private:
 
     /// Queue for responses from the hardware
     static std::queue<Common::Response*> m_responseQueue;
-
 };
 
 } // namespace HWTrackController
