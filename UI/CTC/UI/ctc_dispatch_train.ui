@@ -113,36 +113,17 @@ color: rgb(255, 255, 255);</string>
      <string>(In format hh:mm)</string>
     </property>
    </widget>
-   <widget class="QRadioButton" name="BlueLineRadio">
+   <widget class="QLabel" name="ConfirmationLabel">
     <property name="geometry">
      <rect>
-      <x>280</x>
-      <y>130</y>
-      <width>100</width>
-      <height>20</height>
+      <x>250</x>
+      <y>370</y>
+      <width>311</width>
+      <height>21</height>
      </rect>
     </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(15, 128, 255);</string>
-    </property>
     <property name="text">
-     <string>Blue Line</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="GreenLineRadio">
-    <property name="geometry">
-     <rect>
-      <x>430</x>
-      <y>130</y>
-      <width>100</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(33, 255, 128);</string>
-    </property>
-    <property name="text">
-     <string>Green Line</string>
+     <string/>
     </property>
    </widget>
   </widget>

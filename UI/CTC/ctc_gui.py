@@ -1,5 +1,5 @@
 import os
-from PyQt5 import QtWidgets, uic
+from PyQt5 import QtWidgets, uic, QtCore
 import sys
 
 # GLOBALS
@@ -31,9 +31,11 @@ class Ui(QtWidgets.QMainWindow):
 		self.show()
 
 
-	############################
+	#######################################################################################################################################
+	#######################################################################################################################################
 	# Opens Load Schedule Page
-	############################
+	#######################################################################################################################################
+	#######################################################################################################################################
 	def LoadScheduleWindow(self):
 		uic.loadUi('UI/ctc_schedule_import.ui', self)
 		self.setWindowTitle("CTC - Load Schedule")
@@ -42,9 +44,11 @@ class Ui(QtWidgets.QMainWindow):
 		self.button.clicked.connect(self.returnToMainWindow)
 
 
-	############################
+	#######################################################################################################################################
+	#######################################################################################################################################
 	# Opens Edit Schedule Page
-	############################
+	#######################################################################################################################################
+	#######################################################################################################################################
 	def EditScheduleWindow(self):
 		uic.loadUi('UI/ctc_schedule_edit.ui', self)
 		self.setWindowTitle("CTC - Edit Schedule")
@@ -59,9 +63,11 @@ class Ui(QtWidgets.QMainWindow):
 
 
 
-	###############################
+	#######################################################################################################################################
+	#######################################################################################################################################
 	# Opens Dispatch Train Window
-	###############################
+	#######################################################################################################################################
+	#######################################################################################################################################
 	def DispatchTrainWindow(self):
 
 		uic.loadUi('UI/ctc_dispatch_train.ui', self)
@@ -70,27 +76,69 @@ class Ui(QtWidgets.QMainWindow):
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
 		self.button.clicked.connect(self.returnToMainWindow)
 
-		self.blue_radio_button = self.findChild(QtWidgets.QRadioButton, 'BlueLineRadio') # Find the radio button
-		self.green_radio_button = self.findChild(QtWidgets.QRadioButton, 'GreenLineRadio') # Find the radio button
+		self.d_block_label = self.findChild(QtWidgets.QLineEdit, 'BlockInput') # Find the text input
+		self.d_time_label = self.findChild(QtWidgets.QLineEdit, 'TimeInput') # Find the input
 
-		self.d_block_label = self.findChild(QtWidgets.QLineEdit, 'BlockInput') # Find the label
-		self.d_time_label = self.findChild(QtWidgets.QLineEdit, 'TimeInput') # Find the label
+		self.d_conf_label = self.findChild(QtWidgets.QLabel, 'ConfirmationLabel') # Find the label
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'DispatchButton') # Find the button
 		self.button.clicked.connect(self.DispatchTrain)
 
 
 	def DispatchTrain(self):
-		print(self.d_block_label.text(), '   ', self.d_time_label.text())
+		# Error Check block value
+		try:
+			int(self.d_block_label.text())
+		except:
+			self.d_conf_label.setStyleSheet("color: red")
+			self.d_conf_label.setText('Error: Invalid Block Entered')
+			return
 
-		if(self.blue_radio_button.isChecked()):
-			print('BLUE')
-		if(self.green_radio_button.isChecked()):
-			print('GREEN')
+		# Error Check time values
+		try:
+			int(self.d_time_label.text()[0] + self.d_time_label.text()[1])
+		except:
+			self.d_conf_label.setStyleSheet("color: red")
+			self.d_conf_label.setText('Error: Invalid Time Entered')
+			return
+		try:
+			int(self.d_time_label.text()[3] + self.d_time_label.text()[4])
+		except:
+			self.d_conf_label.setStyleSheet("color: red")
+			self.d_conf_label.setText('Error: Invalid Time Entered')
+			return
 
-	############################
+		# Error Check for time value
+		if(len(self.d_time_label.text()) != 5):
+			self.d_conf_label.setStyleSheet("color: red")
+			self.d_conf_label.setText('Error: Invalid Time Entered')
+			return
+		elif(int(self.d_time_label.text()[0] + self.d_time_label.text()[1]) not in range(1, 13)):
+			self.d_conf_label.setStyleSheet("color: red")
+			self.d_conf_label.setText('Error: Invalid Time Entered')
+			return
+		elif(int(self.d_time_label.text()[3] + self.d_time_label.text()[4]) not in range(60)):
+			self.d_conf_label.setStyleSheet("color: red")
+			self.d_conf_label.setText('Error: Invalid Time Entered')
+			return
+		# Error Check for block value
+		elif((int(self.d_block_label.text()) < 0) | (len(self.d_block_label.text()) == 0)):
+			self.d_conf_label.setStyleSheet("color: red")
+			self.d_conf_label.setText('Error: Invalid Block Entered')
+			return
+
+		# Print confirmation to screen and take actions if information valid
+		else:
+			self.d_conf_label.setStyleSheet("color: green")
+			self.d_conf_label.setText('Train Dispatched to Block ' + self.d_block_label.text() + ' at ' + self.d_time_label.text())
+
+		
+
+	#######################################################################################################################################
+	#######################################################################################################################################
 	# Opens Map Window
-	############################
+	#######################################################################################################################################
+	#######################################################################################################################################
 	def MapWindow(self):
 		uic.loadUi('UI/ctc_view_map.ui', self)
 		self.setWindowTitle("CTC - View Map")
@@ -121,16 +169,20 @@ class Ui(QtWidgets.QMainWindow):
 		self.tplabel = self.findChild(QtWidgets.QLabel, 'ThroughputValue') # Find the label
 
 
-	#############################
+	#######################################################################################################################################
+	#######################################################################################################################################
 	# Toggle for Automatic Mode
-	#############################
+	#######################################################################################################################################
+	#######################################################################################################################################
 	def ToggleAutomaicMode(self):
 		return None
 		#app.exit()
 
-	############################
+	#######################################################################################################################################
+	#######################################################################################################################################
 	# Exits the Module
-	############################
+	#######################################################################################################################################
+	#######################################################################################################################################
 	def ExitModule(self):
 		app.exit()
 
