@@ -28,7 +28,7 @@ namespace Common
  * @li Software Train Controller: 192 - 223
  * @li Hardware Train Controller: 224 - 255
 */
-enum class ResponseCode
+enum class ResponseCode : uint8_t
 {
     SUCCESS = 0,
     ERROR = 1,
@@ -60,6 +60,11 @@ public:
      * @brief Sets the response code member
     */
     void SetResponseCode(const ResponseCode respCode) { m_respCode = respCode; }
+
+    /**
+     * @brief Gets the response code member
+    */
+    ResponseCode GetResponseCode() const { return m_respCode; }
 
     /**
      * @brief Sets the data string member

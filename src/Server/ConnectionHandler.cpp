@@ -70,10 +70,16 @@ void ConnectionHandler::ParseRequest(Common::Request& rReq)
 {
     try
     {
-        rReq.SetRequestCode(static_cast<Common::RequestCode>(std::stoi(m_data)));
+        // Convert data to an string
+        std::string data = std::string(m_data);
+        std::string requestCode = data.substr(0, data.find_first_of(" "));
+        std::string additionalData = data.substr(data.find_first_of(" ") + 1);
 
-        std::string data = std::string(&m_data[2]);
-        rReq.SetData(data);
+        // First characters should be the request code
+        rReq.SetRequestCode(static_cast<Common::RequestCode>(std::stoi(requestCode)));
+
+        // Place the additional data into the data field of the request
+        rReq.SetData(additionalData);
     }
     catch (std::exception& e)
     {
@@ -88,7 +94,10 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
     switch (rReq.GetRequestCode())
     {
         case Common::RequestCode::SET_SWITCH_POSITION:
+        case Common::RequestCode::GET_SWITCH_POSITION:
         case Common::RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST:
+        case Common::RequestCode::SEND_HW_TRACK_CONTROLLER_RESPONSE:
+        case Common::RequestCode::GET_HW_TRACK_CONTROLLER_RESPONSE:
         {
             HWTrackController::RequestManager rm;
             rm.HandleRequest(rReq, resp);
