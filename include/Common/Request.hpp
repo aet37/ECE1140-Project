@@ -30,10 +30,13 @@ namespace Common
 */
 enum class RequestCode : uint8_t
 {
-    ERROR = 0,
-    SET_SWITCH_POSITION = 1,
-    GET_SWITCH_POSITION = 2,
-    GET_HW_TRACK_CONTROLLER_REQUEST = 3
+    ERROR = 1,
+    LOGIN = 2,
+
+    SET_SWITCH_POSITION = 96,
+    GET_SWITCH_POSITION = 97,
+    GET_HW_TRACK_CONTROLLER_REQUEST = 100,
+    SEND_HW_TRACK_CONTROLLER_RESPONSE = 101
 };
 
 /**

@@ -32,7 +32,8 @@ enum class ResponseCode
 {
     SUCCESS = 0,
     ERROR = 1,
-    SWITCH_POSITION = 1
+    
+    SWITCH_POSITION = 96
 };
 
 /**

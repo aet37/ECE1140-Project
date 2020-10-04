@@ -95,7 +95,7 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
             break;
         }
         default:
-            std::cerr << "Invalid command " << static_cast<uint16_t>(rReq.GetRequestCode()) << " received" << std::endl;
+            std::cerr << "Invalid command " << m_data << " received" << std::endl;
             m_message = "INVALID COMMAND";
             return;
     }
