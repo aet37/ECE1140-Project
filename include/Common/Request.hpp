@@ -8,6 +8,7 @@
 
 // SYSTEM INCLUDES
 #include <stdint.h>
+#include <string>
 
 namespace Common
 {
@@ -53,7 +54,7 @@ public:
     {}
 
     Request() { Request(RequestCode::ERROR, ""); }
-    Request(RequestCode reqCode) { Request(reqCode, ""); }
+    explicit Request(RequestCode reqCode) { Request(reqCode, ""); }
 
     /**
      * @brief Sets the response code member
@@ -73,7 +74,7 @@ public:
     /**
      * @brief Writes data to the data string member
     */
-    void AppendData(std::string& rData)
+    void AppendData(const std::string& rData)
     {
         if (m_data == "")
         {

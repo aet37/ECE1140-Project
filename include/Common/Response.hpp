@@ -8,6 +8,7 @@
 
 // SYSTEM INCLUDES
 #include <stdint.h>
+#include <string>
 
 namespace Common
 {
@@ -52,7 +53,7 @@ public:
     {}
 
     Response() { Response(ResponseCode::ERROR, ""); }
-    Response(ResponseCode respCode) { Response(respCode, ""); }
+    explicit Response(ResponseCode respCode) { Response(respCode, ""); }
 
     /**
      * @brief Sets the response code member

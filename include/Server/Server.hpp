@@ -28,7 +28,7 @@ public:
      *
      * @param io_service
      */
-    Server(boost::asio::io_service& io_service) :
+    explicit Server(boost::asio::io_service& io_service) :
         m_acceptor(io_service, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 1234))
     {
         StartAccept();
@@ -43,7 +43,6 @@ public:
     void HandleAccept(ConnectionHandler::pointer connection, const boost::system::error_code& rErr);
 
 protected:
-
 private:
     /// Acceptor object for server
     boost::asio::ip::tcp::acceptor m_acceptor;
