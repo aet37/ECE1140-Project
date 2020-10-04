@@ -29,16 +29,24 @@ def run_initialization():
 
     logger.info("Finished initialization successfully")
 
-def build_sketch(path_to_sketch):
+def build_sketch(path_to_sketch, debug):
     """Builds the provided sketch using the Arduino CLI.
 
     :param str path_to_sketch: Path to sketch to build
+    :param bool debug: Whether to build with the debug flag
 
     """
     logger.info("Building sketch %s", path_to_sketch)
 
-    build_proc = subprocess.Popen([ARDUINO_CLI, 'compile', '--fqbn',
-                                   'arduino:avr:mega', path_to_sketch])
+    if debug:
+        arguments = [ARDUINO_CLI, 'compile', '--fqbn',
+                     'arduino:avr:mega', path_to_sketch,
+                     '--build-properties', 'build.extra_flags=-DDEBUGENABLE']
+    else:
+        arguments = [ARDUINO_CLI, 'compile', '--fqbn',
+                     'arduino:avr:mega', path_to_sketch]
+
+    build_proc = subprocess.Popen(arguments)
     build_proc.wait()
 
     if build_proc.returncode != 0:
@@ -76,6 +84,8 @@ def main():
     argument_parser.add_argument('sketch', help='Sketch to build and upload')
     argument_parser.add_argument('--build', '-b', action='store_true',
                                  help='Just builds the sketch')
+    argument_parser.add_argument('--debug', '-d', action='store_true',
+                                 help='Sets the DEBUGENABLE build flag')
     argument_parser.add_argument('--upload', '-u', action='store_true',
                                  help='Just uploads the sketch')
     argument_parser.add_argument('--initialize', '-i', action='store_true',
@@ -91,7 +101,7 @@ def main():
         run_initialization()
 
     if not args.upload:
-        build_sketch(args.sketch)
+        build_sketch(args.sketch, args.debug)
 
     if not args.build:
         upload_sketch(args.sketch)
