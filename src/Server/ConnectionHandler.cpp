@@ -5,6 +5,7 @@
  */
 
 // SYSTEM INCLUDES
+#include <iostream>
 #include <boost/bind.hpp>
 
 // C++ PROJECT INCLUDES
