@@ -3,9 +3,10 @@
 */
 
 // SYSTEM INCLUDES
+#include <iostream> // For std::cerr
 
 // C++ PROJECT INCLUDES
-#include "Server.hpp"
+#include "Server.hpp" // For Server
 
 int main()
 {

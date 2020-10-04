@@ -5,6 +5,7 @@
 #define INCLUDE_CONNECTION_HANDLER_HPP_
 
 // SYSTEM INCLUDES
+#include <string>
 #include <boost/asio.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
@@ -12,7 +13,10 @@
 // (None)
 
 // FORWARD DECLARATIONS
-// (None)
+namespace Common
+{
+struct Request;
+}
 
 class ConnectionHandler : public boost::enable_shared_from_this<ConnectionHandler>
 {
@@ -22,7 +26,7 @@ public:
     /**
      * @brief Creates a new ConnectionHandler object
     */
-    ConnectionHandler(boost::asio::io_service& rIoService) :
+    explicit ConnectionHandler(boost::asio::io_service& rIoService) :
         m_socket(rIoService)
     {}
 
@@ -68,9 +72,7 @@ public:
     void HandleWrite(const boost::system::error_code& rErr, size_t bytesTransferred);
 
 protected:
-
 private:
-
     /// TCP socket
     boost::asio::ip::tcp::socket m_socket;
 
@@ -82,6 +84,19 @@ private:
 
     /// Data (Client -> Server)
     char m_data[MAX_LENGTH];
+
+    /**
+     * 
+    */
+    void ParseRequest(Common::Request& rReq);
+
+    /**
+     * @brief Determines what actions to take for a given request. This
+     * could include setting the reply message
+     * 
+     * @param rReq   Request that was received
+    */
+    void HandleRequest(Common::Request& rReq);
 };
 
 #endif // INCLUDE_CONNECTION_HANDLER_HPP_
