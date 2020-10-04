@@ -16,8 +16,7 @@ jobs:
     - name: Run CMake
       run: |
         mkdir build
-        cd build
-        cmake ..
+        cmake -Bbuild -H.
 
     - name: Build
-      run: make
+      run: cmake --build build/ --target all
