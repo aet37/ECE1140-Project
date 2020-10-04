@@ -6,7 +6,7 @@ This is the first file that was added to the project. It is a README
 
 ## Build Status
 
-![HW Track Controller Build](https://github.com/aet37/ECE1140-Project/workflows/HW%20Track%20Controller%20Build/badge.svg)
+![Full Build](https://github.com/aet37/ECE1140-Project/workflows/System%20Build/badge.svg)
 
 ## Coding Standard Status
 
