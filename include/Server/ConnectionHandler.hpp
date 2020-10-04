@@ -5,6 +5,7 @@
 #define INCLUDE_CONNECTION_HANDLER_HPP_
 
 // SYSTEM INCLUDES
+#include <string>
 #include <boost/asio.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
@@ -25,7 +26,7 @@ public:
     /**
      * @brief Creates a new ConnectionHandler object
     */
-    ConnectionHandler(boost::asio::io_service& rIoService) :
+    explicit ConnectionHandler(boost::asio::io_service& rIoService) :
         m_socket(rIoService)
     {}
 

@@ -17,8 +17,8 @@ arduino = serial.Serial(SERIAL_PORT, RATE, timeout=5)
 # Communications with server
 HOST = '3.23.104.34'
 SERVER_PORT = 1234
-GET_HW_TRACK_CONTROLLER_REQUEST = b'3'
-SEND_HW_TRACK_CONTROLLER_RESPONSE = b'4'
+GET_HW_TRACK_CONTROLLER_REQUEST = b'100'
+SEND_HW_TRACK_CONTROLLER_RESPONSE = b'101'
 
 def get_request():
     """Retrieves a request from the server.
@@ -83,7 +83,7 @@ def main():
     # Continually check and fulfill requests
     while True:
         request = polling.poll(get_request,
-                               step=0.5,
+                               step=1,
                                poll_forever=True,
                                ignore_exceptions=ConnectionRefusedError,
                                check_success=lambda x: x != b'1')

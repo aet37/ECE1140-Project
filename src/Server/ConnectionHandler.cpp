@@ -5,8 +5,8 @@
  */
 
 // SYSTEM INCLUDES
-#include <boost/bind.hpp>
 #include <iostream>
+#include <boost/bind.hpp>
 
 // C++ PROJECT INCLUDES
 #include "ConnectionHandler.hpp" // Header for class
