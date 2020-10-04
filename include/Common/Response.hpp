@@ -53,8 +53,13 @@ public:
         m_data(data)
     {}
 
-    Response() { Response(ResponseCode::ERROR, ""); }
-    explicit Response(ResponseCode respCode) { Response(respCode, ""); }
+    Response() :
+        Response(ResponseCode::ERROR, "")
+    {}
+    
+    explicit Response(ResponseCode respCode) :
+        Response(respCode, "")
+    {}
 
     /**
      * @brief Sets the response code member

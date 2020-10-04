@@ -25,12 +25,14 @@ void RequestManager::HandleRequest(Common::Request& rRequest, Common::Response& 
     {
         case Common::RequestCode::SET_SWITCH_POSITION:
         {
+            // Add the request to the queue
             AddRequest(rRequest);
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
         case Common::RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST:
         {
+            // Retrieve the next request from the request queue
             Common::Request* pNextRequest = GetNextRequest();
             if (pNextRequest != nullptr)
             {
@@ -40,21 +42,22 @@ void RequestManager::HandleRequest(Common::Request& rRequest, Common::Response& 
             }
             else
             {
+                // Respond with error if there is none
                 rResponse.SetResponseCode(Common::ResponseCode::ERROR);
             }
             break;
         }
         case Common::RequestCode::SEND_HW_TRACK_CONTROLLER_RESPONSE:
         {
-            std::cout << std::stoi(rRequest.GetData()) << std::endl;
+            // Construct a response from the request's data and add it to the queue
             Common::Response resp(static_cast<Common::ResponseCode>(std::stoi(rRequest.GetData())));
-            std::cout << "Response code now: " << static_cast<uint16_t>(resp.GetResponseCode()) << std::endl;
             AddResponse(resp);
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
         case Common::RequestCode::GET_HW_TRACK_CONTROLLER_RESPONSE:
         {
+            // Retrieve a response from the queue
             Common::Response* pNextResponse = GetNextResponse();
             if (pNextResponse != nullptr)
             {
@@ -63,6 +66,7 @@ void RequestManager::HandleRequest(Common::Request& rRequest, Common::Response& 
             }
             else
             {
+                // Respond with error if there are none
                 rResponse.SetResponseCode(Common::ResponseCode::ERROR);
             }
             break;
@@ -77,6 +81,7 @@ void RequestManager::HandleRequest(Common::Request& rRequest, Common::Response& 
 
 void RequestManager::AddRequest(Common::Request& rReq)
 {
+    // Use heap memory so it can stay in the queue
     Common::Request* pNewRequest = new Common::Request();
     *(pNewRequest) = rReq;
     m_requestQueue.push(pNewRequest);
@@ -95,6 +100,7 @@ Common::Request* RequestManager::GetNextRequest()
 
 void RequestManager::AddResponse(Common::Response& rResp)
 {
+    // Use heap memory so it can stay in the queue
     Common::Response* pNewResponse = new Common::Response();
     *(pNewResponse) = rResp;
     m_responseQueue.push(pNewResponse);

@@ -57,8 +57,13 @@ public:
         m_data(data)
     {}
 
-    Request() { Request(RequestCode::ERROR, ""); }
-    explicit Request(RequestCode reqCode) { Request(reqCode, ""); }
+    Request() :
+        Request(RequestCode::ERROR, "")
+    {}
+
+    explicit Request(RequestCode reqCode) :
+        Request(reqCode, "")
+    {}
 
     /**
      * @brief Sets the response code member

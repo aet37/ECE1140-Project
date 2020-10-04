@@ -36,7 +36,7 @@ void ConnectionHandler::HandleRead(const boost::system::error_code& rErr, size_t
     m_data[bytesTransferred] = '\0';
 
     // Just print out the received data
-    std::cout << "Server recieved " << m_data << std::endl;
+    std::cout << "Server received " << m_data << std::endl;
 
     // Parse the data into the request structure
     Common::Request req;
@@ -72,8 +72,18 @@ void ConnectionHandler::ParseRequest(Common::Request& rReq)
     {
         // Convert data to an string
         std::string data = std::string(m_data);
-        std::string requestCode = data.substr(0, data.find_first_of(" "));
-        std::string additionalData = data.substr(data.find_first_of(" ") + 1);
+
+        std::string requestCode = "";
+        std::string additionalData = "";
+        if (data.find_first_of(" ") == std::string::npos)
+        {
+            requestCode = data;
+        }
+        else
+        {
+            requestCode = data.substr(0, data.find_first_of(" "));
+            additionalData = data.substr(data.find_first_of(" ") + 1);
+        }
 
         // First characters should be the request code
         rReq.SetRequestCode(static_cast<Common::RequestCode>(std::stoi(requestCode)));
@@ -109,5 +119,6 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
             return;
     }
 
+    // Set the message, so the requester will receive the response
     m_message = resp.ToString();
 }
