@@ -10,6 +10,9 @@
 
 // C++ PROJECT INCLUDES
 #include "ConnectionHandler.hpp" // Header for class
+#include "RequestManager.hpp" // For HWTrackController::RequestManager
+#include "Request.hpp" // For Common::Request
+#include "Response.hpp" // For Common::Response
 
 void ConnectionHandler::Start()
 {
@@ -18,6 +21,29 @@ void ConnectionHandler::Start()
                              shared_from_this(),
                              boost::asio::placeholders::error,
                              boost::asio::placeholders::bytes_transferred));
+}
+
+void ConnectionHandler::HandleRead(const boost::system::error_code& rErr, size_t bytesTransferred)
+{
+    if (rErr)
+    {
+        std::cerr << "error: " << rErr.message() << std::endl;
+        m_socket.close();
+        return;
+    }
+
+    // Terminate what was transferred
+    m_data[bytesTransferred] = '\0';
+
+    // Just print out the received data
+    std::cout << "Server recieved " << m_data << std::endl;
+
+    // Parse the data into the request structure
+    Common::Request req;
+    ParseRequest(req);
+
+    // Determine what needs done for this request
+    HandleRequest(req);
 
     m_socket.async_write_some(boost::asio::buffer(m_message, ConnectionHandler::MAX_LENGTH),
                               boost::bind(&ConnectionHandler::HandleWrite,
@@ -26,12 +52,12 @@ void ConnectionHandler::Start()
                               boost::asio::placeholders::bytes_transferred));
 }
 
-void ConnectionHandler::HandleRead(const boost::system::error_code& rErr, size_t bytesTransferred)
+void ConnectionHandler::HandleWrite(const boost::system::error_code& rErr, size_t bytesTransferred)
 {
     if (!rErr)
     {
-        // Just print out the received data
-        std::cout << m_data << std::endl;
+        // Just print out a message
+        std::cout << "Server sent " << m_message << std::endl;
     }
     else
     {
@@ -40,16 +66,39 @@ void ConnectionHandler::HandleRead(const boost::system::error_code& rErr, size_t
     }
 }
 
-void ConnectionHandler::HandleWrite(const boost::system::error_code& rErr, size_t bytesTransferred)
+void ConnectionHandler::ParseRequest(Common::Request& rReq)
 {
-    if (!rErr)
+    try
     {
-        // Just print out a message
-        std::cout << "Server sent Hello Message!" << std::endl;
+        rReq.SetRequestCode(static_cast<Common::RequestCode>(std::stoi(m_data)));
+
+        std::string data = std::string(&m_data[2]);
+        rReq.SetData(data);
     }
-    else
+    catch (std::exception& e)
     {
-        std::cerr << "error: " << rErr.message() << std::endl;
-        m_socket.close();
+        std::cerr << "Invalid command " << m_data << std::endl;
+        rReq.SetRequestCode(Common::RequestCode::ERROR);
     }
+}
+
+void ConnectionHandler::HandleRequest(Common::Request& rReq)
+{
+    Common::Response resp;
+    switch (rReq.GetRequestCode())
+    {
+        case Common::RequestCode::SET_SWITCH_POSITION:
+        case Common::RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST:
+        {
+            HWTrackController::RequestManager rm;
+            rm.HandleRequest(rReq, resp);
+            break;
+        }
+        default:
+            std::cerr << "Invalid command " << static_cast<uint16_t>(rReq.GetRequestCode()) << " received" << std::endl;
+            m_message = "INVALID COMMAND";
+            return;
+    }
+
+    m_message = resp.ToString();
 }
