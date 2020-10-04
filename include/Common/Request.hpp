@@ -62,17 +62,22 @@ public:
     /**
      * @brief Sets the response code member
     */
-    void SetRequestCode(RequestCode reqCode) { m_reqCode = reqCode; }
+    void SetRequestCode(const RequestCode reqCode) { m_reqCode = reqCode; }
 
     /**
      * @brief Sets the data string member
     */
-    void SetData(std::string data) { m_data = data; }
+    void SetData(const std::string data) { m_data = data; }
+
+    /**
+     * @brief Gets the data member
+    */
+    const std::string& GetData() const { return m_data; }
 
     /**
      * @brief Gets the request code member
     */
-    RequestCode GetRequestCode() { return m_reqCode; }
+    RequestCode GetRequestCode() const { return m_reqCode; }
 
     /**
      * @brief Writes data to the data string member

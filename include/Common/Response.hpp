@@ -59,12 +59,12 @@ public:
     /**
      * @brief Sets the response code member
     */
-    void SetResponseCode(ResponseCode respCode) { m_respCode = respCode; }
+    void SetResponseCode(const ResponseCode respCode) { m_respCode = respCode; }
 
     /**
      * @brief Sets the data string member
     */
-    void SetData(std::string data) { m_data = data; }
+    void SetData(const std::string data) { m_data = data; }
 
     /**
      * @brief Writes data to the data string member
