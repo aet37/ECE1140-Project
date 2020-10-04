@@ -30,7 +30,7 @@ class TrainSystem
 		void import_track_from_tm();
 
 		// Create new train
-		void create_new_train(enum Line line_to_add);
+		void create_new_train(int block_to);
 
 		// Send train id, authority and speed to Track Controller
 		void send_train_info_tc(Train* to_send);

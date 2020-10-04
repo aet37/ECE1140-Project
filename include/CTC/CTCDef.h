@@ -5,9 +5,6 @@
 #ifndef CTC_CTCDEF_H
 #define CTC_CTCDEF_H
 
-// enumerated definition for the line the train is on
-enum Line {LINE_BLUE, LINE_GREEN};
-
 // Structure that holds data about a single train
 struct Train
 {
@@ -15,13 +12,13 @@ struct Train
 	int train_id;
 	int command_speed;
 	int authority;
-	enum Line line_on;
+	int destination_block;
 
 	// Constructor to initialize elements
-	Train(int id, enum Line on)
+	Train(int id, int block)
 	{
 		train_id = id;
-		line_on = on;
+		destination_block = block;
 		command_speed = 0;
 		authority = 0;
 	}

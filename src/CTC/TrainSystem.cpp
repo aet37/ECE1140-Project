@@ -46,14 +46,14 @@ void TrainSystem::import_track_from_tm()
 }
 
 // Create new train
-void TrainSystem::create_new_train(enum Line line_to_add)
+void TrainSystem::create_new_train(int block_to)
 {
 	// Set the train number to the next available
 	int num = p_trains.size() + 1;
 
 	// Create an object with that number
 	Train* p_temp;
-	p_temp = new Train(num, line_to_add);
+	p_temp = new Train(num, block_to);
 
 	// Append the train to the train list
 	p_trains.push_back(p_temp);
@@ -82,7 +82,6 @@ void TrainSystem::printout()
 	{
 		std::cout << p_trains[0]->command_speed << std::endl;
 		std::cout << p_trains[0]->authority << std::endl;
-		std::cout << p_trains[0]->line_on << std::endl;
 		std::cout << p_trains[0]->train_id << std::endl;
 	}
 }
