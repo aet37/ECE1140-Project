@@ -1,0 +1,24 @@
+name: System Build
+
+on: [push, pull_request] 
+
+jobs:
+  Build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install Boost
+      run: |
+        sudo apt-get install aptitude
+        sudo aptitude install libboost-all-dev -y
+
+    - name: Run CMake
+      run: |
+        mkdir build
+        cmake -Bbuild -H.
+
+    - name: Build
+      run: cmake --build build/ --target all
