@@ -13,7 +13,7 @@ jobs:
     - name: Install Boost
       run: |
         sudo apt-get install aptitude
-        sudo apt-get install libboost-dev-all
+        sudo aptitude install libboost-all-dev
 
     - name: Run CMake
       run: |
