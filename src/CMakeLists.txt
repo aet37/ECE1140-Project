@@ -19,4 +19,8 @@ set(SOURCES
 
 add_executable(main ${SOURCES})
 
-target_link_libraries(main ${Boost_LIBRARIES} HWTrackController)
+target_link_libraries(main 
+                      ${Boost_LIBRARIES}
+                      CTC
+                      HWTrackController
+)
