@@ -14,8 +14,8 @@
 #ifdef DEBUGENABLE
 #define LOG(msg) Serial.print(msg)
 #define LOGN(msg) Serial.println(msg)
-#define LOG_DEC(num) Serial.print((uint64_t)num, DEC)
-#define LOG_DECN(num) Serial.println((uint64_t)num, DEC)
+#define LOG_DEC(num) Serial.print((long)num, DEC)
+#define LOG_DECN(num) Serial.println((long)num, DEC)
 #else
 #define LOG(msg)
 #define LOGN(msg)

@@ -85,7 +85,7 @@ public:
      * @param rKey      Key whose value to retrieve
      * @return Values associated with key
     */
-    T Get(const String& rKey) const
+    const T& Get(const String& rKey) const
     {
         uint32_t hash = CalculateHash(rKey);
         if (m_pKeys[hash] == rKey)
@@ -106,6 +106,37 @@ public:
 
         // Assert if the key is not found
         assert(false);
+    }
+
+    /**
+     * @brief Updates the value associated with the given key
+     * 
+     * @param rKey      Key whose value to update
+     * @param newValue  New value for the key
+     * @return False if the key isn't found
+    */
+    bool Update(const String& rKey, T newValue)
+    {
+        bool updated = false;
+        uint32_t hash = CalculateHash(rKey);
+        if (m_pKeys[hash] == rKey)
+        {
+            m_pValues[hash] = newValue;
+            updated = true;
+        }
+        else
+        {
+            // Loop around table until the key is found
+            for (uint32_t i = hash + 1; i != hash; i = (i + 1) % m_size)
+            {
+                if (m_pKeys[i] == rKey)
+                {
+                    m_pValues[i] = newValue;
+                    updated = true;
+                }
+            }
+        }
+        return updated;
     }
 
     /**

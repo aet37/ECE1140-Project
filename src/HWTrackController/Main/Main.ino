@@ -21,11 +21,12 @@ void setup()
     pinMode(LED_BUILTIN, OUTPUT);
 
     // Initialize the user program
-    UserProgram* pProg = new UserProgram();
+    UserProgram* pProg = new UserProgram("Iteration #2 Program");
+    pProg->AddTag("Switch1");
 
     // Add tasks to the scheduler
-    Scheduler::GetInstance().AddTask(new Task(toggleTask, 1000));
-    Scheduler::GetInstance().AddTask(new Task(Communications::CommsTask, 1000));
+    Scheduler::GetInstance().AddTask(new SystemTask(toggleTask, 1000));
+    Scheduler::GetInstance().AddTask(new SystemTask(Communications::CommsTask, 1000));
 }
 
 void loop()

@@ -21,7 +21,7 @@ void Scheduler::RunTasks()
     // For every task...
     for (int i = 0; i < m_taskList.GetLength(); i++)
     {
-        Task* pTask = m_taskList[i];
+        SystemTask* pTask = m_taskList[i];
 
         // If it's
         if (currentTimeInMs - pTask->GetTimeLastRun() >= pTask->GetPeriod())

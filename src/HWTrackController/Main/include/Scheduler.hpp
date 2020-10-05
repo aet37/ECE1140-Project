@@ -10,7 +10,7 @@
 // (None)
 
 // C++ PROJECT INCLUDES
-#include "Task.hpp"
+#include "SystemTask.hpp" // For SystemTask
 #include "List.hpp" // For List
 
 /**
@@ -36,7 +36,7 @@ public:
      * 
      * @param pTask     Task to be added
     */
-    void AddTask(Task* pTask)
+    void AddTask(SystemTask* pTask)
     {
         m_taskList.Append(pTask);
     }
@@ -50,7 +50,7 @@ public:
 protected:
 private:
     /// List of tasks
-    List<Task*> m_taskList;
+    List<SystemTask*> m_taskList;
 
     /**
      * @brief Creates a new Scheduler object

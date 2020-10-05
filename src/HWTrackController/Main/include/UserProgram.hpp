@@ -24,15 +24,38 @@ public:
     /**
      * Constructs a new UserProgram object
      */
-    UserProgram() :
-        m_keys(),
-        m_pProgramName("Test Program")
+    UserProgram(const char* pProgramName) :
+        m_tags(),
+        m_pProgramName(pProgramName)
     {}
-    
+
+    /**
+     * @brief Adds a tag and defaults the value
+     * 
+     * @param pTagName     Name of the tag
+    */
+    void AddTag(const char* pTagName);
+
+    /**
+     * @brief Sets the given tag to true
+     * 
+     * @param rTagName   Name of tag to set
+     * @return Whether tag was able to be set or not
+    */
+    bool SetTag(String& rTagName);
+
+    /**
+     * @brief Sets the given tag to false
+     * 
+     * @param rTagName   Name of tag to reset
+     * @return Whether tag was able to be reset or not
+    */
+    bool ResetTag(String& rTagName);
+
 protected:
 private:
     /// Tags of the program
-    HashMap<bool> m_keys;
+    HashMap<bool> m_tags;
 
     /// Name of the program
     const char* m_pProgramName;
