@@ -45,8 +45,6 @@ class ResponseCode(Enum):
     SUCCESS = 0
     ERROR = 1
 
-    SWITCH_POSITION = 96
-
 def send_message(request_code, data):
     """Constructs and sends a message to the server
 

@@ -36,7 +36,7 @@ void RequestManager::HandleRequest(Common::Request& rRequest, Common::Response& 
             Common::Request* pNextRequest = GetNextRequest();
             if (pNextRequest != nullptr)
             {
-                rResponse.SetResponseCode(Common::ResponseCode::SWITCH_POSITION);
+                rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
                 rResponse.SetData(pNextRequest->GetData());
                 delete pNextRequest;
             }
