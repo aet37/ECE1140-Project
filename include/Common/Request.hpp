@@ -30,10 +30,14 @@ namespace Common
 */
 enum class RequestCode : uint8_t
 {
-    ERROR = 0,
-    SET_SWITCH_POSITION = 1,
-    GET_SWITCH_POSITION = 2,
-    GET_HW_TRACK_CONTROLLER_REQUEST = 3
+    ERROR = 1,
+    LOGIN = 2,
+
+    SET_SWITCH_POSITION = 96,
+    GET_SWITCH_POSITION = 97,
+    GET_HW_TRACK_CONTROLLER_REQUEST = 100,
+    SEND_HW_TRACK_CONTROLLER_RESPONSE = 101,
+    GET_HW_TRACK_CONTROLLER_RESPONSE = 102
 };
 
 /**
@@ -53,38 +57,33 @@ public:
         m_data(data)
     {}
 
-    Request() { Request(RequestCode::ERROR, ""); }
-    explicit Request(RequestCode reqCode) { Request(reqCode, ""); }
+    Request() :
+        Request(RequestCode::ERROR, "")
+    {}
+
+    explicit Request(RequestCode reqCode) :
+        Request(reqCode, "")
+    {}
 
     /**
      * @brief Sets the response code member
     */
-    void SetRequestCode(RequestCode reqCode) { m_reqCode = reqCode; }
+    void SetRequestCode(const RequestCode reqCode) { m_reqCode = reqCode; }
 
     /**
      * @brief Sets the data string member
     */
-    void SetData(std::string data) { m_data = data; }
+    void SetData(const std::string data) { m_data = data; }
+
+    /**
+     * @brief Gets the data member
+    */
+    const std::string& GetData() const { return m_data; }
 
     /**
      * @brief Gets the request code member
     */
-    RequestCode GetRequestCode() { return m_reqCode; }
-
-    /**
-     * @brief Writes data to the data string member
-    */
-    void AppendData(const std::string& rData)
-    {
-        if (m_data == "")
-        {
-            m_data = rData;
-        }
-        else
-        {
-            m_data += " " + rData;
-        }
-    }
+    RequestCode GetRequestCode() const { return m_reqCode; }
 
 protected:
 private:

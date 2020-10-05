@@ -28,11 +28,12 @@ namespace Common
  * @li Software Train Controller: 192 - 223
  * @li Hardware Train Controller: 224 - 255
 */
-enum class ResponseCode
+enum class ResponseCode : uint8_t
 {
     SUCCESS = 0,
     ERROR = 1,
-    SWITCH_POSITION = 1
+    
+    SWITCH_POSITION = 96
 };
 
 /**
@@ -52,18 +53,28 @@ public:
         m_data(data)
     {}
 
-    Response() { Response(ResponseCode::ERROR, ""); }
-    explicit Response(ResponseCode respCode) { Response(respCode, ""); }
+    Response() :
+        Response(ResponseCode::ERROR, "")
+    {}
+    
+    explicit Response(ResponseCode respCode) :
+        Response(respCode, "")
+    {}
 
     /**
      * @brief Sets the response code member
     */
-    void SetResponseCode(ResponseCode respCode) { m_respCode = respCode; }
+    void SetResponseCode(const ResponseCode respCode) { m_respCode = respCode; }
+
+    /**
+     * @brief Gets the response code member
+    */
+    ResponseCode GetResponseCode() const { return m_respCode; }
 
     /**
      * @brief Sets the data string member
     */
-    void SetData(std::string data) { m_data = data; }
+    void SetData(const std::string data) { m_data = data; }
 
     /**
      * @brief Writes data to the data string member

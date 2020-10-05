@@ -36,7 +36,7 @@ void ConnectionHandler::HandleRead(const boost::system::error_code& rErr, size_t
     m_data[bytesTransferred] = '\0';
 
     // Just print out the received data
-    std::cout << "Server recieved " << m_data << std::endl;
+    std::cout << "Server received " << m_data << std::endl;
 
     // Parse the data into the request structure
     Common::Request req;
@@ -70,10 +70,26 @@ void ConnectionHandler::ParseRequest(Common::Request& rReq)
 {
     try
     {
-        rReq.SetRequestCode(static_cast<Common::RequestCode>(std::stoi(m_data)));
+        // Convert data to an string
+        std::string data = std::string(m_data);
 
-        std::string data = std::string(&m_data[2]);
-        rReq.SetData(data);
+        std::string requestCode = "";
+        std::string additionalData = "";
+        if (data.find_first_of(" ") == std::string::npos)
+        {
+            requestCode = data;
+        }
+        else
+        {
+            requestCode = data.substr(0, data.find_first_of(" "));
+            additionalData = data.substr(data.find_first_of(" ") + 1);
+        }
+
+        // First characters should be the request code
+        rReq.SetRequestCode(static_cast<Common::RequestCode>(std::stoi(requestCode)));
+
+        // Place the additional data into the data field of the request
+        rReq.SetData(additionalData);
     }
     catch (std::exception& e)
     {
@@ -88,17 +104,21 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
     switch (rReq.GetRequestCode())
     {
         case Common::RequestCode::SET_SWITCH_POSITION:
+        case Common::RequestCode::GET_SWITCH_POSITION:
         case Common::RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST:
+        case Common::RequestCode::SEND_HW_TRACK_CONTROLLER_RESPONSE:
+        case Common::RequestCode::GET_HW_TRACK_CONTROLLER_RESPONSE:
         {
             HWTrackController::RequestManager rm;
             rm.HandleRequest(rReq, resp);
             break;
         }
         default:
-            std::cerr << "Invalid command " << static_cast<uint16_t>(rReq.GetRequestCode()) << " received" << std::endl;
+            std::cerr << "Invalid command " << m_data << " received" << std::endl;
             m_message = "INVALID COMMAND";
             return;
     }
 
+    // Set the message, so the requester will receive the response
     m_message = resp.ToString();
 }
