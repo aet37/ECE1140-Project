@@ -40,9 +40,9 @@ public:
     /**
      * 
     */
-    SystemTask operator()()
+    SystemTask operator()(void* pArgument)
     {
-        m_taskFunction(nullptr);
+        m_taskFunction(pArgument);
     }
 
     /**

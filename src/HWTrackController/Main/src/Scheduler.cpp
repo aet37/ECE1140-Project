@@ -26,8 +26,8 @@ void Scheduler::RunTasks()
         // If it's
         if (currentTimeInMs - pTask->GetTimeLastRun() >= pTask->GetPeriod())
         {
-            LOG("Error Time: "); LOG_DECN((currentTimeInMs - pTask->GetTimeLastRun() - pTask->GetPeriod()));
-            pTask->operator()();
+            // LOG("Error Time: "); LOG_DECN((currentTimeInMs - pTask->GetTimeLastRun() - pTask->GetPeriod()));
+            pTask->operator()(m_pProgram);
             pTask->SetTimeLastRun(currentTimeInMs);
         }
     }

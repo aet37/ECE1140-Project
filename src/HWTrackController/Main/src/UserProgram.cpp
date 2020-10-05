@@ -24,3 +24,16 @@ bool UserProgram::ResetTag(String& rTagName)
 {
     return m_tags.Update(rTagName, false);
 }
+
+bool UserProgram::GetTagValue(String& rTagName, bool& rValue)
+{
+    if (m_tags.Contains(rTagName))
+    {
+        rValue = m_tags.Get(rTagName);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}

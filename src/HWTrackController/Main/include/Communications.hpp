@@ -25,6 +25,15 @@ enum class RequestCode
 };
 
 /**
+ * @enum ResponseCode
+*/
+enum class ResponseCode
+{
+    SUCCESS = 0,
+    ERROR = 1,
+};
+
+/**
  * 
 */
 void CommsTask(void* something);

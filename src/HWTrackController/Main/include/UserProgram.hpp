@@ -52,6 +52,15 @@ public:
     */
     bool ResetTag(String& rTagName);
 
+    /**
+     * @brief Gets a tag's value
+     * 
+     * @param[in] rTagName   Name of the tag
+     * @param[out] rValue    Value of the tag
+     * @return Whether operation was successful
+    */
+    bool GetTagValue(String& rTagName, bool& rValue);
+
 protected:
 private:
     /// Tags of the program
