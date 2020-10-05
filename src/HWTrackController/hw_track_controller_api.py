@@ -59,8 +59,10 @@ def send_reponse_to_server(response):
     """
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         sock.connect((HOST, SERVER_PORT))
-        sock.sendall(SEND_HW_TRACK_CONTROLLER_RESPONSE)
+        sock.sendall(SEND_HW_TRACK_CONTROLLER_RESPONSE + b' 0')
         data = sock.recv(1024)
+
+    logger.info("Received %s from server", data)
 
     if data != b'0':
         logger.error("Error response from server")

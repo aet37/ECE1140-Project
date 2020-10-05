@@ -8,7 +8,13 @@ include_directories("${PROJECT_SOURCE_DIR}/include/Common")
 include_directories("${Boost_INCLUDE_DIRS}")
 
 # Add subdirectories
+add_subdirectory(CTC)
+add_subdirectory(SWTrackController)
 add_subdirectory(HWTrackController)
+add_subdirectory(TrackModel)
+add_subdirectory(TrainModel)
+add_subdirectory(SWTrainController)
+add_subdirectory(HWTrainController)
 
 # Set source files
 set(SOURCES
@@ -19,4 +25,13 @@ set(SOURCES
 
 add_executable(main ${SOURCES})
 
-target_link_libraries(main ${Boost_LIBRARIES} HWTrackController)
+target_link_libraries(main 
+                      ${Boost_LIBRARIES}
+                      CTC
+                      SWTrackController
+                      HWTrackController
+                      TrackModel
+                      TrainModel
+                      SWTrainController
+                      HWTrainController
+)
