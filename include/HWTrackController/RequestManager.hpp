@@ -45,24 +45,6 @@ public:
     */
     void HandleRequest(Common::Request& rRequest, Common::Response& rResponse);
 
-    /**
-     * @brief Adds a request to the queue
-    */
-    void AddRequest(Common::Request& rRequest);
-
-    /**
-     * @brief Obtains the next request from the queue
-    */
-    Common::Request* GetNextRequest();
-
-    /**
-     * @brief Is there a request on the queue?
-    */
-    static bool IsRequest()
-    {
-        return !m_requestQueue.empty();
-    }
-
 protected:
 private:
     /// Queue for requests to the hardware
@@ -70,6 +52,26 @@ private:
 
     /// Queue for responses from the hardware
     static std::queue<Common::Response*> m_responseQueue;
+
+    /**
+     * @brief Adds a request to the queue
+    */
+    void AddRequest(Common::Request& rReq);
+
+    /**
+     * @brief Adds a response to the queue
+    */
+    void AddResponse(Common::Response& rResp);
+
+    /**
+     * @brief Obtains the next request from the queue
+    */
+    Common::Request* GetNextRequest();
+
+    /**
+     * @brief Obtains the next response from the queue
+    */
+    Common::Response* GetNextResponse();
 };
 
 } // namespace HWTrackController
