@@ -8,15 +8,22 @@
 // C++ PROJECT INCLUDES
 #include "include/Communications.hpp" // For Communications::CommsTask
 #include "include/Scheduler.hpp" // For Scheduler
+#include "include/UserProgram.hpp" // For UserProgram
 
 static uint64_t currentTime;
 
 void setup()
 {
+    // Initialize Serial
     Serial.begin(9600);
 
+    // Pin Initialization
     pinMode(LED_BUILTIN, OUTPUT);
 
+    // Initialize the user program
+    UserProgram* pProg = new UserProgram();
+
+    // Add tasks to the scheduler
     Scheduler::GetInstance().AddTask(new Task(toggleTask, 1000));
     Scheduler::GetInstance().AddTask(new Task(Communications::CommsTask, 1000));
 }
