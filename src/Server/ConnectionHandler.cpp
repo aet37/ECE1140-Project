@@ -113,6 +113,10 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
             rm.HandleRequest(rReq, resp);
             break;
         }
+        case Common::RequestCode::DISPATCH_TRAIN:
+        {
+            break;
+        }
         default:
             std::cerr << "Invalid command " << m_data << " received" << std::endl;
             m_message = "INVALID COMMAND";
