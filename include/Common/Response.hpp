@@ -31,9 +31,7 @@ namespace Common
 enum class ResponseCode : uint8_t
 {
     SUCCESS = 0,
-    ERROR = 1,
-    
-    SWITCH_POSITION = 96
+    ERROR = 1
 };
 
 /**

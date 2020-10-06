@@ -1,8 +1,8 @@
 /**
- * @file Task.hpp
+ * @file SystemTask.hpp
 */
-#ifndef TASK_HPP
-#define TASK_HPP
+#ifndef SYSTEM_TASK_HPP
+#define SYSTEM_TASK_HPP
 
 // SYSTEM INCLUDES
 #include <stdint.h>
@@ -11,38 +11,38 @@
 // (None)
 
 /**
- * @class Task
+ * @class SystemTask
  * 
  * @brief Data structure to represent a
  * periodic task
 */
-class Task
+class SystemTask
 {
 public:
-    /// Typedef for task function
-    typedef void (*TaskFunction)(void*);
+    /// Typedef for SystemTask function
+    typedef void (*SystemTaskFunction)(void*);
 
     /**
-     * @brief Creates a new Task object
+     * @brief Creates a new SystemTask object
     */
-    Task(TaskFunction func, uint32_t periodInMs) :
+    SystemTask(SystemTaskFunction func, uint32_t periodInMs) :
         m_periodInMs(periodInMs),
         m_timeLastRunInMs(0),
         m_taskFunction(func)
     {}
 
     /// Delete assignment constructor
-    Task& operator=(Task const&) = delete;
+    SystemTask& operator=(SystemTask const&) = delete;
 
     /// Delete copy constructor
-    Task(Task const&) = delete;
+    SystemTask(SystemTask const&) = delete;
 
     /**
      * 
     */
-    Task operator()()
+    SystemTask operator()(void* pArgument)
     {
-        m_taskFunction(nullptr);
+        m_taskFunction(pArgument);
     }
 
     /**
@@ -78,7 +78,7 @@ private:
     uint64_t m_timeLastRunInMs;
 
     /// Function of task
-    TaskFunction m_taskFunction;
+    SystemTaskFunction m_taskFunction;
 };
 
-#endif // TASK_HPP
+#endif // SYSTEM_TASK_HPP

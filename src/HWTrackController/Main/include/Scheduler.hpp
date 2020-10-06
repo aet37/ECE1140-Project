@@ -10,8 +10,11 @@
 // (None)
 
 // C++ PROJECT INCLUDES
-#include "Task.hpp"
+#include "SystemTask.hpp" // For SystemTask
 #include "List.hpp" // For List
+
+// FORWARD REFERENCES
+class UserProgram;
 
 /**
  * @class Scheduler
@@ -36,7 +39,7 @@ public:
      * 
      * @param pTask     Task to be added
     */
-    void AddTask(Task* pTask)
+    void AddTask(SystemTask* pTask)
     {
         m_taskList.Append(pTask);
     }
@@ -47,10 +50,18 @@ public:
     */
     void RunTasks();
 
+    /**
+     * @brief Sets the current user's program
+    */
+    void SetUserProgram(UserProgram* pProgram) { m_pProgram = pProgram; }
+
 protected:
 private:
     /// List of tasks
-    List<Task*> m_taskList;
+    List<SystemTask*> m_taskList;
+
+    /// Current user program
+    UserProgram* m_pProgram;
 
     /**
      * @brief Creates a new Scheduler object
