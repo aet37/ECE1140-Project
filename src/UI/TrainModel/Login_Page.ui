@@ -54,20 +54,26 @@ border-color: rgb(0, 0, 0);</string>
     <widget class="QPushButton" name="login_button">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>52</y>
-       <width>601</width>
-       <height>271</height>
+       <x>180</x>
+       <y>230</y>
+       <width>281</width>
+       <height>91</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>150</pointsize>
+       <pointsize>35</pointsize>
+       <weight>75</weight>
+       <italic>true</italic>
+       <bold>true</bold>
+       <underline>false</underline>
+       <strikeout>false</strikeout>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(0, 0, 0, 255), stop:0.33 rgba(0, 0, 0, 255), stop:0.34 rgba(255, 30, 30, 255), stop:0.66 rgba(255, 0, 0, 255), stop:0.67 rgba(255, 255, 0, 255), stop:1 rgba(255, 255, 0, 255));
-</string>
+      <string notr="true">background-image: url(C:/Users/kenne/Documents/16th Grade/1140 Jerry Seinfeld/Lab 6/newPrefix/Joseph Seinfeld.png);
+color: rgb(255, 0, 0);</string>
      </property>
      <property name="text">
       <string>Login</string>
@@ -118,10 +124,69 @@ border-color: rgb(0, 0, 0);</string>
       </size>
      </property>
     </widget>
+    <widget class="QLineEdit" name="username_in">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>140</y>
+       <width>181</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="placeholderText">
+      <string>Username</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="password_in">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>170</y>
+       <width>181</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="inputMask">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="echoMode">
+      <enum>QLineEdit::Password</enum>
+     </property>
+     <property name="placeholderText">
+      <string>Password</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="alert_login">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>120</y>
+       <width>171</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(221, 221, 221);</string>
+     </property>
+     <property name="text">
+      <string>Incorrect username or password!</string>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="new.qrc"/>
+ </resources>
  <connections/>
 </ui>

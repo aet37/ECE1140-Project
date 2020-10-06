@@ -81,7 +81,7 @@ border-color: rgb(0, 0, 0);</string>
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>40</x>
+       <x>80</x>
        <y>10</y>
        <width>203</width>
        <height>31</height>
@@ -96,7 +96,7 @@ border-color: rgb(0, 0, 0);</string>
       <string>Train #1 Info</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="report_button">
+    <widget class="QPushButton" name="report_button_info1">
      <property name="geometry">
       <rect>
        <x>420</x>
@@ -519,8 +519,24 @@ p, li { white-space: pre-wrap; }
       <string>Page 2 -&gt;</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="page1toM_button">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>61</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string>&lt;- Menu</string>
+     </property>
+    </widget>
     <zorder>label</zorder>
-    <zorder>report_button</zorder>
+    <zorder>report_button_info1</zorder>
     <zorder>disp_command_speed</zorder>
     <zorder>label_2</zorder>
     <zorder>disp_authority_train</zorder>
@@ -539,6 +555,7 @@ p, li { white-space: pre-wrap; }
     <zorder>label_9</zorder>
     <zorder>label_10</zorder>
     <zorder>page1to2_button</zorder>
+    <zorder>page1toM_button</zorder>
    </widget>
    <zorder>frame</zorder>
    <zorder>logout_button_info1</zorder>
