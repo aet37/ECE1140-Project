@@ -7,9 +7,14 @@
 
 // C++ PROJECT INCLUDES
 #include "Server.hpp" // For Server
+#include "../include/CTC/TrainSystem.h" // For CTC System
+#include "CTC/TrainSystem.cpp"
 
 int main()
 {
+    /* Module Specific Initializations */
+    
+    
     try
     {
         boost::asio::io_service io_service;
