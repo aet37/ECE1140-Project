@@ -3,11 +3,11 @@
 
 int main()
 {
-	// Initialize system
-	TrainSystem sys;
+	// // Initialize system
+	// TrainSystem sys;
 
-	// Create a train
-	sys.printout();
-	sys.create_new_train(3);
-	sys.printout();
+	// // Create a train
+	// sys.printout();
+	// sys.create_new_train(3);
+	// sys.printout();
 }
