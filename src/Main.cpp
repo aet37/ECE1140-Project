@@ -7,10 +7,12 @@
 
 // C++ PROJECT INCLUDES
 #include "Server.hpp" // For Server
+#include "../include/CTC/TrainSystem.h" // For CTC System
+#include "CTC/TrainSystem.cpp"
 
 int main()
 {
-    // Module Specific Initializations
+    /* Module Specific Initializations */
     
     
     try

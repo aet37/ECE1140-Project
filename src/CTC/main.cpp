@@ -8,6 +8,6 @@ int main()
 
 	// Create a train
 	sys.printout();
-	sys.create_new_train(LINE_BLUE);
+	sys.create_new_train(3);
 	sys.printout();
 }
