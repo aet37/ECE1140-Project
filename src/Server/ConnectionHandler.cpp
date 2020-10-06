@@ -7,12 +7,17 @@
 // SYSTEM INCLUDES
 #include <iostream>
 #include <boost/bind.hpp>
+#include <string>
 
 // C++ PROJECT INCLUDES
 #include "ConnectionHandler.hpp" // Header for class
 #include "RequestManager.hpp" // For HWTrackController::RequestManager
 #include "Request.hpp" // For Common::Request
 #include "Response.hpp" // For Common::Response
+#include "BufferFunctions.hpp"
+
+#include "../CTC/TrainSystem.h"             // For CTC actions
+#include "../../src/CTC/TrainSystem.cpp"
 
 void ConnectionHandler::Start()
 {
@@ -111,6 +116,30 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         {
             HWTrackController::RequestManager rm;
             rm.HandleRequest(rReq, resp);
+            break;
+        }
+        case Common::RequestCode::CTC_DISPATCH_TRAIN:
+        {
+        	// Iterate through m_data to get destination block (first number in message)
+        	std::string str_block;
+        	char curr = m_data[0];
+        	int itter = 0;
+        	while(curr != ' ')
+	        {
+				str_block.append(reinterpret_cast<const char *>(curr));
+				itter++;
+				curr = m_data[itter];
+	        }
+
+        	// Convert string to integer
+        	int block_to = std::stoi(str_block);
+
+			// Call TrainSystem singleton instance to create a new train
+        	Train* pto_send;
+        	pto_send = TrainSystem::GetInstance().create_new_train(block_to);
+
+        	// Send Train Struct to Track Controller buffer function
+	        CTCToTCTrainInfoBuffer(pto_send->train_id, pto_send->destination_block, pto_send->authority, pto_send->command_speed);
             break;
         }
         default:
