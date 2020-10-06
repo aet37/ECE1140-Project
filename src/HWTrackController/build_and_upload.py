@@ -38,13 +38,11 @@ def build_sketch(path_to_sketch, debug):
     """
     logger.info("Building sketch %s", path_to_sketch)
 
+    arguments = [ARDUINO_CLI, 'compile', '--fqbn',
+                 'arduino:avr:mega', path_to_sketch]
+
     if debug:
-        arguments = [ARDUINO_CLI, 'compile', '--fqbn',
-                     'arduino:avr:mega', path_to_sketch,
-                     '--build-properties', 'build.extra_flags=-DDEBUGENABLE']
-    else:
-        arguments = [ARDUINO_CLI, 'compile', '--fqbn',
-                     'arduino:avr:mega', path_to_sketch]
+        arguments += ['--build-properties', 'build.extra_flags=-DDEBUGENABLE']
 
     build_proc = subprocess.Popen(arguments)
     build_proc.wait()
