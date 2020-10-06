@@ -12,6 +12,12 @@
 class TrainSystem
 {
 	private:
+		/**
+		 * @brief constructor for singleton object TrainSystem
+		 */
+		TrainSystem()
+		{ }
+
 		// Trains
 		std::vector<int> train_numbers;
 		std::vector<Train*> p_trains;
@@ -21,16 +27,23 @@ class TrainSystem
 
 		// Signals
 		std::vector<Signal*> p_signals;
+
 	public:
-		// Constructor and Destructor
-		TrainSystem();
-		~TrainSystem();
+		/**
+		 * @brief	gets singleton instance
+		 * @return 	reference to this singleton TrainSystem Object
+		 */
+		static TrainSystem& GetInstance();
 
 		// Import track from Track Model
 		void import_track_from_tm();
 
-		// Create new train
-		void create_new_train(int block_to);
+		/**
+		 *
+		 * @param block_to
+		 * @return pointer to Train struct
+		 */
+		Train* create_new_train(int block_to);
 
 		// Send train id, authority and speed to Track Controller
 		void send_train_info_tc(Train* to_send);

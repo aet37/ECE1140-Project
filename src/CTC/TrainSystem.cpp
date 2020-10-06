@@ -6,37 +6,14 @@
 #include "../../include/CTC/TrainSystem.h"
 #include <vector>
 
-// Constructor
-TrainSystem::TrainSystem()
+/**
+ * @brief	Gets the singleton instance
+ * @return	TrainSystem singleton pointer
+*/
+TrainSystem& TrainSystem::GetInstance()
 {
-
-}
-
-// Destructor
-TrainSystem::~TrainSystem()
-{
-	Train* to_delete1 = nullptr;
-	// Free all of the pointers
-	while(p_trains.size() != 0)
-	{
-		to_delete1 = p_trains[p_trains.size() - 1];
-		delete to_delete1;
-		p_trains.pop_back();
-	}
-	Track* to_delete2 = nullptr;
-	while(p_tracks.size() != 0)
-	{
-		to_delete2 = p_tracks[p_tracks.size() - 1];
-		delete to_delete2;
-		p_tracks.pop_back();
-	}
-	Signal* to_delete3 = nullptr;
-	while(p_signals.size() != 0)
-	{
-		to_delete3 = p_signals[p_signals.size() - 1];
-		delete to_delete3;
-		p_signals.pop_back();
-	}
+	static TrainSystem* pInstance = new TrainSystem();
+	return *(pInstance);
 }
 
 // Import track from Track Model
@@ -46,7 +23,7 @@ void TrainSystem::import_track_from_tm()
 }
 
 // Create new train
-void TrainSystem::create_new_train(int block_to)
+Train* TrainSystem::create_new_train(int block_to)
 {
 	// Set the train number to the next available
 	int num = p_trains.size() + 1;
@@ -63,9 +40,8 @@ void TrainSystem::create_new_train(int block_to)
 	p_temp->authority = 1000;           // feet
 	p_temp->command_speed = 25;         // mph
 
-	// Send the train info to Track Controller
-	send_train_info_tc(p_temp);
-
+	// return the object just created
+	return p_temp;
 }
 
 // Send train id, authority and speed to Track Controller
