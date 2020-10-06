@@ -35,5 +35,5 @@ target_link_libraries(main
                       TrainModel
                       SWTrainController
                       HWTrainController
-                      debug
+                      debug_lib
 )

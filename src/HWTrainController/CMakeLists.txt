@@ -8,4 +8,4 @@ set(SOURCES
 )
 
 add_library(HWTrainController STATIC ${SOURCES})
-target_link_libraries(HWTrainController debug)
+target_link_libraries(HWTrainController debug_lib)

@@ -8,4 +8,4 @@ set(SOURCES
 )
 
 add_library(TrackModel STATIC ${SOURCES})
-target_link_libraries(TrackModel debug)
+target_link_libraries(TrackModel debug_lib)

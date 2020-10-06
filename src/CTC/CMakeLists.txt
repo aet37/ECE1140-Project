@@ -8,4 +8,4 @@ set(SOURCES
 )
 
 add_library(CTC STATIC ${SOURCES})
-target_link_libraries(CTC debug)
+target_link_libraries(CTC debug_lib)

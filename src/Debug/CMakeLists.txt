@@ -9,4 +9,4 @@ set(SOURCES
 )
 
 # Make library
-add_library(debug STATIC ${SOURCES}) 
+add_library(debug_lib STATIC ${SOURCES})

@@ -8,4 +8,4 @@ set(SOURCES
 )
 
 add_library(SWTrackController STATIC ${SOURCES})
-target_link_libraries(SWTrackController debug)
+target_link_libraries(SWTrackController debug_lib)

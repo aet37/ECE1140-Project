@@ -8,4 +8,4 @@ set(SOURCES
 )
 
 add_library(TrainModel STATIC ${SOURCES})
-target_link_libraries(TrainModel debug)
+target_link_libraries(TrainModel debug_lib)

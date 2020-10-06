@@ -8,4 +8,4 @@ set(SOURCES
 )
 
 add_library(SWTrainController STATIC ${SOURCES})
-target_link_libraries(SWTrainController debug)
+target_link_libraries(SWTrainController debug_lib)
