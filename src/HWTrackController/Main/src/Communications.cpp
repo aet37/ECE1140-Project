@@ -91,6 +91,20 @@ static void GetTagValue(String& rData, UserProgram* pProgram)
     }
 }
 
+/**
+ * @brief Sets a specified tag's value and sends a response
+*/
+static void SetTagValue(String& rData, UserProgram* pProgram)
+{
+    // Parse the message between tag name and value
+    String tagName = rData.substring(0, rData.indexOf(" "));
+    bool value = atoi(rData.substring(rData.indexOf(" "), rData.length()).c_str());
+
+    // Set the tags value and send the response
+    bool ret = pProgram->SetTag(tagName, value);
+    SendResponse(static_cast<ResponseCode>(!ret));
+}
+
 void CommsTask(void* pProgram)
 {
     // Quickly return if nothing has been received
@@ -107,11 +121,13 @@ void CommsTask(void* pProgram)
     switch (code)
     {
         case RequestCode::INVALID:
-        case RequestCode::SET_SWITCH_POSITION:
             SendResponse(ResponseCode::ERROR);
             break;
         case RequestCode::GET_SWITCH_POSITION:
             GetTagValue(data, static_cast<UserProgram*>(pProgram));
+            break;
+        case RequestCode::SET_SWITCH_POSITION:
+            SetTagValue(data, static_cast<UserProgram*>(pProgram));
             break;
         default:
             // We expect ParseCode to take care of this case

@@ -40,17 +40,10 @@ public:
      * @brief Sets the given tag to true
      * 
      * @param rTagName   Name of tag to set
+     * @param value      Value to set tag to
      * @return Whether tag was able to be set or not
     */
-    bool SetTag(String& rTagName);
-
-    /**
-     * @brief Sets the given tag to false
-     * 
-     * @param rTagName   Name of tag to reset
-     * @return Whether tag was able to be reset or not
-    */
-    bool ResetTag(String& rTagName);
+    bool SetTag(String& rTagName, bool value);
 
     /**
      * @brief Gets a tag's value

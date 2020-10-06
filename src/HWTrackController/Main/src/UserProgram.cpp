@@ -15,14 +15,9 @@ void UserProgram::AddTag(const char* pTagName)
     m_tags.Insert(pTagName, false);
 }
 
-bool UserProgram::SetTag(String& rTagName)
+bool UserProgram::SetTag(String& rTagName, bool value)
 {
-    return m_tags.Update(rTagName, true);
-}
-
-bool UserProgram::ResetTag(String& rTagName)
-{
-    return m_tags.Update(rTagName, false);
+    return m_tags.Update(rTagName, value);
 }
 
 bool UserProgram::GetTagValue(String& rTagName, bool& rValue)
