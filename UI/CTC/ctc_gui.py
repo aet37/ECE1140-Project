@@ -2,6 +2,9 @@ import os
 from PyQt5 import QtWidgets, uic, QtCore
 import sys
 
+sys.path.insert(1, '../../src')
+from server_functions import *
+
 # GLOBALS
 class Ui(QtWidgets.QMainWindow):
 
@@ -109,7 +112,7 @@ class Ui(QtWidgets.QMainWindow):
 			return
 
 		# Error Check for time value
-		if(len(self.d_time_label.text()) != 5):
+		if(len(self.d_time_label.text()) != 6):
 			self.d_conf_label.setStyleSheet("color: red")
 			self.d_conf_label.setText('Error: Invalid Time Entered')
 			return
@@ -121,6 +124,9 @@ class Ui(QtWidgets.QMainWindow):
 			self.d_conf_label.setStyleSheet("color: red")
 			self.d_conf_label.setText('Error: Invalid Time Entered')
 			return
+		elif(self.d_time_label.text()[5] not in ['a', 'p']):
+			self.d_conf_label.setStyleSheet("color: red")
+			self.d_conf_label.setText('Error: Invalid Time of Day  Entered (a/p)')
 		# Error Check for block value
 		elif((int(self.d_block_label.text()) < 0) | (len(self.d_block_label.text()) == 0)):
 			self.d_conf_label.setStyleSheet("color: red")
@@ -131,6 +137,10 @@ class Ui(QtWidgets.QMainWindow):
 		else:
 			self.d_conf_label.setStyleSheet("color: green")
 			self.d_conf_label.setText('Train Dispatched to Block ' + self.d_block_label.text() + ' at ' + self.d_time_label.text())
+
+		##### Send data to server #####
+		##### data = "block hour minute a/p"
+		send_message(RequestCode.CTC_DISPATCH_TRAIN, self.d_block_label.text() + ' ' + self.d_time_label.text()[0] + self.d_time_label.text()[1] + ' ' + self.d_time_label.text()[3] + self.d_time_label.text()[4]+ ' ' + self.d_time_label.text()[5])
 
 		
 
