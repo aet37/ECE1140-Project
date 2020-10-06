@@ -9,6 +9,7 @@ include_directories("${PROJECT_SOURCE_DIR}/include/Debug")
 include_directories("${Boost_INCLUDE_DIRS}")
 
 # Add subdirectories
+add_subdirectory(Debug)
 add_subdirectory(CTC)
 add_subdirectory(SWTrackController)
 add_subdirectory(HWTrackController)
