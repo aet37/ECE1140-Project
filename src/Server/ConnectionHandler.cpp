@@ -15,9 +15,10 @@
 #include "Request.hpp" // For Common::Request
 #include "Response.hpp" // For Common::Response
 #include "BufferFunctions.hpp"
+#include "Logger.hpp" // For Logging (debugging)
 
-#include "../CTC/TrainSystem.h"             // For CTC actions
-#include "../../src/CTC/TrainSystem.cpp"
+#include "TrainSystem.hpp"             // For CTC actions
+
 
 void ConnectionHandler::Start()
 {
@@ -120,26 +121,18 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         }
         case Common::RequestCode::CTC_DISPATCH_TRAIN:
         {
-        	// Iterate through m_data to get destination block (first number in message)
-        	std::string str_block;
-        	char curr = m_data[0];
-        	int itter = 0;
-        	while(curr != ' ')
-	        {
-				str_block.append(reinterpret_cast<const char *>(curr));
-				itter++;
-				curr = m_data[itter];
-	        }
+        	// Extract the block train was dispatched to
+        	std::string str_block = rReq.GetData().substr(0, 2);
 
-        	// Convert string to integer
+        	// Convert block to integer
         	int block_to = std::stoi(str_block);
 
 			// Call TrainSystem singleton instance to create a new train
         	Train* pto_send;
-        	pto_send = TrainSystem::GetInstance().create_new_train(block_to);
+        	pto_send = TrainSystem::GetInstance().CreateNewTrain(block_to);
 
         	// Send Train Struct to Track Controller buffer function
-	        CTCToTCTrainInfoBuffer(pto_send->train_id, pto_send->destination_block, pto_send->authority, pto_send->command_speed);
+	        TrainInfoBuffer_TrackController(pto_send->train_id, pto_send->destination_block, pto_send->authority, pto_send->command_speed);
             break;
         }
         default:

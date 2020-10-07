@@ -34,7 +34,7 @@ TrainSystem& TrainSystem::GetInstance()
  * @return pointer to newly created Train struct
  *
  */
-Train* TrainSystem::create_new_train(int block_to)
+Train* TrainSystem::CreateNewTrain(int block_to)
 {
 	// Set the train number to the next available
 	int num = p_trains.size() + 1;
