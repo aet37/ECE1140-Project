@@ -51,6 +51,9 @@ Train* TrainSystem::CreateNewTrain(int block_to)
 	p_temp->authority = 1000;           // feet
 	p_temp->command_speed = 25;         // mph
 
+	// Log creation of object
+	LOG_CTC("From TrainSystem::CreateNewTrain : Created Train #%d", p_temp->train_id);
+
 	// return the object just created
 	return p_temp;
 }
