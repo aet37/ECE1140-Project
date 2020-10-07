@@ -38,5 +38,12 @@ void TrainInfoBuffer_TrackController(int train_id, int destination_block, int au
 void TrainLocationBuffer_CTC(int block_location)
 {
 	TrainSystem::GetInstance().SetTrackOccupied(block_location);
-	TrainSystem::GetInstance().SetTrackNotOccupied(block_location - 1);
+	if(block_location == 11)
+	{
+		TrainSystem::GetInstance().SetTrackNotOccupied(5);
+	}
+	else
+	{
+		TrainSystem::GetInstance().SetTrackNotOccupied(block_location - 1);
+	}
 }
