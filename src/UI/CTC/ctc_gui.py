@@ -156,22 +156,41 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
 		self.button.clicked.connect(self.returnToMainWindow)
 
+		self.button = self.findChild(QtWidgets.QPushButton, 'RefreshSystem') # Find the button
+		self.button.clicked.connect(self.RefreshMap)
+
 		 # Find the Blocks
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block1')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block2')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block3')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block4')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block5')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block6')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block7')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block8')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block9')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block10')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block11')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block12')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block13')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block14')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block15')
+		self.TBlock1 = self.findChild(QtWidgets.QPushButton, 'Block1')
+		self.TBlock2 = self.findChild(QtWidgets.QPushButton, 'Block2')
+		self.TBlock3 = self.findChild(QtWidgets.QPushButton, 'Block3')
+		self.TBlock4 = self.findChild(QtWidgets.QPushButton, 'Block4')
+		self.TBlock5 = self.findChild(QtWidgets.QPushButton, 'Block5')
+		self.TBlock6 = self.findChild(QtWidgets.QPushButton, 'Block6')
+		self.TBlock7 = self.findChild(QtWidgets.QPushButton, 'Block7')
+		self.TBlock8 = self.findChild(QtWidgets.QPushButton, 'Block8')
+		self.TBlock9 = self.findChild(QtWidgets.QPushButton, 'Block9')
+		self.TBlock10 = self.findChild(QtWidgets.QPushButton, 'Block10')
+		self.TBlock11 = self.findChild(QtWidgets.QPushButton, 'Block11')
+		self.TBlock12 = self.findChild(QtWidgets.QPushButton, 'Block12')
+		self.TBlock13 = self.findChild(QtWidgets.QPushButton, 'Block13')
+		self.TBlock14 = self.findChild(QtWidgets.QPushButton, 'Block14')
+		self.TBlock15 = self.findChild(QtWidgets.QPushButton, 'Block15')
+
+	def RefreshMap(self):
+		# Ping server for track occupancies
+		m_tuple_data = send_message(RequestCode.CTC_DISPATCH_TRAIN, '')
+		print('sent')
+
+		# Extract string data from tuple
+		m_data = m_tuple_data[1]
+		m_data.replace(' ', '')
+
+		for i in range(len(m_data)):
+			if(m_data[i] == 't'):
+				eval('self.TBlock%d.setStyleSheet(\"background-color: rgb(255, 255, 10);\")' % i + 1)		# if occupied change block color to yellow
+			else:
+				eval('self.TBlock%d.setStyleSheet(\"background-color: rgb(33, 255, 128);\")' % i + 1)		# if not occupied, change block color to green
+
 
 
 	#######################################################################################################################################
