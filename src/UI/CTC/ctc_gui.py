@@ -6,12 +6,13 @@ sys.path.insert(1, 'src')
 from server_functions import *
 
 # GLOBALS
-class Ui(QtWidgets.QMainWindow):
+class CTCUi(QtWidgets.QMainWindow):
 
 	# UI Class initializer
 	def __init__(self):
-		super(Ui, self).__init__()
+		super(CTCUi, self).__init__()
 		uic.loadUi('src/UI/CTC/ctc_main.ui', self)
+
 		self.setWindowTitle("CTC Main Page")
 
 		# In Main Window
@@ -62,7 +63,7 @@ class Ui(QtWidgets.QMainWindow):
 		self.button.clicked.connect(self.saveEditedSchedule)
 
 	def saveEditedSchedule(self):
-		app.exit()
+		APPCTC.exit()
 
 
 
@@ -72,7 +73,6 @@ class Ui(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def DispatchTrainWindow(self):
-
 		uic.loadUi('src/UI/CTC/ctc_dispatch_train.ui', self)
 		self.setWindowTitle("CTC - Dispatch Train")
 
@@ -186,7 +186,6 @@ class Ui(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	def ToggleAutomaicMode(self):
 		return None
-		#app.exit()
 
 	#######################################################################################################################################
 	#######################################################################################################################################
@@ -194,20 +193,12 @@ class Ui(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def ExitModule(self):
-		app.exit()
+		APPCTC.exit()
 
 
-
-
-
-
-
-
-
-# Main
-app = QtWidgets.QApplication(sys.argv)
-window = Ui()
-app.exec_()
+APPCTC = QtWidgets.QApplication(sys.argv)
+window = CTCUi()
+APPCTC.exec_()
 
 
 

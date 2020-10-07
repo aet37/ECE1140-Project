@@ -8,6 +8,8 @@ import sys
 username = "trainmodel"
 password = "jerry"
 
+global MODULE_TO
+
 # GLOBALS
 class Ui(QtWidgets.QMainWindow):
     def __init__(self):
@@ -28,6 +30,7 @@ class Ui(QtWidgets.QMainWindow):
         self.show()
 
     def loginParse(self):
+        global MODULE_TO
         username = self.username_in.text()
         password = self.password_in.text()
         if username == "trainmodel" and password == "jerry":
@@ -179,6 +182,7 @@ class Ui(QtWidgets.QMainWindow):
         # This is executed when the button is pressed
         self.login()
 
+# Main Login Screen
 app = QtWidgets.QApplication(sys.argv)
 window = Ui()
-app.exec_()
+app.exec_()         # Exit from login screen
