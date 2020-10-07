@@ -134,6 +134,12 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
 
         	// Send Train Struct to Track Controller buffer function
 	        TrainInfoBuffer_TrackController(pto_send->train_id, pto_send->destination_block, pto_send->authority, pto_send->command_speed);
+
+	        // Log action
+	        LOG_CTC("From ConnectionHandler.cpp (CTC_DISPATCH_TRAIN) : Sent Track C. Train %d to block %d", pto_send->train_id, pto_send->destination_block);
+
+	        // Make pointer null
+	        pto_send = nullptr;
             break;
         }
         case Common::RequestCode::GET_COMMAND_SPEED:
