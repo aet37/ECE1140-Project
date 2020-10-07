@@ -141,6 +141,31 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
 	        pto_send = nullptr;
             break;
         }
+	    case Common::RequestCode::CTC_SEND_OCCUPANCIES:
+	    {
+	    	// send Response Code
+			resp.SetResponseCode(Common::ResponseCode::SUCCESS);
+
+			// Form response message; occupied = "t", not occupied = "f"
+			std::string t = "t";
+			std::string f = "f";
+			for(int i = 0; i < TrainSystem::GetInstance().GetTrackArr().size(); i++)
+			{
+				if(TrainSystem::GetInstance().GetTrackArr()[i])
+				{
+					resp.AppendData(t);
+				}
+				else
+				{
+					resp.AppendData(f);
+				}
+			}
+
+			// Log data sent
+			LOG_CTC("From ConnectionHandler.cpp : Occupancies for each track sent");
+
+			break;
+	    }
         case Common::RequestCode::GET_COMMAND_SPEED:
         {
             resp.SetResponseCode(Common::ResponseCode::SUCCESS);
