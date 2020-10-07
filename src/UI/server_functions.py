@@ -31,13 +31,11 @@ class RequestCode(Enum):
     GET_SWITCH_POSITION = 97
     GET_HW_TRACK_CONTROLLER_REQUEST = 100
     SEND_HW_TRACK_CONTROLLER_RESPONSE = 101
-
-<<<<<<< Updated upstream
-=======
+    
     GET_COMMAND_SPEED = 160
     SET_TRAIN_LENGTH = 161
 
->>>>>>> Stashed changes
+
 class ResponseCode(Enum):
     """Codes to begin communication from the server
 
@@ -53,7 +51,7 @@ class ResponseCode(Enum):
     SUCCESS = 0
     ERROR = 1
 
-def send_message(request_code, data):
+def send_message(request_code, data=""):
     """Constructs and sends a message to the server
 
     :param RequestCode request_code: Code representing what the request is for
@@ -80,7 +78,7 @@ def send_message(request_code, data):
 
     # If there's additional response data, capture it
     if len(splits) > 1:
-        response_data = str(data).split(" ", 1)[1]
+        response_data = str(splits[1])
     else:
         response_data = ""
 

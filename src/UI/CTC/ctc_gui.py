@@ -63,7 +63,7 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.button.clicked.connect(self.saveEditedSchedule)
 
 	def saveEditedSchedule(self):
-		APPCTC.exit()
+		app.exit()
 
 
 
@@ -193,12 +193,13 @@ class CTCUi(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def ExitModule(self):
-		APPCTC.exit()
+		os.system('start /B python src/UI/login_gui.py')
+		app.exit()
 
 
-APPCTC = QtWidgets.QApplication(sys.argv)
+app = QtWidgets.QApplication(sys.argv)
 window = CTCUi()
-APPCTC.exec_()
+app.exec_()
 
 
 
