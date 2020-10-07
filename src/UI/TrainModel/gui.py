@@ -39,7 +39,8 @@ class Ui(QtWidgets.QMainWindow):
         elif username == "swtrack" and password == "jerry":
             print("swtrack")
         elif username == "ctc" and password == "jerry":
-            os.system('python src/UI/CTC/ctc_gui.py')
+            os.system('start /B python src/UI/CTC/ctc_gui.py')
+            os.exit()
             #execfile('src/UI/CTC/ctc_gui.py')
         elif username == "hwtrain" and password == "jerry":
             print("hwtrain")

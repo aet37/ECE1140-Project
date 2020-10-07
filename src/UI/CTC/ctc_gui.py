@@ -2,7 +2,7 @@ import os
 from PyQt5 import QtWidgets, uic, QtCore
 import sys
 
-sys.path.insert(1, '../..')
+sys.path.insert(1, 'src')
 from server_functions import *
 
 # GLOBALS
@@ -11,7 +11,7 @@ class Ui(QtWidgets.QMainWindow):
 	# UI Class initializer
 	def __init__(self):
 		super(Ui, self).__init__()
-		uic.loadUi('UI/ctc_main.ui', self)
+		uic.loadUi('src/UI/CTC/ctc_main.ui', self)
 		self.setWindowTitle("CTC Main Page")
 
 		# In Main Window
@@ -40,7 +40,7 @@ class Ui(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def LoadScheduleWindow(self):
-		uic.loadUi('UI/ctc_schedule_import.ui', self)
+		uic.loadUi('src/UI/CTC/ctc_schedule_import.ui', self)
 		self.setWindowTitle("CTC - Load Schedule")
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
@@ -53,7 +53,7 @@ class Ui(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def EditScheduleWindow(self):
-		uic.loadUi('UI/ctc_schedule_edit.ui', self)
+		uic.loadUi('src/UI/CTC/ctc_schedule_edit.ui', self)
 		self.setWindowTitle("CTC - Edit Schedule")
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
@@ -73,7 +73,7 @@ class Ui(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	def DispatchTrainWindow(self):
 
-		uic.loadUi('UI/ctc_dispatch_train.ui', self)
+		uic.loadUi('src/UI/CTC/ctc_dispatch_train.ui', self)
 		self.setWindowTitle("CTC - Dispatch Train")
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
@@ -150,7 +150,7 @@ class Ui(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def MapWindow(self):
-		uic.loadUi('UI/ctc_view_map.ui', self)
+		uic.loadUi('src/UI/CTC/ctc_view_map.ui', self)
 		self.setWindowTitle("CTC - View Map")
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
@@ -158,7 +158,7 @@ class Ui(QtWidgets.QMainWindow):
 
 	# Return to Main from all different windows
 	def returnToMainWindow(self):
-		uic.loadUi('UI/ctc_main.ui', self)
+		uic.loadUi('src/UI/CTC/ctc_main.ui', self)
 		self.setWindowTitle("CTC Main Page")
 
 		# In Main Window
