@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>724</width>
-    <height>434</height>
+    <width>642</width>
+    <height>361</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>30</y>
+      <x>0</x>
+      <y>0</y>
       <width>641</width>
       <height>341</height>
      </rect>
@@ -46,7 +46,7 @@ border-color: rgb(0, 0, 0);</string>
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap>../../../../Pictures/Train Map.png</pixmap>
+      <pixmap>newPrefix/Train Map.png</pixmap>
      </property>
     </widget>
     <widget class="QPushButton" name="train_button_4">

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>642</width>
+    <height>361</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
-      <x>80</x>
-      <y>100</y>
+      <x>0</x>
+      <y>0</y>
       <width>641</width>
       <height>341</height>
      </rect>
@@ -72,7 +72,7 @@ border-color: rgb(0, 0, 0);</string>
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(C:/Users/kenne/Documents/16th Grade/1140 Jerry Seinfeld/Lab 6/newPrefix/Joseph Seinfeld.png);
+      <string notr="true">background-image: url(C:/Users/kenne/Documents/GitHub/ECE1140-Project/src/UI/TrainModel/newPrefix/Joseph Seinfeld.png);
 color: rgb(255, 0, 0);</string>
      </property>
      <property name="text">
@@ -185,8 +185,6 @@ color: rgb(255, 0, 0);</string>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources>
-  <include location="new.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

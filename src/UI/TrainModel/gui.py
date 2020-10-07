@@ -2,6 +2,7 @@
 import os
 from PyQt5 import QtWidgets, uic
 import sys
+import CTC
 
 username = "trainmodel"
 password = "jerry"
@@ -14,7 +15,7 @@ class Ui(QtWidgets.QMainWindow):
 
 
     def login(self):
-        uic.loadUi('C:/Users/kenne/Documents/16th Grade/1140 Jerry Seinfeld/Lab 6/Login_Page.ui', self)
+        uic.loadUi('src/UI/TrainModel/Login_Page.ui', self)
         self.alert_login = self.findChild(QtWidgets.QLabel, 'alert_login')
         self.username_in = self.findChild(QtWidgets.QLineEdit, 'username_in')
         self.password_in = self.findChild(QtWidgets.QLineEdit, 'password_in')
@@ -37,7 +38,7 @@ class Ui(QtWidgets.QMainWindow):
         elif username == "swtrack" and password == "jerry":
             print("swtrack")
         elif username == "ctc" and password == "jerry":
-            print("swtrack")
+            execfile('src/UI/CTC/ctc_gui.py')
         elif username == "hwtrain" and password == "jerry":
             print("hwtrain")
         elif username == "swtrain" and password == "jerry":
@@ -47,7 +48,7 @@ class Ui(QtWidgets.QMainWindow):
 
 
     def mapPage(self):
-        uic.loadUi('C:/Users/kenne/Documents/16th Grade/1140 Jerry Seinfeld/Lab 6/Map_Page.ui', self)
+        uic.loadUi('src/UI/TrainModel/Map_Page.ui', self)
 
         self.logoutbutton = self.findChild(QtWidgets.QPushButton, 'logout_button_map') # Find the button
         self.logoutbutton.clicked.connect(self.logout)
@@ -64,7 +65,7 @@ class Ui(QtWidgets.QMainWindow):
     
     def trainMenu1(self):
         # This is executed when the button is pressed
-        uic.loadUi('C:/Users/kenne/Documents/16th Grade/1140 Jerry Seinfeld/Lab 6/Train_Menu.ui', self)
+        uic.loadUi('src/UI/TrainModel/Train_Menu.ui', self)
         self.button2 = self.findChild(QtWidgets.QPushButton, 'logout_button_menu') # Find the button
         self.button2.clicked.connect(self.logout)
         self.button = self.findChild(QtWidgets.QPushButton, 'train_info_button')# Find the button
@@ -88,7 +89,7 @@ class Ui(QtWidgets.QMainWindow):
 
     def trainInfo1(self):
         # This is executed when the button is pressed
-        uic.loadUi('C:/Users/kenne/Documents/16th Grade/1140 Jerry Seinfeld/Lab 6/Train_Info_Page1.ui', self)
+        uic.loadUi('src/UI/TrainModel/Train_Info_Page1.ui', self)
         self.logoutbutton = self.findChild(QtWidgets.QPushButton, 'logout_button_info1') # Find the button
         self.logoutbutton.clicked.connect(self.logout)
         
@@ -101,7 +102,7 @@ class Ui(QtWidgets.QMainWindow):
     
     def trainInfo2(self):
         # This is executed when the button is pressed
-        uic.loadUi('C:/Users/kenne/Documents/16th Grade/1140 Jerry Seinfeld/Lab 6/Train_Info_Page2.ui', self)
+        uic.loadUi('src/UI/TrainModel/Train_Info_Page2.ui', self)
         self.logoutbutton = self.findChild(QtWidgets.QPushButton, 'logout_button_info2') # Find the button
         self.logoutbutton.clicked.connect(self.logout)
 
@@ -116,7 +117,7 @@ class Ui(QtWidgets.QMainWindow):
     
     def trainInfo3(self):
         # This is executed when the button is pressed
-        uic.loadUi('C:/Users/kenne/Documents/16th Grade/1140 Jerry Seinfeld/Lab 6/Train_Info_Page3.ui', self)
+        uic.loadUi('src/UI/TrainModel/Train_Info_Page3.ui', self)
         self.logoutbutton = self.findChild(QtWidgets.QPushButton, 'logout_button_info3') # Find the button
         self.logoutbutton.clicked.connect(self.logout)
 
@@ -129,7 +130,7 @@ class Ui(QtWidgets.QMainWindow):
 
     def trainParameters(self):
         # This is executed when the button is pressed
-        uic.loadUi('C:/Users/kenne/Documents/16th Grade/1140 Jerry Seinfeld/Lab 6/Train_Parameter.ui', self)
+        uic.loadUi('src/UI/TrainModel/Train_Parameter.ui', self)
         self.logoutbutton = self.findChild(QtWidgets.QPushButton, 'logout_button_parameters') # Find the button
         self.logoutbutton.clicked.connect(self.logout)
         self.logoutbutton = self.findChild(QtWidgets.QPushButton, 'pagePtoM_button') # Find the button
@@ -143,7 +144,7 @@ class Ui(QtWidgets.QMainWindow):
 
     def trainReports(self):
         # This is executed when the button is pressed
-        uic.loadUi('C:/Users/kenne/Documents/16th Grade/1140 Jerry Seinfeld/Lab 6/Train_Report.ui', self)
+        uic.loadUi('src/UI/TrainModel/Train_Report.ui', self)
         self.logoutbutton = self.findChild(QtWidgets.QPushButton, 'logout_button_report') # Find the button
         self.logoutbutton.clicked.connect(self.logout)
 
