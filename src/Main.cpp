@@ -11,8 +11,7 @@
 int main()
 {
     /* Module Specific Initializations */
-    
-    
+
     try
     {
         boost::asio::io_service io_service;

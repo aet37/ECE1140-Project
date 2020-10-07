@@ -86,7 +86,9 @@ private:
     char m_data[MAX_LENGTH];
 
     /**
+     * @brief Parses the data received to construct a request object
      * 
+     * @param[out] rReq     Request constructed from recieved information
     */
     void ParseRequest(Common::Request& rReq);
 
