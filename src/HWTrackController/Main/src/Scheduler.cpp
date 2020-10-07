@@ -21,13 +21,13 @@ void Scheduler::RunTasks()
     // For every task...
     for (int i = 0; i < m_taskList.GetLength(); i++)
     {
-        Task* pTask = m_taskList[i];
+        SystemTask* pTask = m_taskList[i];
 
         // If it's
         if (currentTimeInMs - pTask->GetTimeLastRun() >= pTask->GetPeriod())
         {
-            LOG("Error Time: "); LOG_DECN((currentTimeInMs - pTask->GetTimeLastRun() - pTask->GetPeriod()));
-            pTask->operator()();
+            // LOG("Error Time: "); LOG_DECN((currentTimeInMs - pTask->GetTimeLastRun() - pTask->GetPeriod()));
+            pTask->operator()(m_pProgram);
             pTask->SetTimeLastRun(currentTimeInMs);
         }
     }

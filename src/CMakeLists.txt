@@ -5,10 +5,18 @@ find_package(Boost 1.53.0 COMPONENTS system)
 include_directories("${PROJECT_SOURCE_DIR}/include/Server")
 include_directories("${PROJECT_SOURCE_DIR}/include/HWTrackController")
 include_directories("${PROJECT_SOURCE_DIR}/include/Common")
+include_directories("${PROJECT_SOURCE_DIR}/include/Debug")
 include_directories("${Boost_INCLUDE_DIRS}")
 
 # Add subdirectories
+add_subdirectory(Debug)
+add_subdirectory(CTC)
+add_subdirectory(SWTrackController)
 add_subdirectory(HWTrackController)
+add_subdirectory(TrackModel)
+add_subdirectory(TrainModel)
+add_subdirectory(SWTrainController)
+add_subdirectory(HWTrainController)
 
 # Set source files
 set(SOURCES
@@ -19,4 +27,14 @@ set(SOURCES
 
 add_executable(main ${SOURCES})
 
-target_link_libraries(main ${Boost_LIBRARIES} HWTrackController)
+target_link_libraries(main 
+                      ${Boost_LIBRARIES}
+                      CTC
+                      SWTrackController
+                      HWTrackController
+                      TrackModel
+                      TrainModel
+                      SWTrainController
+                      HWTrainController
+                      debug_lib
+)
