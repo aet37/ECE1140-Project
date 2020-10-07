@@ -716,6 +716,19 @@ background-color: rgb(255, 255, 10);</string>
      <string>KEY</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="RefreshSystem">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>110</y>
+      <width>113</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Refresh Map</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
