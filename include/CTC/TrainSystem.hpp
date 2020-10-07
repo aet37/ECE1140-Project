@@ -58,7 +58,7 @@ class TrainSystem
 		 * @return pointer to newly created Train struct
 		 *
 		 */
-		Train* create_new_train(int block_to);
+		Train* CreateNewTrain(int block_to);
 };
 
 #endif //CTC_TRAIN_SYSTEM_H

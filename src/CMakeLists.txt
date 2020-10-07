@@ -8,6 +8,9 @@ include_directories("${PROJECT_SOURCE_DIR}/include/Common")
 include_directories("${PROJECT_SOURCE_DIR}/include/Debug")
 include_directories("${Boost_INCLUDE_DIRS}")
 
+# CTC Module Includes
+include_directories("${PROJECT_SOURCE_DIR}/include/CTC")
+
 # Add subdirectories
 add_subdirectory(Debug)
 add_subdirectory(CTC)
