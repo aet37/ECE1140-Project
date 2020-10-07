@@ -31,8 +31,10 @@ class RequestCode(Enum):
     GET_SWITCH_POSITION = 97
     GET_HW_TRACK_CONTROLLER_REQUEST = 100
     SEND_HW_TRACK_CONTROLLER_RESPONSE = 101
-
+    
     GET_COMMAND_SPEED = 160
+    SET_TRAIN_LENGTH = 161
+
 
 class ResponseCode(Enum):
     """Codes to begin communication from the server
@@ -60,10 +62,15 @@ def send_message(request_code, data=""):
 
     """
     request = bytes(str(request_code.value), 'utf-8') + b' ' + bytes(data, 'utf-8')
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.connect((HOST, PORT))
-        sock.sendall(request)
-        data = sock.recv(1024)
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            sock.connect((HOST, PORT))
+            sock.sendall(request)
+            data = sock.recv(1024)
+    except ConnectionRefusedError:
+        # Show up as an error
+        data = b'1'
+
 
     # Remove byte stuff and split along first space
     splits = repr(data)[2:-1].split(" ", 1)

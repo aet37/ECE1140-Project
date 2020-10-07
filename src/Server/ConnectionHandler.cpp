@@ -15,6 +15,7 @@
 #include "Request.hpp" // For Common::Request
 #include "Response.hpp" // For Common::Response
 #include "BufferFunctions.hpp"
+#include "TrainModelData.hpp" // For TrainModel::setTrainLength
 #include "Logger.hpp" // For LOG macros
 
 #include "TrainSystem.hpp"             // For CTC actions
@@ -145,6 +146,12 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         {
             resp.SetResponseCode(Common::ResponseCode::SUCCESS);
             resp.SetData("45");
+            break;
+        }
+        case Common::RequestCode::SET_TRAIN_LENGTH:
+        {
+            TrainModel::setTrainLength(std::stoi(rReq.GetData()));
+            resp.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
         default:
