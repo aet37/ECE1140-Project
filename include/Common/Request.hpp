@@ -39,14 +39,10 @@ enum class RequestCode : uint8_t
     GET_SWITCH_POSITION = 97,
     GET_HW_TRACK_CONTROLLER_REQUEST = 100,
     SEND_HW_TRACK_CONTROLLER_RESPONSE = 101,
-<<<<<<< Updated upstream
-    GET_HW_TRACK_CONTROLLER_RESPONSE = 102
-=======
     GET_HW_TRACK_CONTROLLER_RESPONSE = 102,
 
     GET_COMMAND_SPEED = 160,
     SET_TRAIN_LENGTH = 161
->>>>>>> Stashed changes
 };
 
 /**
