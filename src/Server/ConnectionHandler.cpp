@@ -15,12 +15,8 @@
 #include "Request.hpp" // For Common::Request
 #include "Response.hpp" // For Common::Response
 #include "BufferFunctions.hpp"
-<<<<<<< Updated upstream
-#include "Logger.hpp" // For Logging (debugging)
-=======
 #include "TrainModelData.hpp" // For TrainModel::setTrainLength
 #include "Logger.hpp" // For LOG macros
->>>>>>> Stashed changes
 
 #include "TrainSystem.hpp"             // For CTC actions
 
@@ -140,8 +136,6 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
 	        TrainInfoBuffer_TrackController(pto_send->train_id, pto_send->destination_block, pto_send->authority, pto_send->command_speed);
             break;
         }
-<<<<<<< Updated upstream
-=======
         case Common::RequestCode::GET_COMMAND_SPEED:
         {
             resp.SetResponseCode(Common::ResponseCode::SUCCESS);
@@ -154,7 +148,6 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
             resp.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
->>>>>>> Stashed changes
         default:
             std::cerr << "Invalid command " << m_data << " received" << std::endl;
             m_message = "INVALID COMMAND";
