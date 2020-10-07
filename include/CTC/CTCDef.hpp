@@ -1,14 +1,23 @@
-//
-// Created by Andrew Toader on 10.1.20.
-//
+/**
+ * @file CTCDef.hpp
+ *
+ * @brief Declaration of Structs and Enums used in CTC
+ *
+ * @author Andrew Toader
+ *
+ * @date 10.01.2020
+*/
 
 #ifndef CTC_CTCDEF_H
 #define CTC_CTCDEF_H
-
-// Structure that holds data about a single train
+/**
+ *  @struct Train
+ *
+ * @brief Structure that holds data about a single train (id, command speed, authority, destination block)
+ *
+ */
 struct Train
 {
-	// Variables
 	int train_id;
 	int command_speed;
 	int authority;
@@ -24,7 +33,12 @@ struct Train
 	}
 };
 
-// Structure that holds data about a single train
+/**
+ * @struct Track
+ *
+ * @brief Structure that holds data about a single track (open, occupied)
+ *
+ */
 struct Track
 {
 	bool open;
@@ -38,10 +52,23 @@ struct Track
 	}
 };
 
-// Enumerated type telling light color
+/**
+ * @enum Color
+ *
+ * @brief Enumerated type telling light color
+ *
+ * @li LIGHT_RED
+ * @li LIGHT_YELLOW
+ * @li LIGHT_GREEN
+ *
+ */
 enum Color {LIGHT_RED, LIGHT_YELLOW, LIGHT_GREEN};
 
-// Structure that holds data about a single Signal
+/**
+ * @struct Signal
+ *
+ * @brief Structure that holds data about a single Signal (color, track on)
+ */
 struct Signal
 {
 	enum Color status;
