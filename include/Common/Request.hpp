@@ -34,6 +34,7 @@ enum class RequestCode : uint8_t
     LOGIN = 2,
 
     CTC_DISPATCH_TRAIN = 32,
+    CTC_SEND_OCCUPANCIES = 33,
 
     SET_SWITCH_POSITION = 96,
     GET_SWITCH_POSITION = 97,

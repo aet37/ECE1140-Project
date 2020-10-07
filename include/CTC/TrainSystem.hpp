@@ -65,6 +65,16 @@ class TrainSystem
 		static TrainSystem& GetInstance();
 
 		/**
+		* @brief Get the Array of track pointers
+		 *
+		* @param none
+		*
+		* @return vector<Track*>
+		*
+		*/
+		std::vector<Track*> GetTrackArr();
+
+		/**
 		 * @brief Create(dispatch) a new train by creating
 		 * the Train object then adding it to the class member vector
 		 *
