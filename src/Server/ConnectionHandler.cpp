@@ -15,9 +15,10 @@
 #include "Request.hpp" // For Common::Request
 #include "Response.hpp" // For Common::Response
 #include "BufferFunctions.hpp"
+#include "Logger.hpp" // For LOG macros
 
-#include "../CTC/TrainSystem.h"             // For CTC actions
-#include "../../src/CTC/TrainSystem.cpp"
+#include "TrainSystem.hpp"             // For CTC actions
+
 
 void ConnectionHandler::Start()
 {
@@ -41,7 +42,7 @@ void ConnectionHandler::HandleRead(const boost::system::error_code& rErr, size_t
     m_data[bytesTransferred] = '\0';
 
     // Just print out the received data
-    std::cout << "Server received " << m_data << std::endl;
+    LOG_SERVER("Server received %s", m_data);
 
     // Parse the data into the request structure
     Common::Request req;
@@ -62,7 +63,7 @@ void ConnectionHandler::HandleWrite(const boost::system::error_code& rErr, size_
     if (!rErr)
     {
         // Just print out a message
-        std::cout << "Server sent " << m_message << std::endl;
+        LOG_SERVER("Server sent %s", m_message.c_str());
     }
     else
     {
@@ -98,7 +99,7 @@ void ConnectionHandler::ParseRequest(Common::Request& rReq)
     }
     catch (std::exception& e)
     {
-        std::cerr << "Invalid command " << m_data << std::endl;
+        LOG_SERVER("Invalid command %s", m_data);
         rReq.SetRequestCode(Common::RequestCode::ERROR);
     }
 }
@@ -120,30 +121,34 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         }
         case Common::RequestCode::CTC_DISPATCH_TRAIN:
         {
-        	// Iterate through m_data to get destination block (first number in message)
-        	std::string str_block;
-        	char curr = m_data[0];
-        	int itter = 0;
-        	while(curr != ' ')
-	        {
-				str_block.append(reinterpret_cast<const char *>(curr));
-				itter++;
-				curr = m_data[itter];
-	        }
+        	// Extract the block train was dispatched to
+        	std::string str_block = rReq.GetData().substr(0, 2);
 
-        	// Convert string to integer
+        	// Convert block to integer
         	int block_to = std::stoi(str_block);
 
 			// Call TrainSystem singleton instance to create a new train
         	Train* pto_send;
-        	pto_send = TrainSystem::GetInstance().create_new_train(block_to);
+        	pto_send = TrainSystem::GetInstance().CreateNewTrain(block_to);
 
         	// Send Train Struct to Track Controller buffer function
-	        CTCToTCTrainInfoBuffer(pto_send->train_id, pto_send->destination_block, pto_send->authority, pto_send->command_speed);
+	        TrainInfoBuffer_TrackController(pto_send->train_id, pto_send->destination_block, pto_send->authority, pto_send->command_speed);
+
+	        // Log action
+	        LOG_CTC("From ConnectionHandler.cpp (CTC_DISPATCH_TRAIN) : Sent Track C. Train %d to block %d", pto_send->train_id, pto_send->destination_block);
+
+	        // Make pointer null
+	        pto_send = nullptr;
+            break;
+        }
+        case Common::RequestCode::GET_COMMAND_SPEED:
+        {
+            resp.SetResponseCode(Common::ResponseCode::SUCCESS);
+            resp.SetData("45");
             break;
         }
         default:
-            std::cerr << "Invalid command " << m_data << " received" << std::endl;
+            LOG_SERVER("Invalid RequestCode %d", static_cast<int>(rReq.GetRequestCode()));
             m_message = "INVALID COMMAND";
             return;
     }

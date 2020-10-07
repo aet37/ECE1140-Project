@@ -6,19 +6,22 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>642</width>
+    <height>361</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="tabShape">
+   <enum>QTabWidget::Rounded</enum>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="report_signal_button">
     <property name="geometry">
      <rect>
-      <x>160</x>
-      <y>220</y>
+      <x>90</x>
+      <y>140</y>
       <width>431</width>
       <height>28</height>
      </rect>
@@ -44,8 +47,8 @@
    <widget class="QPushButton" name="report_brake_button">
     <property name="geometry">
      <rect>
-      <x>160</x>
-      <y>260</y>
+      <x>90</x>
+      <y>180</y>
       <width>431</width>
       <height>28</height>
      </rect>
@@ -68,11 +71,11 @@
      </size>
     </property>
    </widget>
-   <widget class="QPushButton" name="logout_button">
+   <widget class="QPushButton" name="logout_button_report">
     <property name="geometry">
      <rect>
-      <x>570</x>
-      <y>90</y>
+      <x>500</x>
+      <y>10</y>
       <width>131</width>
       <height>31</height>
      </rect>
@@ -116,8 +119,8 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>80</x>
-      <y>90</y>
+      <x>10</x>
+      <y>10</y>
       <width>203</width>
       <height>31</height>
      </rect>
@@ -134,8 +137,8 @@
    <widget class="QPushButton" name="report_engine_button">
     <property name="geometry">
      <rect>
-      <x>160</x>
-      <y>180</y>
+      <x>90</x>
+      <y>100</y>
       <width>431</width>
       <height>28</height>
      </rect>
@@ -161,8 +164,8 @@
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
-      <x>69</x>
-      <y>79</y>
+      <x>-1</x>
+      <y>-1</y>
       <width>641</width>
       <height>341</height>
      </rect>
@@ -177,11 +180,90 @@ border-color: rgb(0, 0, 0);</string>
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
+    <widget class="QLabel" name="alert_sent1">
+     <property name="geometry">
+      <rect>
+       <x>530</x>
+       <y>110</y>
+       <width>47</width>
+       <height>13</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(221, 221, 221);</string>
+     </property>
+     <property name="text">
+      <string>Sent!</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="alert_sent2">
+     <property name="geometry">
+      <rect>
+       <x>530</x>
+       <y>150</y>
+       <width>47</width>
+       <height>13</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(221, 221, 221);</string>
+     </property>
+     <property name="text">
+      <string>Sent!</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="alert_sent3">
+     <property name="geometry">
+      <rect>
+       <x>530</x>
+       <y>190</y>
+       <width>47</width>
+       <height>13</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(221, 221, 221);</string>
+     </property>
+     <property name="text">
+      <string>Sent!</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pageRtoM_button">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>310</y>
+       <width>61</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string>&lt;- Menu</string>
+     </property>
+    </widget>
    </widget>
    <zorder>frame</zorder>
    <zorder>report_signal_button</zorder>
    <zorder>report_brake_button</zorder>
-   <zorder>logout_button</zorder>
+   <zorder>logout_button_report</zorder>
    <zorder>label</zorder>
    <zorder>report_engine_button</zorder>
   </widget>
