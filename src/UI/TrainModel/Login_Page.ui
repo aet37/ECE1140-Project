@@ -54,15 +54,16 @@ border-color: rgb(0, 0, 0);</string>
     <widget class="QPushButton" name="login_button">
      <property name="geometry">
       <rect>
-       <x>180</x>
-       <y>230</y>
-       <width>281</width>
-       <height>91</height>
+       <x>270</x>
+       <y>200</y>
+       <width>101</width>
+       <height>21</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>35</pointsize>
+       <family>Futura Md BT</family>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <italic>true</italic>
        <bold>true</bold>
@@ -72,56 +73,11 @@ border-color: rgb(0, 0, 0);</string>
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(C:/Users/kenne/Documents/GitHub/ECE1140-Project/src/UI/TrainModel/newPrefix/Joseph Seinfeld.png);
-color: rgb(255, 0, 0);</string>
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(102, 176, 54);</string>
      </property>
      <property name="text">
       <string>Login</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="logout_button_log">
-     <property name="geometry">
-      <rect>
-       <x>530</x>
-       <y>10</y>
-       <width>101</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>1347</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>11</pointsize>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string>Logout</string>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>20</width>
-       <height>20</height>
-      </size>
      </property>
     </widget>
     <widget class="QLineEdit" name="username_in">

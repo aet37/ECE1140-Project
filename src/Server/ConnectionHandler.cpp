@@ -15,7 +15,7 @@
 #include "Request.hpp" // For Common::Request
 #include "Response.hpp" // For Common::Response
 #include "BufferFunctions.hpp"
-#include "Logger.hpp" // For Logging (debugging)
+#include "Logger.hpp" // For LOG macros
 
 #include "TrainSystem.hpp"             // For CTC actions
 
@@ -42,7 +42,7 @@ void ConnectionHandler::HandleRead(const boost::system::error_code& rErr, size_t
     m_data[bytesTransferred] = '\0';
 
     // Just print out the received data
-    std::cout << "Server received " << m_data << std::endl;
+    LOG_SERVER("Server received %s", m_data);
 
     // Parse the data into the request structure
     Common::Request req;
@@ -63,7 +63,7 @@ void ConnectionHandler::HandleWrite(const boost::system::error_code& rErr, size_
     if (!rErr)
     {
         // Just print out a message
-        std::cout << "Server sent " << m_message << std::endl;
+        LOG_SERVER("Server sent %s", m_message.c_str());
     }
     else
     {
@@ -99,7 +99,7 @@ void ConnectionHandler::ParseRequest(Common::Request& rReq)
     }
     catch (std::exception& e)
     {
-        std::cerr << "Invalid command " << m_data << std::endl;
+        LOG_SERVER("Invalid command %s", m_data);
         rReq.SetRequestCode(Common::RequestCode::ERROR);
     }
 }
@@ -135,8 +135,14 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
 	        TrainInfoBuffer_TrackController(pto_send->train_id, pto_send->destination_block, pto_send->authority, pto_send->command_speed);
             break;
         }
+        case Common::RequestCode::GET_COMMAND_SPEED:
+        {
+            resp.SetResponseCode(Common::ResponseCode::SUCCESS);
+            resp.SetData("45");
+            break;
+        }
         default:
-            std::cerr << "Invalid command " << m_data << " received" << std::endl;
+            LOG_SERVER("Invalid RequestCode %d", static_cast<int>(rReq.GetRequestCode()));
             m_message = "INVALID COMMAND";
             return;
     }

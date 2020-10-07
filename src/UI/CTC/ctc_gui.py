@@ -11,7 +11,8 @@ class CTCUi(QtWidgets.QMainWindow):
 	# UI Class initializer
 	def __init__(self):
 		super(CTCUi, self).__init__()
-		uic.loadUi('src/UI/CTC/UI/ctc_main.ui', self)
+		uic.loadUi('src/UI/CTC/ctc_main.ui', self)
+
 		self.setWindowTitle("CTC Main Page")
 
 		# In Main Window
@@ -40,7 +41,7 @@ class CTCUi(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def LoadScheduleWindow(self):
-		uic.loadUi('src/UI/CTC/UI/ctc_schedule_import.ui', self)
+		uic.loadUi('src/UI/CTC/ctc_schedule_import.ui', self)
 		self.setWindowTitle("CTC - Load Schedule")
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
@@ -53,7 +54,7 @@ class CTCUi(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def EditScheduleWindow(self):
-		uic.loadUi('src/UI/CTC/UI/ctc_schedule_edit.ui', self)
+		uic.loadUi('src/UI/CTC/ctc_schedule_edit.ui', self)
 		self.setWindowTitle("CTC - Edit Schedule")
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
@@ -62,7 +63,7 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.button.clicked.connect(self.saveEditedSchedule)
 
 	def saveEditedSchedule(self):
-		APPCTC.exit()
+		app.exit()
 
 
 
@@ -72,8 +73,7 @@ class CTCUi(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def DispatchTrainWindow(self):
-
-		uic.loadUi('src/UI/CTC/UI/ctc_dispatch_train.ui', self)
+		uic.loadUi('src/UI/CTC/ctc_dispatch_train.ui', self)
 		self.setWindowTitle("CTC - Dispatch Train")
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
@@ -150,7 +150,7 @@ class CTCUi(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def MapWindow(self):
-		uic.loadUi('src/UI/CTC/UI/ctc_view_map.ui', self)
+		uic.loadUi('src/UI/CTC/ctc_view_map.ui', self)
 		self.setWindowTitle("CTC - View Map")
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
@@ -158,7 +158,7 @@ class CTCUi(QtWidgets.QMainWindow):
 
 	# Return to Main from all different windows
 	def returnToMainWindow(self):
-		uic.loadUi('src/UI/CTC/UI/ctc_main.ui', self)
+		uic.loadUi('src/UI/CTC/ctc_main.ui', self)
 		self.setWindowTitle("CTC Main Page")
 
 		# In Main Window
@@ -193,23 +193,13 @@ class CTCUi(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def ExitModule(self):
-		APPCTC.exit()
+		os.system('start /B python src/UI/login_gui.py')
+		app.exit()
 
 
-
-
-
-
-
-
-
-# Opens application when called
-def CTCLogin():
-	# make global so it is visible to class in gui.py file
-	global APPCTC
-	APPCTC = QtWidgets.QApplication(sys.argv)
-	window = CTCUi()
-	APPCTC.exec_()
+app = QtWidgets.QApplication(sys.argv)
+window = CTCUi()
+app.exec_()
 
 
 
