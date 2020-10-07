@@ -62,7 +62,7 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.button.clicked.connect(self.saveEditedSchedule)
 
 	def saveEditedSchedule(self):
-		app.exit()
+		APPCTC.exit()
 
 
 
@@ -186,7 +186,6 @@ class CTCUi(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	def ToggleAutomaicMode(self):
 		return None
-		#app.exit()
 
 	#######################################################################################################################################
 	#######################################################################################################################################
@@ -194,7 +193,7 @@ class CTCUi(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def ExitModule(self):
-		app.exit()
+		APPCTC.exit()
 
 
 
@@ -204,11 +203,13 @@ class CTCUi(QtWidgets.QMainWindow):
 
 
 
-# Main
+# Opens application when called
 def CTCLogin():
-	app = QtWidgets.QApplication(sys.argv)
+	# make global so it is visible to class in gui.py file
+	global APPCTC
+	APPCTC = QtWidgets.QApplication(sys.argv)
 	window = CTCUi()
-	app.exec_()
+	APPCTC.exec_()
 
 
 
