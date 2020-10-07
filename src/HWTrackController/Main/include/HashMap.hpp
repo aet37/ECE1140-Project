@@ -12,7 +12,7 @@
 
 /**
  * @class HashMap
- * 
+ *
  * @brief HashMap data structure
  * @tparam T Type of values stored
 */
@@ -22,10 +22,10 @@ class HashMap
 public:
     /**
      * @brief Constructs a new HashMap object
-     * 
+     *
      * @param[in] size Initial size of the hashmap
     */
-    HashMap(uint32_t size = 11) :
+    explicit HashMap(uint32_t size = 11) :
         m_pKeys(new String[size]),
         m_pValues(new T[size]),
         m_numElements(0),
@@ -44,9 +44,9 @@ public:
     /**
      * @brief Inserts an element into the hashmap
      * using the given key
-     * 
+     *
      * @param key       Key at which to insert
-     * @param value     Value to associate with key 
+     * @param value     Value to associate with key
     */
     void Insert(String key, T value)
     {
@@ -81,7 +81,7 @@ public:
     /**
      * @brief Obtains an element corresponding
      * to the given key
-     * 
+     *
      * @param rKey      Key whose value to retrieve
      * @return Values associated with key
     */
@@ -110,7 +110,7 @@ public:
 
     /**
      * @brief Updates the value associated with the given key
-     * 
+     *
      * @param rKey      Key whose value to update
      * @param newValue  New value for the key
      * @return False if the key isn't found
@@ -142,7 +142,7 @@ public:
     /**
      * @brief Determines if an element exists
      * for the given key
-     * 
+     *
      * @param rKey      Key to look for
      * @return Whether key exists in the hash
      *      @retval true    - Key is in hash
@@ -184,9 +184,9 @@ private:
     uint32_t m_size;
 
     /**
-     * Calculates the index of the string using 
+     * Calculates the index of the string using
      * Horner's method
-     * 
+     *
      * @param rStr      String to be hashed
      * @return          Hash of the string
     */
@@ -248,37 +248,37 @@ private:
     /**
      * @brief Helper method to determine the
      * next prime number after the given number
-     * 
+     *
      * @param[in] N    Starting point
      * @return The next prime number greater than n
     */
     int NextPrime(const int N) const
-    { 
-        // Base case 
-        if (N <= 1) return 2; 
-    
-        int prime = N; 
-        bool found = false; 
-    
-        // Loop continuously until IsPrime returns 
-        // true for a number greater than n 
+    {
+        // Base case
+        if (N <= 1) return 2;
+
+        int prime = N;
+        bool found = false;
+
+        // Loop continuously until IsPrime returns
+        // true for a number greater than n
         while (!found)
-        { 
-            prime++; 
-    
+        {
+            prime++;
+
             if (IsPrime(prime))
             {
                 found = true;
             }
-        } 
-    
-        return prime; 
+        }
+
+        return prime;
     }
 
     /**
      * @brief Helper method to determine if a
      * number is prime or not
-     * 
+     *
      * @param[in] n    Number to investigate
      * @return Whether number is prime
      *      @retval true    - Number is prime

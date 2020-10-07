@@ -15,12 +15,12 @@ void UserProgram::AddTag(const char* pTagName)
     m_tags.Insert(pTagName, false);
 }
 
-bool UserProgram::SetTag(String& rTagName, bool value)
+bool UserProgram::SetTag(const String& rTagName, bool value)
 {
     return m_tags.Update(rTagName, value);
 }
 
-bool UserProgram::GetTagValue(String& rTagName, bool& rValue)
+bool UserProgram::GetTagValue(const String& rTagName, bool& rValue) const
 {
     if (m_tags.Contains(rTagName))
     {
