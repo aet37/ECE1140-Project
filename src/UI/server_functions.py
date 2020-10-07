@@ -71,7 +71,6 @@ def send_message(request_code, data=""):
         # Show up as an error
         data = b'1'
 
-
     # Remove byte stuff and split along first space
     splits = repr(data)[2:-1].split(" ", 1)
     response_code = int(splits[0])
