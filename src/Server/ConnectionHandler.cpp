@@ -63,7 +63,7 @@ void ConnectionHandler::HandleWrite(const boost::system::error_code& rErr, size_
     if (!rErr)
     {
         // Just print out a message
-        LOG_SERVER("Server sent %s", m_message);
+        LOG_SERVER("Server sent %s", m_message.c_str());
     }
     else
     {
@@ -133,6 +133,12 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
 
         	// Send Train Struct to Track Controller buffer function
 	        TrainInfoBuffer_TrackController(pto_send->train_id, pto_send->destination_block, pto_send->authority, pto_send->command_speed);
+            break;
+        }
+        case Common::RequestCode::GET_COMMAND_SPEED:
+        {
+            resp.SetResponseCode(Common::ResponseCode::SUCCESS);
+            resp.SetData("45");
             break;
         }
         default:
