@@ -2,7 +2,7 @@ import os
 from PyQt5 import QtWidgets, uic, QtCore
 import sys
 
-sys.path.insert(1, '../../src')
+sys.path.insert(1, '../..')
 from server_functions import *
 
 # GLOBALS

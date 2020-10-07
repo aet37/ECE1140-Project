@@ -2,7 +2,8 @@
 import os
 from PyQt5 import QtWidgets, uic
 import sys
-import CTC
+
+#import CTC
 
 username = "trainmodel"
 password = "jerry"
@@ -38,7 +39,8 @@ class Ui(QtWidgets.QMainWindow):
         elif username == "swtrack" and password == "jerry":
             print("swtrack")
         elif username == "ctc" and password == "jerry":
-            execfile('src/UI/CTC/ctc_gui.py')
+            os.system('python src/UI/CTC/ctc_gui.py')
+            #execfile('src/UI/CTC/ctc_gui.py')
         elif username == "hwtrain" and password == "jerry":
             print("hwtrain")
         elif username == "swtrain" and password == "jerry":
