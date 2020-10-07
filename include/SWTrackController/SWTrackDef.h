@@ -5,7 +5,7 @@
 #ifndef SW_TRACK_DEF_H
 #define SW_TRACK_DEF_H
 
-// Structure that holds data about a single train
+// Structure that holds data about a single track
 struct Track
 {
 	// Variables
@@ -13,7 +13,8 @@ struct Track
 	int command_speed;
 	int authority;
 	int destination_block;
-	int occupancies;
+	int occupancy;
+	int switch_position;
 
 	// Constructor to initialize elements
 	Track()
@@ -22,30 +23,32 @@ struct Track
 		destination_block = 0;
 		command_speed = 0;
 		authority = 0;
-		occupancies = 0;
+		occupancy = 0;
+		switch_position = 6;
 	}
-	
-};
-
-struct Switch
-{
-
-	bool switch_position;
-	int switch_id;
-
-
-
-		Switch()
+	Track(int id, int destination, int auth, int speed)
+	{
+		train_id = id;
+		destination_block = destination;
+		command_speed = speed;
+		authority = auth;
+		occupancy = 0;
+		if(destination ==15)
 		{
-			switch_position = 0;
-			
+			switch_position = 11;
+		}
+		else
+		{
+			switch_position =6;
 		}
 
+	}	
+	void occ_update(int occ)
+	{
+		occupancy = occ;
 
-
+	}
 };
-
-
 
 
 

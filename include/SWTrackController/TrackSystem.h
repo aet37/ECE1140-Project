@@ -5,7 +5,6 @@
 
 #include <vector>
 #include "SWTrackDef.h"
-#include "SwitchDef.h"
 #ifndef SW_TRACK_SYSTEM_H
 #define SW_TRACK_SYSTEM_H
 
@@ -13,14 +12,14 @@ class TrackSystem
 {
 	private:
 		/**
-		 * @brief constructor for singleton object TrainSystem
+		 * @brief constructor for singleton object TrackSystem
 		 */
 		TrackSystem()
 		{ }
 
 		// Tracks
 		std::vector<int> switch_numbers;
-		std::vector<Switch*> p_switches;
+		std::vector<Track*> p_tracks;
         std::vector<int> track_occupancies;
 
 	
@@ -28,22 +27,20 @@ class TrackSystem
 	public:
 		/**
 		 * @brief	gets singleton instance
-		 * @return 	reference to this singleton TrainSystem Object
+		 * @return 	reference to this singleton TrackSystem Object
 		 */
 		static TrackSystem& GetInstance();
 
 
-		/**
-		 *
-		 * @param block_to
-		 * @return pointer to Train struct
-		 */
-		Track* create_new_switch(int authority, int train_id, int comm_speed,int destination);
+		//create a new track with inputted variables
+		Track* create_new_track(int ,int , int,int );
 
-		// Send train id, authority and speed to Track Controller
-		void send_track_info_ctc(Track* to_send_ctc);
+		// update the occupancy of a single track
+		void update_occupancies(Track&, int );
 
-        void send_track_info_tm(Track* to_send_tm);
+		
+
+		
 
 		// TESTING PURPOSES
 		void printout();

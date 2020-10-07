@@ -18,6 +18,7 @@
 #include "Logger.hpp" // For LOG macros
 
 #include "TrainSystem.hpp"             // For CTC actions
+#include "TrackSystem.hpp"
 
 
 void ConnectionHandler::Start()
@@ -114,6 +115,9 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         case Common::RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST:
         case Common::RequestCode::SEND_HW_TRACK_CONTROLLER_RESPONSE:
         case Common::RequestCode::GET_HW_TRACK_CONTROLLER_RESPONSE:
+        case Common::RequestCode::SWTRACK_OCCUPANCY_TO_CTC:
+        case Common::RequestCode::SWTRACK_TRACKSIGNAL_TO_TRAINM:
+        case Common::RequestCode::SWTRACK_SWITCHPOSITION_TO_TRAINM:
         {
             HWTrackController::RequestManager rm;
             rm.HandleRequest(rReq, resp);

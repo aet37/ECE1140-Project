@@ -10,7 +10,7 @@
  */
 
 #include "TrainSystem.hpp" // For interactions with the train system
-
+#include "TrackSystem.hpp"
 
 
 /**
@@ -25,7 +25,7 @@
  */
 void TrainInfoBuffer_TrackController(int train_id, int destination_block, int authority, int command_speed)
 {
-	
+	TrackSystem::create_new_track(train_id, destination_block, authority, command_speed)
 }
 
 /**
@@ -39,4 +39,23 @@ void TrainLocationBuffer_CTC(int block_location)
 {
 	TrainSystem::GetInstance().SetTrackOccupied(block_location);
 	TrainSystem::GetInstance().SetTrackNotOccupied(block_location - 1);
+}
+
+void TrainLocationBuffer_SWTC(Track& a, int block_location)
+{
+    TrackSystem::updateoccupancies(a, block_location)
+
+}
+
+void SwitchPositionBuffer_TrackModel(int)
+{
+
+
+
+}
+
+void TrainInfoBuffer_TrackModel(int train_id, int authority, int command_speed)
+{
+
+
 }

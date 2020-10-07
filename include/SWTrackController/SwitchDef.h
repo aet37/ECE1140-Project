@@ -5,7 +5,7 @@
 #ifndef SWITCH_DEF_H
 #define SWITCH_DEF_H
 
-// Structure that holds data about a single train
+// class that holds data about a single train
 class Switch
 {
     

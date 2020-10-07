@@ -3,12 +3,12 @@
 // TrackSystem Implementation file
 //
 #include <iostream>
-#include "../../include/SWTrackController/TrackSystem.h"
+#include "TrackSystem.h"
 #include <vector>
 
 /**
  * @brief	Gets the singleton instance
- * @return	TrainSystem singleton pointer
+ * @return	TrackSystem singleton pointer
 */
 TrackSystem& TrackSystem::GetInstance()
 {
@@ -17,47 +17,37 @@ TrackSystem& TrackSystem::GetInstance()
 }
 
 
-// Create new train
-Track* TrackSystem::create_new_switch(int authority, int train_id, int comm_speed,int destination)
+// Create new track
+Track* TrackSystem::create_new_track( int train_id,int destination,int authority, int comm_speed)
 {
-	// Set the train number to the next available
-	int num = p_switches.size() + 1;
 
-	// Create an object with that number
-	Switch* p_temp;
-	p_temp = new Switch(num, block_to);
+	// Create an object 
+	Track* p_temp;
+	p_temp = new Track(train_id, destination, authority, comm_speed);
+	p_tracks.push_back(p_temp);
 
-	// Append the train to the train list
-	p_switches.push_back(p_temp);
-	switch_numbers.push_back(num);
-
-	// Add Speed and Authority to train
-	p_temp->authority = 1000;           // feet
-	p_temp->command_speed = 25;         // mph
 
 	// return the object just created
 	return p_temp;
 }
 
-// Send train id, authority and speed to Track Controller
-void TrackSystem::send_track_info_ctc(Track* to_send_ctc)
+void update_occupancies(Track& a, int occ)
 {
+
+
+	// Set occupied member variable as true
+	a.occupancy = occ;
+
 
 }
 
-void TrackSystem::send_track_info_tm(Track* to_send_tm)
-{
 
-}
+
+
+
 
 // TESTING
 void TrackSystem::printout()
-{
-	std::cout << "Size (Trains): " << p_switches.size() << std::endl;
-	if(p_switches.size() > 0)
 	{
-		std::cout << p_tracks[0]->command_speed << std::endl;
-		std::cout << p_tracks[0]->authority << std::endl;
-		std::cout << p_tracks[0]->train_id << std::endl;
+
 	}
-}
