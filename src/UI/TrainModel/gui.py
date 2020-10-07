@@ -3,8 +3,7 @@ import os
 from PyQt5 import QtWidgets, uic
 import sys
 
-sys.path.insert(1, 'src/UI/CTC')
-from ctc_gui import *
+#import CTC
 
 username = "trainmodel"
 password = "jerry"
@@ -43,8 +42,9 @@ class Ui(QtWidgets.QMainWindow):
         elif username == "swtrack" and password == "jerry":
             print("swtrack")
         elif username == "ctc" and password == "jerry":
-            MODULE_TO = 'ctc'
-            app.exit()
+            os.system('start /B python src/UI/CTC/ctc_gui.py')
+            os.exit()
+            #execfile('src/UI/CTC/ctc_gui.py')
         elif username == "hwtrain" and password == "jerry":
             print("hwtrain")
         elif username == "swtrain" and password == "jerry":
@@ -186,11 +186,3 @@ class Ui(QtWidgets.QMainWindow):
 app = QtWidgets.QApplication(sys.argv)
 window = Ui()
 app.exec_()         # Exit from login screen
-
-# close all windows
-QtWidgets.QApplication.closeAllWindows()
-
-
-# Go to Another module if instructed to do so
-if(MODULE_TO == 'ctc'):
-    CTCLogin()      # Defined in ctc_gui.py

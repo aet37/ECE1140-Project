@@ -54,15 +54,16 @@ border-color: rgb(0, 0, 0);</string>
     <widget class="QPushButton" name="login_button">
      <property name="geometry">
       <rect>
-       <x>180</x>
-       <y>230</y>
-       <width>281</width>
-       <height>91</height>
+       <x>270</x>
+       <y>200</y>
+       <width>101</width>
+       <height>21</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>35</pointsize>
+       <family>Futura Md BT</family>
+       <pointsize>11</pointsize>
        <weight>75</weight>
        <italic>true</italic>
        <bold>true</bold>
@@ -72,8 +73,8 @@ border-color: rgb(0, 0, 0);</string>
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(C:/Users/kenne/Documents/GitHub/ECE1140-Project/src/UI/TrainModel/newPrefix/Joseph Seinfeld.png);
-color: rgb(255, 0, 0);</string>
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(102, 176, 54);</string>
      </property>
      <property name="text">
       <string>Login</string>
