@@ -57,3 +57,43 @@ Train* TrainSystem::CreateNewTrain(int block_to)
 	// return the object just created
 	return p_temp;
 }
+
+/**
+* @brief change Track status to occupied
+*
+* @param[in]	track_num
+*
+* @return none
+*
+*/
+void TrainSystem::SetTrackOccupied(int track_num)
+{
+	// Set occupied member variable as true
+	p_tracks[track_num - 1]->occupied = true;
+
+	// Alert UI that a track is occupied
+	/**/
+
+	// Log that a track is occupied
+	LOG_CTC("From TrainSystem::SetTrackOccupied() : Track %d is occupied; Sent to UI", track_num);
+}
+
+/**
+* @brief change Track status to not occupied
+*
+* @param[in]	track_num
+*
+* @return none
+*
+*/
+void TrainSystem::SetTrackNotOccupied(int track_num)
+{
+	// Set occupied member variable as false
+	p_tracks[track_num - 1]->occupied = false;
+
+	// Alert UI that a track is not occupied
+	/**/
+
+	// Log that a track is occupied
+	LOG_CTC("From TrainSystem::SetTrackNotOccupied() : Track %d is NOT occupied; Sent to UI", track_num);
+}
