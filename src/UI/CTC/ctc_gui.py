@@ -156,7 +156,29 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
 		self.button.clicked.connect(self.returnToMainWindow)
 
-	# Return to Main from all different windows
+		 # Find the Blocks
+		self.button = self.findChild(QtWidgets.QPushButton, 'Block1')
+		self.button = self.findChild(QtWidgets.QPushButton, 'Block2')
+		self.button = self.findChild(QtWidgets.QPushButton, 'Block3')
+		self.button = self.findChild(QtWidgets.QPushButton, 'Block4')
+		self.button = self.findChild(QtWidgets.QPushButton, 'Block5')
+		self.button = self.findChild(QtWidgets.QPushButton, 'Block6')
+		self.button = self.findChild(QtWidgets.QPushButton, 'Block7')
+		self.button = self.findChild(QtWidgets.QPushButton, 'Block8')
+		self.button = self.findChild(QtWidgets.QPushButton, 'Block9')
+		self.button = self.findChild(QtWidgets.QPushButton, 'Block10')
+		self.button = self.findChild(QtWidgets.QPushButton, 'Block11')
+		self.button = self.findChild(QtWidgets.QPushButton, 'Block12')
+		self.button = self.findChild(QtWidgets.QPushButton, 'Block13')
+		self.button = self.findChild(QtWidgets.QPushButton, 'Block14')
+		self.button = self.findChild(QtWidgets.QPushButton, 'Block15')
+
+
+	#######################################################################################################################################
+	#######################################################################################################################################
+	# Return to main window from all windows function
+	#######################################################################################################################################
+	#######################################################################################################################################
 	def returnToMainWindow(self):
 		uic.loadUi('src/UI/CTC/ctc_main.ui', self)
 		self.setWindowTitle("CTC Main Page")
