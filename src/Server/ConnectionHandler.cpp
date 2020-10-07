@@ -122,14 +122,7 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         {
         	// Iterate through m_data to get destination block (first number in message)
         	std::string str_block;
-        	char curr = m_data[0];
-        	int itter = 0;
-        	while(curr != ' ')
-	        {
-				str_block.append(reinterpret_cast<const char *>(curr));
-				itter++;
-				curr = m_data[itter];
-	        }
+        	str_block = rReq.GetData().substr(0, 2);
 
         	// Convert string to integer
         	int block_to = std::stoi(str_block);
@@ -139,7 +132,7 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         	pto_send = TrainSystem::GetInstance().create_new_train(block_to);
 
         	// Send Train Struct to Track Controller buffer function
-	        CTCToTCTrainInfoBuffer(pto_send->train_id, pto_send->destination_block, pto_send->authority, pto_send->command_speed);
+	        TrainInfoBuffer_TC(pto_send->train_id, pto_send->destination_block, pto_send->authority, pto_send->command_speed);
             break;
         }
         default:
