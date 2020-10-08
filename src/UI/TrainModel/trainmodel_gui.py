@@ -1,8 +1,12 @@
 
 import os
 from PyQt5 import QtWidgets, uic
+from PyQt5.QtCore import QTimer
 import sys
-import CTC
+sys.path.insert(1, 'src/UI')
+from server_functions import *
+
+#import CTC
 
 username = "trainmodel"
 password = "jerry"
@@ -11,48 +15,17 @@ password = "jerry"
 class Ui(QtWidgets.QMainWindow):
     def __init__(self):
         super(Ui, self).__init__()
-        self.login()
-
-
-    def login(self):
-        uic.loadUi('src/UI/TrainModel/Login_Page.ui', self)
-        self.alert_login = self.findChild(QtWidgets.QLabel, 'alert_login')
-        self.username_in = self.findChild(QtWidgets.QLineEdit, 'username_in')
-        self.password_in = self.findChild(QtWidgets.QLineEdit, 'password_in')
-
-        self.button = self.findChild(QtWidgets.QPushButton, 'login_button')# Find the button
-        self.button.clicked.connect(self.loginParse)
-        self.button2 = self.findChild(QtWidgets.QPushButton, 'logout_button_log') # Find the button
-        self.button2.clicked.connect(app.exit)
-        self.show()
-
-    def loginParse(self):
-        username = self.username_in.text()
-        password = self.password_in.text()
-        if username == "trainmodel" and password == "jerry":
-            self.mapPage()
-        elif username == "trackmodel" and password == "jerry":
-            print("trackmodel")
-        elif username == "hwtrack" and password == "jerry":
-            print("hwtrack")
-        elif username == "swtrack" and password == "jerry":
-            print("swtrack")
-        elif username == "ctc" and password == "jerry":
-            execfile('src/UI/CTC/ctc_gui.py')
-        elif username == "hwtrain" and password == "jerry":
-            print("hwtrain")
-        elif username == "swtrain" and password == "jerry":
-            print("swtrain")
-        else:
-            self.alert_login.setStyleSheet("color: red;")
-
+        self.train1_info_timer = QTimer()
+        self.train1_info_timer.timeout.connect(self.update_speed)
+        self.mapPage()
 
     def mapPage(self):
+        self.stopAllTimers()
         uic.loadUi('src/UI/TrainModel/Map_Page.ui', self)
 
         self.logoutbutton = self.findChild(QtWidgets.QPushButton, 'logout_button_map') # Find the button
         self.logoutbutton.clicked.connect(self.logout)
-        
+
         self.button = self.findChild(QtWidgets.QPushButton, 'train_button_1')# Find the button
         self.button.clicked.connect(self.trainMenu1)
         self.button = self.findChild(QtWidgets.QPushButton, 'train_button_2') # Find the button
@@ -61,9 +34,10 @@ class Ui(QtWidgets.QMainWindow):
         self.button.clicked.connect(self.trainMenu3)
         self.button = self.findChild(QtWidgets.QPushButton, 'train_button_4') # Find the button
         self.button.clicked.connect(self.trainMenu4)
-        #self.show()
-    
+        self.show()
+
     def trainMenu1(self):
+        self.stopAllTimers()
         # This is executed when the button is pressed
         uic.loadUi('src/UI/TrainModel/Train_Menu.ui', self)
         self.button2 = self.findChild(QtWidgets.QPushButton, 'logout_button_menu') # Find the button
@@ -75,7 +49,7 @@ class Ui(QtWidgets.QMainWindow):
         self.button = self.findChild(QtWidgets.QPushButton, 'train_reports_button')# Find the button
         self.button.clicked.connect(self.trainReports)
         self.button = self.findChild(QtWidgets.QPushButton, 'return_button')# Find the button
-        self.button.clicked.connect(self.mapPage)      
+        self.button.clicked.connect(self.mapPage)
 
     def trainMenu2(self):
         # This is executed when the button is pressed
@@ -88,19 +62,25 @@ class Ui(QtWidgets.QMainWindow):
         app.exit()
 
     def trainInfo1(self):
+        self.stopAllTimers()
+        
+        self.train1_info_timer.start(250)
+
         # This is executed when the button is pressed
         uic.loadUi('src/UI/TrainModel/Train_Info_Page1.ui', self)
         self.logoutbutton = self.findChild(QtWidgets.QPushButton, 'logout_button_info1') # Find the button
         self.logoutbutton.clicked.connect(self.logout)
-        
+
         self.button = self.findChild(QtWidgets.QPushButton, 'report_button_info1')# Find the button
         self.button.clicked.connect(self.trainReports)
         self.logoutbutton = self.findChild(QtWidgets.QPushButton, 'page1to2_button') # Find the button
         self.logoutbutton.clicked.connect(self.trainInfo2)
         self.logoutbutton = self.findChild(QtWidgets.QPushButton, 'page1toM_button') # Find the button
         self.logoutbutton.clicked.connect(self.trainMenu1)
-    
+
+        self.disp_command_speed = self.findChild(QtWidgets.QLabel, 'disp_command_speed')# Find the button
     def trainInfo2(self):
+        self.stopAllTimers()
         # This is executed when the button is pressed
         uic.loadUi('src/UI/TrainModel/Train_Info_Page2.ui', self)
         self.logoutbutton = self.findChild(QtWidgets.QPushButton, 'logout_button_info2') # Find the button
@@ -114,8 +94,9 @@ class Ui(QtWidgets.QMainWindow):
         self.logoutbutton.clicked.connect(self.trainInfo3)
         self.logoutbutton = self.findChild(QtWidgets.QPushButton, 'page2toM_button') # Find the button
         self.logoutbutton.clicked.connect(self.trainMenu1)
-    
+
     def trainInfo3(self):
+        self.stopAllTimers()
         # This is executed when the button is pressed
         uic.loadUi('src/UI/TrainModel/Train_Info_Page3.ui', self)
         self.logoutbutton = self.findChild(QtWidgets.QPushButton, 'logout_button_info3') # Find the button
@@ -128,7 +109,16 @@ class Ui(QtWidgets.QMainWindow):
         self.logoutbutton = self.findChild(QtWidgets.QPushButton, 'page3toM_button') # Find the button
         self.logoutbutton.clicked.connect(self.trainMenu1)
 
+    def update_speed(self):
+        responsecode, speed = send_message(RequestCode.GET_COMMAND_SPEED)
+        if responsecode == ResponseCode.SUCCESS:
+            self.disp_command_speed.setText(speed + " MPH")
+        else:
+            self.stopAllTimers()
+            print("The server is not running")
+
     def trainParameters(self):
+        self.stopAllTimers()
         # This is executed when the button is pressed
         uic.loadUi('src/UI/TrainModel/Train_Parameter.ui', self)
         self.logoutbutton = self.findChild(QtWidgets.QPushButton, 'logout_button_parameters') # Find the button
@@ -141,8 +131,10 @@ class Ui(QtWidgets.QMainWindow):
     def saveParameters(self):
         #save parameters
         self.save_alert.setStyleSheet("color: green;")
+        send_message(RequestCode.SET_TRAIN_LENGTH, self.in_length.text())
 
     def trainReports(self):
+        self.stopAllTimers()
         # This is executed when the button is pressed
         uic.loadUi('src/UI/TrainModel/Train_Report.ui', self)
         self.logoutbutton = self.findChild(QtWidgets.QPushButton, 'logout_button_report') # Find the button
@@ -174,8 +166,16 @@ class Ui(QtWidgets.QMainWindow):
 
     def logout(self):
         # This is executed when the button is pressed
-        self.login()
+        if(sys.platform == 'darwin'):
+            os.system('python3 src/UI/login_gui.py &')
+        else:
+            os.system('start /B python src/UI/login_gui.py')
+        app.exit()
 
+    def stopAllTimers(self):
+        self.train1_info_timer.stop()
+
+# Main Login Screen
 app = QtWidgets.QApplication(sys.argv)
 window = Ui()
-app.exec_()
+app.exec_()         # Exit from login screen

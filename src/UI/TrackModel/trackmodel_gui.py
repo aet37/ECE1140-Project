@@ -7,10 +7,10 @@ import sys
 class Ui(QtWidgets.QMainWindow):
     def __init__(self):
         super(Ui, self).__init__()
-        uic.loadUi('C:/Users/Evan/OneDrive/Documents/Github/ECE1140-Project/src/TrackModel/Map_Page.ui', self)
+        uic.loadUi('src/TrackModel/Map_Page.ui', self)
         self.initUI()
         self.stacked_widget.currentChanged.connect(self.set_button_state)
-        self.stacked_widget.setCurrentIndex(0);
+        self.stacked_widget.setCurrentIndex(0)
         self.block1.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(1))
         self.block2.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(2))
         self.block3.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(3))
@@ -393,6 +393,10 @@ class Ui(QtWidgets.QMainWindow):
 
     def logout(self):
         # This is executed when the button is pressed
+        if(sys.platform == 'darwin'):
+            os.system('python3 src/UI/login_gui.py &')
+        else:
+            os.system('start /B python src/UI/login_gui.py')
         app.exit()
 
 app = QtWidgets.QApplication(sys.argv)

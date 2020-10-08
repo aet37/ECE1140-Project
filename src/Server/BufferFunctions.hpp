@@ -1,12 +1,49 @@
+/**
+ * @file BufferFunctions.hpp
+ *
+ * @brief Define buffer functions to communicate data between modules.
+ * One buffer function per data communicated
+ */
+/*
+ * Naming Convention of Buffer functions:
+ *      DescriptionOfDataBuffer_Destination
+ */
+
+#include "TrainSystem.hpp" // For interactions with the train system
+
 
 
 /**
- * @brief	Send info about new train from CTC to Track Controller
+ * @brief	Buffer function to send info about new train from CTC to Track Controller
  *
- * @param	train_id destination_block authority command_speed
+ * @param[in]	train_id
+ * @param[in]	destination_block
+ * @param[in]	authority
+ * @param[in]	command_speed
  *
+ * @return	None
  */
-void CTCToTCTrainInfoBuffer(int train_id, int destination_block, int authority, int command_speed)
+void TrainInfoBuffer_TrackController(int train_id, int destination_block, int authority, int command_speed)
 {
 	
+}
+
+/**
+ * @brief	Buffer function to send info about where the train is from Track controller to CTC
+ *
+ * @param[in]	block_location
+ *
+ * @return	None
+ */
+void TrainLocationBuffer_CTC(int block_location)
+{
+	TrainSystem::GetInstance().SetTrackOccupied(block_location);
+	if(block_location == 11)
+	{
+		TrainSystem::GetInstance().SetTrackNotOccupied(5);
+	}
+	else
+	{
+		TrainSystem::GetInstance().SetTrackNotOccupied(block_location - 1);
+	}
 }

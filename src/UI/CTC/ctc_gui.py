@@ -2,16 +2,17 @@ import os
 from PyQt5 import QtWidgets, uic, QtCore
 import sys
 
-sys.path.insert(1, '../../src')
+sys.path.insert(1, 'src/UI')
 from server_functions import *
 
 # GLOBALS
-class Ui(QtWidgets.QMainWindow):
+class CTCUi(QtWidgets.QMainWindow):
 
 	# UI Class initializer
 	def __init__(self):
-		super(Ui, self).__init__()
-		uic.loadUi('UI/ctc_main.ui', self)
+		super(CTCUi, self).__init__()
+		uic.loadUi('src/UI/CTC/ctc_main.ui', self)
+
 		self.setWindowTitle("CTC Main Page")
 
 		# In Main Window
@@ -40,7 +41,7 @@ class Ui(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def LoadScheduleWindow(self):
-		uic.loadUi('UI/ctc_schedule_import.ui', self)
+		uic.loadUi('src/UI/CTC/ctc_schedule_import.ui', self)
 		self.setWindowTitle("CTC - Load Schedule")
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
@@ -53,7 +54,7 @@ class Ui(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def EditScheduleWindow(self):
-		uic.loadUi('UI/ctc_schedule_edit.ui', self)
+		uic.loadUi('src/UI/CTC/ctc_schedule_edit.ui', self)
 		self.setWindowTitle("CTC - Edit Schedule")
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
@@ -72,8 +73,7 @@ class Ui(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def DispatchTrainWindow(self):
-
-		uic.loadUi('UI/ctc_dispatch_train.ui', self)
+		uic.loadUi('src/UI/CTC/ctc_dispatch_train.ui', self)
 		self.setWindowTitle("CTC - Dispatch Train")
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
@@ -150,15 +150,56 @@ class Ui(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def MapWindow(self):
-		uic.loadUi('UI/ctc_view_map.ui', self)
+		uic.loadUi('src/UI/CTC/ctc_view_map.ui', self)
 		self.setWindowTitle("CTC - View Map")
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
 		self.button.clicked.connect(self.returnToMainWindow)
 
-	# Return to Main from all different windows
+		# Automatically refresh Map after 700ms
+		timer = QtCore.QTimer(self)
+		timer.timeout.connect(self.RefreshMap)
+		timer.start(700)
+
+		 # Find the Blocks
+		self.TBlock1 = self.findChild(QtWidgets.QPushButton, 'Block1')
+		self.TBlock2 = self.findChild(QtWidgets.QPushButton, 'Block2')
+		self.TBlock3 = self.findChild(QtWidgets.QPushButton, 'Block3')
+		self.TBlock4 = self.findChild(QtWidgets.QPushButton, 'Block4')
+		self.TBlock5 = self.findChild(QtWidgets.QPushButton, 'Block5')
+		self.TBlock6 = self.findChild(QtWidgets.QPushButton, 'Block6')
+		self.TBlock7 = self.findChild(QtWidgets.QPushButton, 'Block7')
+		self.TBlock8 = self.findChild(QtWidgets.QPushButton, 'Block8')
+		self.TBlock9 = self.findChild(QtWidgets.QPushButton, 'Block9')
+		self.TBlock10 = self.findChild(QtWidgets.QPushButton, 'Block10')
+		self.TBlock11 = self.findChild(QtWidgets.QPushButton, 'Block11')
+		self.TBlock12 = self.findChild(QtWidgets.QPushButton, 'Block12')
+		self.TBlock13 = self.findChild(QtWidgets.QPushButton, 'Block13')
+		self.TBlock14 = self.findChild(QtWidgets.QPushButton, 'Block14')
+		self.TBlock15 = self.findChild(QtWidgets.QPushButton, 'Block15')
+
+	def RefreshMap(self):
+		# Ping server for track occupancies
+		m_tuple_data = send_message(RequestCode.CTC_DISPATCH_TRAIN)
+
+		# Extract string data from tuple
+		m_data = m_tuple_data[1]
+		m_data.replace(' ', '')
+
+		for i in range(len(m_data)):
+			if(m_data[i] == 't'):
+				eval('self.TBlock%d.setStyleSheet(\"background-color: rgb(255, 255, 10);\")' % i + 1)		# if occupied change block color to yellow
+			else:
+				eval('self.TBlock%d.setStyleSheet(\"background-color: rgb(33, 255, 128);\")' % i + 1)		# if not occupied, change block color to green
+
+
+	#######################################################################################################################################
+	#######################################################################################################################################
+	# Return to main window from all windows function
+	#######################################################################################################################################
+	#######################################################################################################################################
 	def returnToMainWindow(self):
-		uic.loadUi('UI/ctc_main.ui', self)
+		uic.loadUi('src/UI/CTC/ctc_main.ui', self)
 		self.setWindowTitle("CTC Main Page")
 
 		# In Main Window
@@ -186,7 +227,6 @@ class Ui(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	def ToggleAutomaicMode(self):
 		return None
-		#app.exit()
 
 	#######################################################################################################################################
 	#######################################################################################################################################
@@ -194,19 +234,15 @@ class Ui(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def ExitModule(self):
+		if(sys.platform == 'darwin'):
+			os.system('python3 src/UI/login_gui.py &')
+		else:
+			os.system('start /B python src/UI/login_gui.py')
 		app.exit()
 
 
-
-
-
-
-
-
-
-# Main
 app = QtWidgets.QApplication(sys.argv)
-window = Ui()
+window = CTCUi()
 app.exec_()
 
 

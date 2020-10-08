@@ -7,9 +7,9 @@
 #define LOGGER_HPP
 
 // SYSTEM INCLUDES
+#include <string.h>
 #include <fstream>
 #include <string>
-#include <string.h>
 
 // C++ PROJECT INCLUDES
 #include "DebugUtil.hpp" // For util macros
@@ -18,7 +18,8 @@
 // (None)
 
 // Internal Macros
-#define LOG_INTERNAL(logLevel, printGroup, ...) Logger::GetInstance().Log(__FILENAME__, __PRETTY_FUNCTION__, __LINE__, logLevel, printGroup, _COUNT_VARARGS(__VA_ARGS__), ##__VA_ARGS__)
+#define LOG_INTERNAL(logLevel, printGroup, ...) Logger::GetInstance().Log(__FILENAME__, __PRETTY_FUNCTION__, \
+                                                __LINE__, logLevel, printGroup, _COUNT_VARARGS(__VA_ARGS__), ##__VA_ARGS__)
 #define LOG_DEBUG_INTERNAL(printGroup , ...) LOG_INTERNAL(Logger::LogLevel::DEBUG, printGroup, ##__VA_ARGS__)
 
 // Public Macros
@@ -48,10 +49,9 @@
 class Logger
 {
 public:
-
     /////////////////////////////////////
     /// @brief Gets the singleton instance
-    /// 
+    ///
     /// @return Logger instance
     /////////////////////////////////////
     static Logger& GetInstance()
@@ -110,7 +110,8 @@ public:
     /// @param numArgs      Number of arguments passed in additionally
     /// @param ...          Format string followed by replacement variables
     ////////////////////////////////
-    void Log(const char* fileName, const char* funcName, const int lineNumber, const LogLevel logLevel, const PrintGroup printGroup, const int numArgs, ...);
+    void Log(const char* fileName, const char* funcName, const int lineNumber, const LogLevel logLevel, const PrintGroup printGroup,
+             const int numArgs, ...);
 
     ////////////////////////////////
     /// @brief This version is used for the
@@ -129,9 +130,7 @@ public:
     void Close() { m_logStream.close(); }
 
 protected:
-
 private:
-
     /// File name to output
     const char* LOG_FILENAME = "Debug.log";
 
@@ -163,7 +162,7 @@ private:
 
     /////////////////////////////////////
     /// @brief Constructs a new Logger object
-    /// 
+    ///
     /// @note Private to ensure singleton
     /////////////////////////////////////
     Logger() :

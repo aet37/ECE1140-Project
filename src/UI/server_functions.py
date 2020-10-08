@@ -26,11 +26,16 @@ class RequestCode(Enum):
     LOGIN = 2
 
     CTC_DISPATCH_TRAIN = 32
+    CTC_SEND_OCCUPANCIES = 33
 
     SET_SWITCH_POSITION = 96
     GET_SWITCH_POSITION = 97
     GET_HW_TRACK_CONTROLLER_REQUEST = 100
     SEND_HW_TRACK_CONTROLLER_RESPONSE = 101
+    
+    GET_COMMAND_SPEED = 160
+    SET_TRAIN_LENGTH = 161
+
 
 class ResponseCode(Enum):
     """Codes to begin communication from the server
@@ -47,7 +52,7 @@ class ResponseCode(Enum):
     SUCCESS = 0
     ERROR = 1
 
-def send_message(request_code, data):
+def send_message(request_code, data=""):
     """Constructs and sends a message to the server
 
     :param RequestCode request_code: Code representing what the request is for
@@ -58,10 +63,14 @@ def send_message(request_code, data):
 
     """
     request = bytes(str(request_code.value), 'utf-8') + b' ' + bytes(data, 'utf-8')
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.connect((HOST, PORT))
-        sock.sendall(request)
-        data = sock.recv(1024)
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            sock.connect((HOST, PORT))
+            sock.sendall(request)
+            data = sock.recv(1024)
+    except ConnectionRefusedError:
+        # Show up as an error
+        data = b'1'
 
     # Remove byte stuff and split along first space
     splits = repr(data)[2:-1].split(" ", 1)
@@ -69,7 +78,7 @@ def send_message(request_code, data):
 
     # If there's additional response data, capture it
     if len(splits) > 1:
-        response_data = str(data).split(" ", 1)[1]
+        response_data = str(splits[1])
     else:
         response_data = ""
 

@@ -37,7 +37,8 @@ void Logger::Log(const std::string& rMsg, const Logger::LogLevel logLevel, const
 ////////////////////////////////
 /// METHOD NAME: Logger::Log
 ////////////////////////////////
-void Logger::Log(const char* fileName, const char* funcName, const int lineNumber, const Logger::LogLevel logLevel, const Logger::PrintGroup printGroup, const int numArgs, ...)
+void Logger::Log(const char* fileName, const char* funcName, const int lineNumber, const Logger::LogLevel logLevel,
+                 const Logger::PrintGroup printGroup, const int numArgs, ...)
 {
     // Concatenate given strings
     std::stringstream concatStream;
@@ -58,9 +59,9 @@ void Logger::Log(const char* fileName, const char* funcName, const int lineNumbe
     std::string concatString = concatStream.str();
     Log(concatString, logLevel, printGroup);
 
-    // Uncomment and put your module here to see your messages printed out
-    // if (printGroup == Logger::PrintGroup::PRINT_GROUP_CTC)
-    // {
-    //     std::cout << message << std::endl;
-    // }
+    // Add your module's printgroup here for them to also be printed to the console
+    if (printGroup == Logger::PrintGroup::PRINT_GROUP_SERVER)
+    {
+        std::cout << message << std::endl;
+    }
 }
