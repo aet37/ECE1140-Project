@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(221, 221, 221);
+     <string notr="true">background-color: rgb(133, 158, 166);
 border-color: rgb(0, 0, 0);</string>
     </property>
     <property name="frameShape">
@@ -63,6 +63,9 @@ border-color: rgb(0, 0, 0);</string>
        <pointsize>11</pointsize>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(182, 215, 168);</string>
+     </property>
      <property name="text">
       <string>Train 4</string>
      </property>
@@ -86,6 +89,9 @@ border-color: rgb(0, 0, 0);</string>
       <font>
        <pointsize>11</pointsize>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(182, 215, 168);</string>
      </property>
      <property name="text">
       <string>Train 3</string>
@@ -111,6 +117,9 @@ border-color: rgb(0, 0, 0);</string>
        <pointsize>11</pointsize>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(182, 215, 168);</string>
+     </property>
      <property name="text">
       <string>Train 2</string>
      </property>
@@ -125,7 +134,7 @@ border-color: rgb(0, 0, 0);</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>250</y>
+       <y>270</y>
        <width>81</width>
        <height>28</height>
       </rect>
@@ -134,6 +143,9 @@ border-color: rgb(0, 0, 0);</string>
       <font>
        <pointsize>11</pointsize>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(182, 215, 168);</string>
      </property>
      <property name="text">
       <string>Train 1</string>
