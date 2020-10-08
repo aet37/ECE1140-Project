@@ -16,13 +16,15 @@ class Ui(QtWidgets.QMainWindow):
 
 
     def login(self):
-        uic.loadUi('src/UI/TrainModel/Login_Page.ui', self)
+        uic.loadUi('src/UI/Login_Page.ui', self)
         self.alert_login = self.findChild(QtWidgets.QLabel, 'alert_login')
         self.username_in = self.findChild(QtWidgets.QLineEdit, 'username_in')
         self.password_in = self.findChild(QtWidgets.QLineEdit, 'password_in')
 
         self.button = self.findChild(QtWidgets.QPushButton, 'login_button')# Find the button
         self.button.clicked.connect(self.loginParse)
+        self.button = self.findChild(QtWidgets.QPushButton, 'TurnOff') # Find the button
+        self.button.clicked.connect(self.Leave)
         self.show()
 
     def loginParse(self):
@@ -56,6 +58,10 @@ class Ui(QtWidgets.QMainWindow):
             print("swtrain")
         else:
             self.alert_login.setStyleSheet("color: red;")
+
+    def Leave(self):
+    	# Exit application
+    	app.exit()
 
 # Main Login Screen
 app = QtWidgets.QApplication(sys.argv)
