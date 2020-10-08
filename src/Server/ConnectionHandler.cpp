@@ -8,6 +8,8 @@
 #include <iostream>
 #include <boost/bind.hpp>
 #include <string>
+#include <bits/stdc++.h> 
+#include <boost/algorithm/string.hpp> 
 
 // C++ PROJECT INCLUDES
 #include "ConnectionHandler.hpp" // Header for class
@@ -225,13 +227,19 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         }
         case Common::RequestCode::SET_TRAIN_LENGTH:
         {
-            TrainModel::setTrainLength(std::stoi(rReq.GetData()));
+            vector<string> result; 
+            boost::split(result, rReq.GetData(), boost::is_any_of(" ")); 
+            TrainModel::TrainInfoBuffer_TrainModel(std::stoi(result[0])
+                                                    std::stoi(result[1])
+                                                    std::stoi(result[2])
+                                                    std::stoi(result[3])
+                                                    std::stoi(result[4]));
             resp.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
         case Common::RequestCode::SEND_TRAIN_MODEL_DATA:
         {
-            TrainModel::setTrainLength(std::stoi(rReq.GetData()));
+            TrainModel::TrainInfoBuffer_TrainModel(std::stoi(rReq.GetData()));
             resp.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
