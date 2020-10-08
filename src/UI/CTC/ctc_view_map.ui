@@ -646,8 +646,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>480</y>
+      <x>230</x>
+      <y>510</y>
       <width>71</width>
       <height>21</height>
      </rect>
@@ -663,8 +663,8 @@ background-color: rgb(33, 255, 128)</string>
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>480</y>
+      <x>310</x>
+      <y>510</y>
       <width>101</width>
       <height>21</height>
      </rect>
@@ -676,8 +676,8 @@ background-color: rgb(33, 255, 128)</string>
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>480</y>
+      <x>450</x>
+      <y>510</y>
       <width>71</width>
       <height>21</height>
      </rect>
@@ -693,8 +693,8 @@ background-color: rgb(255, 255, 10);</string>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>490</x>
-      <y>480</y>
+      <x>530</x>
+      <y>510</y>
       <width>111</width>
       <height>21</height>
      </rect>
@@ -706,14 +706,40 @@ background-color: rgb(255, 255, 10);</string>
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>390</x>
-      <y>440</y>
+      <x>410</x>
+      <y>480</y>
       <width>31</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
      <string>KEY</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>370</y>
+      <width>60</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Inputs</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="TrackInput">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>400</y>
+      <width>461</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>

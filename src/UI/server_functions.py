@@ -26,13 +26,22 @@ class RequestCode(Enum):
     LOGIN = 2
 
     CTC_DISPATCH_TRAIN = 32
+    CTC_SEND_OCCUPANCIES = 33
 
     SET_SWITCH_POSITION = 96
     GET_SWITCH_POSITION = 97
     GET_HW_TRACK_CONTROLLER_REQUEST = 100
     SEND_HW_TRACK_CONTROLLER_RESPONSE = 101
+    GET_HW_TRACK_CONTROLLER_RESPONSE = 102
+    
+    GET_SIGNAL_TIMES = 128
+    SET_SPEED_LIMIT = 129
+    GET_SPEED_LIMIT = 130
 
     GET_COMMAND_SPEED = 160
+    SET_TRAIN_LENGTH = 161
+    SEND_TRAIN_MODEL_DATA = 162
+
 
 class ResponseCode(Enum):
     """Codes to begin communication from the server
@@ -60,10 +69,14 @@ def send_message(request_code, data=""):
 
     """
     request = bytes(str(request_code.value), 'utf-8') + b' ' + bytes(data, 'utf-8')
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.connect((HOST, PORT))
-        sock.sendall(request)
-        data = sock.recv(1024)
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            sock.connect((HOST, PORT))
+            sock.sendall(request)
+            data = sock.recv(1024)
+    except ConnectionRefusedError:
+        # Show up as an error
+        data = b'1'
 
     # Remove byte stuff and split along first space
     splits = repr(data)[2:-1].split(" ", 1)
@@ -77,7 +90,7 @@ def send_message(request_code, data=""):
 
     return (ResponseCode(response_code), response_data)
 
-def poll_for_response(request_code, data, expected_response=ResponseCode.SUCCESS,
+def poll_for_response(request_code, data="", expected_response=ResponseCode.SUCCESS,
                       timeout=5):
     """Continually sends a message until expected_response is received.
 
@@ -94,7 +107,7 @@ def poll_for_response(request_code, data, expected_response=ResponseCode.SUCCESS
     try:
         response = polling.poll(send_message,
                                 args=[request_code, data],
-                                step=0.25,
+                                step=0.75,
                                 timeout=timeout,
                                 check_success=lambda x: x[0] == expected_response)
     except polling.TimeoutException:

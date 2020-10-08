@@ -15,11 +15,13 @@
 #include "Request.hpp" // For Common::Request
 #include "Response.hpp" // For Common::Response
 #include "BufferFunctions.hpp"
+#include "TrainModelData.hpp" // For TrainModel::setTrainLength
 #include "Logger.hpp" // For LOG macros
 
 #include "TrainSystem.hpp"             // For CTC actions
 #include "TrackSystem.h"
 
+#include "TrackModelData.hpp"
 
 void ConnectionHandler::Start()
 {
@@ -112,6 +114,11 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
     {
         case Common::RequestCode::SET_SWITCH_POSITION:
         case Common::RequestCode::GET_SWITCH_POSITION:
+        {
+            resp.SetResponseCode(Common::ResponseCode::SUCCESS);
+            resp.SetData("6");
+            break;
+        }
         case Common::RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST:
         case Common::RequestCode::SEND_HW_TRACK_CONTROLLER_RESPONSE:
         case Common::RequestCode::GET_HW_TRACK_CONTROLLER_RESPONSE:
@@ -152,10 +159,82 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
 	        pto_send = nullptr;
             break;
         }
+	    case Common::RequestCode::CTC_SEND_OCCUPANCIES:
+	    {
+	    	// send Response Code
+			resp.SetResponseCode(Common::ResponseCode::SUCCESS);
+
+			// Form response message; occupied = "t", not occupied = "f"
+			std::string to_send;
+			for(int i = 0; i < TrainSystem::GetInstance().GetTrackArr().size(); i++)
+			{
+				if(TrainSystem::GetInstance().GetTrackArr()[i]->occupied)
+				{
+					to_send.push_back('t');
+				}
+				else
+				{
+					to_send.push_back('f');
+				}
+			}
+			resp.SetData(to_send);
+
+			// Log data sent
+			LOG_CTC("From ConnectionHandler.cpp : Occupancies for each track sent");
+
+			break;
+	    }
         case Common::RequestCode::GET_COMMAND_SPEED:
         {
             resp.SetResponseCode(Common::ResponseCode::SUCCESS);
             resp.SetData("45");
+            break;
+        }
+        case Common::RequestCode::GET_SIGNAL_TIMES:
+        {
+            resp.SetResponseCode(Common::ResponseCode::SUCCESS);
+            resp.SetData("11:58");
+            resp.AppendData("11:59");
+            resp.AppendData("12:00");
+            resp.AppendData("12:01");
+            resp.AppendData("12:02");
+            resp.AppendData("12:03");
+            resp.AppendData("12:04");
+            resp.AppendData("12:05");
+            resp.AppendData("12:06");
+            resp.AppendData("12:07");
+            resp.AppendData("12:08");
+            resp.AppendData("12:09");
+            resp.AppendData("12:10");
+            resp.AppendData("12:11");
+            resp.AppendData("12:12");
+
+            //resp.AppendData("30");
+            //resp.AppendData("40");
+            break;
+        }
+        case Common::RequestCode::SET_SPEED_LIMIT:
+        {
+            TrackModel::setSpeedLimit(std::stoi(rReq.GetData()));
+            resp.SetResponseCode(Common::ResponseCode::SUCCESS);
+            break;
+        }
+        case Common::RequestCode::GET_SPEED_LIMIT:
+        {
+            resp.SetData(std::to_string(TrackModel::getSpeedLimit()));
+            resp.SetResponseCode(Common::ResponseCode::SUCCESS);
+            break;
+        }
+        case Common::RequestCode::SET_TRAIN_LENGTH:
+        {
+            TrainModel::setTrainLength(std::stoi(rReq.GetData()));
+            resp.SetResponseCode(Common::ResponseCode::SUCCESS);
+            break;
+        }
+        case Common::RequestCode::SEND_TRAIN_MODEL_DATA:
+        {
+            TrainModel::setTrainLength(std::stoi(rReq.GetData()));
+            resp.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
         default:

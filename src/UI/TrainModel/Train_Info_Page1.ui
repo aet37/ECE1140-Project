@@ -69,7 +69,7 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(221, 221, 221);
+     <string notr="true">background-color: rgb(133, 158, 166);
 border-color: rgb(0, 0, 0);</string>
     </property>
     <property name="frameShape">
@@ -287,9 +287,9 @@ p, li { white-space: pre-wrap; }
     <widget class="QLabel" name="label_5">
      <property name="geometry">
       <rect>
-       <x>140</x>
+       <x>150</x>
        <y>130</y>
-       <width>111</width>
+       <width>81</width>
        <height>20</height>
       </rect>
      </property>
@@ -302,7 +302,7 @@ p, li { white-space: pre-wrap; }
       <string notr="true">background-color: rgb(255, 229, 153);</string>
      </property>
      <property name="text">
-      <string>Brake Command</string>
+      <string>Speed Limit</string>
      </property>
     </widget>
     <widget class="QTextBrowser" name="disp_door">
@@ -579,7 +579,7 @@ p, li { white-space: pre-wrap; }
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <widget class="QLabel" name="disp_brake_command">
+    <widget class="QLabel" name="disp_speed_limit">
      <property name="geometry">
       <rect>
        <x>90</x>
@@ -599,7 +599,7 @@ p, li { white-space: pre-wrap; }
       <string notr="true">background-color: rgb(255, 229, 153);</string>
      </property>
      <property name="text">
-      <string>Off</string>
+      <string>Km/Hr</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -654,7 +654,7 @@ p, li { white-space: pre-wrap; }
     <zorder>page1toM_button</zorder>
     <zorder>disp_command_speed</zorder>
     <zorder>disp_authority_train</zorder>
-    <zorder>disp_brake_command</zorder>
+    <zorder>disp_speed_limit</zorder>
     <zorder>disp_advertisements</zorder>
    </widget>
    <zorder>frame</zorder>

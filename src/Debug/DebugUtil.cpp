@@ -20,7 +20,7 @@
 std::string format(const int numArgs, va_list valist)
 {
     std::stringstream formattedString;
-    
+
     if (numArgs > 0)
     {
         // Print out the message filling in the given parameters
@@ -29,7 +29,7 @@ std::string format(const int numArgs, va_list valist)
         {
             if (*msg == '%')
             {
-                switch(*(++msg))
+                switch (*(++msg))
                 {
                     case 'd':
                     case 'i':

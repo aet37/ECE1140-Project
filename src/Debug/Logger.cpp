@@ -37,7 +37,8 @@ void Logger::Log(const std::string& rMsg, const Logger::LogLevel logLevel, const
 ////////////////////////////////
 /// METHOD NAME: Logger::Log
 ////////////////////////////////
-void Logger::Log(const char* fileName, const char* funcName, const int lineNumber, const Logger::LogLevel logLevel, const Logger::PrintGroup printGroup, const int numArgs, ...)
+void Logger::Log(const char* fileName, const char* funcName, const int lineNumber, const Logger::LogLevel logLevel,
+                 const Logger::PrintGroup printGroup, const int numArgs, ...)
 {
     // Concatenate given strings
     std::stringstream concatStream;

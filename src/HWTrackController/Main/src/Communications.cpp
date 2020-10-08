@@ -9,6 +9,7 @@
 // C++ PROJECT INCLUDES
 #include "../include/Communications.hpp" // Header for class
 #include "../include/UserProgram.hpp" // For UserProgram
+#include "../include/Logger.hpp"
 
 namespace Communications
 {
@@ -19,7 +20,7 @@ namespace Communications
  * @param rMsg     Request string
  * @return request code of the message
 */
-static RequestCode ParseCode(String& rMsg)
+static RequestCode ParseCode(const String& rMsg)
 {
     int spaceIndex = rMsg.indexOf(' ');
     int code;
@@ -49,7 +50,7 @@ static RequestCode ParseCode(String& rMsg)
  * @param rMsg      Request string
  * @return Data following ' ' in message
 */
-static String ParseData(String& rMsg)
+static String ParseData(const String& rMsg)
 {
     int spaceIndex = rMsg.indexOf(' ');
     if (spaceIndex == -1)
@@ -78,7 +79,7 @@ static void SendResponse(ResponseCode respCode, const char* pData = "")
 /**
  * @brief Gets a specified tag's value and sends a response
 */
-static void GetTagValue(String& rData, UserProgram* pProgram)
+static void GetTagValue(const String& rData, UserProgram* pProgram)
 {
     bool tagValue;
     if (pProgram->GetTagValue(rData, tagValue))
@@ -94,11 +95,12 @@ static void GetTagValue(String& rData, UserProgram* pProgram)
 /**
  * @brief Sets a specified tag's value and sends a response
 */
-static void SetTagValue(String& rData, UserProgram* pProgram)
+static void SetTagValue(const String& rData, UserProgram* pProgram)
 {
     // Parse the message between tag name and value
     String tagName = rData.substring(0, rData.indexOf(" "));
     bool value = atoi(rData.substring(rData.indexOf(" "), rData.length()).c_str());
+    digitalWrite(LED_BUILTIN, value ? HIGH : LOW);
 
     // Set the tags value and send the response
     bool ret = pProgram->SetTag(tagName, value);
