@@ -197,7 +197,7 @@ class CTCUi(QtWidgets.QMainWindow):
 			if(m_data[i] == 't'):
 				try:
 					eval('self.TBlock%s.setStyleSheet(\"background-color: rgb(255, 255, 10);\")' % str(i + 1))		# if occupied change block color to yellow
-					self.d_track_label.setText('Track Occupancy [from Track Controller]: Track' + str(i + 1) + ' Occupied')
+					self.d_track_label.setText('Track Occupancy [from Track Controller]: Track ' + str(i + 1) + ' Occupied')
 				except:
 					print('Warning: Screen has been closed before  button could update')
 			else:
