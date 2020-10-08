@@ -114,7 +114,7 @@ class Ui(QtWidgets.QMainWindow):
         current_speed = power * 2
         responsecode, speed_lim = send_message(RequestCode.GET_SPEED_LIMIT)
         if responsecode == ResponseCode.SUCCESS:
-            self.disp_speed_limit.setText(speed_lim + " MPH")
+            self.disp_speed_limit.setText(speed_lim + " Km/Hr")
         else:
             self.stopAllTimers()
             print("The server is not running")
