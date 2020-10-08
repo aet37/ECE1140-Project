@@ -148,8 +148,6 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
 			resp.SetResponseCode(Common::ResponseCode::SUCCESS);
 
 			// Form response message; occupied = "t", not occupied = "f"
-			std::string t = "t";
-			std::string f = "f";
 			std::string to_send;
 			for(int i = 0; i < TrainSystem::GetInstance().GetTrackArr().size(); i++)
 			{
@@ -163,7 +161,7 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
 				}
 			}
 			resp.SetData(to_send);
-			
+
 			// Log data sent
 			LOG_CTC("From ConnectionHandler.cpp : Occupancies for each track sent");
 
