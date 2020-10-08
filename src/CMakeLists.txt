@@ -10,6 +10,7 @@ include_directories("${Boost_INCLUDE_DIRS}")
 
 # CTC Module Includes
 include_directories("${PROJECT_SOURCE_DIR}/include/CTC")
+include_directories("${PROJECT_SOURCE_DIR}/include/TrackModel")
 
 # Add subdirectories
 add_subdirectory(Debug)

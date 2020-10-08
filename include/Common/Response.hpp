@@ -77,7 +77,7 @@ public:
     /**
      * @brief Writes data to the data string member
     */
-    void AppendData(std::string& rData)
+    void AppendData(const std::string& rData)
     {
         if (m_data == "")
         {
