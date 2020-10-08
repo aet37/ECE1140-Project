@@ -46,4 +46,4 @@ class TrackSystem
 		void printout();
 };
 
-#endif SW_TRACK_SYSTEM_H
+#endif // SW_TRACK_SYSTEM_H
