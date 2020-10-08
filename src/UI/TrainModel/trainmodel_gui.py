@@ -112,17 +112,17 @@ class Ui(QtWidgets.QMainWindow):
     def update_speed(self):
         power = 1
         current_speed = power * 2
-        responsecode, speed = send_message(RequestCode.GET_COMMAND_SPEED)
+        responsecode, speed_lim = send_message(RequestCode.GET_SPEED_LIMIT)
         if responsecode == ResponseCode.SUCCESS:
-            self.disp_command_speed.setText(speed + " MPH")
+            self.disp_speed_limit.setText(speed_lim + " MPH")
         else:
             self.stopAllTimers()
             print("The server is not running")
-        send_message(RequestCode.SEND_TRAIN_MODEL_DATA, "1"
-                                                      + " " + self.disp_authority_train.text()
-                                                      + " " +  self.disp_command_speed.text()
-                                                      + " " +  str(current_speed)
-                                                      + " " +  self.disp_speed_limit.text())
+        # send_message(RequestCode.SEND_TRAIN_MODEL_DATA, "1"
+        #                                               + " " + self.disp_authority_train.text()
+        #                                               + " " +  self.disp_command_speed.text()
+        #                                               + " " +  str(current_speed)
+        #                                               + " " +  self.disp_speed_limit.text())
 
     def trainParameters(self):
         self.stopAllTimers()
