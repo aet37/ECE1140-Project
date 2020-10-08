@@ -38,9 +38,6 @@ class TrainSystem
 			}
 			ptemp_track = nullptr;
 
-			// For testing purposes
-			SetTrackOccupied(3);
-
 			// Log Creation of system
 			LOG_CTC("From TrainSystem::TrainSystem() : TrainSystem Class Created");
 			LOG_CTC("From TrainSystem::TrainSystem() : %d Tracks Created", p_tracks.size() + 1);
