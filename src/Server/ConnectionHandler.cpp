@@ -122,9 +122,7 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         case Common::RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST:
         case Common::RequestCode::SEND_HW_TRACK_CONTROLLER_RESPONSE:
         case Common::RequestCode::GET_HW_TRACK_CONTROLLER_RESPONSE:
-        case Common::RequestCode::SWTRACK_OCCUPANCY_TO_CTC:
-        case Common::RequestCode::SWTRACK_TRACKSIGNAL_TO_TRAINM:
-        case Common::RequestCode::SWTRACK_SWITCHPOSITION_TO_TRAINM:
+       
         {
             HWTrackController::RequestManager rm;
             rm.HandleRequest(rReq, resp);
@@ -243,7 +241,7 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
             return;
         case Common::RequestCode::SWTRACK_OCCUPANCY_TO_CTC:
         {
-           int occupancy= TrackSystem.GetInstance().
+           int occupancy= TrackSystem.GetInstance().get_track_occ;
         TrainLocationBuffer_TC_TO_CTC(SW_Track_Object->occupancy);
         }
         case Common::RequestCode::SWTRACK_SWITCHPOSITION_TO_TRAINM:
