@@ -24,8 +24,8 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(221, 221, 221);
-border-color: rgb(0, 0, 0);</string>
+     <string notr="true">border-color: rgb(0, 0, 0);
+background-color: rgb(133, 158, 166);</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
@@ -36,16 +36,21 @@ border-color: rgb(0, 0, 0);</string>
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>40</x>
+       <x>20</x>
        <y>10</y>
-       <width>203</width>
+       <width>251</width>
        <height>31</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>12</pointsize>
+       <pointsize>13</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(0, 0, 0);</string>
      </property>
      <property name="text">
       <string>Monk's Train Control System</string>
@@ -74,7 +79,7 @@ border-color: rgb(0, 0, 0);</string>
      </property>
      <property name="styleSheet">
       <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(102, 176, 54);</string>
+background-color: rgb(186, 116, 79);</string>
      </property>
      <property name="text">
       <string>Login</string>
@@ -131,7 +136,7 @@ background-color: rgb(102, 176, 54);</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(221, 221, 221);</string>
+      <string notr="true">color: rgb(133, 158, 166);</string>
      </property>
      <property name="text">
       <string>Incorrect username or password!</string>

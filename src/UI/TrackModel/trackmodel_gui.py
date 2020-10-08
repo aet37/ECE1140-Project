@@ -393,10 +393,14 @@ class Ui(QtWidgets.QMainWindow):
 
     def logout(self):
         # This is executed when the button is pressed
+<<<<<<< HEAD:src/UI/TrackModel/gui.py
         if(sys.platform == 'darwin'):
             os.system('python3 src/UI/login_gui.py &')
         else:
             os.system('start /B python src/UI/login_gui.py')
+=======
+        os.system('start /B python src/UI/login_gui.py')
+>>>>>>> master:src/UI/TrackModel/trackmodel_gui.py
         app.exit()
 
 app = QtWidgets.QApplication(sys.argv)
