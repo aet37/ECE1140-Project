@@ -32,7 +32,7 @@ class Ui(QtWidgets.QMainWindow):
             os.system('start /B python src/UI/TrainModel/trainmodel_gui.py')
             app.exit()
         elif username == "trackmodel" and password == "jerry":
-            os.system('start /B python src/UI/TrackModel/gui.py')
+            os.system('start /B python src/UI/TrackModel/trackmodel_gui.py')
             app.exit()
         elif username == "hwtrack" and password == "jerry":
             print("hwtrack")

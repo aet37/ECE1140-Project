@@ -393,6 +393,7 @@ class Ui(QtWidgets.QMainWindow):
 
     def logout(self):
         # This is executed when the button is pressed
+        os.system('start /B python src/UI/login_gui.py')
         app.exit()
 
 app = QtWidgets.QApplication(sys.argv)
