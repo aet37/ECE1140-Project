@@ -36,9 +36,9 @@ class Ui(QtWidgets.QMainWindow):
             app.exit()
         elif username == "trackmodel" and password == "jerry":
             if(sys.platform == 'darwin'):
-                os.system('python3 src/UI/TrackModel/gui.py &')
+                os.system('python3 src/UI/TrackModel/trackmodel_gui.py &')
             else:
-                os.system('start /B python src/UI/TrackModel/gui.py')
+                os.system('start /B python src/UI/TrackModel/trackmodel_gui.py')
             app.exit()
         elif username == "hwtrack" and password == "jerry":
             print("hwtrack")
