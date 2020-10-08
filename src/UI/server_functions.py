@@ -40,6 +40,7 @@ class RequestCode(Enum):
 
     GET_COMMAND_SPEED = 160
     SET_TRAIN_LENGTH = 161
+    SEND_TRAIN_MODEL_DATA = 162
 
 
 class ResponseCode(Enum):

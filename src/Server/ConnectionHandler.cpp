@@ -179,6 +179,12 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
             resp.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
+        case Common::RequestCode::SEND_TRAIN_MODEL_DATA:
+        {
+            TrainModel::setTrainLength(std::stoi(rReq.GetData()));
+            resp.SetResponseCode(Common::ResponseCode::SUCCESS);
+            break;
+        }
         default:
             LOG_SERVER("Invalid RequestCode %d", static_cast<int>(rReq.GetRequestCode()));
             m_message = "INVALID COMMAND";

@@ -28,6 +28,28 @@ void TrainInfoBuffer_TrackController(int train_id, int destination_block, int au
 	
 }
 
+
+int tm_train_id, tm_authority, tm_command_speed, tm_current_speed, tm_speed_limit
+/**
+ * @brief	Buffer function to send info about new train from CTC to Track Controller
+ *
+ * @param[in]	train_id
+ * @param[in]	authority
+ * @param[in]	command_speed
+ * @param[in]   current_speed
+ * @param[in]   speed_limit
+ *
+ * @return	None
+ */
+void TrainInfoBuffer_TrainModel(int train_id, int authority, int command_speed, int current_speed, int speed_limit)
+{
+	tm_train_id = train_id;
+	tm_authority = authority;
+	tm_command_speed = command_speed;
+	tm_current_speed = current_speed;
+	tm_speed_limit = speed_limit;
+}
+
 /**
  * @brief	Buffer function to send info about where the train is from Track controller to CTC
  *
