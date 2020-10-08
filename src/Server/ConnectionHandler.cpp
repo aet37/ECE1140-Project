@@ -8,6 +8,7 @@
 #include <iostream>
 #include <boost/bind.hpp>
 #include <string>
+#include <vector>
 #include <bits/stdc++.h> 
 #include <boost/algorithm/string.hpp> 
 
@@ -192,9 +193,17 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         }
         case Common::RequestCode::GET_SIGNAL_TIMES:
         {
+            TrackModel::setSpeedLimit(std::stoi(rReq.GetData())); //irrelevant speed limit
+
+            //TrackModel::getBlockNumber();
+            
+            
             resp.SetResponseCode(Common::ResponseCode::SUCCESS);
-            resp.SetData("11:58");
-            resp.AppendData("11:59");
+            int block = TrackModel::getBlockNumber();
+            TrainLocationBuffer_SWTC(block);
+            resp.SetData(std::to_string(block));
+
+            /*resp.AppendData("11:59");
             resp.AppendData("12:00");
             resp.AppendData("12:01");
             resp.AppendData("12:02");
@@ -207,7 +216,7 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
             resp.AppendData("12:09");
             resp.AppendData("12:10");
             resp.AppendData("12:11");
-            resp.AppendData("12:12");
+            resp.AppendData("12:12");*/
 
             //resp.AppendData("30");
             //resp.AppendData("40");
@@ -225,23 +234,25 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
             resp.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
+        
         case Common::RequestCode::SET_TRAIN_LENGTH:
         {
-            vector<string> result; 
+            std::vector<std::string> result; 
             boost::split(result, rReq.GetData(), boost::is_any_of(" ")); 
-            TrainModel::TrainInfoBuffer_TrainModel(std::stoi(result[0])
-                                                    std::stoi(result[1])
-                                                    std::stoi(result[2])
-                                                    std::stoi(result[3])
+            TrainModel::TrainInfoBuffer_TrainModel(std::stoi(result[0]),
+                                                    std::stoi(result[1]),
+                                                    std::stoi(result[2]),
+                                                    std::stoi(result[3]),
                                                     std::stoi(result[4]));
+
             resp.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
         case Common::RequestCode::SEND_TRAIN_MODEL_DATA:
         {
-            TrainModel::TrainInfoBuffer_TrainModel(std::stoi(rReq.GetData()));
-            resp.SetResponseCode(Common::ResponseCode::SUCCESS);
-            break;
+            // TrainModel::TrainInfoBuffer_TrainModel(std::stoi(rReq.GetData()));
+            // resp.SetResponseCode(Common::ResponseCode::SUCCESS);
+            // break;
         }
         case Common::RequestCode::SWTRACK_OCCUPANCY_TO_CTC:
         {
