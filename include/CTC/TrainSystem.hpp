@@ -28,7 +28,7 @@ class TrainSystem
 		 */
 		TrainSystem()
 		{
-			// TEMPORARY FOR ITTERATION 2
+			// TEMPORARY FOR ITERATION 2
 			//      create 15 track objects representing track
 			Track* ptemp_track = nullptr;
 			for(int i = 0; i < 15; i++)

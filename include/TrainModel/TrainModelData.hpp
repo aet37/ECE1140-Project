@@ -11,6 +11,8 @@
 namespace TrainModel
 {
 int trainlength;
+int speedLimit;
+int power;
 void setTrainLength(int len)
 {
     trainlength = len;
@@ -18,6 +20,14 @@ void setTrainLength(int len)
 int getTrainLength()
 {
     return trainlength;
+}
+void setPower(int pow)
+{
+    power = pow;
+}
+int getPower()
+{
+    return power;
 }
 
 } // namespace TrainModel

@@ -49,8 +49,9 @@ def get_response_from_controller():
     """
     arduino.flushInput()
     response = arduino.readline()
-    logger.info("Response from controller %s", response)
-    return response
+    logger.info("Response from controller %s", response[:-2])
+    # Remove \r\n from the end of the response
+    return response[:-2]
 
 def send_reponse_to_server(response):
     """Sends response of the controller back to the server.
@@ -59,7 +60,7 @@ def send_reponse_to_server(response):
     """
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         sock.connect((HOST, SERVER_PORT))
-        sock.sendall(SEND_HW_TRACK_CONTROLLER_RESPONSE + b' 0')
+        sock.sendall(SEND_HW_TRACK_CONTROLLER_RESPONSE + response[1:])
         data = sock.recv(1024)
 
     logger.info("Received %s from server", data)

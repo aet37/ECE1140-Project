@@ -9,6 +9,7 @@
 // C++ PROJECT INCLUDES
 #include "../include/Communications.hpp" // Header for class
 #include "../include/UserProgram.hpp" // For UserProgram
+#include "../include/Logger.hpp"
 
 namespace Communications
 {
@@ -99,6 +100,7 @@ static void SetTagValue(const String& rData, UserProgram* pProgram)
     // Parse the message between tag name and value
     String tagName = rData.substring(0, rData.indexOf(" "));
     bool value = atoi(rData.substring(rData.indexOf(" "), rData.length()).c_str());
+    digitalWrite(LED_BUILTIN, value ? HIGH : LOW);
 
     // Set the tags value and send the response
     bool ret = pProgram->SetTag(tagName, value);

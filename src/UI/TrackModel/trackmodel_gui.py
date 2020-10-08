@@ -2,30 +2,53 @@ import os
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QPushButton, QStackedWidget
 import sys
+from PyQt5.QtCore import QTimer
+sys.path.insert(1, 'src/UI')
+from server_functions import *
 
 
 class Ui(QtWidgets.QMainWindow):
     def __init__(self):
         super(Ui, self).__init__()
+        self.track1_info_timer = QTimer()
+        self.track1_info_timer.timeout.connect(self.update_times)
         uic.loadUi('src/TrackModel/Map_Page.ui', self)
         self.initUI()
         self.stacked_widget.currentChanged.connect(self.set_button_state)
         self.stacked_widget.setCurrentIndex(0)
-        self.block1.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(1))
-        self.block2.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(2))
-        self.block3.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(3))
-        self.block4.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(4))
-        self.block5.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(5))
-        self.block6.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(6))
-        self.block7.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(7))
-        self.block8.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(8))
-        self.block9.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(9))
-        self.block10.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(10))
-        self.block11.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(11))
-        self.block12.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(12))
-        self.block13.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(13))
-        self.block14.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(14))
-        self.block15.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(15))
+        self.block1.clicked.connect(self.page1)
+        self.block2.clicked.connect(self.page2)
+        self.block3.clicked.connect(self.page3)
+        self.block4.clicked.connect(self.page4)
+        self.block5.clicked.connect(self.page5)
+        self.block6.clicked.connect(self.page6)
+        self.block7.clicked.connect(self.page7)
+        self.block8.clicked.connect(self.page8)
+        self.block9.clicked.connect(self.page9)
+        self.block10.clicked.connect(self.page10)
+        self.block11.clicked.connect(self.page11)
+        self.block12.clicked.connect(self.page12)
+        self.block13.clicked.connect(self.page13)
+        self.block14.clicked.connect(self.page14)
+        self.block15.clicked.connect(self.page15)
+
+        self.signal_1 = self.findChild(QtWidgets.QLabel, 'signal_1')
+        self.signal_2 = self.findChild(QtWidgets.QLabel, 'signal_2')
+        self.signal_3 = self.findChild(QtWidgets.QLabel, 'signal_3')
+        self.signal_4 = self.findChild(QtWidgets.QLabel, 'signal_400')
+        self.signal_5 = self.findChild(QtWidgets.QLabel, 'signal_500')
+        self.signal_6 = self.findChild(QtWidgets.QLabel, 'signal_600')
+        self.signal_7 = self.findChild(QtWidgets.QLabel, 'signal_7')
+        self.signal_8 = self.findChild(QtWidgets.QLabel, 'signal_8')
+        self.signal_9 = self.findChild(QtWidgets.QLabel, 'signal_9')
+        self.signal_10 = self.findChild(QtWidgets.QLabel, 'signal_10')
+        self.signal_11 = self.findChild(QtWidgets.QLabel, 'signal_11')
+        self.signal_12 = self.findChild(QtWidgets.QLabel, 'signal_12')
+        self.signal_13 = self.findChild(QtWidgets.QLabel, 'signal_13')
+        self.signal_14 = self.findChild(QtWidgets.QLabel, 'signal_14')
+        self.signal_15 = self.findChild(QtWidgets.QLabel, 'signal_15')
+
+        self.speed_limit_1 = self.findChild(QtWidgets.QLabel, 'speed_limit_1')
 
         self.logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button') # Find the button
         self.logout_button.clicked.connect(self.logout)
@@ -145,22 +168,6 @@ class Ui(QtWidgets.QMainWindow):
         self.block14 = self.findChild(QtWidgets.QPushButton, 'pushButton_14')
         self.block15 = self.findChild(QtWidgets.QPushButton, 'pushButton_15')
         self.stacked_widget = self.findChild(QtWidgets.QStackedWidget, 'stackedWidget')
-    
-        #self.heater_button_1 = self.findChild(QtWidgets.QPushButton, 'heater_button_1')
-        #self.heater_button_2 = self.findChild(QtWidgets.QPushButton, 'heater_button_2')
-        #self.heater_button_3 = self.findChild(QtWidgets.QPushButton, 'heater_button_3')
-        #self.heater_button_1 = self.findChild(QtWidgets.QPushButton, 'heater_button_4')
-        #self.heater_button_2 = self.findChild(QtWidgets.QPushButton, 'heater_button_5')
-        #self.heater_button_3 = self.findChild(QtWidgets.QPushButton, 'heater_button_6')
-        #self.heater_button_1 = self.findChild(QtWidgets.QPushButton, 'heater_button_7')
-        #self.heater_button_2 = self.findChild(QtWidgets.QPushButton, 'heater_button_8')
-        #self.heater_button_3 = self.findChild(QtWidgets.QPushButton, 'heater_button_9')
-        #self.heater_button_1 = self.findChild(QtWidgets.QPushButton, 'heater_button_10')
-        #self.heater_button_2 = self.findChild(QtWidgets.QPushButton, 'heater_button_11')
-        #self.heater_button_3 = self.findChild(QtWidgets.QPushButton, 'heater_button_12')
-        #self.heater_button_1 = self.findChild(QtWidgets.QPushButton, 'heater_button_13')
-        #self.heater_button_2 = self.findChild(QtWidgets.QPushButton, 'heater_button_14')
-        #self.heater_button_3 = self.findChild(QtWidgets.QPushButton, 'heater_button_15')
 
         self.back_button_1 = self.findChild(QtWidgets.QPushButton, 'back_button_1')
         self.back_button_2 = self.findChild(QtWidgets.QPushButton, 'back_button_2')
@@ -201,55 +208,72 @@ class Ui(QtWidgets.QMainWindow):
     def page1(self):
         #new_index = self.stacked_widget.currentIndex()+1
         #if new_index < len(self.stacked_widget):
+        print('hello')
         self.stacked_widget.setCurrentIndex(1)
+        self.trackInfo1()
 
     def page2(self):
         self.stacked_widget.setCurrentIndex(2)
+        self.trackInfo1()
 
     def page3(self):
         self.stacked_widget.setCurrentIndex(3)
+        self.trackInfo1()
 
     def page4(self):
         self.stacked_widget.setCurrentIndex(4)
+        self.trackInfo1()
 
     def page5(self):
         self.stacked_widget.setCurrentIndex(5)
+        self.trackInfo1()
 
     def page6(self):
         self.stacked_widget.setCurrentIndex(6)
+        self.trackInfo1()
 
     def page7(self):
         self.stacked_widget.setCurrentIndex(7)
+        self.trackInfo1()
 
     def page8(self):
         self.stacked_widget.setCurrentIndex(8)
+        self.trackInfo1()
 
     def page9(self):
         self.stacked_widget.setCurrentIndex(9)
+        self.trackInfo1()
 
     def page10(self):
         self.stacked_widget.setCurrentIndex(10)
+        self.trackInfo1()
 
     def page11(self):
-        self.stacked_widget.setCurrentIndex(11) 
+        self.stacked_widget.setCurrentIndex(11)
+        self.trackInfo1() 
 
     def page12(self):
         self.stacked_widget.setCurrentIndex(12)
+        self.trackInfo1()
 
     def page13(self):
-        self.stacked_widget.setCurrentIndex(13)                                       
+        self.stacked_widget.setCurrentIndex(13)
+        self.trackInfo1()                                       
 
     def page14(self):
         self.stacked_widget.setCurrentIndex(14)
+        self.trackInfo1()
 
     def page15(self):
         self.stacked_widget.setCurrentIndex(15)
+        self.trackInfo1()
 
     def set_button_state(self, index):
-        self.block1.setEnabled(True)
+        i = 0
+        #self.block1.setEnabled(True)
         #n_pages = len(self.stacked_widget)
-        self.block2.setEnabled(True)
-        self.block3.setEnabled(True)
+        #self.block2.setEnabled(True)
+        #self.block3.setEnabled(True)
 
     def heater1(self, h_index1):
         h_index1 = h_index1 + 1;
@@ -385,11 +409,50 @@ class Ui(QtWidgets.QMainWindow):
         else:
             self.heater_button_15.setText('Off')
             self.heater_button_15.setStyleSheet("background-color : rgb(255,0,0)")
-                                
+    
+    def update_times(self):
+        responsecode, times = send_message(RequestCode.GET_SIGNAL_TIMES)
+        if responsecode == ResponseCode.SUCCESS:
+            times = times.split(" ")
+            self.signal_1.setText('Signal Last\nTripped:\n'+times[0])
+            self.signal_2.setText('Signal Last\nTripped:\n'+times[1])
+            self.signal_3.setText('Signal Last\nTripped:\n'+times[2])
+            self.signal_4.setText('Signal Last\nTripped:\n'+times[3])
+            self.signal_5.setText('Signal Last\nTripped:\n'+times[4])
+            self.signal_6.setText('Signal Last\nTripped:\n'+times[5])
+            self.signal_7.setText('Signal Last\nTripped:\n'+times[6])
+            self.signal_8.setText('Signal Last\nTripped:\n'+times[7])
+            self.signal_9.setText('Signal Last\nTripped:\n'+times[8])
+            self.signal_10.setText('Signal Last\nTripped:\n'+times[9])
+            self.signal_11.setText('Signal Last\nTripped:\n'+times[10])
+            self.signal_12.setText('Signal Last\nTripped:\n'+times[11])
+            self.signal_13.setText('Signal Last\nTripped:\n'+times[12])
+            self.signal_14.setText('Signal Last\nTripped:\n'+times[13])
+            self.signal_15.setText('Signal Last\nTripped:\n'+times[14])
+        else:
+            print(responsecode)
+        responsecode, switch = send_message(RequestCode.GET_SWITCH_POSITION)
+        if responsecode == ResponseCode.SUCCESS:
+            switch = switch.split(" ")
+            self.switch_5.setText('Switch flipped to:\n\n'+switch[0])
+        else:
+            self.stopAllTimers()
+            print('The server is not running')
 
-    #def insert_page(self, widget, index=-1):
-        #self.stacked_widget.insertWidget(index, widget)
-        #self.set_button_state(self.stacked_widget.currentIndex())
+        send_message(RequestCode.SET_SPEED_LIMIT, self.speed_limit_1.text()[46:48])
+
+        responsecode, speed = send_message(RequestCode.GET_SPEED_LIMIT)
+        if responsecode == ResponseCode.SUCCESS:
+            print(speed)
+        else:
+            print('fail')
+
+    def trackInfo1(self):
+        self.stopAllTimers()
+        self.track1_info_timer.start(5000)
+
+    def stopAllTimers(self):
+        self.track1_info_timer.stop()
 
     def logout(self):
         # This is executed when the button is pressed
