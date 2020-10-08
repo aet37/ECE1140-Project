@@ -1,6 +1,6 @@
 /**
  * @file RequestManager.cpp
- * 
+ *
  * @brief Implementation of RequestManager class
 */
 
@@ -23,6 +23,13 @@ void RequestManager::HandleRequest(const Common::Request& rRequest, Common::Resp
 {
     switch (rRequest.GetRequestCode())
     {
+        case Common::RequestCode::GET_SWITCH_POSITION:
+        {
+            // Add the request to the queue
+            AddRequest(rRequest);
+            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+            break;
+        }
         case Common::RequestCode::SET_SWITCH_POSITION:
         {
             // Add the request to the queue
@@ -36,7 +43,7 @@ void RequestManager::HandleRequest(const Common::Request& rRequest, Common::Resp
             Common::Request* pNextRequest = GetNextRequest();
             if (pNextRequest != nullptr)
             {
-                rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+                rResponse.SetResponseCode(static_cast<Common::ResponseCode>(pNextRequest->GetRequestCode()));
                 rResponse.SetData(pNextRequest->GetData());
                 delete pNextRequest;
             }
@@ -50,7 +57,7 @@ void RequestManager::HandleRequest(const Common::Request& rRequest, Common::Resp
         case Common::RequestCode::SEND_HW_TRACK_CONTROLLER_RESPONSE:
         {
             // Construct a response from the request's data and add it to the queue
-            Common::Response resp(static_cast<Common::ResponseCode>(std::stoi(rRequest.GetData())));
+            Common::Response resp(Common::ResponseCode::SUCCESS, rRequest.GetData());
             AddResponse(resp);
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
