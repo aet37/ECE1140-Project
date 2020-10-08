@@ -236,6 +236,11 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
             TrainModel::setTrainLength(std::stoi(rReq.GetData()));
             resp.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
+        case Common::RequestCode::SEND_TRAIN_MODEL_INFO:
+        {
+            int power_command = Controller::calculatePower();
+            resp.SetResponseCode(Common::ResponseCode::SUCCESS);
+            resp.SetData(std::stoi(power_command));
         }
         default:
             LOG_SERVER("Invalid RequestCode %d", static_cast<int>(rReq.GetRequestCode()));
