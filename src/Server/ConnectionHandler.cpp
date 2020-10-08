@@ -222,7 +222,6 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         case Common::RequestCode::SEND_TRAIN_MODEL_DATA:
         {
             TrainModel::setTrainLength(std::stoi(rReq.GetData()));
->>>>>>> 5f0abb3a68675b6c97138414da3c4e21908ce5a6
             resp.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
