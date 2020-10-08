@@ -48,6 +48,8 @@ class Ui(QtWidgets.QMainWindow):
         self.signal_14 = self.findChild(QtWidgets.QLabel, 'signal_14')
         self.signal_15 = self.findChild(QtWidgets.QLabel, 'signal_15')
 
+        self.speed_limit_1 = self.findChild(QtWidgets.QLabel, 'speed_limit_1')
+
         self.logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button') # Find the button
         self.logout_button.clicked.connect(self.logout)
 
@@ -429,13 +431,21 @@ class Ui(QtWidgets.QMainWindow):
             self.signal_15.setText('Signal Last\nTripped:\n'+times[14])
         else:
             print(responsecode)
-        print("test123")
         responsecode, switch = send_message(RequestCode.GET_SWITCH_POSITION)
         if responsecode == ResponseCode.SUCCESS:
             switch = switch.split(" ")
             self.switch_5.setText('Switch flipped to:\n\n'+switch[0])
         else:
-            print(responsecode)
+            self.stopAllTimers()
+            print('The server is not running')
+
+        send_message(RequestCode.SET_SPEED_LIMIT, self.speed_limit_1.text()[46:48])
+
+        responsecode, speed = send_message(RequestCode.GET_SPEED_LIMIT)
+        if responsecode == ResponseCode.SUCCESS:
+            print(speed)
+        else:
+            print('fail')
 
     def trackInfo1(self):
         self.stopAllTimers()
