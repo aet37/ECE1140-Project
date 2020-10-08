@@ -239,8 +239,8 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         }
         default:
             LOG_SERVER("Invalid RequestCode %d", static_cast<int>(rReq.GetRequestCode()));
-            m_message = "INVALID COMMAND";
-            return;
+            resp.SetResponseCode(Common::ResponseCode::ERROR);
+            break;
     }
 
     // Set the message, so the requester will receive the response
