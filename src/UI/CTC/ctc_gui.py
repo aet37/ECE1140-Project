@@ -234,7 +234,10 @@ class CTCUi(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def ExitModule(self):
-		os.system('start /B python src/UI/login_gui.py')
+		if(sys.platform == 'darwin'):
+			os.system('python3 src/UI/login_gui.py &')
+		else:
+			os.system('start /B python src/UI/login_gui.py')
 		app.exit()
 
 

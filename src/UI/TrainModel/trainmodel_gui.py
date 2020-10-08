@@ -166,7 +166,10 @@ class Ui(QtWidgets.QMainWindow):
 
     def logout(self):
         # This is executed when the button is pressed
-        os.system('start /B python src/UI/login_gui.py')
+        if(sys.platform == 'darwin'):
+            os.system('python3 src/UI/login_gui.py &')
+        else:
+            os.system('start /B python src/UI/login_gui.py')
         app.exit()
 
     def stopAllTimers(self):

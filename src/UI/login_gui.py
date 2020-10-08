@@ -29,17 +29,26 @@ class Ui(QtWidgets.QMainWindow):
         username = self.username_in.text()
         password = self.password_in.text()
         if username == "trainmodel" and password == "jerry":
-            os.system('start /B python src/UI/TrainModel/trainmodel_gui.py')
+            if(sys.platform == 'darwin'):
+                os.system('python3 src/UI/TrainModel/trainmodel_gui.py &')
+            else:
+                os.system('start /B python src/UI/TrainModel/trainmodel_gui.py')
             app.exit()
         elif username == "trackmodel" and password == "jerry":
-            os.system('start /B python src/UI/TrackModel/gui.py')
+            if(sys.platform == 'darwin'):
+                os.system('python3 src/UI/TrackModel/gui.py &')
+            else:
+                os.system('start /B python src/UI/TrackModel/gui.py')
             app.exit()
         elif username == "hwtrack" and password == "jerry":
             print("hwtrack")
         elif username == "swtrack" and password == "jerry":
             print("swtrack")
         elif username == "ctc" and password == "jerry":
-            os.system('start /B python src/UI/CTC/ctc_gui.py')
+            if(sys.platform == 'darwin'):
+                os.system('python3 src/UI/CTC/ctc_gui.py &')
+            else:
+                os.system('start /B python src/UI/CTC/ctc_gui.py')
             app.exit()
         elif username == "hwtrain" and password == "jerry":
             print("hwtrain")
