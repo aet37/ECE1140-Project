@@ -195,7 +195,7 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(221, 221, 221);
+     <string notr="true">background-color: rgb(133, 158, 166);
 border-color: rgb(0, 0, 0);</string>
     </property>
     <property name="frameShape">
