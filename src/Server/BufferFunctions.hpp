@@ -13,6 +13,7 @@
 #include "TrackSystem.h"
 
 
+
 /**
  * @brief	Buffer function to send info about new train from CTC to Track Controller
  *
@@ -23,9 +24,12 @@
  *
  * @return	None
  */
-SW_Track* TrainInfoBuffer_TrackController(int train_id, int destination_block, int authority, int command_speed)
+void TrainInfoBuffer_CTC_TO_TrackController(int train_id, int destination_block, int authority, int command_speed)
 {
-	return TrackSystem::GetInstance().create_new_track(train_id, destination_block, authority, command_speed);
+	
+	TrackSystem::GetInstance().create_new_track(train_id, destination_block, authority, command_speed);
+	//TrainInfoBuffer_TrackModel(train_id, authority, commandspeed);
+	//SwitchPositionBuffer_TrackModel(TrackSystem::GetInstance().get_pos);
 }
 
 
@@ -57,18 +61,10 @@ void TrainInfoBuffer_TrainModel(int train_id, int authority, int command_speed, 
  *
  * @return	None
  */
-void TrainLocationBuffer_CTC(int block_location)
-{
-	TrainSystem::GetInstance().SetTrackOccupied(block_location);
 
-	TrainSystem::GetInstance().SetTrackNotOccupied(block_location - 1);
-}
 
-void TrainLocationBuffer_SWTC(SW_Track& a, int block_location)
-{
-   a.occ_update(block_location);
 
-}
+
 
 void SwitchPositionBuffer_TrackModel(int)
 {
@@ -100,5 +96,14 @@ void TrainLocationBuffer_TC_TO_CTC(int block_location)
 
 		// Log what was done
 		LOG_CTC("From TrainLocationBuffer_CTC() : Block %d set occupied, Block %d set not occupied", block_location, block_location - 1);
+
 	}
+}
+
+
+
+	void TrainLocationBuffer_SWTC(int block_location)
+{
+   TrackSystem::GetInstance().update_occupancies(block_location);
+   TrainLocationBuffer_TC_TO_CTC(block_location);
 }

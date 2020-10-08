@@ -122,9 +122,7 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         case Common::RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST:
         case Common::RequestCode::SEND_HW_TRACK_CONTROLLER_RESPONSE:
         case Common::RequestCode::GET_HW_TRACK_CONTROLLER_RESPONSE:
-        /*case Common::RequestCode::SWTRACK_OCCUPANCY_TO_CTC:
-        case Common::RequestCode::SWTRACK_TRACKSIGNAL_TO_TRAINM:
-        case Common::RequestCode::SWTRACK_SWITCHPOSITION_TO_TRAINM:*/
+       
         {
             HWTrackController::RequestManager rm;
             rm.HandleRequest(rReq, resp);
@@ -143,13 +141,13 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         	pto_send = TrainSystem::GetInstance().CreateNewTrain(block_to);
 
             //creating TrackController object
-            SW_Track* SW_Track_Object;
+            
 
         	// Send Train Struct to Track Controller buffer function
-	        SW_Track_Object= TrainInfoBuffer_TrackController(pto_send->train_id, pto_send->destination_block, pto_send->authority, pto_send->command_speed);
+	        TrainInfoBuffer_CTC_TO_TrackController(pto_send->train_id, pto_send->destination_block, pto_send->authority, pto_send->command_speed);
 
             //send Train Location to CTC
-            TrainLocationBuffer_TC_TO_CTC(SW_Track_Object->occupancy);
+           
 
 
 	        // Log action
@@ -236,6 +234,20 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
             TrainModel::setTrainLength(std::stoi(rReq.GetData()));
             resp.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
+        }
+        case Common::RequestCode::SWTRACK_OCCUPANCY_TO_CTC:
+        {
+           int occupancy= TrackSystem::GetInstance().get_track_occ();
+           TrainLocationBuffer_TC_TO_CTC(occupancy);
+           break;
+        }
+        case Common::RequestCode::SWTRACK_SWITCHPOSITION_TO_TRAINM:
+        {
+
+        }
+        case Common::RequestCode::SWTRACK_TRACKSIGNAL_TO_TRAINM:
+        {
+
         }
         default:
             LOG_SERVER("Invalid RequestCode %d", static_cast<int>(rReq.GetRequestCode()));
