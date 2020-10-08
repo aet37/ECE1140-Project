@@ -10,6 +10,7 @@ from server_functions import *
 class Ui(QtWidgets.QMainWindow):
     def __init__(self):
         super(Ui, self).__init__()
+        distance = 0
         self.track1_info_timer = QTimer()
         self.track1_info_timer.timeout.connect(self.update_times)
         uic.loadUi('src/TrackModel/Map_Page.ui', self)
@@ -411,26 +412,27 @@ class Ui(QtWidgets.QMainWindow):
             self.heater_button_15.setStyleSheet("background-color : rgb(255,0,0)")
     
     def update_times(self):
-        responsecode, times = send_message(RequestCode.GET_SIGNAL_TIMES)
-        if responsecode == ResponseCode.SUCCESS:
-            times = times.split(" ")
-            self.signal_1.setText('Signal Last\nTripped:\n'+times[0])
-            self.signal_2.setText('Signal Last\nTripped:\n'+times[1])
-            self.signal_3.setText('Signal Last\nTripped:\n'+times[2])
-            self.signal_4.setText('Signal Last\nTripped:\n'+times[3])
-            self.signal_5.setText('Signal Last\nTripped:\n'+times[4])
-            self.signal_6.setText('Signal Last\nTripped:\n'+times[5])
-            self.signal_7.setText('Signal Last\nTripped:\n'+times[6])
-            self.signal_8.setText('Signal Last\nTripped:\n'+times[7])
-            self.signal_9.setText('Signal Last\nTripped:\n'+times[8])
-            self.signal_10.setText('Signal Last\nTripped:\n'+times[9])
-            self.signal_11.setText('Signal Last\nTripped:\n'+times[10])
-            self.signal_12.setText('Signal Last\nTripped:\n'+times[11])
-            self.signal_13.setText('Signal Last\nTripped:\n'+times[12])
-            self.signal_14.setText('Signal Last\nTripped:\n'+times[13])
-            self.signal_15.setText('Signal Last\nTripped:\n'+times[14])
-        else:
-            print(responsecode)
+        #responsecode, speed = send_message(RequestCode.GET)
+        #responsecode, block = send_message(RequestCode.GET_SIGNAL_TIMES)
+        #if responsecode == ResponseCode.SUCCESS:
+            #block = times.split(" ")
+        self.signal_1.setText('Currently on\nblock:\n NA')
+        self.signal_2.setText('Currently on\nblock:\n NA')
+        self.signal_3.setText('Currently on\nblock:\n NA')
+        self.signal_4.setText('Currently on\nblock:\n NA')
+        self.signal_5.setText('Currently on\nblock:\n NA')
+        self.signal_6.setText('Currently on\nblock:\n NA')
+        self.signal_7.setText('Currently on\nblock:\n NA')
+        self.signal_8.setText('Currently on\nblock:\n NA')
+        self.signal_9.setText('Currently on\nblock:\n NA')
+        self.signal_10.setText('Currently on\nblock:\n NA')
+        self.signal_11.setText('Currently on\nblock:\n NA')
+        self.signal_12.setText('Currently on\nblock:\n NA')
+        self.signal_13.setText('Currently on\nblock:\n NA')
+        self.signal_14.setText('Currently on\nblock:\n NA')
+        self.signal_15.setText('Currently on\nblock:\n NA')
+        #else:
+            #print(responsecode)
         responsecode, switch = send_message(RequestCode.GET_SWITCH_POSITION)
         if responsecode == ResponseCode.SUCCESS:
             switch = switch.split(" ")
@@ -449,7 +451,7 @@ class Ui(QtWidgets.QMainWindow):
 
     def trackInfo1(self):
         self.stopAllTimers()
-        self.track1_info_timer.start(5000)
+        self.track1_info_timer.start(1000)
 
     def stopAllTimers(self):
         self.track1_info_timer.stop()
