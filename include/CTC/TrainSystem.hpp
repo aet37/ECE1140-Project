@@ -28,7 +28,7 @@ class TrainSystem
 		 */
 		TrainSystem()
 		{
-			// TEMPORARY FOR ITTERATION 2
+			// TEMPORARY FOR ITERATION 2
 			//      create 15 track objects representing track
 			Track* ptemp_track = nullptr;
 			for(int i = 0; i < 15; i++)
@@ -63,6 +63,16 @@ class TrainSystem
 		 *
 		 */
 		static TrainSystem& GetInstance();
+
+		/**
+		* @brief Get the Array of track pointers
+		 *
+		* @param none
+		*
+		* @return vector<Track*>
+		*
+		*/
+		std::vector<Track*> GetTrackArr();
 
 		/**
 		 * @brief Create(dispatch) a new train by creating

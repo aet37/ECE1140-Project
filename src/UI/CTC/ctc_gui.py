@@ -83,6 +83,8 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.d_time_label = self.findChild(QtWidgets.QLineEdit, 'TimeInput') # Find the input
 
 		self.d_conf_label = self.findChild(QtWidgets.QLabel, 'ConfirmationLabel') # Find the label
+		self.d_speed_label = self.findChild(QtWidgets.QLabel, 'SpeedOut') # Find the label
+		self.d_auth_label = self.findChild(QtWidgets.QLabel, 'AuthorityOut') # Find the label
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'DispatchButton') # Find the button
 		self.button.clicked.connect(self.DispatchTrain)
@@ -137,6 +139,9 @@ class CTCUi(QtWidgets.QMainWindow):
 		else:
 			self.d_conf_label.setStyleSheet("color: green")
 			self.d_conf_label.setText('Train Dispatched to Block ' + self.d_block_label.text() + ' at ' + self.d_time_label.text())
+			self.d_speed_label.setText('Command Speed [to Track Controller]: 40 km/hr')
+			self.d_auth_label.setText('Authority [to Track Controller]: 1000 m')
+
 
 		##### Send data to server #####
 		##### data = "block hour minute a/p"
@@ -150,28 +155,61 @@ class CTCUi(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def MapWindow(self):
+		global time_timr
 		uic.loadUi('src/UI/CTC/ctc_view_map.ui', self)
 		self.setWindowTitle("CTC - View Map")
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
-		self.button.clicked.connect(self.returnToMainWindow)
+		self.button.clicked.connect(self.LeaveThis)
+
+		self.d_track_label = self.findChild(QtWidgets.QLabel, 'TrackInput') # Find the label
+
+		# Automatically refresh Map after 700ms
+		time_timr = QtCore.QTimer(self)
+		time_timr.timeout.connect(self.RefreshMap)
+		time_timr.start(700)
 
 		 # Find the Blocks
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block1')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block2')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block3')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block4')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block5')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block6')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block7')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block8')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block9')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block10')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block11')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block12')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block13')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block14')
-		self.button = self.findChild(QtWidgets.QPushButton, 'Block15')
+		self.TBlock1 = self.findChild(QtWidgets.QPushButton, 'Block1')
+		self.TBlock2 = self.findChild(QtWidgets.QPushButton, 'Block2')
+		self.TBlock3 = self.findChild(QtWidgets.QPushButton, 'Block3')
+		self.TBlock4 = self.findChild(QtWidgets.QPushButton, 'Block4')
+		self.TBlock5 = self.findChild(QtWidgets.QPushButton, 'Block5')
+		self.TBlock6 = self.findChild(QtWidgets.QPushButton, 'Block6')
+		self.TBlock7 = self.findChild(QtWidgets.QPushButton, 'Block7')
+		self.TBlock8 = self.findChild(QtWidgets.QPushButton, 'Block8')
+		self.TBlock9 = self.findChild(QtWidgets.QPushButton, 'Block9')
+		self.TBlock10 = self.findChild(QtWidgets.QPushButton, 'Block10')
+		self.TBlock11 = self.findChild(QtWidgets.QPushButton, 'Block11')
+		self.TBlock12 = self.findChild(QtWidgets.QPushButton, 'Block12')
+		self.TBlock13 = self.findChild(QtWidgets.QPushButton, 'Block13')
+		self.TBlock14 = self.findChild(QtWidgets.QPushButton, 'Block14')
+		self.TBlock15 = self.findChild(QtWidgets.QPushButton, 'Block15')
+
+	def RefreshMap(self):
+		# Ping server for track occupancies
+		m_tuple_data = send_message(RequestCode.CTC_SEND_OCCUPANCIES)
+
+		# Extract string data from tuple
+		m_data = m_tuple_data[1]
+
+		for i in range(len(m_data)):
+			if(m_data[i] == 't'):
+				try:
+					eval('self.TBlock%s.setStyleSheet(\"background-color: rgb(255, 255, 10);\")' % str(i + 1))		# if occupied change block color to yellow
+					self.d_track_label.setText('Track Occupancy [from Track Controller]: Track ' + str(i + 1) + ' Occupied')
+				except:
+					print('Warning: Screen has been closed before  button could update')
+			else:
+				try:
+					eval('self.TBlock%s.setStyleSheet(\"background-color: rgb(33, 255, 128);\")' % str(i + 1))		# if not occupied, change block color to green
+				except:
+					print('Warning: Screen has been closed before  button could update')
+
+	def LeaveThis(self):
+		global time_timr
+		time_timr.stop()
+		self.returnToMainWindow()
 
 
 	#######################################################################################################################################
@@ -215,7 +253,10 @@ class CTCUi(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def ExitModule(self):
-		os.system('start /B python src/UI/login_gui.py')
+		if(sys.platform == 'darwin'):
+			os.system('python3 src/UI/login_gui.py &')
+		else:
+			os.system('start /B python src/UI/login_gui.py')
 		app.exit()
 
 

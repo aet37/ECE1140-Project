@@ -15,6 +15,7 @@
 #include "Request.hpp" // For Common::Request
 #include "Response.hpp" // For Common::Response
 #include "BufferFunctions.hpp"
+#include "TrainModelData.hpp" // For TrainModel::setTrainLength
 #include "Logger.hpp" // For LOG macros
 
 #include "TrainSystem.hpp"             // For CTC actions
@@ -146,6 +147,31 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
 	        pto_send = nullptr;
             break;
         }
+	    case Common::RequestCode::CTC_SEND_OCCUPANCIES:
+	    {
+	    	// send Response Code
+			resp.SetResponseCode(Common::ResponseCode::SUCCESS);
+
+			// Form response message; occupied = "t", not occupied = "f"
+			std::string to_send;
+			for(int i = 0; i < TrainSystem::GetInstance().GetTrackArr().size(); i++)
+			{
+				if(TrainSystem::GetInstance().GetTrackArr()[i]->occupied)
+				{
+					to_send.push_back('t');
+				}
+				else
+				{
+					to_send.push_back('f');
+				}
+			}
+			resp.SetData(to_send);
+
+			// Log data sent
+			LOG_CTC("From ConnectionHandler.cpp : Occupancies for each track sent");
+
+			break;
+	    }
         case Common::RequestCode::GET_COMMAND_SPEED:
         {
             resp.SetResponseCode(Common::ResponseCode::SUCCESS);
@@ -184,6 +210,19 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         case Common::RequestCode::GET_SPEED_LIMIT:
         {
             resp.SetData(std::to_string(TrackModel::getSpeedLimit()));
+            resp.SetResponseCode(Common::ResponseCode::SUCCESS);
+            break;
+        }
+        case Common::RequestCode::SET_TRAIN_LENGTH:
+        {
+            TrainModel::setTrainLength(std::stoi(rReq.GetData()));
+            resp.SetResponseCode(Common::ResponseCode::SUCCESS);
+            break;
+        }
+        case Common::RequestCode::SEND_TRAIN_MODEL_DATA:
+        {
+            TrainModel::setTrainLength(std::stoi(rReq.GetData()));
+>>>>>>> 5f0abb3a68675b6c97138414da3c4e21908ce5a6
             resp.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }

@@ -30,7 +30,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>5</number>
+     <number>15</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QTabWidget" name="tabWidget">
@@ -889,7 +889,7 @@ background-color: rgb(170, 0, 127);</string>
        <enum>QFrame::Box</enum>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;NA&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;12:00&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -1381,7 +1381,7 @@ background-color: rgb(170, 0, 127);</string>
        <enum>QFrame::Box</enum>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;NA&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;12:00&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -1819,7 +1819,7 @@ background-color: rgb(170, 0, 127);</string>
        <enum>QFrame::Box</enum>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;NA&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;12:00&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -2497,7 +2497,7 @@ background-color: rgb(170, 0, 127);</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="signal_400">
+     <widget class="QLabel" name="signal_7">
       <property name="geometry">
        <rect>
         <x>550</x>
@@ -2518,7 +2518,7 @@ background-color: rgb(170, 0, 127);</string>
        <enum>QFrame::Box</enum>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;NA&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;12:00&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -3016,7 +3016,7 @@ background-color: rgb(170, 0, 127);</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="signal_500">
+     <widget class="QLabel" name="signal_8">
       <property name="geometry">
        <rect>
         <x>550</x>
@@ -3037,7 +3037,7 @@ background-color: rgb(170, 0, 127);</string>
        <enum>QFrame::Box</enum>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;NA&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;12:00&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -3140,7 +3140,7 @@ background-color: rgb(170, 0, 127);</string>
        <enum>QFrame::Box</enum>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Switch flipped to:&lt;br/&gt;&lt;/p&gt;&lt;p&gt;?&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Switch flipped to:&lt;br/&gt;&lt;/p&gt;&lt;p&gt;6&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -3535,7 +3535,7 @@ background-color: rgb(170, 0, 127);</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="signal_600">
+     <widget class="QLabel" name="signal_9">
       <property name="geometry">
        <rect>
         <x>550</x>
@@ -3556,7 +3556,7 @@ background-color: rgb(170, 0, 127);</string>
        <enum>QFrame::Box</enum>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;NA&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;12:00&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -4054,7 +4054,7 @@ background-color: rgb(170, 0, 127);</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="signal_7">
+     <widget class="QLabel" name="signal_10">
       <property name="geometry">
        <rect>
         <x>550</x>
@@ -4075,7 +4075,7 @@ background-color: rgb(170, 0, 127);</string>
        <enum>QFrame::Box</enum>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;NA&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;12:00&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -4573,7 +4573,7 @@ background-color: rgb(170, 0, 127);</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="signal_8">
+     <widget class="QLabel" name="signal_11">
       <property name="geometry">
        <rect>
         <x>550</x>
@@ -4594,7 +4594,7 @@ background-color: rgb(170, 0, 127);</string>
        <enum>QFrame::Box</enum>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;NA&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;12:00&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -5092,7 +5092,7 @@ background-color: rgb(170, 0, 127);</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="signal_9">
+     <widget class="QLabel" name="signal_12">
       <property name="geometry">
        <rect>
         <x>550</x>
@@ -5113,7 +5113,7 @@ background-color: rgb(170, 0, 127);</string>
        <enum>QFrame::Box</enum>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;NA&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;12:00&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -5611,7 +5611,7 @@ background-color: rgb(170, 0, 127);</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="signal_10">
+     <widget class="QLabel" name="signal_13">
       <property name="geometry">
        <rect>
         <x>550</x>
@@ -5632,7 +5632,7 @@ background-color: rgb(170, 0, 127);</string>
        <enum>QFrame::Box</enum>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;NA&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;12:00&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -6130,7 +6130,7 @@ background-color: rgb(170, 0, 127);</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="signal_11">
+     <widget class="QLabel" name="signal_14">
       <property name="geometry">
        <rect>
         <x>550</x>
@@ -6151,7 +6151,7 @@ background-color: rgb(170, 0, 127);</string>
        <enum>QFrame::Box</enum>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;NA&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;12:00&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -6649,7 +6649,7 @@ background-color: rgb(170, 0, 127);</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="signal_12">
+     <widget class="QLabel" name="signal_15">
       <property name="geometry">
        <rect>
         <x>550</x>
@@ -6670,7 +6670,7 @@ background-color: rgb(170, 0, 127);</string>
        <enum>QFrame::Box</enum>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;NA&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;12:00&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -7168,7 +7168,7 @@ background-color: rgb(170, 0, 127);</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="signal_13">
+     <widget class="QLabel" name="signal_16">
       <property name="geometry">
        <rect>
         <x>550</x>
@@ -7189,7 +7189,7 @@ background-color: rgb(170, 0, 127);</string>
        <enum>QFrame::Box</enum>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;NA&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;12:00&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -7687,7 +7687,7 @@ background-color: rgb(170, 0, 127);</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="signal_14">
+     <widget class="QLabel" name="signal_17">
       <property name="geometry">
        <rect>
         <x>550</x>
@@ -7708,7 +7708,7 @@ background-color: rgb(170, 0, 127);</string>
        <enum>QFrame::Box</enum>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;NA&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;12:00&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -8206,7 +8206,7 @@ background-color: rgb(170, 0, 127);</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="signal_15">
+     <widget class="QLabel" name="signal_18">
       <property name="geometry">
        <rect>
         <x>550</x>
@@ -8227,7 +8227,7 @@ background-color: rgb(170, 0, 127);</string>
        <enum>QFrame::Box</enum>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;NA&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Signal Last&lt;/p&gt;&lt;p&gt;Tripped:&lt;/p&gt;&lt;p&gt;12:00&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>

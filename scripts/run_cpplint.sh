@@ -1,6 +1,6 @@
 pip install cpplint
 
-cpplint --recursive --linelength=120 --filter=-legal/copyright,-whitespace/indent,-whitespace/tab,-whitespace/braces,\
+cpplint --recursive --linelength=140 --filter=-legal/copyright,-whitespace/indent,-whitespace/tab,-whitespace/braces,\
 -build/header_guard,-whitespace/comments,-whitespace/newline *
 
 # cpplint: https://github.com/cpplint/cpplint

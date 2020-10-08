@@ -113,6 +113,9 @@ class Ui(QtWidgets.QMainWindow):
         responsecode, speed = send_message(RequestCode.GET_COMMAND_SPEED)
         if responsecode == ResponseCode.SUCCESS:
             self.disp_command_speed.setText(speed + " MPH")
+        else:
+            self.stopAllTimers()
+            print("The server is not running")
 
     def trainParameters(self):
         self.stopAllTimers()
@@ -128,6 +131,7 @@ class Ui(QtWidgets.QMainWindow):
     def saveParameters(self):
         #save parameters
         self.save_alert.setStyleSheet("color: green;")
+        send_message(RequestCode.SET_TRAIN_LENGTH, self.in_length.text())
 
     def trainReports(self):
         self.stopAllTimers()
@@ -162,7 +166,10 @@ class Ui(QtWidgets.QMainWindow):
 
     def logout(self):
         # This is executed when the button is pressed
-        os.system('start /B python src/UI/login_gui.py')
+        if(sys.platform == 'darwin'):
+            os.system('python3 src/UI/login_gui.py &')
+        else:
+            os.system('start /B python src/UI/login_gui.py')
         app.exit()
 
     def stopAllTimers(self):

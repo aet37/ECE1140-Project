@@ -1,6 +1,6 @@
 /**
  * @file RequestManager.cpp
- * 
+ *
  * @brief Implementation of RequestManager class
 */
 
@@ -19,10 +19,17 @@ namespace HWTrackController
 std::queue<Common::Request*> RequestManager::m_requestQueue = std::queue<Common::Request*>();
 std::queue<Common::Response*> RequestManager::m_responseQueue = std::queue<Common::Response*>();
 
-void RequestManager::HandleRequest(Common::Request& rRequest, Common::Response& rResponse)
+void RequestManager::HandleRequest(const Common::Request& rRequest, Common::Response& rResponse)
 {
     switch (rRequest.GetRequestCode())
     {
+        case Common::RequestCode::GET_SWITCH_POSITION:
+        {
+            // Add the request to the queue
+            AddRequest(rRequest);
+            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+            break;
+        }
         case Common::RequestCode::SET_SWITCH_POSITION:
         {
             // Add the request to the queue
@@ -36,7 +43,7 @@ void RequestManager::HandleRequest(Common::Request& rRequest, Common::Response& 
             Common::Request* pNextRequest = GetNextRequest();
             if (pNextRequest != nullptr)
             {
-                rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+                rResponse.SetResponseCode(static_cast<Common::ResponseCode>(pNextRequest->GetRequestCode()));
                 rResponse.SetData(pNextRequest->GetData());
                 delete pNextRequest;
             }
@@ -50,7 +57,7 @@ void RequestManager::HandleRequest(Common::Request& rRequest, Common::Response& 
         case Common::RequestCode::SEND_HW_TRACK_CONTROLLER_RESPONSE:
         {
             // Construct a response from the request's data and add it to the queue
-            Common::Response resp(static_cast<Common::ResponseCode>(std::stoi(rRequest.GetData())));
+            Common::Response resp(Common::ResponseCode::SUCCESS, rRequest.GetData());
             AddResponse(resp);
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
@@ -79,7 +86,7 @@ void RequestManager::HandleRequest(Common::Request& rRequest, Common::Response& 
     }
 }
 
-void RequestManager::AddRequest(Common::Request& rReq)
+void RequestManager::AddRequest(const Common::Request& rReq)
 {
     // Use heap memory so it can stay in the queue
     Common::Request* pNewRequest = new Common::Request();
@@ -98,7 +105,7 @@ Common::Request* RequestManager::GetNextRequest()
     return pNextRequest;
 }
 
-void RequestManager::AddResponse(Common::Response& rResp)
+void RequestManager::AddResponse(const Common::Response& rResp)
 {
     // Use heap memory so it can stay in the queue
     Common::Response* pNewResponse = new Common::Response();

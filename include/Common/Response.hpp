@@ -1,6 +1,6 @@
 /**
  * @file Response.hpp
- * 
+ *
  * @brief Data structure to be used to respond to a request
 */
 #ifndef RESPONSE_HPP
@@ -15,10 +15,10 @@ namespace Common
 
 /**
  * @enum ResponseCode
- * 
+ *
  * @brief Codes that will be used when the server
  * response back from a request
- * 
+ *
  * @li System wide: 0 - 31
  * @li CTC: 32 - 63
  * @li Software Track Controller: 64 - 95
@@ -36,7 +36,7 @@ enum class ResponseCode : uint8_t
 
 /**
  * @class Response
- * 
+ *
  * @brief Structure used to hold response code and
  * any additional information for the response
 */
@@ -54,7 +54,7 @@ public:
     Response() :
         Response(ResponseCode::ERROR, "")
     {}
-    
+
     explicit Response(ResponseCode respCode) :
         Response(respCode, "")
     {}

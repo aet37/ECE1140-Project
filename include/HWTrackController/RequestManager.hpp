@@ -43,7 +43,7 @@ public:
      * @param[in] rRequest      Request to be handled
      * @param[out] rResponse    Response to the request 
     */
-    void HandleRequest(Common::Request& rRequest, Common::Response& rResponse);
+    void HandleRequest(const Common::Request& rRequest, Common::Response& rResponse);
 
 protected:
 private:
@@ -56,12 +56,12 @@ private:
     /**
      * @brief Adds a request to the queue
     */
-    void AddRequest(Common::Request& rReq);
+    void AddRequest(const Common::Request& rReq);
 
     /**
      * @brief Adds a response to the queue
     */
-    void AddResponse(Common::Response& rResp);
+    void AddResponse(const Common::Response& rResp);
 
     /**
      * @brief Obtains the next request from the queue

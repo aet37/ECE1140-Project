@@ -26,6 +26,19 @@ TrainSystem& TrainSystem::GetInstance()
 }
 
 /**
+* @brief Get the Array of track pointers
+ *
+* @param none
+*
+* @return vector<Track*>
+*
+*/
+std::vector<Track*> TrainSystem::GetTrackArr()
+{
+	return p_tracks;
+}
+
+/**
  *@brief Create(dispatch) a new train by creating
  * the Train object then adding it to the class member vector
  *
@@ -48,8 +61,8 @@ Train* TrainSystem::CreateNewTrain(int block_to)
 	train_numbers.push_back(num);
 
 	// Add Speed and Authority to train
-	p_temp->authority = 1000;           // feet
-	p_temp->command_speed = 25;         // mph
+	p_temp->authority = 1000;           // m
+	p_temp->command_speed = 40;         // km/hr
 
 	// Log creation of object
 	LOG_CTC("From TrainSystem::CreateNewTrain : Created Train #%d", p_temp->train_id);
@@ -71,11 +84,8 @@ void TrainSystem::SetTrackOccupied(int track_num)
 	// Set occupied member variable as true
 	p_tracks[track_num - 1]->occupied = true;
 
-	// Alert UI that a track is occupied
-	/**/
-
 	// Log that a track is occupied
-	LOG_CTC("From TrainSystem::SetTrackOccupied() : Track %d is occupied; Sent to UI", track_num);
+	LOG_CTC("From TrainSystem::SetTrackOccupied() : Track %d is occupied", track_num);
 }
 
 /**
@@ -91,9 +101,7 @@ void TrainSystem::SetTrackNotOccupied(int track_num)
 	// Set occupied member variable as false
 	p_tracks[track_num - 1]->occupied = false;
 
-	// Alert UI that a track is not occupied
-	/**/
 
 	// Log that a track is occupied
-	LOG_CTC("From TrainSystem::SetTrackNotOccupied() : Track %d is NOT occupied; Sent to UI", track_num);
+	LOG_CTC("From TrainSystem::SetTrackNotOccupied() : Track %d is NOT occupied", track_num);
 }
