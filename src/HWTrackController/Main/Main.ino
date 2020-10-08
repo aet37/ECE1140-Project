@@ -29,7 +29,7 @@ void setup()
     Scheduler::GetInstance().SetUserProgram(pProg);
 
     // Add tasks to the scheduler
-    Scheduler::GetInstance().AddTask(new SystemTask(toggleTask, 1000));
+    // Scheduler::GetInstance().AddTask(new SystemTask(toggleTask, 1000));
     Scheduler::GetInstance().AddTask(new SystemTask(Communications::CommsTask, 1000));
 }
 
