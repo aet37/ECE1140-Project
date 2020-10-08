@@ -62,7 +62,7 @@ Train* TrainSystem::CreateNewTrain(int block_to)
 
 	// Add Speed and Authority to train
 	p_temp->authority = 1000;           // m
-	p_temp->command_speed = 11;         // m/s
+	p_temp->command_speed = 40;         // km/hr
 
 	// Log creation of object
 	LOG_CTC("From TrainSystem::CreateNewTrain : Created Train #%d", p_temp->train_id);
