@@ -43,7 +43,7 @@ void TrainLocationBuffer_CTC(int block_location)
 
 void TrainLocationBuffer_SWTC(SW_Track& a, int block_location)
 {
-   TrackSystem::GetInstance().update_occupancies(a, block_location);
+   a.occ_updates(block_location);
 
 }
 

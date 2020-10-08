@@ -36,7 +36,7 @@ void update_occupancies(SW_Track& a, int occ)
 
 
 	// Set occupied member variable as true
-	a.occupancy = occ;
+	a.occ_update(occ);
 
 
 }
