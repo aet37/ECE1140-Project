@@ -32,6 +32,7 @@ class RequestCode(Enum):
     GET_SWITCH_POSITION = 97
     GET_HW_TRACK_CONTROLLER_REQUEST = 100
     SEND_HW_TRACK_CONTROLLER_RESPONSE = 101
+    GET_HW_TRACK_CONTROLLER_RESPONSE = 102
     
     GET_SIGNAL_TIMES = 128
 
@@ -86,7 +87,7 @@ def send_message(request_code, data=""):
 
     return (ResponseCode(response_code), response_data)
 
-def poll_for_response(request_code, data, expected_response=ResponseCode.SUCCESS,
+def poll_for_response(request_code, data="", expected_response=ResponseCode.SUCCESS,
                       timeout=5):
     """Continually sends a message until expected_response is received.
 
@@ -103,7 +104,7 @@ def poll_for_response(request_code, data, expected_response=ResponseCode.SUCCESS
     try:
         response = polling.poll(send_message,
                                 args=[request_code, data],
-                                step=0.25,
+                                step=0.75,
                                 timeout=timeout,
                                 check_success=lambda x: x[0] == expected_response)
     except polling.TimeoutException:
