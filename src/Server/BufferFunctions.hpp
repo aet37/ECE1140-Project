@@ -104,6 +104,6 @@ void TrainLocationBuffer_TC_TO_CTC(int block_location)
 
 	void TrainLocationBuffer_SWTC(int block_location)
 {
-   TrackSystem::GetInstance().update_occupancies(block_location));
+   TrackSystem::GetInstance().update_occupancies(block_location);
    TrainLocationBuffer_TC_TO_CTC(block_location);
 }

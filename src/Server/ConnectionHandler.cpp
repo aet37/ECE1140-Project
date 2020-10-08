@@ -146,7 +146,7 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
             
 
         	// Send Train Struct to Track Controller buffer function
-	        TrainInfoBuffer_TrackController(pto_send->train_id, pto_send->destination_block, pto_send->authority, pto_send->command_speed);
+	        TrainInfoBuffer_CTC_TO_TrackController(pto_send->train_id, pto_send->destination_block, pto_send->authority, pto_send->command_speed);
 
             //send Train Location to CTC
            
