@@ -142,7 +142,7 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
 	        SW_Track_Object= TrainInfoBuffer_TrackController(pto_send->train_id, pto_send->destination_block, pto_send->authority, pto_send->command_speed);
 
             //send Train Location to CTC
-            TrainLocationBuffer_CTC(SW_Track_Object->occupancy);
+            TrainLocationBuffer_TC_TO_CTC(SW_Track_Object->occupancy);
 
 
 	        // Log action
