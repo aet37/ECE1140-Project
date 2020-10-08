@@ -83,6 +83,8 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.d_time_label = self.findChild(QtWidgets.QLineEdit, 'TimeInput') # Find the input
 
 		self.d_conf_label = self.findChild(QtWidgets.QLabel, 'ConfirmationLabel') # Find the label
+		self.d_speed_label = self.findChild(QtWidgets.QLabel, 'SpeedOut') # Find the label
+		self.d_auth_label = self.findChild(QtWidgets.QLabel, 'AuthorityOut') # Find the label
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'DispatchButton') # Find the button
 		self.button.clicked.connect(self.DispatchTrain)
@@ -137,6 +139,9 @@ class CTCUi(QtWidgets.QMainWindow):
 		else:
 			self.d_conf_label.setStyleSheet("color: green")
 			self.d_conf_label.setText('Train Dispatched to Block ' + self.d_block_label.text() + ' at ' + self.d_time_label.text())
+			self.d_speed_label.setText('Command Speed [to Track Controller]: 40 km/hr')
+			self.d_auth_label.setText('Authority [to Track Controller]: 1000 m')
+
 
 		##### Send data to server #####
 		##### data = "block hour minute a/p"
@@ -156,6 +161,8 @@ class CTCUi(QtWidgets.QMainWindow):
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
 		self.button.clicked.connect(self.LeaveThis)
+
+		self.d_track_label = self.findChild(QtWidgets.QLabel, 'TrackInput') # Find the label
 
 		# Automatically refresh Map after 700ms
 		time_timr = QtCore.QTimer(self)
@@ -190,6 +197,7 @@ class CTCUi(QtWidgets.QMainWindow):
 			if(m_data[i] == 't'):
 				try:
 					eval('self.TBlock%s.setStyleSheet(\"background-color: rgb(255, 255, 10);\")' % str(i + 1))		# if occupied change block color to yellow
+					self.d_track_label.setText('Track Occupancy [from Track Controller]: Track' + str(i + 1) + ' Occupied')
 				except:
 					print('Warning: Screen has been closed before  button could update')
 			else:
