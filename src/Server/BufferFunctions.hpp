@@ -41,9 +41,15 @@ void TrainLocationBuffer_CTC(int block_location)
 	if(block_location == 11)
 	{
 		TrainSystem::GetInstance().SetTrackNotOccupied(5);
+
+		// Log what was done
+		LOG_CTC("From TrainLocationBuffer_CTC() : Block %d set occupied, Block 5 set not occupied", block_location);
 	}
 	else
 	{
 		TrainSystem::GetInstance().SetTrackNotOccupied(block_location - 1);
+
+		// Log what was done
+		LOG_CTC("From TrainLocationBuffer_CTC() : Block %d set occupied, Block %d set not occupied", block_location, block_location - 1);
 	}
 }
