@@ -43,7 +43,7 @@ void TrainLocationBuffer_CTC(int block_location)
 
 void TrainLocationBuffer_SWTC(SW_Track& a, int block_location)
 {
-   a.occ_updates(block_location);
+   a.occ_update(block_location);
 
 }
 
