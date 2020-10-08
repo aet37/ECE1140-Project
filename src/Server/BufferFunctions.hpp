@@ -29,7 +29,7 @@ void TrainInfoBuffer_TrackController(int train_id, int destination_block, int au
 }
 
 
-int tm_train_id, tm_authority, tm_command_speed, tm_current_speed, tm_speed_limit
+int tm_train_id, tm_authority, tm_command_speed, tm_current_speed, tm_speed_limit;
 /**
  * @brief	Buffer function to send info about new train from CTC to Track Controller
  *
