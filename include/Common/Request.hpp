@@ -43,7 +43,9 @@ enum class RequestCode : uint8_t
     GET_HW_TRACK_CONTROLLER_RESPONSE = 102,
 
     GET_COMMAND_SPEED = 160,
-    SET_TRAIN_LENGTH = 161
+    SET_TRAIN_LENGTH = 161,
+
+    SEND_TRAIN_MODEL_INFO = 192
 };
 
 /**
