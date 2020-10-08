@@ -18,12 +18,12 @@ TrackSystem& TrackSystem::GetInstance()
 
 
 // Create new track
-Track* TrackSystem::create_new_track( int train_id,int destination,int authority, int comm_speed)
+SW_Track* TrackSystem::create_new_track( int train_id,int destination,int authority, int comm_speed)
 {
 
 	// Create an object 
-	Track* p_temp;
-	p_temp = new Track(train_id, destination, authority, comm_speed);
+	SW_Track* p_temp;
+	p_temp = new SW_Track(train_id, destination, authority, comm_speed);
 	p_tracks.push_back(p_temp);
 
 
@@ -31,7 +31,7 @@ Track* TrackSystem::create_new_track( int train_id,int destination,int authority
 	return p_temp;
 }
 
-void update_occupancies(Track& a, int occ)
+void update_occupancies(SW_Track& a, int occ)
 {
 
 

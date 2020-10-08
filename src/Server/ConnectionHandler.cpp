@@ -18,7 +18,7 @@
 #include "Logger.hpp" // For LOG macros
 
 #include "TrainSystem.hpp"             // For CTC actions
-#include "TrackSystem.hpp"
+#include "TrackSystem.h"
 
 
 void ConnectionHandler::Start()
@@ -115,9 +115,9 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         case Common::RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST:
         case Common::RequestCode::SEND_HW_TRACK_CONTROLLER_RESPONSE:
         case Common::RequestCode::GET_HW_TRACK_CONTROLLER_RESPONSE:
-        case Common::RequestCode::SWTRACK_OCCUPANCY_TO_CTC:
+        /*case Common::RequestCode::SWTRACK_OCCUPANCY_TO_CTC:
         case Common::RequestCode::SWTRACK_TRACKSIGNAL_TO_TRAINM:
-        case Common::RequestCode::SWTRACK_SWITCHPOSITION_TO_TRAINM:
+        case Common::RequestCode::SWTRACK_SWITCHPOSITION_TO_TRAINM:*/
         {
             HWTrackController::RequestManager rm;
             rm.HandleRequest(rReq, resp);
@@ -135,10 +135,11 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         	Train* pto_send;
         	pto_send = TrainSystem::GetInstance().CreateNewTrain(block_to);
 
-            TrackSystem switch1;
+            SW_Track* SW_Track_Object;
 
         	// Send Train Struct to Track Controller buffer function
-	        TrainInfoBuffer_TrackController(pto_send->train_id, pto_send->destination_block, pto_send->authority, pto_send->command_speed);
+	        SW_Track_Object= TrainInfoBuffer_TrackController(pto_send->train_id, pto_send->destination_block, pto_send->authority, pto_send->command_speed);
+
 
 	        // Log action
 	        LOG_CTC("From ConnectionHandler.cpp (CTC_DISPATCH_TRAIN) : Sent Track C. Train %d to block %d", pto_send->train_id, pto_send->destination_block);

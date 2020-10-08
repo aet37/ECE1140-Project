@@ -6,7 +6,7 @@
 #define SW_TRACK_DEF_H
 
 // Structure that holds data about a single track
-struct Track
+struct SW_Track
 {
 	// Variables
 	int train_id;
@@ -17,7 +17,7 @@ struct Track
 	int switch_position;
 
 	// Constructor to initialize elements
-	Track()
+	/*Track()
 	{
 		train_id = 0;
 		destination_block = 0;
@@ -25,8 +25,8 @@ struct Track
 		authority = 0;
 		occupancy = 0;
 		switch_position = 6;
-	}
-	Track(int id, int destination, int auth, int speed)
+	}*/
+	SW_Track(int id, int destination, int auth, int speed)
 	{
 		train_id = id;
 		destination_block = destination;

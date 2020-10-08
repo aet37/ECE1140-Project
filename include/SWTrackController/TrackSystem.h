@@ -19,7 +19,7 @@ class TrackSystem
 
 		// Tracks
 		std::vector<int> switch_numbers;
-		std::vector<Track*> p_tracks;
+		std::vector<SW_Track*> p_tracks;
         std::vector<int> track_occupancies;
 
 	
@@ -33,10 +33,10 @@ class TrackSystem
 
 
 		//create a new track with inputted variables
-		Track* create_new_track(int ,int , int,int );
+		SW_Track* create_new_track(int ,int , int,int );
 
 		// update the occupancy of a single track
-		void update_occupancies(Track&, int );
+		void update_occupancies(SW_Track&, int );
 
 		
 
