@@ -16,3 +16,12 @@ Controller* ControlSystem::createNewController(int com_sp, int curr_sp, int sp_l
     // Return instance of controller
     return p_temp;
 }
+
+/**
+ * @param id = train_id
+ * @brief Returns individual Controller from vector
+ */
+Controller* ControlSystem::getControllerInstance(int id)
+{
+    return p_controllers[id];
+}

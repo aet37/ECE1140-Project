@@ -24,5 +24,10 @@ class ControlSystem
          */ 
         Controller* createNewController(int com_sp, int curr_sp, int sp_lim, int auth);
 
+        /**
+         * @param id = train_id
+         * @brief Returns individual Controller from vector
+         */
+        Controller* getControllerInstance(int id);
 };
 #endif

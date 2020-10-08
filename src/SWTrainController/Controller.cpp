@@ -88,7 +88,7 @@ int Controller::getPowerCommand()
  */
 void Controller::calculatePower()
 {
-    power_command = 500;
+    power_command = (kp + ki) * current_speed;
 }
 
 /**
