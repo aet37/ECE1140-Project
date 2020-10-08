@@ -156,8 +156,10 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
 		self.button.clicked.connect(self.returnToMainWindow)
 
-		self.button = self.findChild(QtWidgets.QPushButton, 'RefreshSystem') # Find the button
-		self.button.clicked.connect(self.RefreshMap)
+		# Automatically refresh Map after 700ms
+		timer = QtCore.QTimer(self)
+		timer.timeout.connect(self.RefreshMap)
+		timer.start(700)
 
 		 # Find the Blocks
 		self.TBlock1 = self.findChild(QtWidgets.QPushButton, 'Block1')
@@ -179,7 +181,6 @@ class CTCUi(QtWidgets.QMainWindow):
 	def RefreshMap(self):
 		# Ping server for track occupancies
 		m_tuple_data = send_message(RequestCode.CTC_DISPATCH_TRAIN, '')
-		print('sent')
 
 		# Extract string data from tuple
 		m_data = m_tuple_data[1]
@@ -190,7 +191,6 @@ class CTCUi(QtWidgets.QMainWindow):
 				eval('self.TBlock%d.setStyleSheet(\"background-color: rgb(255, 255, 10);\")' % i + 1)		# if occupied change block color to yellow
 			else:
 				eval('self.TBlock%d.setStyleSheet(\"background-color: rgb(33, 255, 128);\")' % i + 1)		# if not occupied, change block color to green
-
 
 
 	#######################################################################################################################################
