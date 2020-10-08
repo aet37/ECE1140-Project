@@ -40,9 +40,9 @@ class TrackSystem
 		void update_occupancies(int );
 
 		
-	int TrackSystem::get_track_occ();
+	int get_track_occ();
 
-	int TrackSystem::get_pos();
+	int get_pos();
 		
 
 		// TESTING PURPOSES
