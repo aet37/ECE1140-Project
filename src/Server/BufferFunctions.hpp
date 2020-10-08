@@ -59,3 +59,10 @@ void TrainInfoBuffer_TrackModel(int train_id, int authority, int command_speed)
 
 
 }
+
+void TrainLocationBuffer_CTC(int block_location)
+{
+
+
+	
+}
