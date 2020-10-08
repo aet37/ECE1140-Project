@@ -7,6 +7,7 @@ include_directories("${PROJECT_SOURCE_DIR}/include/HWTrackController")
 include_directories("${PROJECT_SOURCE_DIR}/include/Common")
 include_directories("${PROJECT_SOURCE_DIR}/include/Debug")
 include_directories("${Boost_INCLUDE_DIRS}")
+include_directories("${PROJECT_SOURCE_DIR}/include/SWTrackController")
 
 # CTC Module Includes
 include_directories("${PROJECT_SOURCE_DIR}/include/CTC")

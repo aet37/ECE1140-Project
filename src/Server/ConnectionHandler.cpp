@@ -135,6 +135,8 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         	Train* pto_send;
         	pto_send = TrainSystem::GetInstance().CreateNewTrain(block_to);
 
+            TrackSystem switch1;
+
         	// Send Train Struct to Track Controller buffer function
 	        TrainInfoBuffer_TrackController(pto_send->train_id, pto_send->destination_block, pto_send->authority, pto_send->command_speed);
 
