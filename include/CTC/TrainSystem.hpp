@@ -28,7 +28,7 @@ class TrainSystem
 		 */
 		TrainSystem()
 		{
-			// TEMPORARY FOR ITTERATION 2
+			// TEMPORARY FOR ITERATION 2
 			//      create 15 track objects representing track
 			Track* ptemp_track = nullptr;
 			for(int i = 0; i < 15; i++)
@@ -37,6 +37,9 @@ class TrainSystem
 				p_tracks.push_back(ptemp_track);
 			}
 			ptemp_track = nullptr;
+
+			// For testing purposes
+			SetTrackOccupied(3);
 
 			// Log Creation of system
 			LOG_CTC("From TrainSystem::TrainSystem() : TrainSystem Class Created");
