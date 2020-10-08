@@ -151,7 +151,7 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
 			std::string to_send;
 			for(int i = 0; i < TrainSystem::GetInstance().GetTrackArr().size(); i++)
 			{
-				if(TrainSystem::GetInstance().GetTrackArr()[i])
+				if(TrainSystem::GetInstance().GetTrackArr()[i]->occupied)
 				{
 					to_send.push_back('t');
 				}
