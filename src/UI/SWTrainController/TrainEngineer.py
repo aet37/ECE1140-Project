@@ -5,7 +5,7 @@ import sys
 class Ui(QtWidgets.QMainWindow):
     def __init__(self):
         super(Ui, self).__init__()
-        uic.loadUi('/Users/collinhough/Desktop/Classes/JuniorYear/Fall_2020_Classes/ECE1140/Code/UI/TrainEngineer.ui', self)
+        uic.loadUi('src/UI/SWTrainController/TrainEngineer.ui', self)
 
         #self.submit_in = self.findChild(QtWidgets.QPushButton, 'submit_in') # Find the button
         

@@ -15,6 +15,9 @@ include_directories("${PROJECT_SOURCE_DIR}/include/TrainModel")
 include_directories("${PROJECT_SOURCE_DIR}/include/CTC")
 include_directories("${PROJECT_SOURCE_DIR}/include/TrackModel")
 
+# SWTrainController Module Includes
+include_directories("${PROJECT_SOURCE_DIR}/include/SWTrainController")
+
 # Add subdirectories
 add_subdirectory(Debug)
 add_subdirectory(CTC)

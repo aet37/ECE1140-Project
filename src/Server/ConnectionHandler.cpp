@@ -21,6 +21,8 @@
 #include "TrainSystem.hpp"             // For CTC actions
 #include "TrackSystem.h"
 
+#include "SWTrainController.hpp"
+
 #include "TrackModelData.hpp"
 
 void ConnectionHandler::Start()
@@ -236,16 +238,28 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
             TrainModel::setTrainLength(std::stoi(rReq.GetData()));
             resp.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
+        }
         case Common::RequestCode::SEND_TRAIN_MODEL_INFO:
         {
-            int power_command = Controller::calculatePower();
+            int power_command = Controller::setPowerCommand(std::stoi(rReq.GetData()));
             resp.SetResponseCode(Common::ResponseCode::SUCCESS);
-            resp.SetData(std::stoi(power_command));
+            resp.SetData(std::to_string(power_command));
+        }
+        case Common::RequestCode::GET_INFO_FROM_TM:
+        {
+            string train_id = std::to_string(TrainModel::getID());
+            string authority = std::to_string(TrainModel::getAuthority());
+            string command_speed = std::to_string(TrainModel::getCommandSpeed());
+            string current_speed = std::to_string(TrainModel::getCurrentSpeed());
+            string speed_limit = std::to_string(TrainModel::getSpeedLimit());
+            resp.SetResponseCode(Common::ResponseCode::SUCCESS);
+            resp.SetData(train_id + " " + authority + " " + command_speed + " " + current_speed + " " + speed_limit);
+
         }
         default:
             LOG_SERVER("Invalid RequestCode %d", static_cast<int>(rReq.GetRequestCode()));
-            resp.SetResponseCode(Common::ResponseCode::ERROR);
-            break;
+            m_message = "INVALID COMMAND";
+            return;
     }
 
     // Set the message, so the requester will receive the response

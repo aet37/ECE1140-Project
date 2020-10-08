@@ -51,7 +51,8 @@ enum class RequestCode : uint8_t
     SET_TRAIN_LENGTH = 161,
     SEND_TRAIN_MODEL_DATA = 162,
 
-    SEND_TRAIN_MODEL_INFO = 192
+    SEND_TRAIN_MODEL_INFO = 192,
+    GET_INFO_FROM_TM = 193
 };
 
 /**

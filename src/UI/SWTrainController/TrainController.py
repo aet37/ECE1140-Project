@@ -82,14 +82,25 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
     def logout(self):
         # This is executed when the button is pressed
+        if(sys.platform == 'darwin'):
+            os.system('python3 src/UI/login_gui.py &')
+        else:
+            os.system('start /B python src/UI/login_gui.py')
         app.exit()
 
     # Define function to update displayed data
     def update_data(self):
-        responseCode, speed = send_message(RequestCode.GET_COMMAND_SPEED)
+        responseCode, data = send_message(RequestCode.GET_COMMAND_SPEED)
+        train_id, authority, command_speed, current_speed, speed_limit = data.split(" ")
         if responseCode == ResponseCode.SUCCESS:
-            self.CommandSpeedLabel.setText(speed + " MPH")
-
+            self.TrainIDLabel.setText(train_id)
+            self.TrainIDLabel2.setText(train_id)
+            self.TrainIDLabel3.setText(train_id)
+            self.AuthorityLabel.setText(authority + " Blocks")
+            self.CommandSpeedLabel.setText(command_speed + " MPH")
+            self.CurrentSpeedLabel.setText(current_speed + " MPH")
+            self.SpeedLimitLabel.setText(speed_limit + " MPH")
+            send_message(RequestCode.SEND_TRAIN_MODEL_INFO, command_speed)
 
     def stopAllTimers(self):
         self.train_actions_timer.stop()
