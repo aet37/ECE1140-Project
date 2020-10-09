@@ -77,6 +77,7 @@ void TrainInfoBuffer_CTC_TO_TrackController(int train_id, int destination_block,
 	//SwitchPositionBuffer_TrackModel(TrackSystem::GetInstance().get_pos);
 }
 
+int count = 1;
 void TrainLocationBuffer_SWTC(int block_location)
 {
 	TrackSystem::GetInstance().update_occupancies(block_location);
