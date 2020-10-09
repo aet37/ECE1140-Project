@@ -81,6 +81,13 @@ Train* TrainSystem::CreateNewTrain(int block_to)
 */
 void TrainSystem::SetTrackOccupied(int track_num)
 {
+	// Make sure track is not out of range
+	if((track_num < 1) || track_num > p_tracks.size())
+	{
+		LOG_CTC("ERROR: SetTrackOccupied, track %d out of range", track_num);
+		return;
+	}
+
 	// Set occupied member variable as true
 	p_tracks[track_num - 1]->occupied = true;
 
@@ -98,6 +105,13 @@ void TrainSystem::SetTrackOccupied(int track_num)
 */
 void TrainSystem::SetTrackNotOccupied(int track_num)
 {
+	// Make sure track is not out of range
+	if((track_num < 1) || track_num > p_tracks.size())
+	{
+		LOG_CTC("ERROR: SetTrackNotOccupied, track %d out of range", track_num);
+		return;
+	}
+
 	// Set occupied member variable as false
 	p_tracks[track_num - 1]->occupied = false;
 
