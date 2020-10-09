@@ -80,7 +80,7 @@ void TrainInfoBuffer_CTC_TO_TrackController(int train_id, int destination_block,
 int count = 1;
 void TrainLocationBuffer_SWTC(int block_location)
 {
-	TrackSystem::GetInstance().update_occupancies(block_location);
+	//TrackSystem::GetInstance().update_occupancies(block_location);
 	TrainLocationBuffer_TC_TO_CTC(block_location);
 }
 
