@@ -156,12 +156,12 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
 	    case Common::RequestCode::CTC_SEND_OCCUPANCIES:
 	    {
 	    	// Update Track location
-		    TrainLocationBuffer_SWTC(count);    // Send location to SWTC
+		    //TrainLocationBuffer_SWTC(count);    // Send location to SWTC
 			if(count == 10)
 			{
 				count = 1;
 			}
-			
+
 	    	// send Response Code
 			resp.SetResponseCode(Common::ResponseCode::SUCCESS);
 
