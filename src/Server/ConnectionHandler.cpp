@@ -143,15 +143,8 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         	Train* pto_send;
         	pto_send = TrainSystem::GetInstance().CreateNewTrain(block_to);
 
-            //creating TrackController object
-            
-
         	// Send Train Struct to Track Controller buffer function
 	        TrainInfoBuffer_CTC_TO_TrackController(pto_send->train_id, pto_send->destination_block, pto_send->authority, pto_send->command_speed);
-
-            //send Train Location to CTC
-           
-
 
 	        // Log action
 	        LOG_CTC("From ConnectionHandler.cpp (CTC_DISPATCH_TRAIN) : Sent Track C. Train %d to block %d", pto_send->train_id, pto_send->destination_block);
