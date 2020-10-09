@@ -38,7 +38,11 @@ void TrainLocationBuffer_TC_TO_CTC(int block_location)
 	TrainSystem::GetInstance().SetTrackOccupied(block_location);
 
 	// set previous blocks as not occupied
-	if(block_location == 11)
+	if(block_location == 1)
+	{
+		return;
+	}
+	else if(block_location == 11)
 	{
 		TrainSystem::GetInstance().SetTrackNotOccupied(5);
 
@@ -80,7 +84,7 @@ void TrainInfoBuffer_CTC_TO_TrackController(int train_id, int destination_block,
 int count = 1;
 void TrainLocationBuffer_SWTC(int block_location)
 {
-	TrackSystem::GetInstance().update_occupancies(block_location);
+	//TrackSystem::GetInstance().update_occupancies(block_location);
 	TrainLocationBuffer_TC_TO_CTC(block_location);
 }
 
