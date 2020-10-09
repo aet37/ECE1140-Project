@@ -158,7 +158,6 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
 	    	// Update Track location
 		    TrainLocationBuffer_SWTC(count);    // Send location to SWTC
 
-
 			if(count < 10)
 			{
 				count++;
