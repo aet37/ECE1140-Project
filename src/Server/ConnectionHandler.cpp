@@ -245,6 +245,11 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
            int occupancy= TrackSystem::GetInstance().get_track_occ();
         TrainLocationBuffer_TC_TO_CTC(occupancy);
 		break;
+        case Common::RequestCode::SWTRACK_OCCUPANCY_TO_CTC:
+        {
+           int occupancy= TrackSystem::GetInstance().get_track_occ();
+           TrainLocationBuffer_TC_TO_CTC(occupancy);
+           break;
         }
         case Common::RequestCode::SWTRACK_SWITCHPOSITION_TO_TRAINM:
         {
@@ -258,6 +263,10 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
             resp.SetResponseCode(Common::ResponseCode::ERROR);
             break;
 
+        default:
+            LOG_SERVER("Invalid RequestCode %d", static_cast<int>(rReq.GetRequestCode()));
+            resp.SetResponseCode(Common::ResponseCode::ERROR);
+            break;
     }
 
     // Set the message, so the requester will receive the response
