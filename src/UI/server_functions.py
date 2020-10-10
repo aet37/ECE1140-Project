@@ -58,7 +58,7 @@ class ResponseCode(Enum):
     SUCCESS = 0
     ERROR = 1
 
-def send_message(request_code, data=""):
+def send_message(request_code, data="", ignore_exceptions=(ConnectionRefusedError)):
     """Constructs and sends a message to the server
 
     :param RequestCode request_code: Code representing what the request is for
@@ -74,7 +74,7 @@ def send_message(request_code, data=""):
             sock.connect((HOST, PORT))
             sock.sendall(request)
             data = sock.recv(1024)
-    except ConnectionRefusedError:
+    except ignore_exceptions:
         # Show up as an error
         data = b'1'
 
