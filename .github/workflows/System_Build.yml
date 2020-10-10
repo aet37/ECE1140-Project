@@ -32,5 +32,5 @@ jobs:
         event_type: build_successful
         message: |
         {
-          "original_event" : github.event_name
+          "original_event" : "${github.event_name}"
         }
