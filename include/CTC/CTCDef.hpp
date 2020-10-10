@@ -68,6 +68,7 @@ enum Color {LIGHT_RED, LIGHT_YELLOW, LIGHT_GREEN};
  * @struct Signal
  *
  * @brief Structure that holds data about a single Signal (color, track on)
+ *
  */
 struct Signal
 {
