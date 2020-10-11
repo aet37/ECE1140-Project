@@ -1,5 +1,5 @@
 /**
- * @file ServerTestSuite.cpp
+ * @file HWTrackCtrlTestSuite.cpp
 */
 #define CATCH_CONFIG_RUNNER
 
@@ -12,6 +12,7 @@
 int main(int argc, char* argv[])
 {
     // Global setup
+    // (None)
 
     int result = Catch::Session().run( argc, argv );
 
