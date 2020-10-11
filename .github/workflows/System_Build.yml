@@ -30,7 +30,4 @@ jobs:
         # You should create a personal access token and store it in your repository
         token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         event_type: build_successful
-        message: |
-        {
-          "originalEvent": "bar"
-        }
+        message: {"originalEvent": "bar"}
