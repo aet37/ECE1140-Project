@@ -9,5 +9,9 @@ endif()
 # Set the project name
 project(ECE1140_Project)
 
+# Enable testing
+enable_testing()
+
 # Add source subdirectory
 add_subdirectory(src)
+add_subdirectory(tests/UnitTests)

@@ -257,7 +257,7 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         }
         case Common::RequestCode::SWTRACK_OCCUPANCY_TO_CTC:
         {
-           int occupancy= TrackSystem::GetInstance().get_track_occ();
+           int occupancy = TrackSystem::GetInstance().get_track_occ();
            TrainLocationBuffer_TC_TO_CTC(occupancy);
            break;
         }
