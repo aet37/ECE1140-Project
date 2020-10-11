@@ -26,7 +26,7 @@ jobs:
     - name: Run CMake
       run: |
         mkdir build
-        cmake -Bbuild -H.
+        cmake -Bbuild -H. -DBUILD_TESTING:BOOL=FALSE
 
     - name: Build
       run: cmake --build build/ --target all
