@@ -9,9 +9,12 @@ endif()
 # Set the project name
 project(ECE1140_Project)
 
-# Enable testing
-enable_testing()
+# Optionally build tests
+option(BUILD_TESTING "Enable Testing" ON)
+if(BUILD_TESTING)
+    enable_testing()
+    add_subdirectory(tests/UnitTests)
+endif()
 
 # Add source subdirectory
 add_subdirectory(src)
-add_subdirectory(tests/UnitTests)
