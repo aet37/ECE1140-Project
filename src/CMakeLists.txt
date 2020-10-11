@@ -1,5 +1,6 @@
 # Find boost
 find_package(Boost 1.53.0 COMPONENTS system)
+find_package(Catch2 REQUIRED)
 
 # Set include directory
 include_directories("${PROJECT_SOURCE_DIR}/include/Server")
