@@ -6,7 +6,7 @@
 #include "CTCDef.hpp"
 
 // C++ PROJECT INCLUDES
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 /*
  * Test Train Struct Constructor
