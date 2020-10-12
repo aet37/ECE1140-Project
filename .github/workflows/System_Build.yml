@@ -26,7 +26,22 @@ jobs:
     - name: Run CMake
       run: |
         mkdir build
-        cmake -Bbuild -H. -DBUILD_TESTING:BOOL=FALSE
+        cmake -Bbuild -H.
 
     - name: Build
       run: cmake --build build/ --target all
+
+    - name: Create environment variable
+      shell: bash
+      env:
+        PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      run: echo "$PERSONAL_ACCESS_TOKEN"
+
+    - name: Emit build_successful
+      uses: peter-evans/repository-dispatch@v1
+      if: success()
+      with:
+        # You should create a personal access token and store it in your repository
+        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        event-type: build_successful
+        client-payload: '{"originalEvent": "${{ github.event_name }}"}'
