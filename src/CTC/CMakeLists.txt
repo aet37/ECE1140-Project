@@ -1,4 +1,5 @@
 # Set include directory
+include_directories("${PROJECT_SOURCE_DIR}/include/Common")
 include_directories("${PROJECT_SOURCE_DIR}/include/CTC")
 include_directories("${PROJECT_SOURCE_DIR}/include/Debug")
 include_directories("${PROJECT_SOURCE_DIR}/include/CTC")

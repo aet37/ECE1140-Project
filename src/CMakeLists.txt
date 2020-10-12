@@ -6,20 +6,18 @@ include_directories("${PROJECT_SOURCE_DIR}/include/Server")
 include_directories("${PROJECT_SOURCE_DIR}/include/HWTrackController")
 include_directories("${PROJECT_SOURCE_DIR}/include/Common")
 include_directories("${PROJECT_SOURCE_DIR}/include/Debug")
-include_directories("${Boost_INCLUDE_DIRS}")
-
 include_directories("${PROJECT_SOURCE_DIR}/include/SWTrackController")
 include_directories("${PROJECT_SOURCE_DIR}/include/TrainModel")
-
-# CTC Module Includes
 include_directories("${PROJECT_SOURCE_DIR}/include/CTC")
 include_directories("${PROJECT_SOURCE_DIR}/include/TrackModel")
+include_directories("${Boost_INCLUDE_DIRS}")
 
 # SWTrainController Module Includes
 include_directories("${PROJECT_SOURCE_DIR}/include/SWTrainController")
 
 # Add subdirectories
 add_subdirectory(Debug)
+add_subdirectory(Common)
 add_subdirectory(CTC)
 add_subdirectory(SWTrackController)
 add_subdirectory(HWTrackController)

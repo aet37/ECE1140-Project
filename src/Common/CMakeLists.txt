@@ -5,8 +5,8 @@ include_directories("${PROJECT_SOURCE_DIR}/include/Debug")
 
 # Set source files
 set(SOURCES
-    HWTrackControllerRequestManager.cpp
+    RequestManagerRepository.cpp
 )
 
-add_library(HWTrackController STATIC ${SOURCES})
-target_link_libraries(HWTrackController debug_lib)
+add_library(Common STATIC ${SOURCES})
+target_link_libraries(Common debug_lib)

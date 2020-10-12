@@ -26,6 +26,27 @@ TrainSystem& TrainSystem::GetInstance()
 }
 
 /**
+* @brief Import the layout of the track
+ *
+* @param none
+*
+* @return None
+*
+*/
+void TrainSystem::ImportTrackLayout()
+{
+	// Temporary hard-coded track for Iteration 2
+	Track* ptemp_track = nullptr;
+	for(int i = 0; i < 15; i++)
+	{
+		ptemp_track = new Track();
+		p_tracks.push_back(ptemp_track);
+	}
+	ptemp_track = nullptr;
+	LOG_CTC("From TrainSystem::ImportTrackLayout() : %d Tracks Created", p_tracks.size() + 1);
+}
+
+/**
 * @brief Get the Array of track pointers
  *
 * @param none
@@ -76,11 +97,17 @@ Train* TrainSystem::CreateNewTrain(int block_to)
 *
 * @param[in]	track_num
 *
-* @return none
+* @return Throw Error if track is out of range
 *
 */
 void TrainSystem::SetTrackOccupied(int track_num)
 {
+	// Make sure track is not out of range
+	if((track_num < 1) || track_num > p_tracks.size())
+	{
+		throw std::logic_error("TrainSystem::SetTrackOccupied() index out of bounds");
+	}
+
 	// Set occupied member variable as true
 	p_tracks[track_num - 1]->occupied = true;
 
@@ -93,11 +120,18 @@ void TrainSystem::SetTrackOccupied(int track_num)
 *
 * @param[in]	track_num
 *
-* @return none
+* @return Throw Error if track is out of range
 *
 */
 void TrainSystem::SetTrackNotOccupied(int track_num)
 {
+	// Make sure track is not out of range
+	if((track_num < 1) || track_num > p_tracks.size())
+	{
+		throw std::logic_error("TrainSystem::SetTrackNotOccupied() index out of bounds");
+		return;
+	}
+
 	// Set occupied member variable as false
 	p_tracks[track_num - 1]->occupied = false;
 

@@ -8,10 +8,13 @@
 #include <iostream>
 #include <boost/bind.hpp>
 #include <string>
+#include <vector>
+#include <bits/stdc++.h> 
+#include <boost/algorithm/string.hpp> 
 
 // C++ PROJECT INCLUDES
 #include "ConnectionHandler.hpp" // Header for class
-#include "RequestManager.hpp" // For HWTrackController::RequestManager
+#include "HWTrackControllerRequestManager.hpp" // For HWTrackController::HWTrackControllerRequestManager
 #include "Request.hpp" // For Common::Request
 #include "Response.hpp" // For Common::Response
 #include "BufferFunctions.hpp"
@@ -124,11 +127,9 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         case Common::RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST:
         case Common::RequestCode::SEND_HW_TRACK_CONTROLLER_RESPONSE:
         case Common::RequestCode::GET_HW_TRACK_CONTROLLER_RESPONSE:
-        /*case Common::RequestCode::SWTRACK_OCCUPANCY_TO_CTC:
-        case Common::RequestCode::SWTRACK_TRACKSIGNAL_TO_TRAINM:
-        case Common::RequestCode::SWTRACK_SWITCHPOSITION_TO_TRAINM:*/
+       
         {
-            HWTrackController::RequestManager rm;
+            HWTrackController::HWTrackControllerRequestManager rm;
             rm.HandleRequest(rReq, resp);
             break;
         }
@@ -144,15 +145,8 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         	Train* pto_send;
         	pto_send = TrainSystem::GetInstance().CreateNewTrain(block_to);
 
-            //creating TrackController object
-            SW_Track* SW_Track_Object;
-
         	// Send Train Struct to Track Controller buffer function
-	        SW_Track_Object= TrainInfoBuffer_TrackController(pto_send->train_id, pto_send->destination_block, pto_send->authority, pto_send->command_speed);
-
-            //send Train Location to CTC
-            TrainLocationBuffer_TC_TO_CTC(SW_Track_Object->occupancy);
-
+	        TrainInfoBuffer_CTC_TO_TrackController(pto_send->train_id, pto_send->destination_block, pto_send->authority, pto_send->command_speed);
 
 	        // Log action
 	        LOG_CTC("From ConnectionHandler.cpp (CTC_DISPATCH_TRAIN) : Sent Track C. Train %d to block %d", pto_send->train_id, pto_send->destination_block);
@@ -163,6 +157,14 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         }
 	    case Common::RequestCode::CTC_SEND_OCCUPANCIES:
 	    {
+	    	// Update Track location
+		    TrainLocationBuffer_SWTC(count);    // Send location to SWTC
+
+			if(count < 10)
+			{
+				count++;
+			}
+
 	    	// send Response Code
 			resp.SetResponseCode(Common::ResponseCode::SUCCESS);
 
@@ -194,9 +196,17 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         }
         case Common::RequestCode::GET_SIGNAL_TIMES:
         {
+            TrackModel::setSpeedLimit(std::stoi(rReq.GetData())); //irrelevant speed limit
+
+            //TrackModel::getBlockNumber();
+            
+            
             resp.SetResponseCode(Common::ResponseCode::SUCCESS);
-            resp.SetData("11:58");
-            resp.AppendData("11:59");
+            int block = TrackModel::getBlockNumber();
+            TrainLocationBuffer_SWTC(block);
+            resp.SetData(std::to_string(block));
+
+            /*resp.AppendData("11:59");
             resp.AppendData("12:00");
             resp.AppendData("12:01");
             resp.AppendData("12:02");
@@ -209,7 +219,7 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
             resp.AppendData("12:09");
             resp.AppendData("12:10");
             resp.AppendData("12:11");
-            resp.AppendData("12:12");
+            resp.AppendData("12:12");*/
 
             //resp.AppendData("30");
             //resp.AppendData("40");
@@ -227,17 +237,39 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
             resp.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
+        
         case Common::RequestCode::SET_TRAIN_LENGTH:
         {
-            TrainModel::setTrainLength(std::stoi(rReq.GetData()));
+            std::vector<std::string> result; 
+            boost::split(result, rReq.GetData(), boost::is_any_of(" ")); 
+            TrainModel::TrainInfoBuffer_TrainModel(std::stoi(result[0]),
+                                                    std::stoi(result[1]),
+                                                    std::stoi(result[2]),
+                                                    std::stoi(result[3]),
+                                                    std::stoi(result[4]));
+
             resp.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
         case Common::RequestCode::SEND_TRAIN_MODEL_DATA:
         {
-            TrainModel::setTrainLength(std::stoi(rReq.GetData()));
-            resp.SetResponseCode(Common::ResponseCode::SUCCESS);
-            break;
+            // TrainModel::TrainInfoBuffer_TrainModel(std::stoi(rReq.GetData()));
+            // resp.SetResponseCode(Common::ResponseCode::SUCCESS);
+            // break;
+        }
+        case Common::RequestCode::SWTRACK_OCCUPANCY_TO_CTC:
+        {
+           int occupancy = TrackSystem::GetInstance().get_track_occ();
+           TrainLocationBuffer_TC_TO_CTC(occupancy);
+           break;
+        }
+        case Common::RequestCode::SWTRACK_SWITCHPOSITION_TO_TRAINM:
+        {
+
+        }
+        case Common::RequestCode::SWTRACK_TRACKSIGNAL_TO_TRAINM:
+        {
+
         }
         case Common::RequestCode::SEND_TRAIN_MODEL_INFO:
         {

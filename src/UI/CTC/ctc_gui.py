@@ -167,7 +167,7 @@ class CTCUi(QtWidgets.QMainWindow):
 		# Automatically refresh Map after 700ms
 		time_timr = QtCore.QTimer(self)
 		time_timr.timeout.connect(self.RefreshMap)
-		time_timr.start(700)
+		time_timr.start(4000)
 
 		 # Find the Blocks
 		self.TBlock1 = self.findChild(QtWidgets.QPushButton, 'Block1')
