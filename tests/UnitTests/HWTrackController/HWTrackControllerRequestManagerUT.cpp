@@ -6,7 +6,7 @@
 // (None)
 
 // C++ PROJECT INCLUDES
-#include <catch2/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
 #include "HWTrackControllerRequestManager.hpp" // UUT
 #include "Request.hpp"
 #include "Response.hpp"

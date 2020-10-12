@@ -6,7 +6,7 @@
 // (None)
 
 // C++ PROJECT INCLUDES
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 /*
  * Sample Test
