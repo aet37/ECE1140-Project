@@ -31,9 +31,10 @@ jobs:
     - name: Build
       run: cmake --build build/ --target all
 
-    # - shell: bash
-    #   env:
-    #     PERSONAL
+    - shell: bash
+      env:
+        PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        run: echo "$PERSONAL_ACCESS_TOKEN"
 
     - name: Emit build_successful
       uses: peter-evans/repository-dispatch@v1
