@@ -13,5 +13,5 @@
  */
 TEST_CASE( "Test", "[Test::Test()]" )
 {
-	REQUIRE(true);
+	REQUIRE(1 == 1);
 }
