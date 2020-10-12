@@ -1,9 +1,12 @@
-#define CATCH_CONFIG_MAIN
-#define CATCH_CONFIG_COLOUR_NONE
+/**
+ * @file CTCDefUT.cpp
+*/
 
+// SYSTEM INCLUDES
 #include "CTCDef.hpp"
-#include "catch.hpp"
 
+// C++ PROJECT INCLUDES
+#include <catch2/catch.hpp>
 
 /*
  * Test Train Struct Constructor
@@ -34,5 +37,3 @@ TEST_CASE( "Test Signal Struct Constructor", "[Signal::Signal()]" )
 	REQUIRE(s1.status == LIGHT_RED);
 	REQUIRE(s1.track_on == nullptr);
 }
-
-
