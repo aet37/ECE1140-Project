@@ -1,13 +1,10 @@
-# Find catch2
-find_package(Catch2 REQUIRED)
-
 # Set include directories
 include_directories("${PROJECT_SOURCE_DIR}/include/HWTrackController")
 include_directories("${PROJECT_SOURCE_DIR}/include/Common")
 
 # Set source files (Unit tests)
 set(HWTRACKCTRL_UNITTESTS
-    RequestManagerUT.cpp
+    HWTrackControllerRequestManagerUT.cpp
 )
 
 # Add executables (Suites)
