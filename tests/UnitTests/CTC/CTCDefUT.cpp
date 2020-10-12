@@ -1,13 +1,12 @@
 /**
- * @file RequestManagerRepositoryUT.cpp
+ * @file CTCDefUT.cpp
 */
 
 // SYSTEM INCLUDES
-// (None)
+#include "CTCDef.hpp"
 
 // C++ PROJECT INCLUDES
 #include <catch2/catch.hpp>
-#include "CTCDef.hpp"
 
 /*
  * Test Train Struct Constructor
