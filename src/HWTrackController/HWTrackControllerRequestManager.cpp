@@ -16,10 +16,10 @@ namespace HWTrackController
 {
 
 // Static members
-std::queue<Common::Request*> RequestManager::m_requestQueue = std::queue<Common::Request*>();
-std::queue<Common::Response*> RequestManager::m_responseQueue = std::queue<Common::Response*>();
+std::queue<Common::Request*> HWTrackControllerRequestManager::m_requestQueue = std::queue<Common::Request*>();
+std::queue<Common::Response*> HWTrackControllerRequestManager::m_responseQueue = std::queue<Common::Response*>();
 
-void RequestManager::HandleRequest(const Common::Request& rRequest, Common::Response& rResponse)
+void HWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequest, Common::Response& rResponse)
 {
     switch (rRequest.GetRequestCode())
     {
@@ -86,7 +86,7 @@ void RequestManager::HandleRequest(const Common::Request& rRequest, Common::Resp
     }
 }
 
-void RequestManager::AddRequest(const Common::Request& rReq)
+void HWTrackControllerRequestManager::AddRequest(const Common::Request& rReq)
 {
     // Use heap memory so it can stay in the queue
     Common::Request* pNewRequest = new Common::Request();
@@ -94,7 +94,7 @@ void RequestManager::AddRequest(const Common::Request& rReq)
     m_requestQueue.push(pNewRequest);
 }
 
-Common::Request* RequestManager::GetNextRequest()
+Common::Request* HWTrackControllerRequestManager::GetNextRequest()
 {
     Common::Request* pNextRequest = nullptr;
     if (m_requestQueue.empty() != true)
@@ -105,7 +105,7 @@ Common::Request* RequestManager::GetNextRequest()
     return pNextRequest;
 }
 
-void RequestManager::AddResponse(const Common::Response& rResp)
+void HWTrackControllerRequestManager::AddResponse(const Common::Response& rResp)
 {
     // Use heap memory so it can stay in the queue
     Common::Response* pNewResponse = new Common::Response();
@@ -113,7 +113,7 @@ void RequestManager::AddResponse(const Common::Response& rResp)
     m_responseQueue.push(pNewResponse);
 }
 
-Common::Response* RequestManager::GetNextResponse()
+Common::Response* HWTrackControllerRequestManager::GetNextResponse()
 {
     Common::Response* pNextResponse = nullptr;
     if (m_responseQueue.empty() != true)

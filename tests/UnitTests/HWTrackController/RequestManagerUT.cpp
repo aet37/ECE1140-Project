@@ -1,5 +1,5 @@
 /**
- * @file RequestManagerUT.cpp
+ * @file HWTrackControllerRequestManagerUT.cpp
 */
 
 // SYSTEM INCLUDES
@@ -7,13 +7,13 @@
 
 // C++ PROJECT INCLUDES
 #include <catch2/catch.hpp>
-#include "RequestManager.hpp" // UUT
+#include "HWTrackControllerRequestManager.hpp" // UUT
 #include "Request.hpp"
 #include "Response.hpp"
 
 TEST_CASE("Handle Request")
 {
-    HWTrackController::RequestManager rm;
+    HWTrackController::HWTrackControllerRequestManager rm;
     Common::Request req(Common::RequestCode::GET_SWITCH_POSITION);
     Common::Response resp;
 

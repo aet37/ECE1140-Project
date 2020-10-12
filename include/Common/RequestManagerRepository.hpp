@@ -13,10 +13,10 @@
 #include "Request.hpp"
 
 // FORWARD REFERENCES
-class RequestManagerIface;
-
 namespace Common
 {
+
+class RequestManagerIface;
 
 /**
  * @class RequestManagerRepository
