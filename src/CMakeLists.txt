@@ -14,6 +14,7 @@ include_directories("${Boost_INCLUDE_DIRS}")
 
 # Add subdirectories
 add_subdirectory(Debug)
+add_subdirectory(Common)
 add_subdirectory(CTC)
 add_subdirectory(SWTrackController)
 add_subdirectory(HWTrackController)
