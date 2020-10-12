@@ -21,6 +21,9 @@
 ////////////////////////////////
 void Logger::Log(const std::string& rMsg, const Logger::LogLevel logLevel, const Logger::PrintGroup printGroup)
 {
+    // Lock the mutex while we print
+    m_logMutex.lock();
+
     // Print log level
     m_logStream << LOG_LEVEL_NAMES[static_cast<uint8_t>(logLevel)] << " : ";
 
@@ -29,6 +32,9 @@ void Logger::Log(const std::string& rMsg, const Logger::LogLevel logLevel, const
 
     // Print message
     m_logStream << rMsg << "\n";
+
+    // Unlock the mutex here
+    m_logMutex.unlock();
 
     // Flush the log
     m_logStream.flush();
