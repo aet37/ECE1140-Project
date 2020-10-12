@@ -7,7 +7,7 @@ set(SWTRACKCONTROLLER_UNITTESTS
 )
 
 # Add executables (Suites)
-add_executable(SWTrackControllerTestSuite SWTrackControllerTestSuite.cpp ${CTC_UNITTESTS})
+add_executable(SWTrackControllerTestSuite SWTrackControllerTestSuite.cpp ${SWTRACKCONTROLLER_UNITTESTS})
 target_link_libraries(SWTrackControllerTestSuite Catch2::Catch2 SWTrackController)
 
 add_test(NAME SWTrackControllerTestSuite COMMAND SWTrackControllerTestSuite)
