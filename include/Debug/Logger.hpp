@@ -9,6 +9,7 @@
 // SYSTEM INCLUDES
 #include <string.h>
 #include <fstream>
+#include <mutex>
 #include <string>
 
 // C++ PROJECT INCLUDES
@@ -136,6 +137,9 @@ private:
 
     /// Output file stream
     std::ofstream m_logStream;
+
+    /// Mutex to make log file thread safe
+    std::mutex m_logMutex;
 
     /// Names of log levels
     const char* LOG_LEVEL_NAMES[3] =
