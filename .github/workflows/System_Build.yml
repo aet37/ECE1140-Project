@@ -40,6 +40,6 @@ jobs:
       if: success()
       with:
         # You should create a personal access token and store it in your repository
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         event-type: build_successful
         client-payload: '{"originalEvent": "${{ github.event_name }}"}'
