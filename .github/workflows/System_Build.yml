@@ -66,4 +66,6 @@ jobs:
       run: python scripts/server_setup.py ${{ env.BRANCH_NAME }}
 
     - name: Run tests
-      run: pytest tests/RequestTests/HWTrackCtrlRequestTests.py --setup-show
+      run: |
+        cd tests/RequestTests
+        pytest HWTrackCtrlRequestTests.py --setup-show
