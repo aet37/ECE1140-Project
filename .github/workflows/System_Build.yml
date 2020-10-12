@@ -16,12 +16,12 @@ jobs:
         sudo aptitude install libboost-all-dev -y
 
     - name: Installing Catch2
-      run: |
-        git clone https://github.com/Microsoft/vcpkg.git
-        cd vcpkg
-        ./bootstrap-vcpkg.sh
-        ./vcpkg integrate install
-        ./vcpkg install catch2
+      run: sudo apt-get install catch
+        # git clone https://github.com/catchorg/Catch2.git
+        # pushd Catch2
+        # cmake -Bbuild -H. -DBUILD_TESTING=OFF
+        # sudo cmake --build build/ --target install
+        # popd
 
     - name: Run CMake
       run: |
