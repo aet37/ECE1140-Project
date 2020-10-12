@@ -31,11 +31,15 @@ jobs:
     - name: Build
       run: cmake --build build/ --target all
 
+    # - shell: bash
+    #   env:
+    #     PERSONAL
+
     - name: Emit build_successful
       uses: mvasigh/dispatch-action@1.1.6
       if: success()
       with:
         # You should create a personal access token and store it in your repository
-        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         event_type: build_successful
         message: '{"originalEvent": "${{ github.event_name }}"}'
