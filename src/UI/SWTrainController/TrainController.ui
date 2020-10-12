@@ -862,6 +862,9 @@ p, li { white-space: pre-wrap; }
        <string notr="true">QLineEdit { color: grey; }</string>
       </property>
       <property name="text">
+       <string/>
+      </property>
+      <property name="placeholderText">
        <string>Enter temperature (°C):</string>
       </property>
      </widget>
@@ -995,6 +998,9 @@ p, li { white-space: pre-wrap; }
        <string notr="true">QLineEdit { color: grey; }</string>
       </property>
       <property name="text">
+       <string/>
+      </property>
+      <property name="placeholderText">
        <string>Enter Speed:</string>
       </property>
      </widget>
@@ -1024,6 +1030,9 @@ p, li { white-space: pre-wrap; }
        <string notr="true">QLineEdit { color: grey; }</string>
       </property>
       <property name="text">
+       <string/>
+      </property>
+      <property name="placeholderText">
        <string>Manual Override Code:</string>
       </property>
      </widget>

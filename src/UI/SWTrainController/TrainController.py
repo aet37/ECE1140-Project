@@ -12,7 +12,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
         # Create timer to update pages
         self.train_actions_timer = QTimer()
-        self.train_actions_timer.timeout.connect(self.update_data)
+        #self.train_actions_timer.timeout.connect(self.update_data)
 
         # Initialize all buttons and the page of the UI
         self.initUI()
@@ -89,18 +89,18 @@ class SWTrainUi(QtWidgets.QMainWindow):
         app.exit()
 
     # Define function to update displayed data
-    def update_data(self):
-        responseCode, data = send_message(RequestCode.GET_COMMAND_SPEED)
-        train_id, authority, command_speed, current_speed, speed_limit = data.split(" ")
-        if responseCode == ResponseCode.SUCCESS:
-            self.TrainIDLabel.setText(train_id)
-            self.TrainIDLabel2.setText(train_id)
-            self.TrainIDLabel3.setText(train_id)
-            self.AuthorityLabel.setText(authority + " Blocks")
-            self.CommandSpeedLabel.setText(command_speed + " MPH")
-            self.CurrentSpeedLabel.setText(current_speed + " MPH")
-            self.SpeedLimitLabel.setText(speed_limit + " MPH")
-            send_message(RequestCode.SEND_TRAIN_MODEL_INFO, command_speed)
+    #def update_data(self):
+    #    responseCode, data = send_message(RequestCode.GET_COMMAND_SPEED)
+    #    train_id, authority, command_speed, current_speed, speed_limit = data.split(" ")
+    #    if responseCode == ResponseCode.SUCCESS:
+    #        self.TrainIDLabel.setText(train_id)
+    #        self.TrainIDLabel2.setText(train_id)
+    #        self.TrainIDLabel3.setText(train_id)
+    #        self.AuthorityLabel.setText(authority + " Blocks")
+    #        self.CommandSpeedLabel.setText(command_speed + " MPH")
+    #        self.CurrentSpeedLabel.setText(current_speed + " MPH")
+    #        self.SpeedLimitLabel.setText(speed_limit + " MPH")
+    #        send_message(RequestCode.SEND_TRAIN_MODEL_INFO, command_speed)
 
     def stopAllTimers(self):
         self.train_actions_timer.stop()

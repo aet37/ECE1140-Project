@@ -55,7 +55,17 @@ class Ui(QtWidgets.QMainWindow):
         elif username == "hwtrain" and password == "jerry":
             print("hwtrain")
         elif username == "swtrain" and password == "jerry":
-            print("swtrain")
+            if(sys.platform == 'darwin'):
+                os.system('python3 src/UI/SWTrainController/TrainController.py &')
+            else:
+                os.system('start /B python src/UI/TrainController/TrainController.py')
+            app.exit()
+        elif username == "engineer" and password == "jerry":
+            if(sys.platform == 'darwin'):
+                os.system('python3 src/UI/SWTrainController/TrainEngineer.py &')
+            else:
+                os.system('start /B python src/UI/TrainController/TrainEngineer.py')
+            app.exit()
         else:
             self.alert_login.setStyleSheet("color: red;")
 
