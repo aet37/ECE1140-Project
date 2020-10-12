@@ -14,7 +14,7 @@
 
 // C++ PROJECT INCLUDES
 #include "ConnectionHandler.hpp" // Header for class
-#include "RequestManager.hpp" // For HWTrackController::RequestManager
+#include "HWTrackControllerRequestManager.hpp" // For HWTrackController::HWTrackControllerRequestManager
 #include "Request.hpp" // For Common::Request
 #include "Response.hpp" // For Common::Response
 #include "BufferFunctions.hpp"
@@ -127,7 +127,7 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         case Common::RequestCode::GET_HW_TRACK_CONTROLLER_RESPONSE:
        
         {
-            HWTrackController::RequestManager rm;
+            HWTrackController::HWTrackControllerRequestManager rm;
             rm.HandleRequest(rReq, resp);
             break;
         }
@@ -257,7 +257,7 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
         }
         case Common::RequestCode::SWTRACK_OCCUPANCY_TO_CTC:
         {
-           int occupancy= TrackSystem::GetInstance().get_track_occ();
+           int occupancy = TrackSystem::GetInstance().get_track_occ();
            TrainLocationBuffer_TC_TO_CTC(occupancy);
            break;
         }
