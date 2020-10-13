@@ -14,6 +14,7 @@
 #include "ConnectionHandler.hpp" // Header for class
 #include "Request.hpp" // For Common::Request
 #include "Response.hpp" // For Common::Response
+#include "RequestManagerIface.hpp" // For Common::RequestManagerIface
 #include "RequestManagerRepository.hpp" // For Common::RequestManagerRepository
 #include "Logger.hpp" // For LOG macros
 
