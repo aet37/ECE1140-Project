@@ -3,7 +3,8 @@ include_directories("${PROJECT_SOURCE_DIR}/include/CTC")
 
 # Set source files (Unit tests)
 set(CTC_UNITTESTS
-    CTCDefUT.cpp
+        CTCDefUT.cpp
+        CTCTrainSystemUT.cpp
 )
 
 # Add executables (Suites)
