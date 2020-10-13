@@ -33,7 +33,7 @@ class RequestCode(Enum):
     GET_HW_TRACK_CONTROLLER_REQUEST = 100
     SEND_HW_TRACK_CONTROLLER_RESPONSE = 101
     GET_HW_TRACK_CONTROLLER_RESPONSE = 102
-    
+
     GET_SIGNAL_TIMES = 128
     SET_SPEED_LIMIT = 129
     GET_SPEED_LIMIT = 130
@@ -80,7 +80,10 @@ def send_message(request_code, data="", ignore_exceptions=(ConnectionRefusedErro
 
     # Remove byte stuff and split along first space
     splits = repr(data)[2:-1].split(" ", 1)
-    response_code = int(splits[0])
+    try:
+        response_code = int(splits[0])
+    except ValueError:
+        response_code = ResponseCode.ERROR
 
     # If there's additional response data, capture it
     if len(splits) > 1:
