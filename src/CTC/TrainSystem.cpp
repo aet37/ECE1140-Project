@@ -60,6 +60,19 @@ std::vector<Track*> TrainSystem::GetTrackArr()
 }
 
 /**
+* @brief Get the Array of train pointers
+*
+* @param none
+*
+* @return vector<Train*>
+*
+*/
+std::vector<Train*> TrainSystem::GetTrainArr()
+{
+	return p_trains;
+}
+
+/**
  *@brief Create(dispatch) a new train by creating
  * the Train object then adding it to the class member vector
  *
