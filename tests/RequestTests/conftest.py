@@ -14,7 +14,7 @@ def start_server():
     chan = ssh_client.get_transport().open_session()
     chan.get_pty()
     chan.invoke_shell()
-    chan.send('cd Luke/ECE1140-Project/build/src; ./main &\n')
+    chan.send('cd CI/ECE1140-Project/build/src; ./main &\n')
     time.sleep(2)
     print(chan.recv(1024))
 
