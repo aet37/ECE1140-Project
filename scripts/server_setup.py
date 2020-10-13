@@ -1,9 +1,9 @@
 """Script to setup the server for tests"""
 
 from argparse import ArgumentParser
-import paramiko
 import time
 import sys
+import paramiko
 
 def main():
     """Main entry point of script."""
@@ -17,7 +17,6 @@ def main():
     ssh_client = paramiko.SSHClient()
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh_client.connect(hostname='3.23.104.34', username='ec2-user', password='jerryseinfeld')
-    sftp = ssh_client.open_sftp()
 
     chan = ssh_client.get_transport().open_session()
     chan.get_pty()
