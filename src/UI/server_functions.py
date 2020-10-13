@@ -80,7 +80,10 @@ def send_message(request_code, data="", ignore_exceptions=(ConnectionRefusedErro
 
     # Remove byte stuff and split along first space
     splits = repr(data)[2:-1].split(" ", 1)
-    response_code = int(splits[0])
+    try:
+        response_code = int(splits[0])
+    except ValueError:
+        response_code = ResponseCode.ERROR
 
     # If there's additional response data, capture it
     if len(splits) > 1:
