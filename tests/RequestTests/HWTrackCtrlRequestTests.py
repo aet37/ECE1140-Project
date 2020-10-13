@@ -3,7 +3,7 @@
 import sys
 
 sys.path.insert(1, '../../src/UI')
-from server_functions import send_message
+from server_functions import send_message, RequestCode, ResponseCode
 
 def test_get_hw_track_controller_response_failure(start_server):
     """Ensures server responds with an error if no response exists.
