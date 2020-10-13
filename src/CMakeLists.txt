@@ -38,6 +38,7 @@ add_executable(main ${SOURCES})
 target_link_libraries(main 
                       ${Boost_LIBRARIES}
                       ${CMAKE_THREAD_LIBS_INIT}
+                      Common
                       CTC
                       SWTrackController
                       HWTrackController
