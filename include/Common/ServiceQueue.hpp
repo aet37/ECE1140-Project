@@ -88,7 +88,7 @@ public:
      * 
      * @return Number of elements on the queue
     */
-    uint32_t GetSize() const
+    uint32_t GetSize()
     {
         // Lock the queue
         std::lock_guard<std::mutex> guard(m_queueMutex);
