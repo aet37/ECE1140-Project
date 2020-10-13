@@ -1,5 +1,6 @@
 # Find boost
 find_package(Boost 1.53.0 COMPONENTS system)
+find_package(Threads REQUIRED)
 
 # Set include directory
 include_directories("${PROJECT_SOURCE_DIR}/include/Server")
@@ -34,6 +35,7 @@ add_executable(main ${SOURCES})
 
 target_link_libraries(main 
                       ${Boost_LIBRARIES}
+                      ${CMAKE_THREAD_LIBS_INIT}
                       CTC
                       SWTrackController
                       HWTrackController

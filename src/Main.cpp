@@ -4,14 +4,19 @@
 
 // SYSTEM INCLUDES
 #include <iostream> // For std::cerr
+#include <thread> // For std::thread
 
 // C++ PROJECT INCLUDES
 #include "Server.hpp" // For Server
 #include "Logger.hpp" // For LOG macros
+#include "CTCMain.hpp" // For CTC::moduleMain
+#include "HWTrackControllerMain.hpp" // For HWTrackController::moduleMain
 
 int main()
 {
-    /* Module Specific Initializations */
+    // Spawn threads
+    std::thread ctcThread(CTC::moduleMain);
+    std::thread hwTrackControllerThread(HWTrackController::moduleMain);
 
     LOG_SERVER("Server Starting...");
     try
