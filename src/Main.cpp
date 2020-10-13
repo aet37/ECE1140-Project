@@ -11,12 +11,22 @@
 #include "Logger.hpp" // For LOG macros
 #include "CTCMain.hpp" // For CTC::moduleMain
 #include "HWTrackControllerMain.hpp" // For HWTrackController::moduleMain
+#include "SWTrackControllerMain.hpp" // For SWTrackController::moduleMain
+#include "TrackModelMain.hpp" // For HWTrackController::moduleMain
+#include "TrainModelMain.hpp" // For HWTrackController::moduleMain
+#include "HWTrainControllerMain.hpp" // For HWTrainController::moduleMain
+#include "SWTrainControllerMain.hpp" // For SWTrainController::moduleMain
 
 int main()
 {
     // Spawn threads
     std::thread ctcThread(CTC::moduleMain);
     std::thread hwTrackControllerThread(HWTrackController::moduleMain);
+    std::thread swTrackControllerThread(SWTrackController::moduleMain);
+    std::thread trackModelThread(TrackModel::moduleMain);
+    std::thread trainModelThread(TrainModel::moduleMain);
+    std::thread hwTrainControllerThread(HWTrainController::moduleMain);
+    std::thread swTrainControllerThread(SWTrainController::moduleMain);
 
     LOG_SERVER("Server Starting...");
     try
