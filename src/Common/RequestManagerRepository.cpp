@@ -28,7 +28,7 @@ RequestManagerIface* RequestManagerRepository::GetRequestManager(RequestCode req
     {
     	// To CTC
     	case RequestCode::CTC_DISPATCH_TRAIN:
-    	case RequestCode::CTC_SEND_OCCUPANCIES:
+    	case RequestCode::CTC_SEND_GUI_OCCUPANCIES:
 			pRequestManager = &ctcRequestManager;
     		break;
 

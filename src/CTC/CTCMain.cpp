@@ -25,6 +25,7 @@ void moduleMain()
 
     	switch(req.GetRequestCode())
 	    {
+    		// Dispatch Train from GUI
 		    case Common::RequestCode::CTC_DISPATCH_TRAIN: {
 			    // Get block train was dispatched to
 			    std::string str_block = req.GetData().substr(0, 2);
@@ -46,8 +47,8 @@ void moduleMain()
 			    pto_send = nullptr;
 			    break;
 		    }
-
-	    	case Common::RequestCode::CTC_SEND_OCCUPANCIES:
+			// Get Occupancies from Track Controller
+	    	case Common::RequestCode::CTC_GET_OCCUPANCIES:
 	    	{
 			    break;
 		    }
