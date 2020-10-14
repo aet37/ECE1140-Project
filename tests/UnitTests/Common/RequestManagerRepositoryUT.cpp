@@ -20,7 +20,7 @@ TEST_CASE("Singleton")
 
 TEST_CASE("HWTrackController request managers")
 {
-    Common::RequestCode reqCode = GENERATE(Common::RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST, 
+    Common::RequestCode reqCode = GENERATE(Common::RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST,
                                            Common::RequestCode::SEND_HW_TRACK_CONTROLLER_RESPONSE,
                                            Common::RequestCode::GET_HW_TRACK_CONTROLLER_RESPONSE);
     Common::RequestManagerIface* pReqManager = Common::RequestManagerRepository::GetInstance().GetRequestManager(reqCode);

@@ -46,7 +46,7 @@ TEST_CASE("Simple Producer-Consumer")
         const std::chrono::duration<double> TIMEOUT = std::chrono::seconds(1);
         while (testVariable != producedData)
         {
-            std::chrono::duration<double> elapsedTime = std::chrono::steady_clock::now() - start; 
+            std::chrono::duration<double> elapsedTime = std::chrono::steady_clock::now() - start;
             if (elapsedTime > TIMEOUT)
             {
                 FAIL();

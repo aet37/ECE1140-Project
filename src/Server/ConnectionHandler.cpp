@@ -1,14 +1,14 @@
 /**
  * @file ConnectionHandler.cpp
- * 
+ *
  * @brief Implementation of the ConnectionHandler class
  */
 
 // SYSTEM INCLUDES
 #include <iostream>
-#include <boost/bind.hpp>
 #include <string>
 #include <vector>
+#include <boost/bind.hpp>
 
 // C++ PROJECT INCLUDES
 #include "ConnectionHandler.hpp" // Header for class
@@ -137,7 +137,7 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
     //     case Common::RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST:
     //     case Common::RequestCode::SEND_HW_TRACK_CONTROLLER_RESPONSE:
     //     case Common::RequestCode::GET_HW_TRACK_CONTROLLER_RESPONSE:
-       
+
     //     {
     //         HWTrackController::HWTrackControllerRequestManager rm;
     //         rm.HandleRequest(rReq, resp);
@@ -209,8 +209,8 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
     //         TrackModel::setSpeedLimit(std::stoi(rReq.GetData())); //irrelevant speed limit
 
     //         //TrackModel::getBlockNumber();
-            
-            
+
+
     //         resp.SetResponseCode(Common::ResponseCode::SUCCESS);
     //         int block = TrackModel::getBlockNumber();
     //         TrainLocationBuffer_SWTC(block);
@@ -247,11 +247,11 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
     //         resp.SetResponseCode(Common::ResponseCode::SUCCESS);
     //         break;
     //     }
-        
+
     //     case Common::RequestCode::SET_TRAIN_LENGTH:
     //     {
-    //         std::vector<std::string> result; 
-    //         boost::split(result, rReq.GetData(), boost::is_any_of(" ")); 
+    //         std::vector<std::string> result;
+    //         boost::split(result, rReq.GetData(), boost::is_any_of(" "));
     //         TrainModel::TrainInfoBuffer_TrainModel(std::stoi(result[0]),
     //                                                 std::stoi(result[1]),
     //                                                 std::stoi(result[2]),

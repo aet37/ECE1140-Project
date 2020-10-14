@@ -1,6 +1,6 @@
 /**
  * @file RequestManagerRepository.cpp
- * 
+ *
  * @brief Implementations of the RequestManagerRepository class
 */
 

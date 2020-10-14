@@ -20,7 +20,7 @@ namespace Common
 
 /**
  * @class ServiceQueue
- * 
+ *
  * @tparam Type to be stored in queue
 */
 template <typename T>
@@ -39,14 +39,14 @@ public:
     /**
      * @brief Pushes a new object onto the queue and notifies
      * any thread waiting on the conditional variable
-     * 
+     *
      * @param item      Item to be added
     */
     void Push(T item)
     {
         // Lock the queue
         std::lock_guard<std::mutex> guard(m_queueMutex);
-        
+
         // Push the item
         m_queue.push(item);
 
@@ -57,9 +57,9 @@ public:
     /**
      * @brief Pops an element from the queue. If there are none,
      * it will wait on the queue's conditional variable
-     * 
+     *
      * @warning This method has the potential to block
-     * 
+     *
      * @return Element at the front of the queue
     */
     T Pop()
@@ -85,7 +85,7 @@ public:
 
     /**
      * @brief Retrieves the number of objects on the queue
-     * 
+     *
      * @return Number of elements on the queue
     */
     uint32_t GetSize()
