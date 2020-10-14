@@ -15,6 +15,9 @@ include_directories("${PROJECT_SOURCE_DIR}/include/HWTrainController")
 include_directories("${PROJECT_SOURCE_DIR}/include/SWTrainController")
 include_directories("${Boost_INCLUDE_DIRS}")
 
+# SWTrainController Module Includes
+include_directories("${PROJECT_SOURCE_DIR}/include/SWTrainController")
+
 # Add subdirectories
 add_subdirectory(Debug)
 add_subdirectory(Common)
