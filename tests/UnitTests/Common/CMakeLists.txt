@@ -10,6 +10,6 @@ set(COMMON_UNITTESTS
 
 # Add executables (Suites)
 add_executable(CommonTestSuite CommonTestSuite.cpp ${COMMON_UNITTESTS})
-target_link_libraries(CommonTestSuite Catch2::Catch2 ${CMAKE_THREAD_LIBS_INIT} Common HWTrackController)
+target_link_libraries(CommonTestSuite Catch2::Catch2 ${CMAKE_THREAD_LIBS_INIT} Common HWTrackController CTC)
 
 add_test(NAME CommonTestSuite COMMAND CommonTestSuite)
