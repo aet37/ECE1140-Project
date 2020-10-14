@@ -10,6 +10,7 @@
 // C++ PROJECT INCLUDES
 #include "ServiceQueue.hpp" // For Common::ServiceQueue
 #include "Request.hpp" // For Request
+#include "TrainSystem.hpp"
 
 namespace CTC
 {

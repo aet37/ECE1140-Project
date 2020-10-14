@@ -7,6 +7,7 @@ include_directories("${PROJECT_SOURCE_DIR}/src/Server")
 # Set source files
 set(SOURCES
     CTCMain.cpp
+    CTCRequestManager.cpp
     TrainSystem.cpp
 )
 
