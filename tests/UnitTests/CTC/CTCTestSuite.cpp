@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
     // Global setup
     // (None)
 
-    int result = Catch::Session().run( argc, argv );
+    int result = Catch::Session().run(argc, argv);
 
     return result;
 }

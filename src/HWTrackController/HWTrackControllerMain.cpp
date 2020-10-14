@@ -19,4 +19,4 @@ void moduleMain()
     LOG_HW_TRACK_CONTROLLER("Thread starting...");
 }
 
-} // HWTrackController
+} // namespace HWTrackController
