@@ -167,7 +167,7 @@ class CTCUi(QtWidgets.QMainWindow):
 		# Automatically refresh Map after 700ms
 		time_timr = QtCore.QTimer(self)
 		time_timr.timeout.connect(self.RefreshMap)
-		time_timr.start(700)
+		time_timr.start(4000)
 
 		 # Find the Blocks
 		self.TBlock1 = self.findChild(QtWidgets.QPushButton, 'Block1')
@@ -188,7 +188,7 @@ class CTCUi(QtWidgets.QMainWindow):
 
 	def RefreshMap(self):
 		# Ping server for track occupancies
-		m_tuple_data = send_message(RequestCode.CTC_SEND_OCCUPANCIES)
+		m_tuple_data = send_message(RequestCode.CTC_SEND_GUI_OCCUPANCIES)
 
 		# Extract string data from tuple
 		m_data = m_tuple_data[1]

@@ -28,19 +28,8 @@ class TrainSystem
 		 */
 		TrainSystem()
 		{
-			// TEMPORARY FOR ITERATION 2
-			//      create 15 track objects representing track
-			Track* ptemp_track = nullptr;
-			for(int i = 0; i < 15; i++)
-			{
-				ptemp_track = new Track();
-				p_tracks.push_back(ptemp_track);
-			}
-			ptemp_track = nullptr;
-
-			// Log Creation of system
+			ImportTrackLayout();
 			LOG_CTC("From TrainSystem::TrainSystem() : TrainSystem Class Created");
-			LOG_CTC("From TrainSystem::TrainSystem() : %d Tracks Created", p_tracks.size() + 1);
 		}
 
 		/// List of Trains
@@ -65,6 +54,16 @@ class TrainSystem
 		static TrainSystem& GetInstance();
 
 		/**
+		* @brief Import the layout of the track
+		 *
+		* @param none
+		*
+		* @return None
+		*
+		*/
+		void ImportTrackLayout();
+
+		/**
 		* @brief Get the Array of track pointers
 		 *
 		* @param none
@@ -73,6 +72,16 @@ class TrainSystem
 		*
 		*/
 		std::vector<Track*> GetTrackArr();
+
+		/**
+		* @brief Get the Array of train pointers
+		*
+		* @param none
+		*
+		* @return vector<Train*>
+		*
+		*/
+		std::vector<Train*> GetTrainArr();
 
 		/**
 		 * @brief Create(dispatch) a new train by creating
