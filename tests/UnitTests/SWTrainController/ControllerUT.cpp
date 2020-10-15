@@ -29,6 +29,6 @@ TEST_CASE( "Test ControlSystem getControllerInstance", "[ControlSystem::getContr
     Controller* p_testPtr2 = ControlSystem::createNewController(1,2,7,8);
 
     // Test getControllerInstance using created pointers
-    REQUIRE(p_testPtr = ControlSystem::getControllerInstance(0));
-    REQUIRE(p_testPtr2 = ControlSystem::getControllerInstance(1));
+    REQUIRE(p_testPtr == ControlSystem::getControllerInstance(0));
+    REQUIRE(p_testPtr2 == ControlSystem::getControllerInstance(1));
 }
