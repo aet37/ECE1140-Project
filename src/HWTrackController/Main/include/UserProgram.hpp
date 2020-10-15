@@ -22,12 +22,20 @@ class UserProgram
 {
 public:
     /**
-     * Constructs a new UserProgram object
+     * @brief Constructs a new UserProgram object
      */
     explicit UserProgram(const char* pProgramName) :
         m_tags(),
         m_pProgramName(pProgramName)
     {}
+
+    /**
+     * @brief Destroys the UserProgram object
+    */
+    ~UserProgram()
+    {
+        delete m_tags;
+    }
 
     /**
      * @brief Adds a tag and defaults the value

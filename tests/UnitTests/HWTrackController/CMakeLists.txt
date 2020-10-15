@@ -3,8 +3,6 @@ include_directories("${PROJECT_SOURCE_DIR}/include/HWTrackController")
 include_directories("${PROJECT_SOURCE_DIR}/src/HWTrackController/Main/include")
 include_directories("${PROJECT_SOURCE_DIR}/include/Common")
 
-# Set preprocessor definition
-
 # Set source files (Unit tests)
 set(HWTRACKCTRL_UNITTESTS
     HashMapUT.cpp
