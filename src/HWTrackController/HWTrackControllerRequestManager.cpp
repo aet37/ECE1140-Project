@@ -5,12 +5,13 @@
 */
 
 // SYSTEM INCLUDES
-#include <iostream> // For std::cout
+// (None)
 
 // C++ PROJECT INCLUDES
 #include "HWTrackControllerRequestManager.hpp" // Header for class
 #include "Request.hpp" // For Request
 #include "Response.hpp" // For Response
+#include "Logger.hpp" // For LOG macros
 
 namespace HWTrackController
 {
@@ -79,9 +80,8 @@ void HWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequ
             break;
         }
         default:
-            std::cerr << "Invalid command " << static_cast<uint16_t>(rRequest.GetRequestCode())
-                      << " received" << std::endl;
-            rResponse.SetData("INVALID COMMAND");
+            LOG_HW_TRACK_CONTROLLER("Invalid command %d received", static_cast<uint16_t>(rRequest.GetRequestCode()));
+            rResponse.SetResponseCode(Common::ResponseCode::ERROR);
             return;
     }
 }
