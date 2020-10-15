@@ -1,10 +1,12 @@
 # Set include directories
 include_directories("${PROJECT_SOURCE_DIR}/include/HWTrackController")
+include_directories("${PROJECT_SOURCE_DIR}/src/HWTrackController/Main/include")
 include_directories("${PROJECT_SOURCE_DIR}/include/Common")
 
 # Set source files (Unit tests)
 set(HWTRACKCTRL_UNITTESTS
     HWTrackControllerRequestManagerUT.cpp
+    ListUT.cpp
 )
 
 # Add executables (Suites)
