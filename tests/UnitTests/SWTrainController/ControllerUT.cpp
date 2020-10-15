@@ -1,9 +1,9 @@
 /**
- * @file SWTrackControllerUT.cpp
+ * @file ControllerUT.cpp
 */
 
 // SYSTEM INCLUDES
-#include "ControlSystem.h"
+#include "Controller.h"
 
 // C++ PROJECT INCLUDES
 #include <catch2/catch_all.hpp>
