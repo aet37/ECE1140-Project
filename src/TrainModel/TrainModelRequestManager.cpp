@@ -22,8 +22,7 @@ void TrainModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
     switch (rRequest.GetRequestCode())
     {
         default:
-            std::cerr << "Invalid command " << static_cast<uint16_t>(rRequest.GetRequestCode())
-                      << " received" << std::endl;
+            LOG_TRAIN_MODEL("Invalid command %d received", static_cast<uint16_t>(rRequest.GetRequestCode()));
             rResponse.SetResponseCode(Common::ResponseCode::ERROR);
             return;
     }
