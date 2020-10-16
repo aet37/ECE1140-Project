@@ -16,8 +16,8 @@
 
 namespace Common
 {
-struct Response;
-struct Request;
+class Response;
+class Request;
 }
 
 namespace HWTrackController
