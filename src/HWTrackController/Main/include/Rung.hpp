@@ -13,7 +13,7 @@
 #include "List.hpp" // For List
 
 // FORWARD DECLARATIONS
-class InstructionIface;
+class Instruction;
 
 /**
  * @class Rung
@@ -31,13 +31,18 @@ public:
     {}
 
     /**
+     * @brief Adds an instruction to the list
+    */
+    void AddInstruction(Instruction* pInst);
+
+    /**
      * @brief Executes the instructions on this rung
     */
     void Execute();
 protected:
 private:
     /// Pointer to the next rung to be executed
-    List<InstructionIface*> m_instructions;
+    List<Instruction*> m_instructions;
 };
 
 #endif // RUNG_HPP

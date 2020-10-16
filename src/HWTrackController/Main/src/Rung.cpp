@@ -10,7 +10,13 @@
 // C++ PROJECT INCLUDES
 #include "../include/Rung.hpp" // Header for class
 #include "../include/Logger.hpp" // For LOG
-#include "../include/InstructionIface.hpp" // For InstructionIface
+#include "../include/Instruction.hpp" // For Instruction
+
+void Rung::AddInstruction(Instruction* pInst)
+{
+    // TODO: Insert instruction in correct place
+    m_instructions.Append(pInst);
+}
 
 void Rung::Execute()
 {

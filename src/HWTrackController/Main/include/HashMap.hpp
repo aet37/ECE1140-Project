@@ -6,6 +6,7 @@
 
 // SYSTEM INCLUDES
 #include <assert.h>
+#include <Arduino.h>
 
 // C++ PROJECT INCLUDES
 #include "List.hpp" // For List

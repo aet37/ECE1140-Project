@@ -10,7 +10,6 @@
 // (None)
 
 // C++ PROJECT INCLUDES
-#include "HashMap.hpp" // For HashMap
 #include "List.hpp" // For List
 
 // FORWARD REFERENCES
@@ -29,7 +28,6 @@ public:
      * @brief Constructs a new UserProgram object
      */
     explicit UserProgram(const char* pProgramName) :
-        m_tags(),
         m_tasks(),
         m_pProgramName(pProgramName)
     {}
@@ -44,36 +42,8 @@ public:
     */
     void AddTask(Task* pTask);
 
-    /**
-     * @brief Adds a tag and defaults the value
-     *
-     * @param pTagName     Name of the tag
-    */
-    void AddTag(const char* pTagName);
-
-    /**
-     * @brief Sets the given tag to true
-     *
-     * @param rTagName   Name of tag to set
-     * @param value      Value to set tag to
-     * @return Whether tag was able to be set or not
-    */
-    bool SetTag(const String& rTagName, bool value);
-
-    /**
-     * @brief Gets a tag's value
-     *
-     * @param[in] rTagName   Name of the tag
-     * @param[out] rValue    Value of the tag
-     * @return Whether operation was successful
-    */
-    bool GetTagValue(const String& rTagName, bool& rValue) const;
-
 protected:
 private:
-    /// Tags of the program
-    HashMap<bool> m_tags;
-
     /// List of tasks included within the program
     List<Task*> m_tasks;
 
