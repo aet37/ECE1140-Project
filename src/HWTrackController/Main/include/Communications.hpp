@@ -34,9 +34,10 @@ enum class ResponseCode
 };
 
 /**
- * 
+ * @brief Main function to run to handle communications
+ * with the connected computer, server, and user interface
 */
-void CommsTask(void* something);
+void CommsTask(void* pProgram);
 
 } // namespace Communications
 

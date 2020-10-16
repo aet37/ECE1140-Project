@@ -10,7 +10,10 @@
 // (None)
 
 // C++ PROJECT INCLUDES
-#include "../include/HashMap.hpp" // For HashMap
+#include "List.hpp" // For List
+
+// FORWARD REFERENCES
+class Task;
 
 /**
  * @class UserProgram
@@ -22,42 +25,27 @@ class UserProgram
 {
 public:
     /**
-     * Constructs a new UserProgram object
+     * @brief Constructs a new UserProgram object
      */
     explicit UserProgram(const char* pProgramName) :
-        m_tags(),
+        m_tasks(),
         m_pProgramName(pProgramName)
     {}
 
     /**
-     * @brief Adds a tag and defaults the value
-     *
-     * @param pTagName     Name of the tag
+     * @brief Destroys the UserProgram object
     */
-    void AddTag(const char* pTagName);
+    ~UserProgram() {}
 
     /**
-     * @brief Sets the given tag to true
-     *
-     * @param rTagName   Name of tag to set
-     * @param value      Value to set tag to
-     * @return Whether tag was able to be set or not
+     * @brief Adds the given task to the task list
     */
-    bool SetTag(const String& rTagName, bool value);
-
-    /**
-     * @brief Gets a tag's value
-     *
-     * @param[in] rTagName   Name of the tag
-     * @param[out] rValue    Value of the tag
-     * @return Whether operation was successful
-    */
-    bool GetTagValue(const String& rTagName, bool& rValue) const;
+    void AddTask(Task* pTask);
 
 protected:
 private:
-    /// Tags of the program
-    HashMap<bool> m_tags;
+    /// List of tasks included within the program
+    List<Task*> m_tasks;
 
     /// Name of the program
     const char* m_pProgramName;

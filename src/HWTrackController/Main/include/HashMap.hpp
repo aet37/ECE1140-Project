@@ -10,6 +10,15 @@
 // C++ PROJECT INCLUDES
 #include "List.hpp" // For List
 
+// Account for compiler differences if unit testing
+#ifdef BUILD_UNIT_TEST
+#include <string>
+#include <cmath>
+#define String std::string
+#else
+#include <Arduino.h>
+#endif
+
 /**
  * @class HashMap
  *
