@@ -55,7 +55,7 @@ void moduleMain()
 			    reqSend.AppendData(std::to_string(pto_send->command_speed));
 			    reqSend.AppendData(std::to_string(pto_send->authority));
 
-			    SWTrackController::serviceQueue.Push(reqSend);  // Push request to SW Track Controller Queue
+			    //SWTrackControllerMain::serviceQueue.Push(reqSend);  // Push request to SW Track Controller Queue
 
 			    // Log action
 			    LOG_CTC("From ConnectionHandler.cpp (CTC_DISPATCH_TRAIN) : Sent Track C. Train %d to block %d",
