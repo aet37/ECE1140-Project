@@ -13,4 +13,4 @@ set(SOURCES
 )
 
 add_library(CTC STATIC ${SOURCES})
-target_link_libraries(CTC debug_lib)
+target_link_libraries(CTC SWTrackController debug_lib)
