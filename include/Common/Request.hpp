@@ -37,9 +37,10 @@ enum class RequestCode : uint8_t
     CTC_SEND_GUI_OCCUPANCIES = 33,
 	CTC_GET_OCCUPANCIES = 63,
 
-    SWTRACK_OCCUPANCY_TO_CTC = 64,
+    SWTRACK_GET_TRACK_SIGNAL = 64,
     SWTRACK_TRACKSIGNAL_TO_TRAINM = 65,
     SWTRACK_SWITCHPOSITION_TO_TRAINM = 66,
+    SWTRACK_GET_OCCUPANCY = 67,
 
     SET_SWITCH_POSITION = 96,
     GET_SWITCH_POSITION = 97,
@@ -95,6 +96,21 @@ public:
      * @brief Sets the data string member
     */
     void SetData(const std::string data) { m_data = data; }
+
+	/**
+	 * @brief Writes data to the data string member
+	*/
+	void AppendData(const std::string& rData)
+	{
+		if (m_data == "")
+		{
+			m_data = rData;
+		}
+		else
+		{
+			m_data += " " + rData;
+		}
+	}
 
     /**
      * @brief Gets the data member

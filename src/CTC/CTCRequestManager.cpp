@@ -34,17 +34,6 @@ void CTCRequestManager::HandleRequest(const Common::Request& rRequest, Common::R
         }
         case Common::RequestCode::CTC_SEND_GUI_OCCUPANCIES:
         {
-        	// Temporary for Iteration 2
-			if(count < 10)
-			{
-			    count++;
-			}
-			TrainSystem::GetInstance().SetTrackOccupied(count);
-			if(count > 1)
-			{
-				TrainSystem::GetInstance().SetTrackNotOccupied(count - 1);
-			}
-
 			// send Response Code
 	        rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
 
