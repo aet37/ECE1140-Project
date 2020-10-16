@@ -21,9 +21,11 @@ bool Instruction::Evaluate()
     case InstructionType::OTL:
         result = TagDatabase::SetTag(m_argument, true);
         assert(result);
+        break;
     case InstructionType::OTU:
         result = TagDatabase::SetTag(m_argument, false);
         assert(result);
+        break;
     default:
         assert(false);
         break;
