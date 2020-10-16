@@ -1,6 +1,6 @@
 /**
  * @file Task.hpp
- * 
+ *
  * @brief Declarations of the Task class
 */
 #ifndef TASK_HPP
@@ -10,43 +10,57 @@
 // (None)
 
 // C++ PROJECT INCLUDES
-// (None)
+#include "List.hpp" // For List
+#include "SystemTask.hpp" // For SystemTask
+#include "Routine.hpp" // For Routine
 
-// FORWARD REFERENCES
-class Routine;
+/**
+ * @enum TaskType
+*/
+enum class TaskType
+{
+    CONTINUOUS,
+    PERIODIC,
+    EVENT_DRIVEN
+};
 
 /**
  * @class Task
- * 
+ *
  * @brief Class to represent the top level of the user's logic
 */
-class Task
+class Task : public SystemTask
 {
 public:
     /**
-     * @enum TaskType
-    */
-    enum class TaskType
-    {
-        CONTINUOUS,
-        PERIODIC,
-        EVENT_DRIVEN
-    }
-
-    /**
      * @brief Constructs a new Task object
     */
-    Task() :
-        m_type(TaskType::PERIODIC),
-        m_period(0)
+    Task(TaskType taskType, uint32_t periodInMs = 0) :
+        SystemTask(Run, this, periodInMs),
+        m_type(taskType)
     {}
+
+    /**
+     * @brief Method used by the scheduler to invoke this task
+     * 
+     * @param pTask     Pointer to the task to execute
+    */
+    static void Run(void* pTask);
+
+    /**
+     * @brief 
+    */
+    void Run();
 protected:
 private:
     /// Type of the task
     TaskType m_type;
 
-    /// Period of the task. 0 if continuous or event driven
-    uint32_t m_period; 
+    /// Name of the task
+    const char* m_pTaskName;
+
+    /// List of routines belonging to this task. The first routine is the main routine
+    List<Routine> m_routineList;
 };
 
 #endif // TASK_HPP

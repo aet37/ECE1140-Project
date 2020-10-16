@@ -10,6 +10,11 @@
 // C++ PROJECT INCLUDES
 #include "../include/UserProgram.hpp" // Header for class
 
+void UserProgram::AddTask(Task* pTask)
+{
+    m_tasks.Append(pTask);
+}
+
 void UserProgram::AddTag(const char* pTagName)
 {
     m_tags.Insert(pTagName, false);

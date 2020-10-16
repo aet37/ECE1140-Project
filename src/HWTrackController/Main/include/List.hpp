@@ -9,6 +9,7 @@
 
 // SYSTEM INCLUDES
 #include <assert.h>
+#include <stdint.h>
 
 // C++ PROJECT INCLUDES
 // (None)
