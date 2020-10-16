@@ -12,7 +12,9 @@
 // C++ PROJECT INCLUDES
 #include "List.hpp" // For List
 #include "SystemTask.hpp" // For SystemTask
-#include "Routine.hpp" // For Routine
+
+// FORWARD REFERENCES
+class Routine;
 
 /**
  * @enum TaskType
@@ -35,9 +37,11 @@ public:
     /**
      * @brief Constructs a new Task object
     */
-    Task(TaskType taskType, uint32_t periodInMs = 0) :
+    Task(const char* pTaskName, TaskType taskType, uint32_t periodInMs = 0) :
         SystemTask(Run, this, periodInMs),
-        m_type(taskType)
+        m_pTaskName(pTaskName),
+        m_type(taskType),
+        m_routineList()
     {}
 
     /**
@@ -48,9 +52,15 @@ public:
     static void Run(void* pTask);
 
     /**
-     * @brief 
+     * @brief Runs the task starting with the main routine
     */
     void Run();
+
+    /**
+     * @brief Adds a routine to the routine list
+    */
+    void AddRoutine(Routine* pRoutine);
+
 protected:
 private:
     /// Type of the task
@@ -60,7 +70,7 @@ private:
     const char* m_pTaskName;
 
     /// List of routines belonging to this task. The first routine is the main routine
-    List<Routine> m_routineList;
+    List<Routine*> m_routineList;
 };
 
 #endif // TASK_HPP

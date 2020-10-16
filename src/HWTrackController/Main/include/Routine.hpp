@@ -11,7 +11,9 @@
 
 // C++ PROJECT INCLUDES
 #include "List.hpp" // For List
-#include "Rung.hpp" // For Rung
+
+// FORWARD REFERENCE
+class Rung;
 
 /**
  * @class Routine
@@ -25,8 +27,8 @@ public:
     /**
      * @brief Constructs a new Routine object
     */
-    Routine() :
-        m_pRoutineName(),
+    Routine(const char* pRoutineName) :
+        m_pRoutineName(pRoutineName),
         m_pFirstRung(nullptr)
     {}
 
@@ -34,6 +36,14 @@ public:
      * @brief Runs this routine beginning with the first rung
     */
     void Run();
+
+    /**
+     * @brief Sets the first rung of this routine
+    */
+    void SetFirstRung(Rung* pRung)
+    {
+        m_pFirstRung = pRung;
+    }
 protected:
 private:
     /// Name of the routine
