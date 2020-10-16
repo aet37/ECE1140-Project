@@ -6,7 +6,6 @@
 
 // SYSTEM INCLUDES
 #include <assert.h>
-#include <Arduino.h>
 
 // C++ PROJECT INCLUDES
 #include "List.hpp" // For List
@@ -16,6 +15,8 @@
 #include <string>
 #include <cmath>
 #define String std::string
+#else
+#include <Arduino.h>
 #endif
 
 /**
