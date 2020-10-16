@@ -38,7 +38,7 @@ void setup()
 
     // Add a rung to the routine
     Rung* pRung = new Rung();
-    pMainRoutine->SetFirstRung(pRung);
+    pMainRoutine->AppendRung(pRung);
 
     // Add tasks to the scheduler
     // Scheduler::GetInstance().AddTask(new SystemTask(toggleTask, nullptr, 1000));

@@ -16,5 +16,8 @@ void Routine::Run()
 {
     LOG("Running routine "); LOGN(m_pRoutineName);
 
-    m_pFirstRung->Execute();
+    for (uint32_t i = 0; i < m_rungList.GetLength(); i++)
+    {
+        m_rungList[i]->Execute();
+    }
 }

@@ -10,7 +10,10 @@
 // (None)
 
 // C++ PROJECT INCLUDES
-// (None)
+#include "List.hpp" // For List
+
+// FORWARD DECLARATIONS
+class InstructionIface;
 
 /**
  * @class Rung
@@ -24,7 +27,7 @@ public:
      * @brief Constructs a new rung object
     */
     Rung() :
-        m_pNextRung(nullptr)
+        m_instructions()
     {}
 
     /**
@@ -34,7 +37,7 @@ public:
 protected:
 private:
     /// Pointer to the next rung to be executed
-    Rung* m_pNextRung;
+    List<InstructionIface*> m_instructions;
 };
 
 #endif // RUNG_HPP

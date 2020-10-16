@@ -29,7 +29,7 @@ public:
     */
     Routine(const char* pRoutineName) :
         m_pRoutineName(pRoutineName),
-        m_pFirstRung(nullptr)
+        m_rungList()
     {}
 
     /**
@@ -38,19 +38,20 @@ public:
     void Run();
 
     /**
-     * @brief Sets the first rung of this routine
+     * @brief Appends a rung to the list
     */
-    void SetFirstRung(Rung* pRung)
+    void AppendRung(Rung* pRung)
     {
-        m_pFirstRung = pRung;
+        m_rungList.Append(pRung);
     }
+
 protected:
 private:
     /// Name of the routine
     const char* m_pRoutineName;
 
     /// Pointer to the first rung in the routine
-    Rung* m_pFirstRung;
+    List<Rung*> m_rungList;
 };
 
 #endif // ROUTINE_HPP

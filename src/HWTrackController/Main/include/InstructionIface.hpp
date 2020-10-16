@@ -21,9 +21,14 @@ class InstructionIface
 {
 public:
     /**
-     * @brief Executes the instructions on this rung
+     * @brief Evaluates the instruction
+     * 
+     * @return The result of the evaluation
+     *      @retval true        - Instruction evaluated to true
+     *      @retval false       - Instruction evaluated to false
     */
-    void Execute();
+    virtual bool Evaluate() = 0;
+
 protected:
 private:
 };
