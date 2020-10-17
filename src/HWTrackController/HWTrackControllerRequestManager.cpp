@@ -17,8 +17,8 @@ namespace HWTrackController
 {
 
 // Static members
-std::queue<Common::Request*> HWTrackControllerRequestManager::m_requestQueue = std::queue<Common::Request*>();
-std::queue<Common::Response*> HWTrackControllerRequestManager::m_responseQueue = std::queue<Common::Response*>();
+Common::ServiceQueue<Common::Request*> HWTrackControllerRequestManager::m_requestQueue = Common::ServiceQueue<Common::Request*>();
+Common::ServiceQueue<Common::Response*> HWTrackControllerRequestManager::m_responseQueue = Common::ServiceQueue<Common::Response*>();
 
 void HWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequest, Common::Response& rResponse)
 {
