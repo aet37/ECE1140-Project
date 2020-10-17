@@ -31,7 +31,6 @@ namespace Common
 enum class RequestCode : uint8_t
 {
     ERROR = 1,
-    LOGIN = 2,
 
     CTC_DISPATCH_TRAIN = 32,
     CTC_SEND_GUI_OCCUPANCIES = 33,
@@ -47,8 +46,6 @@ enum class RequestCode : uint8_t
     GET_HW_TRACK_CONTROLLER_REQUEST = 100,
     SEND_HW_TRACK_CONTROLLER_RESPONSE = 101,
     GET_HW_TRACK_CONTROLLER_RESPONSE = 102,
-
-
 
     GET_SIGNAL_TIMES = 128,
     SET_SPEED_LIMIT = 129,
