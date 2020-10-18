@@ -13,9 +13,11 @@
 #include "RequestManagerIface.hpp" // For RequestManagerIface
 #include "HWTrackControllerRequestManager.hpp" // For HWTrackController::HWTrackControllerRequestManager
 #include "CTCRequestManager.hpp"    // For CTC::CTCRequestManager
+#include "TrainModelRequestManager.hpp" // For TrainModel::TrainModelRequestManager
 
 static HWTrackController::HWTrackControllerRequestManager hwTrackControllerRequestManager;
 static CTC::CTCRequestManager ctcRequestManager;
+static TrainModel::TrainModelRequestManager trainModelRequestManager;
 
 namespace Common
 {
@@ -39,6 +41,9 @@ RequestManagerIface* RequestManagerRepository::GetRequestManager(RequestCode req
             pRequestManager = &hwTrackControllerRequestManager;
             break;
 
+        case RequestCode::TRAIN_MODEL_GET_CURRENT_SPEED:
+            pRequestManager = &trainModelRequestManager;
+            break;
         default:
             break;
     }
