@@ -10,7 +10,7 @@
 #include "../include/Communications.hpp" // Header for class
 #include "../include/UserProgram.hpp" // For UserProgram
 #include "../include/TagDatabase.hpp" // For TagDatabase
-#include "../include/Logger.hpp"
+#include "../include/ArduinoLogger.hpp"
 
 namespace Communications
 {
