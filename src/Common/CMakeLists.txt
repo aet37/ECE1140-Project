@@ -5,6 +5,7 @@ include_directories("${PROJECT_SOURCE_DIR}/include/Debug")
 
 # Set source files
 set(SOURCES
+    DebugRequestManager.cpp
     RequestManagerRepository.cpp
 )
 set(CMAKE_CXX_STANDARD 17)

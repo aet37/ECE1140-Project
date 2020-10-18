@@ -30,13 +30,19 @@ RequestManagerIface* RequestManagerRepository::GetRequestManager(RequestCode req
 
     switch (requestCode)
     {
-    	// To CTC
+        case RequestCode::DEBUG_TO_CTC:
+        case RequestCode::DEBUG_TO_HWTRACKCTRL:
+        case RequestCode::DEBUG_TO_SWTRACKCTRL:
+        case RequestCode::DEBUG_TO_TRACK_MODEL:
+        case RequestCode::DEBUG_TO_TRAIN_MODEL:
+        case RequestCode::DEBUG_TO_HWTRAINCTRL:
+        case RequestCode::DEBUG_TO_SWTRAINCTRL:
+            pRequestManager = &debugRequestManager;
+            break;
     	case RequestCode::CTC_DISPATCH_TRAIN:
     	case RequestCode::CTC_SEND_GUI_OCCUPANCIES:
 			pRequestManager = &ctcRequestManager;
     		break;
-
-    	// To HWTrackController
         case RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST:
         case RequestCode::SEND_HW_TRACK_CONTROLLER_RESPONSE:
         case RequestCode::GET_HW_TRACK_CONTROLLER_RESPONSE:
