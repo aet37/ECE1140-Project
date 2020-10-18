@@ -43,9 +43,9 @@ RequestManagerIface* RequestManagerRepository::GetRequestManager(RequestCode req
     	case RequestCode::CTC_SEND_GUI_OCCUPANCIES:
 			pRequestManager = &ctcRequestManager;
     		break;
-        case RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST:
-        case RequestCode::SEND_HW_TRACK_CONTROLLER_RESPONSE:
-        case RequestCode::GET_HW_TRACK_CONTROLLER_RESPONSE:
+        case RequestCode::HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST:
+        case RequestCode::HWTRACK_SEND_HW_TRACK_CONTROLLER_REQUEST:
+        case RequestCode::HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE:
             pRequestManager = &hwTrackControllerRequestManager;
             break;
 

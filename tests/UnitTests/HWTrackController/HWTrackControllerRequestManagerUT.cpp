@@ -14,7 +14,7 @@
 TEST_CASE("Handle Request")
 {
     HWTrackController::HWTrackControllerRequestManager rm;
-    Common::Request req(Common::RequestCode::GET_SWITCH_POSITION);
+    Common::Request req(Common::RequestCode::HWTRACK_GET_TAG_VALUE);
     Common::Response resp;
 
     // Call method
