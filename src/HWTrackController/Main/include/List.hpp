@@ -9,6 +9,7 @@
 
 // SYSTEM INCLUDES
 #include <assert.h>
+#include <stdint.h>
 
 // C++ PROJECT INCLUDES
 // (None)
@@ -58,7 +59,7 @@ public:
         // If the array is filled, resize it
         if (m_arraySize == m_length)
         {
-            this->Resize();
+            Resize();
         }
 
         m_list[m_length++] = element;
@@ -90,9 +91,17 @@ public:
     /**
      * @brief Gets the length member
     */
-    uint32_t GetLength(void) const
+    uint32_t GetLength() const
     {
-        return this->m_length;
+        return m_length;
+    }
+
+    /**
+     * @brief Whether the list is empty
+    */
+    bool IsEmpty() const
+    {
+        return m_length == 0;
     }
 
 protected:

@@ -23,24 +23,32 @@ class RequestCode(Enum):
     Hardware Train Controller: 224 - 255
     """
     ERROR = 1
-    LOGIN = 2
+    DEBUG_TO_CTC = 2
+    DEBUG_TO_HWTRACKCTRL = 3
+    DEBUG_TO_SWTRACKCTRL = 4
+    DEBUG_TO_TRACK_MODEL = 5
+    DEBUG_TO_TRAIN_MODEL = 6
+    DEBUG_TO_HWTRAINCTRL = 7
+    DEBUG_TO_SWTRAINCTRL = 8
 
     CTC_DISPATCH_TRAIN = 32
-    CTC_SEND_OCCUPANCIES = 33
+    CTC_SEND_GUI_OCCUPANCIES = 33
 
     SET_SWITCH_POSITION = 96
     GET_SWITCH_POSITION = 97
     GET_HW_TRACK_CONTROLLER_REQUEST = 100
     SEND_HW_TRACK_CONTROLLER_RESPONSE = 101
     GET_HW_TRACK_CONTROLLER_RESPONSE = 102
-    
+
     GET_SIGNAL_TIMES = 128
     SET_SPEED_LIMIT = 129
     GET_SPEED_LIMIT = 130
 
-    GET_COMMAND_SPEED = 160
-    SET_TRAIN_LENGTH = 161
-    SEND_TRAIN_MODEL_DATA = 162
+    TRAIN_MODEL_GIVE_POWER = 160
+    TRAIN_MODEL_GET_CURRENT_SPEED = 161
+    GET_COMMAND_SPEED = 162
+    SET_TRAIN_LENGTH = 163
+    SEND_TRAIN_MODEL_DATA = 164
 
 
 class ResponseCode(Enum):
@@ -58,7 +66,7 @@ class ResponseCode(Enum):
     SUCCESS = 0
     ERROR = 1
 
-def send_message(request_code, data=""):
+def send_message(request_code, data="", ignore_exceptions=(ConnectionRefusedError)):
     """Constructs and sends a message to the server
 
     :param RequestCode request_code: Code representing what the request is for
@@ -74,13 +82,16 @@ def send_message(request_code, data=""):
             sock.connect((HOST, PORT))
             sock.sendall(request)
             data = sock.recv(1024)
-    except ConnectionRefusedError:
+    except ignore_exceptions:
         # Show up as an error
         data = b'1'
 
     # Remove byte stuff and split along first space
     splits = repr(data)[2:-1].split(" ", 1)
-    response_code = int(splits[0])
+    try:
+        response_code = int(splits[0])
+    except ValueError:
+        response_code = ResponseCode.ERROR
 
     # If there's additional response data, capture it
     if len(splits) > 1:

@@ -5,8 +5,10 @@ include_directories("${PROJECT_SOURCE_DIR}/include/Debug")
 
 # Set source files
 set(SOURCES
-    RequestManager.cpp
+    HWTrackControllerMain.cpp
+    HWTrackControllerRequestManager.cpp
 )
+set(CMAKE_CXX_STANDARD 17)
 
 add_library(HWTrackController STATIC ${SOURCES})
 target_link_libraries(HWTrackController debug_lib)
