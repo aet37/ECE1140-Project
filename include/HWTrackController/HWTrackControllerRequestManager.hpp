@@ -7,10 +7,11 @@
 #define HW_TRACK_CONTROLLER_REQUEST_MANAGER_HPP
 
 // SYSTEM INCLUDES
-#include <queue>
+// (None)
 
 // C++ PROJECT INCLUDES
 #include "RequestManagerIface.hpp" // For Common::RequestManagerIface
+#include "ServiceQueue.hpp" // For Common::ServiceQueue
 
 // FORWARD DECLARATIONS
 
@@ -48,10 +49,10 @@ public:
 protected:
 private:
     /// Queue for requests to the hardware
-    static std::queue<Common::Request*> m_requestQueue;
+    static Common::ServiceQueue<Common::Request*> m_requestQueue;
 
     /// Queue for responses from the hardware
-    static std::queue<Common::Response*> m_responseQueue;
+    static Common::ServiceQueue<Common::Response*> m_responseQueue;
 
     /**
      * @brief Adds a request to the queue

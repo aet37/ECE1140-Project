@@ -31,15 +31,15 @@ namespace Common
 enum class RequestCode : uint8_t
 {
     ERROR = 1,
-    LOGIN = 2,
 
     CTC_DISPATCH_TRAIN = 32,
     CTC_SEND_GUI_OCCUPANCIES = 33,
 	CTC_GET_OCCUPANCIES = 63,
 
-    SWTRACK_OCCUPANCY_TO_CTC = 64,
+    SWTRACK_GET_TRACK_SIGNAL = 64,
     SWTRACK_TRACKSIGNAL_TO_TRAINM = 65,
     SWTRACK_SWITCHPOSITION_TO_TRAINM = 66,
+    SWTRACK_GET_OCCUPANCY = 67,
 
     SET_SWITCH_POSITION = 96,
     GET_SWITCH_POSITION = 97,
@@ -47,18 +47,19 @@ enum class RequestCode : uint8_t
     SEND_HW_TRACK_CONTROLLER_RESPONSE = 101,
     GET_HW_TRACK_CONTROLLER_RESPONSE = 102,
 
-
-
     GET_SIGNAL_TIMES = 128,
     SET_SPEED_LIMIT = 129,
     GET_SPEED_LIMIT = 130,
 
-    GET_COMMAND_SPEED = 160,
-    SET_TRAIN_LENGTH = 161,
-    SEND_TRAIN_MODEL_DATA = 162,
+    TRAIN_MODEL_GIVE_POWER = 160,
+    TRAIN_MODEL_GET_CURRENT_SPEED = 161,
+    GET_COMMAND_SPEED = 162,
+    SET_TRAIN_LENGTH = 163,
+    SEND_TRAIN_MODEL_DATA = 164,
 
     SEND_TRAIN_MODEL_INFO = 192,
-    GET_INFO_FROM_TM = 193
+    GET_INFO_FROM_TM = 193,
+    SW_TRAIN_CONTROLLER_GET_CURRENT_SPEED = 194
 };
 
 /**
@@ -95,6 +96,21 @@ public:
      * @brief Sets the data string member
     */
     void SetData(const std::string data) { m_data = data; }
+
+	/**
+	 * @brief Writes data to the data string member
+	*/
+	void AppendData(const std::string& rData)
+	{
+		if (m_data == "")
+		{
+			m_data = rData;
+		}
+		else
+		{
+			m_data += " " + rData;
+		}
+	}
 
     /**
      * @brief Gets the data member

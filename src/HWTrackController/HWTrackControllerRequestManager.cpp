@@ -17,8 +17,8 @@ namespace HWTrackController
 {
 
 // Static members
-std::queue<Common::Request*> HWTrackControllerRequestManager::m_requestQueue = std::queue<Common::Request*>();
-std::queue<Common::Response*> HWTrackControllerRequestManager::m_responseQueue = std::queue<Common::Response*>();
+Common::ServiceQueue<Common::Request*> HWTrackControllerRequestManager::m_requestQueue;
+Common::ServiceQueue<Common::Response*> HWTrackControllerRequestManager::m_responseQueue;
 
 void HWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequest, Common::Response& rResponse)
 {
@@ -91,16 +91,15 @@ void HWTrackControllerRequestManager::AddRequest(const Common::Request& rReq)
     // Use heap memory so it can stay in the queue
     Common::Request* pNewRequest = new Common::Request();
     *(pNewRequest) = rReq;
-    m_requestQueue.push(pNewRequest);
+    m_requestQueue.Push(pNewRequest);
 }
 
 Common::Request* HWTrackControllerRequestManager::GetNextRequest()
 {
     Common::Request* pNextRequest = nullptr;
-    if (m_requestQueue.empty() != true)
+    if (m_requestQueue.IsEmpty() != true)
     {
-        pNextRequest = m_requestQueue.front();
-        m_requestQueue.pop();
+        pNextRequest = m_requestQueue.Pop();
     }
     return pNextRequest;
 }
@@ -110,16 +109,15 @@ void HWTrackControllerRequestManager::AddResponse(const Common::Response& rResp)
     // Use heap memory so it can stay in the queue
     Common::Response* pNewResponse = new Common::Response();
     *(pNewResponse) = rResp;
-    m_responseQueue.push(pNewResponse);
+    m_responseQueue.Push(pNewResponse);
 }
 
 Common::Response* HWTrackControllerRequestManager::GetNextResponse()
 {
     Common::Response* pNextResponse = nullptr;
-    if (m_responseQueue.empty() != true)
+    if (m_responseQueue.IsEmpty() != true)
     {
-        pNextResponse = m_responseQueue.front();
-        m_responseQueue.pop();
+        pNextResponse = m_responseQueue.Pop();
     }
     return pNextResponse;
 }

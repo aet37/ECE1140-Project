@@ -97,6 +97,14 @@ public:
         return m_queue.size();
     }
 
+    /**
+     * @brief Determines whether the queue is empty
+    */
+    bool IsEmpty()
+    {
+        return GetSize() == 0;
+    }
+
 protected:
 private:
     /// Actual queue to hold the objects

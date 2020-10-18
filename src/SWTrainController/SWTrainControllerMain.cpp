@@ -7,6 +7,7 @@
 
 // C++ PROJECT INCLUDES
 #include "SWTrainControllerMain.hpp" // Header for functions
+#include "TrainModelMain.hpp"
 #include "Logger.hpp" // For LOG macros
 
 namespace SWTrainController
