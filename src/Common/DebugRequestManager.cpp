@@ -63,6 +63,9 @@ void DebugRequestManager::HandleRequest(const Common::Request& rRequest, Common:
             rResponse.SetResponseCode(Common::ResponseCode::ERROR);
             return;
     }
+
+    // Set response code to success
+    rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
 }
 
 } // namespace Debug

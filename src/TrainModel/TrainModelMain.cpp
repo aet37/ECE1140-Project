@@ -20,6 +20,7 @@ Common::ServiceQueue<Common::Request> serviceQueue;
 void moduleMain()
 {
     LOG_TRAIN_MODEL("Thread starting...");
+    int currentSpeed;
 
     while (true)
     {
@@ -30,8 +31,8 @@ void moduleMain()
             case Common::RequestCode::TRAIN_MODEL_GIVE_POWER:
             {
                 uint32_t power = std::stoi(receivedRequest.GetData());
-                uint32_t currentSpeed = (power * 2);
-                tm_current_speed = currentSpeed;
+                currentSpeed = (power * 2);
+                LOG_TRAIN_MODEL("currentSpeed = %d", currentSpeed);
                 std::string currentSpeedSend = std::to_string(currentSpeed);
                 Common::Request newRequest(Common::RequestCode::SW_TRAIN_CONTROLLER_GET_CURRENT_SPEED, currentSpeedSend);
                 SWTrainController::serviceQueue.Push(newRequest);
