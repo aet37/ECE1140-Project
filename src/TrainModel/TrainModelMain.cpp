@@ -28,6 +28,7 @@ void moduleMain()
         switch (receivedRequest.GetRequestCode())
         {
             case Common::RequestCode::TRAIN_MODEL_GIVE_POWER:
+            {
                 uint32_t power = std::stoi(receivedRequest.GetData());
                 uint32_t currentSpeed = (power * 2);
                 tm_current_speed = currentSpeed;
@@ -35,9 +36,11 @@ void moduleMain()
                 Common::Request newRequest(Common::RequestCode::SW_TRAIN_CONTROLLER_GET_CURRENT_SPEED, currentSpeedSend);
                 SWTrainController::serviceQueue.Push(newRequest);
                 break;
+            }
             default:
                 ASSERT(false, "Unexpected request code %d", static_cast<uint16_t>(receivedRequest.GetRequestCode()));
         }
     }
+}
 
 } // namespace TrainModel
