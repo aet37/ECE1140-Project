@@ -7,6 +7,7 @@ set(SOURCES
     DebugUtil.cpp
     Logger.cpp
 )
+set(CMAKE_CXX_STANDARD 17)
 
 # Make library
 add_library(debug_lib STATIC ${SOURCES})

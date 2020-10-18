@@ -7,6 +7,7 @@ include_directories("${PROJECT_SOURCE_DIR}/include/Debug")
 set(SOURCES
     TrackModelMain.cpp
 )
+set(CMAKE_CXX_STANDARD 17)
 
 add_library(TrackModel STATIC ${SOURCES})
 target_link_libraries(TrackModel debug_lib)

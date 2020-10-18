@@ -1,24 +1,29 @@
 /**
  * @file Request.hpp
- * 
+ *
  * @brief Data structure to be used to request an action of a module
 */
 #ifndef REQUEST_HPP
 #define REQUEST_HPP
 
 // SYSTEM INCLUDES
+#include <algorithm>
+#include <iostream>
 #include <stdint.h>
 #include <string>
+
+// C++ PROJECT INCLUDES
+#include "Logger.hpp" // For LOG macros
 
 namespace Common
 {
 
 /**
  * @enum RequestCode
- * 
+ *
  * @brief Codes that will be used when communicating with
  * the server. Each module is assigned a range of numbers
- * 
+ *
  * @li System wide: 0 - 31
  * @li CTC: 32 - 63
  * @li Software Track Controller: 64 - 95
@@ -31,6 +36,13 @@ namespace Common
 enum class RequestCode : uint8_t
 {
     ERROR = 1,
+    DEBUG_TO_CTC = 2,
+    DEBUG_TO_HWTRACKCTRL = 3,
+    DEBUG_TO_SWTRACKCTRL = 4,
+    DEBUG_TO_TRACK_MODEL = 5,
+    DEBUG_TO_TRAIN_MODEL = 6,
+    DEBUG_TO_HWTRAINCTRL = 7,
+    DEBUG_TO_SWTRAINCTRL = 8,
 
     CTC_DISPATCH_TRAIN = 32,
     CTC_SEND_GUI_OCCUPANCIES = 33,
@@ -64,7 +76,7 @@ enum class RequestCode : uint8_t
 
 /**
  * @class Request
- * 
+ *
  * @brief Structure used to hold the request code and
  * additional data
 */
@@ -111,6 +123,40 @@ public:
 			m_data += " " + rData;
 		}
 	}
+
+    /**
+     * @brief Parses a single argument within the request's data as a given type
+     * 
+     * @param idx   Index of the data element you want to retrieve
+     * @return Individual data as type T
+    */
+    template<typename T>
+    T ParseData(uint32_t idx) const
+    {
+        // Check the idx first
+        size_t spaceCount = std::count( m_data.begin(), m_data.end(), ' ');
+        if (idx > spaceCount)
+        {
+            LOG_DEBUG("Index is out of bounds");
+            throw std::exception();
+        }
+
+        uint32_t startingIndex = 0;
+        for (int token = 0; token < idx; token++)
+        {
+            startingIndex = m_data.find(" ", startingIndex + 1) + 1;
+        }
+
+        uint32_t endIndex = m_data.find(' ', startingIndex);
+        if constexpr (std::is_same<T, std::string>::value)
+        {
+            return m_data.substr(startingIndex, endIndex);
+        }
+        else
+        {
+            return static_cast<T>(std::stoi(m_data.substr(startingIndex, endIndex)));
+        }
+    }
 
     /**
      * @brief Gets the data member

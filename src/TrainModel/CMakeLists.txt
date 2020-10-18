@@ -8,6 +8,7 @@ set(SOURCES
     TrainModelMain.cpp
     TrainModelRequestManager.cpp
 )
+set(CMAKE_CXX_STANDARD 17)
 
 add_library(TrainModel STATIC ${SOURCES})
-target_link_libraries(TrainModel debug_lib)
+target_link_libraries(TrainModel debug_lib SWTrainController)
