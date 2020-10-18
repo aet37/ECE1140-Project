@@ -11,10 +11,12 @@
 #include "RequestManagerRepository.hpp" // Header for class
 #include "Assert.hpp" // For ASSERT
 #include "RequestManagerIface.hpp" // For RequestManagerIface
+#include "DebugRequestManager.hpp" // For Debug::DebugRequestManager
 #include "HWTrackControllerRequestManager.hpp" // For HWTrackController::HWTrackControllerRequestManager
 #include "CTCRequestManager.hpp"    // For CTC::CTCRequestManager
 #include "TrainModelRequestManager.hpp" // For TrainModel::TrainModelRequestManager
 
+static Debug::DebugRequestManager debugRequestManager;
 static HWTrackController::HWTrackControllerRequestManager hwTrackControllerRequestManager;
 static CTC::CTCRequestManager ctcRequestManager;
 static TrainModel::TrainModelRequestManager trainModelRequestManager;

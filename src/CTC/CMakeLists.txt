@@ -11,6 +11,7 @@ set(SOURCES
     CTCRequestManager.cpp
     TrainSystem.cpp
 )
+set(CMAKE_CXX_STANDARD 17)
 
 add_library(CTC STATIC ${SOURCES})
 target_link_libraries(CTC SWTrackController debug_lib)

@@ -2,6 +2,7 @@
 include_directories("${PROJECT_SOURCE_DIR}/include/HWTrackController")
 include_directories("${PROJECT_SOURCE_DIR}/src/HWTrackController/Main/include")
 include_directories("${PROJECT_SOURCE_DIR}/include/Common")
+include_directories("${PROJECT_SOURCE_DIR}/include/Debug")
 
 # Set source files (Unit tests)
 set(HWTRACKCTRL_UNITTESTS
@@ -9,6 +10,7 @@ set(HWTRACKCTRL_UNITTESTS
     HWTrackControllerRequestManagerUT.cpp
     ListUT.cpp
 )
+set(CMAKE_CXX_STANDARD 17)
 
 # Add executables (Suites)
 add_executable(HWTrackCtrlTestSuite HWTrackCtrlTestSuite.cpp ${HWTRACKCTRL_UNITTESTS})

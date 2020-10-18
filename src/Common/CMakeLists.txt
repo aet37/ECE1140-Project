@@ -7,6 +7,7 @@ include_directories("${PROJECT_SOURCE_DIR}/include/Debug")
 set(SOURCES
     RequestManagerRepository.cpp
 )
+set(CMAKE_CXX_STANDARD 17)
 
 add_library(Common STATIC ${SOURCES})
 target_link_libraries(Common debug_lib)
