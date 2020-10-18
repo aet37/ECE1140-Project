@@ -22,7 +22,7 @@ def main():
     chan.get_pty()
     chan.invoke_shell()
     chan.send('cd CI/ECE1140-Project; git fetch; git checkout ' + args.branch_name +
-              '; mkdir build -p; cd build; cmake ..; make\n')
+              '; git pull; mkdir build -p; cd build; cmake ..; make\n')
     time.sleep(15)
 
 
