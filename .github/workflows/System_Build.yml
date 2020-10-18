@@ -69,3 +69,4 @@ jobs:
       run: |
         cd tests/RequestTests
         pytest HWTrackCtrlRequestTests.py --setup-show
+        pytest TrainModelRequestTests.py --setup-show
