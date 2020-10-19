@@ -24,21 +24,21 @@ void HWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequ
 {
     switch (rRequest.GetRequestCode())
     {
-        case Common::RequestCode::GET_SWITCH_POSITION:
+        case Common::RequestCode::HWTRACK_GET_TAG_VALUE:
         {
             // Add the request to the queue
             AddRequest(rRequest);
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
-        case Common::RequestCode::SET_SWITCH_POSITION:
+        case Common::RequestCode::HWTRACK_SET_TAG_VALUE:
         {
             // Add the request to the queue
             AddRequest(rRequest);
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
-        case Common::RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST:
+        case Common::RequestCode::HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST:
         {
             // Retrieve the next request from the request queue
             Common::Request* pNextRequest = GetNextRequest();
@@ -55,7 +55,7 @@ void HWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequ
             }
             break;
         }
-        case Common::RequestCode::SEND_HW_TRACK_CONTROLLER_RESPONSE:
+        case Common::RequestCode::HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE:
         {
             // Construct a response from the request's data and add it to the queue
             Common::Response resp(Common::ResponseCode::SUCCESS, rRequest.GetData());
@@ -63,7 +63,7 @@ void HWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequ
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
-        case Common::RequestCode::GET_HW_TRACK_CONTROLLER_RESPONSE:
+        case Common::RequestCode::HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE:
         {
             // Retrieve a response from the queue
             Common::Response* pNextResponse = GetNextResponse();

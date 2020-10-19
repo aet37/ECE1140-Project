@@ -52,12 +52,13 @@ enum class RequestCode : uint8_t
     SWTRACK_TRACKSIGNAL_TO_TRAINM = 65,
     SWTRACK_SWITCHPOSITION_TO_TRAINM = 66,
     SWTRACK_GET_OCCUPANCY = 67,
+    SWTRACK_GET_SWITCH_POSITION = 68,
 
-    SET_SWITCH_POSITION = 96,
-    GET_SWITCH_POSITION = 97,
-    GET_HW_TRACK_CONTROLLER_REQUEST = 100,
-    SEND_HW_TRACK_CONTROLLER_RESPONSE = 101,
-    GET_HW_TRACK_CONTROLLER_RESPONSE = 102,
+    HWTRACK_SET_TAG_VALUE = 96,
+    HWTRACK_GET_TAG_VALUE = 97,
+    HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST = 100,
+    HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE = 101,
+    HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE = 102,
 
     GET_SIGNAL_TIMES = 128,
     SET_SPEED_LIMIT = 129,
@@ -167,6 +168,21 @@ public:
      * @brief Gets the request code member
     */
     RequestCode GetRequestCode() const { return m_reqCode; }
+
+    /**
+     * @brief Converts the object to a single string
+    */
+    std::string ToString()
+    {
+        if (m_data == "")
+        {
+            return std::to_string(static_cast<uint8_t>(m_reqCode));
+        }
+        else
+        {
+            return std::to_string(static_cast<uint8_t>(m_reqCode)) + " " + m_data;
+        }
+    }
 
 protected:
 private:
