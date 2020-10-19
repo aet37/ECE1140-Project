@@ -37,7 +37,7 @@ class RequestCode(Enum):
     HWTRACK_SET_TAG_VALUE = 96
     HWTRACK_GET_TAG_VALUE = 97
     HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST = 100
-    HWTRACK_SEND_HW_TRACK_CONTROLLER_REQUEST = 101
+    HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE = 101
     HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE = 102
 
     GET_SIGNAL_TIMES = 128
@@ -65,6 +65,9 @@ class ResponseCode(Enum):
     """
     SUCCESS = 0
     ERROR = 1
+
+    HWTRACK_SET_TAG_VALUE = 96
+    HWTRACK_GET_TAG_VALUE = 97
 
 def send_message(request_code, data="", ignore_exceptions=(ConnectionRefusedError)):
     """Constructs and sends a message to the server
