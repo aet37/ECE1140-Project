@@ -55,7 +55,7 @@ void HWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequ
             }
             break;
         }
-        case Common::RequestCode::HWTRACK_SEND_HW_TRACK_CONTROLLER_REQUEST:
+        case Common::RequestCode::HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE:
         {
             // Construct a response from the request's data and add it to the queue
             Common::Response resp(Common::ResponseCode::SUCCESS, rRequest.GetData());

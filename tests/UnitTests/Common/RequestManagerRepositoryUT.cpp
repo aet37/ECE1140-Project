@@ -21,7 +21,7 @@ TEST_CASE("Singleton")
 TEST_CASE("HWTrackController request managers")
 {
     Common::RequestCode reqCode = GENERATE(Common::RequestCode::HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST,
-                                           Common::RequestCode::HWTRACK_SEND_HW_TRACK_CONTROLLER_REQUEST,
+                                           Common::RequestCode::HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE,
                                            Common::RequestCode::HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE);
     Common::RequestManagerIface* pReqManager = Common::RequestManagerRepository::GetInstance().GetRequestManager(reqCode);
     REQUIRE(nullptr != dynamic_cast<HWTrackController::HWTrackControllerRequestManager*>(pReqManager));
