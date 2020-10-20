@@ -8,7 +8,7 @@
 #include <Arduino.h>
 
 // C++ PROJECT INCLUDES
-#include "../include/Logger.hpp" // For LOG macros
+#include "../include/ArduinoLogger.hpp" // For LOG macros
 #include "../include/Scheduler.hpp" // Header for class
 
 /// Current system time

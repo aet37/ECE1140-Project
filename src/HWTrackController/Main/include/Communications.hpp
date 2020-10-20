@@ -20,8 +20,8 @@ enum class RequestCode
 {
     INVALID = 1,
 
-    SET_SWITCH_POSITION = 96,
-    GET_SWITCH_POSITION = 97
+    HWTRACK_SET_TAG_VALUE = 96,
+    HWTRACK_GET_TAG_VALUE = 97
 };
 
 /**

@@ -10,7 +10,7 @@
 #include "../include/Communications.hpp" // Header for class
 #include "../include/UserProgram.hpp" // For UserProgram
 #include "../include/TagDatabase.hpp" // For TagDatabase
-#include "../include/Logger.hpp"
+#include "../include/ArduinoLogger.hpp"
 
 namespace Communications
 {
@@ -37,8 +37,8 @@ static RequestCode ParseCode(const String& rMsg)
 
     switch (code)
     {
-        case static_cast<int>(RequestCode::GET_SWITCH_POSITION):
-        case static_cast<int>(RequestCode::SET_SWITCH_POSITION):
+        case static_cast<int>(RequestCode::HWTRACK_GET_TAG_VALUE):
+        case static_cast<int>(RequestCode::HWTRACK_SET_TAG_VALUE):
             return static_cast<RequestCode>(code);
         default:
             return RequestCode::INVALID;
@@ -126,10 +126,10 @@ void CommsTask(void* pProgram)
         case RequestCode::INVALID:
             SendResponse(ResponseCode::ERROR);
             break;
-        case RequestCode::GET_SWITCH_POSITION:
+        case RequestCode::HWTRACK_GET_TAG_VALUE:
             GetTagValue(data);
             break;
-        case RequestCode::SET_SWITCH_POSITION:
+        case RequestCode::HWTRACK_SET_TAG_VALUE:
             SetTagValue(data);
             break;
         default:

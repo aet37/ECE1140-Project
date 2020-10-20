@@ -431,7 +431,7 @@ class Ui(QtWidgets.QMainWindow):
             self.signal_15.setText('Signal Last\nTripped:\n'+times[14])
         else:
             print(responsecode)
-        responsecode, switch = send_message(RequestCode.GET_SWITCH_POSITION)
+        responsecode, switch = send_message(RequestCode.SWTRACK_GET_SWITCH_POSITION)
         if responsecode == ResponseCode.SUCCESS:
             switch = switch.split(" ")
             self.switch_5.setText('Switch flipped to:\n\n'+switch[0])
