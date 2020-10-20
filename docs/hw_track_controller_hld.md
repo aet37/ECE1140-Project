@@ -10,6 +10,13 @@ class Communications << (N,#FFFFFF) Namespace >>
     - void SendResponse(ResponseCode, char*)
     - void GetTagValue(String&)
     - void SetTagValue(String&)
+    - void CreateTag(String&)
+    - void StartDownload()
+    - void ClearMemory()
+    - void EndDownload()
+    - void CreateTask(char*, TaskType)
+    - void CreateRoutine(char*)
+    - void CreateRung(char*)
     + void CommsTask(void*)
 }
 
@@ -32,6 +39,9 @@ class SystemTask
     # SystemTaskFunction m_taskFunction
     # void* m_pArgument
 }
+
+package "User Program"
+{
 
 class Task
 {
@@ -70,23 +80,106 @@ class TagDatabase <<(N,0xFFFFFF) Namespace>>
     + void AddTag(char*)
     + bool SetTag(String&, bool)
     + bool GetTagValue(String&, bool&)
+    + void DeleteAllTags()
     {static} - HashMap<bool> tags
+}
+
 }
 
 SystemTask <|-- Task
 
 Rung *-- "0..*" Instruction : Has
-
 Routine *-- "0..*" Rung : Has
-
 Task *-- "1..*" Routine : Has
 
-Communications *-- TagDatabase : Uses
+TagDatabase -up- Communications : < Uses
 
-Instruction *-- TagDatabase : Uses
+TagDatabase - Instruction : < Uses
 
 Scheduler - SystemTask : > Schedules
 Scheduler - Task : > Schedules
+
+note bottom of Communications
+CommsTask interacts with the serial
+port to interface with the software
+end note
+
+@enduml
+```
+
+# Sequence Diagrams
+- Download program
+- CTC sends switch position
+- Programmer manually flips switch
+
+```plantuml
+@startuml
+
+Participant Serial
+participant Communications as comms
+participant TagDatabase as td
+participant Rung
+participant Routine
+participant Task
+
+activate comms
+[-> Serial : write(DOWNLOAD_START)
+comms -> Serial ++ : readline()
+return message
+comms -> comms : StartDownload()
+activate comms
+comms -> td : DeleteAllTags()
+comms -> comms : ClearMemory()
+return
+
+[-> Serial : write(CREATE_TAG, "switch1")
+comms -> Serial ++ : readline()
+return message
+comms -> comms : CreateTag()
+activate comms
+comms -> td : AddTag("switch1")
+return
+
+[-> Serial : write(CREATE_RUNG, "XIC Switch1")
+comms -> Serial ++ : readline()
+return message
+comms -> comms : CreateRung("XIC Switch1")
+activate comms
+comms -> Rung ** : pRung = Rung("XIC Switch1")
+return
+
+[-> Serial : write(CREATE_ROUTINE, "Main")
+comms -> Serial ++ : readline()
+return message
+comms -> comms : CreateRoutine("Main")
+activate comms
+comms -> Routine ** : pRoutine = Routine("Main")
+comms -> Routine : AppendRung(pRung)
+return
+
+[-> Serial : write(CREATE_TASK, "Task1", PERIODIC)
+comms -> Serial ++ : readline()
+return message
+comms -> comms : CreateTask("Task1", PERIODIC)
+activate comms
+comms -> Task ** : Task("Task1", PERIODIC)
+comms -> Task : AddRoutine(pRoutine)
+return
+
+[-> Serial : write(END_DOWNLOAD)
+comms -> Serial ++ : readline()
+return message
+comms -> comms : EndDownload()
+activate comms
+return
+@enduml
+```
+
+```plantuml
+@startuml
+
+participant Communications as comms
+participant TagDatabase as td
 
 @enduml
 ```
