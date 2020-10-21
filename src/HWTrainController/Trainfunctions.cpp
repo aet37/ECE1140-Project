@@ -4,9 +4,9 @@
 void Trainfunctions::setMode(int x){
 	mode = x;
 }
-// void Trainfunctions::setTrackSignal(int x){
-// 	trackSignal = x;
-// }
+void Trainfunctions::setTrackSignal(int x){
+	trackSignal = x;
+}
 void Trainfunctions::setServiceBrake(int x){
 	serviceBrake = x;
 }
