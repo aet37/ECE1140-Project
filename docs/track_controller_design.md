@@ -1,22 +1,24 @@
 # Track Controller Design Notes
 
 ## Keywords
-- TAG - Used to allocate a boolean in the program's memory
-- TASK/ENDTASK - A set of routines that can either be periodically run or event-driven
-- PERIOD - Option to have a task run at a certain period. Should be followed by an = and an integer.
-- EVENT - Option to have a task run when a given event is emitted.
-- ROUTINE/ENDROUTINE - A set of sequential ladder rungs containing instructions. The routine keyword must be followed by a string representing the name of the routine. Every task must contain a singular routine named "Main"
-- RUNG/ENDRUNG - A list of instructions to be evaluated when the routine runs. Rungs may have a name, or remain anonymous. Starts with entry instructions followed by output instructions
-- FALSE
-- TRUE
-- XIC (Examine if closed) - Continues evaluating the rung if the given tag is true
-- XIO (Examine if open) - Continues evaluating the run if the given tag is false
-- OTE (Output energize) - Sets the given tag to true while being executed
-- OTL (Output latch) - Sets the given tag to true until the an otu instruction is executed
-- OTU (Output unlatch) - Sets the given tag to false until an otl or ote instruction is executed
-- JSR (Jump to subroutine) - Jumps to a given subroutine
-- RET (Return) - Returns from a subroutine to the previously executed jsr instruction
-- EMIT - Emits a signal to trigger any event driven tasks
+- tag - Used to allocate a boolean in the program's memory
+- task - A set of routines that can either be continuously run, periodically run, or event-driven
+- continuous - Option to have a task run continuously
+- period - Option to have a task run at a certain period. Should be followed by an = and an integer. A period of 0 is equivalent to a continuous task
+- event - Option to have a task run when a given event is emitted.
+- routine - A set of sequential ladder rungs containing instructions. The routine keyword must be followed by a string representing the name of the routine. Every task must contain a singular routine named "Main"
+- rung - A list of instructions to be evaluated when the routine runs. Rungs may have a name, or remain anonymous. Starts with entry instructions followed by output instructions
+- false
+- true
+
+- xic (Examine if closed) - Continues evaluating the rung if the given tag is true
+- xio (Examine if open) - Continues evaluating the run if the given tag is false
+- ote (Output energize) - Sets the given tag to true while being executed
+- otl (Output latch) - Sets the given tag to true until the an otu instruction is executed
+- otu (Output unlatch) - Sets the given tag to false until an otl or ote instruction is executed
+- jsr (Jump to subroutine) - Jumps to a given subroutine
+- ret (Return) - Returns from a subroutine to the previously executed jsr instruction
+- event - Emits a signal to trigger any event driven tasks
 
 ## File format
 - All tags should be defined at the top of the file and include their name, default value, and a semicolon
@@ -35,43 +37,55 @@
 ```
 tag switch1 = false;
 tag signal1 = false;
-tag output1 = false;
-tag output2 = false;
 
-TASK<period=1000> EverySecondTask
-    ROUTINE Main
-        RUNG
-            XIC signal1;
-            OTL output1;
-        ENDRUNG
-        RUNG
-            XIO signal1;
-            OTU output1;
-        ENDRUNG
-        RUNG
-            XIC switch1;
-            JSR secondRoutine;
-        ENDRUNG
-        RUNG
-            XIO switch1;
-            EVENT MyEvent;
-        ENDRUNG
-    ENDROUTINE
 
-    ROUTINE secondRoutine
-        RUNG
-            OTL output2;
-            RET;
-        ENDRUNG
-    ENDROUTINE
-ENDTASK
+task<continuous> ContinuousTask
+{
+    routine Main
+    {
+        rung
+        {
+            xic switch1;
+            ote signal1;
+        }
 
-TASK<event=MyEvent>
-    ROUTINE Main
-        RUNG
-            OTU output2;
-        ENDRUNG
-    ENDROUTINE
-ENDTASK
+        rung
+        {
+
+        }
+    }
+
+    routine secondRoutine
+    {
+
+    }
+}
+
+task<period=1000> EverySecondTask
+{
+    routine Main
+    {
+        rung
+        {
+
+        }
+    }
+
+    routine secondRoutine
+    {
+
+    }
+}
+
+task<event=MyEvent>
+{
+    routine Main
+    {
+        rung
+        {
+
+        }
+    }
+}
 
 ```
