@@ -68,11 +68,17 @@ enum class RequestCode : uint8_t
     SWTRACK_GET_OCCUPANCY = 67,
     SWTRACK_GET_SWITCH_POSITION = 68,
 
-    HWTRACK_SET_TAG_VALUE = 96,
-    HWTRACK_GET_TAG_VALUE = 97,
-    HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST = 100,
-    HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE = 101,
-    HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE = 102,
+    HWTRACK_START_DOWNLOAD = 96,
+    HWTRACK_END_DOWNLOAD = 97,
+    HWTRACK_CREATE_TAG = 98,
+    HWTRACK_CREATE_TASK = 99,
+    HWTRACK_CREATE_ROUTINE = 100,
+    HWTRACK_CREATE_RUNG = 101,
+    HWTRACK_SET_TAG_VALUE = 102,
+    HWTRACK_GET_TAG_VALUE = 103,
+    HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST = 104,
+    HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE = 105,
+    HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE = 106,
 
     GET_SIGNAL_TIMES = 128,
     SET_SPEED_LIMIT = 129,
@@ -141,7 +147,7 @@ public:
 
     /**
      * @brief Parses a single argument within the request's data as a given type
-     * 
+     *
      * @param idx   Index of the data element you want to retrieve
      * @return Individual data as type T
     */
