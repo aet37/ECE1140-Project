@@ -3,6 +3,14 @@
 ```plantuml
 @startuml
 
+class HWTrackController::RequestManager
+{
+    + void HandleRequest(Request&, Response&)
+    - void AddRequest(Request&)
+    - Request* GetNextRequest()
+    - ServiceQueue<Request*> m_requestQueue
+}
+
 class Communications << (N,#FFFFFF) Namespace >>
 {
     - RequestCode ParseCode(String&)
@@ -12,7 +20,6 @@ class Communications << (N,#FFFFFF) Namespace >>
     - void SetTagValue(String&)
     - void CreateTag(String&)
     - void StartDownload()
-    - void ClearMemory()
     - void EndDownload()
     - void CreateTask(char*, TaskType)
     - void CreateRoutine(char*)
@@ -20,28 +27,27 @@ class Communications << (N,#FFFFFF) Namespace >>
     + void CommsTask(void*)
 }
 
-class Scheduler << Singleton >>
+class Io << (N, #FFFFFF) Namespace >>
 {
-    + Scheduler& GetInstance()
-    + void AddTask(SystemTask*)
-    + void RunTasks()
-    - List<SystemTask*> m_taskList
+    + void SetDisplayText(String&)
+    + void SetOutput(int, bool)
+    + void IoTask(void*)
+    + void InterruptHandler()
 }
 
-class SystemTask
+package "PLC Program"
 {
-    + void Execute()
-    + uint32_t GetPeriod()
-    + uint64_t GetTimeLastRun()
-    + void SetTimeLastRun(uin64_t)
-    # uint32_t m_periodInMs
-    # uint64_t m_timeLastRunInMs
-    # SystemTaskFunction m_taskFunction
-    # void* m_pArgument
-}
 
-package "User Program"
+class UserProgram
 {
+    + void AddTask(Task*)
+    + void ClearMemory()
+    + bool GetRunMode()
+    + void SetRunMode(bool)
+    - List<Task*> m_tasks
+    - bool m_runMode
+    - char* m_pProgramName
+}
 
 class Task
 {
@@ -86,22 +92,24 @@ class TagDatabase <<(N,0xFFFFFF) Namespace>>
 
 }
 
-SystemTask <|-- Task
-
 Rung *-- "0..*" Instruction : Has
 Routine *-- "0..*" Rung : Has
 Task *-- "1..*" Routine : Has
+UserProgram *-- "0..*" Task : Has
 
-TagDatabase -up- Communications : < Uses
+TagDatabase -left- Communications : < Uses
+TagDatabase -down- Io : < Uses
 
 TagDatabase - Instruction : < Uses
-
-Scheduler - SystemTask : > Schedules
-Scheduler - Task : > Schedules
 
 note bottom of Communications
 CommsTask interacts with the serial
 port to interface with the software
+end note
+
+note right of Io
+These functions will interact with
+the input/output pins
 end note
 
 @enduml
@@ -109,15 +117,17 @@ end note
 
 # Sequence Diagrams
 - Download program
-- CTC sends switch position
 - Programmer manually flips switch
+- CTC sends switch position
 
 ```plantuml
 @startuml
 
+title Program Download
 Participant Serial
 participant Communications as comms
 participant TagDatabase as td
+participant UserProgram as up
 participant Rung
 participant Routine
 participant Task
@@ -129,7 +139,7 @@ return message
 comms -> comms : StartDownload()
 activate comms
 comms -> td : DeleteAllTags()
-comms -> comms : ClearMemory()
+comms -> up : ClearMemory()
 return
 
 [-> Serial : write(CREATE_TAG, "switch1")
@@ -162,8 +172,9 @@ comms -> Serial ++ : readline()
 return message
 comms -> comms : CreateTask("Task1", PERIODIC)
 activate comms
-comms -> Task ** : Task("Task1", PERIODIC)
+comms -> Task ** : pTask = Task("Task1", PERIODIC)
 comms -> Task : AddRoutine(pRoutine)
+comms -> up : AddTask(pTask)
 return
 
 [-> Serial : write(END_DOWNLOAD)
@@ -171,6 +182,7 @@ comms -> Serial ++ : readline()
 return message
 comms -> comms : EndDownload()
 activate comms
+comms -> up : SetRunMode(true)
 return
 @enduml
 ```
@@ -178,8 +190,47 @@ return
 ```plantuml
 @startuml
 
+title Manually Flip Switch
+participant Io
+participant TagDatabase as td
+
+[-> Io ++ : Switch Flipped\n(InterruptHandler())
+Io -> td : SetTag("Switch1", true)
+return
+
+@enduml
+```
+
+```plantuml
+@startuml
+
+title Set Switch from User Interface
+participant TrackCtrlGUI as gui
+participant "SWTrackCtrl::\nRequestManager" as swtcrm
+participant "HWTrackCtrl::\nRequestManager" as hwtcrm
+participant "connector script" as cs
+participant Serial
 participant Communications as comms
 participant TagDatabase as td
+
+[-> gui ++ : click
+gui -> swtcrm ++ : HandleRequest(SWTRACK_SET_SWITCH)
+swtcrm -> hwtcrm ++ : HandleRequest(\nHWTRACK_SET_TAG_VALUE)
+hwtcrm -> hwtcrm : AddRequest(\nHWTRACK_SET_TAG_VALUE)
+return
+return
+deactivate gui
+
+activate cs
+cs -> hwtcrm ++ : GetNextRequest()
+return pRequest
+cs -> Serial -- : write(request)
+activate comms
+comms -> Serial ++ : readline()
+return message
+comms -> comms ++ : SetTagValue("Switch1", true)
+comms -> td : SetTag("Switch1", true)
+return
 
 @enduml
 ```
