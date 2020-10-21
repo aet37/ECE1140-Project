@@ -52,13 +52,15 @@ enum class RequestCode : uint8_t
     CTC_UPDATE_SCHEDULE = 37,
     CTC_UPDATE_AUTOMATIC_MODE = 38,
     CTC_UPDATE_SWITCH = 37,
-    CTC_SEND_GUI_THROUGHPUT = 38,
-    CTC_SEND_GUI_TRAIN_INFO = 39,
-    CTC_SEND_GUI_TRACK_INFO = 40,
-    CTC_SEND_GUI_SIGNAL_INFO = 41,
-    CTC_GET_SIGNALS = 61,
-    CTC_GET_TRACK_STATUS = 62,
-    CTC_GET_OCCUPANCIES = 63,
+	CTC_SEND_GUI_THROUGHPUT = 38,
+	CTC_SEND_GUI_TRAIN_INFO = 39,
+	CTC_SEND_GUI_TRACK_INFO = 40,
+	CTC_SEND_GUI_SIGNAL_INFO = 41,
+	CTC_SEND_TIMER_REQUEST = 42,
+	CTC_TIME_TRIGGERED = 60,
+	CTC_GET_SIGNALS = 61,
+	CTC_GET_TRACK_STATUS = 62,
+	CTC_GET_OCCUPANCIES = 63,
 
     SWTRACK_GET_TRACK_SIGNAL = 64,
     SWTRACK_TRACKSIGNAL_TO_TRAINM = 65,
@@ -145,7 +147,7 @@ public:
 
     /**
      * @brief Parses a single argument within the request's data as a given type
-     * 
+     *
      * @param idx   Index of the data element you want to retrieve
      * @return Individual data as type T
     */
