@@ -1,21 +1,27 @@
 #include <iostream>
 #include "Failures.h"
 
-void Failures::setEngineFailure(int x){
+void Failures::setEngineFailure(int x)
+{
 	engineFailure = x;
 }
-void Failures::setSignalFailure(int x){
+void Failures::setSignalFailure(int x)
+{
 	signalFailure = x;
 }
-void Failures::setBrakeFailure(int x){
+void Failures::setBrakeFailure(int x)
+{
 	brakeFailure = x;
 }
-int Failures::getEngineFailure(){
+int Failures::getEngineFailure()
+{
 	return engineFailure;
 }
-int Failures::getSignalFailure(){
+int Failures::getSignalFailure()
+{
 	return signalFailure;
 }
-int Failures::getBrakeFailure(){
+int Failures::getBrakeFailure()
+{
 	return brakeFailure;
 }
