@@ -120,7 +120,7 @@ enum class RequestCode : uint8_t
     SWTRAIN_GUI_ANNOUNCE_STATIONS = 206, // Used by the gui to announce stations
     SWTRAIN_GUI_DISPLAY_ADS = 207, // Used by the gui to display a train's advertisements
     SWTRAIN_GUI_RESOLVE_FAILURE = 208, // Used by the gui to resolve a train failure
-    SWTRAIN_GUI_SET_KP_KI = 209, // Used by the gui to set a train's kp/ki
+    SWTRAIN_GUI_SET_KP_KI = 209 // Used by the gui to set a train's kp/ki
 };
 
 /**
