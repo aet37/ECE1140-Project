@@ -13,10 +13,11 @@
  */
 TEST_CASE( "Test ControlSystem createNewController", "[ControlSystem::createNewController(int, int, int, int)]" )
 {
-	Controller* p_testPtr = ControlSystem::createNewController(3,4,5,6);
+    ControlSystem testSystem(1,2,3,4);
+	Controller* p_testPtr = testSystem.createNewController(3,4,5,6);
 	
 	// Use getControllerInstance method to test creation
-	REQUIRE(p_testPtr == ControlSystem::getControllerInstance(0));
+	REQUIRE(p_testPtr == testSystem.getControllerInstance(1));
 }
 
 /*
@@ -25,10 +26,12 @@ TEST_CASE( "Test ControlSystem createNewController", "[ControlSystem::createNewC
 TEST_CASE( "Test ControlSystem getControllerInstance", "[ControlSystem::getControllerInstance(int)]")
 {
     // Create two controllers
-    Controller* p_testPtr = ControlSystem::createNewController(3,4,5,6);
-    Controller* p_testPtr2 = ControlSystem::createNewController(1,2,7,8);
+    ControlSystem testSystem(3,4,5,6);
+    testSystem.createNewController(1,2,7,8);
+    Controller* p_testPtr = testSystem.getControllerInstance(0);
+    Controller* p_testPtr2 = testSystem.getControllerInstance(1);
 
     // Test getControllerInstance using created pointers
-    REQUIRE(p_testPtr = ControlSystem::getControllerInstance(0));
-    REQUIRE(p_testPtr2 = ControlSystem::getControllerInstance(1));
+    REQUIRE(p_testPtr != testSystem.getControllerInstance(1));
+    REQUIRE(p_testPtr2 != testSystem.getControllerInstance(0));
 }

@@ -26,6 +26,12 @@ class Controller
         int kp;
         int ki;
 
+        // Variables for power calculation
+        int uk;
+        int uk1;
+        int ek;
+        int ek1;
+
         // Failure cases
         bool signalPickupFailure;
         bool engineFailure;
@@ -66,6 +72,54 @@ class Controller
         void setKi(int KI);
 
         /**
+         * @brief Setter function for command speed
+         * @param com_sp == command_speed
+         */
+        void setCommandSpeed(int com_sp);
+
+        /**
+         * @brief Setter function for current speed
+         * @param curr_sp == current_speed
+         */
+        void setCurrentSpeed(int curr_sp);
+
+        /**
+         * @brief Setter function for speed limit
+         * @param sp_lim == speed limit
+         */
+        void setSpeedLimit(int sp_lim);
+
+        /**
+         * @brief Setter function for authority
+         * @param auth == authority
+         */
+        void setAuthority(int auth);
+
+        /**
+         * @brief Getter function for command speed
+         * @return command_speed
+         */
+        int getCommandSpeed();
+
+        /**
+         * @brief Getter function for current speed
+         * @return current_speed
+         */
+        int getCurrentSpeed();
+
+        /**
+         * @brief Getter function for speed limit
+         * @return speed limit
+         */
+        int getSpeedLimit();
+
+        /**
+         * @brief Getter function for authority
+         * @return authority
+         */
+        int getAuthority();
+
+        /**
          * @brief Getter function for power command
          */
         int getPowerCommand();
@@ -74,9 +128,15 @@ class Controller
         // VITAL OPERATIONS
         ///////////////////////////////////////////////////////////////
         /**
-         * @brief calculates power command that will be sent to train model
+         * @brief default calculate power function for testing purposes only
          */
         void calculatePower();
+
+        /**
+         * @brief calculates power command that will be sent to train model
+         * @param T = sample period of train model
+         */
+        void calculatePower(int T);
 
         /**
          * @brief ensures train does not exceed speed limit
@@ -89,6 +149,11 @@ class Controller
          * @brief safety critical aspect to stop train immediately
          */
         void activateEmergencyBrake();
+
+        /**
+         * @brief safety critical aspect to reset emergency brake
+         */
+        void resetEmergencyBrake();
         
         /**
          * @brief allows operator to switch between manual and automatic mode
@@ -102,23 +167,29 @@ class Controller
         /**
          * @brief open/close doors
          */
-        void toggleDoors();
+        bool toggleDoors();
         /**
          * @brief turn lights on/off
          */
-        void toggleLights();
+        bool toggleLights();
         /**
          * @brief turn announcements on/off
          */
-        void announceStations();
+        bool announceStations();
         /**
          * @brief turn advertisements on/off
          */
-        void toggleAds();
+        bool toggleAds();
         /**
-         * @brief turn air-conditioning on/off
+         * @brief sets temperature of train cabin
+         * @param temp = temperature cabin is set to
          */
-        void toggleAirConditioning();
+        void setCabinTemp(int temp);
+        /**
+         * @brief gets temperature of train cabin
+         * @return returns temperature of cabin
+         */
+        int getCabinTemp();
 
 };
 #endif

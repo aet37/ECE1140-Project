@@ -7,6 +7,7 @@ include_directories("${PROJECT_SOURCE_DIR}/include/Debug")
 set(SOURCES
     SWTrainControllerMain.cpp
     ControlSystem.cpp
+    Controller.cpp
 )
 
 add_library(SWTrainController STATIC ${SOURCES})

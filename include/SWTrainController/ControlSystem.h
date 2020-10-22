@@ -16,6 +16,14 @@ class ControlSystem
         std::vector<Controller*> p_controllers;
 
     public:
+        /**
+         * @param com_sp = command speed
+         * @param curr_sp = current speed
+         * @param sp_lim = speed limit
+         * @param auth = authority
+         * @brief constructor to initialize a new controller
+         */
+        ControlSystem(int com_sp, int curr_sp, int sp_lim, int auth);
 
         /**
          * @param train_id = Train ID
