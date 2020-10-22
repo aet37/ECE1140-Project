@@ -50,18 +50,10 @@ public:
     */
     void RunTasks();
 
-    /**
-     * @brief Sets the current user's program
-    */
-    void SetUserProgram(UserProgram* pProgram) { m_pProgram = pProgram; }
-
 protected:
 private:
     /// List of tasks
     List<SystemTask*> m_taskList;
-
-    /// Current user program
-    UserProgram* m_pProgram;
 
     /**
      * @brief Creates a new Scheduler object

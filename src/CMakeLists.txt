@@ -1,4 +1,4 @@
-# Find boost
+ # Find boost
 find_package(Boost 1.53.0 COMPONENTS system)
 find_package(Threads REQUIRED)
 
@@ -35,6 +35,7 @@ set(SOURCES
     Server/Server.cpp
     Main.cpp
 )
+set(CMAKE_CXX_STANDARD 17)
 
 add_executable(main ${SOURCES})
 

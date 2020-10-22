@@ -1,8 +1,8 @@
 /**
- * @file Logger.hpp
+ * @file ArduinoLogger.hpp
 */
-#ifndef LOGGER_HPP
-#define LOGGER_HPP
+#ifndef ARDUINO_LOGGER_HPP
+#define ARDUINO_LOGGER_HPP
 
 // SYSTEM INCLUDES
 #include <Arduino.h>
@@ -23,4 +23,4 @@
 #define LOG_DECN(num)
 #endif
 
-#endif // LOGGER_HPP
+#endif // ARDUINO_LOGGER_HPP

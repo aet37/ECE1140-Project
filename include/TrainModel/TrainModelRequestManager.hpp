@@ -1,13 +1,13 @@
 /**
- * @file CTCRequestManager.hpp
+ * @file TrainModelRequestManager.hpp
  * 
- * @brief Declarations of the CTCRequestManager class
+ * @brief Declarations of the TrainModelRequestManager class
 */
-#ifndef CTC_REQUEST_MANAGER_HPP
-#define CTC_REQUEST_MANAGER_HPP
+#ifndef TRAIN_MODEL_REQUEST_MANAGER_HPP
+#define TRAIN_MODEL_REQUEST_MANAGER_HPP
 
 // SYSTEM INCLUDES
-#include <queue>
+// (None)
 
 // C++ PROJECT INCLUDES
 #include "RequestManagerIface.hpp" // For Common::RequestManagerIface
@@ -20,22 +20,22 @@ class Response;
 class Request;
 }
 
-namespace CTC
+namespace TrainModel
 {
 
 /**
- * @class CTCRequestManager
+ * @class TrainModelRequestManager
  * 
  * @brief This class is responsible for
- * handling requests for the CTC
+ * handling requests for the Train Model
 */
-class CTCRequestManager : public Common::RequestManagerIface
+class TrainModelRequestManager : public Common::RequestManagerIface
 {
 public:
     /**
-     * @brief Constructs a new CTCRequestManager object
+     * @brief Constructs a new TrainModelRequestManager object
     */
-    CTCRequestManager() {}
+    TrainModelRequestManager() {}
 
     /**
      * @brief Handles the given request and constructs a response
@@ -49,6 +49,6 @@ protected:
 private:
 };
 
-} // namespace CTC
+} // namespace TrainModel
 
-#endif // CTC_REQUEST_MANAGER_HPP
+#endif // TRAIN_MODEL_REQUEST_MANAGER_HPP

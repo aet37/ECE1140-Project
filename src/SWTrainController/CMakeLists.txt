@@ -9,6 +9,7 @@ set(SOURCES
     ControlSystem.cpp
     Controller.cpp
 )
+set(CMAKE_CXX_STANDARD 17)
 
 add_library(SWTrainController STATIC ${SOURCES})
 target_link_libraries(SWTrainController debug_lib)
