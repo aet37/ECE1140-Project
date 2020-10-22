@@ -35,7 +35,7 @@ namespace Common
 */
 enum class RequestCode : uint8_t
 {
-    ERROR = 1,
+    ERROR = 1, // Used by the system in the case that there was an error parsing the original request
     DEBUG_TO_CTC = 2,
     DEBUG_TO_HWTRACKCTRL = 3,
     DEBUG_TO_SWTRACKCTRL = 4,
@@ -44,7 +44,7 @@ enum class RequestCode : uint8_t
     DEBUG_TO_HWTRAINCTRL = 7,
     DEBUG_TO_SWTRAINCTRL = 8,
 
-    CTC_DISPATCH_TRAIN = 32,
+    CTC_GUI_DISPATCH_TRAIN = 32, // Used by the gui when the dispatcher dispatches a new train
     CTC_SEND_GUI_OCCUPANCIES = 33,
     CTC_UPDATE_AUTHORITY = 34,
     CTC_UPDATE_SPEED = 35,
@@ -52,23 +52,26 @@ enum class RequestCode : uint8_t
     CTC_UPDATE_SCHEDULE = 37,
     CTC_UPDATE_AUTOMATIC_MODE = 38,
     CTC_UPDATE_SWITCH = 39,
-	CTC_SEND_GUI_THROUGHPUT = 40,
-	CTC_SEND_GUI_TRAIN_INFO = 41,
-	CTC_SEND_GUI_TRACK_INFO = 42,
-	CTC_SEND_GUI_SIGNAL_INFO = 43,
-	CTC_SEND_TIMER_REQUEST = 44,
-	CTC_TIME_TRIGGERED = 60,
-	CTC_GET_SIGNALS = 61,
-	CTC_GET_TRACK_STATUS = 62,
-	CTC_GET_OCCUPANCIES = 63,
+    CTC_SEND_GUI_THROUGHPUT = 40,
+    CTC_SEND_GUI_TRAIN_INFO = 41,
+    CTC_SEND_GUI_TRACK_INFO = 42,
+    CTC_SEND_GUI_SIGNAL_INFO = 43,
+    CTC_SEND_TIMER_REQUEST = 44,
+    CTC_TIME_TRIGGERED = 60,
+    CTC_GET_SIGNALS = 61,
+    CTC_GET_TRACK_STATUS = 62,
+    CTC_GET_OCCUPANCIES = 63,
 
-    SWTRACK_GET_TRACK_SIGNAL = 64,
-    SWTRACK_TRACKSIGNAL_TO_TRAINM = 65,
-    SWTRACK_SWITCHPOSITION_TO_TRAINM = 66,
-    SWTRACK_GET_OCCUPANCY = 67,
-    SWTRACK_GET_SWITCH_POSITION = 68,
-    SWTRACK_SET_TRACK_HEATER // Used by the Track model to turn on/off the track heater
-    SWTRACK_DISPATCH_TRAIN // Used by the CTC to signify that a new train has been dispatched
+    SWTRACK_DISPATCH_TRAIN = 64, // Used by the CTC to signify that a new train has been dispatched
+    SWTRACK_UPDATE_AUTHORITY = 65, // Used by the CTC when a train's authority has been updated
+    SWTRACK_SET_TRACK_SIGNAL = 66, // Used by the CTC to set a track block's signal color
+    SWTRACK_UPDATE_COMMAND_SPEED = 67, // Used by the CTC when a train's command speed is updated
+    SWTRACK_SET_TRACK_STATUS = 68, // Used by the CTC when a block is closed/open for maintenance
+    SWTRACK_SET_SWITCH_POSITION = 69, // Used by the CTC when a track switch needs flipped
+    SWTRACK_SET_TRACK_FAILURE = 70, // Used by the track model to inform the controller that a failure has occured on a block
+    SWTRACK_SET_TRACK_OCCUPANCY = 71, // Used by the track model to inform the controller that a train is on a block
+    SWTRACK_SET_CROSSING = 72, // Used by the track model to have the controller lower/raise the crossing
+    SWTRACK_SET_TRACK_HEATER = 73, // Used by the Track model to turn on/off the track heater
 
     HWTRACK_START_DOWNLOAD = 96, // Used by the SW Track Ctrl to signify download is starting
     HWTRACK_END_DOWNLOAD = 97, // Used by the SW Track Ctrl to signify download has completed
@@ -101,7 +104,13 @@ enum class RequestCode : uint8_t
     TRAIN_MODEL_UPDATE_COMMAND_SPEED = 163, // Used by the track model to update a train's command speed
     TRAIN_MODEL_SET_THE_DAMN_LIGHTS = 164, // Used by the track model to let the train model know that the train is in a tunnel
     TRAIN_MODEL_GIVE_POWER = 165, // Used by the train controller to give the train model a value for power
-    TRAIN_MODEL_GUI_SET_TRAIN_LENGTH = 166, // Used by the gui to set a train's length
+    TRAIN_MODEL_GUI_CAUSE_FAILURE = 166, // Used by the gui to cause a train failure
+    TRAIN_MODEL_GUI_SET_TRAIN_LENGTH = 167, // Used by the gui to set a train's length
+    TRAIN_MODEL_GUI_SET_TRAIN_MASS = 168, // Used by the gui to set a train's mass
+    TRAIN_MODEL_GUI_SET_TRAIN_HEIGHT = 169, // Used by the gui to set a train's height
+    TRAIN_MODEL_GUI_SET_TRAIN_WIDTH = 170, // Used by the gui to set a train's width
+    TRAIN_MODEL_GUI_SET_TRAIN_PASSENGER_COUNT = 171, // Used by the gui to set a train's passenger count
+    TRAIN_MODEL_GUI_SET_TRAIN_CREW_COUNT = 172, // Used by the gui to set a train's crew count
 
     SWTRAIN_DISPATCH_TRAIN = 192, // Used by the train model to signify that a new train has been dispatched
     SWTRAIN_UPDATE_CURRENT_SPEED = 193, // Used by the train model to update a train's current speed
@@ -120,7 +129,19 @@ enum class RequestCode : uint8_t
     SWTRAIN_GUI_ANNOUNCE_STATIONS = 206, // Used by the gui to announce stations
     SWTRAIN_GUI_DISPLAY_ADS = 207, // Used by the gui to display a train's advertisements
     SWTRAIN_GUI_RESOLVE_FAILURE = 208, // Used by the gui to resolve a train failure
-    SWTRAIN_GUI_SET_KP_KI = 209 // Used by the gui to set a train's kp/ki
+    SWTRAIN_GUI_SET_KP_KI = 209, // Used by the gui to set a train's kp/ki
+
+    HWTRAIN_PULL_EBRAKE = 224, // Used by the SW Train Ctrl to pull the train's ebrake
+    HWTRAIN_SET_COMMAND_SPEED = 225, // Used by the SW Train Ctrl to set a train's command speed
+    HWTRAIN_PRESS_SERVICE_BRAKE = 226, // Used by the SW Train Ctrl to update use a train's service brake
+    HWTRAIN_TOGGLE_DAMN_DOORS = 227, // Used by the SW Train Ctrl to toggle a train's door
+    HWTRAIN_TOGGLE_CABIN_LIGHTS = 228, // Used by the SW Train Ctrl to toggle a train's lights
+    HWTRAIN_SET_TEMPERATURE = 229, // Used by the SW Train Ctrl to play temperature by sean paul
+    HWTRAIN_ANNOUNCE_STATIONS = 230, // Used by the SW Train Ctrl to announce stations
+    HWTRAIN_DISPLAY_ADS = 231, // Used by the SW Train Ctrl to display a train's advertisements
+    HWTRAIN_GET_HW_TRAIN_CONTROLLER_REQUEST = 232, // Used by the connector script to check if any requests exist for the hardware
+    HWTRAIN_SEND_HW_TRAIN_CONTROLLER_RESPONSE = 233, // Used by the connector script to forward the hardware's response to the server
+    HWTRAIN_GET_HW_TRAIN_CONTROLLER_RESPONSE = 234 // Used by SW Train Ctrl to get response from the hardware
 };
 
 /**
