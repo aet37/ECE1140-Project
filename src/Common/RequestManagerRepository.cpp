@@ -39,7 +39,7 @@ RequestManagerIface* RequestManagerRepository::GetRequestManager(RequestCode req
         case RequestCode::DEBUG_TO_SWTRAINCTRL:
             pRequestManager = &debugRequestManager;
             break;
-    	case RequestCode::CTC_DISPATCH_TRAIN:
+    	case RequestCode::CTC_GUI_DISPATCH_TRAIN:
     	case RequestCode::CTC_SEND_GUI_OCCUPANCIES:
 			pRequestManager = &ctcRequestManager;
     		break;
@@ -51,7 +51,7 @@ RequestManagerIface* RequestManagerRepository::GetRequestManager(RequestCode req
             pRequestManager = &hwTrackControllerRequestManager;
             break;
 
-        case RequestCode::TRAIN_MODEL_GET_CURRENT_SPEED:
+        case RequestCode::TRAIN_MODEL_DISPATCH_TRAIN:
             pRequestManager = &trainModelRequestManager;
             break;
         default:

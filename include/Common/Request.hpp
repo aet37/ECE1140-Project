@@ -51,12 +51,13 @@ enum class RequestCode : uint8_t
     CTC_UPDATE_SIGNAL = 36,
     CTC_UPDATE_SCHEDULE = 37,
     CTC_UPDATE_AUTOMATIC_MODE = 38,
-    CTC_UPDATE_SWITCH = 39,
+    CTC_UPDATE_SWITCH = 39, // Used by the Track model to update switch positions
     CTC_SEND_GUI_THROUGHPUT = 40,
     CTC_SEND_GUI_TRAIN_INFO = 41,
     CTC_SEND_GUI_TRACK_INFO = 42,
     CTC_SEND_GUI_SIGNAL_INFO = 43,
     CTC_SEND_TIMER_REQUEST = 44,
+    CTC_GIVE_TICKET_SALES = 45, // Used by the track model to give the ctc ticket sales
     CTC_TIME_TRIGGERED = 60,
     CTC_GET_SIGNALS = 61,
     CTC_GET_TRACK_STATUS = 62,
@@ -121,7 +122,7 @@ enum class RequestCode : uint8_t
     SWTRAIN_PULL_PASSENGER_EBRAKE = 198, // Used by the train model to pull a train's passenger e-brake
     SWTRAIN_GUI_GATHER_DATA = 199, // Used by the gui to update the user interface
     SWTRAIN_GUI_PULL_EBRAKE = 200, // Used by the gui to pull the train's ebrake
-    SWTRAIN_GUI_SET_COMMAND_SPEED = 201, // Used by the gui to set a train's command speed
+    SWTRAIN_GUI_SET_SETPOINT_SPEED = 201, // Used by the gui to set a train's setpoint speed
     SWTRAIN_GUI_PRESS_SERVICE_BRAKE = 202, // Used by the gui to update use a train's service brake
     SWTRAIN_GUI_TOGGLE_DAMN_DOORS = 203, // Used by the gui to toggle a train's door
     SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS = 204, // Used by the gui to toggle a train's lights
@@ -132,7 +133,7 @@ enum class RequestCode : uint8_t
     SWTRAIN_GUI_SET_KP_KI = 209, // Used by the gui to set a train's kp/ki
 
     HWTRAIN_PULL_EBRAKE = 224, // Used by the SW Train Ctrl to pull the train's ebrake
-    HWTRAIN_SET_COMMAND_SPEED = 225, // Used by the SW Train Ctrl to set a train's command speed
+    HWTRAIN_SET_SETPOINT_SPEED = 225, // Used by the SW Train Ctrl to set a train's setpoint speed
     HWTRAIN_PRESS_SERVICE_BRAKE = 226, // Used by the SW Train Ctrl to update use a train's service brake
     HWTRAIN_TOGGLE_DAMN_DOORS = 227, // Used by the SW Train Ctrl to toggle a train's door
     HWTRAIN_TOGGLE_CABIN_LIGHTS = 228, // Used by the SW Train Ctrl to toggle a train's lights

@@ -34,7 +34,7 @@ void moduleMain()
                 currentSpeed = (power * 2);
                 LOG_TRAIN_MODEL("currentSpeed = %d", currentSpeed);
                 std::string currentSpeedSend = std::to_string(currentSpeed);
-                Common::Request newRequest(Common::RequestCode::SW_TRAIN_CONTROLLER_GET_CURRENT_SPEED, currentSpeedSend);
+                Common::Request newRequest(Common::RequestCode::SWTRAIN_UPDATE_CURRENT_SPEED, currentSpeedSend);
                 SWTrainController::serviceQueue.Push(newRequest);
                 break;
             }

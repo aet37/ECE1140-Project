@@ -25,7 +25,7 @@ void CTCRequestManager::HandleRequest(const Common::Request& rRequest, Common::R
 {
     switch (rRequest.GetRequestCode())
     {
-        case Common::RequestCode::CTC_DISPATCH_TRAIN:
+        case Common::RequestCode::CTC_GUI_DISPATCH_TRAIN:
         {
             // Add the request to the queue
             CTC::serviceQueue.Push(rRequest);
