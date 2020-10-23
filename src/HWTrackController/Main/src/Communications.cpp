@@ -9,7 +9,8 @@
 // C++ PROJECT INCLUDES
 #include "../include/Communications.hpp" // Header for class
 #include "../include/UserProgram.hpp" // For UserProgram
-#include "../include/Logger.hpp"
+#include "../include/TagDatabase.hpp" // For TagDatabase
+#include "../include/ArduinoLogger.hpp"
 
 namespace Communications
 {
@@ -36,8 +37,8 @@ static RequestCode ParseCode(const String& rMsg)
 
     switch (code)
     {
-        case static_cast<int>(RequestCode::GET_SWITCH_POSITION):
-        case static_cast<int>(RequestCode::SET_SWITCH_POSITION):
+        case static_cast<int>(RequestCode::HWTRACK_GET_TAG_VALUE):
+        case static_cast<int>(RequestCode::HWTRACK_SET_TAG_VALUE):
             return static_cast<RequestCode>(code);
         default:
             return RequestCode::INVALID;
@@ -79,10 +80,10 @@ static void SendResponse(ResponseCode respCode, const char* pData = "")
 /**
  * @brief Gets a specified tag's value and sends a response
 */
-static void GetTagValue(const String& rData, UserProgram* pProgram)
+static void GetTagValue(const String& rData)
 {
     bool tagValue;
-    if (pProgram->GetTagValue(rData, tagValue))
+    if (TagDatabase::GetTagValue(rData, tagValue))
     {
         SendResponse(ResponseCode::SUCCESS, tagValue ? "1" : "0");
     }
@@ -95,7 +96,7 @@ static void GetTagValue(const String& rData, UserProgram* pProgram)
 /**
  * @brief Sets a specified tag's value and sends a response
 */
-static void SetTagValue(const String& rData, UserProgram* pProgram)
+static void SetTagValue(const String& rData)
 {
     // Parse the message between tag name and value
     String tagName = rData.substring(0, rData.indexOf(" "));
@@ -103,7 +104,7 @@ static void SetTagValue(const String& rData, UserProgram* pProgram)
     digitalWrite(LED_BUILTIN, value ? HIGH : LOW);
 
     // Set the tags value and send the response
-    bool ret = pProgram->SetTag(tagName, value);
+    bool ret = TagDatabase::SetTag(tagName, value);
     SendResponse(static_cast<ResponseCode>(!ret));
 }
 
@@ -125,11 +126,11 @@ void CommsTask(void* pProgram)
         case RequestCode::INVALID:
             SendResponse(ResponseCode::ERROR);
             break;
-        case RequestCode::GET_SWITCH_POSITION:
-            GetTagValue(data, static_cast<UserProgram*>(pProgram));
+        case RequestCode::HWTRACK_GET_TAG_VALUE:
+            GetTagValue(data);
             break;
-        case RequestCode::SET_SWITCH_POSITION:
-            SetTagValue(data, static_cast<UserProgram*>(pProgram));
+        case RequestCode::HWTRACK_SET_TAG_VALUE:
+            SetTagValue(data);
             break;
         default:
             // We expect ParseCode to take care of this case

@@ -31,12 +31,30 @@ SW_Track* TrackSystem::create_new_track( int train_id,int destination,int author
 	return p_temp;
 }
 
-void update_occupancies(SW_Track& a, int occ)
+int TrackSystem::get_track_occ()
+{
+
+	// Create an object 
+	int occ = p_tracks[0]->occupancy;
+	
+	return occ;
+}
+
+int TrackSystem::get_pos()
+{
+
+	// Create an object 
+	int pos = p_tracks[0]->switch_position;
+	
+	return pos;
+}
+
+void TrackSystem::update_occupancies( int occ)
 {
 
 
 	// Set occupied member variable as true
-	a.occ_update(occ);
+	p_tracks[0]-> occupancy = occ;
 
 
 }

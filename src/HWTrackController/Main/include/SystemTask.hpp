@@ -25,10 +25,11 @@ public:
     /**
      * @brief Creates a new SystemTask object
     */
-    SystemTask(SystemTaskFunction func, uint32_t periodInMs) :
+    SystemTask(SystemTaskFunction func, void* pArgument, uint32_t periodInMs) :
         m_periodInMs(periodInMs),
         m_timeLastRunInMs(0),
-        m_taskFunction(func)
+        m_taskFunction(func),
+        m_pArgument(pArgument)
     {}
 
     /// Delete assignment constructor
@@ -38,11 +39,11 @@ public:
     SystemTask(SystemTask const&) = delete;
 
     /**
-     * 
+     * @brief Invokes the task's function, passing along the argument
     */
-    SystemTask operator()(void* pArgument)
+    void Execute()
     {
-        m_taskFunction(pArgument);
+        m_taskFunction(m_pArgument);
     }
 
     /**
@@ -70,7 +71,6 @@ public:
     }
 
 protected:
-private:
     /// Period of task
     const uint32_t m_periodInMs;
 
@@ -79,6 +79,10 @@ private:
 
     /// Function of task
     SystemTaskFunction m_taskFunction;
+
+    /// Argument to be passed when task is executed
+    void* m_pArgument;
+private:
 };
 
 #endif // SYSTEM_TASK_HPP

@@ -30,16 +30,19 @@ class TrackSystem
 		 * @return 	reference to this singleton TrackSystem Object
 		 */
 		static TrackSystem& GetInstance();
+		
 
 
 		//create a new track with inputted variables
 		SW_Track* create_new_track(int ,int , int,int );
 
 		// update the occupancy of a single track
-		void update_occupancies(SW_Track&, int );
+		void update_occupancies(int );
 
 		
+	int get_track_occ();
 
+	int get_pos();
 		
 
 		// TESTING PURPOSES

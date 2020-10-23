@@ -23,24 +23,61 @@ class RequestCode(Enum):
     Hardware Train Controller: 224 - 255
     """
     ERROR = 1
-    LOGIN = 2
+    DEBUG_TO_CTC = 2
+    DEBUG_TO_HWTRACKCTRL = 3
+    DEBUG_TO_SWTRACKCTRL = 4
+    DEBUG_TO_TRACK_MODEL = 5
+    DEBUG_TO_TRAIN_MODEL = 6
+    DEBUG_TO_HWTRAINCTRL = 7
+    DEBUG_TO_SWTRAINCTRL = 8
 
     CTC_DISPATCH_TRAIN = 32
-    CTC_SEND_OCCUPANCIES = 33
+    CTC_SEND_GUI_OCCUPANCIES = 33
+    CTC_UPDATE_AUTHORITY = 34
+    CTC_UPDATE_SPEED = 35
+    CTC_UPDATE_SIGNAL = 36
+    CTC_UPDATE_SCHEDULE = 37
+    CTC_UPDATE_AUTOMATIC_MODE = 38
+    CTC_UPDATE_SWITCH = 37
+    CTC_SEND_GUI_THROUGHPUT = 38
+    CTC_SEND_GUI_TRAIN_INFO = 39
+    CTC_SEND_GUI_TRACK_INFO = 40
+    CTC_SEND_GUI_SIGNAL_INFO = 41
+    CTC_GET_SIGNALS = 61
+    CTC_GET_TRACK_STATUS = 62
+    CTC_GET_OCCUPANCIES = 63
 
-    SET_SWITCH_POSITION = 96
-    GET_SWITCH_POSITION = 97
-    GET_HW_TRACK_CONTROLLER_REQUEST = 100
-    SEND_HW_TRACK_CONTROLLER_RESPONSE = 101
-    GET_HW_TRACK_CONTROLLER_RESPONSE = 102
-    
+    SWTRACK_GET_TRACK_SIGNAL = 64
+    SWTRACK_TRACKSIGNAL_TO_TRAINM = 65
+    SWTRACK_SWITCHPOSITION_TO_TRAINM = 66
+    SWTRACK_GET_OCCUPANCY = 67
+    SWTRACK_GET_SWITCH_POSITION = 68
+
+    HWTRACK_START_DOWNLOAD = 96
+    HWTRACK_END_DOWNLOAD = 97
+    HWTRACK_CREATE_TAG = 98
+    HWTRACK_CREATE_TASK = 99
+    HWTRACK_CREATE_ROUTINE = 100
+    HWTRACK_CREATE_RUNG = 101
+    HWTRACK_SET_TAG_VALUE = 102
+    HWTRACK_GET_TAG_VALUE = 103
+    HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST = 104
+    HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE = 105
+    HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE = 106
+
     GET_SIGNAL_TIMES = 128
     SET_SPEED_LIMIT = 129
     GET_SPEED_LIMIT = 130
 
-    GET_COMMAND_SPEED = 160
-    SET_TRAIN_LENGTH = 161
-    SEND_TRAIN_MODEL_DATA = 162
+    TRAIN_MODEL_GIVE_POWER = 160
+    TRAIN_MODEL_GET_CURRENT_SPEED = 161
+    GET_COMMAND_SPEED = 162
+    SET_TRAIN_LENGTH = 163
+    SEND_TRAIN_MODEL_DATA = 164
+
+    SEND_TRAIN_MODEL_INFO = 192
+    GET_INFO_FROM_TM = 193
+    SW_TRAIN_CONTROLLER_GET_CURRENT_SPEED = 194
 
 
 class ResponseCode(Enum):
@@ -58,7 +95,10 @@ class ResponseCode(Enum):
     SUCCESS = 0
     ERROR = 1
 
-def send_message(request_code, data=""):
+    HWTRACK_SET_TAG_VALUE = 102
+    HWTRACK_GET_TAG_VALUE = 103
+
+def send_message(request_code, data="", ignore_exceptions=(ConnectionRefusedError)):
     """Constructs and sends a message to the server
 
     :param RequestCode request_code: Code representing what the request is for
@@ -74,13 +114,16 @@ def send_message(request_code, data=""):
             sock.connect((HOST, PORT))
             sock.sendall(request)
             data = sock.recv(1024)
-    except ConnectionRefusedError:
+    except ignore_exceptions:
         # Show up as an error
         data = b'1'
 
     # Remove byte stuff and split along first space
     splits = repr(data)[2:-1].split(" ", 1)
-    response_code = int(splits[0])
+    try:
+        response_code = int(splits[0])
+    except ValueError:
+        response_code = ResponseCode.ERROR
 
     # If there's additional response data, capture it
     if len(splits) > 1:

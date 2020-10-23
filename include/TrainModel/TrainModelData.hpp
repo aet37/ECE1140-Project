@@ -8,27 +8,13 @@
 // SYSTEM INCLUDES
 // (none)
 
+// C++ PROJECT INCLUDES
+#include "Logger.hpp" // For LOG macros
+
 namespace TrainModel
 {
-int trainlength;
-int speedLimit;
-int power;
-void setTrainLength(int len)
-{
-    trainlength = len;
-}
-int getTrainLength()
-{
-    return trainlength;
-}
-void setPower(int pow)
-{
-    power = pow;
-}
-int getPower()
-{
-    return power;
-}
+
+extern int currentSpeed;
 
 } // namespace TrainModel
 
