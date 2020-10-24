@@ -3,6 +3,7 @@
 import sys
 import pytest
 sys.path.insert(1, '../../../../src/SWTrackController/Compiler')
+print(sys.path)
 from parse import Parser
 from lexer import Lexer
 

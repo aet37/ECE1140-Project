@@ -79,6 +79,8 @@ jobs:
         pushd tests/RequestTests
         pytest --setup-show
         popd
+        pwd
         pushd tests/UnitTests/SWTrackController/Compiler
-        pytest --setup-show
+        pwd
+        pytest --setup-show -s
         popd
