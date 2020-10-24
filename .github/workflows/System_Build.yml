@@ -82,5 +82,6 @@ jobs:
         pwd
         pushd tests/UnitTests/SWTrackController/Compiler
         pwd
+        ls ../../../../src/SWTrackController/Compiler
         pytest --setup-show -s
         popd
