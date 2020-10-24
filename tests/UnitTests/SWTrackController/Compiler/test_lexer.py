@@ -94,7 +94,7 @@ def test_get_token_success():
     assert TokenType.EOF == token.type
     assert "" == token.text
 
-def test_get_token_failure():
+def test_get_token_failure_1():
     """Tests the get_token method
 
     PRECONDITIONS: Lexer made with input "TASK<PERIOD=10.> myTask # This is my task"
@@ -114,6 +114,30 @@ def test_get_token_failure():
         lex.get_token()
     assert SystemExit == pytest_wrapped_e.type
     assert "Lexing error : Illegal character in number" == pytest_wrapped_e.value.code
+
+def test_get_token_failure_2():
+    """Tests the get_token method
+
+    PRECONDITIONS: Lexer made with input "TASK<PERIOD=10.50> my_Task # This is my task"
+    EXECUTION: lex.get_token() repeatedly
+    POSTCONDITIONS: sys.exit is called
+
+    """
+    test_input = "TASK<PERIOD=10.50> my_Task # This is my task"
+    lex = Lexer(test_input)
+
+    lex.get_token()
+    lex.get_token()
+    lex.get_token()
+    lex.get_token()
+    lex.get_token()
+    lex.get_token()
+    lex.get_token()
+
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        lex.get_token()
+    assert SystemExit == pytest_wrapped_e.type
+    assert "Lexing error : Unknown token: _" == pytest_wrapped_e.value.code
 
 
 if __name__ == "__main__":
