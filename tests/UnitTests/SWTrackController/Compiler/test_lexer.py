@@ -3,7 +3,7 @@
 import sys
 import pytest
 sys.path.insert(1, '../../../../src/SWTrackController/Compiler')
-from Lexer import Lexer, TokenType
+from lexer import Lexer, TokenType
 
 # pylint: disable=misplaced-comparison-constant
 def test_next_character():
