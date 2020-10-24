@@ -1,9 +1,11 @@
 """Unit test for the Lexer class"""
 
 import sys
+import pytest
 sys.path.insert(1, '../../../../src/SWTrackController/Compiler')
-from Lexer import Lexer
+from Lexer import Lexer, TokenType
 
+# pylint: disable=misplaced-comparison-constant
 def test_next_character():
     """Tests the next_character method
 
@@ -34,16 +36,84 @@ def test_next_character():
 def test_peek():
     """Tests the peek method
 
-    PRECONDITIONS: Lexer made input "test input"
+    PRECONDITIONS: Lexer made with input "test input"
     EXECUTION: lex.peek()
     POSTCONDITIONS: lex.peek returns 'e'
                     lex.current_character remains 't'
-    
+
     """
     test_input = "test input"
     lex = Lexer(test_input)
     assert test_input[1] == lex.peek()
     assert test_input[0] == lex.current_character
+
+def test_get_token_success():
+    """Tests the get_token method
+
+    PRECONDITIONS: Lexer made with input "TASK<PERIOD=10.50> myTask # This is my task"
+    EXECUTION: lex.get_token() repeatedly
+    POSTCONDITIONS: get_token() returns the correct token
+
+    """
+    test_input = "TASK<PERIOD=10.50> myTask # This is my task"
+    lex = Lexer(test_input)
+
+    token = lex.get_token()
+    assert TokenType.TASK == token.type
+    assert "TASK" == token.text
+
+    token = lex.get_token()
+    assert TokenType.OPEN_ANGLE == token.type
+    assert "<" == token.text
+
+    token = lex.get_token()
+    assert TokenType.PERIOD == token.type
+    assert "PERIOD" == token.text
+
+    token = lex.get_token()
+    assert TokenType.EQ == token.type
+    assert "=" == token.text
+
+    token = lex.get_token()
+    assert TokenType.NUMBER == token.type
+    assert "10.50" == token.text
+
+    token = lex.get_token()
+    assert TokenType.CLOSE_ANGLE == token.type
+    assert ">" == token.text
+
+    token = lex.get_token()
+    assert TokenType.IDENTIFIER == token.type
+    assert "myTask" == token.text
+
+    token = lex.get_token()
+    assert TokenType.NEWLINE == token.type
+    assert "\n" == token.text
+
+    token = lex.get_token()
+    assert TokenType.EOF == token.type
+    assert "" == token.text
+
+def test_get_token_failure():
+    """Tests the get_token method
+
+    PRECONDITIONS: Lexer made with input "TASK<PERIOD=10.> myTask # This is my task"
+    EXECUTION: lex.get_token() repeatedly
+    POSTCONDITIONS: sys.exit is called
+
+    """
+    test_input = "TASK<PERIOD=10.> myTask # This is my task"
+    lex = Lexer(test_input)
+
+    lex.get_token()
+    lex.get_token()
+    lex.get_token()
+    lex.get_token()
+
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        lex.get_token()
+    assert SystemExit == pytest_wrapped_e.type
+    assert "Lexing error : Illegal character in number" == pytest_wrapped_e.value.code
 
 
 if __name__ == "__main__":
