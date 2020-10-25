@@ -15,12 +15,15 @@
 #include "HWTrackControllerRequestManager.hpp" // For HWTrackController::HWTrackControllerRequestManager
 #include "CTCRequestManager.hpp"    // For CTC::CTCRequestManager
 #include "TrainModelRequestManager.hpp" // For TrainModel::TrainModelRequestManager
+//#include "SWTrackControllerRequestManager.hpp"
+#include "TrackModelRequestManager.hpp" // For TrackModel::TrackModelRequestManager
 
 static Debug::DebugRequestManager debugRequestManager;
 static HWTrackController::HWTrackControllerRequestManager hwTrackControllerRequestManager;
 static CTC::CTCRequestManager ctcRequestManager;
 static TrainModel::TrainModelRequestManager trainModelRequestManager;
-
+static TrackModel::TrackModelRequestManager trackModelRequestManager;
+//static SWTrackController::SWTrackControllerRequestManager swTrackControllerRequestManager;
 namespace Common
 {
 
@@ -39,7 +42,7 @@ RequestManagerIface* RequestManagerRepository::GetRequestManager(RequestCode req
         case RequestCode::DEBUG_TO_SWTRAINCTRL:
             pRequestManager = &debugRequestManager;
             break;
-    	case RequestCode::CTC_DISPATCH_TRAIN:
+    	case RequestCode::CTC_GUI_DISPATCH_TRAIN:
     	case RequestCode::CTC_SEND_GUI_OCCUPANCIES:
 			pRequestManager = &ctcRequestManager;
     		break;
@@ -51,14 +54,19 @@ RequestManagerIface* RequestManagerRepository::GetRequestManager(RequestCode req
             pRequestManager = &hwTrackControllerRequestManager;
             break;
 
-        case RequestCode::TRAIN_MODEL_GET_CURRENT_SPEED:
+        case RequestCode::TRAIN_MODEL_DISPATCH_TRAIN:
             pRequestManager = &trainModelRequestManager;
             break;
+
+        case RequestCode::TRACK_MODEL_DISPATCH_TRAIN:
+            pRequestManager = &trackModelRequestManager;
+            break;
+            
         default:
             break;
     }
 
-    ASSERT(pRequestManager != nullptr, "requestCode %d not handled", requestCode);
+    ASSERT(pRequestManager != nullptr, "No request manager found for code %d", requestCode);
 
     return pRequestManager;
 }
