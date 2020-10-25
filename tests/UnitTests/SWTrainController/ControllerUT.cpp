@@ -25,7 +25,7 @@ TEST_CASE( "Test Controller default constructor", "[Controller::Controller()]" )
 TEST_CASE( "Test Initialized constructor", "[Controller::Controller(int, int, int, int)]")
 {
     // Create new controller with initialized command speed, current speed, speed limit, and authority
-    Controller testObj(3,4,5,6);
+    Controller testObj(3,4,6);
     // Set Kp and calculate power
     testObj.setKp(3);
     testObj.calculatePower();
@@ -40,7 +40,7 @@ TEST_CASE( "Test Initialized constructor", "[Controller::Controller(int, int, in
 TEST_CASE( "Test setKi and calculatePower", "[Controller::setKi(int), Controller::calculatePower()]")
 {
     // Create new controller
-    Controller testObj(3,4,5,6);
+    Controller testObj(3,4,6);
 
     // Set Kp and Ki
     testObj.setKp(3);
@@ -102,25 +102,25 @@ TEST_CASE( "Test setCurrentSpeed(int) and getCurrentSpeed()", "[Controller::setC
 }
 
 /*
- * Test setSpeedLimit and getSpeedLimit
+ * Test setSetpointSpeed and getSetpointSpeed
  */
-TEST_CASE( "Test setSpeedLimit(int) and getSpeedLimit()", "[Controller::setSpeedLimit(int), Controller::getSpeedLimit()]")
+TEST_CASE( "Test setSetpointSpeed(int) and getSetpointSpeed()", "[Controller::setSetpointSpeed(int), Controller::getSetpointSpeed()]")
 {
     // Create new Controller
     Controller testObj;
     
-    // Test default value of speed limit
-    REQUIRE(testObj.getSpeedLimit() == 0);
+    // Test default value of setpoint speed
+    REQUIRE(testObj.getSetpointSpeed() == 0);
 
-    // Set new value for speed limit
-    testObj.setSpeedLimit(5);
+    // Set new value for setpoint speed
+    testObj.setSetpointSpeed(5);
 
-    // Test new value of speed limit
-    REQUIRE(testObj.getSpeedLimit() == 5);
+    // Test new value of setpoint speed
+    REQUIRE(testObj.getSetpointSpeed() == 5);
 
     // Test with double value
-    testObj.setSpeedLimit(3.6);
-    REQUIRE(testObj.getSpeedLimit() == 3);
+    testObj.setSetpointSpeed(3.6);
+    REQUIRE(testObj.getSetpointSpeed() == 3);
 }
 
 /*
@@ -206,16 +206,18 @@ TEST_CASE( "Test toggleAds", "[Controller::toggleAds()]")
 }
 
 /*
- * Test air conditioning toggle
+ * Test setCabinTemp and getCabinTemp
  */
-TEST_CASE( "Test toggleAirConditioning", "[Controller::toggleAirConditioning()]")
+TEST_CASE( "Test setCabinTemp and getCabinTemp", "[Controller::setCabinTemp(int), Controller::getCabinTemp()]")
 {
     // Create new controller
     Controller testObj;
-    // Turn air conditioning on
-    REQUIRE(testObj.toggleAirConditioning() == 1);
-    // Turn air conditioning off
-    REQUIRE(testObj.toggleAirConditioning() == 0);
-    // Turn air conditioning on one more time
-    REQUIRE(testObj.toggleAirConditioning() == 1);
+    // Set temperature inside cabin
+    testObj.setCabinTemp(72);
+    // Test get method
+    REQUIRE(testObj.getCabinTemp() == 72);
+    // Set another temperature
+    testObj.setCabinTemp(68);
+    // Get new temperature
+    REQUIRE(testObj.getCabinTemp() == 68);
 }

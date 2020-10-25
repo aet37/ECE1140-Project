@@ -13,7 +13,7 @@ Controller::Controller()
     // Initialize vital variables
     command_speed = 0;
     current_speed = 0;
-    speed_limit = 0;
+    setpoint_speed = 0;
     power_command = 0;
     authority = 0;
     mode = 0;
@@ -34,14 +34,13 @@ Controller::Controller()
  * @brief initializes data coming from train model
  * @param com_sp = command speed
  * @param curr_sp = current speed
- * @param sp_lim = speed limit
  * @param auth = authority
  */
-Controller::Controller(int com_sp, int curr_sp, int sp_lim, int auth)
+Controller::Controller(int com_sp, int curr_sp, int auth)
 {
     command_speed = com_sp;
     current_speed = curr_sp;
-    speed_limit = sp_lim;
+    setpoint_speed = 0;
     power_command = 0;
     authority = auth;
     mode = 0;
@@ -99,12 +98,12 @@ void Controller::setCurrentSpeed(int curr_sp)
 }
 
 /**
- * @brief Setter function for speed limit
- * @param sp_lim == speed limit
+ * @brief Setter function for setpoint speed
+ * @param setp_sp == setpoint speed
  */
-void Controller::setSpeedLimit(int sp_lim)
+void Controller::setSetpointSpeed(int setp_sp)
 {
-    speed_limit = sp_lim;
+    setpoint_speed = setp_sp;
 }
 
 /**
@@ -135,12 +134,12 @@ int Controller::getCurrentSpeed()
 }
 
 /**
- * @brief Getter function for speed limit
- * @return speed limit
+ * @brief Getter function for setpoint speed
+ * @return setpoint speed
  */
-int Controller::getSpeedLimit()
+int Controller::getSetpointSpeed()
 {
-    return speed_limit;
+    return setpoint_speed;
 }
 
 /**
@@ -204,9 +203,9 @@ void Controller::calculatePower(int T)
 /**
  * @brief ensures train does not exceed speed limit
  * @brief if train is in automatic mode, speed is set to command speed
- * @param input_speed = speed train driver inputs if train is in manual mode
+ * @brief if train is in manual mode, speed is set to setpoint speed
  */
-void Controller::regulateSpeed(int input_speed)
+void Controller::regulateSpeed()
 {
     //
 }
@@ -279,7 +278,7 @@ bool Controller::toggleAds()
  * @brief sets temperature of train cabin
  * @param temp = temperature cabin is set to
  */
-void setCabinTemp(int temp)
+void Controller::setCabinTemp(int temp)
 {
     NVO.temperature = temp;
 }
@@ -288,7 +287,7 @@ void setCabinTemp(int temp)
  * @brief gets temperature of train cabin
  * @return returns temperature of cabin
  */
-int getCabinTemp()
+int Controller::getCabinTemp()
 {
     return NVO.temperature;
 }

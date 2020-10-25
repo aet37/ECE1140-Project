@@ -11,10 +11,10 @@
 /*
  * Test creation of new singleton controller
  */
-TEST_CASE( "Test ControlSystem createNewController", "[ControlSystem::createNewController(int, int, int, int)]" )
+TEST_CASE( "Test ControlSystem createNewController", "[ControlSystem::createNewController(int, int, int)]" )
 {
-    ControlSystem testSystem(1,2,3,4);
-	Controller* p_testPtr = testSystem.createNewController(3,4,5,6);
+    ControlSystem testSystem(1,2,4);
+	Controller* p_testPtr = testSystem.createNewController(3,4,6);
 	
 	// Use getControllerInstance method to test creation
 	REQUIRE(p_testPtr == testSystem.getControllerInstance(1));
@@ -26,8 +26,8 @@ TEST_CASE( "Test ControlSystem createNewController", "[ControlSystem::createNewC
 TEST_CASE( "Test ControlSystem getControllerInstance", "[ControlSystem::getControllerInstance(int)]")
 {
     // Create two controllers
-    ControlSystem testSystem(3,4,5,6);
-    testSystem.createNewController(1,2,7,8);
+    ControlSystem testSystem(3,4,6);
+    testSystem.createNewController(1,2,8);
     Controller* p_testPtr = testSystem.getControllerInstance(0);
     Controller* p_testPtr2 = testSystem.getControllerInstance(1);
 

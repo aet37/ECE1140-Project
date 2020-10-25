@@ -15,7 +15,7 @@ class Controller
         // Safety critical information
         int command_speed;
         int current_speed;
-        int speed_limit;
+        int setpoint_speed;
         int power_command;
         int authority;
         bool mode;
@@ -50,10 +50,9 @@ class Controller
          * @brief initializes data coming from train model
          * @param com_sp = command speed
          * @param curr_sp = current speed
-         * @param sp_lim = speed limit
          * @param auth = authority
          */
-        Controller(int com_sp, int curr_sp, int sp_lim, int auth);
+        Controller(int com_sp, int curr_sp, int auth);
 
         ///////////////////////////////////////////////////////////////
         // SETTERS AND GETTERS
@@ -84,10 +83,10 @@ class Controller
         void setCurrentSpeed(int curr_sp);
 
         /**
-         * @brief Setter function for speed limit
-         * @param sp_lim == speed limit
+         * @brief Setter function for setpoint speed
+         * @param setp_sp == setpoint speed
          */
-        void setSpeedLimit(int sp_lim);
+        void setSetpointSpeed(int setp_sp);
 
         /**
          * @brief Setter function for authority
@@ -108,10 +107,10 @@ class Controller
         int getCurrentSpeed();
 
         /**
-         * @brief Getter function for speed limit
-         * @return speed limit
+         * @brief Getter function for setpoint speed
+         * @return setpoint speed
          */
-        int getSpeedLimit();
+        int getSetpointSpeed();
 
         /**
          * @brief Getter function for authority
@@ -141,9 +140,9 @@ class Controller
         /**
          * @brief ensures train does not exceed speed limit
          * @brief if train is in automatic mode, speed is set to command speed
-         * @param input_speed = speed train driver inputs if train is in manual mode
+         * @brief if train is in manual mode, speed is set to setpoint speed
          */
-        void regulateSpeed(int input_speed);
+        void regulateSpeed();
 
         /**
          * @brief safety critical aspect to stop train immediately
