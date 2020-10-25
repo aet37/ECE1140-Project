@@ -11,6 +11,7 @@
 #define TRACKMODEL_TRACKMODELDEF_H
 
 #include <vector>
+#include <string>
 
 
 /**
