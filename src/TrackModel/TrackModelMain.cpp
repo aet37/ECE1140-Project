@@ -26,7 +26,7 @@ void moduleMain()
 
         switch(req.GetRequestCode())
         {
-            case Common::RequestCode::GET_POSITION_FROM_TRAINM: 
+           /* case Common::RequestCode::GET_POSITION_FROM_TRAINM: 
             {
                 uint32_t position = std::stoi(req.GetData());
 
@@ -38,13 +38,13 @@ void moduleMain()
                 // Hardcoding to 75 units for now
                 //req.SetData("75");
                 break;
-            }
-            case Common::RequestCode::SEND_TRACK_OCCUPANCY_TO_SW_TRACK_C:
-            {
+            }*/
+            //case Common::RequestCode::SEND_TRACK_OCCUPANCY_TO_SW_TRACK_C:
+            //{
                 
-                break;
+            //    break;
 
-            }
+            //}
             default:
                 ASSERT(false, "Unexpected request code %d", static_cast<uint16_t>(req.GetRequestCode()));
 
