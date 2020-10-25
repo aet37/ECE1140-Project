@@ -15,13 +15,13 @@
 #include "HWTrackControllerRequestManager.hpp" // For HWTrackController::HWTrackControllerRequestManager
 #include "CTCRequestManager.hpp"    // For CTC::CTCRequestManager
 #include "TrainModelRequestManager.hpp" // For TrainModel::TrainModelRequestManager
-#include "SWTrackControllerRequestManager.hpp"
+//#include "SWTrackControllerRequestManager.hpp"
 
 static Debug::DebugRequestManager debugRequestManager;
 static HWTrackController::HWTrackControllerRequestManager hwTrackControllerRequestManager;
 static CTC::CTCRequestManager ctcRequestManager;
 static TrainModel::TrainModelRequestManager trainModelRequestManager;
-static SWTrackController::SWTrackControllerRequestManager swTrackControllerRequestManager;
+//static SWTrackController::SWTrackControllerRequestManager swTrackControllerRequestManager;
 
 namespace Common
 {
