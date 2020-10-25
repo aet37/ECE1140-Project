@@ -32,7 +32,7 @@ RequestManagerIface* RequestManagerRepository::GetRequestManager(RequestCode req
 
     switch (requestCode)
     {
-    	        case RequestCode::DEBUG_TO_CTC:
+    	case RequestCode::DEBUG_TO_CTC:
         case RequestCode::DEBUG_TO_HWTRACKCTRL:
         case RequestCode::DEBUG_TO_SWTRACKCTRL:
         case RequestCode::DEBUG_TO_TRACK_MODEL:
