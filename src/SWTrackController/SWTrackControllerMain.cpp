@@ -35,17 +35,12 @@ void moduleMain()
             case Common::RequestCode::SWTRACK_DISPATCH_TRAIN:
             {
 
-
-                std::string a =req.GetData().substr();
-
-                std::cout<<"SW Track Controller receieved "<<a;
-                reqSend.SetRequestCode(Common::RequestCode::TRACK_MODEL_DISPATCH_TRAIN);
-                reqSend.SetData("");
-
-                reqSend.AppendData(a);
-                reqSend.AppendData("t");
-                std::cout<<"SW Track Controller will send "<<a<<"t to Track Model";
-                TrackModel::serviceQueue.Push(reqSend);
+                uint32_t theInt = req.ParseData<uint32_t>(0);
+                std::string theIntString = std::to_string(theInt);
+                Common::Request newRequest(Common::RequestCode::TRACK_MODEL_DISPATCH_TRAIN, theIntString);
+                TrackModel::serviceQueue.Push(newRequest);
+                LOG_TRACK_MODEL("Track model dispatch train %s", theIntString.c_str());
+                break;
  
 
                // LOG_SW_TRACK_CONTROLLER("From ConnectionHandler.cpp (CTC_DISPATCH_TRAIN) : Sent Track C. Train %d to block %d",
