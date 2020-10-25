@@ -7,13 +7,14 @@
  *
  * @date 10.17.2020
 */
+#ifndef TRACK_INFO_HPP
+#define TRACK_INFO_HPP
 
 #include <vector>       // For list of trains, tracks, signals
 #include "TrackModelDef.hpp"     // For Train, Track, Signal objects
 #include "Logger.hpp"      // For Logging (debugging)
 
-#ifndef CTC_TRAIN_SYSTEM_H
-#define CTC_TRAIN_SYSTEM_H
+
 
 /**
  * @class TrackInfo
@@ -28,8 +29,7 @@ class TrackInfo
 		 */
 		TrackInfo()
 		{
-			ReadInTrackLayout();
-			LOG_CTC("From TrackInfo::TrackInfo() : TrackInfo Class Created");
+			LOG_TRACK_MODEL("From TrackInfo::TrackInfo() : TrackInfo Class Created");
 		}
 
 		/// List of Trains
@@ -67,26 +67,7 @@ class TrackInfo
 		*/
 		void AddTrackLayout(std::string line, /*std::vector<Station> stations, std::vector<Switch> switches,*/ int totalBlocks, std::vector<Block> blockList);
 
-		/**
-		* @brief Get the Array of track pointers
-		 *
-		* @param none
-		*
-		* @return std::vector<Track*>
-		*
-		*/
-		std::vector<Track*> GetTrackArr();
-
-		/**
-		* @brief Get the Array of train pointers
-		*
-		* @param none
-		*
-		* @return vector<Train*>
-		*
-		*/
-		std::vector<Train*> GetTrainArr();
 
 };
 
-#endif //CTC_TRAIN_SYSTEM_H
+#endif // TRACK_INFO_HPP
