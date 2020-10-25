@@ -8,6 +8,9 @@
 // C++ PROJECT INCLUDES
 #include "TrackModelMain.hpp" // Header for functions
 #include "Logger.hpp" // For LOG macros
+#include "Assert.hpp"
+#include "SWTrackControllerMain.hpp"
+#include "TrainModelMain.hpp"
 
 namespace TrackModel
 {
@@ -17,6 +20,51 @@ Common::ServiceQueue<Common::Request> serviceQueue;
 void moduleMain()
 {
     LOG_TRACK_MODEL("Thread starting...");
+
+    while (true)
+    {
+        Common::Request req = serviceQueue.Pop();
+
+        switch(req.GetRequestCode())
+        {
+           /* case Common::RequestCode::GET_POSITION_FROM_TRAINM: 
+            {
+                uint32_t position = std::stoi(req.GetData());
+
+                std::string occupancy_send = std::to_string(position);
+                
+                Common::Request newRequest(Common::RequestCode::SWTRACK_GET_OCCUPANCY, occupancy_send);
+                SWTrackController::serviceQueue.Push(newRequest);
+                // Recieve position in ??? units from Train Model
+                // Hardcoding to 75 units for now
+                //req.SetData("75");
+                break;
+            }*/
+            //case Common::RequestCode::SEND_TRACK_OCCUPANCY_TO_SW_TRACK_C:
+            //{
+                
+            //    break;
+
+            //}
+            case Common::RequestCode::TRACK_MODEL_DISPATCH_TRAIN:
+            {
+                uint32_t theInt = req.ParseData<uint32_t>(0);
+                std::string theIntString = std::to_string(theInt);
+                Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_DISPATCH_TRAIN, theIntString);
+                TrainModel::serviceQueue.Push(newRequest);
+                LOG_TRACK_MODEL("Track model dispatch train %s", theIntString.c_str());
+                break;
+            }
+            default:
+                ASSERT(false, "Unexpected request code %d", static_cast<uint16_t>(req.GetRequestCode()));
+
+        }
+
+
+    }
+
+
+
 }
 
 } // namespace TrackModel
