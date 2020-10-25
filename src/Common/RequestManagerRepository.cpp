@@ -41,22 +41,31 @@ RequestManagerIface* RequestManagerRepository::GetRequestManager(RequestCode req
         case RequestCode::DEBUG_TO_SWTRAINCTRL:
             pRequestManager = &debugRequestManager;
             break;
-    	case RequestCode::CTC_DISPATCH_TRAIN:
+    	case RequestCode::CTC_GUI_DISPATCH_TRAIN:
     	case RequestCode::CTC_SEND_GUI_OCCUPANCIES:
 			pRequestManager = &ctcRequestManager;
     		break;
-        case RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST:
-        case RequestCode::SEND_HW_TRACK_CONTROLLER_RESPONSE:
-        case RequestCode::GET_HW_TRACK_CONTROLLER_RESPONSE:
+        case RequestCode::HWTRACK_GET_TAG_VALUE:
+        case RequestCode::HWTRACK_SET_TAG_VALUE:
+        case RequestCode::HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST:
+        case RequestCode::HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE:
+        case RequestCode::HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE:
             pRequestManager = &hwTrackControllerRequestManager;
             break;
-        case RequestCode::SWTRACK_GET_TRACK_SIGNAL:
-        case RequestCode::SWTRACK_TRACKSIGNAL_TO_TRAINM:
-        case RequestCode::SWTRACK_SWITCHPOSITION_TO_TRAINM:
-        case RequestCode::SWTRACK_GET_OCCUPANCY:
+        case RequestCode:: SWTRACK_DISPATCH_TRAIN:
+        case RequestCode:: SWTRACK_UPDATE_AUTHORITY:
+        case RequestCode:: SWTRACK_SET_TRACK_SIGNAL:
+        case RequestCode:: SWTRACK_UPDATE_COMMAND_SPEED:
+        case RequestCode:: SWTRACK_SET_TRACK_STATUS:
+        case RequestCode:: SWTRACK_SET_SWITCH_POSITION:
+        case RequestCode:: SWTRACK_SET_TRACK_FAILURE:
+        case RequestCode:: SWTRACK_SET_TRACK_OCCUPANCY:
+        case RequestCode:: SWTRACK_SET_CROSSING:
+        case RequestCode:: SWTRACK_SET_TRACK_HEATER:  
             pRequestManager = &swTrackControllerRequestManager;
             break;
-        case RequestCode::TRAIN_MODEL_GET_CURRENT_SPEED:
+
+        case RequestCode::TRAIN_MODEL_DISPATCH_TRAIN:
             pRequestManager = &trainModelRequestManager;
             break;
         default:

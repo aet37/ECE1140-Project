@@ -167,9 +167,9 @@ void ConnectionHandler::HandleRequest(Common::Request& rReq)
     //         resp.SetData("6");
     //         break;
     //     }
-    //     case Common::RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST:
-    //     case Common::RequestCode::SEND_HW_TRACK_CONTROLLER_RESPONSE:
-    //     case Common::RequestCode::GET_HW_TRACK_CONTROLLER_RESPONSE:
+    //     case Common::RequestCode::HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST:
+    //     case Common::RequestCode::HWTRACK_SEND_HW_TRACK_CONTROLLER_REQUEST:
+    //     case Common::RequestCode::HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE:
 
     //     {
     //         HWTrackController::HWTrackControllerRequestManager rm;
