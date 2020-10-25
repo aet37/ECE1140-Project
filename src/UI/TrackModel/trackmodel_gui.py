@@ -5,15 +5,18 @@ import sys
 from PyQt5.QtCore import QTimer
 sys.path.insert(1, 'src/UI')
 from server_functions import *
+import pyexcel
+import pyexcel_io
+import json
 
 
 class Ui(QtWidgets.QMainWindow):
     def __init__(self):
         super(Ui, self).__init__()
         distance = 0
-        self.track1_info_timer = QTimer()
-        self.track1_info_timer.timeout.connect(self.update_times)
-        uic.loadUi('src/TrackModel/Map_Page.ui', self)
+        # self.track1_info_timer = QTimer()
+        # self.track1_info_timer.timeout.connect(self.update_times)
+        uic.loadUi('src/UI/TrackModel/Map_Page.ui', self)
         self.initUI()
         self.stacked_widget.currentChanged.connect(self.set_button_state)
         self.stacked_widget.setCurrentIndex(0)
@@ -52,7 +55,7 @@ class Ui(QtWidgets.QMainWindow):
         self.speed_limit_1 = self.findChild(QtWidgets.QLabel, 'speed_limit_1')
 
         self.logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button') # Find the button
-        self.logout_button.clicked.connect(self.logout)
+        self.logout_button.clicked.connect(self.readInData)
 
         self.logout_button1 = self.findChild(QtWidgets.QPushButton, 'logout_button1') # Find the button
         self.logout_button1.clicked.connect(self.logout)
@@ -412,42 +415,159 @@ class Ui(QtWidgets.QMainWindow):
             self.heater_button_15.setStyleSheet("background-color : rgb(255,0,0)")
     
     def update_times(self):
+        # TODO get position string from Train Model in ??? UNITS
+        # position_string = send_message(RequestCode.GET_POSITION_FROM_TRAINM)
+
+        # convert position string to an int
+        # int position = std::stoi(position_string)
+
+        
+
+
+        send_message(RequestCode.GET_POSITION_FROM_TRAINM)
+
+
         #responsecode, speed = send_message(RequestCode.GET)
         #responsecode, block = send_message(RequestCode.GET_SIGNAL_TIMES)
         #if responsecode == ResponseCode.SUCCESS:
             #block = times.split(" ")
-        self.signal_1.setText('Currently on\nblock:\n NA')
-        self.signal_2.setText('Currently on\nblock:\n NA')
-        self.signal_3.setText('Currently on\nblock:\n NA')
-        self.signal_4.setText('Currently on\nblock:\n NA')
-        self.signal_5.setText('Currently on\nblock:\n NA')
-        self.signal_6.setText('Currently on\nblock:\n NA')
-        self.signal_7.setText('Currently on\nblock:\n NA')
-        self.signal_8.setText('Currently on\nblock:\n NA')
-        self.signal_9.setText('Currently on\nblock:\n NA')
-        self.signal_10.setText('Currently on\nblock:\n NA')
-        self.signal_11.setText('Currently on\nblock:\n NA')
-        self.signal_12.setText('Currently on\nblock:\n NA')
-        self.signal_13.setText('Currently on\nblock:\n NA')
-        self.signal_14.setText('Currently on\nblock:\n NA')
-        self.signal_15.setText('Currently on\nblock:\n NA')
+        # self.signal_1.setText('Currently on\nblock:\n NA')
+        # self.signal_2.setText('Currently on\nblock:\n NA')
+        # self.signal_3.setText('Currently on\nblock:\n NA')
+        # self.signal_4.setText('Currently on\nblock:\n NA')
+        # self.signal_5.setText('Currently on\nblock:\n NA')
+        # self.signal_6.setText('Currently on\nblock:\n NA')
+        # self.signal_7.setText('Currently on\nblock:\n NA')
+        # self.signal_8.setText('Currently on\nblock:\n NA')
+        # self.signal_9.setText('Currently on\nblock:\n NA')
+        # self.signal_10.setText('Currently on\nblock:\n NA')
+        # self.signal_11.setText('Currently on\nblock:\n NA')
+        # self.signal_12.setText('Currently on\nblock:\n NA')
+        # self.signal_13.setText('Currently on\nblock:\n NA')
+        # self.signal_14.setText('Currently on\nblock:\n NA')
+        # self.signal_15.setText('Currently on\nblock:\n NA')
         #else:
             #print(responsecode)
-        responsecode, switch = send_message(RequestCode.GET_SWITCH_POSITION)
-        if responsecode == ResponseCode.SUCCESS:
-            switch = switch.split(" ")
-            self.switch_5.setText('Switch flipped to:\n\n'+switch[0])
-        else:
-            self.stopAllTimers()
-            print('The server is not running')
+        # responsecode, switch = send_message(RequestCode.GET_SWITCH_POSITION)
+        # if responsecode == ResponseCode.SUCCESS:
+        #     switch = switch.split(" ")
+        #     self.switch_5.setText('Switch flipped to:\n\n'+switch[0])
+        # else:
+        #     self.stopAllTimers()
+        #     print('The server is not running')
 
-        send_message(RequestCode.SET_SPEED_LIMIT, self.speed_limit_1.text()[46:48])
+        # send_message(RequestCode.SET_SPEED_LIMIT, self.speed_limit_1.text()[46:48])
 
-        responsecode, speed = send_message(RequestCode.GET_SPEED_LIMIT)
-        if responsecode == ResponseCode.SUCCESS:
-            print(speed)
+        # responsecode, speed = send_message(RequestCode.GET_SPEED_LIMIT)
+        # if responsecode == ResponseCode.SUCCESS:
+        #     print(speed)
+        # else:
+        #     print('fail')
+    def readInData(self):
+        dialog = QtWidgets.QFileDialog(self)
+        fileInfo = dialog.getOpenFileName(self)
+        
+        testXlsx = fileInfo[0].split('.')
+        if (testXlsx[1] != 'xlsx'):
+            print('File type must be .xlsx, your file was of type: .'+testXlsx[1])
         else:
-            print('fail')
+            #print(fileInfo[0])
+            records = pyexcel.get_sheet(file_name=fileInfo[0])
+            records.name_columns_by_row(0)
+            #print (records.number_of_rows())
+            # print(records.content)
+            trackInfo = {}
+            stationList = []
+            switchList = []
+            trackInfo['Track'] = ''
+            trackInfo['Total Blocks'] = records.number_of_rows()
+            trackInfo['Stations'] = stationList
+            trackInfo['Switches'] = switchList
+            trackInfo['Block List'] = ''
+            blockList = []
+            # stations = 0;
+            for x in range(records.number_of_rows()):
+                destinationSwitchList = ''
+                blockStation = ''
+                # print('%s Line | Section %c | Block Number %d | Block Length (m) %d | Block Grade (%%) %d | Speed Limit (Km/Hr) %d | Stations %s | Switches %s | Elevation (m) %d | Cumulative Elevation (m) %d' % (records.column['Line'][x], records.column['Section'][x], records.column['Block Number'][x], records.column['Block Length (m)'][x], records.column['Block Grade (%)'][x], records.column['Speed Limit (Km/Hr)'][x], records.column['Stations'][x], records.column['Switches'][x], records.column['Elevation (m)'][x], records.column['Cumulative Elevation (m)'][x]))
+                # line = records.column['Line'][x]
+                blockNumber = records.column['Block Number'][x]
+                
+                # Set line name
+                line = records.column['Line'][x]
+                trackInfo['Track'] = line
+
+
+                # Get station lists
+                if (records.column['Stations'][x] != ""):
+                    #stations = stations + 1
+                    stationSplit = records.column['Stations'][x].split(' ', 1) # now have station name
+                    stationList.append({'blockNumber':blockNumber, 'station':stationSplit[1]})
+                    blockStation = stationSplit[1]
+                    trackInfo['Stations'] = stationList
+                    
+                    # Get switch lists
+                if (records.column['Switches'][x] != ""):
+                    cutString = records.column['Switches'][x].replace('SWITCH (', '').replace(' ', '').replace(')', '')
+                    testList = cutString.split('-')
+                    if (int(testList[0]) == blockNumber | int(testList[0:1] == blockNumber) | int(testList[0:2] == blockNumber)):
+                        splitString = cutString.split(';')
+                        destinationSwitchList = []
+                        for y in range(len(splitString)):
+                            destinationSwitchList.append(int(splitString[y].replace(str(blockNumber)+'-', '')))
+                        switchList.append({'switchBase':blockNumber, 'switchDestinations':destinationSwitchList})
+                        trackInfo['Switches'] = switchList
+
+
+                # set block info
+                blockLength = records.column['Block Length (m)'][x]
+                blockGrade = records.column['Block Grade (%)'][x]
+                blockSpeedLimit = records.column['Speed Limit (Km/Hr)'][x]
+                blockStation = blockStation
+                blockSwitch = destinationSwitchList
+                blockElevation = records.column['Elevation (m)'][x]
+                blockCumulativeElevation = records.column['Cumulative Elevation (m)'][x]
+
+                blockList.append({'blockNumber':blockNumber, 'blockLength':blockLength, 'blockGrade':blockGrade, 'blockSpeedLimit':blockSpeedLimit, 'blockStation':blockStation, 'blockSwitch':blockSwitch, 'blockElevation':blockElevation, 'blockCumulativeElevation':blockCumulativeElevation})
+            trackInfo['Block List'] = blockList
+            #print(trackInfo)
+            jsonString = json.dumps(trackInfo)
+            stringLength = len(jsonString)
+            i = 0
+            stringToPrint = ''
+            print('stringLength = '+str(stringLength))
+            send_message(RequestCode.SEND_TRACK_OCCUPANCY_TO_SW_TRACK_C, str(jsonString[0:1000]))
+            # while (stringLength > 0):
+            #     if (i == 0 & (stringLength > 1000)):
+            #         print('1')
+            #         i = 1
+            #         stringToPrint = '----'+jsonString[0:1000]
+            #         stringLength = stringLength - 1000
+            #         jsonString = jsonString[1000:]
+            #         send_message(RequestCode.SET_SPEED_LIMIT, stringToPrint)
+            #         print(stringToPrint)
+            #     elif (i == 0):
+            #         print('2')
+            #         i = 1
+            #         stringToPrint = '----'+jsonString+'----'
+            #         send_message(RequestCode.SET_SPEED_LIMIT, stringToPrint)
+            #         print(stringToPrint)
+            #     elif (stringLength < 1000):
+            #         print('3')
+            #         stringToPrint = jsonString+'----'
+            #         stringLength = 0
+            #         send_message(RequestCode.SET_SPEED_LIMIT, stringToPrint)
+            #         print(stringToPrint)
+            #     else:
+            #         print('4')
+            #         stringToPrint = jsonString[0:1000]
+            #         stringLength = stringLength - 1000
+            #         jsonString = jsonString[1000:]
+            #         send_message(RequestCode.SET_SPEED_LIMIT, stringToPrint)
+            #         print(stringToPrint)
+                    
+
+
 
     def trackInfo1(self):
         self.stopAllTimers()
