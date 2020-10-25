@@ -14,7 +14,7 @@
 #include "include/Rung.hpp" // For Rung
 #include "include/Instruction.hpp" // For Instruction
 #include "include/TagDatabase.hpp" // For TagDatabase::AddTag
-#include "include/Logger.hpp" // For LOG
+#include "include/ArduinoLogger.hpp" // For LOG
 
 static uint64_t currentTime;
 

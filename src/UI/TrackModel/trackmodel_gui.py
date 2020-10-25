@@ -421,8 +421,6 @@ class Ui(QtWidgets.QMainWindow):
         # convert position string to an int
         # int position = std::stoi(position_string)
 
-        
-
 
         send_message(RequestCode.GET_POSITION_FROM_TRAINM)
 
