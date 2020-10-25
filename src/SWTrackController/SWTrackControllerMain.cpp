@@ -38,13 +38,15 @@ void moduleMain()
 
                 std::string a =req.GetData().substr();
 
-                std::cout<<"SW Track Controller receieved "<<a<< " from CTC and will send to Track Model";
+                std::cout<<"SW Track Controller receieved "<<a;
                 reqSend.SetRequestCode(Common::RequestCode::TRACK_MODEL_DISPATCH_TRAIN);
                 reqSend.SetData("");
 
                 reqSend.AppendData(a);
+                reqSend.AppendData("t");
+                std::cout<<"SW Track Controller will send "<<a<<"t to Track Model";
                 TrackModel::serviceQueue.Push(reqSend);
-
+ 
 
                // LOG_SW_TRACK_CONTROLLER("From ConnectionHandler.cpp (CTC_DISPATCH_TRAIN) : Sent Track C. Train %d to block %d",
 			     //       pto_send->train_id, pto_send->destination_block);
