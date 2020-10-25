@@ -25,11 +25,6 @@ void moduleMain()
 
         switch (receivedRequest.GetRequestCode())
         {
-            case Common::RequestCode::SWTRACK_GET_TRACK_SIGNAL:
-            {
-                
-                break;
-            }
             default:
                 ASSERT(false, "Unexpected request received %d", static_cast<uint16_t>(receivedRequest.GetRequestCode()));
                 break;

@@ -8,6 +8,7 @@ set(SOURCES
     HWTrackControllerMain.cpp
     HWTrackControllerRequestManager.cpp
 )
+set(CMAKE_CXX_STANDARD 17)
 
 add_library(HWTrackController STATIC ${SOURCES})
 target_link_libraries(HWTrackController debug_lib)

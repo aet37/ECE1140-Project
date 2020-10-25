@@ -9,7 +9,7 @@
 
 // C++ PROJECT INCLUDES
 #include "../include/Routine.hpp" // Header for class
-#include "../include/Logger.hpp" // For LOG
+#include "../include/ArduinoLogger.hpp" // For LOG
 #include "../include/Rung.hpp" // For Rung
 
 void Routine::Run()

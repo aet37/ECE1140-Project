@@ -8,6 +8,7 @@ set(SOURCES
     SWTrackControllerMain.cpp
     TrackContoller.cpp
 )
+set(CMAKE_CXX_STANDARD 17)
 
 add_library(SWTrackController STATIC ${SOURCES})
 target_link_libraries(SWTrackController debug_lib)

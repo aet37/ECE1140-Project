@@ -9,7 +9,7 @@
 
 // C++ PROJECT INCLUDES
 #include "../include/Rung.hpp" // Header for class
-#include "../include/Logger.hpp" // For LOG
+#include "../include/ArduinoLogger.hpp" // For LOG
 #include "../include/Instruction.hpp" // For Instruction
 
 void Rung::AddInstruction(Instruction* pInst)

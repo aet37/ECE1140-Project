@@ -22,8 +22,8 @@ def main():
     chan.get_pty()
     chan.invoke_shell()
     chan.send('cd CI/ECE1140-Project; git fetch; git checkout ' + args.branch_name +
-              '; mkdir build -p; cd build; cmake ..; make\n')
-    time.sleep(15)
+              '; git pull; mkdir build -p; cd build; cmake ..; make\n')
+    time.sleep(25)
 
 
 if __name__ == "__main__":
