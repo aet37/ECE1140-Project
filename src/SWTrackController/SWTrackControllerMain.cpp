@@ -38,6 +38,7 @@ void moduleMain()
 
                 std::string a =req.GetData().substr();
 
+                std::cout<<"SW Track Controller receieved "<<a<< " from CTC and will send to Track Model";
                 reqSend.SetRequestCode(Common::RequestCode::TRACK_MODEL_DISPATCH_TRAIN);
                 reqSend.SetData("");
 
