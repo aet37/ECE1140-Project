@@ -15,11 +15,13 @@
 #include "HWTrackControllerRequestManager.hpp" // For HWTrackController::HWTrackControllerRequestManager
 #include "CTCRequestManager.hpp"    // For CTC::CTCRequestManager
 #include "TrainModelRequestManager.hpp" // For TrainModel::TrainModelRequestManager
+#include "SWTrackControllerRequestManager.hpp" //For SWTrackController::SWTrackControllerRequestManager
 
 static Debug::DebugRequestManager debugRequestManager;
 static HWTrackController::HWTrackControllerRequestManager hwTrackControllerRequestManager;
 static CTC::CTCRequestManager ctcRequestManager;
 static TrainModel::TrainModelRequestManager trainModelRequestManager;
+static SW_TrackController::SWTrackControllerRequestManager swTrackControllerRequestManager;
 
 namespace Common
 {
@@ -48,7 +50,12 @@ RequestManagerIface* RequestManagerRepository::GetRequestManager(RequestCode req
         case RequestCode::GET_HW_TRACK_CONTROLLER_RESPONSE:
             pRequestManager = &hwTrackControllerRequestManager;
             break;
-
+        case RequestCode::SWTRACK_GET_TRACK_SIGNAL:
+        case RequestCode::SWTRACK_TRACKSIGNAL_TO_TRAINM:
+        case RequestCode::SWTRACK_SWITCHPOSITION_TO_TRAINM:
+        case RequestCode::SWTRACK_GET_OCCUPANCY:
+            pRequestManager = &swTrackControllerRequestManager;
+            break;
         case RequestCode::TRAIN_MODEL_GET_CURRENT_SPEED:
             pRequestManager = &trainModelRequestManager;
             break;
