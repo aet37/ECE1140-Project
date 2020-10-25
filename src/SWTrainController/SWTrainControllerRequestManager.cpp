@@ -24,7 +24,7 @@ void SWTrainControllerRequestManager::HandleRequest(const Common::Request& rRequ
 {
     switch (rRequest.GetRequestCode())
     {
-        case Common::RequestCode::SEND_TRAIN_MODEL_INFO:
+        case Common::RequestCode::SWTRAIN_DISPATCH_TRAIN:
         {
             // Add the request to the queue
             AddRequest(rRequest);
