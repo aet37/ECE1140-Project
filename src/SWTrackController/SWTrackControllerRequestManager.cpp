@@ -15,7 +15,37 @@ namespace SW_TrackController
     {
         switch(rRequest.GetRequestCode())
         {
-            case Common::RequestCode::
+            case Common::RequestCode:: SWTRACK_DISPATCH_TRAIN:
+            {
+                SWTrackController::serviceQueue.Push(rRequest);
+                rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+                break;
+
+
+
+
+
+            }
+
+            default:
+            std::cerr << "Invalid command " << static_cast<uint16_t>(rRequest.GetRequestCode())
+                      << " received" << std::endl;
+            rResponse.SetData("INVALID COMMAND");
+            return;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         }
     }
 }
