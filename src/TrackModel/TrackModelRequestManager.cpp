@@ -24,7 +24,7 @@ void TrackModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
 {
     switch (rRequest.GetRequestCode())
     {
-        case Common::RequestCode::GET_POSITION_FROM_TRAINM:
+        /*case Common::RequestCode::GET_POSITION_FROM_TRAINM:
         {
             // Add the request to the queue
             TrackModel::serviceQueue.Push(rRequest);
@@ -36,7 +36,7 @@ void TrackModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
 			TrackModel::serviceQueue.Push(rRequest);
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
-		}
+		}*/
         /*case Common::RequestCode::CTC_SEND_GUI_OCCUPANCIES:
         {
         	// Temporary for Iteration 2
@@ -72,6 +72,12 @@ void TrackModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
 			LOG_CTC("From ConnectionHandler.cpp : Occupancies for each track sent");
             break;
         }*/
+		case Common::RequestCode::TRACK_MODEL_DISPATCH_TRAIN:
+		{
+			TrackModel::serviceQueue.Push(rRequest);
+			rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+			break;
+		}
         default:
             std::cerr << "Invalid command " << static_cast<uint16_t>(rRequest.GetRequestCode())
                       << " received" << std::endl;

@@ -10,4 +10,4 @@ set(SOURCES
 set(CMAKE_CXX_STANDARD 17)
 
 add_library(TrackModel STATIC ${SOURCES})
-target_link_libraries(TrackModel debug_lib)
+target_link_libraries(TrackModel debug_lib TrainModel)

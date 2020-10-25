@@ -45,6 +45,10 @@ void moduleMain()
             //    break;
 
             //}
+            case Common::RequestCode::TRACK_MODEL_DISPATCH_TRAIN:
+            {
+                break;
+            }
             default:
                 ASSERT(false, "Unexpected request code %d", static_cast<uint16_t>(req.GetRequestCode()));
 
