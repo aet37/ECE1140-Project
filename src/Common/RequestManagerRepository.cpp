@@ -56,7 +56,19 @@ RequestManagerIface* RequestManagerRepository::GetRequestManager(RequestCode req
         case RequestCode::TRAIN_MODEL_DISPATCH_TRAIN:
             pRequestManager = &trainModelRequestManager;
             break;
-        // case RequestCode:: PUT REQUEST CODES HERE FOR HW TRAIN
+        case RequestCode::HWTRAIN_PULL_EBRAKE:
+        case RequestCode::HWTRAIN_SET_SETPOINT_SPEED:
+        case RequestCode::HWTRAIN_PRESS_SERVICE_BRAKE:
+        case RequestCode::HWTRAIN_TOGGLE_DAMN_DOORS:
+        case RequestCode::HWTRAIN_TOGGLE_CABIN_LIGHTS:
+        case RequestCode::HWTRAIN_SET_TEMPERATURE:
+        case RequestCode::HWTRAIN_ANNOUNCE_STATIONS:
+        case RequestCode::HWTRAIN_DISPLAY_ADS:
+        case RequestCode::HWTRAIN_GET_HW_TRAIN_CONTROLLER_REQUEST:
+        case RequestCode::HWTRAIN_SEND_HW_TRAIN_CONTROLLER_RESPONSE:
+        case RequestCode::HWTRAIN_GET_HW_TRAIN_CONTROLLER_RESPONSE:
+            pRequestManager = &hwTrainControllerRequestManager;
+            break;
         default:
             break;
     }

@@ -15,7 +15,56 @@ void HWTrainRequestManager::HandleRequest(const Common::Request& rRequest, Commo
 {
     switch (rRequest.GetRequestCode())
     {
-        case Common::RequestCode:: /* INPUT REQUEST CODES HERE IN THIS FORMAT */:
+        case Common::RequestCode::HWTRAIN_PULL_EBRAKE:
+        {
+            // Add the request to the queue
+            AddRequest(rRequest);
+            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+            break;
+        }
+        case Common::RequestCode::HWTRAIN_SET_SETPOINT_SPEED:
+        {
+            // Add the request to the queue
+            AddRequest(rRequest);
+            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+            break;
+        }
+        case Common::RequestCode::HWTRAIN_PRESS_SERVICE_BRAKE:
+        {
+            // Add the request to the queue
+            AddRequest(rRequest);
+            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+            break;
+        }
+        case Common::RequestCode::HWTRAIN_TOGGLE_DAMN_DOORS:
+        {
+            // Add the request to the queue
+            AddRequest(rRequest);
+            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+            break;
+        }
+        case Common::RequestCode::HWTRAIN_TOGGLE_CABIN_LIGHTS:
+        {
+            // Add the request to the queue
+            AddRequest(rRequest);
+            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+            break;
+        }
+        case Common::RequestCode::HWTRAIN_SET_TEMPERATURE:
+        {
+            // Add the request to the queue
+            AddRequest(rRequest);
+            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+            break;
+        }
+        case Common::RequestCode::HWTRAIN_ANNOUNCE_STATIONS:
+        {
+            // Add the request to the queue
+            AddRequest(rRequest);
+            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+            break;
+        }
+        case Common::RequestCode::HWTRAIN_DISPLAY_ADS:
         {
             // Add the request to the queue
             AddRequest(rRequest);
@@ -70,7 +119,7 @@ void HWTrainRequestManager::HandleRequest(const Common::Request& rRequest, Commo
     }
 }
 
-void HWTrainControllerRequestManager::AddRequest(const Common::Request& rReq)
+void HWTrainRequestManager::AddRequest(const Common::Request& rReq)
 {
     // Use heap memory so it can stay in the queue
     Common::Request* pNewRequest = new Common::Request();
@@ -78,7 +127,7 @@ void HWTrainControllerRequestManager::AddRequest(const Common::Request& rReq)
     m_requestQueue.Push(pNewRequest);
 }
 
-Common::Request* HWTrainControllerRequestManager::GetNextRequest()
+Common::Request* HWTrainRequestManager::GetNextRequest()
 {
     Common::Request* pNextRequest = nullptr;
     if (m_requestQueue.IsEmpty() != true)
@@ -88,7 +137,7 @@ Common::Request* HWTrainControllerRequestManager::GetNextRequest()
     return pNextRequest;
 }
 
-void HWTrainControllerRequestManager::AddResponse(const Common::Response& rResp)
+void HWTrainRequestManager::AddResponse(const Common::Response& rResp)
 {
     // Use heap memory so it can stay in the queue
     Common::Response* pNewResponse = new Common::Response();
@@ -96,7 +145,7 @@ void HWTrainControllerRequestManager::AddResponse(const Common::Response& rResp)
     m_responseQueue.Push(pNewResponse);
 }
 
-Common::Response* HWTrainControllerRequestManager::GetNextResponse()
+Common::Response* HWTrainRequestManager::GetNextResponse()
 {
     Common::Response* pNextResponse = nullptr;
     if (m_responseQueue.IsEmpty() != true)
