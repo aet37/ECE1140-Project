@@ -15,13 +15,19 @@
 #include "HWTrackControllerRequestManager.hpp" // For HWTrackController::HWTrackControllerRequestManager
 #include "CTCRequestManager.hpp"    // For CTC::CTCRequestManager
 #include "TrainModelRequestManager.hpp" // For TrainModel::TrainModelRequestManager
+
 #include "SWTrackControllerRequestManager.hpp" //For SWTrackController::SWTrackControllerRequestManager
+
+
+#include "TrackModelRequestManager.hpp" // For TrackModel::TrackModelRequestManager
+
 
 static Debug::DebugRequestManager debugRequestManager;
 static HWTrackController::HWTrackControllerRequestManager hwTrackControllerRequestManager;
 static CTC::CTCRequestManager ctcRequestManager;
 static TrainModel::TrainModelRequestManager trainModelRequestManager;
 static SW_TrackController::SWTrackControllerRequestManager swTrackControllerRequestManager;
+static TrackModel::TrackModelRequestManager trackModelRequestManager;
 
 namespace Common
 {
@@ -68,11 +74,16 @@ RequestManagerIface* RequestManagerRepository::GetRequestManager(RequestCode req
         case RequestCode::TRAIN_MODEL_DISPATCH_TRAIN:
             pRequestManager = &trainModelRequestManager;
             break;
+
+        case RequestCode::TRACK_MODEL_DISPATCH_TRAIN:
+            pRequestManager = &trackModelRequestManager;
+            break;
+            
         default:
             break;
     }
 
-    ASSERT(pRequestManager != nullptr, "requestCode %d not handled", requestCode);
+    ASSERT(pRequestManager != nullptr, "No request manager found for code %d", requestCode);
 
     return pRequestManager;
 }

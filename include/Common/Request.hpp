@@ -46,6 +46,7 @@ enum class RequestCode : uint8_t
 
     CTC_GUI_DISPATCH_TRAIN = 32, // Used by the gui when the dispatcher dispatches a new train
     CTC_SEND_GUI_OCCUPANCIES = 33,
+
     CTC_UPDATE_AUTHORITY = 34,
     CTC_UPDATE_SPEED = 35,
     CTC_UPDATE_SIGNAL = 36,

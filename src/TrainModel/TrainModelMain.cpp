@@ -38,6 +38,15 @@ void moduleMain()
                 SWTrainController::serviceQueue.Push(newRequest);
                 break;
             }
+            case Common::RequestCode::TRAIN_MODEL_DISPATCH_TRAIN:
+            {
+                uint32_t simp_disp_train = receivedRequest.ParseData<uint32_t>(0);
+                LOG_TRAIN_MODEL("Dispatch Train in TrainModel = %d", simp_disp_train);
+                std::string simp_disp_train_send = std::to_string(simp_disp_train);
+                Common::Request newRequest(Common::RequestCode::SWTRAIN_DISPATCH_TRAIN, simp_disp_train_send);
+                SWTrainController::serviceQueue.Push(newRequest);
+                break;
+            }
             default:
                 ASSERT(false, "Unexpected request code %d", static_cast<uint16_t>(receivedRequest.GetRequestCode()));
         }
