@@ -6,6 +6,8 @@ include_directories("${PROJECT_SOURCE_DIR}/include/Debug")
 # Set source files
 set(SOURCES
     TrackModelMain.cpp
+    TrackInfo.cpp
+    TrackModelRequestManager.cpp
 )
 set(CMAKE_CXX_STANDARD 17)
 
