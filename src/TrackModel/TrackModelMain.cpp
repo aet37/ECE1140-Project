@@ -10,6 +10,7 @@
 #include "Logger.hpp" // For LOG macros
 #include "Assert.hpp"
 #include "SWTrackControllerMain.hpp"
+#include "TrainModelMain.hpp"
 
 namespace TrackModel
 {
@@ -45,6 +46,15 @@ void moduleMain()
             //    break;
 
             //}
+            case Common::RequestCode::TRACK_MODEL_DISPATCH_TRAIN:
+            {
+                uint32_t theInt = req.ParseData<uint32_t>(0);
+                std::string theIntString = std::to_string(theInt);
+                Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_DISPATCH_TRAIN, theIntString);
+                TrainModel::serviceQueue.Push(newRequest);
+                LOG_TRACK_MODEL("Track model dispatch train %s", theIntString.c_str());
+                break;
+            }
             default:
                 ASSERT(false, "Unexpected request code %d", static_cast<uint16_t>(req.GetRequestCode()));
 

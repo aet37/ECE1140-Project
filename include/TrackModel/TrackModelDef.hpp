@@ -11,24 +11,10 @@
 #define TRACKMODEL_TRACKMODELDEF_H
 
 #include <vector>
+#include <string>
 
 
-/**
- * @struct Track
- *
- * @brief Structure that holds data about a single track
- *
- */
-struct Track
-{
-    std::string m_line;
-    int m_totalBlocks;
-    std::vector<Station> m_stations;
-    // instead of station vector, int vector of blocks they're on
-    std::vector<Switch> m_switches;
-    // instead of switch vector, int vector of blocks they're on
-    std::vector<Block> m_blockList;
-};
+
 
 /**
  * @struct Block
@@ -81,6 +67,24 @@ struct Switch
     int m_blockLocation;
     std::vector<int> switchToBlocks;
     // int m_switchPointingTowards
+};
+
+
+/**
+ * @struct Track
+ *
+ * @brief Structure that holds data about a single track
+ *
+ */
+struct Track
+{
+    std::string m_line;
+    int m_totalBlocks;
+    std::vector<Station> m_stations;
+    // instead of station vector, int vector of blocks they're on
+    std::vector<Switch> m_switches;
+    // instead of switch vector, int vector of blocks they're on
+    std::vector<Block> m_blockList;
 };
 
 #endif
