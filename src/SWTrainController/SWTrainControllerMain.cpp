@@ -7,6 +7,7 @@
 
 // C++ PROJECT INCLUDES
 #include "SWTrainControllerMain.hpp" // Header for functions
+#include "HWTrainControllerMain.hpp"
 #include "TrainModelMain.hpp"
 #include "Logger.hpp" // For LOG macros
 #include "Assert.hpp"
@@ -31,7 +32,7 @@ void moduleMain()
                 uint32_t theInt = req.ParseData<uint32_t>(0);
                 std::string theIntString = std::to_string(theInt);
                 Common::Request newRequest(Common::RequestCode::HWTRAIN_DISPATCH_TRAIN, theIntString);
-                SWTrainController::serviceQueue.Push(newRequest);
+                HWTrainController::serviceQueue.Push(newRequest);
                 LOG_SW_TRAIN_CONTROLLER("SWTrainController dispatch train %s", theIntString.c_str());
                 break;
             }
