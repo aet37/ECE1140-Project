@@ -3,13 +3,15 @@
 import sys
 import logging
 from lexer import TokenType
+from emitter import Emitter
 
 logger = logging.getLogger(__name__)
 
 class Parser:
     """Class used to parse source code"""
-    def __init__(self, lexer):
+    def __init__(self, lexer, emitter):
         self.lexer = lexer
+        self.emitter = emitter
 
         self.symbols = set()
 
