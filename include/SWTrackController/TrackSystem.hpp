@@ -4,9 +4,9 @@
 //
 
 #include <vector>
-#include "SWTrackDef.h"
-#ifndef SW_TRACK_SYSTEM_H
-#define SW_TRACK_SYSTEM_H
+#include "SWTrackDef.hpp"
+#ifndef SW_TRACK_SYSTEM_HPP
+#define SW_TRACK_SYSTEM_HPP
 
 class TrackSystem
 {
@@ -49,4 +49,4 @@ class TrackSystem
 		void printout();
 };
 
-#endif // SW_TRACK_SYSTEM_H
+#endif // SW_TRACK_SYSTEM_HPP
