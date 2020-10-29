@@ -13,7 +13,8 @@ def test_my_test():
     """
     code = "TAG myTag = FALSE\n" \
            "XIO myTag\n" \
-           "TASK<PERIOD=1000> myTask\n"
+           "TASK<PERIOD=1000> myTask\n" \
+           "ENDTASK\n"
 
     lex = Lexer(code)
     emit = Emitter('MyOutput')

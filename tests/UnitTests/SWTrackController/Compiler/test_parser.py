@@ -94,6 +94,7 @@ def test_statement_routine_success(mock_emitter):
     """
     source_code = "ROUTINE Main"
     par = Parser(Lexer(source_code), mock_emitter)
+    par.stack.append('TASK')
 
     par.statement()
 
@@ -107,6 +108,7 @@ def test_statement_routine_failure(mock_emitter):
     """
     source_code = "ROUTINE "
     par = Parser(Lexer(source_code), mock_emitter)
+    par.stack.append('TASK')
 
     with pytest.raises(SystemExit) as pytest_wrapped_e:
         par.statement()
@@ -123,6 +125,7 @@ def test_statement_rung_1(mock_emitter):
     """
     source_code = "RUNG"
     par = Parser(Lexer(source_code), mock_emitter)
+    par.stack.append('ROUTINE')
 
     par.statement()
 
@@ -136,6 +139,7 @@ def test_statement_rung_2(mock_emitter):
     """
     source_code = "RUNG myRung"
     par = Parser(Lexer(source_code), mock_emitter)
+    par.stack.append('ROUTINE')
 
     par.statement()
 
@@ -165,6 +169,10 @@ def test_statement_end(mock_emitter):
     """
     source_code = "ENDRUNG\nENDROUTINE\nENDTASK"
     par = Parser(Lexer(source_code), mock_emitter)
+    par.stack.append('TASK')
+    par.stack.append('ROUTINE')
+    par.stack.append('RUNG')
+    par.main_flag = True
 
     par.program()
 
