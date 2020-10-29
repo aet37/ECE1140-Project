@@ -156,6 +156,8 @@ def test_statement_instructions(mock_emitter):
 
     # Add tag to the symbols to avoid errors
     par.tags.add('tag')
+    par.events.add('event')
+    par.routines.add('routine')
 
     par.program()
 
