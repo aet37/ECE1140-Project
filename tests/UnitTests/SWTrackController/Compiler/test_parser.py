@@ -10,10 +10,8 @@ from lexer import Lexer
 from emitter import Emitter
 
 @pytest.fixture(scope='function')
-def mock_emitter(monkeypatch):
-    monkeypatch.setattr('emitter.Emitter', MagicMock(Emitter))
-    return Emitter
-
+def mock_emitter():
+    return MagicMock(Emitter)
 
 # pylint: disable=misplaced-comparison-constant
 def test_statement_tag_1(mock_emitter):
@@ -151,6 +149,9 @@ def test_statement_instructions(mock_emitter):
     """
     source_code = "XIC tag\nXIO tag\nOTE tag\nOTL tag\nOTU tag\nJSR routine\nEMIT event\nRET"
     par = Parser(Lexer(source_code), mock_emitter)
+
+    # Add tag to the symbols to avoid errors
+    par.tags.add('tag')
 
     par.program()
 
