@@ -98,7 +98,7 @@ class Lexer:
         elif self.current_character.isalpha():
             # Token is either a keyword or identifier, so get all the next characters
             start_position = self.current_position
-            while self.peek().isalpha():
+            while (self.peek().isalpha()) or (self.peek().isdigit()):
                 self.next_character()
 
             # Construct the substring and check it it's a keyword
