@@ -7,6 +7,7 @@ include_directories("${PROJECT_SOURCE_DIR}/include/Debug")
 set(SOURCES
     HWTrainControllerMain.cpp
 )
+set(CMAKE_CXX_STANDARD 17)
 
 add_library(HWTrainController STATIC ${SOURCES})
 target_link_libraries(HWTrainController debug_lib)

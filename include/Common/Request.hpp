@@ -1,24 +1,29 @@
 /**
  * @file Request.hpp
- * 
+ *
  * @brief Data structure to be used to request an action of a module
 */
 #ifndef REQUEST_HPP
 #define REQUEST_HPP
 
 // SYSTEM INCLUDES
+#include <algorithm>
+#include <iostream>
 #include <stdint.h>
 #include <string>
+
+// C++ PROJECT INCLUDES
+#include "Logger.hpp" // For LOG macros
 
 namespace Common
 {
 
 /**
  * @enum RequestCode
- * 
+ *
  * @brief Codes that will be used when communicating with
  * the server. Each module is assigned a range of numbers
- * 
+ *
  * @li System wide: 0 - 31
  * @li CTC: 32 - 63
  * @li Software Track Controller: 64 - 95
@@ -30,40 +35,121 @@ namespace Common
 */
 enum class RequestCode : uint8_t
 {
-    ERROR = 1,
-    LOGIN = 2,
+    ERROR = 1, // Used by the system in the case that there was an error parsing the original request
+    DEBUG_TO_CTC = 2,
+    DEBUG_TO_HWTRACKCTRL = 3,
+    DEBUG_TO_SWTRACKCTRL = 4,
+    DEBUG_TO_TRACK_MODEL = 5,
+    DEBUG_TO_TRAIN_MODEL = 6,
+    DEBUG_TO_HWTRAINCTRL = 7,
+    DEBUG_TO_SWTRAINCTRL = 8,
 
-    CTC_DISPATCH_TRAIN = 32,
+    CTC_GUI_DISPATCH_TRAIN = 32, // Used by the gui when the dispatcher dispatches a new train
     CTC_SEND_GUI_OCCUPANCIES = 33,
-	CTC_GET_OCCUPANCIES = 63,
 
-    SWTRACK_OCCUPANCY_TO_CTC = 64,
-    SWTRACK_TRACKSIGNAL_TO_TRAINM = 65,
-    SWTRACK_SWITCHPOSITION_TO_TRAINM = 66,
+    CTC_UPDATE_AUTHORITY = 34,
+    CTC_UPDATE_SPEED = 35,
+    CTC_UPDATE_SIGNAL = 36,
+    CTC_UPDATE_SCHEDULE = 37,
+    CTC_UPDATE_AUTOMATIC_MODE = 38,
+    CTC_UPDATE_SWITCH = 39, // Used by the Track model to update switch positions
+    CTC_SEND_GUI_THROUGHPUT = 40,
+    CTC_SEND_GUI_TRAIN_INFO = 41,
+    CTC_SEND_GUI_TRACK_INFO = 42,
+    CTC_SEND_GUI_SIGNAL_INFO = 43,
+    CTC_SEND_TIMER_REQUEST = 44,
+    CTC_GIVE_TICKET_SALES = 45, // Used by the track model to give the ctc ticket sales
+    CTC_TIME_TRIGGERED = 60,
+    CTC_GET_SIGNALS = 61,
+    CTC_GET_TRACK_STATUS = 62,
+    CTC_GET_OCCUPANCIES = 63,
 
-    SET_SWITCH_POSITION = 96,
-    GET_SWITCH_POSITION = 97,
-    GET_HW_TRACK_CONTROLLER_REQUEST = 100,
-    SEND_HW_TRACK_CONTROLLER_RESPONSE = 101,
-    GET_HW_TRACK_CONTROLLER_RESPONSE = 102,
+    SWTRACK_DISPATCH_TRAIN = 64, // Used by the CTC to signify that a new train has been dispatched
+    SWTRACK_UPDATE_AUTHORITY = 65, // Used by the CTC when a train's authority has been updated
+    SWTRACK_SET_TRACK_SIGNAL = 66, // Used by the CTC to set a track block's signal color
+    SWTRACK_UPDATE_COMMAND_SPEED = 67, // Used by the CTC when a train's command speed is updated
+    SWTRACK_SET_TRACK_STATUS = 68, // Used by the CTC when a block is closed/open for maintenance
+    SWTRACK_SET_SWITCH_POSITION = 69, // Used by the CTC when a track switch needs flipped
+    SWTRACK_SET_TRACK_FAILURE = 70, // Used by the track model to inform the controller that a failure has occured on a block
+    SWTRACK_SET_TRACK_OCCUPANCY = 71, // Used by the track model to inform the controller that a train is on a block
+    SWTRACK_SET_CROSSING = 72, // Used by the track model to have the controller lower/raise the crossing
+    SWTRACK_SET_TRACK_HEATER = 73, // Used by the Track model to turn on/off the track heater
 
+    HWTRACK_START_DOWNLOAD = 96, // Used by the SW Track Ctrl to signify download is starting
+    HWTRACK_END_DOWNLOAD = 97, // Used by the SW Track Ctrl to signify download has completed
+    HWTRACK_CREATE_TAG = 98, // Used by the SW Track Ctrl to create a tag in the hardware
+    HWTRACK_CREATE_TASK = 99, // Used by the SW Track Ctrl to create a task in the hardware
+    HWTRACK_CREATE_ROUTINE = 100, // Used by the SW Track Ctrl to create a routine in the hardware
+    HWTRACK_CREATE_RUNG = 101, // Used by the SW Track Ctrl to create a rung in the hardware
+    HWTRACK_SET_TAG_VALUE = 102, // Used by the SW Track Ctrl to set a tag value
+    HWTRACK_GET_TAG_VALUE = 103, // Used by the SW Track Ctrl to get a tag value
+    HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST = 104, // Used by the connector script to check if any requests exist for the hardware
+    HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE = 105, // Used by the connector script to forward the hardware's response to the server
+    HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE = 106, // Used by SW Track Ctrl to get response from the hardware
 
+    TRACK_MODEL_GUI_TRACK_LAYOUT_START = 129, // Used by the gui to signify that the track layout is starting to be sent
+    TRACK_MODEL_GUI_TRACK_LAYOUT_END = 130, // Used by the gui to signify that the full track layout has been sent
+    TRACK_MODEL_GUI_TRACK_LAYOUT_SECTION = 131, // Used by the gui when the track layout is being imported
+    TRACK_MODEL_GUI_SET_TRACK_HEATER = 132, // Used by the gui when the track heater is set
+    TRACK_MODEL_GUI_SET_FAILURE = 133, // Used by the gui when a track failure is induced
+    TRACK_MODEL_GUI_GATHER_DATA = 134, // Used periodically by the gui to update the user interface
+    TRACK_MODEL_GUI_EDIT_BLOCK_LENGTH = 135, // Used by the gui to edit block length
+    TRACK_MODEL_GIVE_POSITION = 136, // Used by the train model to give the track model the position of a train
+    TRACK_MODEL_UPDATE_COMMAND_SPEED = 137, // Used by the track controller to update the command speed of a train
+    TRACK_MODEL_UPDATE_SWITCH_POSITIONS = 138, // Used by the track controller to update a switch positions
+    TRACK_MODEL_UPDATE_AUTHORITY = 139, // Used by the track controller to update the authority of a train
+    TRACK_MODEL_DISPATCH_TRAIN = 140, // Used by the track controller to signify that a new train has been dispatched
 
-    GET_SIGNAL_TIMES = 128,
-    SET_SPEED_LIMIT = 129,
-    GET_SPEED_LIMIT = 130,
+    TRAIN_MODEL_GUI_GATHER_DATA = 160, // Used periodically by the gui to update the user interface
+    TRAIN_MODEL_DISPATCH_TRAIN = 161, // Used by the track model to signify that a new train has been dispatched
+    TRAIN_MODEL_UPDATE_AUTHORITY = 162, // Used by the track model to update a train's authority
+    TRAIN_MODEL_UPDATE_COMMAND_SPEED = 163, // Used by the track model to update a train's command speed
+    TRAIN_MODEL_SET_THE_DAMN_LIGHTS = 164, // Used by the track model to let the train model know that the train is in a tunnel
+    TRAIN_MODEL_GIVE_POWER = 165, // Used by the train controller to give the train model a value for power
+    TRAIN_MODEL_GUI_CAUSE_FAILURE = 166, // Used by the gui to cause a train failure
+    TRAIN_MODEL_GUI_SET_TRAIN_LENGTH = 167, // Used by the gui to set a train's length
+    TRAIN_MODEL_GUI_SET_TRAIN_MASS = 168, // Used by the gui to set a train's mass
+    TRAIN_MODEL_GUI_SET_TRAIN_HEIGHT = 169, // Used by the gui to set a train's height
+    TRAIN_MODEL_GUI_SET_TRAIN_WIDTH = 170, // Used by the gui to set a train's width
+    TRAIN_MODEL_GUI_SET_TRAIN_PASSENGER_COUNT = 171, // Used by the gui to set a train's passenger count
+    TRAIN_MODEL_GUI_SET_TRAIN_CREW_COUNT = 172, // Used by the gui to set a train's crew count
 
-    GET_COMMAND_SPEED = 160,
-    SET_TRAIN_LENGTH = 161,
-    SEND_TRAIN_MODEL_DATA = 162,
+    SWTRAIN_DISPATCH_TRAIN = 192, // Used by the train model to signify that a new train has been dispatched
+    SWTRAIN_UPDATE_CURRENT_SPEED = 193, // Used by the train model to update a train's current speed
+    SWTRAIN_UPDATE_COMMAND_SPEED = 194, // Used by the train model to update a train's command speed
+    SWTRAIN_UPDATE_SPEED_LIMIT = 195, // Used by the train model to update a train's speed limit
+    SWTRAIN_UPDATE_AUTHORITY = 196, // Used by the train model to update a train's authority
+    SWTRAIN_CAUSE_FAILURE = 197, // Used by the train model to cause a train's failure
+    SWTRAIN_PULL_PASSENGER_EBRAKE = 198, // Used by the train model to pull a train's passenger e-brake
+    SWTRAIN_GUI_GATHER_DATA = 199, // Used by the gui to update the user interface
+    SWTRAIN_GUI_PULL_EBRAKE = 200, // Used by the gui to pull the train's ebrake
+    SWTRAIN_GUI_SET_SETPOINT_SPEED = 201, // Used by the gui to set a train's setpoint speed
+    SWTRAIN_GUI_PRESS_SERVICE_BRAKE = 202, // Used by the gui to update use a train's service brake
+    SWTRAIN_GUI_TOGGLE_DAMN_DOORS = 203, // Used by the gui to toggle a train's door
+    SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS = 204, // Used by the gui to toggle a train's lights
+    SWTRAIN_GUI_SET_SEAN_PAUL = 205, // Used by the gui to play temperature by sean paul
+    SWTRAIN_GUI_ANNOUNCE_STATIONS = 206, // Used by the gui to announce stations
+    SWTRAIN_GUI_DISPLAY_ADS = 207, // Used by the gui to display a train's advertisements
+    SWTRAIN_GUI_RESOLVE_FAILURE = 208, // Used by the gui to resolve a train failure
+    SWTRAIN_GUI_SET_KP_KI = 209, // Used by the gui to set a train's kp/ki
 
-    SEND_TRAIN_MODEL_INFO = 192,
-    GET_INFO_FROM_TM = 193
+    HWTRAIN_PULL_EBRAKE = 224, // Used by the SW Train Ctrl to pull the train's ebrake
+    HWTRAIN_SET_SETPOINT_SPEED = 225, // Used by the SW Train Ctrl to set a train's setpoint speed
+    HWTRAIN_PRESS_SERVICE_BRAKE = 226, // Used by the SW Train Ctrl to update use a train's service brake
+    HWTRAIN_TOGGLE_DAMN_DOORS = 227, // Used by the SW Train Ctrl to toggle a train's door
+    HWTRAIN_TOGGLE_CABIN_LIGHTS = 228, // Used by the SW Train Ctrl to toggle a train's lights
+    HWTRAIN_SET_TEMPERATURE = 229, // Used by the SW Train Ctrl to play temperature by sean paul
+    HWTRAIN_ANNOUNCE_STATIONS = 230, // Used by the SW Train Ctrl to announce stations
+    HWTRAIN_DISPLAY_ADS = 231, // Used by the SW Train Ctrl to display a train's advertisements
+    HWTRAIN_GET_HW_TRAIN_CONTROLLER_REQUEST = 232, // Used by the connector script to check if any requests exist for the hardware
+    HWTRAIN_SEND_HW_TRAIN_CONTROLLER_RESPONSE = 233, // Used by the connector script to forward the hardware's response to the server
+    HWTRAIN_GET_HW_TRAIN_CONTROLLER_RESPONSE = 234, // Used by SW Train Ctrl to get response from the hardware
+    HWTRAIN_DISPATCH_TRAIN = 235 // Used by SWTrainController to signify a train has been dispatched
 };
 
 /**
  * @class Request
- * 
+ *
  * @brief Structure used to hold the request code and
  * additional data
 */
@@ -96,6 +182,55 @@ public:
     */
     void SetData(const std::string data) { m_data = data; }
 
+	/**
+	 * @brief Writes data to the data string member
+	*/
+	void AppendData(const std::string& rData)
+	{
+		if (m_data == "")
+		{
+			m_data = rData;
+		}
+		else
+		{
+			m_data += " " + rData;
+		}
+	}
+
+    /**
+     * @brief Parses a single argument within the request's data as a given type
+     *
+     * @param idx   Index of the data element you want to retrieve
+     * @return Individual data as type T
+    */
+    template<typename T>
+    T ParseData(uint32_t idx) const
+    {
+        // Check the idx first
+        size_t spaceCount = std::count( m_data.begin(), m_data.end(), ' ');
+        if (idx > spaceCount)
+        {
+            LOG_DEBUG("Index is out of bounds");
+            throw std::exception();
+        }
+
+        uint32_t startingIndex = 0;
+        for (int token = 0; token < idx; token++)
+        {
+            startingIndex = m_data.find(" ", startingIndex + 1) + 1;
+        }
+
+        uint32_t endIndex = m_data.find(' ', startingIndex);
+        if constexpr (std::is_same<T, std::string>::value)
+        {
+            return m_data.substr(startingIndex, endIndex);
+        }
+        else
+        {
+            return static_cast<T>(std::stoi(m_data.substr(startingIndex, endIndex)));
+        }
+    }
+
     /**
      * @brief Gets the data member
     */
@@ -105,6 +240,21 @@ public:
      * @brief Gets the request code member
     */
     RequestCode GetRequestCode() const { return m_reqCode; }
+
+    /**
+     * @brief Converts the object to a single string
+    */
+    std::string ToString()
+    {
+        if (m_data == "")
+        {
+            return std::to_string(static_cast<uint8_t>(m_reqCode));
+        }
+        else
+        {
+            return std::to_string(static_cast<uint8_t>(m_reqCode)) + " " + m_data;
+        }
+    }
 
 protected:
 private:

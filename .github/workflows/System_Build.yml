@@ -1,6 +1,15 @@
 name: System Build
 
-on: [push, pull_request] 
+on:
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - 'src/UI/**'
+    branches: [ master ]
+  pull_request:
+    paths-ignore:
+      - 'docs/**'
+      - 'src/UI/**'
 
 jobs:
   Build:
@@ -67,5 +76,9 @@ jobs:
 
     - name: Run tests
       run: |
-        cd tests/RequestTests
-        pytest HWTrackCtrlRequestTests.py --setup-show
+        pushd tests/RequestTests
+        pytest --setup-show
+        popd
+        pushd tests/UnitTests/SWTrackController/Compiler
+        pytest --setup-show
+        popd

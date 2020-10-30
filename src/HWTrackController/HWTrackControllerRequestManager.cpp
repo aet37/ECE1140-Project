@@ -5,39 +5,40 @@
 */
 
 // SYSTEM INCLUDES
-#include <iostream> // For std::cout
+// (None)
 
 // C++ PROJECT INCLUDES
 #include "HWTrackControllerRequestManager.hpp" // Header for class
 #include "Request.hpp" // For Request
 #include "Response.hpp" // For Response
+#include "Logger.hpp" // For LOG macros
 
 namespace HWTrackController
 {
 
 // Static members
-std::queue<Common::Request*> HWTrackControllerRequestManager::m_requestQueue = std::queue<Common::Request*>();
-std::queue<Common::Response*> HWTrackControllerRequestManager::m_responseQueue = std::queue<Common::Response*>();
+Common::ServiceQueue<Common::Request*> HWTrackControllerRequestManager::m_requestQueue;
+Common::ServiceQueue<Common::Response*> HWTrackControllerRequestManager::m_responseQueue;
 
 void HWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequest, Common::Response& rResponse)
 {
     switch (rRequest.GetRequestCode())
     {
-        case Common::RequestCode::GET_SWITCH_POSITION:
+        case Common::RequestCode::HWTRACK_GET_TAG_VALUE:
         {
             // Add the request to the queue
             AddRequest(rRequest);
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
-        case Common::RequestCode::SET_SWITCH_POSITION:
+        case Common::RequestCode::HWTRACK_SET_TAG_VALUE:
         {
             // Add the request to the queue
             AddRequest(rRequest);
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
-        case Common::RequestCode::GET_HW_TRACK_CONTROLLER_REQUEST:
+        case Common::RequestCode::HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST:
         {
             // Retrieve the next request from the request queue
             Common::Request* pNextRequest = GetNextRequest();
@@ -54,7 +55,7 @@ void HWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequ
             }
             break;
         }
-        case Common::RequestCode::SEND_HW_TRACK_CONTROLLER_RESPONSE:
+        case Common::RequestCode::HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE:
         {
             // Construct a response from the request's data and add it to the queue
             Common::Response resp(Common::ResponseCode::SUCCESS, rRequest.GetData());
@@ -62,7 +63,7 @@ void HWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequ
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
-        case Common::RequestCode::GET_HW_TRACK_CONTROLLER_RESPONSE:
+        case Common::RequestCode::HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE:
         {
             // Retrieve a response from the queue
             Common::Response* pNextResponse = GetNextResponse();
@@ -79,9 +80,8 @@ void HWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequ
             break;
         }
         default:
-            std::cerr << "Invalid command " << static_cast<uint16_t>(rRequest.GetRequestCode())
-                      << " received" << std::endl;
-            rResponse.SetData("INVALID COMMAND");
+            LOG_HW_TRACK_CONTROLLER("Invalid command %d received", static_cast<uint16_t>(rRequest.GetRequestCode()));
+            rResponse.SetResponseCode(Common::ResponseCode::ERROR);
             return;
     }
 }
@@ -91,16 +91,15 @@ void HWTrackControllerRequestManager::AddRequest(const Common::Request& rReq)
     // Use heap memory so it can stay in the queue
     Common::Request* pNewRequest = new Common::Request();
     *(pNewRequest) = rReq;
-    m_requestQueue.push(pNewRequest);
+    m_requestQueue.Push(pNewRequest);
 }
 
 Common::Request* HWTrackControllerRequestManager::GetNextRequest()
 {
     Common::Request* pNextRequest = nullptr;
-    if (m_requestQueue.empty() != true)
+    if (m_requestQueue.IsEmpty() != true)
     {
-        pNextRequest = m_requestQueue.front();
-        m_requestQueue.pop();
+        pNextRequest = m_requestQueue.Pop();
     }
     return pNextRequest;
 }
@@ -110,16 +109,15 @@ void HWTrackControllerRequestManager::AddResponse(const Common::Response& rResp)
     // Use heap memory so it can stay in the queue
     Common::Response* pNewResponse = new Common::Response();
     *(pNewResponse) = rResp;
-    m_responseQueue.push(pNewResponse);
+    m_responseQueue.Push(pNewResponse);
 }
 
 Common::Response* HWTrackControllerRequestManager::GetNextResponse()
 {
     Common::Response* pNextResponse = nullptr;
-    if (m_responseQueue.empty() != true)
+    if (m_responseQueue.IsEmpty() != true)
     {
-        pNextResponse = m_responseQueue.front();
-        m_responseQueue.pop();
+        pNextResponse = m_responseQueue.Pop();
     }
     return pNextResponse;
 }

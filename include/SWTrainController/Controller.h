@@ -15,7 +15,7 @@ class Controller
         // Safety critical information
         int command_speed;
         int current_speed;
-        int speed_limit;
+        int setpoint_speed;
         int power_command;
         int authority;
         bool mode;
@@ -25,6 +25,12 @@ class Controller
         // Train Engineer inputs
         int kp;
         int ki;
+
+        // Variables for power calculation
+        int uk;
+        int uk1;
+        int ek;
+        int ek1;
 
         // Failure cases
         bool signalPickupFailure;
@@ -44,10 +50,9 @@ class Controller
          * @brief initializes data coming from train model
          * @param com_sp = command speed
          * @param curr_sp = current speed
-         * @param sp_lim = speed limit
          * @param auth = authority
          */
-        Controller(int com_sp, int curr_sp, int sp_lim, int auth);
+        Controller(int com_sp, int curr_sp, int auth);
 
         ///////////////////////////////////////////////////////////////
         // SETTERS AND GETTERS
@@ -66,6 +71,54 @@ class Controller
         void setKi(int KI);
 
         /**
+         * @brief Setter function for command speed
+         * @param com_sp == command_speed
+         */
+        void setCommandSpeed(int com_sp);
+
+        /**
+         * @brief Setter function for current speed
+         * @param curr_sp == current_speed
+         */
+        void setCurrentSpeed(int curr_sp);
+
+        /**
+         * @brief Setter function for setpoint speed
+         * @param setp_sp == setpoint speed
+         */
+        void setSetpointSpeed(int setp_sp);
+
+        /**
+         * @brief Setter function for authority
+         * @param auth == authority
+         */
+        void setAuthority(int auth);
+
+        /**
+         * @brief Getter function for command speed
+         * @return command_speed
+         */
+        int getCommandSpeed();
+
+        /**
+         * @brief Getter function for current speed
+         * @return current_speed
+         */
+        int getCurrentSpeed();
+
+        /**
+         * @brief Getter function for setpoint speed
+         * @return setpoint speed
+         */
+        int getSetpointSpeed();
+
+        /**
+         * @brief Getter function for authority
+         * @return authority
+         */
+        int getAuthority();
+
+        /**
          * @brief Getter function for power command
          */
         int getPowerCommand();
@@ -74,21 +127,32 @@ class Controller
         // VITAL OPERATIONS
         ///////////////////////////////////////////////////////////////
         /**
-         * @brief calculates power command that will be sent to train model
+         * @brief default calculate power function for testing purposes only
          */
         void calculatePower();
 
         /**
+         * @brief calculates power command that will be sent to train model
+         * @param T = sample period of train model
+         */
+        void calculatePower(int T);
+
+        /**
          * @brief ensures train does not exceed speed limit
          * @brief if train is in automatic mode, speed is set to command speed
-         * @param input_speed = speed train driver inputs if train is in manual mode
+         * @brief if train is in manual mode, speed is set to setpoint speed
          */
-        void regulateSpeed(int input_speed);
+        void regulateSpeed();
 
         /**
          * @brief safety critical aspect to stop train immediately
          */
         void activateEmergencyBrake();
+
+        /**
+         * @brief safety critical aspect to reset emergency brake
+         */
+        void resetEmergencyBrake();
         
         /**
          * @brief allows operator to switch between manual and automatic mode
@@ -102,23 +166,29 @@ class Controller
         /**
          * @brief open/close doors
          */
-        void toggleDoors();
+        bool toggleDoors();
         /**
          * @brief turn lights on/off
          */
-        void toggleLights();
+        bool toggleLights();
         /**
          * @brief turn announcements on/off
          */
-        void announceStations();
+        bool announceStations();
         /**
          * @brief turn advertisements on/off
          */
-        void toggleAds();
+        bool toggleAds();
         /**
-         * @brief turn air-conditioning on/off
+         * @brief sets temperature of train cabin
+         * @param temp = temperature cabin is set to
          */
-        void toggleAirConditioning();
+        void setCabinTemp(int temp);
+        /**
+         * @brief gets temperature of train cabin
+         * @return returns temperature of cabin
+         */
+        int getCabinTemp();
 
 };
 #endif
