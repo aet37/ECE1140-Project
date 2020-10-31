@@ -4,6 +4,7 @@ include_directories("${PROJECT_SOURCE_DIR}/include/SWTrainController")
 # Set source files (Unit tests)
 set(SWTRAINCONTROLLER_UNITTESTS
     SWTrainControllerUT.cpp
+    ControllerUT.cpp
 )
 
 # Add executables (Suites)

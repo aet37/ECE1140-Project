@@ -76,6 +76,9 @@ jobs:
 
     - name: Run tests
       run: |
-        cd tests/RequestTests
-        pytest HWTrackCtrlRequestTests.py --setup-show
-        pytest TrainModelRequestTests.py --setup-show
+        pushd tests/RequestTests
+        pytest --setup-show
+        popd
+        pushd tests/UnitTests/SWTrackController/Compiler
+        pytest --setup-show
+        popd

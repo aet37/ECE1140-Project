@@ -34,7 +34,16 @@ void moduleMain()
                 currentSpeed = (power * 2);
                 LOG_TRAIN_MODEL("currentSpeed = %d", currentSpeed);
                 std::string currentSpeedSend = std::to_string(currentSpeed);
-                Common::Request newRequest(Common::RequestCode::SW_TRAIN_CONTROLLER_GET_CURRENT_SPEED, currentSpeedSend);
+                Common::Request newRequest(Common::RequestCode::SWTRAIN_UPDATE_CURRENT_SPEED, currentSpeedSend);
+                SWTrainController::serviceQueue.Push(newRequest);
+                break;
+            }
+            case Common::RequestCode::TRAIN_MODEL_DISPATCH_TRAIN:
+            {
+                uint32_t simp_disp_train = receivedRequest.ParseData<uint32_t>(0);
+                LOG_TRAIN_MODEL("Dispatch Train in TrainModel = %d", simp_disp_train);
+                std::string simp_disp_train_send = std::to_string(simp_disp_train);
+                Common::Request newRequest(Common::RequestCode::SWTRAIN_DISPATCH_TRAIN, simp_disp_train_send);
                 SWTrainController::serviceQueue.Push(newRequest);
                 break;
             }

@@ -22,7 +22,7 @@ void TrainModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
     LOG_TRAIN_MODEL("RequestCode = %d", static_cast<uint8_t>(rRequest.GetRequestCode()));
     switch (rRequest.GetRequestCode())
     {
-        case Common::RequestCode::TRAIN_MODEL_GET_CURRENT_SPEED:
+        case Common::RequestCode::TRAIN_MODEL_GUI_GATHER_DATA:
             // Temporarily hard code the current speed
             rResponse.SetData("10");
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);

@@ -24,6 +24,7 @@ target_link_libraries(CommonTestSuite
                       TrackModel
                       HWTrainController
                       SWTrackController
-                      SWTrainController)
+                      SWTrainController
+)
 
 add_test(NAME CommonTestSuite COMMAND CommonTestSuite)

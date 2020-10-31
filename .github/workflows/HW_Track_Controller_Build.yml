@@ -4,6 +4,7 @@ on:
   push:
     paths:
       'src/HWTrackController/**'
+    branches: [ master ]
 
 jobs:
   Build_HW_Track_Controller:
