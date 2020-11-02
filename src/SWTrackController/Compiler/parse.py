@@ -2,8 +2,8 @@
 
 import sys
 import logging
-from lexer import TokenType
-from emitter import Emitter
+from SWTrackController.Compiler.lexer import TokenType
+from SWTrackController.Compiler.emitter import Emitter
 
 logger = logging.getLogger(__name__)
 

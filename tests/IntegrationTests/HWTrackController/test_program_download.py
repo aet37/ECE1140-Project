@@ -23,6 +23,11 @@ def test_program_download():
                                      bytes(" FALSE", 'utf-8'))
     assert get_response_from_controller() == b'0'
 
+    send_request_to_controller(bytes(str(RequestCode.HWTRACK_CREATE_TAG.value), 'utf-8') +
+                                     bytes(" output1", 'utf-8') +
+                                     bytes(" FALSE", 'utf-8'))
+    assert get_response_from_controller() == b'0'
+
     # Create a periodic task
     send_request_to_controller(bytes(str(RequestCode.HWTRACK_CREATE_TASK.value), 'utf-8') +
                                      bytes(" PERIOD", 'utf-8') +
@@ -42,6 +47,10 @@ def test_program_download():
     # Add two instructions
     send_request_to_controller(bytes(str(RequestCode.HWTRACK_CREATE_INSTRUCTION.value), 'utf-8') +
                                      bytes(" XIC myTag", 'utf-8'))
+    assert get_response_from_controller() == b'0'
+
+    send_request_to_controller(bytes(str(RequestCode.HWTRACK_CREATE_INSTRUCTION.value), 'utf-8') +
+                                     bytes(" OTL output1", 'utf-8'))
     assert get_response_from_controller() == b'0'
 
     # End download

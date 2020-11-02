@@ -4,10 +4,10 @@ import sys
 from mock import MagicMock
 import pytest
 
-sys.path.insert(1, '../../../../src/SWTrackController/Compiler')
-from parse import Parser
-from lexer import Lexer
-from emitter import Emitter
+sys.path.insert(1, '../../../../src')
+from SWTrackController.Compiler.parse import Parser
+from SWTrackController.Compiler.lexer import Lexer
+from SWTrackController.Compiler.emitter import Emitter
 
 @pytest.fixture(scope='function')
 def mock_emitter():
