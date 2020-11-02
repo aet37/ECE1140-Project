@@ -29,3 +29,43 @@ TEST_CASE("Basic functionality")
     list[0] = 100;
     REQUIRE(list[0] == 100);
 }
+
+TEST_CASE("Insertion")
+{
+    List<uint32_t> list(10);
+
+    list.append(1);
+    list.append(3);
+    list.append(5);
+    list.append(7);
+
+    // Insert at the beginning
+    list.Insert(0, 0);
+
+    REQUIRE(list[0] == 0);
+    REQUIRE(list[1] == 1);
+    REQUIRE(list[2] == 3);
+    REQUIRE(list[3] == 5);
+    REQUIRE(list[4] == 7);
+
+    // Insert at the end
+    list.Insert(5, 8);
+
+    REQUIRE(list[0] == 0);
+    REQUIRE(list[1] == 1);
+    REQUIRE(list[2] == 3);
+    REQUIRE(list[3] == 5);
+    REQUIRE(list[4] == 7);
+    REQUIRE(list[5] == 8);
+
+    // Insert in the middle
+    list.Insert(4, 3);
+
+    REQUIRE(list[0] == 0);
+    REQUIRE(list[1] == 1);
+    REQUIRE(list[2] == 3);
+    REQUIRE(list[3] == 4);
+    REQUIRE(list[4] == 5);
+    REQUIRE(list[5] == 7);
+    REQUIRE(list[6] == 8);
+}
