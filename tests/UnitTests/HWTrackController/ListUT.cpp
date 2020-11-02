@@ -34,10 +34,10 @@ TEST_CASE("Insertion")
 {
     List<uint32_t> list(10);
 
-    list.append(1);
-    list.append(3);
-    list.append(5);
-    list.append(7);
+    list.Append(1);
+    list.Append(3);
+    list.Append(5);
+    list.Append(7);
 
     // Insert at the beginning
     list.Insert(0, 0);
@@ -49,7 +49,7 @@ TEST_CASE("Insertion")
     REQUIRE(list[4] == 7);
 
     // Insert at the end
-    list.Insert(5, 8);
+    list.Insert(8, 5);
 
     REQUIRE(list[0] == 0);
     REQUIRE(list[1] == 1);

@@ -88,22 +88,28 @@ public:
     */
     void Insert(T element, uint32_t index)
     {
+        assert(index <= m_length);
         // If the array is filled, resize it
         if (m_arraySize == m_length)
         {
             Resize();
         }
 
+        // If we are just appending, use that method
+        if (index == m_length)
+        {
+            Append(element);
+            return;
+        }
+
         for (int32_t i = m_length - 1; i >= 0; i--)
         {
-            if (i != index)
-            {
-                m_list[i + 1] = m_list[i];
-            }
-            else
+            m_list[i + 1] = m_list[i];
+            if (i == index)
             {
                 m_list[i] = element;
-                break;p
+                m_length++;
+                break;
             }
         }
     }
