@@ -16,7 +16,7 @@ def main():
 
     ssh_client = paramiko.SSHClient()
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh_client.connect(hostname='3.23.104.34', username='ec2-user', password='jerryseinfeld')
+    ssh_client.connect(hostname='3.19.63.101', username='ec2-user', password='jerryseinfeld')
 
     chan = ssh_client.get_transport().open_session()
     chan.get_pty()
