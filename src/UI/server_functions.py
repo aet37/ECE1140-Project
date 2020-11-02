@@ -97,8 +97,8 @@ class ResponseCode(Enum):
     SUCCESS = 0
     ERROR = 1
 
-    HWTRACK_SET_TAG_VALUE = 102
-    HWTRACK_GET_TAG_VALUE = 103
+    HWTRACK_SET_TAG_VALUE = 103
+    HWTRACK_GET_TAG_VALUE = 104
 
 def send_message(request_code, data="", ignore_exceptions=(ConnectionRefusedError)):
     """Constructs and sends a message to the server
