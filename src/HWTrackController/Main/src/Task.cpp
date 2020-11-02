@@ -19,7 +19,7 @@ void Task::Run(void* pTask)
 
 void Task::Run()
 {
-    LOG("Running task "); LOGN(m_pTaskName);
+    LOG("Running task "); LOGN(m_taskName);
 
     // Execute the main routine
     m_routineList[0]->Run();

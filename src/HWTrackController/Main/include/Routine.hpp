@@ -7,7 +7,7 @@
 #define ROUTINE_HPP
 
 // SYSTEM INCLUDES
-// (None)
+#include <Arduino.h>
 
 // C++ PROJECT INCLUDES
 #include "List.hpp" // For List
@@ -28,7 +28,7 @@ public:
      * @brief Constructs a new Routine object
     */
     Routine(const char* pRoutineName) :
-        m_pRoutineName(pRoutineName),
+        m_routineName(pRoutineName),
         m_rungList()
     {}
 
@@ -53,7 +53,7 @@ public:
 protected:
 private:
     /// Name of the routine
-    const char* m_pRoutineName;
+    const String m_routineName;
 
     /// List of rungs in the routine
     List<Rung*> m_rungList;

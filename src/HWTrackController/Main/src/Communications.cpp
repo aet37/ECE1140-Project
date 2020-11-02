@@ -191,6 +191,7 @@ static void HandleCreateTask(UserProgram* pProgram, const String& rData)
 static void HandleCreateRoutine(UserProgram* pProgram, const String& rData)
 {
     // Create the routine using the given name
+    LOGN(rData);
     Routine* pRoutine = new Routine(rData.c_str());
 
     Task* pLastCreatedTask = pProgram->GetLastCreatedTask();
@@ -227,6 +228,7 @@ static void HandleCreateRung(UserProgram* pProgram)
 */
 static void HandleCreateInstruction(UserProgram* pProgram, const String& rData)
 {
+    LOGN(rData);
     int spaceIndex = rData.indexOf(' ');
     String instType = rData.substring(0, spaceIndex);
     String arg = rData.substring(spaceIndex + 1);
@@ -316,6 +318,7 @@ static void GetTagValue(const String& rData)
 */
 static void SetTagValue(const String& rData)
 {
+    LOGN(rData);
     // Parse the message between tag name and value
     String tagName = rData.substring(0, rData.indexOf(" "));
     bool value = atoi(rData.substring(rData.indexOf(" "), rData.length()).c_str());

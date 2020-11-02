@@ -7,7 +7,7 @@
 #define TASK_HPP
 
 // SYSTEM INCLUDES
-// (None)
+#include <Arduino.h>
 
 // C++ PROJECT INCLUDES
 #include "List.hpp" // For List
@@ -38,7 +38,7 @@ public:
     */
     Task(const char* pTaskName, TaskType taskType, uint32_t periodInMs = 0) :
         SystemTask(Run, this, periodInMs),
-        m_pTaskName(pTaskName),
+        m_taskName(pTaskName),
         m_type(taskType),
         m_routineList(),
         m_pLastCreatedRoutine(nullptr)
@@ -80,7 +80,7 @@ private:
     TaskType m_type;
 
     /// Name of the task
-    const char* m_pTaskName;
+    const String m_taskName;
 
     /// List of routines belonging to this task. The first routine is the main routine
     List<Routine*> m_routineList;
