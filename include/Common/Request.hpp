@@ -81,11 +81,12 @@ enum class RequestCode : uint8_t
     HWTRACK_CREATE_TASK = 99, // Used by the SW Track Ctrl to create a task in the hardware // (string taskType, (float period | string event), string taskName)
     HWTRACK_CREATE_ROUTINE = 100, // Used by the SW Track Ctrl to create a routine in the hardware // (string routineName)
     HWTRACK_CREATE_RUNG = 101, // Used by the SW Track Ctrl to create a rung in the hardware // ((void | string rungName))
-    HWTRACK_SET_TAG_VALUE = 102, // Used by the SW Track Ctrl to set a tag value // (string tagName, bool newValue)
-    HWTRACK_GET_TAG_VALUE = 103, // Used by the SW Track Ctrl to get a tag value // (string tagName)
-    HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST = 104, // Used by the connector script to check if any requests exist for the hardware
-    HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE = 105, // Used by the connector script to forward the hardware's response to the server
-    HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE = 106, // Used by SW Track Ctrl to get response from the hardware
+    HWTRACK_CREATE_INSTRUCTION = 102, // Used by the SW Track Ctrl to create an instruction in the hardware // (instructionType argument)
+    HWTRACK_SET_TAG_VALUE = 103, // Used by the SW Track Ctrl to set a tag value // (string tagName, bool newValue)
+    HWTRACK_GET_TAG_VALUE = 104, // Used by the SW Track Ctrl to get a tag value // (string tagName)
+    HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST = 105, // Used by the connector script to check if any requests exist for the hardware
+    HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE = 106, // Used by the connector script to forward the hardware's response to the server
+    HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE = 107, // Used by SW Track Ctrl to get response from the hardware
 
     TRACK_MODEL_GUI_TRACK_LAYOUT_START = 129, // Used by the gui to signify that the track layout is starting to be sent
     TRACK_MODEL_GUI_TRACK_LAYOUT_END = 130, // Used by the gui to signify that the full track layout has been sent

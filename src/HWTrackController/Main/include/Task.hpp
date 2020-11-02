@@ -40,12 +40,13 @@ public:
         SystemTask(Run, this, periodInMs),
         m_pTaskName(pTaskName),
         m_type(taskType),
-        m_routineList()
+        m_routineList(),
+        m_pLastCreatedRoutine(nullptr)
     {}
 
     /**
      * @brief Method used by the scheduler to invoke this task
-     * 
+     *
      * @param pTask     Pointer to the task to execute
     */
     static void Run(void* pTask);
@@ -57,8 +58,16 @@ public:
 
     /**
      * @brief Adds a routine to the routine list
+     *
+     * @param pRoutine      Routine to be added
+     * @param mainRoutine   Whether this is the main routine being added
     */
-    void AddRoutine(Routine* pRoutine);
+    void AddRoutine(Routine* pRoutine, bool mainRoutine = false);
+
+    /**
+     * @brief Gets the last created routine
+    */
+    Routine* GetLastCreatedRoutine() const { return m_pLastCreatedRoutine; }
 
 protected:
 private:
@@ -70,6 +79,9 @@ private:
 
     /// List of routines belonging to this task. The first routine is the main routine
     List<Routine*> m_routineList;
+
+    /// Last created routine
+    Routine* m_pLastCreatedRoutine;
 };
 
 #endif // TASK_HPP

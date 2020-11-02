@@ -45,12 +45,17 @@ public:
         m_rungList.Append(pRung);
     }
 
+    /**
+     * @brief Gets the last rung that was created
+    */
+    Rung* GetLastCreatedRung() const { return m_rungList[m_rungList.GetLength() - 1]; }
+
 protected:
 private:
     /// Name of the routine
     const char* m_pRoutineName;
 
-    /// Pointer to the first rung in the routine
+    /// List of rungs in the routine
     List<Rung*> m_rungList;
 };
 

@@ -38,9 +38,24 @@ public:
     ~UserProgram() {}
 
     /**
+     * @brief Clears all tasks, routines, rungs, and instructions from the program
+    */
+    void ClearMemory();
+
+    /**
+     * @brief Sets the program name
+    */
+    void SetProgramName(const char* pProgramName) { m_pProgramName = pProgramName; }
+
+    /**
      * @brief Adds the given task to the task list
     */
     void AddTask(Task* pTask);
+
+    /**
+     * @brief Gets the last task in the list
+    */
+    Task* GetLastCreatedTask() const;
 
 protected:
 private:

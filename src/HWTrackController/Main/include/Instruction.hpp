@@ -21,7 +21,10 @@ enum class InstructionType
     XIO,
     OTE,
     OTL,
-    OTU
+    OTU,
+    JSR,
+    RET,
+    EMIT
 };
 
 /**

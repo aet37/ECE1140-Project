@@ -11,6 +11,9 @@
 #include "../include/UserProgram.hpp" // For UserProgram
 #include "../include/TagDatabase.hpp" // For TagDatabase
 #include "../include/Task.hpp" // For Task
+#include "../include/Routine.hpp" // For Routine
+#include "../include/Rung.hpp" // For Rung
+#include "../include/Instruction.hpp" // For Instruction
 #include "../include/ArduinoLogger.hpp" // For LOG macros
 
 namespace Communications
@@ -39,7 +42,11 @@ static RequestCode ParseCode(const String& rMsg)
     switch (code)
     {
         case static_cast<int>(RequestCode::HWTRACK_START_DOWNLOAD):
+        case static_cast<int>(RequestCode::HWTRACK_CREATE_TAG):
         case static_cast<int>(RequestCode::HWTRACK_CREATE_TASK):
+        case static_cast<int>(RequestCode::HWTRACK_CREATE_ROUTINE):
+        case static_cast<int>(RequestCode::HWTRACK_CREATE_RUNG):
+        case static_cast<int>(RequestCode::HWTRACK_CREATE_INSTRUCTION):
         case static_cast<int>(RequestCode::HWTRACK_END_DOWNLOAD):
         case static_cast<int>(RequestCode::HWTRACK_GET_TAG_VALUE):
         case static_cast<int>(RequestCode::HWTRACK_SET_TAG_VALUE):
@@ -89,8 +96,38 @@ static void SendResponse(ResponseCode respCode, const char* pData = "")
 */
 static void HandleStartDownload(UserProgram* pProgram, const String& rProgramName)
 {
-    delete pProgram;
-    pProgram = new UserProgram(rProgramName.c_str());
+    pProgram->ClearMemory();
+    pProgram->SetProgramName(rProgramName.c_str());
+    SendResponse(ResponseCode::SUCCESS);
+}
+
+/**
+ * @brief Creates a tag using the parameters provided
+ *
+ * @param rData     Name and default value of tag
+*/
+static void HandleCreateTag(const String& rData)
+{
+    int spaceIndex = rData.indexOf(' ');
+
+    String tagName = rData.substring(0, spaceIndex);
+    String defaultValue = rData.substring(spaceIndex + 1);
+
+    if (defaultValue.equals("FALSE"))
+    {
+        TagDatabase::AddTag(tagName.c_str());
+    }
+    else if (defaultValue.equals("TRUE"))
+    {
+        TagDatabase::AddTag(tagName.c_str());
+        TagDatabase::SetTag(tagName, true);
+    }
+    else
+    {
+        SendResponse(ResponseCode::ERROR);
+        return;
+    }
+
     SendResponse(ResponseCode::SUCCESS);
 }
 
@@ -144,12 +181,108 @@ static void HandleCreateTask(UserProgram* pProgram, const String& rData)
 }
 
 /**
+ * @brief Creates a routine under the most recently created task
+ *
+ * @param pProgram  Program that's being downloaded
+ * @param rData     Parameter of routine in format: (routineName)
+*/
+static void HandleCreateRoutine(UserProgram* pProgram, const String& rData)
+{
+    // Create the routine using the given name
+    Routine* pRoutine = new Routine(rData.c_str());
+
+    Task* pLastCreatedTask = pProgram->GetLastCreatedTask();
+    if (rData.equals("Main"))
+    {
+        pLastCreatedTask->AddRoutine(pRoutine, true);
+    }
+    else
+    {
+        pLastCreatedTask->AddRoutine(pRoutine, false);
+    }
+
+    SendResponse(ResponseCode::SUCCESS);
+}
+
+/**
+ * @brief Creates a rung under the most recently created routine
+ *
+ * @param pProgram  Program that's being downloaded
+*/
+static void HandleCreateRung(UserProgram* pProgram)
+{
+    Task* pTask = pProgram->GetLastCreatedTask();
+    Routine* pRoutine = pTask->GetLastCreatedRoutine();
+
+    pRoutine->AppendRung(new Rung());
+
+    SendResponse(ResponseCode::SUCCESS);
+}
+
+/**
+ *
+*/
+static void HandleCreateInstruction(UserProgram* pProgram, const String& rData)
+{
+    int spaceIndex = rData.indexOf(' ');
+    String instType = rData.substring(0, spaceIndex);
+    String arg = rData.substring(spaceIndex + 1);
+
+    Instruction* pInstruction = nullptr;
+    if (instType.equals("XIO"))
+    {
+        pInstruction = new Instruction(InstructionType::XIO, arg);
+    }
+    else if (instType.equals("XIC"))
+    {
+        pInstruction = new Instruction(InstructionType::XIC, arg);
+    }
+    else if (instType.equals("OTE"))
+    {
+        pInstruction = new Instruction(InstructionType::OTE, arg);
+    }
+    else if (instType.equals("OTL"))
+    {
+        pInstruction = new Instruction(InstructionType::OTL, arg);
+    }
+    else if (instType.equals("OTU"))
+    {
+        pInstruction = new Instruction(InstructionType::OTU, arg);
+    }
+    else if (instType.equals("JSR"))
+    {
+        pInstruction = new Instruction(InstructionType::JSR, arg);
+    }
+    else if (instType.equals("RET"))
+    {
+        pInstruction = new Instruction(InstructionType::RET, "");
+    }
+    else if (instType.equals("EMIT"))
+    {
+        pInstruction = new Instruction(InstructionType::EMIT, arg);
+    }
+    else
+    {
+        SendResponse(ResponseCode::ERROR);
+        return;
+    }
+
+    Task* pTask = pProgram->GetLastCreatedTask();
+    Routine* pRoutine = pTask->GetLastCreatedRoutine();
+    Rung* pRung = pRoutine->GetLastCreatedRung();
+
+    pRung->AddInstruction(pInstruction);
+    SendResponse(ResponseCode::SUCCESS);
+}
+
+/**
  * @brief Finishes a download by starting each periodic task
  *
  * @param pProgram      Program that has been downloaded
 */
 static void HandleEndDownload(UserProgram* pProgram)
 {
+    digitalWrite(LED_BUILTIN, LOW);
     SendResponse(ResponseCode::SUCCESS);
 }
 
@@ -209,11 +342,24 @@ void CommsTask(void* pProgram)
         case RequestCode::HWTRACK_START_DOWNLOAD:
             HandleStartDownload(pUserProgram, data);
             break;
+        case RequestCode::HWTRACK_CREATE_TAG:
+            HandleCreateTag(data);
+            break;
         case RequestCode::HWTRACK_CREATE_TASK:
             HandleCreateTask(pUserProgram, data);
             break;
+        case RequestCode::HWTRACK_CREATE_ROUTINE:
+            HandleCreateRoutine(pUserProgram, data);
+            break;
+        case RequestCode::HWTRACK_CREATE_RUNG:
+            HandleCreateRung(pUserProgram);
+            break;
+        case RequestCode::HWTRACK_CREATE_INSTRUCTION:
+            HandleCreateInstruction(pUserProgram, data);
+            break;
         case RequestCode::HWTRACK_END_DOWNLOAD:
             HandleEndDownload(pUserProgram);
+            break;
         case RequestCode::HWTRACK_GET_TAG_VALUE:
             GetTagValue(data);
             break;
