@@ -50,6 +50,11 @@ public:
     */
     void RunTasks();
 
+    /**
+     * @brief Removes all user tasks from the schedule
+    */
+    void RemoveUserTasks();
+
 protected:
 private:
     /// List of tasks

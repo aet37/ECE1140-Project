@@ -14,6 +14,7 @@
 #include "../include/Routine.hpp" // For Routine
 #include "../include/Rung.hpp" // For Rung
 #include "../include/Instruction.hpp" // For Instruction
+#include "../include/Scheduler.hpp" // For Scheduler
 #include "../include/ArduinoLogger.hpp" // For LOG macros
 
 namespace Communications
@@ -96,6 +97,7 @@ static void SendResponse(ResponseCode respCode, const char* pData = "")
 */
 static void HandleStartDownload(UserProgram* pProgram, const String& rProgramName)
 {
+    Scheduler::GetInstance().RemoveUserTasks();
     pProgram->ClearMemory();
     pProgram->SetProgramName(rProgramName.c_str());
     SendResponse(ResponseCode::SUCCESS);
@@ -220,7 +222,8 @@ static void HandleCreateRung(UserProgram* pProgram)
 }
 
 /**
- *
+ * @brief Creates an instruction under the most recent rung
+ * using the given parameters
 */
 static void HandleCreateInstruction(UserProgram* pProgram, const String& rData)
 {
@@ -282,7 +285,13 @@ static void HandleCreateInstruction(UserProgram* pProgram, const String& rData)
 */
 static void HandleEndDownload(UserProgram* pProgram)
 {
-    digitalWrite(LED_BUILTIN, LOW);
+    // Add all tasks to the schedule
+    const List<Task*>& rTasks = pProgram->GetTaskList();
+    for (int i = 0; i < rTasks.GetLength(); i++)
+    {
+        Scheduler::GetInstance().AddTask(rTasks[i]);
+    }
+
     SendResponse(ResponseCode::SUCCESS);
 }
 

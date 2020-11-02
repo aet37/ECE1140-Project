@@ -57,6 +57,11 @@ public:
     */
     Task* GetLastCreatedTask() const;
 
+    /**
+     * @brief Gets the full list of tasks
+    */
+    const List<Task*>& GetTaskList() const { return m_tasks; }
+
 protected:
 private:
     /// List of tasks included within the program

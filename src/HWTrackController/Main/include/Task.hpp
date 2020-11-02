@@ -69,6 +69,11 @@ public:
     */
     Routine* GetLastCreatedRoutine() const { return m_pLastCreatedRoutine; }
 
+    /**
+     * @brief Returns true
+    */
+    bool IsUserTask() const { return true; }
+
 protected:
 private:
     /// Type of the task
