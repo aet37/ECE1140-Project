@@ -3,10 +3,10 @@
 import sys
 import pytest
 
-sys.path.insert(1, '../../../../src/SWTrackController/Compiler')
-from lexer import Lexer
-from parse import Parser
-from emitter import Emitter
+sys.path.insert(1, '../../../../src')
+from SWTrackController.Compiler.lexer import Lexer
+from SWTrackController.Compiler.parse import Parser
+from SWTrackController.Compiler.emitter import Emitter
 
 def test_simple_program():
     """Tests the compilation of a simple program"""
