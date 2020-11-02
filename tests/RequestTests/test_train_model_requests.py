@@ -2,8 +2,8 @@
 
 import sys
 
-sys.path.insert(1, '../../src/UI')
-from server_functions import send_message, RequestCode, ResponseCode
+sys.path.insert(1, '../../src')
+from UI.server_functions import send_message, RequestCode, ResponseCode
 
 def test_get_current_speed(start_server):
     """Ensures we multiple power by two and store the current speed.

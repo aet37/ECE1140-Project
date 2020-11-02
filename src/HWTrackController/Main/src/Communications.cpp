@@ -10,7 +10,8 @@
 #include "../include/Communications.hpp" // Header for class
 #include "../include/UserProgram.hpp" // For UserProgram
 #include "../include/TagDatabase.hpp" // For TagDatabase
-#include "../include/ArduinoLogger.hpp"
+#include "../include/Task.hpp" // For Task
+#include "../include/ArduinoLogger.hpp" // For LOG macros
 
 namespace Communications
 {
@@ -37,6 +38,9 @@ static RequestCode ParseCode(const String& rMsg)
 
     switch (code)
     {
+        case static_cast<int>(RequestCode::HWTRACK_START_DOWNLOAD):
+        case static_cast<int>(RequestCode::HWTRACK_CREATE_TASK):
+        case static_cast<int>(RequestCode::HWTRACK_END_DOWNLOAD):
         case static_cast<int>(RequestCode::HWTRACK_GET_TAG_VALUE):
         case static_cast<int>(RequestCode::HWTRACK_SET_TAG_VALUE):
             return static_cast<RequestCode>(code);
@@ -75,6 +79,78 @@ static void SendResponse(ResponseCode respCode, const char* pData = "")
     Serial.print(static_cast<int>(respCode), DEC);
     Serial.print(" ");
     Serial.println(pData);
+}
+
+/**
+ * @brief Deletes the current program and starts a new one with the given name
+ *
+ * @param pProgram      Pointer to the current program
+ * @param rProgramName  Name of the new program
+*/
+static void HandleStartDownload(UserProgram* pProgram, const String& rProgramName)
+{
+    delete pProgram;
+    pProgram = new UserProgram(rProgramName.c_str());
+    SendResponse(ResponseCode::SUCCESS);
+}
+
+/**
+ * @brief Creates a task given the parameters
+ *
+ * @param pProgram      Program that's being downloaded
+ * @param rData         Parameters of the task in format: (PERIOD period | EVENT event) taskName
+*/
+static void HandleCreateTask(UserProgram* pProgram, const String& rData)
+{
+    // Pointer to the task that will be created
+    Task* pTask;
+    TaskType taskType = TaskType::PERIODIC;
+    uint32_t periodInMs = 0;
+
+    // Parse out task type and period or event
+    int firstSpaceIndex = 0;
+    int secondSpaceIndex = rData.indexOf(' ');
+    String type = rData.substring(firstSpaceIndex, secondSpaceIndex);
+
+    firstSpaceIndex = secondSpaceIndex;
+    secondSpaceIndex = rData.indexOf(' ', firstSpaceIndex + 1);
+    if (type.equals("PERIOD"))
+    {
+        String periodAsString = rData.substring(firstSpaceIndex + 1, secondSpaceIndex);
+        periodInMs = periodAsString.toInt();
+    }
+    else if (type.equals("EVENT"))
+    {
+        taskType = TaskType::EVENT_DRIVEN;
+        String eventName = rData.substring(firstSpaceIndex + 1, secondSpaceIndex);
+        // TODO: Need to do something with this
+    }
+    else
+    {
+        SendResponse(ResponseCode::ERROR);
+        return;
+    }
+
+    // Get the task name
+    String taskName = rData.substring(secondSpaceIndex + 1);
+
+    // Create task using parameters
+    pTask = new Task(taskName.c_str(), taskType, periodInMs);
+
+    // Add it to the program
+    pProgram->AddTask(pTask);
+
+    SendResponse(ResponseCode::SUCCESS);
+}
+
+/**
+ * @brief Finishes a download by starting each periodic task
+ *
+ * @param pProgram      Program that has been downloaded
+*/
+static void HandleEndDownload(UserProgram* pProgram)
+{
+    SendResponse(ResponseCode::SUCCESS);
 }
 
 /**
@@ -120,12 +196,24 @@ void CommsTask(void* pProgram)
     String msg = Serial.readStringUntil('\n');
     RequestCode code = ParseCode(msg);
     String data = ParseData(msg);
+    UserProgram* pUserProgram = static_cast<UserProgram*>(pProgram);
 
     switch (code)
     {
         case RequestCode::INVALID:
             SendResponse(ResponseCode::ERROR);
             break;
+        case RequestCode::CHECK:
+            SendResponse(ResponseCode::SUCCESS);
+            break;
+        case RequestCode::HWTRACK_START_DOWNLOAD:
+            HandleStartDownload(pUserProgram, data);
+            break;
+        case RequestCode::HWTRACK_CREATE_TASK:
+            HandleCreateTask(pUserProgram, data);
+            break;
+        case RequestCode::HWTRACK_END_DOWNLOAD:
+            HandleEndDownload(pUserProgram);
         case RequestCode::HWTRACK_GET_TAG_VALUE:
             GetTagValue(data);
             break;

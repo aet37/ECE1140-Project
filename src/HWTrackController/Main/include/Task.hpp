@@ -21,7 +21,6 @@ class Routine;
 */
 enum class TaskType
 {
-    CONTINUOUS,
     PERIODIC,
     EVENT_DRIVEN
 };
