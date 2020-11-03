@@ -2,6 +2,7 @@
 
 from enum import Enum
 import socket
+import threading
 import logging
 import polling
 
@@ -134,6 +135,30 @@ def send_message(request_code, data="", ignore_exceptions=(ConnectionRefusedErro
         response_data = ""
 
     return (ResponseCode(response_code), response_data)
+
+def send_message_async(request_code, data, callback,
+                       ignore_exceptions=(ConnectionRefusedError)):
+    """Sends a given message to a server asynchronously
+
+    :param RequestCode request_code: Code representing what the request is for
+    :param str data: String containing additional data
+    :param Callable callback: Function to be called after the response is received
+    :param set ignore_exceptions: Exceptions to be ignored
+
+    """
+    thread = threading.Thread(target=_send_message_async,
+                              args=(request_code, data, callback, ignore_exceptions),
+                              daemon=True)
+    thread.start()
+
+def _send_message_async(request_code, data, callback,
+                        ignore_exceptions=(ConnectionRefusedError)):
+    """Internal function used as helper to send_message_async"""
+    # Send the message
+    response_code, response_data = send_message(request_code, data, ignore_exceptions)
+
+    # Invoke the callback
+    callback(response_code, response_data)
 
 def poll_for_response(request_code, data="", expected_response=ResponseCode.SUCCESS,
                       timeout=5):

@@ -1,13 +1,11 @@
 """Test for downloading a program to the arduino"""
 
-import serial
 import sys
-import pytest
-from time import sleep
 
 sys.path.insert(1, '../../../src')
-from HWTrackController.hw_track_controller_connector import *
-from UI.server_functions import RequestCode, ResponseCode
+from HWTrackController.hw_track_controller_connector import send_request_to_controller, \
+                                                            get_response_from_controller
+from UI.server_functions import RequestCode
 
 def test_program_download():
     """Downloads a program to the arduino"""
@@ -19,12 +17,12 @@ def test_program_download():
 
     # Create a tag
     send_request_to_controller(bytes(str(RequestCode.HWTRACK_CREATE_TAG.value), 'utf-8') +
-                                     bytes(" myTag", 'utf-8') +
+                                     bytes(" MyTag", 'utf-8') +
                                      bytes(" FALSE", 'utf-8'))
     assert get_response_from_controller() == b'0'
 
     send_request_to_controller(bytes(str(RequestCode.HWTRACK_CREATE_TAG.value), 'utf-8') +
-                                     bytes(" output1", 'utf-8') +
+                                     bytes(" output2", 'utf-8') +
                                      bytes(" FALSE", 'utf-8'))
     assert get_response_from_controller() == b'0'
 
@@ -46,11 +44,11 @@ def test_program_download():
 
     # Add two instructions
     send_request_to_controller(bytes(str(RequestCode.HWTRACK_CREATE_INSTRUCTION.value), 'utf-8') +
-                                     bytes(" XIC myTag", 'utf-8'))
+                                     bytes(" XIC MyTag", 'utf-8'))
     assert get_response_from_controller() == b'0'
 
     send_request_to_controller(bytes(str(RequestCode.HWTRACK_CREATE_INSTRUCTION.value), 'utf-8') +
-                                     bytes(" OTL output1", 'utf-8'))
+                                     bytes(" OTL output2", 'utf-8'))
     assert get_response_from_controller() == b'0'
 
     # End download

@@ -9,8 +9,10 @@ from SWTrackController.Compiler.parse import Parser
 from SWTrackController.Compiler.lexer import Lexer
 from SWTrackController.Compiler.emitter import Emitter
 
+# pylint: disable=redefined-outer-name
 @pytest.fixture(scope='function')
 def mock_emitter():
+    """Creates a mock emitter to use"""
     return MagicMock(Emitter)
 
 # pylint: disable=misplaced-comparison-constant
