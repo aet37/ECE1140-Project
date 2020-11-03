@@ -8,6 +8,7 @@ from SWTrackController.Compiler.lexer import Lexer
 from SWTrackController.Compiler.parse import Parser
 from SWTrackController.Compiler.emitter import Emitter
 
+# pylint: disable=misplaced-comparison-constant
 def test_simple_program():
     """Tests the compilation of a simple program"""
     code = "TAG input1 = FALSE\n" \
@@ -130,7 +131,8 @@ def test_nonexistent_event():
     with pytest.raises(SystemExit) as pytest_wrapped_e:
         par.program()
     assert SystemExit == pytest_wrapped_e.type
-    assert "Parsing error : Emitted event MissingEvent does not correspond to a task" == pytest_wrapped_e.value.code
+    assert "Parsing error : Emitted event MissingEvent does not " \
+           "correspond to a task" == pytest_wrapped_e.value.code
 
 def test_nonexistent_routine():
     """Test program that jumps to a nonexistent routine"""
