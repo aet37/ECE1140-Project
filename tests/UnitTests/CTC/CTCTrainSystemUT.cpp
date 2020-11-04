@@ -15,7 +15,7 @@
 TEST_CASE( "Test TrainSystem ImportTrack and Constructor", "[TrainSystem::ImportTrackLayout()]" )
 {
 	TrainSystem::GetInstance(); //Activate constructor
-	REQUIRE(TrainSystem::GetInstance().GetTrackArr().size() == 15); // Check that the size is 15 blocks
+	REQUIRE(TrainSystem::GetInstance().GetTrackArr(LINE_RED).size() == 76); // Check that the size is 15 blocks
 }
 
 
@@ -55,7 +55,7 @@ TEST_CASE( "Test Set Track Occupied", "[TrainSystem::SetTrackOccupied()]" )
 	bool caught_error = false;  // Initialize variable to catch error
 	try
 	{
-		TrainSystem::GetInstance().SetTrackOccupied(-1);
+		TrainSystem::GetInstance().SetTrackOccupied(-1, LINE_RED);
 	}
 	catch(std::logic_error e)
 	{
@@ -66,7 +66,7 @@ TEST_CASE( "Test Set Track Occupied", "[TrainSystem::SetTrackOccupied()]" )
 
 	try
 	{
-		TrainSystem::GetInstance().SetTrackOccupied(0);
+		TrainSystem::GetInstance().SetTrackOccupied(0, LINE_RED);
 	}
 	catch(std::logic_error e)
 	{
@@ -77,31 +77,31 @@ TEST_CASE( "Test Set Track Occupied", "[TrainSystem::SetTrackOccupied()]" )
 
 	try
 	{
-		TrainSystem::GetInstance().SetTrackOccupied(1);
+		TrainSystem::GetInstance().SetTrackOccupied(1, LINE_RED);
 	}
 	catch(std::logic_error e)
 	{
 		caught_error = true;
 	}
 	REQUIRE(!caught_error);     // Make sure exception was not thrown
-	REQUIRE(TrainSystem::GetInstance().GetTrackArr()[0]->occupied == true); // Make sure that track 1 was set as occupied
+	REQUIRE(TrainSystem::GetInstance().GetTrackArr(LINE_RED)[0]->occupied == true); // Make sure that track 1 was set as occupied
 	caught_error = false;
 
 	try
 	{
-		TrainSystem::GetInstance().SetTrackOccupied(TrainSystem::GetInstance().GetTrackArr().size());
+		TrainSystem::GetInstance().SetTrackOccupied(TrainSystem::GetInstance().GetTrackArr(LINE_RED).size());
 	}
 	catch(std::logic_error e)
 	{
 		caught_error = true;
 	}
 	REQUIRE(!caught_error);     // Make sure exception was not thrown
-	REQUIRE(TrainSystem::GetInstance().GetTrackArr()[TrainSystem::GetInstance().GetTrackArr().size() - 1]->occupied == true); // Make sure that the last track is occupied
+	REQUIRE(TrainSystem::GetInstance().GetTrackArr(LINE_RED)[TrainSystem::GetInstance().GetTrackArr(LINE_RED).size() - 1]->occupied == true); // Make sure that the last track is occupied
 	caught_error = false;
 
 	try
 	{
-		TrainSystem::GetInstance().SetTrackOccupied(TrainSystem::GetInstance().GetTrackArr().size() + 1);
+		TrainSystem::GetInstance().SetTrackOccupied(TrainSystem::GetInstance().GetTrackArr().size() + 1, LINE_RED);
 	}
 	catch(std::logic_error e)
 	{
@@ -120,7 +120,7 @@ TEST_CASE( "Test Set Track Not Occupied", "[TrainSystem::SetTrackNotOccupied()]"
 	bool caught_error = false;  // Initialize variable to catch error
 	try
 	{
-		TrainSystem::GetInstance().SetTrackNotOccupied(-1);
+		TrainSystem::GetInstance().SetTrackNotOccupied(-1, LINE_RED);
 	}
 	catch(std::logic_error e)
 	{
@@ -131,7 +131,7 @@ TEST_CASE( "Test Set Track Not Occupied", "[TrainSystem::SetTrackNotOccupied()]"
 
 	try
 	{
-		TrainSystem::GetInstance().SetTrackNotOccupied(0);
+		TrainSystem::GetInstance().SetTrackNotOccupied(0, LINE_RED);
 	}
 	catch(std::logic_error e)
 	{
@@ -142,31 +142,31 @@ TEST_CASE( "Test Set Track Not Occupied", "[TrainSystem::SetTrackNotOccupied()]"
 
 	try
 	{
-		TrainSystem::GetInstance().SetTrackNotOccupied(1);
+		TrainSystem::GetInstance().SetTrackNotOccupied(1, LINE_RED);
 	}
 	catch(std::logic_error e)
 	{
 		caught_error = true;
 	}
 	REQUIRE(!caught_error);     // Make sure exception was not thrown
-	REQUIRE(TrainSystem::GetInstance().GetTrackArr()[0]->occupied == false); // Make sure that track 1 was set as occupied
+	REQUIRE(TrainSystem::GetInstance().GetTrackArr(LINE_RED)[0]->occupied == false); // Make sure that track 1 was set as occupied
 	caught_error = false;
 
 	try
 	{
-		TrainSystem::GetInstance().SetTrackNotOccupied(TrainSystem::GetInstance().GetTrackArr().size());
+		TrainSystem::GetInstance().SetTrackNotOccupied(TrainSystem::GetInstance().GetTrackArr(LINE_RED).size(), LINE_RED);
 	}
 	catch(std::logic_error e)
 	{
 		caught_error = true;
 	}
 	REQUIRE(!caught_error);     // Make sure exception was not thrown
-	REQUIRE(TrainSystem::GetInstance().GetTrackArr()[TrainSystem::GetInstance().GetTrackArr().size() - 1]->occupied == false); // Make sure that the last track is occupied
+	REQUIRE(TrainSystem::GetInstance().GetTrackArr(LINE_RED)[TrainSystem::GetInstance().GetTrackArr(LINE_RED).size() - 1]->occupied == false); // Make sure that the last track is occupied
 	caught_error = false;
 
 	try
 	{
-		TrainSystem::GetInstance().SetTrackNotOccupied(TrainSystem::GetInstance().GetTrackArr().size() + 1);
+		TrainSystem::GetInstance().SetTrackNotOccupied(TrainSystem::GetInstance().GetTrackArr(LINE_RED).size() + 1, LINE_RED);
 	}
 	catch(std::logic_error e)
 	{
