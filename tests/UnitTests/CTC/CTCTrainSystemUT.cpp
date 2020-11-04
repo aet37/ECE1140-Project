@@ -89,7 +89,7 @@ TEST_CASE( "Test Set Track Occupied", "[TrainSystem::SetTrackOccupied()]" )
 
 	try
 	{
-		TrainSystem::GetInstance().SetTrackOccupied(TrainSystem::GetInstance().GetTrackArr(LINE_RED).size());
+		TrainSystem::GetInstance().SetTrackOccupied(TrainSystem::GetInstance().GetTrackArr(LINE_RED).size(), LINE_RED);
 	}
 	catch(std::logic_error e)
 	{
@@ -101,7 +101,7 @@ TEST_CASE( "Test Set Track Occupied", "[TrainSystem::SetTrackOccupied()]" )
 
 	try
 	{
-		TrainSystem::GetInstance().SetTrackOccupied(TrainSystem::GetInstance().GetTrackArr().size() + 1, LINE_RED);
+		TrainSystem::GetInstance().SetTrackOccupied(TrainSystem::GetInstance().GetTrackArr(LINE_RED).size() + 1, LINE_RED);
 	}
 	catch(std::logic_error e)
 	{
