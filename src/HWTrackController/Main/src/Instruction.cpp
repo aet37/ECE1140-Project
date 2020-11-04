@@ -18,6 +18,10 @@ bool Instruction::Evaluate()
         // Assert that the tag is found because that should be caught by the compiler
         assert(TagDatabase::GetTagValue(m_argument, result));
         break;
+    case InstructionType::XIO:
+        assert(TagDatabase::GetTagValue(m_argument, result));
+        result = !result;
+        break;
     case InstructionType::OTL:
         result = TagDatabase::SetTag(m_argument, true);
         assert(result);

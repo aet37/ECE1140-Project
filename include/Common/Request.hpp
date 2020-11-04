@@ -75,17 +75,18 @@ enum class RequestCode : uint8_t
     SWTRACK_SET_CROSSING = 72, // Used by the track model to have the controller lower/raise the crossing
     SWTRACK_SET_TRACK_HEATER = 73, // Used by the Track model to turn on/off the track heater
 
-    HWTRACK_START_DOWNLOAD = 96, // Used by the SW Track Ctrl to signify download is starting
-    HWTRACK_END_DOWNLOAD = 97, // Used by the SW Track Ctrl to signify download has completed
-    HWTRACK_CREATE_TAG = 98, // Used by the SW Track Ctrl to create a tag in the hardware
-    HWTRACK_CREATE_TASK = 99, // Used by the SW Track Ctrl to create a task in the hardware
-    HWTRACK_CREATE_ROUTINE = 100, // Used by the SW Track Ctrl to create a routine in the hardware
-    HWTRACK_CREATE_RUNG = 101, // Used by the SW Track Ctrl to create a rung in the hardware
-    HWTRACK_SET_TAG_VALUE = 102, // Used by the SW Track Ctrl to set a tag value
-    HWTRACK_GET_TAG_VALUE = 103, // Used by the SW Track Ctrl to get a tag value
-    HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST = 104, // Used by the connector script to check if any requests exist for the hardware
-    HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE = 105, // Used by the connector script to forward the hardware's response to the server
-    HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE = 106, // Used by SW Track Ctrl to get response from the hardware
+    HWTRACK_START_DOWNLOAD = 96, // Used by the SW Track Ctrl to signify download is starting // (string programName)
+    HWTRACK_END_DOWNLOAD = 97, // Used by the SW Track Ctrl to signify download has completed // (void)
+    HWTRACK_CREATE_TAG = 98, // Used by the SW Track Ctrl to create a tag in the hardware // (string tagName, bool defaultValue)
+    HWTRACK_CREATE_TASK = 99, // Used by the SW Track Ctrl to create a task in the hardware // (string taskType, (float period | string event), string taskName)
+    HWTRACK_CREATE_ROUTINE = 100, // Used by the SW Track Ctrl to create a routine in the hardware // (string routineName)
+    HWTRACK_CREATE_RUNG = 101, // Used by the SW Track Ctrl to create a rung in the hardware // ((void | string rungName))
+    HWTRACK_CREATE_INSTRUCTION = 102, // Used by the SW Track Ctrl to create an instruction in the hardware // (instructionType argument)
+    HWTRACK_SET_TAG_VALUE = 103, // Used by the SW Track Ctrl to set a tag value // (string tagName, bool newValue)
+    HWTRACK_GET_TAG_VALUE = 104, // Used by the SW Track Ctrl to get a tag value // (string tagName)
+    HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST = 105, // Used by the connector script to check if any requests exist for the hardware
+    HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE = 106, // Used by the connector script to forward the hardware's response to the server
+    HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE = 107, // Used by SW Track Ctrl to get response from the hardware
 
     TRACK_MODEL_GUI_TRACK_LAYOUT_START = 129, // Used by the gui to signify that the track layout is starting to be sent
     TRACK_MODEL_GUI_TRACK_LAYOUT_END = 130, // Used by the gui to signify that the full track layout has been sent
@@ -207,7 +208,7 @@ public:
     T ParseData(uint32_t idx) const
     {
         // Check the idx first
-        size_t spaceCount = std::count( m_data.begin(), m_data.end(), ' ');
+        size_t spaceCount = std::count(m_data.begin(), m_data.end(), ' ');
         if (idx > spaceCount)
         {
             LOG_DEBUG("Index is out of bounds");

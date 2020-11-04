@@ -2,8 +2,8 @@
 
 import sys
 import pytest
-sys.path.insert(1, '../../../../src/SWTrackController/Compiler')
-from lexer import Lexer, TokenType
+sys.path.insert(1, '../../../../src')
+from SWTrackController.Compiler.lexer import Lexer, TokenType
 
 # pylint: disable=misplaced-comparison-constant
 def test_next_character():

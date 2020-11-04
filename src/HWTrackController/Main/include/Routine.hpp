@@ -7,7 +7,7 @@
 #define ROUTINE_HPP
 
 // SYSTEM INCLUDES
-// (None)
+#include <Arduino.h>
 
 // C++ PROJECT INCLUDES
 #include "List.hpp" // For List
@@ -28,7 +28,7 @@ public:
      * @brief Constructs a new Routine object
     */
     Routine(const char* pRoutineName) :
-        m_pRoutineName(pRoutineName),
+        m_routineName(pRoutineName),
         m_rungList()
     {}
 
@@ -45,12 +45,17 @@ public:
         m_rungList.Append(pRung);
     }
 
+    /**
+     * @brief Gets the last rung that was created
+    */
+    Rung* GetLastCreatedRung() const { return m_rungList[m_rungList.GetLength() - 1]; }
+
 protected:
 private:
     /// Name of the routine
-    const char* m_pRoutineName;
+    const String m_routineName;
 
-    /// Pointer to the first rung in the routine
+    /// List of rungs in the routine
     List<Rung*> m_rungList;
 };
 
