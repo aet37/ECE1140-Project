@@ -35,12 +35,12 @@ TEST_CASE( "Test TrainSystem Singleton Constructor", "[TrainSystem::GetInstance(
  */
 TEST_CASE( "Test Create New Train", "[TrainSystem::CreateNewTrain()]" )
 {
-	TrainSystem::GetInstance().CreateNewTrain(10);
+	TrainSystem::GetInstance().CreateNewTrain(10, LINE_RED);
 
 	REQUIRE(TrainSystem::GetInstance().GetTrainArr().size() == 1);  // Check that the size is 1
 	REQUIRE(TrainSystem::GetInstance().GetTrainArr()[0]->destination_block == 10);  // Check that the destination block is 10
 
-	TrainSystem::GetInstance().CreateNewTrain(15);
+	TrainSystem::GetInstance().CreateNewTrain(15, LINE_RED);
 	REQUIRE(TrainSystem::GetInstance().GetTrainArr().size() == 2);  // Check that the size is 1
 	REQUIRE(TrainSystem::GetInstance().GetTrainArr()[1]->destination_block == 15);  // Check that the destination block is 15
 }
