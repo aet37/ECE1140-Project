@@ -15,10 +15,8 @@
 #include "HWTrackControllerRequestManager.hpp" // For HWTrackController::HWTrackControllerRequestManager
 #include "CTCRequestManager.hpp"    // For CTC::CTCRequestManager
 #include "TrainModelRequestManager.hpp" // For TrainModel::TrainModelRequestManager
-
-#include "SWTrackControllerRequestManager.hpp" //For SWTrackController::SWTrackControllerRequestManager
-
-
+#include "SWTrackControllerRequestManager.hpp" // For SWTrackController::SWTrackControllerRequestManager
+#include "SWTrainControllerRequestManager.hpp" // For SWTrainController::SWTrainControllerRequestManager
 #include "TrackModelRequestManager.hpp" // For TrackModel::TrackModelRequestManager
 
 
@@ -28,6 +26,7 @@ static CTC::CTCRequestManager ctcRequestManager;
 static TrainModel::TrainModelRequestManager trainModelRequestManager;
 static SW_TrackController::SWTrackControllerRequestManager swTrackControllerRequestManager;
 static TrackModel::TrackModelRequestManager trackModelRequestManager;
+static SWTrainController::SWTrainControllerRequestManager swTrainControllerRequestManager;
 
 namespace Common
 {
@@ -77,6 +76,10 @@ RequestManagerIface* RequestManagerRepository::GetRequestManager(RequestCode req
 
         case RequestCode::TRACK_MODEL_DISPATCH_TRAIN:
             pRequestManager = &trackModelRequestManager;
+            break;
+        
+        case RequestCode::SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS:
+            pRequestManager = &swTrainControllerRequestManager;
             break;
             
         default:
