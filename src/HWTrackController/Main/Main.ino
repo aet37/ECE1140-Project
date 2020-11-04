@@ -25,13 +25,15 @@ void setup()
 
     // Pin Initialization
     pinMode(LED_BUILTIN, OUTPUT);
+    pinMode(PIN2, OUTPUT);
 
     // Initialize the user program
     UserProgram* pProg = new UserProgram("Blank Program");
 
     // Add tasks to the scheduler
-    // Scheduler::GetInstance().AddTask(new SystemTask(toggleTask, nullptr, 1000));
-    Scheduler::GetInstance().AddTask(new SystemTask(Communications::CommsTask, static_cast<void*>(pProg), 1000));
+    Scheduler::GetInstance().AddTask(new SystemTask(toggleTask, nullptr, 1000));
+    Scheduler::GetInstance().AddTask(new SystemTask(Communications::CommsTask, static_cast<void*>(pProg), 100));
+    Scheduler::GetInstance().AddTask(new SystemTask(TagDatabase::IoTask, nullptr, 100));
 }
 
 void loop()

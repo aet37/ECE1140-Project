@@ -41,6 +41,18 @@ bool SetTag(const String& rTagName, bool value);
 */
 bool GetTagValue(const String& rTagName, bool& rValue);
 
+/**
+ * @brief Deletes all tags from the database
+*/
+void Clear();
+
+/**
+ * @brief Task to handle input and outputs
+ *
+ * @param pNothing      This argument is not used
+*/
+void IoTask(void* pNothing);
+
 } // namespace TagDatabase
 
 #endif // TAG_DATABASE_HPP

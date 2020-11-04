@@ -100,6 +100,7 @@ static void HandleStartDownload(UserProgram* pProgram, const String& rProgramNam
     Scheduler::GetInstance().RemoveUserTasks();
     pProgram->ClearMemory();
     pProgram->SetProgramName(rProgramName.c_str());
+    TagDatabase::Clear();
     SendResponse(ResponseCode::SUCCESS);
 }
 
