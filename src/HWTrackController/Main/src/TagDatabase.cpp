@@ -38,4 +38,18 @@ bool GetTagValue(const String& rTagName, bool& rValue)
     }
 }
 
+void Clear()
+{
+    tags.Clear();
+}
+
+void IoTask(void* pSomething)
+{
+    bool tagValue = false;
+    if (GetTagValue("output2", tagValue))
+    {
+        digitalWrite(PIN2, tagValue);
+    }
+}
+
 } // namespace TagDatabase

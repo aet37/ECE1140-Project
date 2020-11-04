@@ -19,13 +19,12 @@
 #include "SWTrainControllerRequestManager.hpp" // For SWTrainController::SWTrainControllerRequestManager
 #include "TrackModelRequestManager.hpp" // For TrackModel::TrackModelRequestManager
 
-
 static Debug::DebugRequestManager debugRequestManager;
-static HWTrackController::HWTrackControllerRequestManager hwTrackControllerRequestManager;
 static CTC::CTCRequestManager ctcRequestManager;
-static TrainModel::TrainModelRequestManager trainModelRequestManager;
-static SW_TrackController::SWTrackControllerRequestManager swTrackControllerRequestManager;
+static SWTrackController::SWTrackControllerRequestManager swTrackControllerRequestManager;
+static HWTrackController::HWTrackControllerRequestManager hwTrackControllerRequestManager;
 static TrackModel::TrackModelRequestManager trackModelRequestManager;
+static TrainModel::TrainModelRequestManager trainModelRequestManager;
 static SWTrainController::SWTrainControllerRequestManager swTrainControllerRequestManager;
 
 namespace Common
@@ -35,55 +34,40 @@ RequestManagerIface* RequestManagerRepository::GetRequestManager(RequestCode req
 {
     RequestManagerIface* pRequestManager = nullptr;
 
-    switch (requestCode)
+    // Convert to an integer to check whose request manager to return
+    uint8_t requestCodeValue = static_cast<uint8_t>(requestCode);
+
+    if (requestCodeValue <= 31)
     {
-        case RequestCode::DEBUG_TO_CTC:
-        case RequestCode::DEBUG_TO_HWTRACKCTRL:
-        case RequestCode::DEBUG_TO_SWTRACKCTRL:
-        case RequestCode::DEBUG_TO_TRACK_MODEL:
-        case RequestCode::DEBUG_TO_TRAIN_MODEL:
-        case RequestCode::DEBUG_TO_HWTRAINCTRL:
-        case RequestCode::DEBUG_TO_SWTRAINCTRL:
-            pRequestManager = &debugRequestManager;
-            break;
-    	case RequestCode::CTC_GUI_DISPATCH_TRAIN:
-    	case RequestCode::CTC_SEND_GUI_OCCUPANCIES:
-			pRequestManager = &ctcRequestManager;
-    		break;
-        case RequestCode::HWTRACK_GET_TAG_VALUE:
-        case RequestCode::HWTRACK_SET_TAG_VALUE:
-        case RequestCode::HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST:
-        case RequestCode::HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE:
-        case RequestCode::HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE:
-            pRequestManager = &hwTrackControllerRequestManager;
-            break;
-        case RequestCode:: SWTRACK_DISPATCH_TRAIN:
-        case RequestCode:: SWTRACK_UPDATE_AUTHORITY:
-        case RequestCode:: SWTRACK_SET_TRACK_SIGNAL:
-        case RequestCode:: SWTRACK_UPDATE_COMMAND_SPEED:
-        case RequestCode:: SWTRACK_SET_TRACK_STATUS:
-        case RequestCode:: SWTRACK_SET_SWITCH_POSITION:
-        case RequestCode:: SWTRACK_SET_TRACK_FAILURE:
-        case RequestCode:: SWTRACK_SET_TRACK_OCCUPANCY:
-        case RequestCode:: SWTRACK_SET_CROSSING:
-        case RequestCode:: SWTRACK_SET_TRACK_HEATER:  
-            pRequestManager = &swTrackControllerRequestManager;
-            break;
-
-        case RequestCode::TRAIN_MODEL_DISPATCH_TRAIN:
-            pRequestManager = &trainModelRequestManager;
-            break;
-
-        case RequestCode::TRACK_MODEL_DISPATCH_TRAIN:
-            pRequestManager = &trackModelRequestManager;
-            break;
-        
-        case RequestCode::SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS:
-            pRequestManager = &swTrainControllerRequestManager;
-            break;
-            
-        default:
-            break;
+        pRequestManager = &debugRequestManager;
+    }
+    else if (requestCodeValue <= 63)
+    {
+        pRequestManager = &ctcRequestManager;
+    }
+    else if (requestCodeValue <= 95)
+    {
+        pRequestManager = &swTrackControllerRequestManager;
+    }
+    else if (requestCodeValue <= 127)
+    {
+        pRequestManager = &hwTrackControllerRequestManager;
+    }
+    else if (requestCodeValue <= 159)
+    {
+        pRequestManager = &trackModelRequestManager;
+    }
+    else if (requestCodeValue <= 191)
+    {
+        pRequestManager = &trainModelRequestManager;
+    }
+    else if (requestCodeValue <= 223)
+    {
+        pRequestManager = &swTrainControllerRequestManager;
+    }
+    else
+    {
+        // pRequestManager = &hwTrainControllerRequestManager;
     }
 
     ASSERT(pRequestManager != nullptr, "No request manager found for code %d", requestCode);

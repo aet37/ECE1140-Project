@@ -7,12 +7,22 @@ from HWTrackController.hw_track_controller_connector import send_request_to_cont
                                                             get_response_from_controller
 from UI.server_functions import RequestCode
 
-def test_program_download():
-    """Downloads a program to the arduino"""
-
+def test_blank_controller():
+    """Ensure we can start then immediately end a download"""
     # Start download
     send_request_to_controller(bytes(str(RequestCode.HWTRACK_START_DOWNLOAD.value), 'utf-8') +
-                                     bytes(" Test Program", 'utf-8'))
+                                     bytes(" Blank Program", 'utf-8'))
+    assert get_response_from_controller() == b'0'
+
+    # End download
+    send_request_to_controller(bytes(str(RequestCode.HWTRACK_END_DOWNLOAD.value), 'utf-8'))
+    assert get_response_from_controller() == b'0'
+
+def test_program_download():
+    """Downloads a simple program to the arduino"""
+    # Start download
+    send_request_to_controller(bytes(str(RequestCode.HWTRACK_START_DOWNLOAD.value), 'utf-8') +
+                                     bytes(" LED Toggle Program", 'utf-8'))
     assert get_response_from_controller() == b'0'
 
     # Create a tag
@@ -28,9 +38,7 @@ def test_program_download():
 
     # Create a periodic task
     send_request_to_controller(bytes(str(RequestCode.HWTRACK_CREATE_TASK.value), 'utf-8') +
-                                     bytes(" PERIOD", 'utf-8') +
-                                     bytes(' 1000', 'utf-8') +
-                                     bytes(" MainTask", 'utf-8'))
+                                     bytes(" PERIOD 2000 MainTask", 'utf-8'))
     assert get_response_from_controller() == b'0'
 
     # Create the main routine
@@ -42,18 +50,66 @@ def test_program_download():
     send_request_to_controller(bytes(str(RequestCode.HWTRACK_CREATE_RUNG.value), 'utf-8'))
     assert get_response_from_controller() == b'0'
 
-    # Add two instructions
+    # Add three instructions
     send_request_to_controller(bytes(str(RequestCode.HWTRACK_CREATE_INSTRUCTION.value), 'utf-8') +
                                      bytes(" XIC MyTag", 'utf-8'))
+    assert get_response_from_controller() == b'0'
+
+    send_request_to_controller(bytes(str(RequestCode.HWTRACK_CREATE_INSTRUCTION.value), 'utf-8') +
+                                     bytes(" XIC output2", 'utf-8'))
+    assert get_response_from_controller() == b'0'
+
+    send_request_to_controller(bytes(str(RequestCode.HWTRACK_CREATE_INSTRUCTION.value), 'utf-8') +
+                                     bytes(" OTU output2", 'utf-8'))
+    assert get_response_from_controller() == b'0'
+
+    # Create a new rung
+    send_request_to_controller(bytes(str(RequestCode.HWTRACK_CREATE_RUNG.value), 'utf-8'))
+    assert get_response_from_controller() == b'0'
+
+    # Add three instructions
+    send_request_to_controller(bytes(str(RequestCode.HWTRACK_CREATE_INSTRUCTION.value), 'utf-8') +
+                                     bytes(" XIO MyTag", 'utf-8'))
+    assert get_response_from_controller() == b'0'
+
+    send_request_to_controller(bytes(str(RequestCode.HWTRACK_CREATE_INSTRUCTION.value), 'utf-8') +
+                                     bytes(" XIO output2", 'utf-8'))
     assert get_response_from_controller() == b'0'
 
     send_request_to_controller(bytes(str(RequestCode.HWTRACK_CREATE_INSTRUCTION.value), 'utf-8') +
                                      bytes(" OTL output2", 'utf-8'))
     assert get_response_from_controller() == b'0'
 
+    # Create a new rung
+    send_request_to_controller(bytes(str(RequestCode.HWTRACK_CREATE_RUNG.value), 'utf-8'))
+    assert get_response_from_controller() == b'0'
+
+    # Add two instructions
+    send_request_to_controller(bytes(str(RequestCode.HWTRACK_CREATE_INSTRUCTION.value), 'utf-8') +
+                                     bytes(" XIO output2", 'utf-8'))
+    assert get_response_from_controller() == b'0'
+
+    send_request_to_controller(bytes(str(RequestCode.HWTRACK_CREATE_INSTRUCTION.value), 'utf-8') +
+                                     bytes(" OTU MyTag", 'utf-8'))
+    assert get_response_from_controller() == b'0'
+
+    # Create a new rung
+    send_request_to_controller(bytes(str(RequestCode.HWTRACK_CREATE_RUNG.value), 'utf-8'))
+    assert get_response_from_controller() == b'0'
+
+    # Add two instructions
+    send_request_to_controller(bytes(str(RequestCode.HWTRACK_CREATE_INSTRUCTION.value), 'utf-8') +
+                                     bytes(" XIC output2", 'utf-8'))
+    assert get_response_from_controller() == b'0'
+
+    send_request_to_controller(bytes(str(RequestCode.HWTRACK_CREATE_INSTRUCTION.value), 'utf-8') +
+                                     bytes(" OTL MyTag", 'utf-8'))
+    assert get_response_from_controller() == b'0'
+
     # End download
     send_request_to_controller(bytes(str(RequestCode.HWTRACK_END_DOWNLOAD.value), 'utf-8'))
     assert get_response_from_controller() == b'0'
+
 
 if __name__ == "__main__":
     raise Exception("Run using pytest")

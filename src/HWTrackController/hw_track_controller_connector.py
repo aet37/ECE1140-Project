@@ -40,6 +40,7 @@ def send_request_to_controller(request):
 
     :param request: Request retrieved from the server
     """
+    sleep(0.2)
     bytes_written = arduino.write(request)
     logger.info("%d bytes written to the controller", bytes_written)
 
