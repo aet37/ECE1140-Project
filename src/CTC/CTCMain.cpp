@@ -46,7 +46,7 @@ void moduleMain()
 			    pto_send = TrainSystem::GetInstance().CreateNewTrain(block_to);
 
 			    // Push Train Struct to Track controller queue
-				reqSend.SetRequestCode(Common::RequestCode::SWTRACK_SET_TRACK_SIGNAL);  // Create request class to send
+				reqSend.SetRequestCode(Common::RequestCode::SWTRACK_DISPATCH_TRAIN);  // Create request class to send
 				reqSend.SetData("");    // Clear Previous Data
 
 				// Add "train_di destination_block command_speed authority" to send string

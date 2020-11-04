@@ -1,6 +1,6 @@
 /**
  * @file Task.cpp
- * 
+ *
  * @brief Implementations of Task class
 */
 
@@ -19,13 +19,21 @@ void Task::Run(void* pTask)
 
 void Task::Run()
 {
-    LOG("Running task "); LOGN(m_pTaskName);
+    LOG("Running task "); LOGN(m_taskName);
 
     // Execute the main routine
     m_routineList[0]->Run();
 }
 
-void Task::AddRoutine(Routine* pRoutine)
+void Task::AddRoutine(Routine* pRoutine, bool mainRoutine)
 {
-    m_routineList.Append(pRoutine);
+    if (mainRoutine)
+    {
+        m_routineList.Insert(pRoutine, 0);
+    }
+    else
+    {
+        m_routineList.Append(pRoutine);
+    }
+    m_pLastCreatedRoutine = pRoutine;
 }

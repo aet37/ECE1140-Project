@@ -2,6 +2,7 @@
 
 from enum import Enum
 import socket
+import threading
 import logging
 import polling
 
@@ -59,11 +60,12 @@ class RequestCode(Enum):
     HWTRACK_CREATE_TASK = 99
     HWTRACK_CREATE_ROUTINE = 100
     HWTRACK_CREATE_RUNG = 101
-    HWTRACK_SET_TAG_VALUE = 102
-    HWTRACK_GET_TAG_VALUE = 103
-    HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST = 104
-    HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE = 105
-    HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE = 106
+    HWTRACK_CREATE_INSTRUCTION = 102
+    HWTRACK_SET_TAG_VALUE = 103
+    HWTRACK_GET_TAG_VALUE = 104
+    HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST = 105
+    HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE = 106
+    HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE = 107
 
     GET_SIGNAL_TIMES = 128
     SET_SPEED_LIMIT = 129
@@ -96,8 +98,8 @@ class ResponseCode(Enum):
     SUCCESS = 0
     ERROR = 1
 
-    HWTRACK_SET_TAG_VALUE = 102
-    HWTRACK_GET_TAG_VALUE = 103
+    HWTRACK_SET_TAG_VALUE = 103
+    HWTRACK_GET_TAG_VALUE = 104
 
 def send_message(request_code, data="", ignore_exceptions=(ConnectionRefusedError)):
     """Constructs and sends a message to the server
@@ -133,6 +135,30 @@ def send_message(request_code, data="", ignore_exceptions=(ConnectionRefusedErro
         response_data = ""
 
     return (ResponseCode(response_code), response_data)
+
+def send_message_async(request_code, data, callback,
+                       ignore_exceptions=(ConnectionRefusedError)):
+    """Sends a given message to a server asynchronously
+
+    :param RequestCode request_code: Code representing what the request is for
+    :param str data: String containing additional data
+    :param Callable callback: Function to be called after the response is received
+    :param set ignore_exceptions: Exceptions to be ignored
+
+    """
+    thread = threading.Thread(target=_send_message_async,
+                              args=(request_code, data, callback, ignore_exceptions),
+                              daemon=True)
+    thread.start()
+
+def _send_message_async(request_code, data, callback,
+                        ignore_exceptions=(ConnectionRefusedError)):
+    """Internal function used as helper to send_message_async"""
+    # Send the message
+    response_code, response_data = send_message(request_code, data, ignore_exceptions)
+
+    # Invoke the callback
+    callback(response_code, response_data)
 
 def poll_for_response(request_code, data="", expected_response=ResponseCode.SUCCESS,
                       timeout=5):
