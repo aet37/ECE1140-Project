@@ -53,6 +53,17 @@ struct Track
 };
 
 /**
+ * @enum Line
+ *
+ * @brief Enumerated type telling line or train
+ *
+ * @li LINE_GREEN
+ * @li LINE_RED
+ *
+ */
+enum Line {LINE_GREEN, LINE_RED};
+
+/**
  * @enum Color
  *
  * @brief Enumerated type telling light color

@@ -145,7 +145,7 @@ class CTCUi(QtWidgets.QMainWindow):
 
 		##### Send data to server #####
 		##### data = "block hour minute a/p"
-		send_message(RequestCode.CTC_DISPATCH_TRAIN, self.d_block_label.text() + ' ' + self.d_time_label.text()[0] + self.d_time_label.text()[1] + ' ' + self.d_time_label.text()[3] + self.d_time_label.text()[4]+ ' ' + self.d_time_label.text()[5])
+		send_message(RequestCode.CTC_DISPATCH_TRAIN,  '0' + ' ' + self.d_time_label.text()[0] + self.d_time_label.text()[1] + ' ' + self.d_time_label.text()[3] + self.d_time_label.text()[4]+ ' ' + self.d_time_label.text()[5] + ' ' + self.d_block_label.text())
 
 		
 

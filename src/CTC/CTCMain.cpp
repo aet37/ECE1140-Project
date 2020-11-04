@@ -35,15 +35,27 @@ void moduleMain()
     		// Dispatch Train from GUI
 		    case Common::RequestCode::CTC_GUI_DISPATCH_TRAIN:
 		    {
+		    	// Get Line train is on
+		    	int ln = std::stoi(req.GetData().substr(0, 1));
+		    	Line line_on;
+		    	if(ln == 0)
+			    {
+		    		line_on = LINE_GREEN;
+			    }
+		    	else
+			    {
+		    		line_on = LINE_RED;
+			    }
 			    // Get block train was dispatched to
-			    std::string str_block = req.GetData().substr(0, 2);
+			    std::string str_block = req.GetData().substr(11, req.GetData().size() - 11);
+
 
 			    // Convert block to integer
 			    int block_to = std::stoi(str_block);
 
 			    // Call TrainSystem singleton instance to create a new train
 			    Train *pto_send;
-			    pto_send = TrainSystem::GetInstance().CreateNewTrain(block_to);
+			    pto_send = TrainSystem::GetInstance().CreateNewTrain(block_to,line_on);
 
 			    // Push Train Struct to Track controller queue
 				reqSend.SetRequestCode(Common::RequestCode::SWTRACK_DISPATCH_TRAIN);  // Create request class to send
@@ -68,7 +80,7 @@ void moduleMain()
 	    	case Common::RequestCode::CTC_GET_OCCUPANCIES:
 		    {
 			    int block_location = std::stoi(req.GetData());  // get block location as integer
-
+				/*
 			    // set the block passed in as occupied
 			    TrainSystem::GetInstance().SetTrackOccupied(block_location);
 
@@ -92,6 +104,7 @@ void moduleMain()
 				    LOG_CTC("From TrainLocationBuffer_CTC() : Block %d set occupied, Block %d set not occupied", block_location, block_location - 1);
 
 			    }
+			    */
 			    break;
 		    }
 		    default:
