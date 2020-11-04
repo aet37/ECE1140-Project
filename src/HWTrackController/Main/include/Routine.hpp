@@ -27,7 +27,7 @@ public:
     /**
      * @brief Constructs a new Routine object
     */
-    Routine(const char* pRoutineName) :
+    explicit Routine(const char* pRoutineName) :
         m_routineName(pRoutineName),
         m_rungList()
     {}

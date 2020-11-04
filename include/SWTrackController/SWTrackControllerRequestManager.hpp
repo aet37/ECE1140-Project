@@ -20,7 +20,7 @@ class Response;
 class Request;
 }
 
-namespace SW_TrackController
+namespace SWTrackController
 {
 
 /**
