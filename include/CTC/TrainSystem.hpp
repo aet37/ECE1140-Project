@@ -39,7 +39,8 @@ class TrainSystem
 		std::vector<Train*> p_trains;
 
 		/// List of Tracks
-		std::vector<Track*> p_tracks;
+		std::vector<Track*> p_blocks_red;
+		std::vector<Track*> p_blocks_green;
 
 		/// List of Signals
 		std::vector<Signal*> p_signals;
@@ -71,7 +72,7 @@ class TrainSystem
 		* @return vector<Track*>
 		*
 		*/
-		std::vector<Track*> GetTrackArr();
+		std::vector<Track*> GetTrackArr(enum Line ln);
 
 		/**
 		* @brief Get the Array of train pointers
@@ -92,7 +93,7 @@ class TrainSystem
 		 * @return pointer to newly created Train struct
 		 *
 		 */
-		Train* CreateNewTrain(int block_to);
+		Train* CreateNewTrain(int block_to, enum Line ln);
 
 		/**
 		* @brief change Track status to occupied
@@ -102,7 +103,7 @@ class TrainSystem
 		* @return none
 		*
 		*/
-		void SetTrackOccupied(int track_num);
+		void SetTrackOccupied(int track_num, enum Line ln);
 
 		/**
 		* @brief change Track status to not occupied
@@ -112,7 +113,7 @@ class TrainSystem
 		* @return none
 		*
 		*/
-		void SetTrackNotOccupied(int track_num);
+		void SetTrackNotOccupied(int track_num, enum Line ln);
 };
 
 #endif //CTC_TRAIN_SYSTEM_H

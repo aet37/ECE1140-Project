@@ -48,31 +48,6 @@ public:
 
 protected:
 private:
-    /// Queue for requests to the hardware
-    static Common::ServiceQueue<Common::Request*> m_requestQueue;
-
-    /// Queue for responses from the hardware
-    static Common::ServiceQueue<Common::Response*> m_responseQueue;
-
-    /**
-     * @brief Adds a request to the queue
-    */
-    void AddRequest(const Common::Request& rReq);
-
-    /**
-     * @brief Adds a response to the queue
-    */
-    void AddResponse(const Common::Response& rResp);
-
-    /**
-     * @brief Obtains the next request from the queue
-    */
-    Common::Request* GetNextRequest();
-
-    /**
-     * @brief Obtains the next response from the queue
-    */
-    Common::Response* GetNextResponse();
 };
 
 } // namespace SWTrainController

@@ -8,6 +8,7 @@ set(SOURCES
     SWTrainControllerMain.cpp
     ControlSystem.cpp
     Controller.cpp
+    SWTrainControllerRequestManager.cpp
 )
 set(CMAKE_CXX_STANDARD 17)
 
