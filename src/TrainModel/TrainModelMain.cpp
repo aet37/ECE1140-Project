@@ -100,54 +100,42 @@ void moduleMain()
             {
                 uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
                 uint32_t trainLength = receivedRequest.ParseData<uint32_t>(1);
-                LOG_TRAIN_MODEL("Train Length = %d\nTrain ID = %d", trainLength, trainId);
+                LOG_TRAIN_MODEL("Train Length = %d, Train ID = %d", trainLength, trainId);
                 break;
             }
             case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_MASS:
             {
-                // uint32_t power = std::stoi(receivedRequest.GetData());
-                // currentSpeed = (power * 2);
-                // LOG_TRAIN_MODEL("currentSpeed = %d", currentSpeed);
-                // std::string currentSpeedSend = std::to_string(currentSpeed);
-                // Common::Request newRequest(Common::RequestCode::SWTRAIN_UPDATE_CURRENT_SPEED, currentSpeedSend);
-                // SWTrainController::serviceQueue.Push(newRequest);
+                uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
+                uint32_t trainMass = receivedRequest.ParseData<uint32_t>(1);
+                LOG_TRAIN_MODEL("Train Mass = %d, Train ID = %d", trainMass, trainId);
                 break;
             }
             case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_HEIGHT:
             {
-                // uint32_t disData = std::stoi(receivedRequest.GetData());
-                // LOG_TRAIN_MODEL("Dispatch Train = %d", currendisDatatSpeed);
-                // std::string disDataSend = std::to_string(disData);
-                // Common::Request newRequest(Common::RequestCode::SWTRAIN_DISPATCH_TRAIN, disDataSend);
-                // SWTrainController::serviceQueue.Push(newRequest);
+                uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
+                uint32_t trainHeight = receivedRequest.ParseData<uint32_t>(1);
+                LOG_TRAIN_MODEL("Train Height = %d, Train ID = %d", trainHeight, trainId);
                 break;
             }
             case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_WIDTH:
             {
-                // uint32_t power = std::stoi(receivedRequest.GetData());
-                // currentSpeed = (power * 2);
-                // LOG_TRAIN_MODEL("currentSpeed = %d", currentSpeed);
-                // std::string currentSpeedSend = std::to_string(currentSpeed);
-                // Common::Request newRequest(Common::RequestCode::SWTRAIN_UPDATE_CURRENT_SPEED, currentSpeedSend);
-                // SWTrainController::serviceQueue.Push(newRequest);
+                uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
+                uint32_t trainWidth = receivedRequest.ParseData<uint32_t>(1);
+                LOG_TRAIN_MODEL("Train Width = %d, Train ID = %d", trainWidth, trainId);
                 break;
             }
             case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_PASSENGER_COUNT:
             {
-                // uint32_t disData = std::stoi(receivedRequest.GetData());
-                // LOG_TRAIN_MODEL("Dispatch Train = %d", currendisDatatSpeed);
-                // std::string disDataSend = std::to_string(disData);
-                // Common::Request newRequest(Common::RequestCode::SWTRAIN_DISPATCH_TRAIN, disDataSend);
-                // SWTrainController::serviceQueue.Push(newRequest);
+                uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
+                uint32_t trainPassengerCount = receivedRequest.ParseData<uint32_t>(1);
+                LOG_TRAIN_MODEL("Train Passenger Count = %d, Train ID = %d", trainPassengerCount, trainId);
                 break;
             }
             case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_CREW_COUNT:
             {
-                // uint32_t disData = std::stoi(receivedRequest.GetData());
-                // LOG_TRAIN_MODEL("Dispatch Train = %d", currendisDatatSpeed);
-                // std::string disDataSend = std::to_string(disData);
-                // Common::Request newRequest(Common::RequestCode::SWTRAIN_DISPATCH_TRAIN, disDataSend);
-                // SWTrainController::serviceQueue.Push(newRequest);
+                uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
+                uint32_t trainCrewCount = receivedRequest.ParseData<uint32_t>(1);
+                LOG_TRAIN_MODEL("Train Crew Count = %d, Train ID = %d", trainCrewCount, trainId);
                 break;
             }
             default:
