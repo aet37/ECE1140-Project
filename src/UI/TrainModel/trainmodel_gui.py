@@ -151,7 +151,7 @@ class Ui(QtWidgets.QMainWindow):
         self.fail_alert.setStyleSheet("color: rgb(133, 158, 166);")
 
     def train_reports(self):
-        # This is executed when the button is pressed
+        """Method called when the train report button is pressed"""
         uic.loadUi('src/UI/TrainModel/Train_Report.ui', self)
         self.logoutbutton = self.findChild(QtWidgets.QPushButton, 'logout_button_report')
         self.logoutbutton.clicked.connect(self.logout)
