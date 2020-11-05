@@ -45,7 +45,8 @@ class RequestCode(Enum):
     CTC_SEND_GUI_TRAIN_INFO = 42
     CTC_SEND_GUI_TRACK_INFO = 43
     CTC_SEND_GUI_SIGNAL_INFO = 44
-	CTC_GIVE_TICKET_SALES = 45 # Used by the track model to give the ctc ticket sales
+    CTC_SEND_TIMER_REQUEST = 45
+	CTC_GIVE_TICKET_SALES = 46 # Used by the track model to give the ctc ticket sales
     CTC_TIME_TRIGGERED = 60
     CTC_GET_SIGNALS = 61
     CTC_GET_TRACK_STATUS = 62

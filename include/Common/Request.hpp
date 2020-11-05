@@ -44,20 +44,20 @@ enum class RequestCode : uint8_t
     DEBUG_TO_SWTRAINCTRL = 8,
 
     CTC_GUI_DISPATCH_TRAIN = 32, // Used by the gui when the dispatcher dispatches a new train
-    CTC_SEND_GUI_OCCUPANCIES = 33,
-
-    CTC_UPDATE_AUTHORITY = 34,
-    CTC_UPDATE_SPEED = 35,
-    CTC_UPDATE_SIGNAL = 36,
-    CTC_UPDATE_SCHEDULE = 37,
-    CTC_UPDATE_AUTOMATIC_MODE = 38,
-    CTC_UPDATE_SWITCH = 39, // Used by the Track model to update switch positions
-    CTC_SEND_GUI_THROUGHPUT = 40,
-    CTC_SEND_GUI_TRAIN_INFO = 41,
-    CTC_SEND_GUI_TRACK_INFO = 42,
-    CTC_SEND_GUI_SIGNAL_INFO = 43,
-    CTC_SEND_TIMER_REQUEST = 44,
-    CTC_GIVE_TICKET_SALES = 45, // Used by the track model to give the ctc ticket sales
+	CTC_SEND_GUI_GREEN_OCCUPANCIES = 33,
+	CTC_SEND_GUI_RED_OCCUPANCIES = 34,
+    CTC_UPDATE_AUTHORITY = 35,
+    CTC_UPDATE_SPEED = 36,
+    CTC_UPDATE_SIGNAL = 37,
+    CTC_UPDATE_SCHEDULE = 38,
+    CTC_UPDATE_AUTOMATIC_MODE = 39,
+    CTC_UPDATE_SWITCH = 40, // Used by the Track model to update switch positions
+    CTC_SEND_GUI_THROUGHPUT = 41,
+    CTC_SEND_GUI_TRAIN_INFO = 42,
+    CTC_SEND_GUI_TRACK_INFO = 43,
+    CTC_SEND_GUI_SIGNAL_INFO = 44,
+    CTC_SEND_TIMER_REQUEST = 45,
+    CTC_GIVE_TICKET_SALES = 46, // Used by the track model to give the ctc ticket sales
     CTC_TIME_TRIGGERED = 60,
     CTC_GET_SIGNALS = 61,
     CTC_GET_TRACK_STATUS = 62,
