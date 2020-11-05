@@ -9,7 +9,6 @@
 // SYSTEM INCLUDES
 #include <algorithm>
 #include <iostream>
-#include <stdint.h>
 #include <string>
 
 // C++ PROJECT INCLUDES

@@ -27,7 +27,7 @@ void DebugRequestManager::HandleRequest(const Common::Request& rRequest, Common:
 {
     // Get the actual request information from the debug request
     Common::RequestCode reqCode = rRequest.ParseData<Common::RequestCode>(0);
-    
+
     // We need to separate out the request code from the data now
     std::string containedRequest = rRequest.GetData();
     std::string data = containedRequest.substr(containedRequest.find_first_of(' ') + 1);

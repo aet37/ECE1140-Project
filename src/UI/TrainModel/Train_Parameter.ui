@@ -178,7 +178,7 @@ border-color: rgb(0, 0, 0);</string>
      <property name="geometry">
       <rect>
        <x>250</x>
-       <y>280</y>
+       <y>250</y>
        <width>131</width>
        <height>31</height>
       </rect>
@@ -219,38 +219,6 @@ border-color: rgb(0, 0, 0);</string>
       </size>
      </property>
     </widget>
-    <widget class="QLineEdit" name="in_ki">
-     <property name="geometry">
-      <rect>
-       <x>340</x>
-       <y>250</y>
-       <width>181</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="placeholderText">
-      <string>Input Train KI...</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="in_kp">
-     <property name="geometry">
-      <rect>
-       <x>110</x>
-       <y>250</y>
-       <width>181</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="placeholderText">
-      <string>Input Train KP...</string>
-     </property>
-    </widget>
     <widget class="QPushButton" name="pagePtoM_button">
      <property name="geometry">
       <rect>
@@ -271,7 +239,7 @@ border-color: rgb(0, 0, 0);</string>
      <property name="geometry">
       <rect>
        <x>270</x>
-       <y>320</y>
+       <y>290</y>
        <width>101</width>
        <height>16</height>
       </rect>
@@ -283,12 +251,22 @@ border-color: rgb(0, 0, 0);</string>
       <string>Saved successfully</string>
      </property>
     </widget>
-    <zorder>label</zorder>
-    <zorder>save_button</zorder>
-    <zorder>in_kp</zorder>
-    <zorder>in_ki</zorder>
-    <zorder>pagePtoM_button</zorder>
-    <zorder>save_alert</zorder>
+    <widget class="QLabel" name="fail_alert">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>300</y>
+       <width>221</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(133, 158, 166);</string>
+     </property>
+     <property name="text">
+      <string>Failed to send</string>
+     </property>
+    </widget>
    </widget>
    <zorder>frame</zorder>
    <zorder>logout_button_parameters</zorder>

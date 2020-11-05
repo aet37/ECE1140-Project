@@ -100,6 +100,7 @@ static void HandleStartDownload(UserProgram* pProgram, const String& rProgramNam
     Scheduler::GetInstance().RemoveUserTasks();
     pProgram->ClearMemory();
     pProgram->SetProgramName(rProgramName.c_str());
+    TagDatabase::Clear();
     SendResponse(ResponseCode::SUCCESS);
 }
 
@@ -162,7 +163,7 @@ static void HandleCreateTask(UserProgram* pProgram, const String& rData)
     {
         taskType = TaskType::EVENT_DRIVEN;
         String eventName = rData.substring(firstSpaceIndex + 1, secondSpaceIndex);
-        // TODO: Need to do something with this
+        // TODO(ljk55): Need to do something with this
     }
     else
     {
