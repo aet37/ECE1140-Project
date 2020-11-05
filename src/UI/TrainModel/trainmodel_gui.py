@@ -127,15 +127,19 @@ class Ui(QtWidgets.QMainWindow):
 
         # Verify the user's input
         for value in parameters.values():
+            if value == "":
+                self.fail_alert.setText("Some of the parameters are missing")
+                self.fail_alert.setStyleSheet("color: red;")
+                return
+                
             try:
                 int(value)
             except ValueError:
+                self.fail_alert.setText("All parameters must be integer values")
                 self.fail_alert.setStyleSheet("color: red;")
                 return
 
-            if value == "":
-                self.fail_alert.setStyleSheet("color: red;")
-                return
+            
 
         # Send the data to the cloud
         for request_code, value in parameters.items():

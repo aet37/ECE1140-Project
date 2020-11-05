@@ -57,16 +57,6 @@ void moduleMain()
                 // SWTrainController::serviceQueue.Push(newRequest);
                 break;
             }
-            case Common::RequestCode::TRAIN_MODEL_SET_THE_DAMN_LIGHTS:
-            {
-                // uint32_t power = std::stoi(receivedRequest.GetData());
-                // currentSpeed = (power * 2);
-                // LOG_TRAIN_MODEL("currentSpeed = %d", currentSpeed);
-                // std::string currentSpeedSend = std::to_string(currentSpeed);
-                // Common::Request newRequest(Common::RequestCode::SWTRAIN_UPDATE_AUTHORITY, currentSpeedSend);
-                // SWTrainController::serviceQueue.Push(newRequest);
-                break;
-            }
             case Common::RequestCode::TRAIN_MODEL_UPDATE_AUTHORITY:
             {
                 uint32_t Authority = std::stoi(receivedRequest.GetData());
@@ -89,11 +79,9 @@ void moduleMain()
             }
             case Common::RequestCode::TRAIN_MODEL_SET_THE_DAMN_LIGHTS:
             {
-                uint32_t theLights = std::stoi(receivedRequest.GetData());
-                LOG_TRAIN_MODEL("Lights Status = %d", theLights);
-                std::string theLightsSend = std::to_string(theLights);
-                // Common::Request newRequest(Common::RequestCode::SWTRAIN_DISPATCH_TRAIN, theLightsSend);
-                // SWTrainController::serviceQueue.Push(newRequest);
+                uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
+                bool theLights = receivedRequest.ParseData<bool>(1);
+                LOG_TRAIN_MODEL("Train Light Status = %d, Train ID = %d", theLights, trainId);
                 break;
             }
             case Common::RequestCode::TRAIN_MODEL_GUI_CAUSE_FAILURE:
