@@ -44,7 +44,7 @@ class LoginPage(QtWidgets.QMainWindow):
         elif username == "swtrain" and password == "jerry":
             file_path = 'src/UI/SWTrainController/TrainController.py'
         elif username == "engineer" and password == "jerry":
-            file_path = 'src/UI/TrainController/TrainEngineer.py'
+            file_path = 'src/UI/SWTrainController/TrainEngineer.py'
         else:
             self.alert_login.setStyleSheet("color: red;")
             return
