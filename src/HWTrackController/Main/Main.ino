@@ -9,11 +9,8 @@
 #include "include/Communications.hpp" // For Communications::CommsTask
 #include "include/Scheduler.hpp" // For Scheduler
 #include "include/UserProgram.hpp" // For UserProgram
-#include "include/Task.hpp" // For Task
-#include "include/Routine.hpp" // For Routine
-#include "include/Rung.hpp" // For Rung
-#include "include/Instruction.hpp" // For Instruction
-#include "include/TagDatabase.hpp" // For TagDatabase::AddTag
+#include "include/Lcd/LcdApi.hpp" // For LcdApi
+#include "include/TagDatabase.hpp" // For TagDatabase
 #include "include/ArduinoLogger.hpp" // For LOG
 
 static uint64_t currentTime;
@@ -22,6 +19,10 @@ void setup()
 {
     // Initialize Serial
     Serial.begin(9600);
+
+    // Initialize the lcd display
+    LcdApi::Initialize();
+    LcdApi::WriteTest();
 
     // Pin Initialization
     pinMode(LED_BUILTIN, OUTPUT);
@@ -43,6 +44,7 @@ void loop()
 
 void toggleTask(void* something)
 {
+    LcdApi::ScrollRight();
     digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
     LOG("LED Toggled\n");
 }
