@@ -57,6 +57,16 @@ void moduleMain()
                 // SWTrainController::serviceQueue.Push(newRequest);
                 break;
             }
+            case Common::RequestCode::TRAIN_MODEL_SET_THE_DAMN_LIGHTS:
+            {
+                // uint32_t power = std::stoi(receivedRequest.GetData());
+                // currentSpeed = (power * 2);
+                // LOG_TRAIN_MODEL("currentSpeed = %d", currentSpeed);
+                // std::string currentSpeedSend = std::to_string(currentSpeed);
+                // Common::Request newRequest(Common::RequestCode::SWTRAIN_UPDATE_AUTHORITY, currentSpeedSend);
+                // SWTrainController::serviceQueue.Push(newRequest);
+                break;
+            }
             case Common::RequestCode::TRAIN_MODEL_UPDATE_AUTHORITY:
             {
                 uint32_t Authority = std::stoi(receivedRequest.GetData());
