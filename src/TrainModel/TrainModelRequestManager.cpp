@@ -34,6 +34,7 @@ void TrainModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
         case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_WIDTH:
         case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_CREW_COUNT:
             TrainModel::serviceQueue.Push(rRequest);
+            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         default:
             LOG_TRAIN_MODEL("Invalid command %d received", static_cast<uint16_t>(rRequest.GetRequestCode()));
