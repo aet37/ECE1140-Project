@@ -10,6 +10,18 @@
 
 #ifndef CTC_CTCDEF_H
 #define CTC_CTCDEF_H
+
+/**
+ * @enum Line
+ *
+ * @brief Enumerated type telling line or train
+ *
+ * @li LINE_GREEN
+ * @li LINE_RED
+ *
+ */
+enum Line {LINE_GREEN, LINE_RED, LINE_UNSPEC};
+
 /**
  *  @struct Train
  *
@@ -22,6 +34,8 @@ struct Train
 	int command_speed;
 	int authority;
 	int destination_block;
+	enum Line line_on;
+	int block_on;
 
 	// Constructor to initialize elements
 	Train(int id, int block)
@@ -30,6 +44,8 @@ struct Train
 		destination_block = block;
 		command_speed = 0;
 		authority = 0;
+		line_on = LINE_UNSPEC;
+		block_on = -1;
 	}
 };
 
@@ -51,17 +67,6 @@ struct Track
 		occupied = false;
 	}
 };
-
-/**
- * @enum Line
- *
- * @brief Enumerated type telling line or train
- *
- * @li LINE_GREEN
- * @li LINE_RED
- *
- */
-enum Line {LINE_GREEN, LINE_RED};
 
 /**
  * @enum Color

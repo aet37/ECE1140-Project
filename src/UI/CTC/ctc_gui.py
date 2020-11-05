@@ -151,10 +151,10 @@ class CTCUi(QtWidgets.QMainWindow):
 
 	#######################################################################################################################################
 	#######################################################################################################################################
-	# Opens Map Window
+	# Opens Green Map Window
 	#######################################################################################################################################
 	#######################################################################################################################################
-	def MapWindow(self):
+	def GreenMapWindow(self):
 		global time_timr
 		uic.loadUi('src/UI/CTC/ctc_view_map.ui', self)
 		self.setWindowTitle("CTC - View Map")
@@ -165,6 +165,7 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.d_track_label = self.findChild(QtWidgets.QLabel, 'TrackInput') # Find the label
 
 		# Automatically refresh Map after 700ms
+
 		time_timr = QtCore.QTimer(self)
 		time_timr.timeout.connect(self.RefreshMap)
 		time_timr.start(700)

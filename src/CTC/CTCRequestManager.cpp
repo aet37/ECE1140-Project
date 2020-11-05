@@ -32,7 +32,7 @@ void CTCRequestManager::HandleRequest(const Common::Request& rRequest, Common::R
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
-        case Common::RequestCode::CTC_SEND_GUI_OCCUPANCIES:
+        case Common::RequestCode::CTC_SEND_GUI_GREEN_OCCUPANCIES:
         {
 			// send Response Code
 	        rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
