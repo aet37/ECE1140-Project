@@ -12,7 +12,7 @@
 #include "Request.hpp" // For Request
 #include "Response.hpp" // For Response
 #include "Logger.hpp"   // For LOG macros
-#include "TrainModelData.hpp"
+#include "TrainModelMain.hpp" // For TrainModel::serviceQueue
 
 namespace TrainModel
 {
@@ -26,6 +26,14 @@ void TrainModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
             // Temporarily hard code the current speed
             rResponse.SetData("10");
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+            break;
+        case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_LENGTH:
+        case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_MASS:
+        case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_HEIGHT:
+        case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_PASSENGER_COUNT:
+        case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_WIDTH:
+        case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_CREW_COUNT:
+            TrainModel::serviceQueue.Push(rRequest);
             break;
         default:
             LOG_TRAIN_MODEL("Invalid command %d received", static_cast<uint16_t>(rRequest.GetRequestCode()));
