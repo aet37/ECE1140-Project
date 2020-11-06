@@ -81,7 +81,7 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.button.clicked.connect(self.GreenMapWindow)
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'ViewRed') # Find the view green button
-		#self.button.clicked.connect(self.RedMapWindow)
+		self.button.clicked.connect(self.RedMapWindow)
 
 	#######################################################################################################################################
 	#######################################################################################################################################
@@ -214,7 +214,7 @@ class CTCUi(QtWidgets.QMainWindow):
 		# Automatically refresh Map after 700ms
 
 		time_timr = QtCore.QTimer(self)
-		time_timr.timeout.connect(self.RefreshMap)
+		time_timr.timeout.connect(self.RefreshMapGreen)
 		time_timr.start(700)
 
 		# Find the Blocks
@@ -225,7 +225,7 @@ class CTCUi(QtWidgets.QMainWindow):
 		for i in range(1, 7):
 			exec('self.S%s = self.findChild(QtWidgets.QPushButton, \'SW%s\')' % (str(i), str(i)))
 
-	def RefreshMap(self):
+	def RefreshMapGreen(self):
 		# Ping server for track occupancies
 		m_tuple_data = send_message(RequestCode.CTC_SEND_GUI_GREEN_OCCUPANCIES)
 
@@ -269,7 +269,7 @@ class CTCUi(QtWidgets.QMainWindow):
 
 	#######################################################################################################################################
 	#######################################################################################################################################
-	# Opens Signal Info Window
+	# Opens Green Signal Info Window
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def ViewSignalGreen(self):
@@ -278,6 +278,90 @@ class CTCUi(QtWidgets.QMainWindow):
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
 		self.button.clicked.connect(self.GreenMapWindow)
+
+	#######################################################################################################################################
+	#######################################################################################################################################
+	# Opens Red Map Window
+	#######################################################################################################################################
+	#######################################################################################################################################
+	def RedMapWindow(self):
+		global time_timr
+		uic.loadUi('src/UI/CTC/ctc_view_red_line.ui', self)
+		self.setWindowTitle("CTC - View Red Map")
+
+		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMapMenu') # Find the button
+		self.button.clicked.connect(self.LeaveThis)
+
+		self.SigButton = self.findChild(QtWidgets.QPushButton, 'ViewSignalButton')	# Find signal button
+		self.SigButton.clicked.connect(self.ViewSignalRedGo)
+
+		# Automatically refresh Map after 700ms
+
+		time_timr = QtCore.QTimer(self)
+		time_timr.timeout.connect(self.RefreshMapRed)
+		time_timr.start(700)
+
+		# Find the Blocks
+		for i in range(1, 77):
+			exec('self.R%s = self.findChild(QtWidgets.QPushButton, \'RB%s\')' % (str(i), str(i)))
+
+		 # Find the Switches
+		for i in range(1, 8):
+			exec('self.S%s = self.findChild(QtWidgets.QPushButton, \'SW%s\')' % (str(i), str(i)))
+
+	def RefreshMapRed(self):
+		# Ping server for track occupancies
+		m_tuple_data = send_message(RequestCode.CTC_SEND_GUI_RED_OCCUPANICES)
+
+		# Extract string data from tuple
+		m_data = m_tuple_data[1]
+
+		for i in range(len(m_data)):
+			if(m_data[i] == 't'):
+				try:
+					eval('self.R%s.setStyleSheet(\"background-color: rgb(255, 255, 10);\")' % str(i + 1))		# if occupied change block color to yellow
+				except:
+					print(i, 'Warning: Screen has been closed before button could update')
+			else:
+				try:
+					eval('self.R%s.setStyleSheet(\"background-color: rgb(33, 255, 128);\")' % str(i + 1))		# if not occupied, change block color to green
+				except:
+					print('Warning: Screen has been closed before  button could update')
+
+		# Ping server for switch positions
+		m_tuple_data = send_message(RequestCode.CTC_SEND_GUI_SWITCH_POS_RED)
+
+		# Extract string data from tuple
+		m_data = m_tuple_data[1]
+
+		for i in range(1, 8):
+			wrtxt = m_data[(4 * (i - 1)):(3 + (4 * (i - 1)))]
+			try:
+				eval('self.SW%s.setText(\'%s\')' % (str(i), wrtxt))
+			except:
+				print('Warning: Screen has been closed before button could update')
+
+	def ViewSignalRedGo(self):
+		global time_timr
+		time_timr.stop()
+		self.ViewSignalRed()
+
+	def LeaveThis(self):
+		global time_timr
+		time_timr.stop()
+		self.MapMenuWindow()
+
+	#######################################################################################################################################
+	#######################################################################################################################################
+	# Opens Red Signal Info Window
+	#######################################################################################################################################
+	#######################################################################################################################################
+	def ViewSignalRed(self):
+		uic.loadUi('src/UI/CTC/ctc_view_signal_red_line.ui', self)
+		self.setWindowTitle("CTC - View Green Line Signal")
+
+		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
+		self.button.clicked.connect(self.RedMapWindow)
 
 	#######################################################################################################################################
 	#######################################################################################################################################
