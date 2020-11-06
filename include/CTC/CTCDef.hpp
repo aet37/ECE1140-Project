@@ -11,7 +11,7 @@
 #ifndef CTC_CTCDEF_H
 #define CTC_CTCDEF_H
 
-#include <map>
+#include <vector>
 
 /**
  * @enum Line
