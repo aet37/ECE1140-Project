@@ -22,16 +22,32 @@ void Scheduler::RunTasks()
     // For every task...
     for (int i = 0; i < m_taskList.GetLength(); i++)
     {
+        // Get the next task in the list
         SystemTask* pTask = m_taskList[i];
 
-        // If it's
+        // Determine if it's been this task's period
         if (currentTimeInMs - pTask->GetTimeLastRun() >= pTask->GetPeriod())
         {
-            // LOG("Error Time: "); LOG_DECN((currentTimeInMs - pTask->GetTimeLastRun() - pTask->GetPeriod()));
             pTask->Execute();
             pTask->SetTimeLastRun(currentTimeInMs);
         }
     }
+}
+
+bool Scheduler::RunEventDrivenTask(const String& rEventName)
+{
+    bool taskRun = false;
+    for (int i = 0; i < m_eventDrivenTaskList.GetLength(); i++)
+    {
+        Task* pTask = m_eventDrivenTaskList[i];
+
+        if (pTask->GetEventName().equals(rEventName))
+        {
+            pTask->Execute();
+            taskRun = true;
+        }
+    }
+    return taskRun;
 }
 
 void Scheduler::RemoveUserTasks()

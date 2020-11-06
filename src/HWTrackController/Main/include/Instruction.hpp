@@ -52,6 +52,16 @@ public:
     */
     bool Evaluate();
 
+    /**
+     * @brief Gets the instruction type
+    */
+    const InstructionType GetInstructionType() const { return m_type; }
+
+    /**
+     * @brief Gets the argument of the instruction
+    */
+    const String& GetArgument() const { return m_argument; }
+
 protected:
 private:
     /// Type of the instruction
