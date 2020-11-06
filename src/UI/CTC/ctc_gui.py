@@ -201,7 +201,6 @@ class CTCUi(QtWidgets.QMainWindow):
 
 		# Extract string data from tuple
 		m_data = m_tuple_data[1]
-		print(len(m_data))
 
 		for i in range(len(m_data)):
 			if(m_data[i] == 't'):
