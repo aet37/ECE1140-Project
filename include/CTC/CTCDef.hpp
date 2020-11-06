@@ -12,6 +12,7 @@
 #define CTC_CTCDEF_H
 
 #include <vector>
+#include <string>
 
 /**
  * @enum Line
