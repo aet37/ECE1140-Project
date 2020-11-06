@@ -39,6 +39,7 @@ public:
     Task(const char* pTaskName, TaskType taskType, uint32_t periodInMs = 0) :
         SystemTask(Run, this, periodInMs),
         m_taskName(pTaskName),
+        m_event(""),
         m_type(taskType),
         m_routineList(),
         m_pLastCreatedRoutine(nullptr)
@@ -74,10 +75,28 @@ public:
     */
     bool IsUserTask() const { return true; }
 
+    /**
+     * @brief Gets the task type
+    */
+    TaskType GetTaskType() const { return m_type; }
+
+    /**
+     * @brief Gets the name of the event that will trigger this task
+    */
+    const String& GetEventName() const { return m_event; }
+
+    /**
+     * @brief Sets the name of the event that will trigger this task
+    */
+    void SetEventName(String eventName) { m_event = eventName; }
+
 protected:
 private:
     /// Type of the task
     TaskType m_type;
+
+    /// Name of the event if event driven
+    String m_event;
 
     /// Name of the task
     const String m_taskName;
