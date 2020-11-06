@@ -81,6 +81,14 @@ void moduleMain()
 				reqSend.AppendData(std::to_string(pto_send->destination_block));
 			    reqSend.AppendData(std::to_string(pto_send->command_speed));
 			    reqSend.AppendData(std::to_string(pto_send->authority));
+			    if(pto_send->line_on == LINE_GREEN)
+			    {
+				    reqSend.AppendData("0001110100");
+			    }
+			    else
+			    {
+				    reqSend.AppendData("01111101000001");
+			    }
 
 			    SWTrackController::serviceQueue.Push(reqSend);  // Push request to SW Track Controller Queue
 
