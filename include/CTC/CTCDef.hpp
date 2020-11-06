@@ -38,6 +38,8 @@ struct Train
 	int destination_block;
 	enum Line line_on;
 	int block_on;
+	std::vector<int> route_blocks;
+	std::vector<int> rout_switches;
 
 	// Constructor to initialize elements
 	Train(int id, int block)

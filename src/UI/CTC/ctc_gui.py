@@ -95,6 +95,9 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
 		self.button.clicked.connect(self.returnToMainWindow)
 
+		self.green_radio = self.findChild(QtWidgets.QRadioButton, 'GreenRadio')
+		self.red_radio = self.findChild(QtWidgets.QRadioButton, 'RedRadio')
+
 		self.d_block_label = self.findChild(QtWidgets.QLineEdit, 'BlockInput') # Find the text input
 		self.d_time_label = self.findChild(QtWidgets.QLineEdit, 'TimeInput') # Find the input
 
@@ -115,53 +118,80 @@ class CTCUi(QtWidgets.QMainWindow):
 			self.d_conf_label.setText('Error: Invalid Block Entered')
 			return
 
-		# Error Check time values
-		try:
-			int(self.d_time_label.text()[0] + self.d_time_label.text()[1])
-		except:
+		# Make sure user specified a line
+		if((self.green_radio.isChecked() == False) & (self.red_radio.isChecked() == False)):
 			self.d_conf_label.setStyleSheet("color: red")
-			self.d_conf_label.setText('Error: Invalid Time Entered')
-			return
-		try:
-			int(self.d_time_label.text()[3] + self.d_time_label.text()[4])
-		except:
-			self.d_conf_label.setStyleSheet("color: red")
-			self.d_conf_label.setText('Error: Invalid Time Entered')
+			self.d_conf_label.setText('Error: Please Select a Line')
 			return
 
-		# Error Check for time value
-		if(len(self.d_time_label.text()) != 6):
-			self.d_conf_label.setStyleSheet("color: red")
-			self.d_conf_label.setText('Error: Invalid Time Entered')
-			return
-		elif(int(self.d_time_label.text()[0] + self.d_time_label.text()[1]) not in range(1, 13)):
-			self.d_conf_label.setStyleSheet("color: red")
-			self.d_conf_label.setText('Error: Invalid Time Entered')
-			return
-		elif(int(self.d_time_label.text()[3] + self.d_time_label.text()[4]) not in range(60)):
-			self.d_conf_label.setStyleSheet("color: red")
-			self.d_conf_label.setText('Error: Invalid Time Entered')
-			return
-		elif(self.d_time_label.text()[5] not in ['a', 'p']):
-			self.d_conf_label.setStyleSheet("color: red")
-			self.d_conf_label.setText('Error: Invalid Time of Day  Entered (a/p)')
 		# Error Check for block value
-		elif((int(self.d_block_label.text()) < 0) | (len(self.d_block_label.text()) == 0)):
+		if((int(self.d_block_label.text()) <= 0) | (len(self.d_block_label.text()) == 0)):
 			self.d_conf_label.setStyleSheet("color: red")
 			self.d_conf_label.setText('Error: Invalid Block Entered')
 			return
+		elif((self.red_radio.isChecked()) & (int(self.d_block_label.text()) > 76)):
+			self.d_conf_label.setStyleSheet("color: red")
+			self.d_conf_label.setText('Error: Invalid Block Entered For Red Line')
+			return
+		elif((self.red_radio.isChecked() == False) & (int(self.d_block_label.text()) > 155)):
+			self.d_conf_label.setStyleSheet("color: red")
+			self.d_conf_label.setText('Error: Invalid Block Entered For Green Line')
+			return
 
-		# Print confirmation to screen and take actions if information valid
+		# Error Check for time value
+		if((len(self.d_time_label.text()) != 6) & (len(self.d_time_label.text()) != 0)):
+			self.d_conf_label.setStyleSheet("color: red")
+			self.d_conf_label.setText('Error: Invalid Time Entered 3')
+			return
+		elif(len(self.d_time_label.text()) == 6):
+
+			# Error Check time values
+			try:
+				int(self.d_time_label.text()[0] + self.d_time_label.text()[1])
+			except:
+				self.d_conf_label.setStyleSheet("color: red")
+				self.d_conf_label.setText('Error: Invalid Time Entered 1')
+				return
+			try:
+				int(self.d_time_label.text()[3] + self.d_time_label.text()[4])
+			except:
+				self.d_conf_label.setStyleSheet("color: red")
+				self.d_conf_label.setText('Error: Invalid Time Entered 2')
+				return
+
+			if(int(self.d_time_label.text()[0] + self.d_time_label.text()[1]) not in range(1, 13)):
+				self.d_conf_label.setStyleSheet("color: red")
+				self.d_conf_label.setText('Error: Invalid Time Entered 4')
+				return
+			elif(int(self.d_time_label.text()[3] + self.d_time_label.text()[4]) not in range(60)):
+				self.d_conf_label.setStyleSheet("color: red")
+				self.d_conf_label.setText('Error: Invalid Time Entered 5')
+				return
+			elif(self.d_time_label.text()[5] not in ['a', 'p']):
+				self.d_conf_label.setStyleSheet("color: red")
+				self.d_conf_label.setText('Error: Invalid Time of Day  Entered (a/p)')
+
+			# Print confirmation to screen and take actions if information valid
+			else:
+				self.d_conf_label.setStyleSheet("color: green")
+				self.d_conf_label.setText('Train Dispatched to Block ' + self.d_block_label.text() + ' at ' + self.d_time_label.text())
+				self.d_speed_label.setText('Command Speed [to Track Controller]: 55 km/hr')
+				self.d_auth_label.setText('Authority [to Track Controller]: 3 Blocks')
+				##### Send data to server #####
+				##### data = "block hour minute a/p"
+				send_message(RequestCode.CTC_DISPATCH_TRAIN,  str(int(self.red_radio.isChecked())) + ' ' + self.d_time_label.text()[0] + self.d_time_label.text()[1] + ' ' + self.d_time_label.text()[3] + self.d_time_label.text()[4]+ ' ' + self.d_time_label.text()[5] + ' ' + self.d_block_label.text())
+
 		else:
 			self.d_conf_label.setStyleSheet("color: green")
-			self.d_conf_label.setText('Train Dispatched to Block ' + self.d_block_label.text() + ' at ' + self.d_time_label.text())
-			self.d_speed_label.setText('Command Speed [to Track Controller]: 40 km/hr')
-			self.d_auth_label.setText('Authority [to Track Controller]: 1000 m')
+			self.d_conf_label.setText('Train Dispatched to Block ' + self.d_block_label.text() + ' Now')
+			self.d_speed_label.setText('Command Speed [to Track Controller]: 55 km/hr')
+			self.d_auth_label.setText('Authority [to Track Controller]: 3 Blocks')
+			send_message(RequestCode.CTC_DISPATCH_TRAIN,  str(int(self.red_radio.isChecked())) + ' 00 00 a ' + self.d_block_label.text())
 
 
 		##### Send data to server #####
 		##### data = "block hour minute a/p"
-		send_message(RequestCode.CTC_DISPATCH_TRAIN,  '0' + ' ' + self.d_time_label.text()[0] + self.d_time_label.text()[1] + ' ' + self.d_time_label.text()[3] + self.d_time_label.text()[4]+ ' ' + self.d_time_label.text()[5] + ' ' + self.d_block_label.text())
+		#send_message(RequestCode.CTC_DISPATCH_TRAIN,  '0' + ' ' + self.d_time_label.text()[0] + self.d_time_label.text()[1] + ' ' + self.d_time_label.text()[3] + self.d_time_label.text()[4]+ ' ' + self.d_time_label.text()[5] + ' ' + self.d_block_label.text())
 
 		
 

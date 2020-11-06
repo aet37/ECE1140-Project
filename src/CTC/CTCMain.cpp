@@ -46,10 +46,9 @@ void moduleMain()
 			    {
 		    		line_on = LINE_RED;
 			    }
+
 			    // Get block train was dispatched to
-			    std::string str_block = req.GetData().substr(11, req.GetData().size() - 11);
-
-
+			    std::string str_block = req.GetData().substr(10, req.GetData().size() - 10);
 			    // Convert block to integer
 			    int block_to = std::stoi(str_block);
 
