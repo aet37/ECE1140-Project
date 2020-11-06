@@ -23,6 +23,7 @@ bool Instruction::Evaluate()
         assert(TagDatabase::GetTagValue(m_argument, result));
         result = !result;
         break;
+    case InstructionType::OTE:
     case InstructionType::OTL:
         result = TagDatabase::SetTag(m_argument, true);
         assert(result);
