@@ -52,6 +52,7 @@ void CTCRequestManager::HandleRequest(const Common::Request& rRequest, Common::R
 			        to_send.push_back('f');
 			    }
 			}
+			std::cout << to_send.size() << std::endl;
 	        rResponse.SetData(to_send);
 
 			// Log data sent
