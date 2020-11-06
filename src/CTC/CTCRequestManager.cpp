@@ -32,32 +32,53 @@ void CTCRequestManager::HandleRequest(const Common::Request& rRequest, Common::R
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
-        case Common::RequestCode::CTC_SEND_GUI_GREEN_OCCUPANCIES:
-        {
-			// send Response Code
+        case Common::RequestCode::CTC_SEND_GUI_GREEN_OCCUPANCIES: {
+	        // send Response Code
 	        rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
 
-			// Form response message; occupied = "t", not occupied = "f"
-			std::string to_send;
+	        // Form response message; occupied = "t", not occupied = "f"
+	        std::string to_send;
 
-			// Add green line blocks
-			for(int i = 0; i < TrainSystem::GetInstance().GetTrackArr(LINE_GREEN).size(); i++)
-			{
-			    if(TrainSystem::GetInstance().GetTrackArr(LINE_GREEN)[i]->occupied)
-			    {
+	        // Add green line blocks
+	        for (int i = 0; i < TrainSystem::GetInstance().GetTrackArr(LINE_GREEN).size(); i++) {
+		        if (TrainSystem::GetInstance().GetTrackArr(LINE_GREEN)[i]->occupied) {
 			        to_send.push_back('t');
+		        } else {
+			        to_send.push_back('f');
+		        }
+	        }
+	        rResponse.SetData(to_send);
+
+	        // Log data sent
+	        LOG_CTC("From ConnectionHandler.cpp : Occupancies for each track on GREEN LINE sent");
+	        break;
+        }
+	    case Common::RequestCode::CTC_SEND_GUI_RED_OCCUPANCIES:
+	    {
+		    // send Response Code
+		    rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+
+		    // Form response message; occupied = "t", not occupied = "f"
+		    std::string to_send;
+
+		    // Add green line blocks
+		    for(int i = 0; i < TrainSystem::GetInstance().GetTrackArr(LINE_RED).size(); i++)
+		    {
+			    if(TrainSystem::GetInstance().GetTrackArr(LINE_RED)[i]->occupied)
+			    {
+				    to_send.push_back('t');
 			    }
 			    else
 			    {
-			        to_send.push_back('f');
+				    to_send.push_back('f');
 			    }
-			}
-	        rResponse.SetData(to_send);
+		    }
+		    rResponse.SetData(to_send);
 
-			// Log data sent
-			LOG_CTC("From ConnectionHandler.cpp : Occupancies for each track sent");
-            break;
-        }
+		    // Log data sent
+		    LOG_CTC("From ConnectionHandler.cpp : Occupancies for each track on RED LINE sent");
+		    break;
+	    }
         default:
             std::cerr << "Invalid command " << static_cast<uint16_t>(rRequest.GetRequestCode())
                       << " received" << std::endl;
