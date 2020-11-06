@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>642</width>
-    <height>361</height>
+    <height>341</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -213,7 +213,6 @@ border-color: rgb(0, 0, 0);</string>
    <zorder>return_button</zorder>
    <zorder>train_reports_button</zorder>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>
