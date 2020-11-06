@@ -126,31 +126,31 @@ struct Switch
 		greater_block = greater;
 		pointing_to = less;
 	}
+
+	std::string TrackSwitchToString()
+	{
+		std::string to_return;
+
+		if(pointing_to == -1)
+		{
+			to_return = "Yrd";
+		}
+		else if(pointing_to < 10)
+		{
+			to_return.append("00");
+			to_return.append(std::to_string(pointing_to));
+		}
+		else if(pointing_to < 100)
+		{
+			to_return.append("0");
+			to_return.append(std::to_string(pointing_to));
+		}
+		else
+		{
+			to_return.append(std::to_string(pointing_to));
+		}
+		return to_return;
+	}
 };
-
-std::string TrackSwitchToString(int sw)
-{
-	std::string to_return;
-
-	if(sw == -1)
-	{
-		to_return = "Yrd";
-	}
-	else if(sw < 10)
-	{
-		to_return.append("00");
-		to_return.append(std::to_string(sw));
-	}
-	else if(sw < 100)
-	{
-		to_return.append("0");
-		to_return.append(std::to_string(sw));
-	}
-	else
-	{
-		to_return.append(std::to_string(sw));
-	}
-	return to_return;
-}
 
 #endif //CTC_CTCDEF_H

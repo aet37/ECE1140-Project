@@ -90,7 +90,7 @@ void CTCRequestManager::HandleRequest(const Common::Request& rRequest, Common::R
 		    // Add green line switches
 		    for(int i = 0; i < TrainSystem::GetInstance().GetSwitchesArr(LINE_GREEN).size(); i++)
 		    {
-			    to_send.append(TrackSwitchToString(TrainSystem::GetInstance().GetSwitchesArr(LINE_GREEN)[i]->pointing_to));
+			    to_send.append(TrainSystem::GetInstance().GetSwitchesArr(LINE_GREEN)[i]->TrackSwitchToString());
 			    if(i != TrainSystem::GetInstance().GetSwitchesArr(LINE_GREEN).size() - 1)
 			    {
 				    to_send.append(" ");
