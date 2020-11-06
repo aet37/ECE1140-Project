@@ -76,11 +76,20 @@ void moduleMain()
 				reqSend.SetRequestCode(Common::RequestCode::SWTRACK_DISPATCH_TRAIN);  // Create request class to send
 				reqSend.SetData("");    // Clear Previous Data
 
-				// Add "train_di destination_block command_speed authority" to send string
+				// Add "train_di destination_block command_speed authority Line_on switch_arr" to send string
 				reqSend.AppendData(std::to_string(pto_send->train_id));
 				reqSend.AppendData(std::to_string(pto_send->destination_block));
 			    reqSend.AppendData(std::to_string(pto_send->command_speed));
 			    reqSend.AppendData(std::to_string(pto_send->authority));
+			    if(pto_send->line_on == LINE_GREEN)
+			    {
+				    reqSend.AppendData("0");    // Send Line if Green
+			    }
+			    else
+			    {
+			    	reqSend.AppendData("1");    // Send Line if Red
+			    }
+
 			    if(pto_send->line_on == LINE_GREEN)
 			    {
 				    reqSend.AppendData("0001110100");
