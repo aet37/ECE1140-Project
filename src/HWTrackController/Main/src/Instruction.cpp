@@ -8,6 +8,7 @@
 // C++ PROJECT INCLUDES
 #include "../include/Instruction.hpp" // Header for class
 #include "../include/TagDatabase.hpp" // For TagDatabase
+#include "../include/Scheduler.hpp" // For Scheduler
 
 bool Instruction::Evaluate()
 {
@@ -28,6 +29,11 @@ bool Instruction::Evaluate()
         break;
     case InstructionType::OTU:
         result = TagDatabase::SetTag(m_argument, false);
+        assert(result);
+        break;
+    case InstructionType::EMIT:
+        // The compiler is expected to catch an emitted event without a task
+        result = Scheduler::GetInstance().RunEventDrivenTask(m_argument);
         assert(result);
         break;
     default:
