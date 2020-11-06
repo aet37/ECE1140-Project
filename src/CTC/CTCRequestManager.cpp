@@ -40,7 +40,7 @@ void CTCRequestManager::HandleRequest(const Common::Request& rRequest, Common::R
 			// Form response message; occupied = "t", not occupied = "f"
 			std::string to_send;
 
-			// Add green line blocks first
+			// Add green line blocks
 			for(int i = 0; i < TrainSystem::GetInstance().GetTrackArr(LINE_GREEN).size(); i++)
 			{
 			    if(TrainSystem::GetInstance().GetTrackArr(LINE_GREEN)[i]->occupied)
@@ -52,19 +52,6 @@ void CTCRequestManager::HandleRequest(const Common::Request& rRequest, Common::R
 			        to_send.push_back('f');
 			    }
 			}
-
-			// Add red line blocks
-	        for(int i = 0; i < TrainSystem::GetInstance().GetTrackArr(LINE_RED).size(); i++)
-	        {
-		        if(TrainSystem::GetInstance().GetTrackArr(LINE_RED)[i]->occupied)
-		        {
-			        to_send.push_back('t');
-		        }
-		        else
-		        {
-			        to_send.push_back('f');
-		        }
-	        }
 	        rResponse.SetData(to_send);
 
 			// Log data sent
