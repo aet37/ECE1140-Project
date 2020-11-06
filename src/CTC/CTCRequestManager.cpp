@@ -99,7 +99,30 @@ void CTCRequestManager::HandleRequest(const Common::Request& rRequest, Common::R
 		    rResponse.SetData(to_send);
 
 		    // Log data sent
-		    LOG_CTC("From ConnectionHandler.cpp : Signals on GREEN LINE sent");
+		    LOG_CTC("From ConnectionHandler.cpp : Switches on GREEN LINE sent");
+		    break;
+	    }
+	    case Common::RequestCode::CTC_SEND_GUI_SWITCH_POS_RED:
+	    {
+		    // send Response Code
+		    rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+
+		    // Form response message
+		    std::string to_send;
+
+		    // Add green line switches
+		    for(int i = 0; i < TrainSystem::GetInstance().GetSwitchesArr(LINE_RED).size(); i++)
+		    {
+			    to_send.append(TrainSystem::GetInstance().GetSwitchesArr(LINE_RED)[i]->TrackSwitchToString());
+			    if(i != TrainSystem::GetInstance().GetSwitchesArr(LINE_RED).size() - 1)
+			    {
+				    to_send.append(" ");
+			    }
+		    }
+		    rResponse.SetData(to_send);
+
+		    // Log data sent
+		    LOG_CTC("From ConnectionHandler.cpp : Switches on Red LINE sent");
 		    break;
 	    }
         default:

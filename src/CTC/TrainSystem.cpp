@@ -65,6 +65,22 @@ void TrainSystem::ImportTrackLayout()
 	p_switches_green.push_back(sw5);
 	p_switches_green.push_back(sw6);
 
+	// Create Red Switches
+	Switch* rsw1 = new Switch(-1, 8);
+	Switch* rsw2 = new Switch(1, 15);
+	Switch* rsw3 = new Switch(28, 76);
+	Switch* rsw4 = new Switch(32, 72);
+	Switch* rsw5 = new Switch(39, 71);
+	Switch* rsw6 = new Switch(43, 67);
+	Switch* rsw7 = new Switch(53, 66);
+	p_switches_red.push_back(rsw1);
+	p_switches_red.push_back(rsw2);
+	p_switches_red.push_back(rsw3);
+	p_switches_red.push_back(rsw4);
+	p_switches_red.push_back(rsw5);
+	p_switches_red.push_back(rsw6);
+	p_switches_red.push_back(rsw7);
+
 	LOG_CTC("From TrainSystem::ImportTrackLayout() : Tracks Created");
 }
 
