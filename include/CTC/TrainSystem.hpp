@@ -29,6 +29,7 @@ class TrainSystem
 		TrainSystem()
 		{
 			ImportTrackLayout();
+			p_blocks_green[22]->occupied = true;
 			LOG_CTC("From TrainSystem::TrainSystem() : TrainSystem Class Created");
 		}
 

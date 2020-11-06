@@ -223,7 +223,7 @@ class CTCUi(QtWidgets.QMainWindow):
 		for i in range(1, 7):
 			wrtxt = m_data[(4 * (i - 1)):(3 + (4 * (i - 1)))]
 			try:
-				eval('self.SW%s.setText(\'%s\')' % wrtxt)		# if occupied change block color to yellow
+				eval('self.SW%s.setText(\'%s\')' % (str(i), wrtxt))
 			except:
 				print('Warning: Screen has been closed before button could update')
 
