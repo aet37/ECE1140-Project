@@ -56,6 +56,10 @@ void moduleMain()
 			    Train *pto_send;
 			    pto_send = TrainSystem::GetInstance().CreateNewTrain(block_to,line_on);
 
+			    // Set Suggested Speed and Authority
+			    pto_send->command_speed = 55;
+			    pto_send->authority = 3;
+
 			    // Push Train Struct to Track controller queue
 				reqSend.SetRequestCode(Common::RequestCode::SWTRACK_DISPATCH_TRAIN);  // Create request class to send
 				reqSend.SetData("");    // Clear Previous Data
