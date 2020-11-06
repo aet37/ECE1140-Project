@@ -128,7 +128,7 @@ struct Switch
 	}
 };
 
-std::string SwitchToString(int sw)
+std::string TrackSwitchToString(int sw)
 {
 	std::string to_return;
 
