@@ -25,7 +25,7 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.button = self.findChild(QtWidgets.QPushButton, 'Dispatch') # Find the button
 		self.button.clicked.connect(self.DispatchTrainWindow)
 		self.button = self.findChild(QtWidgets.QPushButton, 'Map') # Find the button
-		self.button.clicked.connect(self.MapWindow)
+		self.button.clicked.connect(self.MapMenuWindow)
 
 		self.checkbox = self.findChild(QtWidgets.QCheckBox, 'AutomaticToggle') # Find the check box
 		self.checkbox.clicked.connect(self.ToggleAutomaicMode)
@@ -65,7 +65,23 @@ class CTCUi(QtWidgets.QMainWindow):
 	def saveEditedSchedule(self):
 		app.exit()
 
+	#######################################################################################################################################
+	#######################################################################################################################################
+	# Opens Map Menu Page
+	#######################################################################################################################################
+	#######################################################################################################################################
+	def MapMenuWindow(self):
+		uic.loadUi('src/UI/CTC/ctc_map_menu.ui', self)
+		self.setWindowTitle("CTC - Map Menu")
 
+		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button to return to main menu
+		self.button.clicked.connect(self.returnToMainWindow)
+
+		self.button = self.findChild(QtWidgets.QPushButton, 'ViewGreen') # Find the view green button
+		self.button.clicked.connect(self.GreenMapWindow)
+
+		self.button = self.findChild(QtWidgets.QPushButton, 'ViewRed') # Find the view green button
+		#self.button.clicked.connect(self.RedMapWindow)
 
 	#######################################################################################################################################
 	#######################################################################################################################################
@@ -156,13 +172,14 @@ class CTCUi(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	def GreenMapWindow(self):
 		global time_timr
-		uic.loadUi('src/UI/CTC/ctc_view_map.ui', self)
-		self.setWindowTitle("CTC - View Map")
+		uic.loadUi('src/UI/CTC/ctc_view_green_line.ui', self)
+		self.setWindowTitle("CTC - View Green Map")
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
 		self.button.clicked.connect(self.LeaveThis)
 
-		self.d_track_label = self.findChild(QtWidgets.QLabel, 'TrackInput') # Find the label
+		self.SigButton = self.findChild(QtWidgets.QPushButton, 'ViewSignalButton')	# Find signal button
+		self.SigButton.clicked.connect(self.ViewSignalGreen)
 
 		# Automatically refresh Map after 700ms
 
@@ -170,26 +187,17 @@ class CTCUi(QtWidgets.QMainWindow):
 		time_timr.timeout.connect(self.RefreshMap)
 		time_timr.start(700)
 
-		 # Find the Blocks
-		self.TBlock1 = self.findChild(QtWidgets.QPushButton, 'Block1')
-		self.TBlock2 = self.findChild(QtWidgets.QPushButton, 'Block2')
-		self.TBlock3 = self.findChild(QtWidgets.QPushButton, 'Block3')
-		self.TBlock4 = self.findChild(QtWidgets.QPushButton, 'Block4')
-		self.TBlock5 = self.findChild(QtWidgets.QPushButton, 'Block5')
-		self.TBlock6 = self.findChild(QtWidgets.QPushButton, 'Block6')
-		self.TBlock7 = self.findChild(QtWidgets.QPushButton, 'Block7')
-		self.TBlock8 = self.findChild(QtWidgets.QPushButton, 'Block8')
-		self.TBlock9 = self.findChild(QtWidgets.QPushButton, 'Block9')
-		self.TBlock10 = self.findChild(QtWidgets.QPushButton, 'Block10')
-		self.TBlock11 = self.findChild(QtWidgets.QPushButton, 'Block11')
-		self.TBlock12 = self.findChild(QtWidgets.QPushButton, 'Block12')
-		self.TBlock13 = self.findChild(QtWidgets.QPushButton, 'Block13')
-		self.TBlock14 = self.findChild(QtWidgets.QPushButton, 'Block14')
-		self.TBlock15 = self.findChild(QtWidgets.QPushButton, 'Block15')
+		# Find the Blocks
+		for i in range(1, 151):
+			exec('self.GB%s = self.findChild(QtWidgets.QPushButton, \'G%s\')' % (str(i), str(i)))
+
+		 # Find the Switches
+		for i in range(1, 7):
+			exec('self.S%s = self.findChild(QtWidgets.QPushButton, \'SW%s\')' % (str(i), str(i)))
 
 	def RefreshMap(self):
 		# Ping server for track occupancies
-		m_tuple_data = send_message(RequestCode.CTC_SEND_GUI_OCCUPANCIES)
+		m_tuple_data = send_message(RequestCode.CTC_SEND_GUI_GREEN_OCCUPANCIES)
 
 		# Extract string data from tuple
 		m_data = m_tuple_data[1]
@@ -200,7 +208,7 @@ class CTCUi(QtWidgets.QMainWindow):
 					eval('self.TBlock%s.setStyleSheet(\"background-color: rgb(255, 255, 10);\")' % str(i + 1))		# if occupied change block color to yellow
 					self.d_track_label.setText('Track Occupancy [from Track Controller]: Track ' + str(i + 1) + ' Occupied')
 				except:
-					print('Warning: Screen has been closed before  button could update')
+					print('Warning: Screen has been closed before button could update')
 			else:
 				try:
 					eval('self.TBlock%s.setStyleSheet(\"background-color: rgb(33, 255, 128);\")' % str(i + 1))		# if not occupied, change block color to green
@@ -212,6 +220,17 @@ class CTCUi(QtWidgets.QMainWindow):
 		time_timr.stop()
 		self.returnToMainWindow()
 
+	#######################################################################################################################################
+	#######################################################################################################################################
+	# Opens Signal Info Window
+	#######################################################################################################################################
+	#######################################################################################################################################
+	def ViewSignalGreen(self):
+		uic.loadUi('src/UI/CTC/ctc_view_signal_green_line.ui', self)
+		self.setWindowTitle("CTC - View Green Line Signal")
+
+		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
+		self.button.clicked.connect(self.returnToMainWindow)
 
 	#######################################################################################################################################
 	#######################################################################################################################################
@@ -232,7 +251,7 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.button = self.findChild(QtWidgets.QPushButton, 'Dispatch') # Find the button
 		self.button.clicked.connect(self.DispatchTrainWindow)
 		self.button = self.findChild(QtWidgets.QPushButton, 'Map') # Find the button
-		self.button.clicked.connect(self.MapWindow)
+		self.button.clicked.connect(self.MapMenuWindow)
 
 		self.checkbox = self.findChild(QtWidgets.QCheckBox, 'AutomaticToggle') # Find the check box
 		self.checkbox.clicked.connect(self.ToggleAutomaicMode)
