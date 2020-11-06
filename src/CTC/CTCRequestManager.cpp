@@ -79,6 +79,29 @@ void CTCRequestManager::HandleRequest(const Common::Request& rRequest, Common::R
 		    LOG_CTC("From ConnectionHandler.cpp : Occupancies for each track on RED LINE sent");
 		    break;
 	    }
+	    case Common::RequestCode::CTC_SEND_GUI_SWITCH_POS_GREEN:
+	    {
+		    // send Response Code
+		    rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+
+		    // Form response message
+		    std::string to_send;
+
+		    // Add green line switches
+		    for(int i = 0; i < TrainSystem::GetInstance().GetSwitchesArr(LINE_GREEN).size(); i++)
+		    {
+			    to_send.append(SwitchToString(TrainSystem::GetInstance().GetSwitchesArr(LINE_GREEN)[i]->pointing_to));
+			    if(i != TrainSystem::GetInstance().GetSwitchesArr(LINE_GREEN).size() - 1)
+			    {
+				    to_send.append(" ");
+			    }
+		    }
+		    rResponse.SetData(to_send);
+
+		    // Log data sent
+		    LOG_CTC("From ConnectionHandler.cpp : Signals on GREEN LINE sent");
+		    break;
+	    }
         default:
             std::cerr << "Invalid command " << static_cast<uint16_t>(rRequest.GetRequestCode())
                       << " received" << std::endl;

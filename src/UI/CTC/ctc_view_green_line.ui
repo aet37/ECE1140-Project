@@ -6803,24 +6803,6 @@ background-color: rgb(252, 1, 7);</string>
      <string>(Click Block to close it)</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_156">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>10</y>
-      <width>141</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>24</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>GREEN LINE</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="SW1">
     <property name="geometry">
      <rect>
@@ -7016,6 +6998,23 @@ color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
      <string> (Click to toggle in Maint. Mode)</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="BackToMapMenu">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>151</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(252, 1, 7);
+color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>Back to Map Menu</string>
     </property>
    </widget>
    <zorder>line_165</zorder>
@@ -7492,7 +7491,6 @@ color: rgb(255, 255, 255);</string>
    <zorder>label_154</zorder>
    <zorder>pushButton_3</zorder>
    <zorder>label_155</zorder>
-   <zorder>label_156</zorder>
    <zorder>SW1</zorder>
    <zorder>label_157</zorder>
    <zorder>ViewTrainNum</zorder>
@@ -7506,6 +7504,7 @@ color: rgb(255, 255, 255);</string>
    <zorder>pushButton_10</zorder>
    <zorder>label_158</zorder>
    <zorder>label_159</zorder>
+   <zorder>BackToMapMenu</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

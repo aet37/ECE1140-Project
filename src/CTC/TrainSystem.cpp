@@ -50,6 +50,21 @@ void TrainSystem::ImportTrackLayout()
 		p_blocks_green.push_back(ptemp_track);
 	}
 	ptemp_track = nullptr;
+
+	// Create Green Switches
+	Switch* sw1 = new Switch(1, 12);
+	Switch* sw2 = new Switch(30, 150);
+	Switch* sw3 = new Switch(-1, 59);
+	Switch* sw4 = new Switch(-1, 61);
+	Switch* sw5 = new Switch(77, 101);
+	Switch* sw6 = new Switch(86, 10);
+	p_switches_green.push_back(sw1);
+	p_switches_green.push_back(sw2);
+	p_switches_green.push_back(sw3);
+	p_switches_green.push_back(sw4);
+	p_switches_green.push_back(sw5);
+	p_switches_green.push_back(sw6);
+
 	LOG_CTC("From TrainSystem::ImportTrackLayout() : Tracks Created");
 }
 
@@ -76,7 +91,30 @@ std::vector<Track*> TrainSystem::GetTrackArr(enum Line ln)
 	{
 		throw std::logic_error("TrainSystem::GetTrackArr : Invalid Line Argument");
 	}
+}
 
+/**
+* @brief Get the Array of Signal pointers
+*
+* @param Line
+*
+* @return vector<Signal*>
+*
+*/
+std::vector<Switch*> TrainSystem::GetSwitchesArr(enum Line ln)
+{
+	if(ln == LINE_GREEN)
+	{
+		return p_switches_green;
+	}
+	else if(ln == LINE_RED)
+	{
+		return p_switches_red;
+	}
+	else
+	{
+		throw std::logic_error("TrainSystem::GetTrackArr : Invalid Line Argument");
+	}
 }
 
 /**

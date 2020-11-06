@@ -175,11 +175,11 @@ class CTCUi(QtWidgets.QMainWindow):
 		uic.loadUi('src/UI/CTC/ctc_view_green_line.ui', self)
 		self.setWindowTitle("CTC - View Green Map")
 
-		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
+		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMapMenu') # Find the button
 		self.button.clicked.connect(self.LeaveThis)
 
 		self.SigButton = self.findChild(QtWidgets.QPushButton, 'ViewSignalButton')	# Find signal button
-		self.SigButton.clicked.connect(self.ViewSignalGreen)
+		self.SigButton.clicked.connect(self.ViewSignalGreenGo)
 
 		# Automatically refresh Map after 700ms
 
@@ -206,19 +206,36 @@ class CTCUi(QtWidgets.QMainWindow):
 			if(m_data[i] == 't'):
 				try:
 					eval('self.GB%s.setStyleSheet(\"background-color: rgb(255, 255, 10);\")' % str(i + 1))		# if occupied change block color to yellow
-					#self.d_track_label.setText('Track Occupancy [from Track Controller]: Track ' + str(i + 1) + ' Occupied')
 				except:
 					print(i, 'Warning: Screen has been closed before button could update')
 			else:
 				try:
 					eval('self.GB%s.setStyleSheet(\"background-color: rgb(33, 255, 128);\")' % str(i + 1))		# if not occupied, change block color to green
 				except:
-					print(i, 'Warning: Screen has been closed before  button could update')
+					print('Warning: Screen has been closed before  button could update')
+
+		# Ping server for track occupancies
+		m_tuple_data = send_message(RequestCode.CTC_SEND_GUI_SWITCH_POS_GREEN)
+
+		# Extract string data from tuple
+		m_data = m_tuple_data[1]
+
+		for i in range(1, 7):
+			wrtxt = m_data[(4 * (i - 1)):(3 + (4 * (i - 1)))]
+			try:
+				eval('self.SW%s.setText(\'%s\')' % wrtxt)		# if occupied change block color to yellow
+			except:
+				print('Warning: Screen has been closed before button could update')
+
+	def ViewSignalGreenGo(self):
+		global time_timr
+		time_timr.stop()
+		self.ViewSignalGreen()
 
 	def LeaveThis(self):
 		global time_timr
 		time_timr.stop()
-		self.returnToMainWindow()
+		self.MapMenuWindow()
 
 	#######################################################################################################################################
 	#######################################################################################################################################
@@ -230,7 +247,7 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.setWindowTitle("CTC - View Green Line Signal")
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
-		self.button.clicked.connect(self.returnToMainWindow)
+		self.button.clicked.connect(self.GreenMapWindow)
 
 	#######################################################################################################################################
 	#######################################################################################################################################

@@ -11,6 +11,8 @@
 #ifndef CTC_CTCDEF_H
 #define CTC_CTCDEF_H
 
+#include <map>
+
 /**
  * @enum Line
  *
@@ -103,5 +105,52 @@ struct Signal
 		delete track_on;
 	}
 };
+
+/**
+ * @struct Switch
+ *
+ * @brief Structure that holds data about a single Switch (pointing to)
+ *
+ * @note -1 denotes yard
+ *
+ */
+struct Switch
+{
+	int less_block;
+	int greater_block;
+	int pointing_to;
+
+	Switch(int less, int greater)
+	{
+		less_block =  less;
+		greater_block = greater;
+		pointing_to = less;
+	}
+};
+
+std::string SwitchToString(int sw)
+{
+	std::string to_return;
+
+	if(sw == -1)
+	{
+		to_return = "Yrd";
+	}
+	else if(sw < 10)
+	{
+		to_return.append("00");
+		to_return.append(std::to_string(sw));
+	}
+	else if(sw < 100)
+	{
+		to_return.append("0");
+		to_return.append(std::to_string(sw));
+	}
+	else
+	{
+		to_return.append(std::to_string(sw));
+	}
+	return to_return;
+}
 
 #endif //CTC_CTCDEF_H
