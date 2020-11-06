@@ -6821,7 +6821,7 @@ background-color: rgb(252, 1, 7);</string>
      <string>GREEN LINE</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_4">
+   <widget class="QPushButton" name="SW1">
     <property name="geometry">
      <rect>
       <x>730</x>
@@ -6874,7 +6874,7 @@ color: rgb(255, 255, 255);</string>
      <string>Info For Signal:</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="ViewTrainButton">
+   <widget class="QPushButton" name="ViewSignalButton">
     <property name="geometry">
      <rect>
       <x>590</x>
@@ -6887,7 +6887,7 @@ color: rgb(255, 255, 255);</string>
      <string>View Signal</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_5">
+   <widget class="QPushButton" name="SW2">
     <property name="geometry">
      <rect>
       <x>340</x>
@@ -6904,7 +6904,7 @@ color: rgb(255, 255, 255);</string>
      <string>30</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_6">
+   <widget class="QPushButton" name="SW3">
     <property name="geometry">
      <rect>
       <x>320</x>
@@ -6921,7 +6921,7 @@ color: rgb(255, 255, 255);</string>
      <string>Y</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_7">
+   <widget class="QPushButton" name="SW4">
     <property name="geometry">
      <rect>
       <x>90</x>
@@ -6938,7 +6938,7 @@ color: rgb(255, 255, 255);</string>
      <string>Y</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_8">
+   <widget class="QPushButton" name="SW5">
     <property name="geometry">
      <rect>
       <x>910</x>
@@ -6955,7 +6955,7 @@ color: rgb(255, 255, 255);</string>
      <string>77</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_9">
+   <widget class="QPushButton" name="SW6">
     <property name="geometry">
      <rect>
       <x>1040</x>
@@ -7493,16 +7493,16 @@ color: rgb(255, 255, 255);</string>
    <zorder>pushButton_3</zorder>
    <zorder>label_155</zorder>
    <zorder>label_156</zorder>
-   <zorder>pushButton_4</zorder>
+   <zorder>SW1</zorder>
    <zorder>label_157</zorder>
    <zorder>ViewTrainNum</zorder>
    <zorder>InfoTrainLabel</zorder>
-   <zorder>ViewTrainButton</zorder>
-   <zorder>pushButton_5</zorder>
-   <zorder>pushButton_6</zorder>
-   <zorder>pushButton_7</zorder>
-   <zorder>pushButton_8</zorder>
-   <zorder>pushButton_9</zorder>
+   <zorder>ViewSignalButton</zorder>
+   <zorder>SW2</zorder>
+   <zorder>SW3</zorder>
+   <zorder>SW4</zorder>
+   <zorder>SW5</zorder>
+   <zorder>SW6</zorder>
    <zorder>pushButton_10</zorder>
    <zorder>label_158</zorder>
    <zorder>label_159</zorder>
