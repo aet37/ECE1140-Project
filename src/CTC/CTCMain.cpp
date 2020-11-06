@@ -46,16 +46,19 @@ void moduleMain()
 			    {
 		    		line_on = LINE_RED;
 			    }
+
 			    // Get block train was dispatched to
-			    std::string str_block = req.GetData().substr(11, req.GetData().size() - 11);
-
-
+			    std::string str_block = req.GetData().substr(10, req.GetData().size() - 10);
 			    // Convert block to integer
 			    int block_to = std::stoi(str_block);
 
 			    // Call TrainSystem singleton instance to create a new train
 			    Train *pto_send;
 			    pto_send = TrainSystem::GetInstance().CreateNewTrain(block_to,line_on);
+
+			    // Set Suggested Speed and Authority
+			    pto_send->command_speed = 55;
+			    pto_send->authority = 3;
 
 			    // Push Train Struct to Track controller queue
 				reqSend.SetRequestCode(Common::RequestCode::SWTRACK_DISPATCH_TRAIN);  // Create request class to send

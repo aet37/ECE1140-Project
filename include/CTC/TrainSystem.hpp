@@ -45,6 +45,10 @@ class TrainSystem
 		/// List of Signals
 		std::vector<Signal*> p_signals;
 
+		/// List of Switches
+		std::vector<Switch*> p_switches_green;
+		std::vector<Switch*> p_switches_red;
+
 	public:
 		/**
 		 * @brief	gets singleton instance
@@ -67,12 +71,22 @@ class TrainSystem
 		/**
 		* @brief Get the Array of track pointers
 		 *
-		* @param none
+		* @param Line
 		*
 		* @return vector<Track*>
 		*
 		*/
 		std::vector<Track*> GetTrackArr(enum Line ln);
+
+		/**
+		* @brief Get the Array of Signal pointers
+		*
+		* @param Line
+		*
+		* @return vector<Signal*>
+		*
+		*/
+		std::vector<Switch*> GetSwitchesArr(enum Line ln);
 
 		/**
 		* @brief Get the Array of train pointers

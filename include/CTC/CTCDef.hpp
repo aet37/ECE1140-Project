@@ -11,6 +11,9 @@
 #ifndef CTC_CTCDEF_H
 #define CTC_CTCDEF_H
 
+#include <vector>
+#include <string>
+
 /**
  * @enum Line
  *
@@ -36,6 +39,8 @@ struct Train
 	int destination_block;
 	enum Line line_on;
 	int block_on;
+	std::vector<int> route_blocks;
+	std::vector<int> rout_switches;
 
 	// Constructor to initialize elements
 	Train(int id, int block)
@@ -101,6 +106,53 @@ struct Signal
 	~Signal()
 	{
 		delete track_on;
+	}
+};
+
+/**
+ * @struct Switch
+ *
+ * @brief Structure that holds data about a single Switch (pointing to)
+ *
+ * @note -1 denotes yard
+ *
+ */
+struct Switch
+{
+	int less_block;
+	int greater_block;
+	int pointing_to;
+
+	Switch(int less, int greater)
+	{
+		less_block =  less;
+		greater_block = greater;
+		pointing_to = less;
+	}
+
+	std::string TrackSwitchToString()
+	{
+		std::string to_return;
+
+		if(pointing_to == -1)
+		{
+			to_return = "Yrd";
+		}
+		else if(pointing_to < 10)
+		{
+			to_return.append("00");
+			to_return.append(std::to_string(pointing_to));
+		}
+		else if(pointing_to < 100)
+		{
+			to_return.append("0");
+			to_return.append(std::to_string(pointing_to));
+		}
+		else
+		{
+			to_return.append(std::to_string(pointing_to));
+		}
+		return to_return;
 	}
 };
 
