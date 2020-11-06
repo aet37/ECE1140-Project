@@ -3535,6 +3535,20 @@ color: rgb(255, 255, 255);</string>
      <string>76</string>
     </property>
    </widget>
+   <widget class="Line" name="line_68">
+    <property name="geometry">
+     <rect>
+      <x>1150</x>
+      <y>200</y>
+      <width>20</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <zorder>line_68</zorder>
    <zorder>line_18</zorder>
    <zorder>line_22</zorder>
    <zorder>line_46</zorder>

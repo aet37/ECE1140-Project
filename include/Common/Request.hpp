@@ -51,17 +51,16 @@ enum class RequestCode : uint8_t
     CTC_UPDATE_SIGNAL = 37,
     CTC_UPDATE_SCHEDULE = 38,
     CTC_UPDATE_AUTOMATIC_MODE = 39,
-    CTC_UPDATE_SWITCH = 40, // Used by the Track model to update switch positions
-    CTC_SEND_GUI_THROUGHPUT = 41,
+    CTC_UPDATE_SWITCH = 40,
+    CTC_SEND_GUI_THROUGHPUT = 41, // Used by the track model to give the ctc ticket sales
     CTC_SEND_GUI_TRAIN_INFO = 42,
 	CTC_SEND_GUI_SWITCH_POS_GREEN = 43,
 	CTC_SEND_GUI_SWITCH_POS_RED = 44,
     CTC_SEND_GUI_SIGNAL_INFO = 45,
     CTC_SEND_TIMER_REQUEST = 46,
-    CTC_GIVE_TICKET_SALES = 47, // Used by the track model to give the ctc ticket sales
     CTC_TIME_TRIGGERED = 60,
     CTC_GET_SIGNALS = 61,
-    CTC_GET_TRACK_STATUS = 62,
+    CTC_GET_SWITCHES = 62,
     CTC_GET_OCCUPANCIES = 63,
 
     SWTRACK_DISPATCH_TRAIN = 64, // Used by the CTC to signify that a new train has been dispatched

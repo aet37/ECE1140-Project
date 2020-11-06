@@ -261,3 +261,49 @@ void TrainSystem::SetTrackNotOccupied(int track_num, enum Line ln)
 	// Log that a track is occupied
 	LOG_CTC("From TrainSystem::SetTrackNotOccupied() : Track %d is NOT occupied", track_num);
 }
+
+/**
+ * @brief change Track status to occupied
+ *
+ * @param[in]	switch_num, Line, update_pos
+ *
+ * @return none
+ *
+*/
+void TrainSystem::SetSwitch(int switch_num, enum Line ln, int pos)
+{
+	if(ln == LINE_GREEN)
+	{
+		if(pos == 1)
+		{
+			p_switches_green[switch_num - 1]->pointing_to = p_switches_green[switch_num - 1]->greater_block;
+		}
+		else if(pos == 0)
+		{
+			p_switches_green[switch_num - 1]->pointing_to = p_switches_green[switch_num - 1]->less_block;
+		}
+		else
+		{
+			throw std::logic_error("TrainSystem::SetSwitch : Invalid position given (not 1 or 0)");
+		}
+	}
+	if(ln == LINE_RED)
+	{
+		if(pos == 1)
+		{
+			p_switches_red[switch_num - 1]->pointing_to = p_switches_red[switch_num - 1]->greater_block;
+		}
+		else if(pos == 0)
+		{
+			p_switches_red[switch_num - 1]->pointing_to = p_switches_red[switch_num - 1]->less_block;
+		}
+		else
+		{
+			throw std::logic_error("TrainSystem::SetSwitch : Invalid position given (not 1 or 0)");
+		}
+	}
+	else
+	{
+		throw std::logic_error("TrainSystem::SetSwitch : Invalid Line provided");
+	}
+}
