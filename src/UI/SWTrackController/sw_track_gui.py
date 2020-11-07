@@ -9,6 +9,8 @@ from SWTrackController.Compiler.lexer import Lexer
 from SWTrackController.Compiler.emitter import Emitter
 from SWTrackController.Compiler.parse import Parser
 
+from UI.server_functions import RequestCode, send_message
+
 class SWTrackControllerUi(QtWidgets.QMainWindow):
     def __init__(self):
         super(SWTrackControllerUi, self).__init__()
@@ -39,7 +41,10 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             return
 
         file_name = dialog.selectedFiles()
-        self.compile_program(file_name[0])
+        output_file = self.compile_program(file_name[0])
+
+        if output_file != None:
+            self.send_compiled_program(output_file)
 
     def compile_program(self, file_name):
         """Method used to invoke the PLC language compiler on the given file
@@ -54,15 +59,31 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             source_code += line
 
         # Create compiler elements
+        output_file = 'CompiledOutput.txt'
         lex = Lexer(source_code)
-        emitter = Emitter("CompiledOutput.txt")
+        emitter = Emitter(output_file)
         par = Parser(lex, emitter)
 
         # Try to compile
         try:
-            par.program()
-        except:
+            par.program(program_name=os.path.splitext(os.path.basename(file_name))[0])
+            return output_file
+        except Exception as e:
+            print(e)
             print("Compilation failed!")
+            return None
+
+    def send_compiled_program(self, output_file):
+        """Method used to read compiled program and send messages to the server
+
+        :param str output_file: Name of the file containing the compiled program
+        """
+        for line in open(output_file, 'r'):
+            line = line.rstrip('\n')
+            request_code, _, data = line.partition(' ')
+            request_code = RequestCode[request_code]
+
+            send_message(request_code, data)
 
     @staticmethod
     def logout():
