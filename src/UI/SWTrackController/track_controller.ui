@@ -32,7 +32,7 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QComboBox" name="comboBox">
+    <widget class="QComboBox" name="track_controller_combo_box">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -42,10 +42,7 @@
       </rect>
      </property>
      <property name="currentText">
-      <string notr="true">Select Track Controller...</string>
-     </property>
-     <property name="placeholderText">
-      <string>Select Track Controller...</string>
+      <string notr="true"/>
      </property>
     </widget>
     <widget class="QPushButton" name="download_program_button">
@@ -129,7 +126,7 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_10">
+     <widget class="QLabel" name="track_heater_label">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -171,7 +168,7 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <widget class="QLabel" name="label_2">
+     <widget class="QLabel" name="occupied_label">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -255,7 +252,7 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_4">
+     <widget class="QLabel" name="switch_position_label">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -318,7 +315,7 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_12">
+     <widget class="QLabel" name="light_status_label">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -381,7 +378,7 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_6">
+     <widget class="QLabel" name="track_status_label">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -444,7 +441,7 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_11">
+     <widget class="QLabel" name="railway_crossing_label">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -507,7 +504,7 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_19">
+     <widget class="QLabel" name="command_speed_label">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -570,7 +567,7 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_18">
+     <widget class="QLabel" name="suggested_speed_label">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -633,7 +630,7 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_17">
+     <widget class="QLabel" name="authority_label">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -657,7 +654,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QComboBox" name="comboBox_2">
+    <widget class="QComboBox" name="block_combo_box">
      <property name="geometry">
       <rect>
        <x>180</x>
@@ -667,16 +664,13 @@
       </rect>
      </property>
      <property name="currentText">
-      <string notr="true">Select Block...</string>
-     </property>
-     <property name="placeholderText">
-      <string>Select Block...</string>
+      <string notr="true"/>
      </property>
     </widget>
     <widget class="QLabel" name="train_presence_label">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>8</x>
        <y>58</y>
        <width>181</width>
        <height>21</height>
@@ -697,9 +691,9 @@
     <widget class="Line" name="line">
      <property name="geometry">
       <rect>
-       <x>90</x>
+       <x>80</x>
        <y>247</y>
-       <width>551</width>
+       <width>561</width>
        <height>20</height>
       </rect>
      </property>
@@ -712,7 +706,7 @@
       <rect>
        <x>28</x>
        <y>245</y>
-       <width>61</width>
+       <width>51</width>
        <height>20</height>
       </rect>
      </property>
@@ -754,9 +748,9 @@
     <widget class="Line" name="line_4">
      <property name="geometry">
       <rect>
-       <x>220</x>
+       <x>180</x>
        <y>60</y>
-       <width>421</width>
+       <width>461</width>
        <height>20</height>
       </rect>
      </property>
