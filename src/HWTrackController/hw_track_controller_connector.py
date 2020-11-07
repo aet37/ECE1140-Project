@@ -3,6 +3,7 @@
 from argparse import ArgumentParser
 import socket
 import sys
+from time import sleep
 import logging
 import polling
 import serial
@@ -13,12 +14,13 @@ logger = logging.getLogger(__name__)
 SERIAL_PORT = 'COM3'
 RATE = 9600
 arduino = serial.Serial(SERIAL_PORT, RATE, timeout=5)
+sleep(2)
 
 # Communications with server
 HOST = '3.23.104.34'
 SERVER_PORT = 1234
-HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST = b'104'
-HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE = b'105'
+HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST = b'105'
+HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE = b'106'
 
 def get_request():
     """Retrieves a request from the server.
@@ -38,6 +40,7 @@ def send_request_to_controller(request):
 
     :param request: Request retrieved from the server
     """
+    sleep(0.2)
     bytes_written = arduino.write(request)
     logger.info("%d bytes written to the controller", bytes_written)
 
@@ -49,9 +52,9 @@ def get_response_from_controller():
     """
     arduino.flushInput()
     response = arduino.readline()
-    logger.info("Response from controller %s", response[:-2])
+    logger.info("Response from controller %s", response)
     # Remove \r\n from the end of the response
-    return response[:-2]
+    return response.rstrip(b'\t\r\n ')
 
 def send_reponse_to_server(response):
     """Sends response of the controller back to the server.

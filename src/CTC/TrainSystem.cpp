@@ -35,28 +35,102 @@ TrainSystem& TrainSystem::GetInstance()
 */
 void TrainSystem::ImportTrackLayout()
 {
-	// Temporary hard-coded track for Iteration 2
+	// Initialize the red track blocks
 	Track* ptemp_track = nullptr;
-	for(int i = 0; i < 15; i++)
+	for(int i = 0; i < 76; i++)
 	{
 		ptemp_track = new Track();
-		p_tracks.push_back(ptemp_track);
+		p_blocks_red.push_back(ptemp_track);
+	}
+
+	// Initialize the green track blocks
+	for(int i = 0; i < 150; i++)
+	{
+		ptemp_track = new Track();
+		p_blocks_green.push_back(ptemp_track);
 	}
 	ptemp_track = nullptr;
-	LOG_CTC("From TrainSystem::ImportTrackLayout() : %d Tracks Created", p_tracks.size() + 1);
+
+	// Create Green Switches
+	Switch* sw1 = new Switch(1, 12);
+	Switch* sw2 = new Switch(30, 150);
+	Switch* sw3 = new Switch(-1, 59);
+	Switch* sw4 = new Switch(-1, 61);
+	Switch* sw5 = new Switch(77, 101);
+	Switch* sw6 = new Switch(86, 10);
+	p_switches_green.push_back(sw1);
+	p_switches_green.push_back(sw2);
+	p_switches_green.push_back(sw3);
+	p_switches_green.push_back(sw4);
+	p_switches_green.push_back(sw5);
+	p_switches_green.push_back(sw6);
+
+	// Create Red Switches
+	Switch* rsw1 = new Switch(-1, 8);
+	Switch* rsw2 = new Switch(1, 15);
+	Switch* rsw3 = new Switch(28, 76);
+	Switch* rsw4 = new Switch(32, 72);
+	Switch* rsw5 = new Switch(39, 71);
+	Switch* rsw6 = new Switch(43, 67);
+	Switch* rsw7 = new Switch(53, 66);
+	p_switches_red.push_back(rsw1);
+	p_switches_red.push_back(rsw2);
+	p_switches_red.push_back(rsw3);
+	p_switches_red.push_back(rsw4);
+	p_switches_red.push_back(rsw5);
+	p_switches_red.push_back(rsw6);
+	p_switches_red.push_back(rsw7);
+
+	LOG_CTC("From TrainSystem::ImportTrackLayout() : Tracks Created");
 }
 
 /**
-* @brief Get the Array of track pointers
+* @brief Get the Array of track pointers for the green track
  *
-* @param none
+* @param[in] enum Line
 *
 * @return vector<Track*>
+* @return Throw Error if incorrect line is specified
 *
 */
-std::vector<Track*> TrainSystem::GetTrackArr()
+std::vector<Track*> TrainSystem::GetTrackArr(enum Line ln)
 {
-	return p_tracks;
+	if(ln == LINE_GREEN)
+	{
+		return p_blocks_green;
+	}
+	else if(ln == LINE_RED)
+	{
+		return p_blocks_red;
+	}
+	else
+	{
+		throw std::logic_error("TrainSystem::GetTrackArr : Invalid Line Argument");
+	}
+}
+
+/**
+* @brief Get the Array of Signal pointers
+*
+* @param Line
+*
+* @return vector<Signal*>
+*
+*/
+std::vector<Switch*> TrainSystem::GetSwitchesArr(enum Line ln)
+{
+	if(ln == LINE_GREEN)
+	{
+		return p_switches_green;
+	}
+	else if(ln == LINE_RED)
+	{
+		return p_switches_red;
+	}
+	else
+	{
+		throw std::logic_error("TrainSystem::GetTrackArr : Invalid Line Argument");
+	}
 }
 
 /**
@@ -81,7 +155,7 @@ std::vector<Train*> TrainSystem::GetTrainArr()
  * @return pointer to newly created Train struct
  *
  */
-Train* TrainSystem::CreateNewTrain(int block_to)
+Train* TrainSystem::CreateNewTrain(int block_to, enum Line ln)
 {
 	// Set the train number to the next available
 	int num = p_trains.size() + 1;
@@ -109,20 +183,39 @@ Train* TrainSystem::CreateNewTrain(int block_to)
 * @brief change Track status to occupied
 *
 * @param[in]	track_num
+* @param[in]	Line
 *
-* @return Throw Error if track is out of range
+* @return Throw Error if track is out of range or invalid line entered
 *
 */
-void TrainSystem::SetTrackOccupied(int track_num)
+void TrainSystem::SetTrackOccupied(int track_num, enum Line ln)
 {
-	// Make sure track is not out of range
-	if((track_num < 1) || track_num > p_tracks.size())
+	if(ln == LINE_GREEN)
 	{
-		throw std::logic_error("TrainSystem::SetTrackOccupied() index out of bounds");
-	}
+		// Make sure track is not out of range
+		if ((track_num < 1) || track_num > p_blocks_green.size())
+		{
+			throw std::logic_error("TrainSystem::SetTrackOccupied() index out of bounds");
+		}
 
-	// Set occupied member variable as true
-	p_tracks[track_num - 1]->occupied = true;
+		// Set occupied member variable as true
+		p_blocks_green[track_num - 1]->occupied = true;
+	}
+	else if(ln == LINE_RED)
+	{
+		// Make sure track is not out of range
+		if ((track_num < 1) || track_num > p_blocks_red.size())
+		{
+			throw std::logic_error("TrainSystem::SetTrackOccupied() : index out of bounds");
+		}
+
+		// Set occupied member variable as true
+		p_blocks_red[track_num - 1]->occupied = true;
+	}
+	else
+	{
+		throw std::logic_error("TrainSystem::SetTrackOccupied() : Invalid input for Line");
+	}
 
 	// Log that a track is occupied
 	LOG_CTC("From TrainSystem::SetTrackOccupied() : Track %d is occupied", track_num);
@@ -132,23 +225,85 @@ void TrainSystem::SetTrackOccupied(int track_num)
 * @brief change Track status to not occupied
 *
 * @param[in]	track_num
+* @param[in]	Line
 *
-* @return Throw Error if track is out of range
+* @return Throw Error if track is out of range or invalid line entered
 *
 */
-void TrainSystem::SetTrackNotOccupied(int track_num)
+void TrainSystem::SetTrackNotOccupied(int track_num, enum Line ln)
 {
-	// Make sure track is not out of range
-	if((track_num < 1) || track_num > p_tracks.size())
+	if(ln == LINE_GREEN)
 	{
-		throw std::logic_error("TrainSystem::SetTrackNotOccupied() index out of bounds");
-		return;
+		// Make sure track is not out of range
+		if ((track_num < 1) || track_num > p_blocks_green.size())
+		{
+			throw std::logic_error("TrainSystem::SetTrackNotOccupied() index out of bounds");
+		}
+
+		// Set occupied member variable as true
+		p_blocks_green[track_num - 1]->occupied = false;
 	}
+	else if(ln == LINE_RED)
+	{
+		// Make sure track is not out of range
+		if ((track_num < 1) || track_num > p_blocks_red.size())
+		{
+			throw std::logic_error("TrainSystem::SetTrackNotOccupied() : index out of bounds");
+		}
 
-	// Set occupied member variable as false
-	p_tracks[track_num - 1]->occupied = false;
-
-
+		// Set occupied member variable as true
+		p_blocks_red[track_num - 1]->occupied = false;
+	}
+	else
+	{
+		throw std::logic_error("TrainSystem::SetTrackNotOccupied() : Invalid input for Line");
+	}
 	// Log that a track is occupied
 	LOG_CTC("From TrainSystem::SetTrackNotOccupied() : Track %d is NOT occupied", track_num);
+}
+
+/**
+ * @brief change Track status to occupied
+ *
+ * @param[in]	switch_num, Line, update_pos
+ *
+ * @return none
+ *
+*/
+void TrainSystem::SetSwitch(int switch_num, enum Line ln, int pos)
+{
+	if(ln == LINE_GREEN)
+	{
+		if(pos == 1)
+		{
+			p_switches_green[switch_num - 1]->pointing_to = p_switches_green[switch_num - 1]->greater_block;
+		}
+		else if(pos == 0)
+		{
+			p_switches_green[switch_num - 1]->pointing_to = p_switches_green[switch_num - 1]->less_block;
+		}
+		else
+		{
+			throw std::logic_error("TrainSystem::SetSwitch : Invalid position given (not 1 or 0)");
+		}
+	}
+	if(ln == LINE_RED)
+	{
+		if(pos == 1)
+		{
+			p_switches_red[switch_num - 1]->pointing_to = p_switches_red[switch_num - 1]->greater_block;
+		}
+		else if(pos == 0)
+		{
+			p_switches_red[switch_num - 1]->pointing_to = p_switches_red[switch_num - 1]->less_block;
+		}
+		else
+		{
+			throw std::logic_error("TrainSystem::SetSwitch : Invalid position given (not 1 or 0)");
+		}
+	}
+	else
+	{
+		throw std::logic_error("TrainSystem::SetSwitch : Invalid Line provided");
+	}
 }

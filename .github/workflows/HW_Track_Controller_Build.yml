@@ -5,6 +5,10 @@ on:
     paths:
       'src/HWTrackController/**'
     branches: [ master ]
+  pull_request:
+    paths:
+      'src/HWTrackController/**'
+    branches: [ master ]
 
 jobs:
   Build_HW_Track_Controller:

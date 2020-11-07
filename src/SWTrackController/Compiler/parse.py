@@ -2,8 +2,8 @@
 
 import sys
 import logging
-from lexer import TokenType
-from emitter import Emitter
+from SWTrackController.Compiler.lexer import TokenType
+from SWTrackController.Compiler.emitter import Emitter
 
 logger = logging.getLogger(__name__)
 
@@ -84,8 +84,19 @@ class Parser:
         while not self.check_token(TokenType.EOF):
             self.statement()
 
+        # Check to ensure all statements have ends
         if len(self.stack) != 0:
             self.abort("Missing end statements")
+
+        # Check that all emitted events correspond to actual events
+        for event in self.emitted_events:
+            if event not in self.events:
+                self.abort("Emitted event {} does not correspond to a task".format(event))
+
+        # Check that all JSR instructions jump to valid routines
+        for jump in self.jumps:
+            if jump not in self.routines:
+                self.abort("Routine {} does not exist".format(jump))
 
         self.emitter.emit_line("END_DOWNLOAD")
 
@@ -192,6 +203,10 @@ class Parser:
         self.match(TokenType.NUMBER)
         self.emitter.emit(self.previous_token.text)
 
+        PERIOD_LIMIT = 20
+        if (int(self.previous_token.text) < PERIOD_LIMIT):
+            self.abort("Period below allowable limit {}".format(PERIOD_LIMIT))
+
     def event_type(self):
         """Production step for eventType ::= 'EVENT' '=' identifier"""
         logger.info("EVENTTYPE")
@@ -274,18 +289,21 @@ class Parser:
 
     def end_routine(self):
         """Production step for "ENDROUTINE"""
-        if not self.main_flag:
-            self.abort("There must be a single Main routine")
-        else:
-            self.main_flag = False
-
         if self.stack.pop() != 'ROUTINE':
             self.abort("Missing matching ENDRUNG")
 
     def end_task(self):
         """Production step for "ENDTASK"""
+        if len(self.stack) == 0:
+            self.abort("Too many end statements")
+
         if self.stack.pop() != 'TASK':
             self.abort("Missing matching ENDROUTINE")
+
+        if not self.main_flag:
+            self.abort("There must be a single Main routine")
+        else:
+            self.main_flag = False
 
     def tag(self):
         """Production step for "TAG" identifier "=" (true | false)"""

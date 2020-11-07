@@ -4,13 +4,15 @@ import sys
 from mock import MagicMock
 import pytest
 
-sys.path.insert(1, '../../../../src/SWTrackController/Compiler')
-from parse import Parser
-from lexer import Lexer
-from emitter import Emitter
+sys.path.insert(1, '../../../../src')
+from SWTrackController.Compiler.parse import Parser
+from SWTrackController.Compiler.lexer import Lexer
+from SWTrackController.Compiler.emitter import Emitter
 
+# pylint: disable=redefined-outer-name
 @pytest.fixture(scope='function')
 def mock_emitter():
+    """Creates a mock emitter to use"""
     return MagicMock(Emitter)
 
 # pylint: disable=misplaced-comparison-constant
@@ -156,6 +158,8 @@ def test_statement_instructions(mock_emitter):
 
     # Add tag to the symbols to avoid errors
     par.tags.add('tag')
+    par.events.add('event')
+    par.routines.add('routine')
 
     par.program()
 
