@@ -1,83 +1,99 @@
 
 import os
 from PyQt5 import QtWidgets, uic
+from PyQt5.QtWidgets import QFileDialog
 import sys
-from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem
-#import Request.hpp
 
+sys.path.insert(1, 'src')
+from SWTrackController.Compiler.lexer import Lexer
+from SWTrackController.Compiler.emitter import Emitter
+from SWTrackController.Compiler.parse import Parser
 
-# GLOBALS
+from UI.server_functions import RequestCode, send_message
 
-sw1val = 0
-class Ui(QtWidgets.QMainWindow):
+class SWTrackControllerUi(QtWidgets.QMainWindow):
     def __init__(self):
-        super(Ui, self).__init__()
-        uic.loadUi('C:/Users/natta/AppData/Local/Programs/Python/Python38-32/Scripts/SW_Track_Controller_UI.ui', self)
-  
-     
-        self.button = self.findChild(QtWidgets.QPushButton, 'switch1_button') # Find the button
-        self.button.clicked.connect(self.switch1)
-        
-        self.table=self.findChild(QtWidgets.QTableWidget, 'switch_table')
+        super(SWTrackControllerUi, self).__init__()
+        uic.loadUi('src/UI/SWTrackController/track_controller.ui', self)
 
-        self.label = self.findChild(QtWidgets.QLabel, 'switch1_label')
+        # Current track controller and block selected
+        self.current_track_controller = None
+        self.current_block = None
 
-       
-       # self.button2 = self.findChild(QtWidgets.QPushButton, 'logout_button') # Find the button
-       # self.button2.clicked.connect(self.logout)
+        # Find elements and connect them accordingly
+        logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button')
+        logout_button.clicked.connect(SWTrackControllerUi.logout)
+
+        download_program_button = self.findChild(QtWidgets.QPushButton, 'download_program_button')
+        download_program_button.clicked.connect(self.download_program)
 
         self.show()
-        self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
-        asd = QTableWidgetItem()
-        asdf = QTableWidgetItem()
-        asdfg = QTableWidgetItem()
 
-        asd.setText("In-Block")
-        
-        self.table.setRowCount(10)
-        self.table.setColumnCount(3)
-        asd.setText("Switch")
-        self.table.setHorizontalHeaderItem(0,asd)
-        asdf.setText("In-Block")
-        self.table.setHorizontalHeaderItem(1,asdf)
-        asdfg.setText("Out-Block")
-        self.table.setHorizontalHeaderItem(2,asdfg)
-      
+    def download_program(self):
+        """Method called when the download program button is pressed"""
+        dialog = QtWidgets.QFileDialog(self)
+        dialog.setFileMode(QFileDialog.ExistingFile)
+        dialog.setWindowTitle("Select Program to Download")
+        dialog.setNameFilter("Text files (*.txt)")
 
-      
-        self.table.setItem(0, 0, asd)
-       
+        # Return if the user hits cancel
+        if not dialog.exec_():
+            return
 
-    
-    
+        file_name = dialog.selectedFiles()
+        output_file = self.compile_program(file_name[0])
 
-    def switch1(self):
+        if output_file != None:
+            self.send_compiled_program(output_file)
 
-        #send signal to server to switch switch 1
+    def compile_program(self, file_name):
+        """Method used to invoke the PLC language compiler on the given file
 
+        :param str file_name: Absolute path to the file to compile
 
-        #garbage
-        global sw1val
-        
-        if(sw1val==1):
-            
-            # This is executed when the button is pressed
-           self.switch1_label.setText("0")
-           sw1val = 0
+        :return: Name of the output file. None if compilation failed
+        """
+        # Gather the source code from the file
+        source_code = ''
+        for line in open(file_name, 'r'):
+            source_code += line
 
-        if(sw1val==0):
-            self.switch1_label.setText("1")
-            sw1val = 1
+        # Create compiler elements
+        output_file = 'CompiledOutput.txt'
+        lex = Lexer(source_code)
+        emitter = Emitter(output_file)
+        par = Parser(lex, emitter)
 
+        # Try to compile
+        try:
+            par.program(program_name=os.path.splitext(os.path.basename(file_name))[0])
+            return output_file
+        except Exception as e:
+            print(e)
+            print("Compilation failed!")
+            return None
 
+    def send_compiled_program(self, output_file):
+        """Method used to read compiled program and send messages to the server
 
-            
-   #
-   # def logout(self):
-   #     # This is executed when the button is pressed
-   #     app.exit()
+        :param str output_file: Name of the file containing the compiled program
+        """
+        for line in open(output_file, 'r'):
+            line = line.rstrip('\n')
+            request_code, _, data = line.partition(' ')
+            request_code = RequestCode[request_code]
 
-  
+            send_message(request_code, data)
+
+    @staticmethod
+    def logout():
+        """Method invoked when the logout button is pressed"""
+        if sys.platform == 'darwin':
+            os.system('python3 src/UI/login_gui.py &')
+        else:
+            os.system('start /B python src/UI/login_gui.py')
+        app.exit()
+
 app = QtWidgets.QApplication(sys.argv)
-window = Ui()
+window = SWTrackControllerUi()
 app.exec_()
