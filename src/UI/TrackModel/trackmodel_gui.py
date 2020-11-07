@@ -16,11 +16,9 @@ class Ui(QtWidgets.QMainWindow):
         super(Ui, self).__init__()
         # self.track1_info_timer = QTimer()
         # self.track1_info_timer.timeout.connect(self.update_times)
-        # use this for not-local
-        #uic.loadUi('src/UI/TrackModel/Map_Page.ui', self)
+        
+        uic.loadUi('src/UI/TrackModel/Map_Page.ui', self)
 
-        # use this for local
-        uic.loadUi('C:/Users/Evan/OneDrive/Documents/GitHub/ECE1140-Project/src/UI/TrackModel/Map_Page.ui', self)
         self.show()
 
         self.initUI()
