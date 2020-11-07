@@ -1,7 +1,8 @@
 """Train Model GUI"""
 
 import os
-from PyQt5 import QtWidgets, uic
+from PyQt5 import QtWidgets, uic, QtGui
+from PyQt5.QtGui import QScreen
 from PyQt5.QtCore import QTimer
 import sys
 
@@ -13,25 +14,18 @@ class Ui(QtWidgets.QMainWindow):
     def __init__(self):
         super(Ui, self).__init__()
         self.current_train_id = 1
-        self.main_page()
-
-    def main_page(self):
-        """Method called upon starting the user interface"""
-        uic.loadUi('src/UI/TrainModel/main_page.ui', self)
-
-        # Find all elements and connect them to methods
-        logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button_map')
-        logout_button.clicked.connect(self.logout)
-
-        button = self.findChild(QtWidgets.QPushButton, 'train_button_1')
-        button.clicked.connect(self.train_menu)
-
-        # Show the page
-        self.show()
+        self.train_menu()
 
     def train_menu(self):
         """Method called after a train is selected"""
         uic.loadUi('src/UI/TrainModel/Train_Menu.ui', self)
+
+        screen = app.primaryScreen()
+        print('Screen: %s' % screen.name())
+        size = screen.size()
+        print('Size: %d x %d' % (size.width(), size.height()))
+        rect = screen.availableGeometry()
+        print('Available: %d x %d' % (rect.width(), rect.height()))
 
         # Find all elements and connect them accordingly
         logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button_menu')
@@ -46,8 +40,8 @@ class Ui(QtWidgets.QMainWindow):
         train_reports_button = self.findChild(QtWidgets.QPushButton, 'train_reports_button')
         train_reports_button.clicked.connect(self.train_reports)
 
-        return_button = self.findChild(QtWidgets.QPushButton, 'return_button')
-        return_button.clicked.connect(self.main_page)
+        # Show the page
+        self.show()
 
     def train_info_1(self):
 
