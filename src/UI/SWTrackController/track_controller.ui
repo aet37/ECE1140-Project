@@ -42,7 +42,10 @@
       </rect>
      </property>
      <property name="currentText">
-      <string notr="true"/>
+      <string notr="true">Select Track Controller...</string>
+     </property>
+     <property name="placeholderText">
+      <string>Select Track Controller...</string>
      </property>
     </widget>
     <widget class="QPushButton" name="download_program_button">
@@ -664,13 +667,16 @@
       </rect>
      </property>
      <property name="currentText">
-      <string notr="true"/>
+      <string notr="true">Select Block...</string>
+     </property>
+     <property name="placeholderText">
+      <string>Select Block...</string>
      </property>
     </widget>
     <widget class="QLabel" name="train_presence_label">
      <property name="geometry">
       <rect>
-       <x>8</x>
+       <x>30</x>
        <y>58</y>
        <width>181</width>
        <height>21</height>
@@ -691,9 +697,9 @@
     <widget class="Line" name="line">
      <property name="geometry">
       <rect>
-       <x>80</x>
+       <x>90</x>
        <y>247</y>
-       <width>561</width>
+       <width>551</width>
        <height>20</height>
       </rect>
      </property>
@@ -706,7 +712,7 @@
       <rect>
        <x>28</x>
        <y>245</y>
-       <width>51</width>
+       <width>61</width>
        <height>20</height>
       </rect>
      </property>
@@ -748,9 +754,9 @@
     <widget class="Line" name="line_4">
      <property name="geometry">
       <rect>
-       <x>180</x>
+       <x>220</x>
        <y>60</y>
-       <width>461</width>
+       <width>421</width>
        <height>20</height>
       </rect>
      </property>
