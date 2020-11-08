@@ -2,7 +2,7 @@
 
 import sys
 import logging
-from SWTrackController.Compiler.lexer import TokenType
+from SWTrackController.Compiler.lexer import TokenType, CompilationError
 from SWTrackController.Compiler.emitter import Emitter
 
 logger = logging.getLogger(__name__)
@@ -65,14 +65,13 @@ class Parser:
         self.current_token = self.peek_token
         self.peek_token = self.lexer.get_token()
 
-    @staticmethod
-    def abort(message):
+    def abort(self, message):
         """Exits the program and prints the message.
 
         :param str message: Message to be printed prior to exiting
 
         """
-        raise Exception("Parsing error : " + message)
+        raise CompilationError("Parsing error line #{} : {}".format(self.lexer.line_number, message))
 
     def program(self, program_name=''):
         """Production step for program ::= {statement}

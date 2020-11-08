@@ -4,7 +4,7 @@ import sys
 import pytest
 
 sys.path.insert(1, '../../../../src')
-from SWTrackController.Compiler.lexer import Lexer
+from SWTrackController.Compiler.lexer import Lexer, CompilationError
 from SWTrackController.Compiler.parse import Parser
 from SWTrackController.Compiler.emitter import Emitter
 
@@ -55,9 +55,9 @@ def test_missing_main():
     emit = Emitter('MyOutput')
     par = Parser(lex, emit)
 
-    with pytest.raises(Exception) as pytest_wrapped_e:
+    with pytest.raises(CompilationError) as pytest_wrapped_e:
         par.program()
-    assert "Parsing error : There must be a single Main routine" == str(pytest_wrapped_e.value)
+    assert "Parsing error line #12 : There must be a single Main routine" == str(pytest_wrapped_e.value)
 
 def test_multiple_mains():
     """Tests a program with multiple mains"""
@@ -82,9 +82,9 @@ def test_multiple_mains():
     emit = Emitter('MyOutput')
     par = Parser(lex, emit)
 
-    with pytest.raises(Exception) as pytest_wrapped_e:
+    with pytest.raises(CompilationError) as pytest_wrapped_e:
         par.program()
-    assert "Parsing error : There can only be one Main routine" == str(pytest_wrapped_e.value)
+    assert "Parsing error line #11 : There can only be one Main routine" == str(pytest_wrapped_e.value)
 
 def test_no_tag():
     """Test program that uses a nonexistent tag"""
@@ -103,9 +103,9 @@ def test_no_tag():
     emit = Emitter('MyOutput')
     par = Parser(lex, emit)
 
-    with pytest.raises(Exception) as pytest_wrapped_e:
+    with pytest.raises(CompilationError) as pytest_wrapped_e:
         par.program()
-    assert "Parsing error : Referencing tag input2 before assignment" == str(pytest_wrapped_e.value)
+    assert "Parsing error line #7 : Referencing tag input2 before assignment" == str(pytest_wrapped_e.value)
 
 def test_nonexistent_event():
     """Test program that uses a nonexistent event"""
@@ -125,9 +125,9 @@ def test_nonexistent_event():
     emit = Emitter('MyOutput')
     par = Parser(lex, emit)
 
-    with pytest.raises(Exception) as pytest_wrapped_e:
+    with pytest.raises(CompilationError) as pytest_wrapped_e:
         par.program()
-    assert "Parsing error : Emitted event MissingEvent does not " \
+    assert "Parsing error line #13 : Emitted event MissingEvent does not " \
            "correspond to a task" == str(pytest_wrapped_e.value)
 
 def test_nonexistent_routine():
@@ -148,9 +148,9 @@ def test_nonexistent_routine():
     emit = Emitter('MyOutput')
     par = Parser(lex, emit)
 
-    with pytest.raises(Exception) as pytest_wrapped_e:
+    with pytest.raises(CompilationError) as pytest_wrapped_e:
         par.program()
-    assert "Parsing error : Routine MissingRoutine does not exist" == str(pytest_wrapped_e.value)
+    assert "Parsing error line #13 : Routine MissingRoutine does not exist" == str(pytest_wrapped_e.value)
 
 def test_too_many_ends():
     """Test program that too many end statements"""
@@ -170,9 +170,9 @@ def test_too_many_ends():
     emit = Emitter('MyOutput')
     par = Parser(lex, emit)
 
-    with pytest.raises(Exception) as pytest_wrapped_e:
+    with pytest.raises(CompilationError) as pytest_wrapped_e:
         par.program()
-    assert "Parsing error : Too many end statements" == str(pytest_wrapped_e.value)
+    assert "Parsing error line #13 : Too many end statements" == str(pytest_wrapped_e.value)
 
 def test_missing_end():
     """Test program with missing ENDROUTINE"""
@@ -190,9 +190,9 @@ def test_missing_end():
     emit = Emitter('MyOutput')
     par = Parser(lex, emit)
 
-    with pytest.raises(Exception) as pytest_wrapped_e:
+    with pytest.raises(CompilationError) as pytest_wrapped_e:
         par.program()
-    assert "Parsing error : Missing matching ENDROUTINE" == str(pytest_wrapped_e.value)
+    assert "Parsing error line #11 : Missing matching ENDROUTINE" == str(pytest_wrapped_e.value)
 
 def test_low_period():
     """Test program with a period less than 20ms"""
@@ -211,9 +211,9 @@ def test_low_period():
     emit = Emitter('MyOutput')
     par = Parser(lex, emit)
 
-    with pytest.raises(Exception) as pytest_wrapped_e:
+    with pytest.raises(CompilationError) as pytest_wrapped_e:
         par.program()
-    assert "Parsing error : Period below allowable limit 20" == str(pytest_wrapped_e.value)
+    assert "Parsing error line #3 : Period below allowable limit 20" == str(pytest_wrapped_e.value)
 
 if __name__ == "__main__":
     raise Exception("Run using pytest")
