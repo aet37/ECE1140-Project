@@ -1,58 +1,82 @@
 /**
- * @file RequestManagerRepository.hpp
- * 
- * @brief Declaration of the RequestManagerRepository class
+ * @file RequestManagerRepository.cpp
+ *
+ * @brief Implementations of the RequestManagerRepository class
 */
-#ifndef REQUEST_MANAGER_REPOSITORY_HPP
-#define REQUEST_MANAGER_REPOSITORY_HPP
 
 // SYSTEM INCLUDES
 // (None)
 
 // C++ PROJECT INCLUDES
-#include "Request.hpp"
+#include "RequestManagerRepository.hpp" // Header for class
+#include "Assert.hpp" // For ASSERT
+#include "RequestManagerIface.hpp" // For RequestManagerIface
+#include "DebugRequestManager.hpp" // For Debug::DebugRequestManager
+#include "HWTrackControllerRequestManager.hpp" // For HWTrackController::HWTrackControllerRequestManager
+#include "CTCRequestManager.hpp"    // For CTC::CTCRequestManager
+#include "TrainModelRequestManager.hpp" // For TrainModel::TrainModelRequestManager
+//#include "SWTrackControllerRequestManager.hpp"
+#include "TrackModelRequestManager.hpp" // For TrackModel::TrackModelRequestManager
 
-// FORWARD REFERENCES
+static Debug::DebugRequestManager debugRequestManager;
+static HWTrackController::HWTrackControllerRequestManager hwTrackControllerRequestManager;
+static CTC::CTCRequestManager ctcRequestManager;
+static TrainModel::TrainModelRequestManager trainModelRequestManager;
+static TrackModel::TrackModelRequestManager trackModelRequestManager;
+//static SWTrackController::SWTrackControllerRequestManager swTrackControllerRequestManager;
 namespace Common
 {
 
-class RequestManagerIface;
-
-/**
- * @class RequestManagerRepository
- * 
- * @brief Repository for module's request managers
-*/
-class RequestManagerRepository
+RequestManagerIface* RequestManagerRepository::GetRequestManager(RequestCode requestCode)
 {
-public:
-    /**
-     * @brief Gets the singleton instance
-    */
-    static RequestManagerRepository& GetInstance()
+    RequestManagerIface* pRequestManager = nullptr;
+
+    switch (requestCode)
     {
-        static RequestManagerRepository* pInstance = new RequestManagerRepository();
-        return *(pInstance);
+        case RequestCode::DEBUG_TO_CTC:
+        case RequestCode::DEBUG_TO_HWTRACKCTRL:
+        case RequestCode::DEBUG_TO_SWTRACKCTRL:
+        case RequestCode::DEBUG_TO_TRACK_MODEL:
+        case RequestCode::DEBUG_TO_TRAIN_MODEL:
+        case RequestCode::DEBUG_TO_HWTRAINCTRL:
+        case RequestCode::DEBUG_TO_SWTRAINCTRL:
+            pRequestManager = &debugRequestManager;
+            break;
+    	case RequestCode::CTC_GUI_DISPATCH_TRAIN:
+    	case RequestCode::CTC_SEND_GUI_OCCUPANCIES:
+			pRequestManager = &ctcRequestManager;
+    		break;
+        case RequestCode::HWTRACK_GET_TAG_VALUE:
+        case RequestCode::HWTRACK_SET_TAG_VALUE:
+        case RequestCode::HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST:
+        case RequestCode::HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE:
+        case RequestCode::HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE:
+            pRequestManager = &hwTrackControllerRequestManager;
+            break;
+
+        case RequestCode::TRAIN_MODEL_DISPATCH_TRAIN:
+            pRequestManager = &trainModelRequestManager;
+            break;
+
+        case RequestCode::TRACK_MODEL_DISPATCH_TRAIN:
+            pRequestManager = &trackModelRequestManager;
+            break;
+
+        case RequestCode::TRACK_MODEL_GUI_TRACK_LAYOUT:
+            pRequestManager = &trackModelRequestManager;
+            break;
+
+        case RequestCode::TRACK_MODEL_GUI_BLOCK:
+            pRequestManager = &trackModelRequestManager;
+            break;
+            
+        default:
+            break;
     }
 
-    /**
-     * @brief Retrieves a specific's module's request manager based
-     * on the given request code
-     * 
-     * @param requestCode       Code of the request
-     * @return Specific request manager to handle the request
-    */
-    RequestManagerIface* GetRequestManager(RequestCode requestCode);
-protected:
-private:
-    /**
-     * @brief Constructs a new RequestManagerRepository object
-     * 
-     * @note Private to ensure singleton instance
-    */
-    RequestManagerRepository() {}
-};
+    ASSERT(pRequestManager != nullptr, "No request manager found for code %d", requestCode);
+
+    return pRequestManager;
+}
 
 } // namespace Common
-
-#endif // REQUEST_MANAGER_REPOSITORY_HPP
