@@ -143,7 +143,8 @@ enum class RequestCode : uint8_t
     HWTRAIN_DISPLAY_ADS = 231, // Used by the SW Train Ctrl to display a train's advertisements
     HWTRAIN_GET_HW_TRAIN_CONTROLLER_REQUEST = 232, // Used by the connector script to check if any requests exist for the hardware
     HWTRAIN_SEND_HW_TRAIN_CONTROLLER_RESPONSE = 233, // Used by the connector script to forward the hardware's response to the server
-    HWTRAIN_GET_HW_TRAIN_CONTROLLER_RESPONSE = 234 // Used by SW Train Ctrl to get response from the hardware
+    HWTRAIN_GET_HW_TRAIN_CONTROLLER_RESPONSE = 234, // Used by SW Train Ctrl to get response from the hardware
+    HWTRAIN_DISPATCH_TRAIN = 235
 };
 
 /**

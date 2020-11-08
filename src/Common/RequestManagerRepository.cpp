@@ -15,24 +15,18 @@
 #include "HWTrackControllerRequestManager.hpp" // For HWTrackController::HWTrackControllerRequestManager
 #include "CTCRequestManager.hpp"    // For CTC::CTCRequestManager
 #include "TrainModelRequestManager.hpp" // For TrainModel::TrainModelRequestManager
-<<<<<<< HEAD
 #include "HWTrainRequestManager.hpp"
-=======
 //#include "SWTrackControllerRequestManager.hpp"
 #include "TrackModelRequestManager.hpp" // For TrackModel::TrackModelRequestManager
->>>>>>> origin/master
 
 static Debug::DebugRequestManager debugRequestManager;
 static HWTrackController::HWTrackControllerRequestManager hwTrackControllerRequestManager;
 static CTC::CTCRequestManager ctcRequestManager;
 static TrainModel::TrainModelRequestManager trainModelRequestManager;
-<<<<<<< HEAD
 static HWTrainController::HWTrainRequestManager hwTrainControllerRequestManager;
 
-=======
 static TrackModel::TrackModelRequestManager trackModelRequestManager;
 //static SWTrackController::SWTrackControllerRequestManager swTrackControllerRequestManager;
->>>>>>> origin/master
 namespace Common
 {
 
@@ -66,7 +60,6 @@ RequestManagerIface* RequestManagerRepository::GetRequestManager(RequestCode req
         case RequestCode::TRAIN_MODEL_DISPATCH_TRAIN:
             pRequestManager = &trainModelRequestManager;
             break;
-<<<<<<< HEAD
         case RequestCode::HWTRAIN_PULL_EBRAKE:
         case RequestCode::HWTRAIN_SET_SETPOINT_SPEED:
         case RequestCode::HWTRAIN_PRESS_SERVICE_BRAKE:
@@ -80,13 +73,11 @@ RequestManagerIface* RequestManagerRepository::GetRequestManager(RequestCode req
         case RequestCode::HWTRAIN_GET_HW_TRAIN_CONTROLLER_RESPONSE:
             pRequestManager = &hwTrainControllerRequestManager;
             break;
-=======
 
         case RequestCode::TRACK_MODEL_DISPATCH_TRAIN:
             pRequestManager = &trackModelRequestManager;
             break;
             
->>>>>>> origin/master
         default:
             break;
     }

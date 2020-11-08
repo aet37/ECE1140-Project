@@ -71,6 +71,13 @@ void HWTrainRequestManager::HandleRequest(const Common::Request& rRequest, Commo
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
+        case Common::RequestCode::HWTRAIN_DISPATCH_TRAIN:
+        {
+            // Add the request to the queue
+            AddRequest(rRequest);
+            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+            break;
+        }
         case Common::RequestCode::HWTRAIN_GET_HW_TRAIN_CONTROLLER_REQUEST:
         {
             // Retrieve the next request from the request queue
