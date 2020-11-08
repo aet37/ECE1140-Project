@@ -33,6 +33,13 @@ void SWTrainControllerRequestManager::HandleRequest(const Common::Request& rRequ
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
+        case Common::RequestCode::SWTRAIN_GUI_TOGGLE_DAMN_DOORS:
+        {
+            // Add the request to the queue
+            SWTrainController::serviceQueue.Push(rRequest);
+            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+            break;
+        }
         default:
             LOG_SW_TRAIN_CONTROLLER("Invalid command %d received", static_cast<uint16_t>(rRequest.GetRequestCode()));
             rResponse.SetResponseCode(Common::ResponseCode::ERROR);

@@ -48,6 +48,17 @@ void moduleMain()
                 LOG_SW_TRAIN_CONTROLLER("SWTrainController lights: %d", trainID);
                 break;
             }
+            case Common::RequestCode::SWTRAIN_GUI_TOGGLE_DAMN_DOORS:
+            {
+                uint32_t trainID = req.ParseData<uint32_t>(0);
+                // Controller tempController = TrainControllers.getControllerInstance(TrainID);
+                // uint32_t doorStatus = tempController.toggleDoors();
+                // std::string doorStatusString = std::to_string(doorStatus);
+                // Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_SET_THE_DAMN_LIGHTS, lightStatusString)
+                // TrainModel::serviceQueue.Push(newRequest)
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController doors: %d", trainID);
+                break;
+            }
             default:
                 ASSERT(false, "Unexpected request code %d", static_cast<uint16_t>(req.GetRequestCode()));
 

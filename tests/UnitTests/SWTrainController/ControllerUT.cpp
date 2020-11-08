@@ -22,7 +22,7 @@ TEST_CASE( "Test Controller default constructor", "[Controller::Controller()]" )
 /*
  * Test initialized constructor and set Kp
  */
-TEST_CASE( "Test Initialized constructor", "[Controller::Controller(int, int, int, int)]")
+TEST_CASE( "Test Initialized constructor", "[Controller::Controller(int, int, bool)]")
 {
     // Create new controller with initialized command speed, current speed, speed limit, and authority
     Controller testObj(3,4,6);
@@ -126,7 +126,7 @@ TEST_CASE( "Test setSetpointSpeed(int) and getSetpointSpeed()", "[Controller::se
 /*
  * Test setAuthority and getAuthority
  */
-TEST_CASE( "Test setAuthority(int) and getAuthority()", "[Controller::setAuthority(int), Controller::getAuthority()]")
+TEST_CASE( "Test setAuthority(bool) and getAuthority()", "[Controller::setAuthority(bool), Controller::getAuthority()]")
 {
     // Create new Controller
     Controller testObj;
@@ -135,14 +135,14 @@ TEST_CASE( "Test setAuthority(int) and getAuthority()", "[Controller::setAuthori
     REQUIRE(testObj.getAuthority() == 0);
 
     // Set new value for authority
-    testObj.setAuthority(5);
+    testObj.setAuthority(1);
 
     // Test new value of authority
-    REQUIRE(testObj.getAuthority() == 5);
+    REQUIRE(testObj.getAuthority() == 1);
 
     // Test with double value
     testObj.setAuthority(3.8);
-    REQUIRE(testObj.getAuthority() == 3);
+    REQUIRE(testObj.getAuthority() == 0);
 }
 
 /*
