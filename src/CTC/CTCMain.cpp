@@ -163,6 +163,9 @@ void moduleMain()
 					    throw std::logic_error("CTC::CTCMain.cpp : Track Controller sent invalid Track Occupancy Array (Red)");
 				    }
 			    }
+
+			    // Update Train Positions based on updated track occupancies
+			    TrainSystem::GetInstance().UpdateTrainPosition();
 			    break;
 		    }
 		    // Get Switches from Track Controller
