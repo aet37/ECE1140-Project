@@ -225,7 +225,7 @@ void initializeRouteMaps(std::map<std::string, std::vector<uint32_t>>& rGreenLin
                                     0
                                     };
     rGreenLineRoutes.insert(std::pair<std::string, std::vector<uint32_t>>("0001110100", blocks));
-
+/**
     base = {9, 8, 7, 6, 5, 4, 3, 2, 1, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27}
 
     for (int i = 0; i < 2; i++) 
@@ -297,6 +297,7 @@ void initializeRouteMaps(std::map<std::string, std::vector<uint32_t>>& rGreenLin
 
     blocks = {};
     rRedLineRoutes.insert(std::pair<std::string, std::vector<uint32_t>>("01111101000001", blocks));
+    **/
 }
 
 } // namespace TrackModel
