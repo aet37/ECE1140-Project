@@ -45,7 +45,7 @@ RequestManagerIface* RequestManagerRepository::GetRequestManager(RequestCode req
     {
         pRequestManager = &ctcRequestManager;
     }
-    else if (requestCodeValue <= 95)
+    else if (requestCodeValue <= 70)
     {
         pRequestManager = &swTrackControllerRequestManager;
     }

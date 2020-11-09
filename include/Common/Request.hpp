@@ -73,6 +73,15 @@ enum class RequestCode : uint8_t
     SWTRACK_SET_TRACK_OCCUPANCY = 71, // Used by the track model to inform the controller that a train is on a block
     SWTRACK_SET_CROSSING = 72, // Used by the track model to have the controller lower/raise the crossing
     SWTRACK_SET_TRACK_HEATER = 73, // Used by the Track model to turn on/off the track heater
+    START_DOWNLOAD = 74, // Used by the gui to start a download
+    END_DOWNLOAD = 75, // Used by the gui to end a download
+    CREATE_TAG = 76, // Used by the gui to create a tag
+    CREATE_TASK = 77, // Used by the gui to create a task
+    CREATE_ROUTINE = 78, // Used by the gui to create a routine
+    CREATE_RUNG = 79, // Used by the gui to create a rung
+    CREATE_INSTRUCTION = 80, // Used by the gui to create an instruction
+    SET_TAG_VALUE = 81, // Used by the gui to set a tag's value
+    GET_TAG_VALUE = 82, // Used by the gui to get a tag's value
 
     HWTRACK_START_DOWNLOAD = 96, // Used by the SW Track Ctrl to signify download is starting // (string programName)
     HWTRACK_END_DOWNLOAD = 97, // Used by the SW Track Ctrl to signify download has completed // (void)

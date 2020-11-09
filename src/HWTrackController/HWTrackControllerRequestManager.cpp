@@ -24,13 +24,21 @@ void HWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequ
 {
     switch (rRequest.GetRequestCode())
     {
-        case Common::RequestCode::HWTRACK_GET_TAG_VALUE:
+        case Common::RequestCode::START_DOWNLOAD:
+        case Common::RequestCode::END_DOWNLOAD:
+        case Common::RequestCode::CREATE_TAG:
+        case Common::RequestCode::CREATE_TASK:
+        case Common::RequestCode::CREATE_ROUTINE:
+        case Common::RequestCode::CREATE_RUNG:
+        case Common::RequestCode::CREATE_INSTRUCTION:
         {
-            // Add the request to the queue
-            AddRequest(rRequest);
+            Common::RequestCode scaledCode = static_cast<Common::RequestCode>(static_cast<uint8_t>(rRequest.GetRequestCode()) + 22);
+            Common::Request newReq(scaledCode, rRequest.GetData());
+            AddRequest(newReq);
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
+        case Common::RequestCode::HWTRACK_GET_TAG_VALUE:
         case Common::RequestCode::HWTRACK_SET_TAG_VALUE:
         {
             // Add the request to the queue
