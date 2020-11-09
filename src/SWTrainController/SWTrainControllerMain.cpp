@@ -54,9 +54,31 @@ void moduleMain()
                 // Controller tempController = TrainControllers.getControllerInstance(TrainID);
                 // uint32_t doorStatus = tempController.toggleDoors();
                 // std::string doorStatusString = std::to_string(doorStatus);
-                // Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_SET_THE_DAMN_LIGHTS, lightStatusString)
+                // Common::Request newRequest(Common::RequestCode:: , lightStatusString)
                 // TrainModel::serviceQueue.Push(newRequest)
                 LOG_SW_TRAIN_CONTROLLER("SWTrainController doors: %d", trainID);
+                break;
+            }
+            case Common::RequestCode::SWTRAIN_GUI_ANNOUNCE_STATIONS:
+            {
+                uint32_t trainID = req.ParseData<uint32_t>(0);
+                // Controller tempController = TrainControllers.getControllerInstance(TrainID);
+                // uint32_t announcementStatus = tempController.announceStations();
+                // std::string announcementStatusString = std::to_string(announcementStatus);
+                // Common::Request newRequest(Common::RequestCode:: , lightStatusString)
+                // TrainModel::serviceQueue.Push(newRequest)
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController announcements: %d", trainID);
+                break;
+            }
+            case Common::RequestCode::SWTRAIN_GUI_DISPLAY_ADS:
+            {
+                uint32_t trainID = req.ParseData<uint32_t>(0);
+                // Controller tempController = TrainControllers.getControllerInstance(TrainID);
+                // uint32_t adsStatus = tempController.toggleAds();
+                // std::string adsStatusString = std::to_string(adsStatus);
+                // Common::Request newRequest(Common::RequestCode:: , lightStatusString)
+                // TrainModel::serviceQueue.Push(newRequest)
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController advertisements: %d", trainID);
                 break;
             }
             default:
