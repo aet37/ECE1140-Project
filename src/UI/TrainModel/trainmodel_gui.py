@@ -20,12 +20,14 @@ class Ui(QtWidgets.QMainWindow):
         """Method called after a train is selected"""
         uic.loadUi('src/UI/TrainModel/Train_Menu.ui', self)
 
+        # TESTING DYNAMIC SCREEN SIZE!!!!!!!!!!!!!
         screen = app.primaryScreen()
         print('Screen: %s' % screen.name())
         size = screen.size()
         print('Size: %d x %d' % (size.width(), size.height()))
         rect = screen.availableGeometry()
         print('Available: %d x %d' % (rect.width(), rect.height()))
+        # TESTING DYNAMIC SCREEN SIZE!!!!!!!!!!!!!
 
         # Find all elements and connect them accordingly
         logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button_menu')
