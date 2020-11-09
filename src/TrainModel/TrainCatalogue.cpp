@@ -13,7 +13,7 @@
 namespace TrainModel
 {
 
-Train* TrainCatalogue::GetTrain(int trainId) const
+Train* TrainCatalogue::GetTrain(int trainId)
 {
    return &m_trainList[trainId];
 }

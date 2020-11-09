@@ -13,7 +13,7 @@
 namespace TrainModel
 {
 
-Block* BlockCatalogue::GetBlock(int blockId) const
+Block* BlockCatalogue::GetBlock(int blockId)
 {
    return &m_blockList[blockId];
 }

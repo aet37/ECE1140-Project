@@ -35,7 +35,7 @@ public:
     /**
      * @brief Gets a train from the list
     */
-    Train* GetTrain(int trainId) const;
+    Train* GetTrain(int trainId);
 
     /**
      * @brief Adds a train to the train list

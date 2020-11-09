@@ -66,7 +66,7 @@ public:
      * 
      * @param blockId       Index of the block to get
     */
-    Block* GetBlock(int blockId) const;
+    Block* GetBlock(int blockId);
 
     /**
      * @brief Adds a block to the end of the block list
