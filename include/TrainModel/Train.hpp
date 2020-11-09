@@ -119,7 +119,7 @@ public:
 
     // BRAKE COMMAND
     // ASK COLLIN ABOUT THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // ASK COLLIN ABOUT THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // What is the diff between service brake and brake command?
     /**
      * @brief Setter function for brakeCommand
      * @param brakeCommand
@@ -228,7 +228,7 @@ public:
      * @brief Setter function for trainWidth
      * @param trainLength
      */
-    void SetTrainWidth(int trainLength) { m_trainWidth = trainWidth; };
+    void SetTrainWidth(int trainWidth) { m_trainWidth = trainWidth; };
 
     /**
      * @brief gets trainWidth
@@ -348,11 +348,7 @@ private:
     int m_position; // THIS IS CALCULATED
     int m_authority;
     int m_currentBlock;
-    // MOVE TO BLOCK: int m_blockSize;
     // INTEGERS (Nonvital)
-    // MOVE TO BLOCK: int m_accelerationLimit;
-    // MOVE TO BLOCK: int m_decelerationLimit;
-    // MOVE TO BLOCK: int m_speedLimit;
     int m_tempControl;
     // BOOLEANS (Vital)
     bool m_emergencyPassengeBrake;
@@ -379,7 +375,7 @@ private:
     bool m_brakeFailure;
 
     // MISC.
-    bool m_mode;  // Auto or Manuel
+    bool m_mode;  // Auto or Manual
 };
 
 } // namespace TrainModel

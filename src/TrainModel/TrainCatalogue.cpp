@@ -13,9 +13,6 @@
 namespace TrainModel
 {
 
-/**
- * @brief Gets a train from the list
-*/
 Train* TrainCatalogue::GetTrain(int trainId) const
 {
    return &m_trainList[trainId];
@@ -24,9 +21,9 @@ Train* TrainCatalogue::GetTrain(int trainId) const
 /**
  * @brief Adds a train to the train list
 */
-void TrainCatalogue::AddTrain(Train train, int trainId) const
+void TrainCatalogue::AddTrain(Train train)
 {
-   m_trainList[trainId] = train; // ?????????????????????????????????????????????
+   m_trainList.push_back(train);
 }
 
 } // namespace Common

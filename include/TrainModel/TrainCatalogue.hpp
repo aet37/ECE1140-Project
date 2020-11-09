@@ -10,7 +10,7 @@
 #include <vector>
 
 // C++ PROJECT INCLUDES
-#include "Train.hpp"
+#include "Train.hpp" // For Train
 
 namespace TrainModel
 {
@@ -18,7 +18,7 @@ namespace TrainModel
 /**
  * @class TrainCatalogue
  * 
- * @brief Repository for module's request managers
+ * @brief Catalogue of all the trains
 */
 class TrainCatalogue
 {
@@ -40,7 +40,7 @@ public:
     /**
      * @brief Adds a train to the train list
     */
-    void AddTrain(Train train, int trainId);
+    void AddTrain(Train train);
 
     /**
      * @brief Gets the number of trains in the list

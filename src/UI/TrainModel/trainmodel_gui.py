@@ -16,17 +16,20 @@ class Ui(QtWidgets.QMainWindow):
         self.current_train_id = 1
         self.train_menu()
 
+    #######################################################################
+    ############################## GUI PAGES ##############################
+    #######################################################################
     def train_menu(self):
         """Method called after a train is selected"""
         uic.loadUi('src/UI/TrainModel/Train_Menu.ui', self)
 
         # TESTING DYNAMIC SCREEN SIZE!!!!!!!!!!!!!
-        screen = app.primaryScreen()
-        print('Screen: %s' % screen.name())
-        size = screen.size()
-        print('Size: %d x %d' % (size.width(), size.height()))
-        rect = screen.availableGeometry()
-        print('Available: %d x %d' % (rect.width(), rect.height()))
+        # screen = app.primaryScreen()
+        # print('Screen: %s' % screen.name())
+        # size = screen.size()
+        # print('Size: %d x %d' % (size.width(), size.height()))
+        # rect = screen.availableGeometry()
+        # print('Available: %d x %d' % (rect.width(), rect.height()))
         # TESTING DYNAMIC SCREEN SIZE!!!!!!!!!!!!!
 
         # Find all elements and connect them accordingly
@@ -103,6 +106,32 @@ class Ui(QtWidgets.QMainWindow):
         save_button = self.findChild(QtWidgets.QPushButton, 'save_button')
         save_button.clicked.connect(self.save_parameters)
 
+    def train_reports(self):
+        """Method called when the train reports button is pressed"""
+        uic.loadUi('src/UI/TrainModel/Train_Report.ui', self)
+
+        # Find all elements and connect them
+        logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button_report')
+        logout_button.clicked.connect(self.logout)
+
+        reports_to_main_button = self.findChild(QtWidgets.QPushButton, 'pageRtoM_button')
+        reports_to_main_button.clicked.connect(self.train_menu)
+
+        report_engine_button = self.findChild(QtWidgets.QPushButton, 'report_engine_button')
+        report_engine_button.clicked.connect(self.report_engine)
+
+        report_signal_button = self.findChild(QtWidgets.QPushButton, 'report_signal_button')
+        report_signal_button.clicked.connect(self.report_signal)
+
+        report_brake_button = self.findChild(QtWidgets.QPushButton, 'report_brake_button')
+        report_brake_button.clicked.connect(self.report_brake)
+
+    #######################################################################
+    ############################ HELPER METHODS ###########################
+    #######################################################################
+    def update_current_speed(self):
+        responsecode, currentSpeed = send_message(RequestCode.TRAIN_MODEL_UPDATE_CURRENT_SPEED)
+    
     def save_parameters(self):
         """Sends all the entered parameters to the cloud"""
         parameters = { RequestCode.TRAIN_MODEL_GUI_SET_TRAIN_LENGTH : "",
@@ -144,26 +173,6 @@ class Ui(QtWidgets.QMainWindow):
 
         self.save_alert.setStyleSheet("color: green;")
         self.fail_alert.setStyleSheet("color: rgb(133, 158, 166);")
-
-    def train_reports(self):
-        """Method called when the train reports button is pressed"""
-        uic.loadUi('src/UI/TrainModel/Train_Report.ui', self)
-
-        # Find all elements and connect them
-        logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button_report')
-        logout_button.clicked.connect(self.logout)
-
-        reports_to_main_button = self.findChild(QtWidgets.QPushButton, 'pageRtoM_button')
-        reports_to_main_button.clicked.connect(self.train_menu)
-
-        report_engine_button = self.findChild(QtWidgets.QPushButton, 'report_engine_button')
-        report_engine_button.clicked.connect(self.report_engine)
-
-        report_signal_button = self.findChild(QtWidgets.QPushButton, 'report_signal_button')
-        report_signal_button.clicked.connect(self.report_signal)
-
-        report_brake_button = self.findChild(QtWidgets.QPushButton, 'report_brake_button')
-        report_brake_button.clicked.connect(self.report_brake)
 
     def report_engine(self):
         """Method connected to the report engine failure button"""
