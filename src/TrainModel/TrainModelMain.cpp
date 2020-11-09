@@ -8,9 +8,10 @@
 // C++ PROJECT INCLUDES
 #include "TrainModelMain.hpp" // Header for functions
 #include "SWTrainControllerMain.hpp" // For SWTrainController::serviceQueue
-#include "TrainModelData.hpp" // For TrainModel::tm_current_speed
 #include "Assert.hpp" // For ASSERT
 #include "Logger.hpp" // For LOG macros
+#include "Train.hpp" // For TrainModel::Train
+#include "TrainCatalogue.hpp" // For TrainCatalogue
 
 namespace TrainModel
 {
@@ -40,6 +41,30 @@ void moduleMain()
             }
             case Common::RequestCode::TRAIN_MODEL_DISPATCH_TRAIN:
             {
+                Train newTrain;
+                uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
+                newTrain.SetCommandSpeed(receivedRequest.ParseData<uint32_t>(1));
+                newTrain.SetAuthority(receivedRequest.ParseData<uint32_t>(1));
+                newTrain.SetTempControl(receivedRequest.ParseData<uint32_t>(1));
+                newTrain.SetEmergencyPassengeBrake(receivedRequest.ParseData<uint32_t>(1));
+                newTrain.SetServiceBrake(receivedRequest.ParseData<uint32_t>(1));
+                newTrain.SetBrakeCommand(receivedRequest.ParseData<uint32_t>(1));
+                newTrain.SetHeadLights(receivedRequest.ParseData<uint32_t>(1));
+                newTrain.SetCabinLights(receivedRequest.ParseData<uint32_t>(1));
+                newTrain.SetAdvertisements(receivedRequest.ParseData<uint32_t>(1));
+                newTrain.SetAnnouncements(receivedRequest.ParseData<uint32_t>(1));
+                newTrain.SetDoors(receivedRequest.ParseData<uint32_t>(1));
+                newTrain.SetCurrentBlock(receivedRequest.ParseData<uint32_t>(1));
+                newTrain.SetTrainLength(32.2); // Meters
+                newTrain.SetTrainWidth(2.65); // Meters
+                newTrain.SetTrainHeight(3.42); // Meters
+                newTrain.SetTrainMass(40.9); // Tons
+                newTrain.SetTrainCrewCount(receivedRequest.ParseData<uint32_t>(1));
+                newTrain.SetTrainPassCount(receivedRequest.ParseData<uint32_t>(1));
+
+
+                TrainCatalogue::GetInstance().AddTrain(newTrain);
+
                 uint32_t disData = std::stoi(receivedRequest.GetData());
                 LOG_TRAIN_MODEL("Dispatch Train = %d", disData);
                 std::string disDataSend = std::to_string(disData);

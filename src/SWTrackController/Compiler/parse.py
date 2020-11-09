@@ -2,7 +2,7 @@
 
 import sys
 import logging
-from SWTrackController.Compiler.lexer import TokenType
+from SWTrackController.Compiler.lexer import TokenType, CompilationError
 from SWTrackController.Compiler.emitter import Emitter
 
 logger = logging.getLogger(__name__)
@@ -65,20 +65,25 @@ class Parser:
         self.current_token = self.peek_token
         self.peek_token = self.lexer.get_token()
 
-    @staticmethod
-    def abort(message):
+    def abort(self, message):
         """Exits the program and prints the message.
 
         :param str message: Message to be printed prior to exiting
 
         """
-        sys.exit("Parsing error : " + message)
+        raise CompilationError("Parsing error line #{} : {}".format(self.lexer.line_number, message))
 
-    def program(self):
-        """Production step for program ::= {statement}"""
+    def program(self, program_name=''):
+        """Production step for program ::= {statement}
+
+        :param str program_name: Name of the program
+        """
         logger.info("PROGRAM")
 
-        self.emitter.emit_line("START_DOWNLOAD")
+        if program_name == '':
+            self.emitter.emit_line("START_DOWNLOAD")
+        else:
+            self.emitter.emit_line("START_DOWNLOAD " + program_name)
 
         # Parse all of the statements
         while not self.check_token(TokenType.EOF):
@@ -99,6 +104,9 @@ class Parser:
                 self.abort("Routine {} does not exist".format(jump))
 
         self.emitter.emit_line("END_DOWNLOAD")
+
+        # Write to the file and return it
+        self.emitter.write_file()
 
     # pylint: disable=too-many-branches
     def statement(self):
@@ -266,7 +274,7 @@ class Parser:
             return
         else:
             self.match(TokenType.IDENTIFIER)
-        
+
         if instruction_type == 'JSR':
             # Add the routine name to a list to be verified later
             # during compilation

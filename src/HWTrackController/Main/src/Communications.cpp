@@ -154,6 +154,7 @@ static void HandleCreateTask(UserProgram* pProgram, const String& rData)
 
     firstSpaceIndex = secondSpaceIndex;
     secondSpaceIndex = rData.indexOf(' ', firstSpaceIndex + 1);
+    String eventName;
     if (type.equals("PERIOD"))
     {
         String periodAsString = rData.substring(firstSpaceIndex + 1, secondSpaceIndex);
@@ -162,8 +163,7 @@ static void HandleCreateTask(UserProgram* pProgram, const String& rData)
     else if (type.equals("EVENT"))
     {
         taskType = TaskType::EVENT_DRIVEN;
-        String eventName = rData.substring(firstSpaceIndex + 1, secondSpaceIndex);
-        // TODO(ljk55): Need to do something with this
+        eventName = rData.substring(firstSpaceIndex + 1, secondSpaceIndex);
     }
     else
     {
@@ -176,6 +176,12 @@ static void HandleCreateTask(UserProgram* pProgram, const String& rData)
 
     // Create task using parameters
     pTask = new Task(taskName.c_str(), taskType, periodInMs);
+
+    // Set the event name if it's event driven
+    if (taskType == TaskType::EVENT_DRIVEN)
+    {
+        pTask->SetEventName(eventName);
+    }
 
     // Add it to the program
     pProgram->AddTask(pTask);
@@ -292,7 +298,15 @@ static void HandleEndDownload(UserProgram* pProgram)
     const List<Task*>& rTasks = pProgram->GetTaskList();
     for (int i = 0; i < rTasks.GetLength(); i++)
     {
-        Scheduler::GetInstance().AddTask(rTasks[i]);
+        // Only add periodic tasks
+        if (rTasks[i]->GetTaskType() == TaskType::PERIODIC)
+        {
+            Scheduler::GetInstance().AddTask(rTasks[i]);
+        }
+        else
+        {
+            Scheduler::GetInstance().AddEventDrivenTask(rTasks[i]);
+        }
     }
 
     SendResponse(ResponseCode::SUCCESS);

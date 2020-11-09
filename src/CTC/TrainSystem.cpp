@@ -50,6 +50,37 @@ void TrainSystem::ImportTrackLayout()
 		p_blocks_green.push_back(ptemp_track);
 	}
 	ptemp_track = nullptr;
+
+	// Create Green Switches
+	Switch* sw1 = new Switch(1, 12);
+	Switch* sw2 = new Switch(30, 150);
+	Switch* sw3 = new Switch(-1, 59);
+	Switch* sw4 = new Switch(-1, 61);
+	Switch* sw5 = new Switch(77, 101);
+	Switch* sw6 = new Switch(86, 10);
+	p_switches_green.push_back(sw1);
+	p_switches_green.push_back(sw2);
+	p_switches_green.push_back(sw3);
+	p_switches_green.push_back(sw4);
+	p_switches_green.push_back(sw5);
+	p_switches_green.push_back(sw6);
+
+	// Create Red Switches
+	Switch* rsw1 = new Switch(-1, 8);
+	Switch* rsw2 = new Switch(1, 15);
+	Switch* rsw3 = new Switch(28, 76);
+	Switch* rsw4 = new Switch(32, 72);
+	Switch* rsw5 = new Switch(39, 71);
+	Switch* rsw6 = new Switch(43, 67);
+	Switch* rsw7 = new Switch(53, 66);
+	p_switches_red.push_back(rsw1);
+	p_switches_red.push_back(rsw2);
+	p_switches_red.push_back(rsw3);
+	p_switches_red.push_back(rsw4);
+	p_switches_red.push_back(rsw5);
+	p_switches_red.push_back(rsw6);
+	p_switches_red.push_back(rsw7);
+
 	LOG_CTC("From TrainSystem::ImportTrackLayout() : Tracks Created");
 }
 
@@ -76,7 +107,30 @@ std::vector<Track*> TrainSystem::GetTrackArr(enum Line ln)
 	{
 		throw std::logic_error("TrainSystem::GetTrackArr : Invalid Line Argument");
 	}
+}
 
+/**
+* @brief Get the Array of Signal pointers
+*
+* @param Line
+*
+* @return vector<Signal*>
+*
+*/
+std::vector<Switch*> TrainSystem::GetSwitchesArr(enum Line ln)
+{
+	if(ln == LINE_GREEN)
+	{
+		return p_switches_green;
+	}
+	else if(ln == LINE_RED)
+	{
+		return p_switches_red;
+	}
+	else
+	{
+		throw std::logic_error("TrainSystem::GetTrackArr : Invalid Line Argument");
+	}
 }
 
 /**
@@ -206,4 +260,131 @@ void TrainSystem::SetTrackNotOccupied(int track_num, enum Line ln)
 	}
 	// Log that a track is occupied
 	LOG_CTC("From TrainSystem::SetTrackNotOccupied() : Track %d is NOT occupied", track_num);
+}
+
+/**
+ * @brief change Track status to occupied
+ *
+ * @param[in]	switch_num, Line, update_pos
+ *
+ * @return none
+ *
+*/
+void TrainSystem::SetSwitch(int switch_num, enum Line ln, int pos)
+{
+	if(ln == LINE_GREEN)
+	{
+		if(pos == 1)
+		{
+			p_switches_green[switch_num - 1]->pointing_to = p_switches_green[switch_num - 1]->greater_block;
+		}
+		else if(pos == 0)
+		{
+			p_switches_green[switch_num - 1]->pointing_to = p_switches_green[switch_num - 1]->less_block;
+		}
+		else
+		{
+			throw std::logic_error("TrainSystem::SetSwitch : Invalid position given (not 1 or 0)");
+		}
+	}
+	if(ln == LINE_RED)
+	{
+		if(pos == 1)
+		{
+			p_switches_red[switch_num - 1]->pointing_to = p_switches_red[switch_num - 1]->greater_block;
+		}
+		else if(pos == 0)
+		{
+			p_switches_red[switch_num - 1]->pointing_to = p_switches_red[switch_num - 1]->less_block;
+		}
+		else
+		{
+			throw std::logic_error("TrainSystem::SetSwitch : Invalid position given (not 1 or 0)");
+		}
+	}
+	else
+	{
+		throw std::logic_error("TrainSystem::SetSwitch : Invalid Line provided");
+	}
+}
+
+/**
+ * @brief update the train position (to be called every time occupancy is changed)
+ *
+ * @param[post] train location for each Train* in p_trains updated with current location
+ *
+ * @return none
+ *
+*/
+void TrainSystem::UpdateTrainPosition()
+{
+	for(int i = 0; i < p_trains.size(); i++)
+	{
+		if(p_trains[i]->line_on == LINE_GREEN)      // If train is on GREEN Line
+		{
+			if(p_trains[i]->index_on_route == 0)        // Has not made it out of the yard yet
+			{
+				if(p_blocks_green[green_route_blocks[1] - 1]->occupied == false)
+				{
+					p_trains[i]->index_on_route++;
+				}
+				else
+				{
+					continue;
+				}
+			}
+			else if(p_trains[i]->index_on_route == (green_route_blocks.size() - 1))     // Reached the yard (end)
+			{
+				// Free the train and delete it from the vector
+				delete p_trains[i];
+				p_trains.erase(p_trains.begin() + i);
+				i--;
+				continue;
+			}
+			else
+			{
+				if(p_blocks_green[p_trains[i]->index_on_route - 1]->occupied == false)
+				{
+					p_trains[i]->index_on_route++;
+				}
+				else
+				{
+					continue;
+				}
+			}
+		}
+		else        // If on RED Line
+		{
+			if (p_trains[i]->index_on_route == 0)        // Has not made it out of the yard yet
+			{
+				if (p_blocks_red[red_route_blocks[1] - 1]->occupied == false)
+				{
+					p_trains[i]->index_on_route++;
+				}
+				else
+				{
+					continue;
+				}
+			}
+			else if (p_trains[i]->index_on_route == (red_route_blocks.size() - 1))     // Reached the yard (end)
+			{
+				// Free the train and delete it from the vector
+				delete p_trains[i];
+				p_trains.erase(p_trains.begin() + i);
+				i--;
+				continue;
+			}
+			else
+			{
+				if (p_blocks_red[p_trains[i]->index_on_route - 1]->occupied == false)
+				{
+					p_trains[i]->index_on_route++;
+				}
+				else
+				{
+					continue;
+				}
+			}
+		}
+	}
 }

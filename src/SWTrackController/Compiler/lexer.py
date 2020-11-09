@@ -12,17 +12,22 @@ class Lexer:
         # Append a \n to simplify lexing
         self.source_code = input_string + '\n'
 
+        self.line_number = 1
         self.current_character = ''
         self.current_position = -1
         self.next_character()
 
     def next_character(self):
         """Processes the next character"""
+        if self.current_character == '\n':
+            self.line_number += 1
+
         self.current_position += 1
         if self.current_position >= len(self.source_code):
             self.current_character = '\0'
         else:
             self.current_character = self.source_code[self.current_position]
+
         logger.debug("self.current_character set to %s", self.current_character)
 
     def peek(self):
@@ -35,13 +40,13 @@ class Lexer:
             return '\0'
         return self.source_code[self.current_position + 1]
 
-    @staticmethod
-    def abort(message):
+    def abort(self, message):
         """Exits the program and prints the message.
 
         :param str message: Message to be printed prior to exiting
 
         """
+        raise CompilationError("Lexing error line #{} : {}".format(self.line_number, message))
         sys.exit("Lexing error : " + message)
 
     def skip_whitespace(self):
@@ -173,3 +178,7 @@ class TokenType(enum.Enum):
     EQ = 201
     OPEN_ANGLE = 202
     CLOSE_ANGLE = 203
+
+class CompilationError(Exception):
+    """Class to represent a general compilation error"""
+    pass
