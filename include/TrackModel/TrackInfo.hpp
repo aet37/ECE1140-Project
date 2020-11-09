@@ -15,6 +15,11 @@
 #include "Logger.hpp"      // For Logging (debugging)
 
 
+namespace TrackModel
+{
+
+// FORWARD DECLARATIONS
+class Track;
 
 /**
  * @class TrackInfo
@@ -29,23 +34,27 @@ class TrackInfo
 		 */
 		TrackInfo()
 		{
-			LOG_TRACK_MODEL("From TrackInfo::TrackInfo() : TrackInfo Class Created");
+			LOG_TRACK_MODEL("TrackInfo Class Created");
 		}
 
 		/// List of Trains
 		std::vector<int> train_numbers;
 
 		/// List of Tracks
-		std::vector<Track*> p_tracks;
+		std::vector<Track*> m_pTrackList;
 
 	public:
-		// /**
-		//  * @brief	gets singleton instance
-		//  *
-		//  * @return 	reference to this singleton TrackInfo Object
-		//  *
-		//  */
-		// static std::vector<Track> InitializeSystem();
+		/**
+		 * @brief	gets singleton instance
+		 *
+		 * @return 	reference to this singleton TrackInfo Object
+		 *
+		 */
+		static TrackInfo& GetInstance()
+		{
+			static TrackInfo* pInstance = new TrackInfo();
+			return *(pInstance);
+		}
 
 		/**
 		* @brief Read in the layout of the track and add it to the list of tracks.
@@ -55,7 +64,7 @@ class TrackInfo
 		* @return bool trackObtained
 		*
 		*/
-		void getTrack(int trackNumber);
+		Track* getTrack(int trackNumber);
 
 
         /**
@@ -65,9 +74,9 @@ class TrackInfo
 		* @return none
 		*
 		*/
-		void AddTrackLayout(std::string line, /*std::vector<Station> stations, std::vector<Switch> switches,*/ int totalBlocks, std::vector<Block> blockList);
-
-
+		void AddTrackLayout(std::string line, int number, int totalBlocks);
 };
+
+} // namespace TrackModel
 
 #endif // TRACK_INFO_HPP
