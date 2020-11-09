@@ -24,6 +24,7 @@ void TrainModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
     switch (rRequest.GetRequestCode())
     {
         case Common::RequestCode::TRAIN_MODEL_GUI_GATHER_DATA:
+        {
             Train* pTrain = TrainCatalogue::GetInstance().GetTrain(rRequest.ParseData<uint32_t>(0));
 
             rResponse.AppendData(std::to_string(pTrain->GetCommandSpeed()));
@@ -44,6 +45,7 @@ void TrainModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
             
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
+        }
         case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_LENGTH:
         case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_MASS:
         case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_HEIGHT:
