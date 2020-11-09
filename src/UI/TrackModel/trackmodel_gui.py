@@ -145,7 +145,7 @@ class Ui(QtWidgets.QMainWindow):
                     blockElevation = records.column['Elevation (m)'][x]
                     blockCumulativeElevation = round(records.column['Cumulative Elevation (m)'][x], 2)
 
-
+                    blockInfo['Track'] = tracks
                     blockInfo['Number'] = blockNumber
                     blockInfo['Length'] = blockLength
                     blockInfo['Grade'] = blockGrade
