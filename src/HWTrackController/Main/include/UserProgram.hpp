@@ -29,7 +29,7 @@ public:
      */
     explicit UserProgram(const char* pProgramName) :
         m_tasks(),
-        m_pProgramName(pProgramName)
+        m_programName(pProgramName)
     {}
 
     /**
@@ -45,7 +45,12 @@ public:
     /**
      * @brief Sets the program name
     */
-    void SetProgramName(const char* pProgramName) { m_pProgramName = pProgramName; }
+    void SetProgramName(const char* pProgramName) { m_programName = pProgramName; }
+
+    /**
+     * @brief Gets the program name
+    */
+    const String& GetProgramName() const { return m_programName; }
 
     /**
      * @brief Adds the given task to the task list
@@ -68,7 +73,7 @@ private:
     List<Task*> m_tasks;
 
     /// Name of the program
-    const char* m_pProgramName;
+    String m_programName;
 };
 
 #endif // USER_PROGRAM_HPP

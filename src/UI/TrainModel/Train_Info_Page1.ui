@@ -78,13 +78,13 @@ border-color: rgb(0, 0, 0);</string>
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="page1_train_label">
      <property name="geometry">
       <rect>
        <x>80</x>
        <y>10</y>
        <width>203</width>
-       <height>31</height>
+       <height>20</height>
       </rect>
      </property>
      <property name="font">
@@ -631,7 +631,7 @@ p, li { white-space: pre-wrap; }
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <zorder>label</zorder>
+    <zorder>page1_train_label</zorder>
     <zorder>report_button_info1</zorder>
     <zorder>textBrowser</zorder>
     <zorder>label_2</zorder>

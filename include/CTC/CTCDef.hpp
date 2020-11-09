@@ -38,7 +38,7 @@ struct Train
 	int authority;
 	int destination_block;
 	enum Line line_on;
-	int block_on;
+	int index_on_route;
 	std::vector<int> route_blocks;
 	std::vector<int> rout_switches;
 
@@ -50,7 +50,7 @@ struct Train
 		command_speed = 0;
 		authority = 0;
 		line_on = LINE_UNSPEC;
-		block_on = -1;
+		index_on_route = 0;
 	}
 };
 

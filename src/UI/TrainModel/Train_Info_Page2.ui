@@ -33,24 +33,6 @@ border-color: rgb(0, 0, 0);</string>
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QLabel" name="label">
-     <property name="geometry">
-      <rect>
-       <x>80</x>
-       <y>10</y>
-       <width>203</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>12</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Train #1 Info</string>
-     </property>
-    </widget>
     <widget class="QPushButton" name="report_button_info2">
      <property name="geometry">
       <rect>
@@ -164,7 +146,7 @@ p, li { white-space: pre-wrap; }
     <widget class="QLabel" name="label_3">
      <property name="geometry">
       <rect>
-       <x>410</x>
+       <x>400</x>
        <y>60</y>
        <width>111</width>
        <height>20</height>
@@ -506,7 +488,24 @@ p, li { white-space: pre-wrap; }
       <string>&lt;- Menu</string>
      </property>
     </widget>
-    <zorder>label</zorder>
+    <widget class="QLabel" name="page2_train_label">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>10</y>
+       <width>203</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Train #1 Info</string>
+     </property>
+    </widget>
     <zorder>report_button_info2</zorder>
     <zorder>disp_emergency_passenger_brake</zorder>
     <zorder>label_2</zorder>
@@ -528,6 +527,7 @@ p, li { white-space: pre-wrap; }
     <zorder>page2to3_button</zorder>
     <zorder>page2to1_button</zorder>
     <zorder>page2toM_button</zorder>
+    <zorder>page2_train_label</zorder>
    </widget>
    <widget class="QPushButton" name="logout_button_info2">
     <property name="geometry">
