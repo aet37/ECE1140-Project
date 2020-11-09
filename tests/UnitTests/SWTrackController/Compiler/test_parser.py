@@ -6,7 +6,7 @@ import pytest
 
 sys.path.insert(1, '../../../../src')
 from SWTrackController.Compiler.parse import Parser
-from SWTrackController.Compiler.lexer import Lexer
+from SWTrackController.Compiler.lexer import Lexer, CompilationError
 from SWTrackController.Compiler.emitter import Emitter
 
 # pylint: disable=redefined-outer-name
@@ -39,10 +39,9 @@ def test_statement_tag_2(mock_emitter):
     source_code = "TAG myTag = notAKeyword"
     par = Parser(Lexer(source_code), mock_emitter)
 
-    with pytest.raises(SystemExit) as pytest_wrapped_e:
+    with pytest.raises(CompilationError) as pytest_wrapped_e:
         par.program()
-    assert SystemExit == pytest_wrapped_e.type
-    assert "Parsing error : Expected FALSE, but found notAKeyword" == pytest_wrapped_e.value.code
+    assert "Parsing error line #2 : Expected FALSE, but found notAKeyword" == str(pytest_wrapped_e.value)
 
 def test_statement_task_1(mock_emitter):
     """Tests the statement method
@@ -81,10 +80,9 @@ def test_statement_task_3(mock_emitter):
     source_code = "TASK<CONTINUOUS> myTask"
     par = Parser(Lexer(source_code), mock_emitter)
 
-    with pytest.raises(SystemExit) as pytest_wrapped_e:
+    with pytest.raises(CompilationError) as pytest_wrapped_e:
         par.statement()
-    assert SystemExit == pytest_wrapped_e.type
-    assert "Parsing error : Invalid task type CONTINUOUS" == pytest_wrapped_e.value.code
+    assert "Parsing error line #1 : Invalid task type CONTINUOUS" == str(pytest_wrapped_e.value)
 
 def test_statement_routine_success(mock_emitter):
     """Tests the statement method
@@ -112,10 +110,9 @@ def test_statement_routine_failure(mock_emitter):
     par = Parser(Lexer(source_code), mock_emitter)
     par.stack.append('TASK')
 
-    with pytest.raises(SystemExit) as pytest_wrapped_e:
+    with pytest.raises(CompilationError) as pytest_wrapped_e:
         par.statement()
-    assert SystemExit == pytest_wrapped_e.type
-    assert "Parsing error : Expected IDENTIFIER, but found \n" == pytest_wrapped_e.value.code
+    assert "Parsing error line #2 : Expected IDENTIFIER, but found \n" == str(pytest_wrapped_e.value)
 
 def test_statement_rung_1(mock_emitter):
     """Tests the statement method

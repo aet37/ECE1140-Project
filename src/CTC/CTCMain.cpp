@@ -46,10 +46,9 @@ void moduleMain()
 			    {
 		    		line_on = LINE_RED;
 			    }
+
 			    // Get block train was dispatched to
-			    std::string str_block = req.GetData().substr(11, req.GetData().size() - 11);
-
-
+			    std::string str_block = req.GetData().substr(10, req.GetData().size() - 10);
 			    // Convert block to integer
 			    int block_to = std::stoi(str_block);
 
@@ -57,15 +56,64 @@ void moduleMain()
 			    Train *pto_send;
 			    pto_send = TrainSystem::GetInstance().CreateNewTrain(block_to,line_on);
 
+			    // Set Suggested Speed and Authority
+			    pto_send->command_speed = 55;
+			    pto_send->authority = 3;
+
+			    // Set route
+			    if(line_on == LINE_GREEN)
+			    {
+			    	pto_send->rout_switches = TrainSystem::GetInstance().green_route_switches;
+			    	pto_send->route_blocks = TrainSystem::GetInstance().green_route_blocks;
+			    }
+			    else
+			    {
+				    pto_send->rout_switches = TrainSystem::GetInstance().red_route_switches;
+				    pto_send->route_blocks = TrainSystem::GetInstance().red_route_blocks;
+			    }
+
+			    // set it on the first block if it is not occupied
+			    if(pto_send->line_on == LINE_GREEN)
+			    {
+			    	if(TrainSystem::GetInstance().GetTrackArr(LINE_GREEN)[TrainSystem::GetInstance().green_route_blocks[1] - 1]->occupied == false)
+				    {
+						pto_send->index_on_route++;
+				    }
+			    }
+			    else
+			    {
+			    	if(TrainSystem::GetInstance().GetTrackArr(LINE_RED)[TrainSystem::GetInstance().red_route_blocks[1] - 1]->occupied == false)
+				    {
+			    		pto_send->index_on_route++;
+				    }
+			    }
+
 			    // Push Train Struct to Track controller queue
 				reqSend.SetRequestCode(Common::RequestCode::SWTRACK_DISPATCH_TRAIN);  // Create request class to send
 				reqSend.SetData("");    // Clear Previous Data
 
-				// Add "train_di destination_block command_speed authority" to send string
+				// Add "train_di destination_block command_speed authority Line_on switch_arr" to send string
 				reqSend.AppendData(std::to_string(pto_send->train_id));
 				reqSend.AppendData(std::to_string(pto_send->destination_block));
 			    reqSend.AppendData(std::to_string(pto_send->command_speed));
 			    reqSend.AppendData(std::to_string(pto_send->authority));
+			    if(pto_send->line_on == LINE_GREEN)
+			    {
+				    reqSend.AppendData("0");    // Send Line if Green
+			    }
+			    else
+			    {
+			    	reqSend.AppendData("1");    // Send Line if Red
+			    }
+
+			    if(pto_send->line_on == LINE_GREEN)
+			    {
+				    reqSend.AppendData("0001110100");
+			    }
+			    else
+			    {
+				    reqSend.AppendData("01111101000001");
+			    }
 
 			    SWTrackController::serviceQueue.Push(reqSend);  // Push request to SW Track Controller Queue
 
@@ -79,32 +127,86 @@ void moduleMain()
 			// Get Occupancies from Track Controller
 	    	case Common::RequestCode::CTC_GET_OCCUPANCIES:
 		    {
-			    int block_location = std::stoi(req.GetData());  // get block location as integer
-				/*
-			    // set the block passed in as occupied
-			    TrainSystem::GetInstance().SetTrackOccupied(block_location);
+			    std::string green_occupancies = req.GetData().substr(0, 150);  // get green block occupancies
+			    std::string red_occupancies = req.GetData().substr(150, 76);    // get red block occupancies
 
-			    // set previous blocks as not occupied
-			    if(block_location == 1)
+			    for(int i = 0; i < TrainSystem::GetInstance().GetTrackArr(LINE_GREEN).size(); i++)
 			    {
-				    return;
+			    	if(green_occupancies.at(i) == '1')
+				    {
+			    		TrainSystem::GetInstance().SetTrackOccupied(i + 1, LINE_GREEN);
+				    }
+			    	else if(green_occupancies.at(i) == '0')
+				    {
+					    TrainSystem::GetInstance().SetTrackNotOccupied(i + 1, LINE_GREEN);
+				    }
+			    	else
+				    {
+			    		std::cout << req.GetData() << std::endl;
+			    		throw std::logic_error("CTC::CTCMain.cpp : Track Controller sent invalid Track Occupancy Array (Green)");
+				    }
 			    }
-			    else if(block_location == 11)
+
+			    for(int i = 0; i < TrainSystem::GetInstance().GetTrackArr(LINE_RED).size(); i++)
 			    {
-				    TrainSystem::GetInstance().SetTrackNotOccupied(5);
-
-				    // Log what was done
-				    LOG_CTC("From TrainLocationBuffer_CTC() : Block %d set occupied, Block 5 set not occupied", block_location);
+				    if(red_occupancies.at(i) == '1')
+				    {
+					    TrainSystem::GetInstance().SetTrackOccupied(i + 1, LINE_RED);
+				    }
+				    else if(red_occupancies.at(i) == '0')
+				    {
+					    TrainSystem::GetInstance().SetTrackNotOccupied(i + 1, LINE_RED);
+				    }
+				    else
+				    {
+					    std::cout << req.GetData() << std::endl;
+					    throw std::logic_error("CTC::CTCMain.cpp : Track Controller sent invalid Track Occupancy Array (Red)");
+				    }
 			    }
-			    else
+
+			    // Update Train Positions based on updated track occupancies
+			    TrainSystem::GetInstance().UpdateTrainPosition();
+			    break;
+		    }
+		    // Get Switches from Track Controller
+		    case Common::RequestCode::CTC_GET_SWITCHES:
+		    {
+			    std::string green_switches = req.GetData().substr(0, 6);  // get green switches
+			    std::string red_switches = req.GetData().substr(6, 7);    // get red switches
+
+			    for(int i = 0; i < TrainSystem::GetInstance().GetSwitchesArr(LINE_GREEN).size(); i++)
 			    {
-				    TrainSystem::GetInstance().SetTrackNotOccupied(block_location - 1);
-
-				    // Log what was done
-				    LOG_CTC("From TrainLocationBuffer_CTC() : Block %d set occupied, Block %d set not occupied", block_location, block_location - 1);
-
+				    if(green_switches.at(i) == '1')
+				    {
+					    TrainSystem::GetInstance().SetSwitch(i + 1, LINE_GREEN, 1);
+				    }
+				    else if(green_switches.at(i) == '0')
+				    {
+					    TrainSystem::GetInstance().SetSwitch(i + 1, LINE_GREEN, 0);
+				    }
+				    else
+				    {
+					    std::cout << req.GetData() << std::endl;
+					    throw std::logic_error("CTC::CTCMain.cpp : Track Controller sent invalid Switch Array (Green)");
+				    }
 			    }
-			    */
+
+			    for(int i = 0; i < TrainSystem::GetInstance().GetSwitchesArr(LINE_RED).size(); i++)
+			    {
+				    if(red_switches.at(i) == '1')
+				    {
+					    TrainSystem::GetInstance().SetSwitch(i + 1, LINE_RED, 1);
+				    }
+				    else if(red_switches.at(i) == '0')
+				    {
+					    TrainSystem::GetInstance().SetSwitch(i + 1, LINE_RED, 0);
+				    }
+				    else
+				    {
+					    std::cout << req.GetData() << std::endl;
+					    throw std::logic_error("CTC::CTCMain.cpp : Track Controller sent invalid Switch Array (Red)");
+				    }
+			    }
 			    break;
 		    }
 		    default:

@@ -36,7 +36,7 @@ class LoginPage(QtWidgets.QMainWindow):
         elif username == "hwtrack" and password == "jerry":
             print("hwtrack")
         elif username == "swtrack" and password == "jerry":
-            print("swtrack")
+            file_path = 'src/UI/SWTrackController/sw_track_gui.py'
         elif username == "ctc" and password == "jerry":
             file_path = 'src/UI/CTC/ctc_gui.py'
         elif username == "hwtrain" and password == "jerry":

@@ -51,28 +51,40 @@ enum class RequestCode : uint8_t
     CTC_UPDATE_SIGNAL = 37,
     CTC_UPDATE_SCHEDULE = 38,
     CTC_UPDATE_AUTOMATIC_MODE = 39,
-    CTC_UPDATE_SWITCH = 40, // Used by the Track model to update switch positions
-    CTC_SEND_GUI_THROUGHPUT = 41,
+    CTC_UPDATE_SWITCH = 40,
+    CTC_SEND_GUI_THROUGHPUT = 41, // Used by the track model to give the ctc ticket sales
     CTC_SEND_GUI_TRAIN_INFO = 42,
-    CTC_SEND_GUI_TRACK_INFO = 43,
-    CTC_SEND_GUI_SIGNAL_INFO = 44,
-    CTC_SEND_TIMER_REQUEST = 45,
-    CTC_GIVE_TICKET_SALES = 46, // Used by the track model to give the ctc ticket sales
+	CTC_SEND_GUI_SWITCH_POS_GREEN = 43,
+	CTC_SEND_GUI_SWITCH_POS_RED = 44,
+    CTC_SEND_GUI_SIGNAL_INFO = 45,
+    CTC_SEND_TIMER_REQUEST = 46,
     CTC_TIME_TRIGGERED = 60,
     CTC_GET_SIGNALS = 61,
-    CTC_GET_TRACK_STATUS = 62,
+    CTC_GET_SWITCHES = 62,
     CTC_GET_OCCUPANCIES = 63,
 
-    SWTRACK_DISPATCH_TRAIN = 64, // Used by the CTC to signify that a new train has been dispatched
+    SWTRACK_DISPATCH_TRAIN = 64, // Used by the CTC to signify that a new train has been dispatched // (trainID, destinationBlock, commandSpeed, authority, trackColor, switchPositions)
     SWTRACK_UPDATE_AUTHORITY = 65, // Used by the CTC when a train's authority has been updated
     SWTRACK_SET_TRACK_SIGNAL = 66, // Used by the CTC to set a track block's signal color
     SWTRACK_UPDATE_COMMAND_SPEED = 67, // Used by the CTC when a train's command speed is updated
     SWTRACK_SET_TRACK_STATUS = 68, // Used by the CTC when a block is closed/open for maintenance
     SWTRACK_SET_SWITCH_POSITION = 69, // Used by the CTC when a track switch needs flipped
     SWTRACK_SET_TRACK_FAILURE = 70, // Used by the track model to inform the controller that a failure has occured on a block
-    SWTRACK_SET_TRACK_OCCUPANCY = 71, // Used by the track model to inform the controller that a train is on a block
-    SWTRACK_SET_CROSSING = 72, // Used by the track model to have the controller lower/raise the crossing
-    SWTRACK_SET_TRACK_HEATER = 73, // Used by the Track model to turn on/off the track heater
+    SWTRACK_SET_TRACK_OCCUPANCY = 71, // Used by the track model to inform the controller that a train is on a block // (blockId, trainOrNot)
+    SWTRACK_SET_CROSSING = 72, // Used by the track model to have the controller lower/raise the crossing // (blockId, up/down)
+    SWTRACK_SET_TRACK_HEATER = 73, // Used by the Track model to turn on/off the track heater // (trackColor, on/off)
+
+    // The following request codes are used by the sw track controller gui to download a plc program
+    // An offset is used to convert them to hw track controller requests. PLEASE DON'T CHANGE THE NUMBERS!!!
+    START_DOWNLOAD = 74, // Used by the gui to start a download
+    END_DOWNLOAD = 75, // Used by the gui to end a download
+    CREATE_TAG = 76, // Used by the gui to create a tag
+    CREATE_TASK = 77, // Used by the gui to create a task
+    CREATE_ROUTINE = 78, // Used by the gui to create a routine
+    CREATE_RUNG = 79, // Used by the gui to create a rung
+    CREATE_INSTRUCTION = 80, // Used by the gui to create an instruction
+    SET_TAG_VALUE = 81, // Used by the gui to set a tag's value
+    GET_TAG_VALUE = 82, // Used by the gui to get a tag's value
 
     HWTRACK_START_DOWNLOAD = 96, // Used by the SW Track Ctrl to signify download is starting // (string programName)
     HWTRACK_END_DOWNLOAD = 97, // Used by the SW Track Ctrl to signify download has completed // (void)
@@ -94,11 +106,11 @@ enum class RequestCode : uint8_t
     TRACK_MODEL_GUI_SET_FAILURE = 133, // Used by the gui when a track failure is induced
     TRACK_MODEL_GUI_GATHER_DATA = 134, // Used periodically by the gui to update the user interface
     TRACK_MODEL_GUI_EDIT_BLOCK_LENGTH = 135, // Used by the gui to edit block length
-    TRACK_MODEL_GIVE_POSITION = 136, // Used by the train model to give the track model the position of a train
-    TRACK_MODEL_UPDATE_COMMAND_SPEED = 137, // Used by the track controller to update the command speed of a train
-    TRACK_MODEL_UPDATE_SWITCH_POSITIONS = 138, // Used by the track controller to update a switch positions
-    TRACK_MODEL_UPDATE_AUTHORITY = 139, // Used by the track controller to update the authority of a train
-    TRACK_MODEL_DISPATCH_TRAIN = 140, // Used by the track controller to signify that a new train has been dispatched
+    TRACK_MODEL_GIVE_POSITION = 136, // Used by the train model to give the track model the position of a train // (blockId, trainOrNot)
+    TRACK_MODEL_UPDATE_COMMAND_SPEED = 137, // Used by the track controller to update the command speed of a train // (trainId, newSpeed)
+    TRACK_MODEL_UPDATE_SWITCH_POSITIONS = 138, // Used by the track controller to update a switch positions // (trackColor, switchNumberFromYard, switchPosition)
+    TRACK_MODEL_UPDATE_AUTHORITY = 139, // Used by the track controller to update the authority of a train // (trainId, newAuthority)
+    TRACK_MODEL_DISPATCH_TRAIN = 140, // Used by the track controller to signify that a new train has been dispatched // (trainID, destinationBlock, commandSpeed, authority, trackColor)
 
     TRAIN_MODEL_GUI_GATHER_DATA = 160, // Used periodically by the gui to update the user interface
     TRAIN_MODEL_DISPATCH_TRAIN = 161, // Used by the track model to signify that a new train has been dispatched

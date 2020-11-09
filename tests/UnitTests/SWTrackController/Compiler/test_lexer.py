@@ -3,7 +3,7 @@
 import sys
 import pytest
 sys.path.insert(1, '../../../../src')
-from SWTrackController.Compiler.lexer import Lexer, TokenType
+from SWTrackController.Compiler.lexer import CompilationError, Lexer, TokenType
 
 # pylint: disable=misplaced-comparison-constant
 def test_next_character():
@@ -110,10 +110,9 @@ def test_get_token_failure_1():
     lex.get_token()
     lex.get_token()
 
-    with pytest.raises(SystemExit) as pytest_wrapped_e:
+    with pytest.raises(CompilationError) as pytest_wrapped_e:
         lex.get_token()
-    assert SystemExit == pytest_wrapped_e.type
-    assert "Lexing error : Illegal character in number" == pytest_wrapped_e.value.code
+    assert "Lexing error line #1 : Illegal character in number" == str(pytest_wrapped_e.value)
 
 def test_get_token_failure_2():
     """Tests the get_token method
@@ -134,10 +133,9 @@ def test_get_token_failure_2():
     lex.get_token()
     lex.get_token()
 
-    with pytest.raises(SystemExit) as pytest_wrapped_e:
+    with pytest.raises(CompilationError) as pytest_wrapped_e:
         lex.get_token()
-    assert SystemExit == pytest_wrapped_e.type
-    assert "Lexing error : Unknown token: _" == pytest_wrapped_e.value.code
+    assert "Lexing error line #1 : Unknown token: _" == str(pytest_wrapped_e.value)
 
 
 if __name__ == "__main__":

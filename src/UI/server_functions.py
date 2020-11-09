@@ -43,10 +43,11 @@ class RequestCode(Enum):
     CTC_UPDATE_SWITCH = 40
     CTC_SEND_GUI_THROUGHPUT = 41
     CTC_SEND_GUI_TRAIN_INFO = 42
-    CTC_SEND_GUI_TRACK_INFO = 43
-    CTC_SEND_GUI_SIGNAL_INFO = 44
-    CTC_SEND_TIMER_REQUEST = 45
-    CTC_GIVE_TICKET_SALES = 46 # Used by the track model to give the ctc ticket sales
+    CTC_SEND_GUI_SWITCH_POS_GREEN = 43
+    CTC_SEND_GUI_SWITCH_POS_RED = 44
+    CTC_SEND_GUI_SIGNAL_INFO = 45
+    CTC_SEND_TIMER_REQUEST = 46
+    CTC_GIVE_TICKET_SALES = 47 # Used by the track model to give the ctc ticket sales
     CTC_TIME_TRIGGERED = 60
     CTC_GET_SIGNALS = 61
     CTC_GET_TRACK_STATUS = 62
@@ -62,6 +63,15 @@ class RequestCode(Enum):
     SWTRACK_SET_TRACK_OCCUPANCY = 71 # Used by the track model to inform the controller that a train is on a block
     SWTRACK_SET_CROSSING = 72 # Used by the track model to have the controller lower/raise the crossing
     SWTRACK_SET_TRACK_HEATER = 73 # Used by the Track model to turn on/off the track heater
+    START_DOWNLOAD = 74 # Used by the gui to start a download
+    END_DOWNLOAD = 75 # Used by the gui to end a download
+    CREATE_TAG = 76 # Used by the gui to create a tag
+    CREATE_TASK = 77 # Used by the gui to create a task
+    CREATE_ROUTINE = 78 # Used by the gui to create a routine
+    CREATE_RUNG = 79 # Used by the gui to create a rung
+    CREATE_INSTRUCTION = 80 # Used by the gui to create an instruction
+    SET_TAG_VALUE = 81 # Used by the gui to set a tag's value
+    GET_TAG_VALUE = 82 # Used by the gui to get a tag's value
 
     HWTRACK_START_DOWNLOAD = 96 # Used by the SW Track Ctrl to signify download is starting # (string programName)
     HWTRACK_END_DOWNLOAD = 97 # Used by the SW Track Ctrl to signify download has completed # (void)
