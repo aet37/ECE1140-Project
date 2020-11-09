@@ -78,24 +78,6 @@ border-color: rgb(0, 0, 0);</string>
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QLabel" name="label">
-     <property name="geometry">
-      <rect>
-       <x>80</x>
-       <y>10</y>
-       <width>203</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>12</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Train #1 Info</string>
-     </property>
-    </widget>
     <widget class="QPushButton" name="report_button_info3">
      <property name="geometry">
       <rect>
@@ -234,13 +216,31 @@ p, li { white-space: pre-wrap; }
       <string>&lt;- Menu</string>
      </property>
     </widget>
-    <zorder>label</zorder>
+    <widget class="QLabel" name="page3_train_label">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>10</y>
+       <width>203</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Train #1 Info</string>
+     </property>
+    </widget>
     <zorder>report_button_info3</zorder>
     <zorder>disp_announcements</zorder>
     <zorder>label_2</zorder>
     <zorder>label_10</zorder>
     <zorder>page3to2_button</zorder>
     <zorder>page3toM_button</zorder>
+    <zorder>page3_train_label</zorder>
    </widget>
    <zorder>frame</zorder>
    <zorder>logout_button_info3</zorder>

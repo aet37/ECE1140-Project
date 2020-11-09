@@ -72,6 +72,22 @@ void moduleMain()
 				    pto_send->route_blocks = TrainSystem::GetInstance().red_route_blocks;
 			    }
 
+			    // set it on the first block if it is not occupied
+			    if(pto_send->line_on == LINE_GREEN)
+			    {
+			    	if(TrainSystem::GetInstance().GetTrackArr(LINE_GREEN)[TrainSystem::GetInstance().green_route_blocks[1] - 1]->occupied == false)
+				    {
+						pto_send->index_on_route++;
+				    }
+			    }
+			    else
+			    {
+			    	if(TrainSystem::GetInstance().GetTrackArr(LINE_RED)[TrainSystem::GetInstance().red_route_blocks[1] - 1]->occupied == false)
+				    {
+			    		pto_send->index_on_route++;
+				    }
+			    }
+
 			    // Push Train Struct to Track controller queue
 				reqSend.SetRequestCode(Common::RequestCode::SWTRACK_DISPATCH_TRAIN);  // Create request class to send
 				reqSend.SetData("");    // Clear Previous Data
@@ -147,6 +163,9 @@ void moduleMain()
 					    throw std::logic_error("CTC::CTCMain.cpp : Track Controller sent invalid Track Occupancy Array (Red)");
 				    }
 			    }
+
+			    // Update Train Positions based on updated track occupancies
+			    TrainSystem::GetInstance().UpdateTrainPosition();
 			    break;
 		    }
 		    // Get Switches from Track Controller

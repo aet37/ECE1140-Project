@@ -7,6 +7,7 @@ include_directories("${PROJECT_SOURCE_DIR}/include/Debug")
 set(SOURCES
     DebugRequestManager.cpp
     RequestManagerRepository.cpp
+    Timekeeper.cpp
 )
 set(CMAKE_CXX_STANDARD 17)
 
