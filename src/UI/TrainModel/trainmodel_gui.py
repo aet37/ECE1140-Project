@@ -13,7 +13,7 @@ class Ui(QtWidgets.QMainWindow):
     """UI class for the Train Model"""
     def __init__(self):
         super(Ui, self).__init__()
-        self.current_train_id = 1
+        self.current_train_id = "1"
         self.train_menu()
 
     #######################################################################
@@ -129,8 +129,10 @@ class Ui(QtWidgets.QMainWindow):
     #######################################################################
     ############################ HELPER METHODS ###########################
     #######################################################################
-    def update_current_speed(self):
-        responsecode, currentSpeed = send_message(RequestCode.TRAIN_MODEL_UPDATE_CURRENT_SPEED)
+    def update_gui(self):
+        responsecode, dataReceived = send_message(RequestCode.TRAIN_MODEL_GUI_GATHER_DATA, self.current_train_id)
+        if responsecode == ResponseCode.SUCCESS:
+            # Parse the data and update the gui.
     
     def save_parameters(self):
         """Sends all the entered parameters to the cloud"""
