@@ -8,7 +8,6 @@
 // C++ PROJECT INCLUDES
 #include "TrainModelMain.hpp" // Header for functions
 #include "SWTrainControllerMain.hpp" // For SWTrainController::serviceQueue
-#include "TrainModelData.hpp" // For TrainModel::tm_current_speed
 #include "Assert.hpp" // For ASSERT
 #include "Logger.hpp" // For LOG macros
 #include "Train.hpp" // For TrainModel::Train
