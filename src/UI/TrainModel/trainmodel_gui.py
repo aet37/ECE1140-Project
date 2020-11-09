@@ -1,7 +1,8 @@
 """Train Model GUI"""
 
 import os
-from PyQt5 import QtWidgets, uic
+from PyQt5 import QtWidgets, uic, QtGui
+from PyQt5.QtGui import QScreen
 from PyQt5.QtCore import QTimer
 import sys
 
@@ -12,26 +13,24 @@ class Ui(QtWidgets.QMainWindow):
     """UI class for the Train Model"""
     def __init__(self):
         super(Ui, self).__init__()
-        self.current_train_id = 1
-        self.main_page()
+        self.current_train_id = "1"
+        self.train_menu()
 
-    def main_page(self):
-        """Method called upon starting the user interface"""
-        uic.loadUi('src/UI/TrainModel/main_page.ui', self)
-
-        # Find all elements and connect them to methods
-        logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button_map')
-        logout_button.clicked.connect(self.logout)
-
-        button = self.findChild(QtWidgets.QPushButton, 'train_button_1')
-        button.clicked.connect(self.train_menu)
-
-        # Show the page
-        self.show()
-
+    #######################################################################
+    ############################## GUI PAGES ##############################
+    #######################################################################
     def train_menu(self):
         """Method called after a train is selected"""
         uic.loadUi('src/UI/TrainModel/Train_Menu.ui', self)
+
+        # TESTING DYNAMIC SCREEN SIZE!!!!!!!!!!!!!
+        # screen = app.primaryScreen()
+        # print('Screen: %s' % screen.name())
+        # size = screen.size()
+        # print('Size: %d x %d' % (size.width(), size.height()))
+        # rect = screen.availableGeometry()
+        # print('Available: %d x %d' % (rect.width(), rect.height()))
+        # TESTING DYNAMIC SCREEN SIZE!!!!!!!!!!!!!
 
         # Find all elements and connect them accordingly
         logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button_menu')
@@ -46,8 +45,8 @@ class Ui(QtWidgets.QMainWindow):
         train_reports_button = self.findChild(QtWidgets.QPushButton, 'train_reports_button')
         train_reports_button.clicked.connect(self.train_reports)
 
-        return_button = self.findChild(QtWidgets.QPushButton, 'return_button')
-        return_button.clicked.connect(self.main_page)
+        # Show the page
+        self.show()
 
     def train_info_1(self):
 
@@ -107,6 +106,34 @@ class Ui(QtWidgets.QMainWindow):
         save_button = self.findChild(QtWidgets.QPushButton, 'save_button')
         save_button.clicked.connect(self.save_parameters)
 
+    def train_reports(self):
+        """Method called when the train reports button is pressed"""
+        uic.loadUi('src/UI/TrainModel/Train_Report.ui', self)
+
+        # Find all elements and connect them
+        logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button_report')
+        logout_button.clicked.connect(self.logout)
+
+        reports_to_main_button = self.findChild(QtWidgets.QPushButton, 'pageRtoM_button')
+        reports_to_main_button.clicked.connect(self.train_menu)
+
+        report_engine_button = self.findChild(QtWidgets.QPushButton, 'report_engine_button')
+        report_engine_button.clicked.connect(self.report_engine)
+
+        report_signal_button = self.findChild(QtWidgets.QPushButton, 'report_signal_button')
+        report_signal_button.clicked.connect(self.report_signal)
+
+        report_brake_button = self.findChild(QtWidgets.QPushButton, 'report_brake_button')
+        report_brake_button.clicked.connect(self.report_brake)
+
+    #######################################################################
+    ############################ HELPER METHODS ###########################
+    #######################################################################
+    def update_gui(self):
+        responsecode, dataReceived = send_message(RequestCode.TRAIN_MODEL_GUI_GATHER_DATA, self.current_train_id)
+        if responsecode == ResponseCode.SUCCESS:
+            # Parse the data and update the gui.
+    
     def save_parameters(self):
         """Sends all the entered parameters to the cloud"""
         parameters = { RequestCode.TRAIN_MODEL_GUI_SET_TRAIN_LENGTH : "",
@@ -148,26 +175,6 @@ class Ui(QtWidgets.QMainWindow):
 
         self.save_alert.setStyleSheet("color: green;")
         self.fail_alert.setStyleSheet("color: rgb(133, 158, 166);")
-
-    def train_reports(self):
-        """Method called when the train reports button is pressed"""
-        uic.loadUi('src/UI/TrainModel/Train_Report.ui', self)
-
-        # Find all elements and connect them
-        logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button_report')
-        logout_button.clicked.connect(self.logout)
-
-        reports_to_main_button = self.findChild(QtWidgets.QPushButton, 'pageRtoM_button')
-        reports_to_main_button.clicked.connect(self.train_menu)
-
-        report_engine_button = self.findChild(QtWidgets.QPushButton, 'report_engine_button')
-        report_engine_button.clicked.connect(self.report_engine)
-
-        report_signal_button = self.findChild(QtWidgets.QPushButton, 'report_signal_button')
-        report_signal_button.clicked.connect(self.report_signal)
-
-        report_brake_button = self.findChild(QtWidgets.QPushButton, 'report_brake_button')
-        report_brake_button.clicked.connect(self.report_brake)
 
     def report_engine(self):
         """Method connected to the report engine failure button"""

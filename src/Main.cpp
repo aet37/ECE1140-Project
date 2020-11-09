@@ -16,6 +16,7 @@
 #include "TrainModelMain.hpp" // For HWTrackController::moduleMain
 #include "HWTrainControllerMain.hpp" // For HWTrainController::moduleMain
 #include "SWTrainControllerMain.hpp" // For SWTrainController::moduleMain
+#include "Timekeeper.hpp" // For Common::Timekeeper
 
 int main()
 {
@@ -27,6 +28,7 @@ int main()
     std::thread trainModelThread(TrainModel::moduleMain);
     std::thread hwTrainControllerThread(HWTrainController::moduleMain);
     std::thread swTrainControllerThread(SWTrainController::moduleMain);
+    std::thread timeKeeperThread([]() { Common::Timekeeper::GetInstance().KeepTime(); });
 
     LOG_SERVER("Server Starting...");
     try
