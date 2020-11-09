@@ -58,10 +58,13 @@ private:
     /// Period used for the power - velocity loop
     static const uint32_t SAMPLING_PERIOD_IN_MS = 1000;
 
+    /// Max amount of time the thread can sleep for
+    static const uint32_t MAX_SLEEP_DURATION_IN_MS = 5000;
+
     /**
      * @struct Timer
     */
-    struct Timer
+    typedef struct Timer
     {
         /// Period of the timer, zero if it's a point timer
         uint32_t m_periodInMs;
@@ -76,7 +79,7 @@ private:
          * @brief Constructs a new Timer object
         */
         Timer(uint32_t periodInMs, ServiceQueue<Request>* serviceQueue);
-    };
+    } Timer;
 
     /// List of timers
     std::vector<Timer> m_timerList;
@@ -84,8 +87,8 @@ private:
     /// Mutex for the list
     std::mutex m_listMutex;
 
-    /// Lowest period. Used to know how long the thread can sleep for
-    uint32_t m_lowestPeriod;
+    /// Amount of time until the next timer should expire
+    uint32_t m_sleepDurationInMs;
 
     /**
      * @brief Constructs a new Timekeeper object
@@ -95,7 +98,7 @@ private:
     Timekeeper() :
         m_timerList(),
         m_listMutex(),
-        m_lowestPeriod(1000)
+        m_sleepDurationInMs(MAX_SLEEP_DURATION_IN_MS)
     {}
 };
 

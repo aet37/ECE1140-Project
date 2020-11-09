@@ -42,6 +42,7 @@ enum class RequestCode : uint8_t
     DEBUG_TO_TRAIN_MODEL = 6,
     DEBUG_TO_HWTRAINCTRL = 7,
     DEBUG_TO_SWTRAINCTRL = 8,
+    TIMER_EXPIRED = 9, // Used by the timekeeper to tell a module that its timer has expired
 
     CTC_GUI_DISPATCH_TRAIN = 32, // Used by the gui when the dispatcher dispatches a new train
 	CTC_SEND_GUI_GREEN_OCCUPANCIES = 33,
