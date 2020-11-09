@@ -42,6 +42,7 @@ enum class RequestCode : uint8_t
     DEBUG_TO_TRAIN_MODEL = 6,
     DEBUG_TO_HWTRAINCTRL = 7,
     DEBUG_TO_SWTRAINCTRL = 8,
+    TIMER_EXPIRED = 9, // Used by the timekeeper to tell a module that its timer has expired
 
     CTC_GUI_DISPATCH_TRAIN = 32, // Used by the gui when the dispatcher dispatches a new train
 	CTC_SEND_GUI_GREEN_OCCUPANCIES = 33,
@@ -85,6 +86,8 @@ enum class RequestCode : uint8_t
     CREATE_INSTRUCTION = 80, // Used by the gui to create an instruction
     SET_TAG_VALUE = 81, // Used by the gui to set a tag's value
     GET_TAG_VALUE = 82, // Used by the gui to get a tag's value
+
+    SWTRACK_GUI_GATHER_DATA = 83, // Used by the gui to periodically gather data from the server
 
     HWTRACK_START_DOWNLOAD = 96, // Used by the SW Track Ctrl to signify download is starting // (string programName)
     HWTRACK_END_DOWNLOAD = 97, // Used by the SW Track Ctrl to signify download has completed // (void)
