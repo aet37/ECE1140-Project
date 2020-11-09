@@ -25,7 +25,7 @@ void moduleMain()
     std::map<std::string, std::vector<uint32_t>>* pGreenLinePaths = new std::map<std::string, std::vector<uint32_t>>();
     std::map<std::string, std::vector<uint32_t>>* pRedLinePaths = new std::map<std::string, std::vector<uint32_t>>();
 
-    initializeRouteMaps(*greenLinePaths, *redLinePaths);
+    //initializeRouteMaps(*greenLinePaths, *redLinePaths);
 
     while (true)
     {
@@ -207,7 +207,7 @@ void initializeRouteMaps(std::map<std::string, std::vector<uint32_t>>& rGreenLin
     //         list(range(30, 59)), # Switch between I, J and Yard @ block 58
     //         [58, 59, 60, 61]
     //     ]
-
+/**
     std::vector<uint32_t> blocks = {0,
                                     62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76,
                                     77, 78, 79, 80, 81, 82, 83, 84, 85,
@@ -228,16 +228,16 @@ void initializeRouteMaps(std::map<std::string, std::vector<uint32_t>>& rGreenLin
 
     base = {9, 8, 7, 6, 5, 4, 3, 2, 1, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27}
 
-    for (int i = 0; i < 2; i++) 
+    for (int i = 0; i < 2; i++)
         {28, 29, 30, 31, 32}
         or
         {76, 75, 74, 73, 72}
 
-        + 
+        +
 
         {33, 34, 35, 36, 37, 38}
 
-        for 
+        for
 
             {39, 40, 41, 42, 43}
             or
@@ -297,6 +297,7 @@ void initializeRouteMaps(std::map<std::string, std::vector<uint32_t>>& rGreenLin
 
     blocks = {};
     rRedLineRoutes.insert(std::pair<std::string, std::vector<uint32_t>>("01111101000001", blocks));
+    **/
 }
 
 } // namespace TrackModel
