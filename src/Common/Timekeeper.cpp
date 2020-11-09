@@ -22,9 +22,6 @@ void Timekeeper::KeepTime()
         // Sleep until the next timer should expire
         std::this_thread::sleep_for(std::chrono::milliseconds(m_sleepDurationInMs));
 
-        // Reset the sleep duration to max sleep
-        m_sleepDurationInMs = MAX_SLEEP_DURATION_IN_MS;
-
         // Iterate through the timer list
         for (int i = 0; i < m_timerList.size(); i++)
         {
@@ -33,7 +30,7 @@ void Timekeeper::KeepTime()
             rTimer.m_timeRemainingInMs -= m_sleepDurationInMs;
 
             // Emit the event if there is no time remaining
-            if (rTimer.m_timeRemainingInMs == 0)
+            if (rTimer.m_timeRemainingInMs <= 0)
             {
                 rTimer.m_pServiceQueue->Push(Request(RequestCode::TIMER_EXPIRED));
 
