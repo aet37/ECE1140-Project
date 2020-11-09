@@ -71,6 +71,11 @@ private:
 
         /// Service queue that the event will go onto
         ServiceQueue<Request>* m_pServiceQueue;
+
+        /**
+         * @brief Constructs a new Timer object
+        */
+        Timer(uint32_t periodInMs, ServiceQueue<Request>* serviceQueue);
     };
 
     /// List of timers

@@ -28,7 +28,7 @@ int main()
     std::thread trainModelThread(TrainModel::moduleMain);
     std::thread hwTrainControllerThread(HWTrainController::moduleMain);
     std::thread swTrainControllerThread(SWTrainController::moduleMain);
-    std::thread timeKeeperThread(Common::Timekeeper::GetInstance().KeepTime);
+    std::thread timeKeeperThread([]() { Common::Timekeeper::GetInstance().KeepTime(); });
 
     LOG_SERVER("Server Starting...");
     try
