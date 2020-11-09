@@ -36,15 +36,15 @@ class LoginPage(QtWidgets.QMainWindow):
         elif username == "hwtrack" and password == "jerry":
             print("hwtrack")
         elif username == "swtrack" and password == "jerry":
-            print("swtrack")
+            file_path = 'src/UI/SWTrackController/sw_track_gui.py'
         elif username == "ctc" and password == "jerry":
             file_path = 'src/UI/CTC/ctc_gui.py'
         elif username == "hwtrain" and password == "jerry":
-            print("hwtrain")
+            file_path = 'src/UI/HWTrainController/HWTrainController_gui.py'
         elif username == "swtrain" and password == "jerry":
             file_path = 'src/UI/SWTrainController/TrainController.py'
         elif username == "engineer" and password == "jerry":
-            file_path = 'src/UI/TrainController/TrainEngineer.py'
+            file_path = 'src/UI/SWTrainController/TrainEngineer.py'
         else:
             self.alert_login.setStyleSheet("color: red;")
             return

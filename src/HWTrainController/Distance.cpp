@@ -6,12 +6,6 @@
 // void Distance::setTransponder(int x){
 // 	transponder = x; //Use button to get transponder 
 // }
-void Distance::setAuthority(int x){
-	authority = x;
-}
-void Distance::setTransponder(int x){
-	transponder = x;
-}
 int Distance::getAuthority(){
 	return authority;
 }

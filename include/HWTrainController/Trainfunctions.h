@@ -5,14 +5,15 @@
 
 class Trainfunctions{
 	private:
-		bool mode, trackSignal, emergencyBrake;
+		bool trackSignal, emergencyBrake;
 		int serviceBrake;
 	public:
-		void setMode(int);
+		Trainfunctions();
+		//void setMode(int);
 		void setTrackSignal(int);
 		void setServiceBrake(int);
 		void setEmergencyBrake(int);
-		int getMode();
+		//int getMode();
 		int getTrackSignal();
 		int getServiceBrake();
 		int getEmergencyBrake();	

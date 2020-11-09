@@ -33,6 +33,10 @@ void moduleMain()
                 LOG_HW_TRAIN_CONTROLLER("HWTrain model dispatch train %s", theIntString.c_str());
                 break;
             }
+            case Common::RequestCode::HWTRAIN_UPDATE_CURRENT_SPEED:
+            {
+
+            }
             default:
                 ASSERT(false, "Unexpected request code %d", static_cast<uint16_t>(req.GetRequestCode()));
 

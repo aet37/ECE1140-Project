@@ -5,6 +5,7 @@ class Failures{
 	private:
 		bool engineFailure, signalFailure, brakeFailure;
 	public:	
+		Failures();
 		void setEngineFailure(int);
 		void setSignalFailure(int);
 		void setBrakeFailure(int);

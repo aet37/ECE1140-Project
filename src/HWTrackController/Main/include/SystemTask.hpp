@@ -70,6 +70,11 @@ public:
         m_timeLastRunInMs = timeLastRunInMs;
     }
 
+    /**
+     * @brief Method to tell whether this is a user's task
+    */
+    virtual bool IsUserTask() const { return false; }
+
 protected:
     /// Period of task
     const uint32_t m_periodInMs;

@@ -5,6 +5,7 @@ class Distance{
 	private:
 		int authority, transponder;
 	public:
+		Distance();
 		void setAuthority(int);
 		void setTransponder(int);
 		int getAuthority();

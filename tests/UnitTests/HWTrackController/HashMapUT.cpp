@@ -40,4 +40,14 @@ TEST_CASE("HashMap Basic Functionality")
 
         REQUIRE_FALSE(hashMap.Update("XYZ", 50));
     }
+
+    SECTION("Clear")
+    {
+        hashMap.Clear();
+
+        for (uint32_t i = 0; i < 9; i++)
+        {
+            REQUIRE_FALSE(hashMap.Contains(keys[i]));
+        }
+    }
 }
