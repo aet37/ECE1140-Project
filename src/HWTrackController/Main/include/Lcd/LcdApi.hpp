@@ -20,9 +20,26 @@ namespace LcdApi
 */
 void Initialize();
 
-void WriteTest();
+/**
+ * @brief Writes the given text to the display starting at (0, 0)
+*/
+void Write(String& rText);
+void Write(const char* pText);
 
+/**
+ * @brief Clears the LCD display
+*/
+void Clear();
+
+/**
+ * @brief Scrolls the text to the right
+*/
 void ScrollRight();
+
+/**
+ * @brief Task function to periodically scroll the display
+*/
+void ScrollTask(void* pNothing);
 
 } // namespace LcdApi
 

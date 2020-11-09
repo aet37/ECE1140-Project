@@ -22,17 +22,31 @@ void Initialize()
     lcd.backlight();
 }
 
-void WriteTest()
+void Write(String& rText)
 {
     lcd.setCursor(0, 0); // Set the cursor on the first column and first row.
-    lcd.print("Hello World!"); // Print the string "Hello World!"
-    lcd.setCursor(2, 1); //Set the cursor on the third column and the second row (counting starts at 0!).
-    lcd.print("LCD tutorial");
+    lcd.print(rText);
+}
+
+void Write(const char* pText)
+{
+    lcd.setCursor(0, 0); // Set the cursor on the first column and first row.
+    lcd.print(pText);
+}
+
+void Clear()
+{
+    lcd.clear();
 }
 
 void ScrollRight()
 {
     lcd.scrollDisplayRight();
+}
+
+void ScrollTask(void* pNothing)
+{
+    ScrollRight();
 }
 
 } // namespace LcdApi
