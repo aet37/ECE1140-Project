@@ -227,29 +227,29 @@ class Ui(QtWidgets.QMainWindow):
         
         split_data = response_data.split(' ')
 
-        lineName = split_data[0]
-        blockNumber = int(split_data[1])
-        section = split_data[2]
-        elevation = float(split_data[3])
-        cumulativeElevation = float(split_data[4])
-        length = float(split_data[5])
-        grade = float(split_data[6])
-        speedLimit = int(split_data[7])
-        underground = split_data[8]
-        stationName = split_data[9]
+        lineName = split_data[1]
+        blockNumber = int(split_data[2])
+        section = split_data[3]
+        elevation = float(split_data[4])
+        cumulativeElevation = float(split_data[5])
+        length = float(split_data[6])
+        grade = float(split_data[7])
+        speedLimit = int(split_data[8])
+        underground = split_data[9]
+        stationName = split_data[10]
 
         stationName = stationName.replace('_', ' ')
 
-        ticketsSold = int(split_data[10])
-        passengersBoarded = int(split_data[11])
-        passengersExited = int(split_data[12])
-        exitSide = split_data[13]
-        occupied = int(split_data[14])
-        switchList1 = int(split_data[15])
-        switchList2 = int(split_data[16])
-        currentSwitch = int(split_data[17])
-        trackHeater = bool(split_data[18])
-        failureMode = split_data[19]
+        ticketsSold = int(split_data[11])
+        passengersBoarded = int(split_data[12])
+        passengersExited = int(split_data[13])
+        exitSide = split_data[14]
+        occupied = int(split_data[15])
+        switchList1 = int(split_data[16])
+        switchList2 = int(split_data[17])
+        currentSwitch = int(split_data[18])
+        trackHeater = bool(split_data[19])
+        failureMode = split_data[20]
 
 
 
