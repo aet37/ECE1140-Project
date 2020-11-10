@@ -24,7 +24,7 @@ void moduleMain()
 {
     LOG_HW_TRAIN_CONTROLLER("Thread starting...");
     Failures Fail;
-    Distance Dist;
+    Distance Dist(20);
     Speedstuff Spood;
     Trainfunctions Train;
     Insidetrain Intrain;
