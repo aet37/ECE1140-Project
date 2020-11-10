@@ -72,8 +72,6 @@ class Ui(QtWidgets.QMainWindow):
 
         self.button = self.findChild(QtWidgets.QPushButton, 'LightsButton') # Find the button
         self.button.clicked.connect(self.Lights)
-
-        # send_message(RequestCode.SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS, "1") 
         
         
         self.show()
@@ -176,6 +174,7 @@ class Ui(QtWidgets.QMainWindow):
         else: 
             self.label11.setStyleSheet("color: green;")
             self.label11.setText("On")
+        send_message(RequestCode.SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS, "1")
 
     def LCDTemp(self):
         self.LCD1 = self.findChild(QtWidgets.QLCDNumber, 'TempLCD')
