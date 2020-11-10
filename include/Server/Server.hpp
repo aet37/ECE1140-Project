@@ -29,7 +29,7 @@ public:
      * @param io_service
      */
     explicit Server(boost::asio::io_service& io_service) :
-        m_acceptor(io_service, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 1301))
+        m_acceptor(io_service, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 1302))
     {
         StartAccept();
     }
