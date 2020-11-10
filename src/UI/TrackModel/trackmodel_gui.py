@@ -155,6 +155,7 @@ class Ui(QtWidgets.QMainWindow):
                     blockInfo['Speed Limit'] = blockSpeedLimit
                     blockInfo['Elevation'] = blockElevation
                     blockInfo['Cumulative Elevation'] = blockCumulativeElevation
+                    #blockInfo['']
 
                     if (records.column['Stations'][x] != ""):
                         blockInfo['Station'] = records.column['Stations'][x]

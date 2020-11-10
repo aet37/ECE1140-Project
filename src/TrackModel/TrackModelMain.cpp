@@ -307,6 +307,7 @@ void moduleMain()
                 test.erase(0, 10);
                 int pos = test.find(',');
                 std::string gettingTrackNumber = test.substr(0, pos);
+                printf("test123\n");
                 int trackNumberInt = stoi(gettingTrackNumber);
 
                 // grab track using track number
@@ -316,6 +317,7 @@ void moduleMain()
                 test.erase(0, pos + 2);
                 pos = test.find(',');
                 std::string blockNumberString = test.substr(0, pos);
+                printf("test1234\n");
                 int blockNumber = stoi(blockNumberString);
                 test.erase(0, pos + 12);
 
@@ -334,6 +336,7 @@ void moduleMain()
                 // get get speed limit, convert to int
                 pos = test.find(',');
                 std::string blockSpeedLimitString = test.substr(0, pos);
+                printf("test12345\n");
                 int blockSpeedLimit = stoi(blockSpeedLimitString);
                 test.erase(0, pos + 15);
 
