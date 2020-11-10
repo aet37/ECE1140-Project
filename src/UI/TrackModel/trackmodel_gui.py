@@ -9,6 +9,7 @@ from UI.server_functions import *
 import pyexcel
 import pyexcel_io
 import json
+tracks = 0
 
 
 class Ui(QtWidgets.QMainWindow):
@@ -16,7 +17,7 @@ class Ui(QtWidgets.QMainWindow):
         super(Ui, self).__init__()
         # self.track1_info_timer = QTimer()
         # self.track1_info_timer.timeout.connect(self.update_times)
-        
+
         uic.loadUi('src/UI/TrackModel/Map_Page.ui', self)
 
         self.show()
@@ -25,12 +26,17 @@ class Ui(QtWidgets.QMainWindow):
         #self.stacked_widget.currentChanged.connect(self.set_button_state)
         #self.stacked_widget.setCurrentIndex(0)
 
+
+
         self.show()
     def initUI(self):
         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
         #self.button.clicked.connect(self.trainMenu1)
         addTrackButton = self.findChild(QtWidgets.QPushButton, 'add_track_button')
         addTrackButton.clicked.connect(self.readInData)
+
+        logoutButton = self.findChild(QtWidgets.QPushButton, 'logout_button')
+        logoutButton.clicked.connect(self.logout)
     # def addTab(self):
     #     tab = QtWidgets.QMainWindow()
     #     self.tabWidget.addTab(tab, "Red Line")
@@ -86,6 +92,7 @@ class Ui(QtWidgets.QMainWindow):
         # else:
         #     print('fail')
     def readInData(self):
+        global tracks
         dialog = QtWidgets.QFileDialog(self)
         fileInfo = dialog.getOpenFileName(self)
         
@@ -99,76 +106,125 @@ class Ui(QtWidgets.QMainWindow):
             #print (records.number_of_rows())
             # print(records.content)
             trackInfo = {}
-            stationList = []
-            switchList = []
-            trackInfo['Track'] = ''
-            trackInfo['Total Blocks'] = records.number_of_rows()
-            trackInfo['Stations'] = stationList
-            trackInfo['Switches'] = switchList
-            trackInfo['Block List'] = ''
-            blockList = []
+            # stationList = []
+            # switchList = []
+            # trackInfo['Stations'] = stationList
+            # trackInfo['Switches'] = switchList
+            # trackInfo['Block List'] = ''
             # stations = 0;
-            for x in range(records.number_of_rows()):
-                destinationSwitchList = ''
-                blockStation = ''
-                # print('%s Line | Section %c | Block Number %d | Block Length (m) %d | Block Grade (%%) %d | Speed Limit (Km/Hr) %d | Stations %s | Switches %s | Elevation (m) %d | Cumulative Elevation (m) %d' % (records.column['Line'][x], records.column['Section'][x], records.column['Block Number'][x], records.column['Block Length (m)'][x], records.column['Block Grade (%)'][x], records.column['Speed Limit (Km/Hr)'][x], records.column['Stations'][x], records.column['Switches'][x], records.column['Elevation (m)'][x], records.column['Cumulative Elevation (m)'][x]))
-                # line = records.column['Line'][x]
-                blockNumber = records.column['Block Number'][x]
+
+            if (records.number_of_rows() > 0):
+                # set Line inside trackInfo
+                trackInfo['Track'] = records.column['Line'][1]
                 
-                # Set line name
-                line = records.column['Line'][x]
-                trackInfo['Track'] = line
+                tracks = tracks + 1
+                # set track nmumber inside of trackInfo dictionary
+                trackInfo['tNumber'] = tracks
 
-                # Get station lists
-                if (records.column['Stations'][x] != ""):
-                    #stations = stations + 1
-                    stationSplit = records.column['Stations'][x].split(' ', 1) # now have station name
-                    stationList.append({'blockNumber':blockNumber, 'station':stationSplit[1]})
-                    blockStation = stationSplit[1]
-                    trackInfo['Stations'] = stationList
+                # set totalBlocks inside trackInfo
+                trackInfo['Total Blocks'] = records.number_of_rows()
+
+                jsonString = json.dumps(trackInfo)
+                send_message(RequestCode.TRACK_MODEL_GUI_TRACK_LAYOUT, str(jsonString))
+                print(str(jsonString))
+
+
+                theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
+                combo1 = QComboBox()
+                line = records.column['Line'][1]
+                combo1.addItem("Select "+line+" Line block")
+                theTabWidget.addTab(combo1, line+" Line")
+
+                for x in range(records.number_of_rows()):
+                    blockInfo = {}
+                    blockNumber = records.column['Block Number'][x]
+                    combo1.addItem("Block "+str(blockNumber)) 
+
+                    blockLength = records.column['Block Length (m)'][x]
+                    blockGrade = records.column['Block Grade (%)'][x]
+                    blockSpeedLimit = records.column['Speed Limit (Km/Hr)'][x]
+                    #blockStation = blockStation
+                    #blockSwitch = destinationSwitchList
+                    blockElevation = records.column['Elevation (m)'][x]
+                    blockCumulativeElevation = round(records.column['Cumulative Elevation (m)'][x], 2)
+
+                    blockInfo['Track'] = tracks
+                    blockInfo['Number'] = blockNumber
+                    blockInfo['Length'] = blockLength
+                    blockInfo['Grade'] = blockGrade
+                    blockInfo['Speed Limit'] = blockSpeedLimit
+                    blockInfo['Elevation'] = blockElevation
+                    blockInfo['Cumulative Elevation'] = blockCumulativeElevation
+
+                    if (records.column['Stations'][x] != ""):
+                        blockInfo['Station'] = records.column['Stations'][x]
+                        blockInfo['Exit Side'] = records.column['Exit Side'][x]
+                    if (records.column['Switches'][x] != ""):
+                        switchString = records.column['Switches'][x]
+                        #switchString = switchString.split(',')
+                        blockInfo['Switches'] = switchString
+                    if (records.column['Underground'][x] != ""):
+                        blockInfo['Underground'] = "true"
+                    if (records.column['Railway Crossing'][x] != ""):
+                        blockInfo['Railway Crossing'] = "true"
+
+                    print(blockInfo)
+                    jsonString = json.dumps(blockInfo)
+                    send_message(RequestCode.TRACK_MODEL_GUI_BLOCK, str(jsonString))
+
+            else:
+                print('error')
+
+            # for x in range(records.number_of_rows() + 1):
+
+            #     destinationSwitchList = ''
+            #     blockStation = ''
+            #     # print('%s Line | Section %c | Block Number %d | Block Length (m) %d | Block Grade (%%) %d | Speed Limit (Km/Hr) %d | Stations %s | Switches %s | Elevation (m) %d | Cumulative Elevation (m) %d' % (records.column['Line'][x], records.column['Section'][x], records.column['Block Number'][x], records.column['Block Length (m)'][x], records.column['Block Grade (%)'][x], records.column['Speed Limit (Km/Hr)'][x], records.column['Stations'][x], records.column['Switches'][x], records.column['Elevation (m)'][x], records.column['Cumulative Elevation (m)'][x]))
+            #     # line = records.column['Line'][x]
+            #     blockNumber = records.column['Block Number'][x]
+                
+            #     # Set line name
+            #     line = records.column['Line'][x]
+            #     trackInfo['Track'] = line
+
+            #     # Get station lists
+            #     if (records.column['Stations'][x] != ""):
+            #         #stations = stations + 1
+            #         stationSplit = records.column['Stations'][x].split(' ', 1) # now have station name
+            #         stationList.append({'blockNumber':blockNumber, 'station':stationSplit[1]})
+            #         blockStation = stationSplit[1]
+            #         trackInfo['Stations'] = stationList
                     
-                    # Get switch lists
-                if (records.column['Switches'][x] != ""):
-                    cutString = records.column['Switches'][x].replace('SWITCH (', '').replace(' ', '').replace(')', '')
-                    testList = cutString.split('-')
-                    if (int(testList[0]) == blockNumber | int(testList[0:1] == blockNumber) | int(testList[0:2] == blockNumber)):
-                        splitString = cutString.split(';')
-                        destinationSwitchList = []
-                        for y in range(len(splitString)):
-                            destinationSwitchList.append(int(splitString[y].replace(str(blockNumber)+'-', '')))
-                        switchList.append({'switchBase':blockNumber, 'switchDestinations':destinationSwitchList})
-                        trackInfo['Switches'] = switchList
+            #         # Get switch lists
+            #     if (records.column['Switches'][x] != ""):
+            #         cutString = records.column['Switches'][x].replace('SWITCH (', '').replace(' ', '').replace(')', '')
+            #         testList = cutString.split('-')
+            #         if (int(testList[0]) == blockNumber | int(testList[0:1] == blockNumber) | int(testList[0:2] == blockNumber)):
+            #             splitString = cutString.split(';')
+            #             destinationSwitchList = []
+            #             for y in range(len(splitString)):
+            #                 destinationSwitchList.append(int(splitString[y].replace(str(blockNumber)+'-', '')))
+            #             switchList.append({'switchBase':blockNumber, 'switchDestinations':destinationSwitchList})
+            #             trackInfo['Switches'] = switchList
 
+            #     if (x == 1):
+            #         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
+            #         combo1 = QComboBox()
+            #         combo1.addItem("Select "+line+" Line block")
+            #         theTabWidget.addTab(combo1, line+" Line")            
 
-                # set block info
-                blockLength = records.column['Block Length (m)'][x]
-                blockGrade = records.column['Block Grade (%)'][x]
-                blockSpeedLimit = records.column['Speed Limit (Km/Hr)'][x]
-                blockStation = blockStation
-                blockSwitch = destinationSwitchList
-                blockElevation = records.column['Elevation (m)'][x]
-                blockCumulativeElevation = records.column['Cumulative Elevation (m)'][x]
-
-                blockList.append({'blockNumber':blockNumber, 'blockLength':blockLength, 'blockGrade':blockGrade, 'blockSpeedLimit':blockSpeedLimit, 'blockStation':blockStation, 'blockSwitch':blockSwitch, 'blockElevation':blockElevation, 'blockCumulativeElevation':blockCumulativeElevation})
-            
-                if (x == 0):
-                    theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
-                    combo1 = QComboBox()
-                    combo1.addItem("Select "+line+" Line block")
-                    theTabWidget.addTab(combo1, line+" Line")            
-
-                combo1.addItem("Block "+str(blockNumber))
-            trackInfo['Block List'] = blockList
+            #     combo1.addItem("Block "+str(blockNumber))
+            # trackInfo['Block List'] = blockList
 
 
             #print(trackInfo)
-            jsonString = json.dumps(trackInfo)
-            stringLength = len(jsonString)
-            i = 0
-            stringToPrint = ''
-            print('stringLength = '+str(stringLength))
-            send_message(RequestCode.SEND_TRACK_OCCUPANCY_TO_SW_TRACK_C, str(jsonString[0:1000]))
-            # while (stringLength > 0):
+            # jsonString = json.dumps(trackInfo)
+            # stringLength = len(jsonString)
+            # i = 0
+            # stringToPrint = ''
+            # print('stringLength = '+str(stringLength))
+            # send_message(RequestCode.TRACK_MODEL_GUI_TRACK_LAYOUT_START, str(jsonString[0:1000]))
+            # # while (stringLength > 0):
             #     if (i == 0 & (stringLength > 1000)):
             #         print('1')
             #         i = 1

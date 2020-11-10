@@ -103,8 +103,8 @@ enum class RequestCode : uint8_t
     HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE = 106, // Used by the connector script to forward the hardware's response to the server
     HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE = 107, // Used by SW Track Ctrl to get response from the hardware
 
-    TRACK_MODEL_GUI_TRACK_LAYOUT_START = 129, // Used by the gui to signify that the track layout is starting to be sent
-    TRACK_MODEL_GUI_TRACK_LAYOUT_END = 130, // Used by the gui to signify that the full track layout has been sent
+    TRACK_MODEL_GUI_TRACK_LAYOUT = 129, // Used by the gui to signify that the track layout is being sent
+    TRACK_MODEL_GUI_BLOCK = 130, // Used by the gui to signify that a block is being sent
     TRACK_MODEL_GUI_TRACK_LAYOUT_SECTION = 131, // Used by the gui when the track layout is being imported
     TRACK_MODEL_GUI_SET_TRACK_HEATER = 132, // Used by the gui when the track heater is set
     TRACK_MODEL_GUI_SET_FAILURE = 133, // Used by the gui when a track failure is induced

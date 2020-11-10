@@ -24,12 +24,18 @@ void TrackModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
 {
     switch (rRequest.GetRequestCode())
     {
-		/*case Common::RequestCode::TRACK_MODEL_DISPATCH_TRAIN:
+		case Common::RequestCode::TRACK_MODEL_GUI_TRACK_LAYOUT:
 		{
 			TrackModel::serviceQueue.Push(rRequest);
 			rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
 			break;
-		}*/
+		}
+        case Common::RequestCode::TRACK_MODEL_GUI_BLOCK:
+		{
+			TrackModel::serviceQueue.Push(rRequest);
+			rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+			break;
+		}
         default:
             std::cerr << "Invalid command " << static_cast<uint16_t>(rRequest.GetRequestCode())
                       << " received" << std::endl;
