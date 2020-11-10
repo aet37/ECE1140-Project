@@ -177,6 +177,10 @@ public:
     {
         m_occupiedBy = trainId;
     }
+    std::string getSection()
+    {
+        return m_blockSection;
+    }
 
 
 protected:

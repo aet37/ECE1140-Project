@@ -51,6 +51,8 @@ void TrackModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
 
             Block theBlock = theTrack->getBlock(blockNumber);
 
+			rResponse.AppendData(theBlock.getSection());
+
             rResponse.AppendData(std::to_string(theBlock.getBlockElevation()));
 
             rResponse.AppendData(std::to_string(theBlock.getBlockCumulativeElevation()));
