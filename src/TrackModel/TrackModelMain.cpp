@@ -383,18 +383,16 @@ void moduleMain()
                     pos = test.find("Switches");
                     test.erase(0, pos + 12);
                     pos = test.find(',');
-                    std::string firstSwitchString = test.substr(0, pos);
+                    std::string switchInfo = test.substr(0, pos);
                     test.erase(0, pos + 1);
                     pos = test.find('\"');
                     std::string secondSwitchString = test.substr(0, pos);
-                    std::string switchInfo = firstSwitchString.append(" ").append(secondSwitchString);
+                    switchInfo.append(" ").append(secondSwitchString);
                     test.erase(0, pos + 1);
                     printf("\n");
-                    printf(firstSwitchString.c_str());
-                    printf("\n");
-                    printf(secondSwitchString.c_str());
-                    printf("\n");
                     printf(switchInfo.c_str());
+                    printf("\n");
+                    printf(test.c_str());
                     printf("\n");
                 }
                 else
