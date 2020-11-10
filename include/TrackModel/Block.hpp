@@ -59,11 +59,12 @@ public:
             m_switchBool = false;
         }
         
-        printf("\n\n\n");
+        /*printf("\n\n\n");
         printf("blocknhmber = %d\nblocklength = %f\nblockgrade = %f\n blockspeedlimit = %d\n ", blockNumber, blockLength, blockGrade, blockSpeedLimit);
         printf("elevation = %f\n cumuEle = %f\n direction = %s\n", blockElevation, blockCumulativeElevation, blockDirection.c_str());
         printf("under = %s\n railway = %s\n station = %s\n switchInfo = %s\n", blockUnderground.c_str(), blockRailwayCrossing.c_str(), stationInfo.c_str(), switchInfo.c_str());
         printf("\n\n\n");
+        */
 
     }
 

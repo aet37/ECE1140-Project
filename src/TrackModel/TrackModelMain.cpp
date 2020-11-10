@@ -271,8 +271,6 @@ void moduleMain()
                 std::string switchPositions = req.ParseData<std::string>(5);
 
 
-
-
                 std::string theIntString = std::to_string(trainId);
                 Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_DISPATCH_TRAIN, theIntString);
                 TrainModel::serviceQueue.Push(newRequest);
@@ -416,10 +414,10 @@ void moduleMain()
                     railwayCrossing = "false";
                 }
 
+                // add block to track we got from block info before
                 theTrack->AddBlock(blockNumber, blockLength, blockGrade, 
                 blockSpeedLimit, blockElevation, blockCumulativeElevation, 
-                blockDirection, blockUnderground, stationInfo, 
-                switchInfo, railwayCrossing);
+                blockDirection, blockUnderground, stationInfo, switchInfo, railwayCrossing);
 
                 break;
             }
