@@ -161,7 +161,7 @@ class Ui(QtWidgets.QMainWindow):
                     if (records.column['Underground'][x] != ""):
                         blockInfo['Underground'] = "true"
                     else:
-                        blockInfo['UnderGround']= "false"
+                        blockInfo['Underground']= "false"
 
                     if (records.column['Stations'][x] != ""):
                         blockInfo['Station'] = records.column['Stations'][x]

@@ -357,15 +357,18 @@ void moduleMain()
                 //get underground boolean
                 pos = test.find('\"');
                 std::string blockUnderground = test.substr(0, pos);
-                printf("\nhi\n");
-                printf(blockUnderground.c_str());
-                printf("\n");
-
 
                 // get StationInfo
                 if (test.find("Station\": \"") != std::string::npos){
                     pos = test.find("Station\": \"");
-                    test.erase(0, pos + 11);
+                    test.erase(0, pos + 12);
+                    pos = test.find("\",");
+                    std::string stationInfo = test.substr(0, pos);
+                    stationInfo.append(" ");
+                    test.erase(0, pos + 17);
+                    printf("hello\n");
+                    printf(test.c_str());
+                    printf("\nbye\n");
                     //std::string stationInfo
                 }
 
