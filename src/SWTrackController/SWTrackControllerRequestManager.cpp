@@ -31,12 +31,12 @@ void SWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequ
     {
         case Common::RequestCode::SWTRACK_GUI_GATHER_DATA:
         {
-            rResponse.SetResponseCode(ResponseCode::ERROR);
+            rResponse.SetResponseCode(Common::ResponseCode::ERROR);
             break;
         }
         case Common::RequestCode::SWTRACK_GUI_SET_SWITCH_POSITION:
         {
-            rResponse.SetResponseCode(ResponseCode::ERROR);
+            rResponse.SetResponseCode(Common::ResponseCode::ERROR);
             break;
         }
         case Common::RequestCode::START_DOWNLOAD:
@@ -46,13 +46,13 @@ void SWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequ
             {
                 Common::RequestCode scaledCode = static_cast<Common::RequestCode>(static_cast<uint8_t>(rRequest.GetRequestCode()) + REQUEST_CODE_DIFFERENCE);
                 Common::Request scaledReq(scaledCode, rRequest.GetData());
-                HWTrackController::RequestManager reqManager;
+                HWTrackController::HWTrackControllerRequestManager reqManager;
                 reqManager.HandleRequest(scaledReq, rResponse);
             }
             else
             {
                 SWTrackController::serviceQueue.Push(rRequest);
-                rResponse.SetResponseCode(ResponseCode::SUCCESS);
+                rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             }
             break;
         }
@@ -66,19 +66,19 @@ void SWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequ
             {
                 Common::RequestCode scaledCode = static_cast<Common::RequestCode>(static_cast<uint8_t>(rRequest.GetRequestCode()) + REQUEST_CODE_DIFFERENCE);
                 Common::Request scaledReq(scaledCode, rRequest.GetData());
-                HWTrackController::RequestManager reqManager;
+                HWTrackController::HWTrackControllerRequestManager reqManager;
                 reqManager.HandleRequest(scaledReq, rResponse);
             }
             else
             {
                 SWTrackController::serviceQueue.Push(rRequest);
-                rResponse.SetResponseCode(ResponseCode::SUCCESS);
+                rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             }
             break;
         }
         default:
-            LOG_SW_TRACK_CTRL("Invalid command %d received", static_cast<uint16_t>(rRequest.GetRequestCode()));
-            rResponse.SetResponseCode(ResponseCode::ERROR);
+            LOG_SW_TRACK_CONTROLLER("Invalid command %d received", static_cast<uint16_t>(rRequest.GetRequestCode()));
+            rResponse.SetResponseCode(Common::ResponseCode::ERROR);
             return;
     }
 }
