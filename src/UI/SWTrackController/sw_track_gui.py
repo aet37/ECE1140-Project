@@ -197,7 +197,7 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
 
         if (self.current_track_controller is not None) and \
            (self.current_block is not None):
-            data = str(self.current_track_controller) + str(self.current_block)
+            data = str(self.current_track_controller) + ' ' + str(self.current_block)
             send_message_async(RequestCode.SWTRACK_GUI_GATHER_DATA,
                                data=data,
                                callback=self.update_gui)
