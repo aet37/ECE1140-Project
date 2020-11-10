@@ -17,7 +17,6 @@ namespace TrackModel
 extern Common::ServiceQueue<Common::Request> serviceQueue;
 
 void moduleMain();
-//void initializeRouteMaps(std::map<std::string, std::vector<uint32_t>> test1, std::map<std::string, std::vector<uint32_t>> test2);
 
 } // namespace TrackModel
 
