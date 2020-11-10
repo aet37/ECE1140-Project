@@ -225,7 +225,104 @@ class Ui(QtWidgets.QMainWindow):
         # ticketsSold, passengersBoarded, passengersExited, exit side, occupied by
         # switchList, currentSwitch, trackHeater, failure mode
         
-        
+        split_data = response_data.split(' ')
+
+        lineName = split_data[0]
+        blockNumber = int(split_data[1])
+        section = split_data[2]
+        elevation = float(split_data[3])
+        cumulativeElevation = float(split_data[4])
+        length = float(split_data[5])
+        grade = float(split_data[6])
+        speedLimit = int(split_data[7])
+        underground = split_data[8]
+        stationName = split_data[9]
+
+        stationName = stationName.replace('_', ' ')
+
+        ticketsSold = int(split_data[10])
+        passengersBoarded = int(split_data[11])
+        passengersExited = int(split_data[12])
+        exitSide = split_data[13]
+        occupied = int(split_data[14])
+        switchList1 = int(split_data[15])
+        switchList2 = int(split_data[16])
+        currentSwitch = int(split_data[17])
+        trackHeater = bool(split_data[18])
+        failureMode = split_data[19]
+
+
+
+        line_name_label = self.findChild(QtWidgets.QLabel, 'line_name_label')
+        line_name_label.setText(lineName + " Line")
+
+        block_number_label = self.findChild(QtWidgets.QLabel, 'block_number_label')
+        block_number_label.setText("Block " + blockNumber)
+
+        section_label = self.findChild(QtWidgets.QLabel, 'section_label')
+        section_label.setText("Section: " + section)
+
+        elevation_label = self.findChild(QtWidgets.QLabel, 'elevation_label')
+        elevation_label.setText("Elevation\n\n"+ elevation)
+
+        cumulative_elevation_label = self.findChild(QtWidgets.QLabel, 'elevation_label')
+        cumulative_elevation_label.setText("Cumulative Elevation\n\n"+ elevation)
+
+        length_label = self.findChild(QtWidgets.QLabel, 'length_label')
+        length_label.setText("Block Length:\n\n"+ length)
+
+        grade_label = self.findChild(QtWidgets.QLabel, 'grade_label')
+        grade_label.setText("Block Grade:\n\n"+ length+'%')
+
+        speed_limit_label = self.findChild(QtWidgets.QLabel, 'speed_limit_label')
+        speed_limit_label.setText("Speed Limit:\n\n"+ speedLimit+" Km/Hr")
+
+        underground_label = self.findChild(QtWidgets.QLabel, 'underground_label')
+        underground_label.setText("Underground:\n\n"+ underground)
+
+        station_name_label = self.findChild(QtWidgets.QLabel, 'station_name_label')
+        station_name_label.setText("Station Name:\n\n"+ stationName)
+
+        tickets_sold_label = self.findChild(QtWidgets.QLabel, 'tickets_sold_label')
+        tickets_sold_label.setText("Tickets Sold:\n\n"+ ticketsSold)
+
+        passengers_boarded_label = self.findChild(QtWidgets.QLabel, 'passengers_boarded_label')
+        passengers_boarded_label.setText("Passengers Boarded:\n\n"+ passengersBoarded)
+
+        passengers_exited_label = self.findChild(QtWidgets.QLabel, 'passengers_exited_label')
+        passengers_exited_label.setText("Passengers Exited:\n\n"+ passengersExited)
+
+        exit_side_label = self.findChild(QtWidgets.QLabel, 'exit_side_label')
+        exit_side_label.setText("Passengers Boarded:\n\n"+ exitSide)
+
+        occupied_label = self.findChild(QtWidgets.QLabel, 'occupied_label')
+        occupied_label.setText("Occupied by:\n\n"+ occupied)
+
+        switch_list_label = self.findChild(QtWidgets.QLabel, 'switch_list_label')
+        if (switchList1 == -1):
+            switch_list_label.setText("Switches possible:\n\nNA")
+        else:
+            switch_list_label.setText("Switches possible:\n\n"+ switchList1 +' '+ switchList2)
+
+        current_switch_label = self.findChild(QtWidgets.QLabel, 'current_switch_label')
+
+        if (currentSwitch == -1):
+            current_switch_label.setText("Switch flipped to:\n\nNA")
+        else:
+            current_switch_label.setText("Switch flipped to: \n\n"+currentSwitch)
+
+
+        track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
+        if (trackHeater == true):
+            track_heater_button.setText("On")
+            track_heater_button.setStyleSheet("background-color : green")
+        else:
+            track_heater_button.setText("On")
+            track_heater_button.setStyleSheet("background-color : red")
+
+        failure_mode_label = self.findChild(QtWidgets.QLabel, 'failure_mode_label')
+        failure_mode_label.setText("Failure Mode:\n\n"+ failureMode)
+
 
     def trackInfo1(self):
         self.stopAllTimers()
