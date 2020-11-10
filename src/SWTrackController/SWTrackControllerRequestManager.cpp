@@ -72,8 +72,6 @@ void SWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequ
         case Common::RequestCode::CREATE_ROUTINE:
         case Common::RequestCode::CREATE_RUNG:
         case Common::RequestCode::CREATE_INSTRUCTION:
-        {
-            if (trackControllerNumber == HW_TRACK_CONTROLLER_NUMBER)
             {
                 Common::RequestCode scaledCode = static_cast<Common::RequestCode>(static_cast<uint8_t>(rRequest.GetRequestCode()) + REQUEST_CODE_DIFFERENCE);
                 Common::Request scaledReq(scaledCode, rRequest.GetData());

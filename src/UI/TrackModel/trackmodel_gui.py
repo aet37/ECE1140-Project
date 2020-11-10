@@ -34,6 +34,9 @@ class Ui(QtWidgets.QMainWindow):
         #self.button.clicked.connect(self.trainMenu1)
         addTrackButton = self.findChild(QtWidgets.QPushButton, 'add_track_button')
         addTrackButton.clicked.connect(self.readInData)
+
+        logoutButton = self.findChild(QtWidgets.QPushButton, 'logout_button')
+        logoutButton.clicked.connect(self.logout)
     # def addTab(self):
     #     tab = QtWidgets.QMainWindow()
     #     self.tabWidget.addTab(tab, "Red Line")
@@ -152,6 +155,7 @@ class Ui(QtWidgets.QMainWindow):
                     blockInfo['Speed Limit'] = blockSpeedLimit
                     blockInfo['Elevation'] = blockElevation
                     blockInfo['Cumulative Elevation'] = blockCumulativeElevation
+                    #blockInfo['']
 
                     if (records.column['Stations'][x] != ""):
                         blockInfo['Station'] = records.column['Stations'][x]
