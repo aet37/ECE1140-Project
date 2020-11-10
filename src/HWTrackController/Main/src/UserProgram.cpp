@@ -13,7 +13,7 @@
 void UserProgram::ClearMemory()
 {
     m_tasks.Clear();
-    m_pProgramName = "";
+    m_programName = "";
 }
 
 void UserProgram::AddTask(Task* pTask)

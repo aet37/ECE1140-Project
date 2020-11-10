@@ -63,6 +63,9 @@ class RequestCode(Enum):
     SWTRACK_SET_TRACK_OCCUPANCY = 71 # Used by the track model to inform the controller that a train is on a block
     SWTRACK_SET_CROSSING = 72 # Used by the track model to have the controller lower/raise the crossing
     SWTRACK_SET_TRACK_HEATER = 73 # Used by the Track model to turn on/off the track heater
+
+    # The following request codes are used by the sw track controller gui to download a plc program
+    # An offset is used to convert them to hw track controller requests. PLEASE DON'T CHANGE THE NUMBERS!!!
     START_DOWNLOAD = 74 # Used by the gui to start a download
     END_DOWNLOAD = 75 # Used by the gui to end a download
     CREATE_TAG = 76 # Used by the gui to create a tag
@@ -72,6 +75,9 @@ class RequestCode(Enum):
     CREATE_INSTRUCTION = 80 # Used by the gui to create an instruction
     SET_TAG_VALUE = 81 # Used by the gui to set a tag's value
     GET_TAG_VALUE = 82 # Used by the gui to get a tag's value
+
+    SWTRACK_GUI_GATHER_DATA = 83 # Used by the gui to periodically gather data from the server
+    SWTRACK_GUI_SET_SWITCH_POSITION = 84 # Used by the gui to set a switch's position // (trackController, newPosition)
 
     HWTRACK_START_DOWNLOAD = 96 # Used by the SW Track Ctrl to signify download is starting # (string programName)
     HWTRACK_END_DOWNLOAD = 97 # Used by the SW Track Ctrl to signify download has completed # (void)
@@ -86,8 +92,8 @@ class RequestCode(Enum):
     HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE = 106 # Used by the connector script to forward the hardware's response to the server
     HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE = 107 # Used by SW Track Ctrl to get response from the hardware
 
-    TRACK_MODEL_GUI_TRACK_LAYOUT_START = 129 # Used by the gui to signify that the track layout is starting to be sent
-    TRACK_MODEL_GUI_TRACK_LAYOUT_END = 130 # Used by the gui to signify that the full track layout has been sent
+    TRACK_MODEL_GUI_TRACK_LAYOUT = 129 # Used by the gui to signify that the track layout is starting to be sent
+    TRACK_MODEL_GUI_BLOCK = 130 # Used by the gui to signify that a block is being sent
     TRACK_MODEL_GUI_TRACK_LAYOUT_SECTION = 131 # Used by the gui when the track layout is being imported
     TRACK_MODEL_GUI_SET_TRACK_HEATER = 132 # Used by the gui when the track heater is set
     TRACK_MODEL_GUI_SET_FAILURE = 133 # Used by the gui when a track failure is induced

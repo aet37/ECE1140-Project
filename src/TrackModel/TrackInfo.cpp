@@ -10,10 +10,11 @@
 */
 
 #include "TrackInfo.hpp"  // Definition of class
-// #include <vector>           // For accessing list of Trains, Tracks, Signals
+#include "Track.hpp" // For TrackModel::Track
 #include "Logger.hpp"       // For logging events (debugging purposes)
-static std::vector<Track> trackList;
 
+namespace TrackModel
+{
 
 /**
 * @brief Read in the layout of the track
@@ -23,17 +24,27 @@ static std::vector<Track> trackList;
 * @return int trackNumber
 *
 */
-void TrackInfo::AddTrackLayout(std::string line, /*std::vector<Station> stations, std::vector<Switch> switches,*/ int totalBlocks, std::vector<Block> blockList)
+void TrackInfo::AddTrackLayout(std::string line, int number, int totalBlocks)
 {
     //Eventaully will add checks to make sure same line tracks aren't added
-    Track newTrack;
-    newTrack.m_line = line;
-    //newTrack.m_stations = stations;
-    //newTrack.m_switches = switches;
-    newTrack.m_totalBlocks = totalBlocks;
-	newTrack.m_blockList = blockList;
 
-    trackList.push_back(newTrack);
 
-	LOG_TRACK_MODEL("From TrackInfo::AddTrackLayout() : %d Track Created: Track ", trackList.size());
+    Track* pNewTrack = new Track(line, number, totalBlocks);
+
+    m_pTrackList.push_back(pNewTrack);
+    //Track *newTrack = new Track();
+    //pNewTrack->m_line = line;
+    //pNewTrack->m_number = number;
+    //pNewTrack->m_totalBlocks = totalBlocks;
+
+    //trackList.push_back(newTrack);
+
+	LOG_TRACK_MODEL("From TrackInfo::AddTrackLayout() : %d Track Created: Track ", m_pTrackList.size());
 }
+
+Track* TrackInfo::getTrack(int trackNumber)
+{
+    return m_pTrackList[trackNumber - 1];
+}
+
+} // namespace TrackModel
