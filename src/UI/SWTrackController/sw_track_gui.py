@@ -189,6 +189,7 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             current_position = switch_position_label.text()
             message = str(self.current_track_controller) + ' ' + ("0" if current_position == '1' else '1')
             send_message(RequestCode.SWTRACK_GUI_SET_SWITCH_POSITION, message)
+            switch_position_label.setText(("0" if current_position == '1' else '1'))
 
     def send_gather_data_message(self):
         """Method called periodically to send the gather data message to the server"""
