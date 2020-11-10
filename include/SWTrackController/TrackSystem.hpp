@@ -2,11 +2,11 @@
 // Created by Nathan Swanson on on 10.6.20.
 // System which will run the SW Track Controller module
 //
+#ifndef SW_TRACK_SYSTEM_HPP
+#define SW_TRACK_SYSTEM_HPP
 
 #include <vector>
 #include "SWTrackDef.hpp"
-#ifndef SW_TRACK_SYSTEM_HPP
-#define SW_TRACK_SYSTEM_HPP
 
 class TrackSystem
 {
