@@ -350,16 +350,15 @@ void moduleMain()
                 test.erase(0, pos + 16);
 
                 // get track block travel direction
-                printf("heeeeello\n");
-                printf(test.c_str());
-                printf("\nend");
                 pos = test.find("\",");
                 std::string blockDirection = test.substr(0, pos);
                 test.erase(0, pos + 19);
 
                 //get underground boolean
+                pos = test.find('\"');
+                std::string blockUnderground = test.substr(0, pos);
                 printf("\nhi\n");
-                printf(test.c_str());
+                printf(blockUnderground.c_str());
                 printf("\n");
 
 
