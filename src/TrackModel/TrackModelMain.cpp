@@ -367,7 +367,7 @@ void moduleMain()
                 if (test.find("Station\": \"") != std::string::npos)
                 {
                     pos = test.find("Station\": \"");
-                    test.erase(0, pos + 12);
+                    test.erase(0, pos + 11);
                     pos = test.find("\",");
                     stationInfo = test.substr(0, pos);
                     stationInfo.append(",");
