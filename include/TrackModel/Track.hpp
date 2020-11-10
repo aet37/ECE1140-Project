@@ -7,6 +7,7 @@
 // SYSTEM INCLUDES
 #include <string>
 #include <vector>
+#include "Block.hpp"
 
 // FORWARD DECLARATIONS
 class Station;
@@ -38,9 +39,9 @@ public:
     std::string blockDirection, std::string blockUnderground, std::string stationInfo, 
     std::string switchInfo, std::string blockRailway)
     {
-        
-
-
+        m_blockList.push_back(Block(blockNumber, blockLength, blockGrade, blockSpeedLimit,
+        blockElevation, blockCumulativeElevation, blockDirection, blockUnderground,
+        stationInfo, switchInfo, blockRailway));
     }
 
 protected:
@@ -61,7 +62,7 @@ private:
     // std::vector<Switch> m_switches;
 
     // instead of switch vector, int vector of blocks they're on
-    // std::vector<Block> m_blockList;
+    std::vector<Block> m_blockList;
 };
 
 } // namespace TrackModel

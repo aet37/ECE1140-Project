@@ -25,11 +25,12 @@ namespace TrackModel
 class Block
 {
 public:
-    Block(int blockNumber, double blockGrade, double blockSpeedLimit, double blockElevation, 
+    Block(int blockNumber, double blockLength, double blockGrade, int blockSpeedLimit, double blockElevation, 
     double blockCumulativeElevation, std::string blockDirection, std::string blockUnderground, 
     std::string stationInfo, std::string switchInfo, std::string blockRailwayCrossing)
     {
         m_blockNumber = blockNumber;
+        m_blockLength = blockLength;
         m_blockGrade = blockGrade;
         m_blockSpeedLimit = blockSpeedLimit;
         m_blockElevation = blockElevation;
@@ -65,11 +66,14 @@ private:
     /// number of the block
     int m_blockNumber;
 
+    /// length of block
+    double m_blockLength;
+
     /// grade of block
     double m_blockGrade;
 
     /// speed limit of block
-    double m_blockSpeedLimit;
+    int m_blockSpeedLimit;
 
     /// elevation of the block
     double m_blockElevation;
