@@ -279,8 +279,10 @@ void moduleMain()
             }
             case Common::RequestCode::TRACK_MODEL_GUI_GATHER_DATA:
             {
+                printf("\n\nEntered\n\n");
                 std::string test = req.GetData();
                 int pos = test.find(' ');
+                printf("\n\n%s", test.c_str());
                 int trackNumber = std::stoi(test.substr(0, pos));
                 test.erase(0, pos + 1);
                 int blockNumber = std::stoi(test);
@@ -288,7 +290,7 @@ void moduleMain()
                 req.SetData("");
                 // line name, block number, 
                 //req.AppendData
-
+                break;
 
 
             }

@@ -176,7 +176,7 @@ class Ui(QtWidgets.QMainWindow):
                         blockInfo['Underground']= "false"
 
                     blockInfo['Section'] = blockSection
-                    
+
                     if (records.column['Stations'][x] != ""):
                         blockInfo['Station'] = records.column['Stations'][x]
                         blockInfo['Exit Side'] = records.column['Exit Side'][x]
@@ -190,7 +190,7 @@ class Ui(QtWidgets.QMainWindow):
                         blockInfo['RailwayCrossing'] = "false"
 
                     jsonString = json.dumps(blockInfo)
-                    print(jsonString)
+                    #print(jsonString)
                     send_message(RequestCode.TRACK_MODEL_GUI_BLOCK, str(jsonString))
 
                 self.send_gather_data_message()
@@ -215,6 +215,7 @@ class Ui(QtWidgets.QMainWindow):
         send_message_async(RequestCode.TRACK_MODEL_GUI_GATHER_DATA, data=data, callback=self.update_gui)
 
     def update_gui(self, response_code, response_data):
+        print("test123")
         if response_code == ResponseCode.ERROR:
             print("There was a problem communicating with the server")
             return
