@@ -17,8 +17,8 @@ class Controller
         int current_speed;
         int setpoint_speed;
         int power_command;
-        int authority;
-        bool mode;
+        bool authority;
+        bool mode; // 0 = Automatic, 1 = Manual
         bool serviceBrake;
         bool emergencyBrake;
 
@@ -52,7 +52,7 @@ class Controller
          * @param curr_sp = current speed
          * @param auth = authority
          */
-        Controller(int com_sp, int curr_sp, int auth);
+        Controller(int com_sp, int curr_sp, bool auth);
 
         ///////////////////////////////////////////////////////////////
         // SETTERS AND GETTERS
@@ -92,7 +92,7 @@ class Controller
          * @brief Setter function for authority
          * @param auth == authority
          */
-        void setAuthority(int auth);
+        void setAuthority(bool auth);
 
         /**
          * @brief Getter function for command speed
@@ -116,7 +116,7 @@ class Controller
          * @brief Getter function for authority
          * @return authority
          */
-        int getAuthority();
+        bool getAuthority();
 
         /**
          * @brief Getter function for power command
@@ -127,15 +127,9 @@ class Controller
         // VITAL OPERATIONS
         ///////////////////////////////////////////////////////////////
         /**
-         * @brief default calculate power function for testing purposes only
+         * @brief calculates power command that will be sent to train model
          */
         void calculatePower();
-
-        /**
-         * @brief calculates power command that will be sent to train model
-         * @param T = sample period of train model
-         */
-        void calculatePower(int T);
 
         /**
          * @brief ensures train does not exceed speed limit
@@ -157,8 +151,9 @@ class Controller
         /**
          * @brief allows operator to switch between manual and automatic mode
          * @param override = string code entered by operator to initiate manual override
+         * @return returns boolean value to signify if override was successful
          */
-        void toggleMode(std::string override);
+        bool toggleMode(std::string override);
 
         ///////////////////////////////////////////////////////////////
         // NON-VITAL OPERATIONS
