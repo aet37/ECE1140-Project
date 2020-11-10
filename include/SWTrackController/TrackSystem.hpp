@@ -4,7 +4,7 @@
 //
 
 #include <vector>
-#include "SWTrackDef.hpp"
+#include "TrackController.hpp"
 #ifndef SW_TRACK_SYSTEM_HPP
 #define SW_TRACK_SYSTEM_HPP
 
