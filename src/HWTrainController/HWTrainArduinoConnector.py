@@ -15,7 +15,7 @@ RATE = 9600
 arduino = serial.Serial(SERIAL_PORT, RATE, timeout=5)
 
 # Communications with server
-HOST = '3.19.63.101'
+HOST = '3.23.104.34'
 SERVER_PORT = 1234
 HWTRAIN_PULL_EBRAKE = b'224'
 HWTRAIN_SET_SETPOINT_SPEED = b'225'
@@ -37,7 +37,6 @@ HWTRAIN_PULL_PASSENGER_EBRAKE = b'240'
 HWTRAIN_GUI_GATHER_DATA = b'241'
 HWTRAIN_GUI_RESOLVE_FAILURE = b'242'
 HWTRAIN_GUI_SET_KP_KI = b'243'
-# ADD REST OF REQUEST CODES
 
 def get_request():
     """Retrieves a request from the server.
@@ -47,7 +46,7 @@ def get_request():
     """
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         sock.connect((HOST, SERVER_PORT))
-        sock.sendall(HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST)
+        sock.sendall(HWTRAIN_GET_HW_TRAIN_CONTROLLER_REQUEST)
         data = sock.recv(1024)
 
     return data
@@ -79,7 +78,7 @@ def send_reponse_to_server(response):
     """
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         sock.connect((HOST, SERVER_PORT))
-        sock.sendall(HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE + response[1:])
+        sock.sendall(HWTRAIN_SEND_HW_TRAIN_CONTROLLER_RESPONSE + response[1:])
         data = sock.recv(1024)
 
     logger.info("Received %s from server", data)
