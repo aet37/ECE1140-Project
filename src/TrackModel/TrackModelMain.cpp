@@ -420,6 +420,9 @@ void moduleMain()
                 blockSpeedLimit, blockElevation, blockCumulativeElevation, 
                 blockDirection, blockUnderground, stationInfo, 
                 switchInfo, railwayCrossing);
+
+                printf("hiiiiiiiiiiiiiiiiiii");
+
                 break;
             }
             default:
