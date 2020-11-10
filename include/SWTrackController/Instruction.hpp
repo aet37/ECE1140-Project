@@ -31,6 +31,18 @@ class Instruction
             m_argument(argument)
             {}
 
+        bool Evaluate();
+
+        const InstructionType getInstructionType() const 
+        {
+            return m_type;
+        }
+
+        const string& getArgument() const
+        {
+            return m_argument;
+        }
+
 
 };
 

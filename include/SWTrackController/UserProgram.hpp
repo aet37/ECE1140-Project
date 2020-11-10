@@ -12,7 +12,7 @@ class UserProgram
 {
 	private:
 	List<Task*> m_tasks;
-    const char* m_pName;
+    string m_pName;
 
 
 	public:
@@ -25,7 +25,26 @@ class UserProgram
 
     ~UserProgram(){}
 
+    void ClearMemory();
+
+    void setProgramName(const char* pProgramName)
+    {
+        m_pName = pProgramName;
+    }
+
+    const string& getProgramName() const
+    {
+        return m_pName;
+    }
+
     void AddTask(Task* pTask);
+
+    Task* getMostRecentTask() const;
+
+    const List<Task*>& getTaskList() const
+    {
+        return m_tasks;
+    }
     
 
 

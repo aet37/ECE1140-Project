@@ -3,6 +3,9 @@
 
 #include <List.hpp>
 #include <Rung.hpp>
+#include <string>
+using namespace std;
+
 
 
 class Routine
