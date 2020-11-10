@@ -174,7 +174,7 @@ class Ui(QtWidgets.QMainWindow):
         else: 
             self.label11.setStyleSheet("color: green;")
             self.label11.setText("On")
-        send_message(RequestCode.SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS, "1")
+        send_message(RequestCode.HWTRAIN_TOGGLE_CABIN_LIGHTS, "1")
 
     def LCDTemp(self):
         self.LCD1 = self.findChild(QtWidgets.QLCDNumber, 'TempLCD')
