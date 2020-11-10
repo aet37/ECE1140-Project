@@ -366,10 +366,17 @@ void moduleMain()
                     std::string stationInfo = test.substr(0, pos);
                     stationInfo.append(" ");
                     test.erase(0, pos + 17);
-                    printf("hello\n");
+                    pos = test.find('\"');
+                    std::string stationInfo2 = test.substr(0, pos);
+                    stationInfo.append(stationInfo2);
+                    test.erase(0, pos + 1);
+                    printf("tester\n");
                     printf(test.c_str());
-                    printf("\nbye\n");
-                    //std::string stationInfo
+                    printf("\nall done");
+                }
+                else
+                {
+                    std::string stationInfo = "";
                 }
 
 
