@@ -6,6 +6,9 @@
 // void Distance::setTransponder(int x){
 // 	transponder = x; //Use button to get transponder 
 // }
+Distance::Distance(int auth){
+	authority = auth;
+}
 int Distance::getAuthority(){
 	return authority;
 }

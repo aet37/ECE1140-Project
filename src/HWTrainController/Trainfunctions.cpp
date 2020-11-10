@@ -1,7 +1,11 @@
 #include <iostream>
 #include "Trainfunctions.h"
 
-
+Trainfunctions::Trainfunctions(){
+	trackSignal = 0;
+	serviceBrake = 0;
+	emergencyBrake = 0;
+}
 void Trainfunctions::setTrackSignal(int x){
 	trackSignal = x;
 }

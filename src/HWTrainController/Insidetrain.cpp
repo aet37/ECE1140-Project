@@ -1,6 +1,15 @@
 #include <iostream>
 #include "Insidetrain.h"
 
+Insidetrain::Insidetrain(){
+	lights = 0;
+	doors = 0;
+	emergencyPassengerBrake = 0;
+	temperature = 0;
+	advertisements = 0;
+	announcements = 0;
+}
+
 void Insidetrain::setLights(){
 	lights = !lights;
 }

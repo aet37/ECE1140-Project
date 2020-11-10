@@ -1,6 +1,11 @@
 #include <iostream>
 #include "Failures.h"
 
+Failures::Failures(){
+	engineFailure = 0;
+	signalFailure = 0;
+	brakeFailure = 0;
+}
 void Failures::setEngineFailure(int x){
 	engineFailure = x;
 }
