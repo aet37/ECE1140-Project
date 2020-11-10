@@ -16,6 +16,8 @@
 
 static uint64_t currentTime;
 
+#define PIN23 23
+
 void setup()
 {
     // Initialize Serial
@@ -28,6 +30,7 @@ void setup()
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(PIN2, OUTPUT);
     pinMode(PIN3, OUTPUT);
+    pinMode(PIN23, INPUT);
 
     // Initialize the user program
     UserProgram* pProg = new UserProgram("Blank Program");
