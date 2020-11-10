@@ -98,13 +98,16 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         """Method called when a different track controller is selected"""
         self.current_track_controller = self.track_controller_combo_box.currentText().split('#')[1]
 
+        if 'Green' in self.track_controller_combo_box.currentText():
+            self.current_track_controller = str(int(self.current_track_controller) + len(self.red_line_controllers))
+
         # Update the options in the block combo box
         self.block_combo_box.clear()
         if 'Red' in self.track_controller_combo_box.currentText():
             for block in self.red_line_controllers[int(self.current_track_controller) - 1]:
                 self.block_combo_box.addItem("Block #{}".format(block))
         else:
-            for block in self.green_line_controllers[int(self.current_track_controller) - 1]:
+            for block in self.green_line_controllers[int(self.current_track_controller) - len(self.red_line_controllers) - 1]:
                 self.block_combo_box.addItem("Block #{}".format(block))
 
     def block_selected(self):
@@ -161,8 +164,7 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             alert.exec_()
             return None
 
-    @staticmethod
-    def send_compiled_program(output_file):
+    def send_compiled_program(self, output_file):
         """Method used to read compiled program and send messages to the server
 
         :param str output_file: Name of the file containing the compiled program
@@ -171,6 +173,10 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             line = line.rstrip('\n')
             request_code, _, data = line.partition(' ')
             request_code = RequestCode[request_code]
+
+            # Add the track controller number if we are starting the download
+            if request_code == RequestCode.START_DOWNLOAD:
+                data += ' ' + self.current_track_controller
 
             send_message(request_code, data)
 
@@ -191,7 +197,7 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
 
         if (self.current_track_controller is not None) and \
            (self.current_block is not None):
-            data = str(self.current_track_controller) + str(self.current_block)
+            data = str(self.current_track_controller) + ' ' + str(self.current_block)
             send_message_async(RequestCode.SWTRACK_GUI_GATHER_DATA,
                                data=data,
                                callback=self.update_gui)
