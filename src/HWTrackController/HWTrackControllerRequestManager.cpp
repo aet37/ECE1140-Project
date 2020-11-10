@@ -80,6 +80,22 @@ void HWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequ
             }
             break;
         }
+        case Common::RequestCode::HWTRACK_GUI_GATHER_DATA:
+        {
+            // Clear the response queue to prepare this response
+            m_responseQueue.Clear();
+
+            std::string tags[] = {"heater", "switch", "lightStatus", "occupied", "status",
+                                  "authority", "suggestedSpeed", "commandSpeed"};
+
+            for (int i = 0; i < 8; i++)
+            {
+                AddRequest(Common::Request(Common::RequestCode::HWTRACK_GET_TAG_VALUE, tags[i]));
+            }
+
+            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+            break;
+        }
         default:
             LOG_HW_TRACK_CONTROLLER("Invalid command %d received", static_cast<uint16_t>(rRequest.GetRequestCode()));
             rResponse.SetResponseCode(Common::ResponseCode::ERROR);

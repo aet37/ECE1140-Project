@@ -13,9 +13,6 @@
 #include "SWTrackControllerMain.hpp"  // For SWTrackController::serviceQueue
 #include "HWTrackControllerRequestManager.hpp" // For HWTrackController::RequestManager
 
-// HW Track Controller will be the first controller on the green line
-static const uint32_t HW_TRACK_CONTROLLER_NUMBER = 15;
-
 // Difference between swtrack and hwtrack request codes
 static const uint32_t REQUEST_CODE_DIFFERENCE = 22;
 
@@ -31,6 +28,7 @@ void SWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequ
     {
         case Common::RequestCode::SWTRACK_GUI_GATHER_DATA:
         {
+            trackControllerNumber = rRequest.ParseData<uint32_t>(0);
             rResponse.SetResponseCode(Common::ResponseCode::ERROR);
             break;
         }
