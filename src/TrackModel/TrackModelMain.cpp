@@ -320,12 +320,13 @@ void initializeRouteMaps(std::map<std::string, std::vector<uint32_t>>& rGreenLin
 
                         for (int n = 0; n < 2; n++)
                         {
+                            int p = 0;
                             if (m == 0)
                             {
                                 base.insert(base.end(), choice11.begin(), choice11.end());
                                 for (int o = 0; o < 2; o++)
                                 {
-                                    int p;
+                                    
                                     if (o == 0)
                                     {
                                         p = 0;
