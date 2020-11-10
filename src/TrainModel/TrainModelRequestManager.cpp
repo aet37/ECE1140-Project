@@ -48,6 +48,13 @@ void TrainModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
+        case Common::RequestCode::TRAIN_MODEL_GUI_UPDATE_DROP_DOWN:
+        {
+            uint32_t numberOfTrains = TrainCatalogue::GetInstance().GetNumberOfTrains();
+            rResponse.AppendData(std::to_string(numberOfTrains));
+            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+            break;
+        }
         case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_LENGTH:
         case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_MASS:
         case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_HEIGHT:

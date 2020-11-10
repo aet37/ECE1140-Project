@@ -16,7 +16,7 @@ class Ui(QtWidgets.QMainWindow):
 
         self.train_menu_timer = QTimer()
         self.train_info_timer = QTimer()
-        #self.train_menu_timer.timeout.connect(update_train_list) add later
+        self.train_menu_timer.timeout.connect(self.update_train_list)
         self.train_info_timer.timeout.connect(self.update_gui)
 
         self.current_train_id = "1"
@@ -46,6 +46,7 @@ class Ui(QtWidgets.QMainWindow):
         logout_button.clicked.connect(self.logout)
 
         train_info_button = self.findChild(QtWidgets.QPushButton, 'train_info_button')
+        self.current_train_id = self.menu_train_combo.currentData()
         train_info_button.clicked.connect(self.train_info_1)
 
         train_parameters_button = self.findChild(QtWidgets.QPushButton, 'train_parameters_button')
@@ -142,11 +143,23 @@ class Ui(QtWidgets.QMainWindow):
     ############################ HELPER METHODS ###########################
     #######################################################################
     def update_gui(self):
-        responsecode, dataReceived = send_message(RequestCode.TRAIN_MODEL_GUI_GATHER_DATA, self.current_train_id)
+        responsecode, dataReceived = send_message(RequestCode.TRAIN_MODEL_GUI_GATHER_DATA, str(self.current_train_id))
         if responsecode == ResponseCode.SUCCESS:
             # Parse the data and update the gui.
             dataParsed = dataReceived.split()
             self.disp_cabin_lights.setText(dataParsed[11])
+
+    def update_train_list(self):
+        responsecode, dataReceived = send_message(RequestCode.TRAIN_MODEL_GUI_UPDATE_DROP_DOWN, str(self.current_train_id))
+        if responsecode == ResponseCode.SUCCESS:
+            # Parse the data and update the gui.
+            dataParsed = int(dataReceived)
+            count = 1
+            #self.menu_train_combo.clear()
+            self.findChild(QtWidgets.QComboBox, 'menu_train_combo').clear()
+            while(count <= dataParsed + 1):
+                self.menu_train_combo.addItem("Train #" + dataParsed[count])
+                count = count + 1
     
     def save_parameters(self):
         """Sends all the entered parameters to the cloud"""
