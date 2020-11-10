@@ -354,9 +354,13 @@ void moduleMain()
                 // get track block travel direction
                 pos = test.find("\",");
                 std::string blockDirection = test.substr(0, pos);
-                printf("tester\n");
-                printf(blockDirection.c_str());
+                pos = test.find("Underground");
+                test.erase(0, pos + 15);
+                printf("hi\n");
+                printf(test.c_str());
                 printf("\n");
+
+
                 // get StationInfo
                 if (test.find("Station\": \"") != std::string::npos){
                     pos = test.find("Station\": \"");
