@@ -27,6 +27,7 @@ void setup()
     // Pin Initialization
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(PIN2, OUTPUT);
+    pinMode(PIN3, OUTPUT);
 
     // Initialize the user program
     UserProgram* pProg = new UserProgram("Blank Program");

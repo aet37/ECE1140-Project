@@ -50,6 +50,11 @@ void IoTask(void* pSomething)
     {
         digitalWrite(PIN2, tagValue);
     }
+
+    if (GetTagValue("switch", tagValue))
+    {
+        digitalWrite(PIN3, tagValue);
+    }
 }
 
 } // namespace TagDatabase
