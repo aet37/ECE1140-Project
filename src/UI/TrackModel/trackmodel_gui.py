@@ -166,12 +166,14 @@ class Ui(QtWidgets.QMainWindow):
                     if (records.column['Stations'][x] != ""):
                         blockInfo['Station'] = records.column['Stations'][x]
                         blockInfo['Exit Side'] = records.column['Exit Side'][x]
+
                     if (records.column['Switches'][x] != ""):
-                        switchString = records.column['Switches'][x]
-                        #switchString = switchString.split(',')
-                        blockInfo['Switches'] = switchString
+                        blockInfo['Switches'] = records.column['Switches'][x]
+
                     if (records.column['Railway Crossing'][x] != ""):
                         blockInfo['Railway Crossing'] = "true"
+                    else:
+                        blockInfo['RailwayCrossing'] = "false"
 
                     jsonString = json.dumps(blockInfo)
                     send_message(RequestCode.TRACK_MODEL_GUI_BLOCK, str(jsonString))

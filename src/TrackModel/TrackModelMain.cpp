@@ -389,15 +389,26 @@ void moduleMain()
                     std::string secondSwitchString = test.substr(0, pos);
                     switchInfo.append(" ").append(secondSwitchString);
                     test.erase(0, pos + 1);
-                    printf("\n");
-                    printf(switchInfo.c_str());
-                    printf("\n");
-                    printf(test.c_str());
-                    printf("\n");
                 }
                 else
                 {
                     std::string switchInfo = "";
+                }
+                
+                if (test.find("Railway Crossing") != std::string::npos)
+                {
+                    pos = test.find("Railway Crossing");
+                    test.erase(0, pos + 20);
+                    pos = test.find('\"');
+                    std::string railwayCrossing = test.substr(0, pos);
+                    printf("\n");
+                    printf("hello");
+                    printf(railwayCrossing.c_str());
+                    printf("\n");
+                }
+                else
+                {
+                    std::string railwayCrossing = "false";
                 }
                 
 
