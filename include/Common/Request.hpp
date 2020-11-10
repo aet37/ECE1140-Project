@@ -168,6 +168,8 @@ enum class RequestCode : uint8_t
     HWTRAIN_CAUSE_FAILURE = 239, // Used by the train model to cause a train's failure
     HWTRAIN_PULL_PASSENGER_EBRAKE = 240, // Used by the train model to pull a train's passenger e-brake
     HWTRAIN_GUI_GATHER_DATA = 241, // Used by the gui to update the user interface
+    HWTRAIN_GUI_RESOLVE_FAILURE = 242, // Used by the gui to resolve a train failure
+    HWTRAIN_GUI_SET_KP_KI = 243, // Used by the gui to set a train's kp/ki
 };
 
 /**

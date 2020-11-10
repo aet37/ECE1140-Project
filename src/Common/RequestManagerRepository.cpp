@@ -23,7 +23,6 @@
 
 static Debug::DebugRequestManager debugRequestManager;
 static CTC::CTCRequestManager ctcRequestManager;
-static TrainModel::TrainModelRequestManager trainModelRequestManager;
 static HWTrainController::HWTrainRequestManager hwTrainControllerRequestManager;
 
 static SWTrackController::SWTrackControllerRequestManager swTrackControllerRequestManager;

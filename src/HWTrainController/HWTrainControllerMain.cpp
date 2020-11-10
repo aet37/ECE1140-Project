@@ -9,6 +9,10 @@
 #include "HWTrainControllerMain.hpp" // Header for functions
 #include "Logger.hpp" // For LOG macros
 #include "Assert.hpp"
+#include "Failures.h"
+#include "Distance.h"
+#include "Speedstuff.h"
+#include "Trainfunctions.h"
 
 namespace HWTrainController
 {
@@ -18,7 +22,10 @@ Common::ServiceQueue<Common::Request> serviceQueue;
 void moduleMain()
 {
     LOG_HW_TRAIN_CONTROLLER("Thread starting...");
-
+    Failures Fail;
+    Distance Dist;
+    Speedstuff Spood;
+    Trainfunctions Train;
     while (true)
     {
         Common::Request req = serviceQueue.Pop();
@@ -35,7 +42,7 @@ void moduleMain()
             }
             case Common::RequestCode::HWTRAIN_UPDATE_CURRENT_SPEED:
             {
-
+                Spood
             }
             default:
                 ASSERT(false, "Unexpected request code %d", static_cast<uint16_t>(req.GetRequestCode()));

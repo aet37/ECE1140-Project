@@ -8,7 +8,7 @@ class Insidetrain{
 		bool lights, doors, emergencyPassengerBrake;
 		int temperature, advertisements, announcements;
 	public:
-		void setLights(int);
+		void setLights();
 		void setDoors(int);
 		void setEmergencyPassengerBrake(int);
 		void setTemperature(int);

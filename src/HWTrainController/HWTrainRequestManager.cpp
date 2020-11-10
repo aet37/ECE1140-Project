@@ -119,6 +119,13 @@ void HWTrainRequestManager::HandleRequest(const Common::Request& rRequest, Commo
             }
             break;
         }
+        case Common::RequestCode::HWTRAIN_DISPATCH_TRAIN:
+        {
+            // Add the request to the queue
+            AddRequest(rRequest);
+            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+            break;
+        }
         default:
             LOG_HW_TRACK_CONTROLLER("Invalid command %d received", static_cast<uint16_t>(rRequest.GetRequestCode()));
             rResponse.SetResponseCode(Common::ResponseCode::ERROR);

@@ -1,8 +1,8 @@
 #include <iostream>
 #include "Insidetrain.h"
 
-void Insidetrain::setLights(int x){
-	lights = x;
+void Insidetrain::setLights(){
+	lights = !lights;
 }
 void Insidetrain::setDoors(int x){
 	doors = x;

@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>220</x>
-      <y>290</y>
+      <y>110</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -31,7 +31,7 @@
     <property name="geometry">
      <rect>
       <x>380</x>
-      <y>290</y>
+      <y>110</y>
       <width>121</width>
       <height>23</height>
      </rect>
@@ -44,7 +44,7 @@
     <property name="geometry">
      <rect>
       <x>570</x>
-      <y>290</y>
+      <y>110</y>
       <width>117</width>
       <height>23</height>
      </rect>
@@ -60,7 +60,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>290</y>
+      <y>110</y>
       <width>121</width>
       <height>23</height>
      </rect>
@@ -73,7 +73,7 @@
     <property name="geometry">
      <rect>
       <x>760</x>
-      <y>290</y>
+      <y>110</y>
       <width>117</width>
       <height>23</height>
      </rect>
@@ -89,7 +89,7 @@
     <property name="geometry">
      <rect>
       <x>950</x>
-      <y>290</y>
+      <y>110</y>
       <width>117</width>
       <height>23</height>
      </rect>
@@ -101,24 +101,24 @@
      <string>Change Brake</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="FailureButton">
+   <widget class="QPushButton" name="BrakeFailButton">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>560</y>
+      <x>200</x>
+      <y>370</y>
       <width>121</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
-     <string>Display Failures</string>
+     <string>Display Brake Failure</string>
     </property>
    </widget>
    <widget class="QPushButton" name="SpeedButton">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>560</y>
+      <x>10</x>
+      <y>260</y>
       <width>121</width>
       <height>23</height>
      </rect>
@@ -130,8 +130,8 @@
    <widget class="QPushButton" name="PowerButton">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>560</y>
+      <x>200</x>
+      <y>260</y>
       <width>121</width>
       <height>23</height>
      </rect>
@@ -140,24 +140,24 @@
      <string>Display Power</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="KpKiButton">
+   <widget class="QPushButton" name="KpButton">
     <property name="geometry">
      <rect>
-      <x>570</x>
-      <y>560</y>
+      <x>380</x>
+      <y>260</y>
       <width>121</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
-     <string>Display Kp and Ki</string>
+     <string>Display Kp</string>
     </property>
    </widget>
    <widget class="QPushButton" name="PEBrakebutton">
     <property name="geometry">
      <rect>
       <x>720</x>
-      <y>560</y>
+      <y>260</y>
       <width>201</width>
       <height>23</height>
      </rect>
@@ -170,7 +170,7 @@
     <property name="geometry">
      <rect>
       <x>950</x>
-      <y>560</y>
+      <y>260</y>
       <width>121</width>
       <height>23</height>
      </rect>
@@ -195,8 +195,8 @@
    <widget class="QLabel" name="DoorLabel">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>240</y>
+      <x>240</x>
+      <y>60</y>
       <width>101</width>
       <height>21</height>
      </rect>
@@ -212,14 +212,14 @@
      <string notr="true">color: rgb(255, 0, 0);</string>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string>Off</string>
     </property>
    </widget>
    <widget class="QLabel" name="AdsLabel">
     <property name="geometry">
      <rect>
-      <x>580</x>
-      <y>240</y>
+      <x>600</x>
+      <y>60</y>
       <width>101</width>
       <height>21</height>
      </rect>
@@ -235,24 +235,24 @@
      <string notr="true">color: rgb(255, 0, 0);</string>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string>Off</string>
     </property>
    </widget>
    <widget class="QLCDNumber" name="TempLCD">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>220</y>
-      <width>111</width>
-      <height>51</height>
+      <x>390</x>
+      <y>50</y>
+      <width>101</width>
+      <height>41</height>
      </rect>
     </property>
    </widget>
    <widget class="QLCDNumber" name="SpeedLCD">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>500</y>
+      <x>10</x>
+      <y>200</y>
       <width>111</width>
       <height>41</height>
      </rect>
@@ -261,28 +261,28 @@
    <widget class="QLCDNumber" name="KpLCD">
     <property name="geometry">
      <rect>
-      <x>600</x>
-      <y>452</y>
-      <width>81</width>
-      <height>31</height>
+      <x>580</x>
+      <y>200</y>
+      <width>101</width>
+      <height>41</height>
      </rect>
     </property>
    </widget>
    <widget class="QLCDNumber" name="KiLCD">
     <property name="geometry">
      <rect>
-      <x>600</x>
-      <y>512</y>
-      <width>81</width>
-      <height>31</height>
+      <x>390</x>
+      <y>202</y>
+      <width>101</width>
+      <height>41</height>
      </rect>
     </property>
    </widget>
    <widget class="QLabel" name="AnnounceLabel">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>240</y>
+      <x>40</x>
+      <y>60</y>
       <width>101</width>
       <height>21</height>
      </rect>
@@ -298,14 +298,14 @@
      <string notr="true">color: rgb(255, 0, 0);</string>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string>Off</string>
     </property>
    </widget>
-   <widget class="QLabel" name="SignalFailure">
+   <widget class="QLabel" name="SignalFailureLabel">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>510</y>
+      <x>610</x>
+      <y>320</y>
       <width>101</width>
       <height>21</height>
      </rect>
@@ -321,14 +321,14 @@
      <string notr="true">color: rgb(255, 0, 0);</string>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string>Off</string>
     </property>
    </widget>
-   <widget class="QLabel" name="EngineFailure">
+   <widget class="QLabel" name="EngineFailureLabel">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>480</y>
+      <x>410</x>
+      <y>320</y>
       <width>101</width>
       <height>21</height>
      </rect>
@@ -344,14 +344,14 @@
      <string notr="true">color: rgb(255, 0, 0);</string>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string>Off</string>
     </property>
    </widget>
-   <widget class="QLabel" name="BrakeFailure">
+   <widget class="QLabel" name="BrakeFailureLabel">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>450</y>
+      <x>240</x>
+      <y>320</y>
       <width>101</width>
       <height>21</height>
      </rect>
@@ -367,15 +367,15 @@
      <string notr="true">color: rgb(255, 0, 0);</string>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string>Off</string>
     </property>
    </widget>
    <widget class="QLabel" name="EBrakeLabel">
     <property name="geometry">
      <rect>
-      <x>960</x>
-      <y>520</y>
-      <width>101</width>
+      <x>980</x>
+      <y>210</y>
+      <width>41</width>
       <height>21</height>
      </rect>
     </property>
@@ -390,14 +390,14 @@
      <string notr="true">color: rgb(255, 0, 0);</string>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string>Off</string>
     </property>
    </widget>
    <widget class="QLabel" name="ModeLabel">
     <property name="geometry">
      <rect>
-      <x>770</x>
-      <y>240</y>
+      <x>790</x>
+      <y>60</y>
       <width>101</width>
       <height>21</height>
      </rect>
@@ -413,14 +413,99 @@
      <string notr="true">color: rgb(255, 0, 0);</string>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string>Off</string>
     </property>
    </widget>
    <widget class="QLabel" name="PEBrakeLabel">
     <property name="geometry">
      <rect>
-      <x>770</x>
-      <y>520</y>
+      <x>800</x>
+      <y>210</y>
+      <width>41</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 0, 0);</string>
+    </property>
+    <property name="text">
+     <string>Off</string>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="PowerLCD">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>200</y>
+      <width>111</width>
+      <height>41</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="EngineFailButton">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>370</y>
+      <width>121</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Display Engine Failure</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="SignalFailButton">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>370</y>
+      <width>121</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Display Signal Failure</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="KiButton">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>260</y>
+      <width>121</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Display Ki</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="LightsButton">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>370</y>
+      <width>121</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Lights On/Off</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="LightsLabel">
+    <property name="geometry">
+     <rect>
+      <x>800</x>
+      <y>320</y>
       <width>101</width>
       <height>21</height>
      </rect>
@@ -436,30 +521,30 @@
      <string notr="true">color: rgb(255, 0, 0);</string>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string>Off</string>
     </property>
    </widget>
-   <widget class="QLCDNumber" name="PowerLCD">
+   <widget class="QLabel" name="BrakeLabel">
     <property name="geometry">
      <rect>
-      <x>390</x>
-      <y>500</y>
-      <width>111</width>
-      <height>41</height>
+      <x>980</x>
+      <y>60</y>
+      <width>101</width>
+      <height>21</height>
      </rect>
     </property>
-   </widget>
-   <widget class="QProgressBar" name="BrakeProgress">
-    <property name="geometry">
-     <rect>
-      <x>960</x>
-      <y>250</y>
-      <width>118</width>
-      <height>23</height>
-     </rect>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
-    <property name="value">
-     <number>24</number>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 0, 0);</string>
+    </property>
+    <property name="text">
+     <string>Off</string>
     </property>
    </widget>
   </widget>
