@@ -348,15 +348,15 @@ void moduleMain()
                 std::string blockCumulativeElevationString = test.substr(0, pos);
                 double blockCumulativeElevation = stod(blockCumulativeElevationString);
                 test.erase(0, pos + 16);
-                printf("hello\n");
-                printf(test.c_str());
 
                 // get track block travel direction
+                printf("heeeeello\n");
+                printf(test.c_str());
+                printf("\nend");
                 pos = test.find("\",");
                 std::string blockDirection = test.substr(0, pos);
-                pos = test.find("Underground");
                 test.erase(0, pos + 15);
-                printf("hi\n");
+                printf("\nhi\n");
                 printf(test.c_str());
                 printf("\n");
 
