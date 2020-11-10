@@ -337,6 +337,7 @@ void moduleMain()
                 pos = test.find(',');
                 std::string blockSpeedLimitString = test.substr(0, pos);
                 printf("test12345\n");
+                printf(blockSpeedLimitString.c_str());
                 int blockSpeedLimit = stoi(blockSpeedLimitString);
                 test.erase(0, pos + 15);
 
