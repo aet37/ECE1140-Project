@@ -23,10 +23,10 @@ void moduleMain()
 {
     LOG_TRACK_MODEL("Thread starting...");
 
-    std::map<std::string, std::vector<uint32_t>>* pGreenLinePaths = new std::map<std::string, std::vector<uint32_t>>();
-    std::map<std::string, std::vector<uint32_t>>* pRedLinePaths = new std::map<std::string, std::vector<uint32_t>>();
+   // std::map<std::string, std::vector<uint32_t>>* pGreenLinePaths = new std::map<std::string, std::vector<uint32_t>>();
+   // std::map<std::string, std::vector<uint32_t>>* pRedLinePaths = new std::map<std::string, std::vector<uint32_t>>();
 
-    initializeRouteMaps(*pGreenLinePaths, *pRedLinePaths);
+   // initializeRouteMaps(*pGreenLinePaths, *pRedLinePaths);
 
     while (true)
     {
@@ -174,7 +174,7 @@ void moduleMain()
 
 }
 
-void initializeRouteMaps(std::map<std::string, std::vector<uint32_t>>& rGreenLineRoutes, std::map<std::string, std::vector<uint32_t>>& rRedLineRoutes)
+/*void initializeRouteMaps(std::map<std::string, std::vector<uint32_t>>& rGreenLineRoutes, std::map<std::string, std::vector<uint32_t>>& rRedLineRoutes)
 {
     // # All the track controllers and the blocks they control
     //     self.red_line_controllers = [
@@ -364,10 +364,11 @@ void initializeRouteMaps(std::map<std::string, std::vector<uint32_t>>& rGreenLin
 
                                 std::string switchPositions =
                                 rRedLineRoutes.insert(std::pair<std::string, std::vector<uint32_t>>("01111101000001", blocks));
-**/
+
     blocks = {};
     rRedLineRoutes.insert(std::pair<std::string, std::vector<uint32_t>>("01111101000001", blocks));
     
 }
+*/
 
 } // namespace TrackModel
