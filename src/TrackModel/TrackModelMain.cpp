@@ -277,23 +277,7 @@ void moduleMain()
                 LOG_TRACK_MODEL("Track model dispatch train %s", theIntString.c_str());
                 break;
             }
-            case Common::RequestCode::TRACK_MODEL_GUI_GATHER_DATA:
-            {
-                printf("\n\nEntered\n\n");
-                std::string test = req.GetData();
-                int pos = test.find(' ');
-                printf("\n\n%s", test.c_str());
-                int trackNumber = std::stoi(test.substr(0, pos));
-                test.erase(0, pos + 1);
-                int blockNumber = std::stoi(test);
-
-                req.SetData("");
-                // line name, block number, 
-                //req.AppendData
-                break;
-
-
-            }
+            
             case Common::RequestCode::TRACK_MODEL_GUI_TRACK_LAYOUT:
             {
                 // get line name from string

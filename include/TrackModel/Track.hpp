@@ -48,6 +48,18 @@ public:
     {
         return m_line;
     }
+    Block getBlock(int blockNumber)
+    {
+        return m_blockList[blockNumber - 1];
+    }
+    bool getTrackHeater()
+    {
+        return m_trackHeater;
+    }
+    void setTrackHeater(bool heater)
+    {
+        m_trackHeater = heater;
+    }
 
 
 protected:

@@ -50,6 +50,14 @@ public:
     {
         return m_currentBlock;
     }
+    std::string getSwitchList()
+    {
+        std::string switchList = "";
+        switchList.append(std::to_string(m_switchBlocks[0]));
+        switchList.append(" ");
+        switchList.append(std::to_string(m_switchBlocks[1]));
+        return switchList;
+    }
 
 protected:
 private:

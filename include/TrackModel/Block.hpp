@@ -59,13 +59,14 @@ public:
         {
             m_switchBool = false;
         }
+        m_occupiedBy = -1;
         
-        printf("\n\n\n");
+        /*printf("\n\n\n");
         printf("blocknhmber = %d\nblocklength = %f\nblockgrade = %f\n blockspeedlimit = %d\n ", blockNumber, blockLength, blockGrade, blockSpeedLimit);
         printf("elevation = %f\n cumuEle = %f\n direction = %s\n section = %s\n", blockElevation, blockCumulativeElevation, blockDirection.c_str(), blockSection.c_str());
         printf("under = %s\n railway = %s\n station = %s\n switchInfo = %s\n", blockUnderground.c_str(), blockRailwayCrossing.c_str(), stationInfo.c_str(), switchInfo.c_str());
         printf("\n\n\n");
-        
+        */
 
     }
     double getBlockLength()
@@ -116,6 +117,26 @@ public:
         }
         else return "";
     }
+    int getStationTicketsSold()
+    {
+        return m_theStation.getTicketsSold();
+    }
+    void setStationTicketsSold(int tickets)
+    {
+        m_theStation.setTicketsSold(tickets);
+    }
+    void setStationPassengers(int boarded, int exited)
+    {
+        m_theStation.setPassengers(boarded, exited);
+    }
+    int getStationPassengersBoarded()
+    {
+        return m_theStation.getPassengersBoarded();
+    }
+    int getStationPassengersExited()
+    {
+        return m_theStation.getPassengersExited();
+    }
     void setSwitch(int switchValue)
     {
         if (m_switchBool == true)
@@ -124,13 +145,21 @@ public:
         }
         //else error
     }
-    int getSwitch()
+    int getCurrentSwitch()
     {
         if (m_switchBool == true)
         {
             return m_theSwitch.getCurrentSwitch();
         }
         else return -1;
+    }
+    std::string getSwitchList()
+    {
+        if (m_switchBool == true)
+        {
+            return m_theSwitch.getSwitchList();
+        }
+        else return "";
     }
     bool getRailwayCrossing()
     {
@@ -139,6 +168,14 @@ public:
             return true;
         }
         return false;
+    }
+    int getOccupiedBy()
+    {
+        return m_occupiedBy;
+    }
+    void setOccupiedBy(int trainId)
+    {
+        m_occupiedBy = trainId;
     }
 
 
@@ -187,6 +224,8 @@ private:
     ///section of block
     std::string m_blockSection;
 
+    // train ID occupied by
+    int m_occupiedBy;
 
 
 };
