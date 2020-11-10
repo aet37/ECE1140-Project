@@ -352,8 +352,8 @@ void moduleMain()
                 printf(test.c_str());
 
                 // get track block travel direction
-                
-
+                pos = test.find(',');
+                std::string blockDirection = test.substr(0, pos);
 
                 // get StationInfo
                 if (test.find("Station\": \"") != std::string::npos){
