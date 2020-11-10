@@ -109,7 +109,7 @@ border-color: rgb(0, 0, 0);</string>
       <string notr="true">background-color: rgb(255, 255, 255);</string>
      </property>
      <property name="placeholderText">
-      <string>Select Train...</string>
+      <string>1</string>
      </property>
     </widget>
     <widget class="QLabel" name="label">

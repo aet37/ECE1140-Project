@@ -30,7 +30,7 @@ class Ui(QtWidgets.QMainWindow):
         uic.loadUi('src/UI/TrainModel/Train_Menu.ui', self)
 
         self.stop_all_timers() # Restart timers
-        self.train_menu_timer.start(250)
+        self.train_menu_timer.start(2000)
 
         # TESTING DYNAMIC SCREEN SIZE!!!!!!!!!!!!!
         # screen = app.primaryScreen()
@@ -46,7 +46,7 @@ class Ui(QtWidgets.QMainWindow):
         logout_button.clicked.connect(self.logout)
 
         train_info_button = self.findChild(QtWidgets.QPushButton, 'train_info_button')
-        self.current_train_id = self.menu_train_combo.currentData()
+        self.menu_train_combo.currentIndexChanged.connect(self.update_current_train_id)
         train_info_button.clicked.connect(self.train_info_1)
 
         train_parameters_button = self.findChild(QtWidgets.QPushButton, 'train_parameters_button')
@@ -58,9 +58,13 @@ class Ui(QtWidgets.QMainWindow):
         # Show the page
         self.show()
 
+    def update_current_train_id(self):
+        self.current_train_id = self.menu_train_combo.currentText()[-1]
+        print(self.current_train_id)
+
     def train_info_1(self):
         self.stop_all_timers() # Restart timers
-        self.train_info_timer.start(250)
+        self.train_info_timer.start(2000)
         # This is executed when the button is pressed
         uic.loadUi('src/UI/TrainModel/Train_Info_Page1.ui', self)
         logoutbutton = self.findChild(QtWidgets.QPushButton, 'logout_button_info1')
@@ -143,23 +147,27 @@ class Ui(QtWidgets.QMainWindow):
     ############################ HELPER METHODS ###########################
     #######################################################################
     def update_gui(self):
+        if "Select Train..." in self.current_train_id:
+            return
         responsecode, dataReceived = send_message(RequestCode.TRAIN_MODEL_GUI_GATHER_DATA, str(self.current_train_id))
         if responsecode == ResponseCode.SUCCESS:
             # Parse the data and update the gui.
             dataParsed = dataReceived.split()
-            self.disp_cabin_lights.setText(dataParsed[11])
+            self.findChild(QtWidgets.QTextBrowser, 'disp_cabin_lights').setText(dataParsed[11])
 
     def update_train_list(self):
-        responsecode, dataReceived = send_message(RequestCode.TRAIN_MODEL_GUI_UPDATE_DROP_DOWN, str(self.current_train_id))
+        responsecode, dataReceived = send_message(RequestCode.TRAIN_MODEL_GUI_UPDATE_DROP_DOWN)
         if responsecode == ResponseCode.SUCCESS:
             # Parse the data and update the gui.
             dataParsed = int(dataReceived)
             count = 1
+            currentIndex = self.findChild(QtWidgets.QComboBox, 'menu_train_combo').currentIndex()
             #self.menu_train_combo.clear()
             self.findChild(QtWidgets.QComboBox, 'menu_train_combo').clear()
-            while(count <= dataParsed + 1):
-                self.menu_train_combo.addItem("Train #" + dataParsed[count])
+            while(count < dataParsed + 1):
+                self.menu_train_combo.addItem("Train #" + str(count))
                 count = count + 1
+            self.findChild(QtWidgets.QComboBox, 'menu_train_combo').setCurrentIndex(currentIndex)
     
     def save_parameters(self):
         """Sends all the entered parameters to the cloud"""
