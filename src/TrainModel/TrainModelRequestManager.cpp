@@ -27,21 +27,23 @@ void TrainModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
         {
             Train* pTrain = TrainCatalogue::GetInstance().GetTrain(rRequest.ParseData<uint32_t>(0));
 
-            rResponse.AppendData(std::to_string(pTrain->GetCommandSpeed()));
-            rResponse.AppendData(std::to_string(pTrain->GetCurrentSpeed()));
-            rResponse.AppendData(std::to_string(pTrain->GetPosition()));
-            rResponse.AppendData(std::to_string(pTrain->GetAuthority()));
-            rResponse.AppendData(std::to_string(pTrain->GetTempControl()));
-            rResponse.AppendData(std::to_string(pTrain->GetEmergencyPassengeBrake()));
-            rResponse.AppendData(std::to_string(pTrain->GetServiceBrake()));
-            rResponse.AppendData(std::to_string(pTrain->GetBrakeCommand()));
-            rResponse.AppendData(std::to_string(pTrain->GetHeadLights()));
-            rResponse.AppendData(std::to_string(pTrain->GetCabinLights()));
-            rResponse.AppendData(std::to_string(pTrain->GetAdvertisements()));
-            rResponse.AppendData(std::to_string(pTrain->GetAnnouncements()));
-            rResponse.AppendData(std::to_string(pTrain->GetDoors()));
-            rResponse.AppendData(std::to_string(pTrain->GetCurrentBlock()));
-            rResponse.AppendData(std::to_string(pTrain->GetMode()));
+            rResponse.AppendData(std::to_string(pTrain->GetDestinationBlock())); // 0
+            rResponse.AppendData(std::to_string(pTrain->GetCommandSpeed())); // 1
+            rResponse.AppendData(std::to_string(pTrain->GetCurrentSpeed())); // 2
+            rResponse.AppendData(std::to_string(pTrain->GetPosition())); // 3
+            rResponse.AppendData(std::to_string(pTrain->GetAuthority())); // 4
+            rResponse.AppendData(std::to_string(pTrain->GetCurrentLine())); // 5
+            rResponse.AppendData(std::to_string(pTrain->GetTempControl())); // 6
+            rResponse.AppendData(std::to_string(pTrain->GetEmergencyPassengeBrake())); // 7
+            rResponse.AppendData(std::to_string(pTrain->GetServiceBrake())); // 8
+            rResponse.AppendData(std::to_string(pTrain->GetBrakeCommand())); // 9
+            rResponse.AppendData(std::to_string(pTrain->GetHeadLights())); // 10
+            rResponse.AppendData(std::to_string(pTrain->GetCabinLights())); // 11
+            rResponse.AppendData(std::to_string(pTrain->GetAdvertisements())); // 12
+            rResponse.AppendData(std::to_string(pTrain->GetAnnouncements())); // 13
+            rResponse.AppendData(std::to_string(pTrain->GetDoors())); // 14
+            rResponse.AppendData(std::to_string(pTrain->GetCurrentBlock())); // 15
+            rResponse.AppendData(std::to_string(pTrain->GetMode())); // 16
             
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;

@@ -43,24 +43,11 @@ void moduleMain()
             {
                 Train newTrain;
                 uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
-                newTrain.SetCommandSpeed(receivedRequest.ParseData<uint32_t>(1));
-                newTrain.SetAuthority(receivedRequest.ParseData<uint32_t>(1));
-                newTrain.SetTempControl(receivedRequest.ParseData<uint32_t>(1));
-                newTrain.SetEmergencyPassengeBrake(receivedRequest.ParseData<uint32_t>(1));
-                newTrain.SetServiceBrake(receivedRequest.ParseData<uint32_t>(1));
-                newTrain.SetBrakeCommand(receivedRequest.ParseData<uint32_t>(1));
-                newTrain.SetHeadLights(receivedRequest.ParseData<uint32_t>(1));
-                newTrain.SetCabinLights(receivedRequest.ParseData<uint32_t>(1));
-                newTrain.SetAdvertisements(receivedRequest.ParseData<uint32_t>(1));
-                newTrain.SetAnnouncements(receivedRequest.ParseData<uint32_t>(1));
-                newTrain.SetDoors(receivedRequest.ParseData<uint32_t>(1));
-                newTrain.SetCurrentBlock(receivedRequest.ParseData<uint32_t>(1));
-                newTrain.SetTrainLength(32.2); // Meters
-                newTrain.SetTrainWidth(2.65); // Meters
-                newTrain.SetTrainHeight(3.42); // Meters
-                newTrain.SetTrainMass(40.9); // Tons
-                newTrain.SetTrainCrewCount(receivedRequest.ParseData<uint32_t>(1));
-                newTrain.SetTrainPassCount(receivedRequest.ParseData<uint32_t>(1));
+                newTrain.SetDestinationBlock(receivedRequest.ParseData<uint32_t>(1));
+                newTrain.SetCommandSpeed(receivedRequest.ParseData<uint32_t>(2));
+                newTrain.SetAuthority(receivedRequest.ParseData<uint32_t>(3));
+                newTrain.SetCurrentLine(receivedRequest.ParseData<uint32_t>(4));
+                // Route info from Evan? receivedRequest.ParseData<uint32_t>(5);
 
 
                 TrainCatalogue::GetInstance().AddTrain(newTrain);
@@ -159,6 +146,33 @@ void moduleMain()
                 uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
                 uint32_t trainCrewCount = receivedRequest.ParseData<uint32_t>(1);
                 LOG_TRAIN_MODEL("Train Crew Count = %d, Train ID = %d", trainCrewCount, trainId);
+                break;
+            }
+            case Common::RequestCode::TRAIN_MODEL_GUI_UPDATE_DROP_DOWN:
+            {
+                //uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
+                //uint32_t trainPassengerCount = receivedRequest.ParseData<uint32_t>(1);
+                //LOG_TRAIN_MODEL("Train Passenger Count = %d, Train ID = %d", trainPassengerCount, trainId);
+                break;
+            }
+            case Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_LIGHTS:
+            {
+                // TESTING
+                Train newTrain;
+                uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
+                uint32_t lightStatus = receivedRequest.ParseData<uint32_t>(1);
+
+                newTrain.SetCabinLights(lightStatus);
+                TrainCatalogue::GetInstance().AddTrain(newTrain);
+
+                // IMPLEMENTATION
+                // uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
+                // uint32_t lightStatus = receivedRequest.ParseData<uint32_t>(1);
+
+                // Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId);
+                // tempTrain->SetCabinLights(lightStatus);
+
+                LOG_TRAIN_MODEL("Train Cabin Lights = %d, Train ID = %d", lightStatus, trainId);
                 break;
             }
             default:

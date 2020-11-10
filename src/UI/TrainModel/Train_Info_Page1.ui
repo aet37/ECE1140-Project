@@ -223,26 +223,6 @@ p, li { white-space: pre-wrap; }
       <string>Authority (Train Controller)</string>
      </property>
     </widget>
-    <widget class="QTextBrowser" name="textBrowser_4">
-     <property name="geometry">
-      <rect>
-       <x>350</x>
-       <y>120</y>
-       <width>221</width>
-       <height>61</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 229, 153);</string>
-     </property>
-     <property name="html">
-      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
     <widget class="QTextBrowser" name="textBrowser_3">
      <property name="geometry">
       <rect>
@@ -261,27 +241,6 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_4">
-     <property name="geometry">
-      <rect>
-       <x>410</x>
-       <y>130</y>
-       <width>101</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>11</pointsize>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 229, 153);</string>
-     </property>
-     <property name="text">
-      <string>Advertisements</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_5">
@@ -391,7 +350,7 @@ p, li { white-space: pre-wrap; }
       <string>Temperature Control</string>
      </property>
     </widget>
-    <widget class="QTextBrowser" name="disp_light_controller_tunnel">
+    <widget class="QTextBrowser" name="disp_head_lights">
      <property name="geometry">
       <rect>
        <x>350</x>
@@ -438,9 +397,9 @@ p, li { white-space: pre-wrap; }
     <widget class="QLabel" name="label_8">
      <property name="geometry">
       <rect>
-       <x>390</x>
+       <x>420</x>
        <y>270</y>
-       <width>151</width>
+       <width>81</width>
        <height>20</height>
       </rect>
      </property>
@@ -453,7 +412,7 @@ p, li { white-space: pre-wrap; }
       <string notr="true">background-color: rgb(255, 229, 153);</string>
      </property>
      <property name="text">
-      <string>Light Controller Tunnel</string>
+      <string>Head Lights</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_9">
@@ -605,7 +564,7 @@ p, li { white-space: pre-wrap; }
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <widget class="QLabel" name="disp_advertisements">
+    <widget class="QLabel" name="disp_current_speed">
      <property name="geometry">
       <rect>
        <x>360</x>
@@ -625,27 +584,67 @@ p, li { white-space: pre-wrap; }
       <string notr="true">background-color: rgb(255, 229, 153);</string>
      </property>
      <property name="text">
-      <string>Off</string>
+      <string>MPH</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>410</x>
+       <y>130</y>
+       <width>101</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 229, 153);</string>
+     </property>
+     <property name="text">
+      <string>Current Speed</string>
+     </property>
+    </widget>
+    <widget class="QTextBrowser" name="textBrowser_4">
+     <property name="geometry">
+      <rect>
+       <x>350</x>
+       <y>120</y>
+       <width>221</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 229, 153);</string>
+     </property>
+     <property name="html">
+      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <zorder>textBrowser_4</zorder>
     <zorder>page1_train_label</zorder>
     <zorder>report_button_info1</zorder>
     <zorder>textBrowser</zorder>
     <zorder>label_2</zorder>
     <zorder>textBrowser_2</zorder>
     <zorder>label_3</zorder>
-    <zorder>textBrowser_4</zorder>
     <zorder>textBrowser_3</zorder>
-    <zorder>label_4</zorder>
     <zorder>label_5</zorder>
     <zorder>disp_door</zorder>
     <zorder>disp_temperature_control</zorder>
     <zorder>label_6</zorder>
     <zorder>label_7</zorder>
-    <zorder>disp_light_controller_tunnel</zorder>
+    <zorder>disp_head_lights</zorder>
     <zorder>disp_beacon</zorder>
     <zorder>label_8</zorder>
     <zorder>label_9</zorder>
@@ -655,7 +654,8 @@ p, li { white-space: pre-wrap; }
     <zorder>disp_command_speed</zorder>
     <zorder>disp_authority_train</zorder>
     <zorder>disp_speed_limit</zorder>
-    <zorder>disp_advertisements</zorder>
+    <zorder>disp_current_speed</zorder>
+    <zorder>label_4</zorder>
    </widget>
    <zorder>frame</zorder>
    <zorder>logout_button_info1</zorder>

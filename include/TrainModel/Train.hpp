@@ -24,7 +24,20 @@ public:
 
     ///////////////////////////////////////////////////////////////
     // SETTERS AND GETTERS
-    ///////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////// m_destinationBlock;
+
+    // DESTINATION BLOCK
+    /**
+     * @brief Setter function for destinationBlock
+     * @param destinationBlock
+     */
+    void SetDestinationBlock(int destinationBlock) { m_destinationBlock = destinationBlock; };
+
+    /**
+     * @brief gets destinationBlock
+     * @return returns destinationBlock
+     */
+    int GetDestinationBlock() const { return m_destinationBlock; }
 
     // COMMAND SPEED
     /**
@@ -77,6 +90,19 @@ public:
      * @return returns authority
      */
     int GetAuthority() const { return m_authority; }
+
+    // CURRENT LINE
+    /**
+     * @brief Setter function for currentLine
+     * @param currentLine
+     */
+    void SetCurrentLine(int currentLine) { m_currentLine = currentLine; };
+
+    /**
+     * @brief gets currentLine
+     * @return returns currentLine
+     */
+    int GetCurrentLine() const { return m_currentLine; }
 
     // TEMP CONTROL
     /**
@@ -343,10 +369,12 @@ public:
 protected:
 private:
     // INTEGERS (Vital)
+    int m_destinationBlock;
     int m_commandSpeed;
     int m_currentSpeed; // THIS IS CALCULATED
     int m_position; // THIS IS CALCULATED
     int m_authority;
+    int m_currentLine;
     int m_currentBlock;
     // INTEGERS (Nonvital)
     int m_tempControl;

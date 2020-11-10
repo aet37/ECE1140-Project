@@ -7,12 +7,18 @@ from PyQt5.QtCore import QTimer
 import sys
 
 sys.path.insert(1, 'src')
-from UI.server_functions import send_message_async, RequestCode
+from UI.server_functions import send_message_async, RequestCode, send_message, ResponseCode
 
 class Ui(QtWidgets.QMainWindow):
     """UI class for the Train Model"""
     def __init__(self):
         super(Ui, self).__init__()
+
+        self.train_menu_timer = QTimer()
+        self.train_info_timer = QTimer()
+        #self.train_menu_timer.timeout.connect(update_train_list) add later
+        self.train_info_timer.timeout.connect(self.update_gui)
+
         self.current_train_id = "1"
         self.train_menu()
 
@@ -22,6 +28,9 @@ class Ui(QtWidgets.QMainWindow):
     def train_menu(self):
         """Method called after a train is selected"""
         uic.loadUi('src/UI/TrainModel/Train_Menu.ui', self)
+
+        self.stop_all_timers() # Restart timers
+        self.train_menu_timer.start(250)
 
         # TESTING DYNAMIC SCREEN SIZE!!!!!!!!!!!!!
         # screen = app.primaryScreen()
@@ -49,7 +58,8 @@ class Ui(QtWidgets.QMainWindow):
         self.show()
 
     def train_info_1(self):
-
+        self.stop_all_timers() # Restart timers
+        self.train_info_timer.start(250)
         # This is executed when the button is pressed
         uic.loadUi('src/UI/TrainModel/Train_Info_Page1.ui', self)
         logoutbutton = self.findChild(QtWidgets.QPushButton, 'logout_button_info1')
@@ -93,6 +103,7 @@ class Ui(QtWidgets.QMainWindow):
         logoutbutton.clicked.connect(self.train_menu)
 
     def train_parameters(self):
+        self.stop_all_timers() # Restart timers
         """Called to used the train parameters page"""
         uic.loadUi('src/UI/TrainModel/train_parameter.ui', self)
 
@@ -107,6 +118,7 @@ class Ui(QtWidgets.QMainWindow):
         save_button.clicked.connect(self.save_parameters)
 
     def train_reports(self):
+        self.stop_all_timers() # Restart timers
         """Method called when the train reports button is pressed"""
         uic.loadUi('src/UI/TrainModel/Train_Report.ui', self)
 
@@ -133,6 +145,8 @@ class Ui(QtWidgets.QMainWindow):
         responsecode, dataReceived = send_message(RequestCode.TRAIN_MODEL_GUI_GATHER_DATA, self.current_train_id)
         if responsecode == ResponseCode.SUCCESS:
             # Parse the data and update the gui.
+            dataParsed = dataReceived.split()
+            self.disp_cabin_lights.setText(dataParsed[11])
     
     def save_parameters(self):
         """Sends all the entered parameters to the cloud"""
@@ -202,6 +216,10 @@ class Ui(QtWidgets.QMainWindow):
         else:
             os.system('start /B python src/UI/login_gui.py')
         app.exit()
+
+    def stop_all_timers(self):
+        self.train_menu_timer.stop()
+        self.train_info_timer.stop()
 
 app = QtWidgets.QApplication(sys.argv)
 window = Ui()
