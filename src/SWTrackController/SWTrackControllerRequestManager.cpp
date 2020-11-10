@@ -13,9 +13,6 @@
 #include "SWTrackControllerMain.hpp"  // For SWTrackController::serviceQueue
 #include "HWTrackControllerRequestManager.hpp" // For HWTrackController::RequestManager
 
-// HW Track Controller will be the first controller on the green line
-static const uint32_t HW_TRACK_CONTROLLER_NUMBER = 15;
-
 // Difference between swtrack and hwtrack request codes
 static const uint32_t REQUEST_CODE_DIFFERENCE = 22;
 
@@ -31,12 +28,25 @@ void SWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequ
     {
         case Common::RequestCode::SWTRACK_GUI_GATHER_DATA:
         {
+            trackControllerNumber = rRequest.ParseData<uint32_t>(0);
             rResponse.SetResponseCode(Common::ResponseCode::ERROR);
             break;
         }
         case Common::RequestCode::SWTRACK_GUI_SET_SWITCH_POSITION:
         {
-            rResponse.SetResponseCode(Common::ResponseCode::ERROR);
+            trackControllerNumber = rRequest.ParseData<uint32_t>(0);
+            if (trackControllerNumber == HW_TRACK_CONTROLLER_NUMBER)
+            {
+                Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "switch " + rRequest.ParseData<std::string>(1));
+                HWTrackController::HWTrackControllerRequestManager reqManager;
+                reqManager.HandleRequest(newReq, rResponse);
+            }
+            else
+            {
+                Common::Request newReq(Common::RequestCode::SET_TAG_VALUE, "switch " + rRequest.GetData());
+                SWTrackController::serviceQueue.Push(rRequest);
+                rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+            }
             break;
         }
         case Common::RequestCode::START_DOWNLOAD:
@@ -60,6 +70,7 @@ void SWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequ
         case Common::RequestCode::CREATE_TAG:
         case Common::RequestCode::CREATE_TASK:
         case Common::RequestCode::CREATE_ROUTINE:
+        case Common::RequestCode::CREATE_RUNG:
         case Common::RequestCode::CREATE_INSTRUCTION:
         {
             if (trackControllerNumber == HW_TRACK_CONTROLLER_NUMBER)

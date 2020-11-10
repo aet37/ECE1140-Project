@@ -75,6 +75,11 @@ public:
     void SetData(const std::string data) { m_data = data; }
 
     /**
+     * @brief Gets the data member
+    */
+    const std::string& GetData() const { return m_data; }
+
+    /**
      * @brief Writes data to the data string member
     */
     void AppendData(const std::string& rData)

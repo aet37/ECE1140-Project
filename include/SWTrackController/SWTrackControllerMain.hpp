@@ -16,6 +16,9 @@ namespace SWTrackController
 
 extern Common::ServiceQueue<Common::Request> serviceQueue;
 
+// HW Track Controller will be the first controller on the green line
+static const uint32_t HW_TRACK_CONTROLLER_NUMBER = 15;
+
 void moduleMain();
 
 } // namespace SWTrackController
