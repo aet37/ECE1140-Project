@@ -180,5 +180,3 @@ void moduleMain()
         }
     }
 }
-
-} // namespace TrainModel

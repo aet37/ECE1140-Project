@@ -42,12 +42,18 @@ void moduleMain()
             }
             case Common::RequestCode::SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS:
             {
+                // Read train ID
                 uint32_t trainID = req.ParseData<uint32_t>(0);
-                // Controller tempController = TrainControllers.getControllerInstance(TrainID);
-                // uint32_t lightStatus = tempController.toggleLights();
-                // std::string lightStatusString = std::to_string(lightStatus);
-                // Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_SET_THE_DAMN_LIGHTS, lightStatusString)
-                // TrainModel::serviceQueue.Push(newRequest)
+                // toggle train lights
+                Controller tempController;
+                uint32_t lightStatus = tempController.toggleLights();
+                std::string trainIDString = std::to_string(trainID);
+                std::string lightStatusString = std::to_string(lightStatus);
+                // Create new request and send to Train Model
+                Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_LIGHTS);
+                newRequest.AppendData(trainIDString);
+                newRequest.AppendData(lightStatusString);
+                TrainModel::serviceQueue.Push(newRequest);
                 LOG_SW_TRAIN_CONTROLLER("SWTrainController lights: %d", trainID);
                 break;
             }
