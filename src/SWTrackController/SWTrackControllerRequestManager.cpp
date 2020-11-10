@@ -36,7 +36,19 @@ void SWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequ
         }
         case Common::RequestCode::SWTRACK_GUI_SET_SWITCH_POSITION:
         {
-            rResponse.SetResponseCode(Common::ResponseCode::ERROR);
+            trackControllerNumber = rRequest.ParseData<uint32_t>(0);
+            if (trackControllerNumber == HW_TRACK_CONTROLLER_NUMBER)
+            {
+                Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "switch " + rRequest.ParseData<std::string>(1));
+                HWTrackController::HWTrackControllerRequestManager reqManager;
+                reqManager.HandleRequest(newReq, rResponse);
+            }
+            else
+            {
+                Common::Request newReq(Common::RequestCode::SET_TAG_VALUE, "switch " + rRequest.GetData());
+                SWTrackController::serviceQueue.Push(rRequest);
+                rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+            }
             break;
         }
         case Common::RequestCode::START_DOWNLOAD:
