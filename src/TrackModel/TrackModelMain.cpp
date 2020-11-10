@@ -313,15 +313,9 @@ void moduleMain()
                 Track *theTrack = TrackInfo::GetInstance().getTrack(trackNumberInt);
 
                 // get number of block, convert to int
-                printf(test.c_str());
-                printf("\n");
                 test.erase(0, pos + 12);
-                printf(test.c_str());
                 pos = test.find(',');
                 std::string blockNumberString = test.substr(0, pos);
-                printf("test1234\n");
-                printf(blockNumberString.c_str());
-                printf("got block number\n");
                 int blockNumber = stoi(blockNumberString);
                 test.erase(0, pos + 12);
 
@@ -339,9 +333,7 @@ void moduleMain()
 
                 // get get speed limit, convert to int
                 pos = test.find(',');
-                printf("test12345\n");
                 std::string blockSpeedLimitString = test.substr(0, pos);
-                printf(blockSpeedLimitString.c_str());
                 int blockSpeedLimit = stoi(blockSpeedLimitString);
                 test.erase(0, pos + 15);
 
@@ -355,6 +347,13 @@ void moduleMain()
                 pos = test.find(',');
                 std::string blockCumulativeElevationString = test.substr(0, pos);
                 double blockCumulativeElevation = stod(blockCumulativeElevationString);
+                test.erase(0, pos + 16);
+                printf("hello\n");
+                printf(test.c_str());
+
+                // get track block travel direction
+                
+
 
                 // get StationInfo
                 if (test.find("Station\": \"") != std::string::npos){

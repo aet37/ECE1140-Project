@@ -147,6 +147,7 @@ class Ui(QtWidgets.QMainWindow):
                     #blockSwitch = destinationSwitchList
                     blockElevation = records.column['Elevation (m)'][x]
                     blockCumulativeElevation = round(records.column['Cumulative Elevation (m)'][x], 2)
+                    blockDirection = records.column['Direction'][x]
 
                     blockInfo['Track'] = tracks
                     blockInfo['Number'] = blockNumber
@@ -155,7 +156,12 @@ class Ui(QtWidgets.QMainWindow):
                     blockInfo['Speed Limit'] = blockSpeedLimit
                     blockInfo['Elevation'] = blockElevation
                     blockInfo['Cumulative Elevation'] = blockCumulativeElevation
-                    #blockInfo['']
+                    blockInfo['Direction'] = blockDirection
+
+                    if (records.column['Underground'][x] != ""):
+                        blockInfo['Underground'] = "true"
+                    else:
+                        blockInfo['UnderGround']= "false"
 
                     if (records.column['Stations'][x] != ""):
                         blockInfo['Station'] = records.column['Stations'][x]
@@ -164,12 +170,9 @@ class Ui(QtWidgets.QMainWindow):
                         switchString = records.column['Switches'][x]
                         #switchString = switchString.split(',')
                         blockInfo['Switches'] = switchString
-                    if (records.column['Underground'][x] != ""):
-                        blockInfo['Underground'] = "true"
                     if (records.column['Railway Crossing'][x] != ""):
                         blockInfo['Railway Crossing'] = "true"
 
-                    print(blockInfo)
                     jsonString = json.dumps(blockInfo)
                     send_message(RequestCode.TRACK_MODEL_GUI_BLOCK, str(jsonString))
 
