@@ -50,6 +50,36 @@ public:
 
         }
 
+        std::string getName()
+        {
+            return m_stationName;
+        }
+        std::string getExitSide()
+        {
+            return m_stationExitSide;
+        }
+        void setTicketsSold(int ticketsSold)
+        {
+            m_ticketsSold = ticketsSold;
+        }
+        int getTicketsSold()
+        {
+            return m_ticketsSold;
+        }
+        void setPassengers(int boarded, int exited)
+        {
+            m_passengersBoarded = m_passengersBoarded + boarded;
+            m_passengersExited = m_passengersExited + exited;
+        }
+        int getPassengersBoarded()
+        {
+            return m_passengersBoarded;
+        }
+        int getPassengersExited()
+        {
+            return m_passengersExited;
+        }
+
 protected:
 private:
     /// name of station

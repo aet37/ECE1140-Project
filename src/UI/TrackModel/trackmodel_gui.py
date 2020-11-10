@@ -126,13 +126,13 @@ class Ui(QtWidgets.QMainWindow):
 
                 jsonString = json.dumps(trackInfo)
                 send_message(RequestCode.TRACK_MODEL_GUI_TRACK_LAYOUT, str(jsonString))
-                print(str(jsonString))
+                #print(str(jsonString))
 
 
                 theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
                 combo1 = QComboBox()
                 line = records.column['Line'][1]
-                combo1.addItem("Select "+line+" Line block")
+                #combo1.addItem("Select "+line+" Line block")
                 theTabWidget.addTab(combo1, line+" Line")
 
                 for x in range(records.number_of_rows()):
@@ -177,6 +177,12 @@ class Ui(QtWidgets.QMainWindow):
 
                     jsonString = json.dumps(blockInfo)
                     send_message(RequestCode.TRACK_MODEL_GUI_BLOCK, str(jsonString))
+
+                currentComboBlock = str(combo1.currentText())
+                currentComboBlock = currentComboBlock[6:]
+                print("\n\n\n")
+                print(currentComboBlock)
+                print("\n\n\n")
 
             else:
                 print('error')

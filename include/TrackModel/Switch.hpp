@@ -24,8 +24,6 @@ public:
 
     }
     Switch(std::string switchInfo)
-        //m_switchBlocks(switchBlocks),
-        //m_currentBlock(switchBlocks[0])
     {
         int pos = switchInfo.find(" ");
         int switch1 = std::stoi(switchInfo.substr(0, pos));
@@ -43,7 +41,14 @@ public:
         m_switchBlocks.push_back(switch2);
 
         m_currentBlock = m_switchBlocks[0];
-
+    }
+    void setCurrentSwitch(int switchValue)
+    {
+        m_currentBlock = m_switchBlocks[switchValue];
+    }
+    int getCurrentSwitch()
+    {
+        return m_currentBlock;
     }
 
 protected:

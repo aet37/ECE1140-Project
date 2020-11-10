@@ -67,6 +67,79 @@ public:
         */
 
     }
+    double getBlockLength()
+    {
+        return m_blockLength;
+    }
+    void setBlockLength(double blockLength)
+    {
+        m_blockLength = blockLength;
+    }
+    double getBlockGrade()
+    {
+        return m_blockGrade;
+    }
+    int getBlockSpeedLimit()
+    {
+        return m_blockSpeedLimit;
+    }
+    double getBlockElevation()
+    {
+        return m_blockElevation;
+    }
+    double getBlockCumulativeElevation()
+    {
+        return m_blockCumulativeElevation;
+    }
+    std::string getBlockDirection()
+    {
+        return m_blockDirection;
+    }
+    std::string getBlockUnderground()
+    {
+        return m_blockUnderground;
+    }
+    std::string getStationName()
+    {
+        if (m_stationBool == true)
+        {
+            return m_theStation.getName();
+        }
+        else return "";
+    }
+    std::string getStationExitSide()
+    {
+        if (m_stationBool == true)
+        {
+            return m_theStation.getExitSide();
+        }
+        else return "";
+    }
+    void setSwitch(int switchValue)
+    {
+        if (m_switchBool == true)
+        {
+            m_theSwitch.setCurrentSwitch(switchValue);
+        }
+        //else error
+    }
+    int getSwitch()
+    {
+        if (m_switchBool == true)
+        {
+            return m_theSwitch.getCurrentSwitch();
+        }
+        else return -1;
+    }
+    bool getRailwayCrossing()
+    {
+        if (m_blockRailwayCrossing != "")
+        {
+            return true;
+        }
+        return false;
+    }
+
 
 protected:
 private:
