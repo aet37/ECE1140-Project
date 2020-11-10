@@ -26,7 +26,7 @@ class Block
 {
 public:
     Block(int blockNumber, double blockLength, double blockGrade, int blockSpeedLimit, double blockElevation, 
-    double blockCumulativeElevation, std::string blockDirection, std::string blockUnderground, 
+    double blockCumulativeElevation, std::string blockDirection, std::string blockUnderground, std::string blockSection,
     std::string stationInfo, std::string switchInfo, std::string blockRailwayCrossing)
     {
         m_blockNumber = blockNumber;
@@ -37,6 +37,7 @@ public:
         m_blockCumulativeElevation = blockCumulativeElevation;
         m_blockDirection = blockDirection;
         m_blockUnderground = blockUnderground;
+        m_blockSection = blockSection;
         m_blockRailwayCrossing = blockRailwayCrossing;
 
         if (stationInfo != "")
@@ -59,12 +60,12 @@ public:
             m_switchBool = false;
         }
         
-        /*printf("\n\n\n");
+        printf("\n\n\n");
         printf("blocknhmber = %d\nblocklength = %f\nblockgrade = %f\n blockspeedlimit = %d\n ", blockNumber, blockLength, blockGrade, blockSpeedLimit);
-        printf("elevation = %f\n cumuEle = %f\n direction = %s\n", blockElevation, blockCumulativeElevation, blockDirection.c_str());
+        printf("elevation = %f\n cumuEle = %f\n direction = %s\n section = %s\n", blockElevation, blockCumulativeElevation, blockDirection.c_str(), blockSection.c_str());
         printf("under = %s\n railway = %s\n station = %s\n switchInfo = %s\n", blockUnderground.c_str(), blockRailwayCrossing.c_str(), stationInfo.c_str(), switchInfo.c_str());
         printf("\n\n\n");
-        */
+        
 
     }
     double getBlockLength()
@@ -182,6 +183,9 @@ private:
 
     /// railway crossing on block
     std::string m_blockRailwayCrossing;
+
+    ///section of block
+    std::string m_blockSection;
 
 
 

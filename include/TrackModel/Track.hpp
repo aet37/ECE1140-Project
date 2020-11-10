@@ -37,18 +37,18 @@ public:
 
     void AddBlock(int blockNumber, double blockLength, double blockGrade, 
     int blockSpeedLimit, double blockElevation, double blockCumulativeElevation, 
-    std::string blockDirection, std::string blockUnderground, std::string stationInfo, 
+    std::string blockDirection, std::string blockUnderground, std::string blockSection, std::string stationInfo, 
     std::string switchInfo, std::string blockRailway)
     {
         m_blockList.push_back(Block(blockNumber, blockLength, blockGrade, blockSpeedLimit,
-        blockElevation, blockCumulativeElevation, blockDirection, blockUnderground,
+        blockElevation, blockCumulativeElevation, blockDirection, blockUnderground, blockSection,
         stationInfo, switchInfo, blockRailway));
     }
     std::string getLineName()
     {
         return m_line;
     }
-    
+
 
 protected:
 private:

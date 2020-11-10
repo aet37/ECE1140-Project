@@ -277,6 +277,21 @@ void moduleMain()
                 LOG_TRACK_MODEL("Track model dispatch train %s", theIntString.c_str());
                 break;
             }
+            case Common::RequestCode::TRACK_MODEL_GUI_GATHER_DATA:
+            {
+                std::string test = req.GetData();
+                int pos = test.find(' ');
+                int trackNumber = std::stoi(test.substr(0, pos));
+                test.erase(0, pos + 1);
+                int blockNumber = std::stoi(test);
+
+                req.SetData("");
+                // line name, block number, 
+                //req.AppendData
+
+
+
+            }
             case Common::RequestCode::TRACK_MODEL_GUI_TRACK_LAYOUT:
             {
                 // get line name from string
@@ -359,6 +374,11 @@ void moduleMain()
                 //get underground boolean
                 pos = test.find('\"');
                 std::string blockUnderground = test.substr(0, pos);
+                test.erase(0, pos + 15);
+
+                //get block section
+                pos = test.find('\"');
+                std::string blockSection = test.substr(0, pos);
 
                 // get StationInfo
                 std::string stationInfo = "";
@@ -417,7 +437,7 @@ void moduleMain()
                 // add block to track we got from block info before
                 theTrack->AddBlock(blockNumber, blockLength, blockGrade, 
                 blockSpeedLimit, blockElevation, blockCumulativeElevation, 
-                blockDirection, blockUnderground, stationInfo, switchInfo, railwayCrossing);
+                blockDirection, blockUnderground, blockSection, stationInfo, switchInfo, railwayCrossing);
 
                 break;
             }

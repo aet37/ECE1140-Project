@@ -10,12 +10,11 @@ import pyexcel
 import pyexcel_io
 import json
 tracks = 0
-combo1 = QComboBox()
-combo2 = QComboBox()
-combo3 = QComboBox()
+
 
 
 class Ui(QtWidgets.QMainWindow):
+    
     def __init__(self):
         super(Ui, self).__init__()
         # self.track1_info_timer = QTimer()
@@ -24,6 +23,12 @@ class Ui(QtWidgets.QMainWindow):
         uic.loadUi('src/UI/TrackModel/Map_Page.ui', self)
 
         self.show()
+        global combo1
+        combo1 = QComboBox()
+        global combo2 
+        combo2 = QComboBox()
+        global combo3 
+        combo3 = QComboBox()
 
         self.initUI()
         #self.stacked_widget.currentChanged.connect(self.set_button_state)
@@ -153,6 +158,7 @@ class Ui(QtWidgets.QMainWindow):
                     blockElevation = records.column['Elevation (m)'][x]
                     blockCumulativeElevation = round(records.column['Cumulative Elevation (m)'][x], 2)
                     blockDirection = records.column['Direction'][x]
+                    blockSection = records.column['Section'][x]
 
                     blockInfo['Track'] = tracks
                     blockInfo['Number'] = blockNumber
@@ -163,11 +169,14 @@ class Ui(QtWidgets.QMainWindow):
                     blockInfo['Cumulative Elevation'] = blockCumulativeElevation
                     blockInfo['Direction'] = blockDirection
 
+
                     if (records.column['Underground'][x] != ""):
                         blockInfo['Underground'] = "true"
                     else:
                         blockInfo['Underground']= "false"
 
+                    blockInfo['Section'] = blockSection
+                    
                     if (records.column['Stations'][x] != ""):
                         blockInfo['Station'] = records.column['Stations'][x]
                         blockInfo['Exit Side'] = records.column['Exit Side'][x]
@@ -181,9 +190,9 @@ class Ui(QtWidgets.QMainWindow):
                         blockInfo['RailwayCrossing'] = "false"
 
                     jsonString = json.dumps(blockInfo)
+                    print(jsonString)
                     send_message(RequestCode.TRACK_MODEL_GUI_BLOCK, str(jsonString))
 
-                print("hello")
                 self.send_gather_data_message()
 
             else:
@@ -199,16 +208,17 @@ class Ui(QtWidgets.QMainWindow):
         else:
             currentComboBlock = str(combo3.currentText())
 
+        lineNumber = (theTabWidget.currentIndex() + 1)
         currentComboBlock = currentComboBlock[6:]
-        
-        
-        print("\n\n\n\n")
-        print(currentComboBlock)
 
-        #data = str(self.current_track_controller) + str(self.current_block)
-        #send_message_async(RequestCode.TRACKMODEL_GUI_GATHER_DATA, data=data, callback=self.update_gui)
+        data = str(lineNumber) + " " + str(currentComboBlock)
+        send_message_async(RequestCode.TRACK_MODEL_GUI_GATHER_DATA, data=data, callback=self.update_gui)
 
-    #def update_gui(self, response_code, response_data):
+    def update_gui(self, response_code, response_data):
+        if response_code == ResponseCode.ERROR:
+            print("There was a problem communicating with the server")
+            return
+        
 
     def trackInfo1(self):
         self.stopAllTimers()
