@@ -131,6 +131,7 @@ class Ui(QtWidgets.QMainWindow):
 
                 theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
                 combo1 = QComboBox()
+                combo1.setAccessibleName("block_combo_box")
                 line = records.column['Line'][1]
                 #combo1.addItem("Select "+line+" Line block")
                 theTabWidget.addTab(combo1, line+" Line")
@@ -178,95 +179,25 @@ class Ui(QtWidgets.QMainWindow):
                     jsonString = json.dumps(blockInfo)
                     send_message(RequestCode.TRACK_MODEL_GUI_BLOCK, str(jsonString))
 
-                currentComboBlock = str(combo1.currentText())
-                currentComboBlock = currentComboBlock[6:]
-                print("\n\n\n")
-                print(currentComboBlock)
-                print("\n\n\n")
+                self.send_gather_data_message
 
             else:
                 print('error')
 
-            # for x in range(records.number_of_rows() + 1):
+    def send_gather_data_message(self):
+        """Method called periodically to send the gather data message to the server"""
+            combo1 = self.findChild(QtWidgets.QComboBox, 'block_combo_box')            
+            currentComboBlock = str(combo1.currentText())
+            currentComboBlock = currentComboBlock[6:]
+            print("\n\n\n\n")
+            print(currentComboBlock)
 
-            #     destinationSwitchList = ''
-            #     blockStation = ''
-            #     # print('%s Line | Section %c | Block Number %d | Block Length (m) %d | Block Grade (%%) %d | Speed Limit (Km/Hr) %d | Stations %s | Switches %s | Elevation (m) %d | Cumulative Elevation (m) %d' % (records.column['Line'][x], records.column['Section'][x], records.column['Block Number'][x], records.column['Block Length (m)'][x], records.column['Block Grade (%)'][x], records.column['Speed Limit (Km/Hr)'][x], records.column['Stations'][x], records.column['Switches'][x], records.column['Elevation (m)'][x], records.column['Cumulative Elevation (m)'][x]))
-            #     # line = records.column['Line'][x]
-            #     blockNumber = records.column['Block Number'][x]
-                
-            #     # Set line name
-            #     line = records.column['Line'][x]
-            #     trackInfo['Track'] = line
+            data = str(self.current_track_controller) + str(self.current_block)
+            send_message_async(RequestCode.TRACKMODEL_GUI_GATHER_DATA,
+                               data=data,
+                               callback=self.update_gui)
 
-            #     # Get station lists
-            #     if (records.column['Stations'][x] != ""):
-            #         #stations = stations + 1
-            #         stationSplit = records.column['Stations'][x].split(' ', 1) # now have station name
-            #         stationList.append({'blockNumber':blockNumber, 'station':stationSplit[1]})
-            #         blockStation = stationSplit[1]
-            #         trackInfo['Stations'] = stationList
-                    
-            #         # Get switch lists
-            #     if (records.column['Switches'][x] != ""):
-            #         cutString = records.column['Switches'][x].replace('SWITCH (', '').replace(' ', '').replace(')', '')
-            #         testList = cutString.split('-')
-            #         if (int(testList[0]) == blockNumber | int(testList[0:1] == blockNumber) | int(testList[0:2] == blockNumber)):
-            #             splitString = cutString.split(';')
-            #             destinationSwitchList = []
-            #             for y in range(len(splitString)):
-            #                 destinationSwitchList.append(int(splitString[y].replace(str(blockNumber)+'-', '')))
-            #             switchList.append({'switchBase':blockNumber, 'switchDestinations':destinationSwitchList})
-            #             trackInfo['Switches'] = switchList
-
-            #     if (x == 1):
-            #         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
-            #         combo1 = QComboBox()
-            #         combo1.addItem("Select "+line+" Line block")
-            #         theTabWidget.addTab(combo1, line+" Line")            
-
-            #     combo1.addItem("Block "+str(blockNumber))
-            # trackInfo['Block List'] = blockList
-
-
-            #print(trackInfo)
-            # jsonString = json.dumps(trackInfo)
-            # stringLength = len(jsonString)
-            # i = 0
-            # stringToPrint = ''
-            # print('stringLength = '+str(stringLength))
-            # send_message(RequestCode.TRACK_MODEL_GUI_TRACK_LAYOUT_START, str(jsonString[0:1000]))
-            # # while (stringLength > 0):
-            #     if (i == 0 & (stringLength > 1000)):
-            #         print('1')
-            #         i = 1
-            #         stringToPrint = '----'+jsonString[0:1000]
-            #         stringLength = stringLength - 1000
-            #         jsonString = jsonString[1000:]
-            #         send_message(RequestCode.SET_SPEED_LIMIT, stringToPrint)
-            #         print(stringToPrint)
-            #     elif (i == 0):
-            #         print('2')
-            #         i = 1
-            #         stringToPrint = '----'+jsonString+'----'
-            #         send_message(RequestCode.SET_SPEED_LIMIT, stringToPrint)
-            #         print(stringToPrint)
-            #     elif (stringLength < 1000):
-            #         print('3')
-            #         stringToPrint = jsonString+'----'
-            #         stringLength = 0
-            #         send_message(RequestCode.SET_SPEED_LIMIT, stringToPrint)
-            #         print(stringToPrint)
-            #     else:
-            #         print('4')
-            #         stringToPrint = jsonString[0:1000]
-            #         stringLength = stringLength - 1000
-            #         jsonString = jsonString[1000:]
-            #         send_message(RequestCode.SET_SPEED_LIMIT, stringToPrint)
-            #         print(stringToPrint)
-                    
-
-
+    def update_gui(self, response_code, response_data):
 
     def trackInfo1(self):
         self.stopAllTimers()
