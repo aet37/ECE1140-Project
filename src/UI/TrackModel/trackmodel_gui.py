@@ -219,6 +219,12 @@ class Ui(QtWidgets.QMainWindow):
         if response_code == ResponseCode.ERROR:
             print("There was a problem communicating with the server")
             return
+
+        # line name, block number, section, elevation, cumulative elevation
+        # length, grade, speed limit, underground, stationName
+        # ticketsSold, passengersBoarded, passengersExited, exit side, occupied by
+        # switchList, currentSwitch, trackHeater, failure mode
+        
         
 
     def trackInfo1(self):

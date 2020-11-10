@@ -79,27 +79,22 @@ void TrackModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
             }
             else
             {
-                rResponse.AppendData(stationName);
+				stationName.replace(stationName.begin(), stationName.end(), ' ', '_');
+                printf("\n\nstationName = %s", stationName.c_str());
+				rResponse.AppendData(stationName);
                 rResponse.AppendData(std::to_string(theBlock.getStationTicketsSold()));
                 rResponse.AppendData(std::to_string(theBlock.getStationPassengersBoarded()));
                 rResponse.AppendData(std::to_string(theBlock.getStationPassengersExited()));
                 rResponse.AppendData(theBlock.getStationExitSide());
             }
                 
-            if (theBlock.getOccupiedBy() == -1)
-            {
-                rResponse.AppendData("None");
-            }
-            else
-            {
-                rResponse.AppendData(std::to_string(theBlock.getOccupiedBy()));
-            }
+            rResponse.AppendData(std::to_string(theBlock.getOccupiedBy()));
 
             //switch stuff
             if (theBlock.getSwitchList() == "")
             {
-                rResponse.AppendData("NA");
-                rResponse.AppendData("NA");
+                rResponse.AppendData("-1 -1");
+                rResponse.AppendData("-1");
             }
             else
             {
