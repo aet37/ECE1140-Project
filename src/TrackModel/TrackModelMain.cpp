@@ -376,6 +376,8 @@ void moduleMain()
                     std::string stationInfo2 = test.substr(0, pos);
                     stationInfo.append(stationInfo2);
                     test.erase(0, pos + 1);
+                    printf("THI ONE COUNTS\n");
+                    printf(stationInfo.c_str());
                     // ex: NAME RIGHT
                 }
                 else
@@ -420,8 +422,6 @@ void moduleMain()
                 blockSpeedLimit, blockElevation, blockCumulativeElevation, 
                 blockDirection, blockUnderground, stationInfo, 
                 switchInfo, railwayCrossing);
-
-                printf("hiiiiiiiiiiiiiiiiiii");
 
                 break;
             }
