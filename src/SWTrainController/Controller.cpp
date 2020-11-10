@@ -233,14 +233,11 @@ void Controller::resetEmergencyBrake()
  */
 bool Controller::toggleMode(std::string override)
 {
-    // Check length of attempted password
-    if (override.length() != password.length())
-        return 0;
-
+    // Check if override code is correct
     if (override == password)
     {
         mode = !mode;
-        return 1;
+        return mode;
     }
     else
         return 0;

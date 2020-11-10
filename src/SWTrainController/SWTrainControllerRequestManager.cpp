@@ -54,6 +54,20 @@ void SWTrainControllerRequestManager::HandleRequest(const Common::Request& rRequ
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
+        case Common::RequestCode::SWTRAIN_GUI_SET_SEAN_PAUL:
+        {
+            // Add the request to the queue
+            SWTrainController::serviceQueue.Push(rRequest);
+            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+            break;
+        }
+        case Common::RequestCode::SWTRAIN_GUI_SWITCH_MODE:
+        {
+            // Add the request to the queue
+            SWTrainController::serviceQueue.Push(rRequest);
+            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+            break;
+        }
         default:
             LOG_SW_TRAIN_CONTROLLER("Invalid command %d received", static_cast<uint16_t>(rRequest.GetRequestCode()));
             rResponse.SetResponseCode(Common::ResponseCode::ERROR);

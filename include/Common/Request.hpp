@@ -149,7 +149,8 @@ enum class RequestCode : uint8_t
     SWTRAIN_GUI_DISPLAY_ADS = 207, // Used by the gui to display a train's advertisements
     SWTRAIN_GUI_RESOLVE_FAILURE = 208, // Used by the gui to resolve a train failure
     SWTRAIN_GUI_SET_KP_KI = 209, // Used by the gui to set a train's kp/ki
-    SWTrain_Time_Trigger = 210, // Used to trigger PID loop and calculate power
+    SWTRAIN_GUI_SWITCH_MODE = 210, // Used by gui to switch between automatic and manual mode
+    SWTRAIN_TIME_TRIGGER = 211, // Used to trigger PID loop and calculate power
 
     HWTRAIN_PULL_EBRAKE = 224, // Used by the SW Train Ctrl to pull the train's ebrake
     HWTRAIN_SET_SETPOINT_SPEED = 225, // Used by the SW Train Ctrl to set a train's setpoint speed
