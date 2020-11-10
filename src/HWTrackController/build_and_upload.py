@@ -27,6 +27,12 @@ def run_initialization():
     if install_proc.returncode != 0:
         raise BaseException("Install failed")
 
+    install_lib_proc = subprocess.Popen([ARDUINO_CLI, 'lib', 'install', 'LiquidCrystal I2C'])
+    install_lib_proc.wait()
+
+    if install_lib_proc.returncode != 0:
+        raise BaseException("Install library failed")
+
     logger.info("Finished initialization successfully")
 
 def build_sketch(path_to_sketch, debug):

@@ -63,6 +63,9 @@ class RequestCode(Enum):
     SWTRACK_SET_TRACK_OCCUPANCY = 71 # Used by the track model to inform the controller that a train is on a block
     SWTRACK_SET_CROSSING = 72 # Used by the track model to have the controller lower/raise the crossing
     SWTRACK_SET_TRACK_HEATER = 73 # Used by the Track model to turn on/off the track heater
+
+    # The following request codes are used by the sw track controller gui to download a plc program
+    # An offset is used to convert them to hw track controller requests. PLEASE DON'T CHANGE THE NUMBERS!!!
     START_DOWNLOAD = 74 # Used by the gui to start a download
     END_DOWNLOAD = 75 # Used by the gui to end a download
     CREATE_TAG = 76 # Used by the gui to create a tag
@@ -72,6 +75,9 @@ class RequestCode(Enum):
     CREATE_INSTRUCTION = 80 # Used by the gui to create an instruction
     SET_TAG_VALUE = 81 # Used by the gui to set a tag's value
     GET_TAG_VALUE = 82 # Used by the gui to get a tag's value
+
+    SWTRACK_GUI_GATHER_DATA = 83 # Used by the gui to periodically gather data from the server
+    SWTRACK_GUI_SET_SWITCH_POSITION = 84 # Used by the gui to set a switch's position // (trackController, newPosition)
 
     HWTRACK_START_DOWNLOAD = 96 # Used by the SW Track Ctrl to signify download is starting # (string programName)
     HWTRACK_END_DOWNLOAD = 97 # Used by the SW Track Ctrl to signify download has completed # (void)
@@ -131,6 +137,8 @@ class RequestCode(Enum):
     SWTRAIN_GUI_DISPLAY_ADS = 207 # Used by the gui to display a train's advertisements
     SWTRAIN_GUI_RESOLVE_FAILURE = 208 # Used by the gui to resolve a train failure
     SWTRAIN_GUI_SET_KP_KI = 209 # Used by the gui to set a train's kp/ki
+    SWTRAIN_GUI_SWITCH_MODE = 210 # Used by gui to switch between automatic and manual mode
+    SWTRAIN_TIME_TRIGGER = 211 # Used to trigger PID loop and calculate power
 
     HWTRAIN_PULL_EBRAKE = 224 # Used by the SW Train Ctrl to pull the train's ebrake
     HWTRAIN_SET_SETPOINT_SPEED = 225 # Used by the SW Train Ctrl to set a train's setpoint speed

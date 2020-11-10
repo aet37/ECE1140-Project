@@ -36,7 +36,7 @@ Controller::Controller()
  * @param curr_sp = current speed
  * @param auth = authority
  */
-Controller::Controller(int com_sp, int curr_sp, int auth)
+Controller::Controller(int com_sp, int curr_sp, bool auth)
 {
     command_speed = com_sp;
     current_speed = curr_sp;
@@ -110,7 +110,7 @@ void Controller::setSetpointSpeed(int setp_sp)
  * @brief Setter function for authority
  * @param auth == auth
  */
-void Controller::setAuthority(int auth)
+void Controller::setAuthority(bool auth)
 {
     authority = auth;
 }
@@ -146,7 +146,7 @@ int Controller::getSetpointSpeed()
  * @brief Getter function for authority
  * @return authority
  */
-int Controller::getAuthority()
+bool Controller::getAuthority()
 {
     return authority;
 }
@@ -163,19 +163,16 @@ int Controller::getPowerCommand()
 // VITAL OPERATIONS
 ///////////////////////////////////////////////////////////////
 /**
- * @brief default calculate power function for testing purposes
+ * @brief calculates power command that will be sent to train model
  */
 void Controller::calculatePower()
 {
-    power_command = (kp + ki) * command_speed;
-}
-/**
- * @brief calculates power command that will be sent to train model
- */
-void Controller::calculatePower(int T)
-{
-    // Find Verror
-    int Verror = command_speed - current_speed;
+    // Find Verror depending on mode
+    int Verror = 0;
+    if (mode == 0) // Automatic Mode
+        Verror = command_speed - current_speed;
+    else // Manual Mode
+        Verror = setpoint_speed - current_speed;
 
     // Set ek as the kth sample of velocity error
     ek = Verror;
@@ -207,7 +204,10 @@ void Controller::calculatePower(int T)
  */
 void Controller::regulateSpeed()
 {
-    //
+    // Check mode of operation (Automatic or Manual)
+        // Automatic Mode
+            // C
+        // Manual Mode
 }
 
 /**
@@ -229,10 +229,18 @@ void Controller::resetEmergencyBrake()
 /**
  * @brief allows operator to switch between manual and automatic mode
  * @param override = string code entered by operator to initiate manual override
+ * @return returns boolean value to signify success of operation
  */
-void Controller::toggleMode(std::string override)
+bool Controller::toggleMode(std::string override)
 {
-
+    // Check if override code is correct
+    if (override == password)
+    {
+        mode = !mode;
+        return mode;
+    }
+    else
+        return 0;
 }
 
 ///////////////////////////////////////////////////////////////

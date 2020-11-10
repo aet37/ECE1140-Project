@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>641</width>
-    <height>341</height>
+    <width>639</width>
+    <height>334</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -213,7 +213,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QFrame" name="frame_5">
+    <widget class="QFrame" name="switch_position_frame">
      <property name="geometry">
       <rect>
        <x>230</x>
@@ -273,6 +273,22 @@
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="switch_position_button">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>181</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="flat">
+       <bool>true</bool>
       </property>
      </widget>
     </widget>
