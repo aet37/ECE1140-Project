@@ -60,6 +60,7 @@ void SWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequ
         case Common::RequestCode::CREATE_TAG:
         case Common::RequestCode::CREATE_TASK:
         case Common::RequestCode::CREATE_ROUTINE:
+        case Common::RequestCode::CREATE_RUNG:
         case Common::RequestCode::CREATE_INSTRUCTION:
         {
             if (trackControllerNumber == HW_TRACK_CONTROLLER_NUMBER)
