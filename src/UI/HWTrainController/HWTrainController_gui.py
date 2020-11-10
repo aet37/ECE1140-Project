@@ -178,14 +178,24 @@ class Ui(QtWidgets.QMainWindow):
             self.label11.setText("On")
 
     def LCDTemp(self):
-        
+        self.LCD1 = self.findChild(QtWidgets.QLCDNumber, 'TempLCD')
+
+
     def LCDSpeed(self):
+        self.LCD2 = self.findChild(QtWidgets.QLCDNumber, 'SpeedLCD')
+
 
     def LCDPower(self):
+        self.LCD3 = self.findChild(QtWidgets.QLCDNumber, 'PowerLCD')
+
 
     def LCDKp(self):
+        self.LCD4 = self.findChild(QtWidgets.QLCDNumber, 'KpLCD')
+
 
     def LCDKi(self):
+        self.LCD5 = self.findChild(QtWidgets.QLCDNumber, 'KiLCD')
+        
 
     def logout(self):
         # This is executed when the button is pressed
