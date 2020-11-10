@@ -29,7 +29,7 @@ public:
      */
     explicit UserProgram(const char* pProgramName) :
         m_tasks(),
-        m_pProgramName(pProgramName)
+        m_programName(pProgramName)
     {}
 
     /**
@@ -38,9 +38,34 @@ public:
     ~UserProgram() {}
 
     /**
+     * @brief Clears all tasks, routines, rungs, and instructions from the program
+    */
+    void ClearMemory();
+
+    /**
+     * @brief Sets the program name
+    */
+    void SetProgramName(const char* pProgramName) { m_programName = pProgramName; }
+
+    /**
+     * @brief Gets the program name
+    */
+    const String& GetProgramName() const { return m_programName; }
+
+    /**
      * @brief Adds the given task to the task list
     */
     void AddTask(Task* pTask);
+
+    /**
+     * @brief Gets the last task in the list
+    */
+    Task* GetLastCreatedTask() const;
+
+    /**
+     * @brief Gets the full list of tasks
+    */
+    const List<Task*>& GetTaskList() const { return m_tasks; }
 
 protected:
 private:
@@ -48,7 +73,7 @@ private:
     List<Task*> m_tasks;
 
     /// Name of the program
-    const char* m_pProgramName;
+    String m_programName;
 };
 
 #endif // USER_PROGRAM_HPP

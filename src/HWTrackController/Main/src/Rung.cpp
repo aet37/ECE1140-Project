@@ -11,25 +11,33 @@
 #include "../include/Rung.hpp" // Header for class
 #include "../include/ArduinoLogger.hpp" // For LOG
 #include "../include/Instruction.hpp" // For Instruction
+#include "../include/TagDatabase.hpp" // For TagDatabase
 
 void Rung::AddInstruction(Instruction* pInst)
 {
-    // TODO: Insert instruction in correct place
+    // TODO(ljk55): Insert instruction in correct place
     m_instructions.Append(pInst);
 }
 
 void Rung::Execute()
 {
-    LOGN("Executing rung");
-
     // Execute the instructions on this rung. If an instruction evaluates to false,
     // We should stop executing this rung
+    bool ret = true;
     for (int i = 0; i < m_instructions.GetLength(); i++)
     {
-        bool ret = m_instructions[i]->Evaluate();
-        if (ret == false)
+        if (ret == true)
         {
-            break;
+            LOG("Executing instruction "); LOG_DECN(i);
+            ret = m_instructions[i]->Evaluate();
+        }
+        else
+        {
+            // Check for OTE instructions and set their associated tags low
+            if (m_instructions[i]->GetInstructionType() == InstructionType::OTE)
+            {
+                (void)TagDatabase::SetTag(m_instructions[i]->GetArgument(), false);
+            }
         }
     }
 }

@@ -2,8 +2,8 @@ import os
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QTimer
 import sys
-sys.path.insert(1, 'src/UI')
-from server_functions import *
+sys.path.insert(1, 'src')
+from UI.server_functions import *
 
 class SWTrainUi(QtWidgets.QMainWindow):
     def __init__(self):
@@ -49,7 +49,10 @@ class SWTrainUi(QtWidgets.QMainWindow):
         # Define buttons on Train Actions Page
         self.return_button1 = self.findChild(QtWidgets.QPushButton, 'MainMenu2')
         self.doors_button = self.findChild(QtWidgets.QPushButton, 'Doors')
+        # When light button is clicked, go to lightToggle function
         self.lights_button = self.findChild(QtWidgets.QPushButton, 'Lights')
+        self.lights_button.clicked.connect(self.toggle_lights)
+
         self.announceStations_button = self.findChild(QtWidgets.QPushButton, 'Announcements')
         self.ads_button = self.findChild(QtWidgets.QPushButton, 'Advertisements')
         self.automaticMode_button = self.findChild(QtWidgets.QPushButton, 'AutomaticMode')
@@ -79,6 +82,10 @@ class SWTrainUi(QtWidgets.QMainWindow):
         self.button2.setEnabled(True)
         self.return_button1.setEnabled(True)
         self.return_button2.setEnabled(True)
+
+    def toggle_lights(self):
+        # self.findChild(QtWidgets.QComboBox, "TrainIDBox2").currentText()
+        send_message(RequestCode.SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS, "1")
 
     def logout(self):
         # This is executed when the button is pressed

@@ -7,7 +7,7 @@
 #include "TrackSystem.hpp"  // For handling requests
 #include "SWTrackControllerMain.hpp"  // For acessing Service Queue
 
-namespace SW_TrackController
+namespace SWTrackController
 {
 
 

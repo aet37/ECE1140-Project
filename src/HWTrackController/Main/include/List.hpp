@@ -1,7 +1,7 @@
 /**
  * @file List.hpp
- * 
- * @brief Declarations and implementation for 
+ *
+ * @brief Declarations and implementation for
  * array backed list
 */
 #ifndef LIST_HPP
@@ -16,7 +16,7 @@
 
 /**
  * @class List
- * 
+ *
  * @brief Array-backed list class
  * @tparam T type stored in list
 */
@@ -26,7 +26,7 @@ class List
 public:
     /**
      * @brief Constructs a new List object
-     * 
+     *
      * @param[in] initialSize Initial size of list
     */
     explicit List(uint32_t initialSize = 10) :
@@ -51,7 +51,7 @@ public:
 
     /**
      * @brief Appends an element to the end of the list
-     * 
+     *
      * @param element   Element to be inserted
     */
     void Append(T element)
@@ -81,6 +81,58 @@ public:
     {
         assert(index < m_length);
         return m_list[index];
+    }
+
+    /**
+     * @brief Inserts the given element at the given position
+    */
+    void Insert(T element, uint32_t index)
+    {
+        assert(index <= m_length);
+        // If the array is filled, resize it
+        if (m_arraySize == m_length)
+        {
+            Resize();
+        }
+
+        // If we are just appending, use that method
+        if (index == m_length)
+        {
+            Append(element);
+            return;
+        }
+
+        for (int32_t i = m_length - 1; i >= 0; i--)
+        {
+            m_list[i + 1] = m_list[i];
+            if (i == index)
+            {
+                m_list[i] = element;
+                m_length++;
+                break;
+            }
+        }
+    }
+
+    /**
+     * @brief Removes the element at the given index
+     *
+     * @param index     Index of element to remove
+     * @return Element that was removed
+    */
+    T Remove(uint32_t index)
+    {
+        // Bounds check
+        assert(index <= (m_length - 1));
+
+        T oldValue = m_list[index];
+
+        for (uint32_t i = index; i < m_length - 1; i++)
+        {
+            m_list[i] = m_list[i+1];
+        }
+        m_length--;
+        return oldValue;
     }
 
     /**

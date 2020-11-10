@@ -39,7 +39,12 @@ public:
         m_pValues(new T[size]),
         m_numElements(0),
         m_size(size)
-    {}
+    {
+        for (uint32_t i = 0; i < size; i++)
+        {
+            m_pKeys[i] = "";
+        }
+    }
 
     /**
      * @brief Destroys a hashmap object
@@ -48,6 +53,18 @@ public:
     {
         delete[] m_pKeys;
         delete[] m_pValues;
+    }
+
+    /**
+     * @brief Clears the hashmap of all entries
+    */
+    void Clear()
+    {
+        for (uint32_t i = 0; i < m_size; i++)
+        {
+            m_pKeys[i] = "";
+        }
+        m_numElements = 0;
     }
 
     /**

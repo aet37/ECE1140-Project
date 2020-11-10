@@ -39,7 +39,7 @@ void moduleMain()
                 std::string theIntString = std::to_string(theInt);
                 Common::Request newRequest(Common::RequestCode::TRACK_MODEL_DISPATCH_TRAIN, theIntString);
                 TrackModel::serviceQueue.Push(newRequest);
-                LOG_SW_TRACK_CONTROLLER("Track model dispatch train %s", theIntString.c_str());
+                LOG_SW_TRACK_CONTROLLER("SWTrackController dispatch train %s", theIntString.c_str());
                 break;
  
 

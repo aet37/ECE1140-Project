@@ -4,12 +4,10 @@ on:
   push:
     paths-ignore:
       - 'docs/**'
-      - 'src/UI/**'
     branches: [ master ]
   pull_request:
     paths-ignore:
       - 'docs/**'
-      - 'src/UI/**'
 
 jobs:
   Build:
@@ -71,14 +69,11 @@ jobs:
       shell: bash
       run: echo "BRANCH_NAME=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_ENV
 
-    - name: Run server setup script
-      run: python scripts/server_setup.py ${{ env.BRANCH_NAME }}
+    # - name: Run server setup script
+      # run: python scripts/server_setup.py ${{ env.BRANCH_NAME }}
 
     - name: Run tests
       run: |
-        pushd tests/RequestTests
-        pytest --setup-show
-        popd
         pushd tests/UnitTests/SWTrackController/Compiler
         pytest --setup-show
         popd

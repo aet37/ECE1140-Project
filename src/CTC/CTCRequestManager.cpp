@@ -32,30 +32,99 @@ void CTCRequestManager::HandleRequest(const Common::Request& rRequest, Common::R
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
-        case Common::RequestCode::CTC_SEND_GUI_OCCUPANCIES:
-        {
-			// send Response Code
+        case Common::RequestCode::CTC_SEND_GUI_GREEN_OCCUPANCIES: {
+	        // send Response Code
 	        rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
 
-			// Form response message; occupied = "t", not occupied = "f"
-			std::string to_send;
-			for(int i = 0; i < TrainSystem::GetInstance().GetTrackArr().size(); i++)
-			{
-			    if(TrainSystem::GetInstance().GetTrackArr()[i]->occupied)
-			    {
+	        // Form response message; occupied = "t", not occupied = "f"
+	        std::string to_send;
+
+	        // Add green line blocks
+	        for (int i = 0; i < TrainSystem::GetInstance().GetTrackArr(LINE_GREEN).size(); i++) {
+		        if (TrainSystem::GetInstance().GetTrackArr(LINE_GREEN)[i]->occupied) {
 			        to_send.push_back('t');
+		        } else {
+			        to_send.push_back('f');
+		        }
+	        }
+	        rResponse.SetData(to_send);
+
+	        // Log data sent
+	        LOG_CTC("From ConnectionHandler.cpp : Occupancies for each track on GREEN LINE sent");
+	        break;
+        }
+	    case Common::RequestCode::CTC_SEND_GUI_RED_OCCUPANCIES:
+	    {
+		    // send Response Code
+		    rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+
+		    // Form response message; occupied = "t", not occupied = "f"
+		    std::string to_send;
+
+		    // Add green line blocks
+		    for(int i = 0; i < TrainSystem::GetInstance().GetTrackArr(LINE_RED).size(); i++)
+		    {
+			    if(TrainSystem::GetInstance().GetTrackArr(LINE_RED)[i]->occupied)
+			    {
+				    to_send.push_back('t');
 			    }
 			    else
 			    {
-			        to_send.push_back('f');
+				    to_send.push_back('f');
 			    }
-			}
-	        rResponse.SetData(to_send);
+		    }
+		    rResponse.SetData(to_send);
 
-			// Log data sent
-			LOG_CTC("From ConnectionHandler.cpp : Occupancies for each track sent");
-            break;
-        }
+		    // Log data sent
+		    LOG_CTC("From ConnectionHandler.cpp : Occupancies for each track on RED LINE sent");
+		    break;
+	    }
+	    case Common::RequestCode::CTC_SEND_GUI_SWITCH_POS_GREEN:
+	    {
+		    // send Response Code
+		    rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+
+		    // Form response message
+		    std::string to_send;
+
+		    // Add green line switches
+		    for(int i = 0; i < TrainSystem::GetInstance().GetSwitchesArr(LINE_GREEN).size(); i++)
+		    {
+			    to_send.append(TrainSystem::GetInstance().GetSwitchesArr(LINE_GREEN)[i]->TrackSwitchToString());
+			    if(i != TrainSystem::GetInstance().GetSwitchesArr(LINE_GREEN).size() - 1)
+			    {
+				    to_send.append(" ");
+			    }
+		    }
+		    rResponse.SetData(to_send);
+
+		    // Log data sent
+		    LOG_CTC("From ConnectionHandler.cpp : Switches on GREEN LINE sent");
+		    break;
+	    }
+	    case Common::RequestCode::CTC_SEND_GUI_SWITCH_POS_RED:
+	    {
+		    // send Response Code
+		    rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+
+		    // Form response message
+		    std::string to_send;
+
+		    // Add green line switches
+		    for(int i = 0; i < TrainSystem::GetInstance().GetSwitchesArr(LINE_RED).size(); i++)
+		    {
+			    to_send.append(TrainSystem::GetInstance().GetSwitchesArr(LINE_RED)[i]->TrackSwitchToString());
+			    if(i != TrainSystem::GetInstance().GetSwitchesArr(LINE_RED).size() - 1)
+			    {
+				    to_send.append(" ");
+			    }
+		    }
+		    rResponse.SetData(to_send);
+
+		    // Log data sent
+		    LOG_CTC("From ConnectionHandler.cpp : Switches on Red LINE sent");
+		    break;
+	    }
         default:
             std::cerr << "Invalid command " << static_cast<uint16_t>(rRequest.GetRequestCode())
                       << " received" << std::endl;

@@ -21,7 +21,10 @@ enum class InstructionType
     XIO,
     OTE,
     OTL,
-    OTU
+    OTU,
+    JSR,
+    RET,
+    EMIT
 };
 
 /**
@@ -48,6 +51,16 @@ public:
      *      @retval false       - Instruction evaluated to false
     */
     bool Evaluate();
+
+    /**
+     * @brief Gets the instruction type
+    */
+    const InstructionType GetInstructionType() const { return m_type; }
+
+    /**
+     * @brief Gets the argument of the instruction
+    */
+    const String& GetArgument() const { return m_argument; }
 
 protected:
 private:

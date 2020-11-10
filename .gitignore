@@ -47,3 +47,6 @@ build
 
 # Mac file
 .DS_Store
+
+# Track controller compiler output
+CompiledOutput.txt

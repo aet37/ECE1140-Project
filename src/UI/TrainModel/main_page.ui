@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>642</width>
-    <height>361</height>
+    <width>641</width>
+    <height>341</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -46,7 +46,7 @@ border-color: rgb(0, 0, 0);</string>
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap>newPrefix/Train Map.png</pixmap>
+      <pixmap>../../../../../../.designer/backup/newPrefix/Train Map.png</pixmap>
      </property>
     </widget>
     <widget class="QPushButton" name="train_button_4">
@@ -222,7 +222,6 @@ border-color: rgb(0, 0, 0);</string>
     </widget>
    </widget>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>

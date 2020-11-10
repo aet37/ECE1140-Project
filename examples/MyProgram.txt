@@ -1,0 +1,16 @@
+TAG MyTag = FALSE
+TAG output2 = FALSE
+
+TASK<PERIOD=2000> MainTask
+    ROUTINE Main
+        RUNG
+            XIO MyTag
+            XIO output2
+            OTE output2
+        ENDRUNG
+        RUNG
+            XIC output2
+            OTE MyTag
+        ENDRUN
+    ENDROUTINE
+ENDTASK
