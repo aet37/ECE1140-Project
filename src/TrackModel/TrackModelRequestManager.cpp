@@ -33,93 +33,92 @@ void TrackModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
 		{
 			//TrackModel::serviceQueue.Push(rRequest);
 			std::string test = rRequest.GetData();
-                int pos = test.find(' ');
-                int trackNumber = std::stoi(test.substr(0, pos));
+            int pos = test.find(' ');
+            int trackNumber = std::stoi(test.substr(0, pos));
 
-                test.erase(0, pos + 1);
-                int blockNumber = std::stoi(test);
+            test.erase(0, pos + 1);
+            int blockNumber = std::stoi(test);
 
-                rResponse.SetData("");
+            rResponse.SetData("");
 
-                Track *theTrack = TrackInfo::GetInstance().getTrack(trackNumber);
+            Track *theTrack = TrackInfo::GetInstance().getTrack(trackNumber);
 
-                std::string lineName = theTrack->getLineName();
+            std::string lineName = theTrack->getLineName();
 
-                rResponse.AppendData(lineName);
+            rResponse.AppendData(lineName);
 
-                rResponse.AppendData(std::to_string(blockNumber));
+            rResponse.AppendData(std::to_string(blockNumber));
 
-                Block theBlock = theTrack->getBlock(blockNumber);
+            Block theBlock = theTrack->getBlock(blockNumber);
 
-                rResponse.AppendData(std::to_string(theBlock.getBlockElevation()));
+            rResponse.AppendData(std::to_string(theBlock.getBlockElevation()));
 
-                rResponse.AppendData(std::to_string(theBlock.getBlockCumulativeElevation()));
+            rResponse.AppendData(std::to_string(theBlock.getBlockCumulativeElevation()));
 
-                rResponse.AppendData(std::to_string(theBlock.getBlockLength()));
+            rResponse.AppendData(std::to_string(theBlock.getBlockLength()));
                 
-                rResponse.AppendData(std::to_string(theBlock.getBlockGrade()));
+            rResponse.AppendData(std::to_string(theBlock.getBlockGrade()));
 
-                rResponse.AppendData(std::to_string(theBlock.getBlockSpeedLimit()));
+            rResponse.AppendData(std::to_string(theBlock.getBlockSpeedLimit()));
 
-                rResponse.AppendData(theBlock.getBlockUnderground());
+            rResponse.AppendData(theBlock.getBlockUnderground());
 
-                //station ones
+            //station ones
 
-                std::string stationName = theBlock.getStationName();
+            std::string stationName = theBlock.getStationName();
 
-                if (stationName == ""){
-                    rResponse.AppendData("NA");
-                    //tickets sold
-                    rResponse.AppendData(std::to_string(0));
-                    //boarded
-                    rResponse.AppendData(std::to_string(0));
-                    // exited
-                    rResponse.AppendData(std::to_string(0));
-                    rResponse.AppendData("NA");
-                }
-                else
-                {
-                    rResponse.AppendData(stationName);
-                    rResponse.AppendData(std::to_string(theBlock.getStationTicketsSold()));
-                    rResponse.AppendData(std::to_string(theBlock.getStationPassengersBoarded()));
-                    rResponse.AppendData(std::to_string(theBlock.getStationPassengersExited()));
-                    rResponse.AppendData(theBlock.getStationExitSide());
-                }
+            if (stationName == ""){
+                rResponse.AppendData("NA");
+                //tickets sold
+                rResponse.AppendData(std::to_string(0));
+                //boarded
+                rResponse.AppendData(std::to_string(0));
+                // exited
+                rResponse.AppendData(std::to_string(0));
+                rResponse.AppendData("NA");
+            }
+            else
+            {
+                rResponse.AppendData(stationName);
+                rResponse.AppendData(std::to_string(theBlock.getStationTicketsSold()));
+                rResponse.AppendData(std::to_string(theBlock.getStationPassengersBoarded()));
+                rResponse.AppendData(std::to_string(theBlock.getStationPassengersExited()));
+                rResponse.AppendData(theBlock.getStationExitSide());
+            }
                 
-                if (theBlock.getOccupiedBy() == -1)
-                {
-                    rResponse.AppendData("None");
-                }
-                else
-                {
-                    rResponse.AppendData(std::to_string(theBlock.getOccupiedBy()));
-                }
-
-                //switch stuff
-                if (theBlock.getSwitchList() == "")
-                {
-                    rResponse.AppendData("NA");
-                    rResponse.AppendData("NA");
-                }
-                else
-                {
-                    rResponse.AppendData(theBlock.getSwitchList());
-                    rResponse.AppendData(std::to_string(theBlock.getCurrentSwitch()));
-                }
-
-                rResponse.AppendData(std::to_string(theTrack->getTrackHeater()));
-                
-                // Implement failure mode later
+            if (theBlock.getOccupiedBy() == -1)
+            {
                 rResponse.AppendData("None");
+            }
+            else
+            {
+                rResponse.AppendData(std::to_string(theBlock.getOccupiedBy()));
+            }
 
-                // line name, block number, section, elevation, cumulative elevation
-                // length, grade, speed limit, underground, stationName
-                // ticketsSold, passengersBoarded, passengersExited, exit side, occupied by
-                // switchList, currentSwitch, trackHeater, failure mode
+            //switch stuff
+            if (theBlock.getSwitchList() == "")
+            {
+                rResponse.AppendData("NA");
+                rResponse.AppendData("NA");
+            }
+            else
+            {
+                rResponse.AppendData(theBlock.getSwitchList());
+                rResponse.AppendData(std::to_string(theBlock.getCurrentSwitch()));
+            }
 
-                Common::Request newRequest(Common::RequestCode::TRACK_MODEL_DISPATCH_TRAIN, theIntString);
-                TrackModel::serviceQueue.Push(newRequest);
-                break;
+            rResponse.AppendData(std::to_string(theTrack->getTrackHeater()));
+                
+            // Implement failure mode later
+            rResponse.AppendData("None");
+
+            // line name, block number, section, elevation, cumulative elevation
+            // length, grade, speed limit, underground, stationName
+            // ticketsSold, passengersBoarded, passengersExited, exit side, occupied by
+            // switchList, currentSwitch, trackHeater, failure mode
+
+            //Common::Request newRequest(Common::RequestCode::TRACK_MODEL_DISPATCH_TRAIN, theIntString);
+            //TrackModel::serviceQueue.Push(newRequest);
 			rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
 			break;
 		}
