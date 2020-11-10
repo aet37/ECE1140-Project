@@ -307,16 +307,17 @@ void moduleMain()
                 test.erase(0, 10);
                 int pos = test.find(',');
                 std::string gettingTrackNumber = test.substr(0, pos);
-                printf("test123\n");
                 printf(gettingTrackNumber.c_str());
-                printf("got track number\n");
                 int trackNumberInt = stoi(gettingTrackNumber);
 
                 // grab track using track number
                 Track *theTrack = TrackInfo::GetInstance().getTrack(trackNumberInt);
 
                 // get number of block, convert to int
+                printf(test.c_str());
+                printf("\n");
                 test.erase(0, pos + 2);
+                printf(test.c_str());
                 pos = test.find(',');
                 std::string blockNumberString = test.substr(0, pos);
                 printf("test1234\n");
