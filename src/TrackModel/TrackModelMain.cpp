@@ -13,6 +13,10 @@
 #include "SWTrackControllerMain.hpp"
 #include "TrainModelMain.hpp"
 #include "TrackInfo.hpp"
+#include "Track.hpp"
+#include "Block.hpp"
+#include "Station.hpp"
+#include "Switch.hpp"
 
 namespace TrackModel
 {
@@ -359,13 +363,14 @@ void moduleMain()
                 std::string blockUnderground = test.substr(0, pos);
 
                 // get StationInfo
+                std::string stationInfo = "";
                 if (test.find("Station\": \"") != std::string::npos)
                 {
                     pos = test.find("Station\": \"");
                     test.erase(0, pos + 12);
                     pos = test.find("\",");
-                    std::string stationInfo = test.substr(0, pos);
-                    stationInfo.append(" ");
+                    stationInfo = test.substr(0, pos);
+                    stationInfo.append(",");
                     test.erase(0, pos + 17);
                     pos = test.find('\"');
                     std::string stationInfo2 = test.substr(0, pos);
@@ -375,16 +380,17 @@ void moduleMain()
                 }
                 else
                 {
-                    std::string stationInfo = "";
+                    stationInfo = "";
                 }
 
                 //get switchInfo
+                std::string switchInfo = "";
                 if (test.find("Switches") != std::string::npos)
                 {
                     pos = test.find("Switches");
                     test.erase(0, pos + 12);
                     pos = test.find(',');
-                    std::string switchInfo = test.substr(0, pos);
+                    switchInfo = test.substr(0, pos);
                     test.erase(0, pos + 1);
                     pos = test.find('\"');
                     std::string secondSwitchString = test.substr(0, pos);
@@ -394,22 +400,26 @@ void moduleMain()
                 }
                 else
                 {
-                    std::string switchInfo = "";
+                    switchInfo = "";
                 }
                 
+                std::string railwayCrossing = "false";
                 if (test.find("Railway Crossing") != std::string::npos)
                 {
                     pos = test.find("Railway Crossing");
                     test.erase(0, pos + 20);
                     pos = test.find('\"');
-                    std::string railwayCrossing = test.substr(0, pos);
+                    railwayCrossing = test.substr(0, pos);
                 }
                 else
                 {
-                    std::string railwayCrossing = "false";
+                    railwayCrossing = "false";
                 }
 
-                //theTrack->
+                theTrack->AddBlock(blockNumber, blockLength, blockGrade, 
+                blockSpeedLimit, blockElevation, blockCumulativeElevation, 
+                blockDirection, blockUnderground, stationInfo, 
+                switchInfo, railwayCrossing);
                 break;
             }
             default:

@@ -21,19 +21,34 @@ class Station
 public:
     Station()
     {
-        
+
     }
+    
     Station(std::string stationInfo)
     {
-        stationInfo.erase(0, 12);
-        int pos = stationInfo.find('\"'); // HERRON AVE", "Exit Side": "Right"
-        std::string name = stationInfo.substr(0, pos);
-        m_stationName = name;
+        
+        int pos = stationInfo.find(",");
+        m_stationName = stationInfo.substr(0, pos);
 
-        stationInfo.erase(0, pos + 17);
-        pos = stationInfo.find('\"');
-        std::string exitSide = stationInfo.substr(0, pos);
-        m_stationExitSide = exitSide;
+        stationInfo.erase(0, pos + 1);
+
+        m_stationExitSide = stationInfo;
+
+        printf("\n\n");
+        printf(m_stationName.c_str());
+        printf("\n\n");
+        printf(m_stationExitSide.c_str());
+        printf("\n\n");
+
+        // stationInfo.erase(0, 12);
+        // int pos = stationInfo.find('\"'); // HERRON AVE", "Exit Side": "Right"
+        // std::string name = stationInfo.substr(0, pos);
+        // m_stationName = name;
+
+        // stationInfo.erase(0, pos + 17);
+        // pos = stationInfo.find('\"');
+        // std::string exitSide = stationInfo.substr(0, pos);
+        // m_stationExitSide = exitSide;
 
         m_ticketsSold = 0;
         m_passengersBoarded = 0;
