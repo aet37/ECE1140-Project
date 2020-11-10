@@ -4,6 +4,7 @@
 
 // SYSTEM INCLUDES
 #include <map>
+#include <vector>
 
 // C++ PROJECT INCLUDES
 #include "TrackModelMain.hpp" // Header for functions
@@ -22,10 +23,10 @@ void moduleMain()
 {
     LOG_TRACK_MODEL("Thread starting...");
 
-    std::map<std::string, std::vector<uint32_t>>* pGreenLinePaths = new std::map<std::string, std::vector<uint32_t>>();
-    std::map<std::string, std::vector<uint32_t>>* pRedLinePaths = new std::map<std::string, std::vector<uint32_t>>();
+   // std::map<std::string, std::vector<uint32_t>>* pGreenLinePaths = new std::map<std::string, std::vector<uint32_t>>();
+   // std::map<std::string, std::vector<uint32_t>>* pRedLinePaths = new std::map<std::string, std::vector<uint32_t>>();
 
-    //initializeRouteMaps(*greenLinePaths, *redLinePaths);
+   // initializeRouteMaps(*pGreenLinePaths, *pRedLinePaths);
 
     while (true)
     {
@@ -151,8 +152,8 @@ void moduleMain()
                 double blockCumulativeElevation = stod(blockCumulativeElevationString);
 
                 // get StationInfo
-                if (test.find('Station\": \"') != std::string::npos){
-                    pos = test.find('Station\": \"');
+                if (test.find("Station\": \"") != std::string::npos){
+                    pos = test.find("Station\": \"");
                     test.erase(0, pos + 11);
                     //std::string stationInfo
                 }
@@ -173,7 +174,7 @@ void moduleMain()
 
 }
 
-void initializeRouteMaps(std::map<std::string, std::vector<uint32_t>>& rGreenLineRoutes, std::map<std::string, std::vector<uint32_t>>& rRedLineRoutes)
+/*void initializeRouteMaps(std::map<std::string, std::vector<uint32_t>>& rGreenLineRoutes, std::map<std::string, std::vector<uint32_t>>& rRedLineRoutes)
 {
     // # All the track controllers and the blocks they control
     //     self.red_line_controllers = [
@@ -207,7 +208,7 @@ void initializeRouteMaps(std::map<std::string, std::vector<uint32_t>>& rGreenLin
     //         list(range(30, 59)), # Switch between I, J and Yard @ block 58
     //         [58, 59, 60, 61]
     //     ]
-/**
+
     std::vector<uint32_t> blocks = {0,
                                     62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76,
                                     77, 78, 79, 80, 81, 82, 83, 84, 85,
@@ -226,42 +227,133 @@ void initializeRouteMaps(std::map<std::string, std::vector<uint32_t>>& rGreenLin
                                     };
     rGreenLineRoutes.insert(std::pair<std::string, std::vector<uint32_t>>("0001110100", blocks));
 
-    base = {9, 8, 7, 6, 5, 4, 3, 2, 1, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27}
+    std::vector<uint32_t> base = {9, 8, 7, 6, 5, 4, 3, 2, 1, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27};
+    std::vector<uint32_t> choice1 = {28, 29, 30, 31, 32};
+    std::vector<uint32_t> choice2 = {76, 75, 74, 73, 72};
+    std::vector<uint32_t> base1 = {33, 34, 35, 36, 37, 38};
 
-    for (int i = 0; i < 2; i++) 
-        {28, 29, 30, 31, 32}
-        or
-        {76, 75, 74, 73, 72}
+    std::vector<uint32_t> choice3 = {39, 40, 41, 42, 43};
+    std::vector<uint32_t> choice4 = {71, 70, 69, 68, 67};
+    std::vector<uint32_t> base2 = {44, 45, 46, 47, 48, 49, 50, 51, 52};
 
-        + 
+    std::vector<uint32_t> choice5 = {53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66};
+    std::vector<uint32_t> choice6 = {66, 65, 64, 63, 62, 61, 60, 59, 58, 57, 56, 55, 54, 53};
+    std::vector<uint32_t> base3 = {52, 51, 50, 49, 48, 47, 46, 45, 44};
 
-        {33, 34, 35, 36, 37, 38}
+    std::vector<uint32_t> choice7 = {43, 42, 41, 40, 39};
+    std::vector<uint32_t> choice8 = {67, 68, 69, 70, 71};
+    std::vector<uint32_t> base4 = {38, 37, 36, 35, 34, 33};
 
-        for 
+    std::vector<uint32_t> choice9 = {32, 31, 30, 29, 28};
+    std::vector<uint32_t> choice10 = {72, 73, 74, 75, 76};
+    std::vector<uint32_t> base5 = {27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16};
 
-            {39, 40, 41, 42, 43}
-            or
-            {71, 70, 69, 68, 67}
+    std::vector<uint32_t> choice11 = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 
-            {44, 45, 46, 47, 48, 49, 50, 51, 52}
+    std::vector<uint32_t> choice12 = {0};
+    ///TODO: choice13 is where the train comes A->B->C->D instead of the yard. We are not accounting for this currently
+    ///TODO: for now we will say it always enters yard
+    std::vector<uint32_t> choice13 = {0};
 
-        {53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66}
-        or
-        {66, 65, 64, 63, 62, 61, 60, 59, 58, 57, 56, 55, 54, 53}
 
-        {52, 51, 50, 49, 48, 47, 46, 45, 44}
+    std::vector<uint32_t> choice14 = {15, 14, 13, 12, 11, 10};
 
-        {43, 42, 41, 40, 39}
-        or
-        {67, 68, 69, 70, 71}
 
-        {38, 37, 36, 35, 34, 33}
+    for (int i = 0; i < 2; i++)
+    {
+        if (i == 0)
+        {
+            base.insert(base.end(), choice1.begin(), choice1.end());
+        }
+        else
+        {
+            base.insert(base.end(), choice2.begin(), choice2.end());
+        }
+            base.insert(base.end(), base1.begin(), base1.end());
+        for (int j = 0; j < 2; j++)
+        {
+            if (j == 0)
+            {
+            base.insert(base.end(), choice3.begin(), choice3.end());
+            }
+            else
+            {
+            base.insert(base.end(), choice4.begin(), choice4.end());
+            }
+            base.insert(base.end(), base2.begin(), base2.end());
 
-        {32, 31, 30, 29, 28}
-        or
-        {72, 73, 74, 75, 76}
+            for (int k = 0;  k < 2; k++)
+            {
+                if (k == 0)
+                {
+                base.insert(base.end(), choice5.begin(), choice5.end());
+                }
+                else
+                {
+                base.insert(base.end(), choice6.begin(), choice6.end());
+                }
+                base.insert(base.end(), base3.begin(), base3.end());
+                
+                for (int l = 0; l < 2; l++)
+                {
+                    if (l == 0)
+                    {
+                    base.insert(base.end(), choice7.begin(), choice7.end());
+                    }
+                    else
+                    {
+                    base.insert(base.end(), choice8.begin(), choice8.end());
+                    }
+                    base.insert(base.end(), base4.begin(), base4.end());
 
-        {27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16}
+                    for (int m = 0; m < 2; m++)
+                    {
+                        if (m == 0)
+                        {
+                        base.insert(base.end(), choice9.begin(), choice9.end());
+                        }
+                        else
+                        {
+                        base.insert(base.end(), choice10.begin(), choice10.end());
+                        }
+                        base.insert(base.end(), base5.begin(), base5.end());
+
+                        for (int n = 0; n < 2; n++)
+                        {
+                            int p = 0;
+                            if (m == 0)
+                            {
+                                base.insert(base.end(), choice11.begin(), choice11.end());
+                                for (int o = 0; o < 2; o++)
+                                {
+                                    
+                                    if (o == 0)
+                                    {
+                                        p = 0;
+                                        base.insert(base.end(), choice12.begin(), choice12.end());
+                                    }
+                                    else
+                                    {
+                                        p = 1;
+                                        base.insert(base.end(), choice13.begin(), choice13.end());
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                base.insert(base.end(), choice14.begin(), choice14.end());
+                            }
+                            std::string switchPositions = std::to_string(i) + std::to_string(j) + std::to_string(k) + std::to_string(l) + std::to_string(m) + std::to_string(n) + std::to_string(p);
+                            rRedLineRoutes.insert(std::pair<std::string, std::vector<uint32_t>>(switchPositions, blocks));
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+/**
+
 
         {1, 2, 3, 4, 5, 6, 7, 8, 9}
             {0}
@@ -270,34 +362,13 @@ void initializeRouteMaps(std::map<std::string, std::vector<uint32_t>>& rGreenLin
         or
         {15, 14, 13, 12, 11, 10}
 
-
-    for (int i = 0; i < 2; i++)
-    {
-        for (int j = 0; j < 2; j++)
-        {
-            for (int k = 0; k < 2; k++)
-            {
-                for (int l = 0; l < 2; l++)
-                {
-                    for (int m = 0; m < 2; m++)
-                    {
-                        for (int n = 0; n < 2; n++)
-                        {
-                            for (int o = 0; o < 2; o++)
-                            {
                                 std::string switchPositions =
                                 rRedLineRoutes.insert(std::pair<std::string, std::vector<uint32_t>>("01111101000001", blocks));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     blocks = {};
     rRedLineRoutes.insert(std::pair<std::string, std::vector<uint32_t>>("01111101000001", blocks));
-    **/
+    
 }
+*/
 
 } // namespace TrackModel
