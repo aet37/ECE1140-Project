@@ -31,7 +31,7 @@ TEST_CASE( "Test Initialized constructor", "[Controller::Controller(int, int, bo
     testObj.calculatePower();
 
     // Test initialized controller by checking calculated power value
-    REQUIRE(testObj.getPowerCommand() == (3*3));
+    REQUIRE(testObj.getPowerCommand() == -3);
 }
 
 /*
@@ -48,13 +48,13 @@ TEST_CASE( "Test setKi and calculatePower", "[Controller::setKi(int), Controller
 
     // Calculate power
     testObj.calculatePower();
-    REQUIRE(testObj.getPowerCommand() == 15);
+    REQUIRE(testObj.getPowerCommand() == -3);
 
     // Input a new command speed and recalculate power;
     testObj.setCommandSpeed(9);
-    REQUIRE(testObj.getPowerCommand() == 15);
+    REQUIRE(testObj.getPowerCommand() == -3);
     testObj.calculatePower();
-    REQUIRE(testObj.getPowerCommand() == 45);
+    REQUIRE(testObj.getPowerCommand() == 15);
 }
 
 /*
@@ -141,7 +141,7 @@ TEST_CASE( "Test setAuthority(bool) and getAuthority()", "[Controller::setAuthor
     REQUIRE(testObj.getAuthority() == 1);
 
     // Test with double value
-    testObj.setAuthority(3.8);
+    testObj.setAuthority(0);
     REQUIRE(testObj.getAuthority() == 0);
 }
 
