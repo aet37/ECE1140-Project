@@ -318,6 +318,7 @@ void moduleMain()
                 pos = test.find(',');
                 std::string blockNumberString = test.substr(0, pos);
                 printf("test1234\n");
+                printf(blockNumberString.c_str());
                 int blockNumber = stoi(blockNumberString);
                 test.erase(0, pos + 12);
 
@@ -335,8 +336,8 @@ void moduleMain()
 
                 // get get speed limit, convert to int
                 pos = test.find(',');
-                std::string blockSpeedLimitString = test.substr(0, pos);
                 printf("test12345\n");
+                std::string blockSpeedLimitString = test.substr(0, pos);
                 printf(blockSpeedLimitString.c_str());
                 int blockSpeedLimit = stoi(blockSpeedLimitString);
                 test.erase(0, pos + 15);
