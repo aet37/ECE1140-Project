@@ -24,6 +24,8 @@ class TrackController
 
 
 	public:
+
+	TrackController();
 	
 	bool getSwitchPos()
 	{
