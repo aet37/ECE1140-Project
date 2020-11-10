@@ -34,12 +34,6 @@ public:
 
         m_stationExitSide = stationInfo;
 
-        printf("\n\n");
-        printf(m_stationName.c_str());
-        printf("\n\n");
-        printf(m_stationExitSide.c_str());
-        printf("\n\n");
-
         // stationInfo.erase(0, 12);
         // int pos = stationInfo.find('\"'); // HERRON AVE", "Exit Side": "Right"
         // std::string name = stationInfo.substr(0, pos);
