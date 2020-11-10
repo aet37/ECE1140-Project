@@ -10,6 +10,9 @@ import pyexcel
 import pyexcel_io
 import json
 tracks = 0
+combo1 = QComboBox()
+combo2 = QComboBox()
+combo3 = QComboBox()
 
 
 class Ui(QtWidgets.QMainWindow):
@@ -37,12 +40,6 @@ class Ui(QtWidgets.QMainWindow):
 
         logoutButton = self.findChild(QtWidgets.QPushButton, 'logout_button')
         logoutButton.clicked.connect(self.logout)
-    # def addTab(self):
-    #     tab = QtWidgets.QMainWindow()
-    #     self.tabWidget.addTab(tab, "Red Line")
-    #     w = Ui()
-    #     w.show()
-    #     sys.exit(app.exec_())
 
     # def update_times(self):
         # TODO get position string from Train Model in ??? UNITS
@@ -130,16 +127,23 @@ class Ui(QtWidgets.QMainWindow):
 
 
                 theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
-                combo1 = QComboBox()
-                combo1.setAccessibleName("block_combo_box")
                 line = records.column['Line'][1]
                 #combo1.addItem("Select "+line+" Line block")
-                theTabWidget.addTab(combo1, line+" Line")
+                if (tracks == 1):
+                    theTabWidget.addTab(combo1, line+" Line")
+                    theCombo = combo1
+                elif (tracks == 2):
+                    theTabWidget.addTab(combo2, line+" Line")
+                    theCombo = combo2
+                else:
+                    theTabWidget.addTab(combo3, line+" Line")
+                    theCombo = combo3
+
 
                 for x in range(records.number_of_rows()):
                     blockInfo = {}
                     blockNumber = records.column['Block Number'][x]
-                    combo1.addItem("Block "+str(blockNumber)) 
+                    theCombo.addItem("Block "+str(blockNumber)) 
 
                     blockLength = records.column['Block Length (m)'][x]
                     blockGrade = records.column['Block Grade (%)'][x]
@@ -179,25 +183,32 @@ class Ui(QtWidgets.QMainWindow):
                     jsonString = json.dumps(blockInfo)
                     send_message(RequestCode.TRACK_MODEL_GUI_BLOCK, str(jsonString))
 
-                self.send_gather_data_message
+                print("hello")
+                self.send_gather_data_message()
 
             else:
                 print('error')
 
     def send_gather_data_message(self):
         """Method called periodically to send the gather data message to the server"""
-            combo1 = self.findChild(QtWidgets.QComboBox, 'block_combo_box')            
+        theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
+        if (theTabWidget.currentIndex() == 0):
             currentComboBlock = str(combo1.currentText())
-            currentComboBlock = currentComboBlock[6:]
-            print("\n\n\n\n")
-            print(currentComboBlock)
+        elif(theTabWidget.currentIndex() == 1):
+            currentComboBlock = str(combo2.currentText())
+        else:
+            currentComboBlock = str(combo3.currentText())
 
-            data = str(self.current_track_controller) + str(self.current_block)
-            send_message_async(RequestCode.TRACKMODEL_GUI_GATHER_DATA,
-                               data=data,
-                               callback=self.update_gui)
+        currentComboBlock = currentComboBlock[6:]
+        
+        
+        print("\n\n\n\n")
+        print(currentComboBlock)
 
-    def update_gui(self, response_code, response_data):
+        #data = str(self.current_track_controller) + str(self.current_block)
+        #send_message_async(RequestCode.TRACKMODEL_GUI_GATHER_DATA, data=data, callback=self.update_gui)
+
+    #def update_gui(self, response_code, response_data):
 
     def trackInfo1(self):
         self.stopAllTimers()

@@ -9,7 +9,7 @@ import polling
 logger = logging.getLogger(__name__)
 
 HOST = '3.23.104.34'  # The server's hostname or IP address
-PORT = 1305       # The port used by the server
+PORT = 1306       # The port used by the server
 
 class RequestCode(Enum):
     """Codes to begin communication to the server
