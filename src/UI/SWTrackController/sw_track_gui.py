@@ -1,6 +1,8 @@
 """Software Track Controller GUI"""
 
 import os
+import threading
+from time import sleep
 import sys
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog
@@ -85,6 +87,9 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         self.track_controller_selected()
         self.block_combo_box.setCurrentIndex(0)
         self.block_selected()
+
+        # Flag to indicate we are updating the hardware
+        self.updating_hardware = False
 
         # Update the gui and start the periodic timer
         self.send_gather_data_message()
@@ -196,14 +201,59 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         print(self.current_track_controller)
         print(self.current_block)
 
+        if self.updating_hardware:
+            print("Updating hardware")
+            return
+
         if (self.current_track_controller is not None) and \
            (self.current_block is not None):
-            data = str(self.current_track_controller) + ' ' + str(self.current_block)
-            send_message_async(RequestCode.SWTRACK_GUI_GATHER_DATA,
-                               data=data,
-                               callback=self.update_gui)
+            if self.current_track_controller != "15":
+                data = str(self.current_track_controller) + ' ' + str(self.current_block)
+                send_message_async(RequestCode.SWTRACK_GUI_GATHER_DATA,
+                                   data=data,
+                                   callback=self.update_gui_sw)
+            else:
+                data = str(self.current_track_controller) + ' ' + str(self.current_block)
+                send_message_async(RequestCode.HWTRACK_GUI_GATHER_DATA,
+                                   data=data,
+                                   callback=self.update_gui_hw)
 
-    def update_gui(self, response_code, response_data):
+    def update_gui_hw(self, *args):
+        """Method called to periodically update the gui when the hw track controller is chosen"""
+        # Spawn a new thread to gather the responses
+        thread = threading.Thread(target=self.gather_data_from_hw)
+        thread.start()
+
+        # Don't let messages to be sent
+        self.updating_hardware = True
+
+    def gather_data_from_hw(self):
+        """Gets responses from the arduino for each of the messages that were sent"""
+        # Get response for each tag
+        i = 0
+
+        new_response_data = ''
+
+        while i < 8:
+            response_code, response_data = send_message(RequestCode.HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE)
+            if response_code == ResponseCode.SUCCESS:
+                splits = response_data.split(' ')
+                if splits[0] == '0':
+                    new_response_data += splits[1] + ' '
+                if splits[0] == '1':
+                    new_response_data += '-1' + ' '
+                i += 1
+            else:
+                sleep(0.5)
+
+        # If we are still looking at the hardware
+        if self.current_track_controller == 15:
+            self.update_gui_sw(ResponseCode.SUCCESS, new_response_data)
+
+        # Allow messages to be sent again
+        self.updating_hardware = False
+
+    def update_gui_sw(self, response_code, response_data):
         """Method called to periodically update the gui"""
         if response_code == ResponseCode.ERROR:
             print("There was a problem communicating with the server")

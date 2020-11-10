@@ -17,6 +17,7 @@ arduino = serial.Serial(SERIAL_PORT, RATE, timeout=5)
 sleep(2)
 
 # Communications with server
+# HOST = '18.188.207.58'
 HOST = '3.23.104.34'
 SERVER_PORT = 1234
 HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST = b'105'
@@ -61,9 +62,10 @@ def send_reponse_to_server(response):
 
     :param response: Response gathered from the controller
     """
+    print(response[1:])
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         sock.connect((HOST, SERVER_PORT))
-        sock.sendall(HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE + response[1:])
+        sock.sendall(HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE + b' ' + response)
         data = sock.recv(1024)
 
     logger.info("Received %s from server", data)
