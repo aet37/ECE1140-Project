@@ -15,31 +15,18 @@
 #include "HWTrackControllerRequestManager.hpp" // For HWTrackController::HWTrackControllerRequestManager
 #include "CTCRequestManager.hpp"    // For CTC::CTCRequestManager
 #include "TrainModelRequestManager.hpp" // For TrainModel::TrainModelRequestManager
-<<<<<<< HEAD
-
-#include "SWTrackControllerRequestManager.hpp" //For SWTrackController::SWTrackControllerRequestManager
-
-
-=======
 #include "SWTrackControllerRequestManager.hpp" // For SWTrackController::SWTrackControllerRequestManager
 #include "SWTrainControllerRequestManager.hpp" // For SWTrainController::SWTrainControllerRequestManager
->>>>>>> master
 #include "TrackModelRequestManager.hpp" // For TrackModel::TrackModelRequestManager
 
 
 static Debug::DebugRequestManager debugRequestManager;
 static CTC::CTCRequestManager ctcRequestManager;
-<<<<<<< HEAD
-static TrainModel::TrainModelRequestManager trainModelRequestManager;
-static SW_TrackController::SWTrackControllerRequestManager swTrackControllerRequestManager;
-static TrackModel::TrackModelRequestManager trackModelRequestManager;
-=======
 static SWTrackController::SWTrackControllerRequestManager swTrackControllerRequestManager;
 static HWTrackController::HWTrackControllerRequestManager hwTrackControllerRequestManager;
 static TrackModel::TrackModelRequestManager trackModelRequestManager;
 static TrainModel::TrainModelRequestManager trainModelRequestManager;
 static SWTrainController::SWTrainControllerRequestManager swTrainControllerRequestManager;
->>>>>>> master
 
 namespace Common
 {
