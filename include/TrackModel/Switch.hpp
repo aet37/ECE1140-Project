@@ -19,10 +19,16 @@ namespace TrackModel
 class Switch
 {
 public:
-    Switch(std::string switchInfo) :
+    Switch()
+    {
+
+    }
+    Switch(std::string switchInfo)
         //m_switchBlocks(switchBlocks),
         //m_currentBlock(switchBlocks[0])
-    {}
+    {
+
+    }
 
 protected:
 private:

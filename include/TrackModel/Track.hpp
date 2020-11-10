@@ -33,7 +33,10 @@ public:
         // m_blockList()
     {}
 
-    void AddBlock(std::string test)
+    void AddBlock(int blockNumber, double blockLength, double blockGrade, 
+    int blockSpeedLimit, double blockElevation, double blockCumulativeElevation, 
+    std::string blockDirection, std::string blockUnderground, std::string stationInfo, 
+    std::string switchInfo, std::string blockRailway)
     {
         
 

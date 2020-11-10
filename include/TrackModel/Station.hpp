@@ -19,10 +19,11 @@ namespace TrackModel
 class Station
 {
 public:
-    Station(std::string stationInfo) :
-        m_ticketsSold(0),
-        m_passengersBoarded(0),
-        m_passengersExited(0)
+    Station()
+    {
+        
+    }
+    Station(std::string stationInfo)
     {
         stationInfo.erase(0, 12);
         int pos = stationInfo.find('\"'); // HERRON AVE", "Exit Side": "Right"
@@ -33,6 +34,11 @@ public:
         pos = stationInfo.find('\"');
         std::string exitSide = stationInfo.substr(0, pos);
         m_stationExitSide = exitSide;
+
+        m_ticketsSold = 0;
+        m_passengersBoarded = 0;
+        m_passengersExited = 0;
+
         }
 
 protected:

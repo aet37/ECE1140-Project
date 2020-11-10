@@ -25,13 +25,40 @@ namespace TrackModel
 class Block
 {
 public:
-    Block(int blockNumber, double blockGrade, double blockSpeedLimit, std::string stationInfo, std::string switchInfo) :
-        m_blockNumber(blockNumber),
-        m_blockGrade(blockGrade),
-        m_blockSpeedLimit(blockSpeedLimit),
-        m_station(Station(stationInfo)),
-        m_switch(Switch(switchInfo))
-    {}
+    Block(int blockNumber, double blockGrade, double blockSpeedLimit, double blockElevation, 
+    double blockCumulativeElevation, std::string blockDirection, std::string blockUnderground, 
+    std::string stationInfo, std::string switchInfo, std::string blockRailwayCrossing)
+    {
+        m_blockNumber = blockNumber;
+        m_blockGrade = blockGrade;
+        m_blockSpeedLimit = blockSpeedLimit;
+        m_blockElevation = blockElevation;
+        m_blockCumulativeElevation = blockCumulativeElevation;
+        m_blockDirection = blockDirection;
+        m_blockUnderground = blockUnderground;
+        m_blockRailwayCrossing = blockRailwayCrossing;
+
+        if (stationInfo != "")
+        {
+            m_theStation = Station(stationInfo);
+            m_stationBool = true;
+        }
+        else
+        {
+            m_stationBool = false;
+        }
+
+        if (switchInfo != "")
+        {
+            m_theSwitch = Switch(switchInfo);
+            m_switchBool = true;
+        }
+        else 
+        {
+            m_switchBool = false;
+        }
+        
+    }
 
 protected:
 private:
@@ -44,11 +71,36 @@ private:
     /// speed limit of block
     double m_blockSpeedLimit;
 
-    /// station if applicable
-    Station m_station;
+    /// elevation of the block
+    double m_blockElevation;
 
-    /// switch if applicable
-    Switch m_switch;
+    /// cumulative elevation of block
+    double m_blockCumulativeElevation;
+
+    /// travel direction of block
+    std::string m_blockDirection;
+
+    ///is block underground
+    std::string m_blockUnderground;
+
+    /// station on the block, "" if none exists
+    //std::string m_stationInfo;
+    Station m_theStation;
+
+    /// is there a station on this block?
+    bool m_stationBool;
+
+    /// switch on the block, "" if none exists
+    //std::string m_switchInfo;
+    Switch m_theSwitch;
+
+    bool m_switchBool;
+
+    /// railway crossing on block
+    std::string m_blockRailwayCrossing;
+
+
+
 };
 
 } // namespace TrackModel

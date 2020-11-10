@@ -371,6 +371,7 @@ void moduleMain()
                     std::string stationInfo2 = test.substr(0, pos);
                     stationInfo.append(stationInfo2);
                     test.erase(0, pos + 1);
+                    // ex: NAME RIGHT
                 }
                 else
                 {
@@ -389,6 +390,7 @@ void moduleMain()
                     std::string secondSwitchString = test.substr(0, pos);
                     switchInfo.append(" ").append(secondSwitchString);
                     test.erase(0, pos + 1);
+                    // ex: 5 7
                 }
                 else
                 {
@@ -401,18 +403,13 @@ void moduleMain()
                     test.erase(0, pos + 20);
                     pos = test.find('\"');
                     std::string railwayCrossing = test.substr(0, pos);
-                    printf("\n");
-                    printf("hello");
-                    printf(railwayCrossing.c_str());
-                    printf("\n");
                 }
                 else
                 {
                     std::string railwayCrossing = "false";
                 }
-                
 
-
+                //theTrack->
                 break;
             }
             default:
