@@ -355,7 +355,9 @@ void moduleMain()
                 printf("\nend");
                 pos = test.find("\",");
                 std::string blockDirection = test.substr(0, pos);
-                test.erase(0, pos + 15);
+                test.erase(0, pos + 19);
+
+                //get underground boolean
                 printf("\nhi\n");
                 printf(test.c_str());
                 printf("\n");
