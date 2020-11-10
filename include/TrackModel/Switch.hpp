@@ -32,7 +32,7 @@ public:
         switchInfo.erase(0, pos + 1);
         int switch2 = std::stoi(switchInfo);
 
-        if (switch1 < switch2)
+        if (switch1 > switch2)
         {
             int switch3 = switch2;
             switch2 = switch1;
@@ -45,7 +45,7 @@ public:
         m_currentBlock = m_switchBlocks[0];
 
         printf("\n\n");
-        printf("Switches are:");
+        printf("Switches are: ");
         printf("%d and %d", m_switchBlocks[0], m_switchBlocks[1]);
         printf("\n\n");
 
