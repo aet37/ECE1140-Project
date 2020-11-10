@@ -307,7 +307,6 @@ void moduleMain()
                 test.erase(0, 10);
                 int pos = test.find(',');
                 std::string gettingTrackNumber = test.substr(0, pos);
-                printf(gettingTrackNumber.c_str());
                 int trackNumberInt = stoi(gettingTrackNumber);
 
                 // grab track using track number
@@ -316,7 +315,7 @@ void moduleMain()
                 // get number of block, convert to int
                 printf(test.c_str());
                 printf("\n");
-                test.erase(0, pos + 2);
+                test.erase(0, pos + 12);
                 printf(test.c_str());
                 pos = test.find(',');
                 std::string blockNumberString = test.substr(0, pos);
