@@ -359,7 +359,8 @@ void moduleMain()
                 std::string blockUnderground = test.substr(0, pos);
 
                 // get StationInfo
-                if (test.find("Station\": \"") != std::string::npos){
+                if (test.find("Station\": \"") != std::string::npos)
+                {
                     pos = test.find("Station\": \"");
                     test.erase(0, pos + 12);
                     pos = test.find("\",");
@@ -370,15 +371,37 @@ void moduleMain()
                     std::string stationInfo2 = test.substr(0, pos);
                     stationInfo.append(stationInfo2);
                     test.erase(0, pos + 1);
-                    printf("tester\n");
-                    printf(test.c_str());
-                    printf("\nall done");
                 }
                 else
                 {
                     std::string stationInfo = "";
                 }
 
+                //get switchInfo
+                if (test.find("Switches") != std::string::npos)
+                {
+                    pos = test.find("Switches");
+                    test.erase(0, pos + 12);
+                    pos = test.find(',');
+                    std::string firstSwitchString = test.substr(0, pos);
+                    test.erase(0, pos + 1);
+                    pos = test.find('\"');
+                    std::string secondSwitchString = test.substr(0, pos);
+                    std::string switchInfo = firstSwitchString.append(" ").append(secondSwitchString);
+                    test.erase(0, pos + 1);
+                    printf("\n");
+                    printf(firstSwitchString.c_str());
+                    printf("\n");
+                    printf(secondSwitchString.c_str());
+                    printf("\n");
+                    printf(switchInfo.c_str());
+                    printf("\n");
+                }
+                else
+                {
+                    std::string switchInfo = "";
+                }
+                
 
 
                 break;
