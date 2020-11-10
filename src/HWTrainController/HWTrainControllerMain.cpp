@@ -13,6 +13,7 @@
 #include "Distance.h"
 #include "Speedstuff.h"
 #include "Trainfunctions.h"
+#include "Insidetrain.h"
 
 namespace HWTrainController
 {
@@ -26,6 +27,7 @@ void moduleMain()
     Distance Dist;
     Speedstuff Spood;
     Trainfunctions Train;
+    Insidetrain Intrain;
     while (true)
     {
         Common::Request req = serviceQueue.Pop();
@@ -40,9 +42,14 @@ void moduleMain()
                 LOG_HW_TRAIN_CONTROLLER("HWTrain model dispatch train %s", theIntString.c_str());
                 break;
             }
-            case Common::RequestCode::HWTRAIN_UPDATE_CURRENT_SPEED:
+            case Common::RequestCode::HWTRAIN_TOGGLE_CABIN_LIGHTS:
             {
-                Spood
+                Intrain.setLights();
+                bool lights = Intrain.getLights();
+                // std::string lightString = std::to_string(Intrain.getLights());
+                // Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_SET_THE_DAMN_LIGHTS, lightString)
+                // TrainModel::serviceQueue.Push(newRequest)
+                LOG_HW_TRAIN_CONTROLLER("HWTrain model dispatch train %d", lights);
             }
             default:
                 ASSERT(false, "Unexpected request code %d", static_cast<uint16_t>(req.GetRequestCode()));
