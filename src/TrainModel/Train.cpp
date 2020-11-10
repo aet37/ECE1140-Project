@@ -18,10 +18,12 @@ Train::Train()
     // Initialize vital variables
 
     // INTEGERS (Vital)
+    m_destinationBlock = 0;
     m_commandSpeed = 0;
     m_currentSpeed = 0; // THIS IS CALCULATED
     m_position = 0; // THIS IS CALCULATED
     m_authority = 0;
+    m_currentLine = 0; // Default green line
     m_currentBlock = 0;
     // INTEGERS (Nonvital)
     m_tempControl = 0;
@@ -38,12 +40,12 @@ Train::Train()
     m_doors = false;
 
     // Parameter Inputs
-    m_trainLength = 0;
-    m_trainWidth = 0;
-    m_trainHeight = 0;
-    m_trainMass = 0;
+    m_trainLength = 32.2; // Meters
+    m_trainWidth = 2.65; // Meters
+    m_trainHeight = 3.42; // Meters
+    m_trainMass = 40.9; // Tons
     m_trainCrewCount = 0;
-    m_trainPassCount = 0;
+    m_trainPassCount = 2; // HARDCODED (Unless told otherwise)
 
     // Failure cases
     m_signalPickupFailure = false;
