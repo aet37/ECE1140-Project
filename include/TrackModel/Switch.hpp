@@ -44,11 +44,6 @@ public:
 
         m_currentBlock = m_switchBlocks[0];
 
-        printf("\n\n");
-        printf("Switches are: ");
-        printf("%d and %d", m_switchBlocks[0], m_switchBlocks[1]);
-        printf("\n\n");
-
     }
 
 protected:
