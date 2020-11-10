@@ -182,6 +182,9 @@ p, li { white-space: pre-wrap; }
         <height>51</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 51, 16);</string>
+      </property>
       <property name="text">
        <string>Manual Mode</string>
       </property>
@@ -642,7 +645,7 @@ p, li { white-space: pre-wrap; }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 51, 16)</string>
+       <string notr="true">background-color: rgb(255, 51, 16);</string>
       </property>
       <property name="text">
        <string>EMERGENCY BRAKE</string>
@@ -974,6 +977,9 @@ p, li { white-space: pre-wrap; }
         <height>51</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: green;</string>
+      </property>
       <property name="text">
        <string>Automatic Mode</string>
       </property>
@@ -1230,7 +1236,6 @@ p, li { white-space: pre-wrap; }
     </widget>
    </widget>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>
