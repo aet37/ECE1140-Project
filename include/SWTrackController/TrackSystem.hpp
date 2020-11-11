@@ -13,7 +13,6 @@ class TrackSystem
 {
 	private:
 
-
 		//vectors for storing variables
 		std::vector<TrackController> p_Controllers;
 		std::vector<std::vector<int>> blocks_Controlled;
@@ -24,7 +23,7 @@ class TrackSystem
 	
 
 	public:
-		
+
 		//track system constructor
 		TrackSystem()
 		{
@@ -72,6 +71,7 @@ class TrackSystem
 		{
 			int count1;
 			int count2;
+
 			//if green line
 			if(a==0)
 			{
@@ -93,7 +93,8 @@ class TrackSystem
 				}
 			}
 
-			//if green line
+			//if red line
+
 			else if(a==1)
 			{
 				//iterate through each controller
@@ -121,17 +122,18 @@ class TrackSystem
 			{
 				if(i==i+1)
 				{
+
+
 					switchpositions.push_back(p_Controllers[i].getSwitchPos());
+
 				}
 			}
 		}
 
-		
-
-
 		//class to generate the array of occupied blocks
 		string makeOccupancies()
 		{
+
 			//string for output
 			string out = "";
 
@@ -266,6 +268,7 @@ class TrackSystem
 
 			//setting temp to 26
 			temp = p_Controllers[25].getOccupancy();
+
 			//blocks 52-66
 			for(int i=0;i<15;i++)
 			{
@@ -294,71 +297,71 @@ class TrackSystem
 			return out;
 		}
 
-	//string to generate switch positions
-	string makePositions()
-	{
-		//string to be output
-		string out="";
 
-		//getting switch positions from 1 controller of the pairs
-		for(int i=0;i<27;i+2)
+		//string to generate switch positions
+		string makePositions()
 		{
-			//making sure the controllers have the same output
-			if(p_Controllers[i].getSwitchPos()==p_Controllers[i+1].getSwitchPos())
+			//string to be output
+			string out="";
+
+			//getting switch positions from 1 controller of the pairs
+			for(int i=0;i<26;i+2)
 			{
-				out += p_Controllers[i].getSwitchPos();
+				//making sure the controllers have the same output
+				if(p_Controllers[i].getSwitchPos()==p_Controllers[i+1].getSwitchPos())
+				{
+					out += p_Controllers[i].getSwitchPos();
+				}
+				//if not, loop breaks
+				else
+				{
+					break;
+				}
 			}
-			//if not, loop breaks
-			else
+
+			//returning switch position string 
+			return out;
+
+
+		}
+
+		//getting a single switches position
+		bool getSinglePosition(int a)
+		{
+			return switchpositions[a];
+		}
+
+		//function for checking if a switch move
+		int didSwitchMove()
+		{
+			//iterating through each switches position 
+			for(int i=0;i<switchpositions.size();i++)
 			{
-				break;
+				//if one of them is different, return that switch number
+				if(switchpositions.at(i)!=prevswitchpositions.at(i))
+				{
+					return i;
+				}
+
+				//else, return a garbage value
+				else
+				{
+				
+					return 14;
+					
+				}
 			}
 		}
 
-		//returning switch position string 
-		return out;
 
-	}
-
-	//getting a single switches position
-	bool getSinglePosition(int a)
-	{
-		return switchpositions[a];
-	}
-
-	//function for checking if a switch moved
-	int didSwitchMove()
-	{
-		//iterating through each switches position 
-		for(int i=0;i<switchpositions.size();i++)
-		{
-			//if one of them is different, return that switch number
-			if(switchpositions.at(i)!=prevswitchpositions.at(i))
+		//function to input switch positions upon train dispatch
+		void inputPositions(std::vector<bool> input, bool a)
+		{		
+			//green line
+			if(a==0)
 			{
-				return i;
-			}
-
-			//else, return a garbage value
-			else
-			{
-				return 14;
-			}
-		}
-	}
-
-
-
-
-	//function to input switch positions upon train dispatch
-	void inputPositions(std::vector<bool> input, bool a)
-	{		
-		//green line
-		if(a==0)
-		{
-
-			//pushing switch positions to corresponding controllers
-			p_Controllers[6].addToQueue(input[0]);
-			p_Controllers[7].addToQueue(input[0]);
+				p_Controllers[6].addToQueue(input[0]);
+				p_Controllers[7].addToQueue(input[0]);
 
 			p_Controllers[8].addToQueue(input[1]);
 			p_Controllers[9].addToQueue(input[1]);
@@ -372,66 +375,73 @@ class TrackSystem
 			p_Controllers[10].addToQueue(input[3]);
 			p_Controllers[11].addToQueue(input[3]);
 
-			p_Controllers[4].addToQueue(input[5]);
-			p_Controllers[5].addToQueue(input[5]);
-				
-			p_Controllers[4].addToQueue(input[8]);
-			p_Controllers[5].addToQueue(input[8]);
+
+				p_Controllers[4].addToQueue(input[5]);
+				p_Controllers[5].addToQueue(input[5]);
+
+				p_Controllers[4].addToQueue(input[8]);
+				p_Controllers[5].addToQueue(input[8]);
+
 
 			p_Controllers[1].addToQueue(input[6]);
 
 			p_Controllers[1].addToQueue(input[7]);
 
-			p_Controllers[6].addToQueue(input[9]);
-			p_Controllers[7].addToQueue(input[9]);
+
+				p_Controllers[6].addToQueue(input[9]);
+				p_Controllers[7].addToQueue(input[9]);
+			}
+
+			//red line 
+			else if (a==1)
+			{
+				p_Controllers[14].addToQueue(input[0]);
+				p_Controllers[15].addToQueue(input[0]);
+
+				p_Controllers[14].addToQueue(input[13]);
+				p_Controllers[15].addToQueue(input[13]);
+
+				p_Controllers[12].addToQueue(input[1]);
+				p_Controllers[13].addToQueue(input[1]);
+
+				p_Controllers[12].addToQueue(input[12]);
+				p_Controllers[13].addToQueue(input[12]);
+
+				p_Controllers[24].addToQueue(input[2]);
+				p_Controllers[25].addToQueue(input[2]);
+
+				p_Controllers[24].addToQueue(input[11]);
+				p_Controllers[25].addToQueue(input[11]);
+
+				p_Controllers[22].addToQueue(input[3]);
+				p_Controllers[23].addToQueue(input[3]);
+
+				p_Controllers[22].addToQueue(input[10]);
+				p_Controllers[23].addToQueue(input[10]);
+
+				p_Controllers[20].addToQueue(input[4]);
+				p_Controllers[21].addToQueue(input[4]);
+
+				p_Controllers[20].addToQueue(input[9]);
+				p_Controllers[21].addToQueue(input[9]);
+
+				p_Controllers[18].addToQueue(input[5]);
+				p_Controllers[19].addToQueue(input[5]);
+
+				p_Controllers[18].addToQueue(input[8]);
+				p_Controllers[19].addToQueue(input[8]);
+
+				p_Controllers[16].addToQueue(input[6]);
+				p_Controllers[17].addToQueue(input[6]);
+
+				p_Controllers[16].addToQueue(input[7]);
+				p_Controllers[17].addToQueue(input[7]);
+			}
+
 		}
 
-		//red line 
-		else if (a==1)
-		{
-			p_Controllers[14].addToQueue(input[0]);
-			p_Controllers[15].addToQueue(input[0]);
-
-			p_Controllers[14].addToQueue(input[13]);
-			p_Controllers[15].addToQueue(input[13]);
-
-			p_Controllers[12].addToQueue(input[1]);
-			p_Controllers[13].addToQueue(input[1]);
-
-			p_Controllers[12].addToQueue(input[12]);
-			p_Controllers[13].addToQueue(input[12]);
-
-			p_Controllers[24].addToQueue(input[2]);
-			p_Controllers[25].addToQueue(input[2]);
-
-			p_Controllers[24].addToQueue(input[11]);
-			p_Controllers[25].addToQueue(input[11]);
-
-			p_Controllers[22].addToQueue(input[3]);
-			p_Controllers[23].addToQueue(input[3]);
-
-			p_Controllers[22].addToQueue(input[10]);
-			p_Controllers[23].addToQueue(input[10]);
-
-			p_Controllers[20].addToQueue(input[4]);
-			p_Controllers[21].addToQueue(input[4]);
-
-			p_Controllers[20].addToQueue(input[9]);
-			p_Controllers[21].addToQueue(input[9]);
-
-			p_Controllers[18].addToQueue(input[5]);
-			p_Controllers[19].addToQueue(input[5]);
-
-			p_Controllers[18].addToQueue(input[8]);
-			p_Controllers[19].addToQueue(input[8]);
-
-			p_Controllers[16].addToQueue(input[6]);
-			p_Controllers[17].addToQueue(input[6]);
-
-			p_Controllers[16].addToQueue(input[7]);
-			p_Controllers[17].addToQueue(input[7]);
-		}
-	}
+		
+	
 };
 
 #endif // SW_TRACK_SYSTEM_HPP
