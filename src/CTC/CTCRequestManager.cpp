@@ -125,6 +125,29 @@ void CTCRequestManager::HandleRequest(const Common::Request& rRequest, Common::R
 		    LOG_CTC("From ConnectionHandler.cpp : Switches on Red LINE sent");
 		    break;
 	    }
+    	case Common::RequestCode::CTC_SEND_GUI_VAILD_TRAIN:
+	    {
+	    	bool in_system = false;
+	    	int tnum = std::stoi(rRequest.GetData());
+
+	    	for (int i = 0; i < TrainSystem::GetInstance().GetTrainArr().size(); i++)
+		    {
+	    		if (tnum == TrainSystem::GetInstance().GetTrainArr()[i]->train_id)
+			    {
+	    			in_system = true;
+			    }
+		    }
+
+	    	if (in_system)
+		    {
+			    rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+		    }
+	    	else
+		    {
+			    rResponse.SetResponseCode(Common::ResponseCode::ERROR);
+		    }
+			break;
+	    }
         default:
             std::cerr << "Invalid command " << static_cast<uint16_t>(rRequest.GetRequestCode())
                       << " received" << std::endl;
