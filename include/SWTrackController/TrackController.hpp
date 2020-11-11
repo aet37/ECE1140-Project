@@ -1,55 +1,59 @@
 //
-// Created by Nathan Swanson on 10.6.20
+// Edited by Nathan Swanson on 11.11.20
 //
 
 #ifndef TRACK_CONTROLLER_HPP
 #define TRACK_CONTROLLER_HPP
-#include <UserProgram.hpp>
 #include <vector>
 #include <queue>
+#include "UserProgram.hpp"
 
 // class that holds information on a track controller
 class TrackController
 {
 	private:
 	// Variables
+
+	//uploaded pLC program
 	UserProgram PLC_Program;
+
+	//suggested speed sent from CTC
 	int suggested_speed=0;
+
+	//vector that holds occupancies controlled by controller
 	std::vector<bool> occupancy;
+
+	//vector that holds previous occupancies controlled by controller
 	std::vector<bool> prevOccupancy;
+
+	//switch position
 	bool switch_position=0;
+
+	//queue that holds switch positions to be popped off
 	std::queue<bool> positionQueue;
+
+	//set to 1 when controller is created
 	bool setup=0;
+
+	//variable that tells controller when to pop off next value
 	bool popNext=0;
 
 
 	public:
+
+	//constructor
+	TrackController();
 	
-	bool getSwitchPos()
-	{
-		return switch_position;
-	}
+	//returns switch position
+	bool getSwitchPos();
 
-	bool changeSwitchPos()
-	{
-		if(switch_position==0)
-		{
-			switch_position=1;
-			return switch_position;
-		}
-		else if(switch_position==1)
-		{
-			switch_position=0;
-			return switch_position;
-		}
-	}
+	//changes switch position
+	bool changeSwitchPos();
 
-	std::vector<bool> getOccupancy()
-	{
-		return occupancy;
-	}
+	//returns occupancies of controller
+	std::vector<bool> getOccupancy();
 
-	bool setOccupancy(std::vector<bool> newOccupancy)
+	/*bool setupOccupancy(std::vector<bool> newOccupancy)
 	{
 		if(newOccupancy.size()==occupancy.size()&&setup==1)
 		{
@@ -66,49 +70,31 @@ class TrackController
 		{
 			return 0;
 		}
-	}
+	}*/
 
-	int getSuggestedSpeed()
-	{
-		return suggested_speed;
-	}
+	//sets a block in the controller as occupied
+	void setOccupied(int a);
 
-	void setSuggestedSpeed(int a)
-	{
-		suggested_speed=a;
-	}
+	//sets a block in the controller as unoccupied
+	void setUnoccupied(int a);
 
-	void addToQueue(bool a)
-	{
-		positionQueue.push(a);
-	}
+	//returns suggested speed sent by CTC
+	int getSuggestedSpeed();
 
-	void setPopNext()
-	{
-		popNext=1;
-	}
+	//suggested speed sent by CTC
+	void setSuggestedSpeed(int a);
+
+	//used at train dispatch to put a new value on the switch
+	void addToQueue(bool a);
+
+	//sets Popnext to 1
+	void setPopNext();
 	
-	bool queueUpdate()
-	{
-		if(popNext=1)
-		{
-			positionQueue.pop();
-			switch_position=positionQueue.front();
-			popNext=0;
-			
-		}
-		
-	}
+	//pops next value off controller, resets Popnext
+	bool queueUpdate();
 
-	void loop()
-	{
-		PLC_Program();
-		queueUpdate();
-
-
-
-
-	}
+	//loops through plc program
+	void loop();
 
 
 	

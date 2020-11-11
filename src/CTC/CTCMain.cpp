@@ -36,7 +36,7 @@ void moduleMain()
 		    case Common::RequestCode::CTC_GUI_DISPATCH_TRAIN:
 		    {
 		    	// Get Line train is on
-		    	int ln = std::stoi(req.GetData().substr(0, 1));
+		    	int ln = req.ParseData<int>(0);
 		    	Line line_on;
 		    	if(ln == 0)
 			    {
@@ -59,7 +59,7 @@ void moduleMain()
 			    // Set Suggested Speed and Authority
 			    pto_send->command_speed = 55;
 			    pto_send->authority = 3;
-
+				pto_send->line_on = line_on;
 			    // Set route
 			    if(line_on == LINE_GREEN)
 			    {
@@ -127,8 +127,9 @@ void moduleMain()
 			// Get Occupancies from Track Controller
 	    	case Common::RequestCode::CTC_GET_OCCUPANCIES:
 		    {
-			    std::string green_occupancies = req.GetData().substr(0, 150);  // get green block occupancies
-			    std::string red_occupancies = req.GetData().substr(150, 76);    // get red block occupancies
+				LOG_CTC("CTC received this: %s", req.GetData().c_str());
+			    std::string green_occupancies = req.ParseData<std::string>(0);  // get green block occupancies
+			    std::string red_occupancies = req.ParseData<std::string>(1);    // get red block occupancies
 
 			    for(int i = 0; i < TrainSystem::GetInstance().GetTrackArr(LINE_GREEN).size(); i++)
 			    {
@@ -171,8 +172,8 @@ void moduleMain()
 		    // Get Switches from Track Controller
 		    case Common::RequestCode::CTC_GET_SWITCHES:
 		    {
-			    std::string green_switches = req.GetData().substr(0, 6);  // get green switches
-			    std::string red_switches = req.GetData().substr(6, 7);    // get red switches
+			    std::string green_switches = req.ParseData<std::string>(0);  // get green switches
+			    std::string red_switches = req.ParseData<std::string>(1);    // get red switches
 
 			    for(int i = 0; i < TrainSystem::GetInstance().GetSwitchesArr(LINE_GREEN).size(); i++)
 			    {

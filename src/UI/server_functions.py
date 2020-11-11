@@ -107,21 +107,19 @@ class RequestCode(Enum):
     TRACK_MODEL_UPDATE_AUTHORITY = 139 # Used by the track controller to update the authority of a train
     TRACK_MODEL_DISPATCH_TRAIN = 140 # Used by the track controller to signify that a new train has been dispatched
 
-    TRAIN_MODEL_GUI_GATHER_DATA = 160 # Used periodically by the gui to update the user interface
-    TRAIN_MODEL_DISPATCH_TRAIN = 161 # Used by the track model to signify that a new train has been dispatched
-    TRAIN_MODEL_UPDATE_AUTHORITY = 162 # Used by the track model to update a train's authority
-    TRAIN_MODEL_UPDATE_COMMAND_SPEED = 163 # Used by the track model to update a train's command speed
-    TRAIN_MODEL_SET_THE_DAMN_LIGHTS = 164 # Used by the track model to let the train model know that the train is in a tunnel
-    TRAIN_MODEL_GIVE_POWER = 165 # Used by the train controller to give the train model a value for power
-    TRAIN_MODEL_GUI_CAUSE_FAILURE = 166 # Used by the gui to cause a train failure
-    TRAIN_MODEL_GUI_SET_TRAIN_LENGTH = 167 # Used by the gui to set a train's length
-    TRAIN_MODEL_GUI_SET_TRAIN_MASS = 168 # Used by the gui to set a train's mass
-    TRAIN_MODEL_GUI_SET_TRAIN_HEIGHT = 169 # Used by the gui to set a train's height
-    TRAIN_MODEL_GUI_SET_TRAIN_WIDTH = 170 # Used by the gui to set a train's width
-    TRAIN_MODEL_GUI_SET_TRAIN_PASSENGER_COUNT = 171 # Used by the gui to set a train's passenger count
-    TRAIN_MODEL_GUI_SET_TRAIN_CREW_COUNT = 172 # Used by the gui to set a train's crew count
-    TRAIN_MODEL_GUI_UPDATE_DROP_DOWN = 173 # Used by the gui to update the drop-down that contains the trains
-    TRAIN_MODEL_GUI_RECEIVE_LIGHTS = 174 # Used by the swtrain to toggle lights
+    TRAIN_MODEL_DISPATCH_TRAIN = 160 # Used by the track model to signify that a new train has been dispatched
+    TRAIN_MODEL_GUI_1_GATHER_DATA = 161 # Used periodically by the gui to update page 1 the user interface
+    TRAIN_MODEL_GUI_2_GATHER_DATA = 162 # Used periodically by the gui to update page 2 the user interface
+    TRAIN_MODEL_GUI_3_GATHER_DATA = 163 # Used periodically by the gui to update page 3 the user interface
+    TRAIN_MODEL_GUI_SET_TRAIN_LENGTH = 164 # Used by the gui to set a train's length
+    TRAIN_MODEL_GUI_SET_TRAIN_MASS = 165 # Used by the gui to set a train's mass
+    TRAIN_MODEL_GUI_SET_TRAIN_HEIGHT = 166 # Used by the gui to set a train's height
+    TRAIN_MODEL_GUI_SET_TRAIN_WIDTH = 167 # Used by the gui to set a train's width
+    TRAIN_MODEL_GUI_SET_TRAIN_PASSENGER_COUNT = 168 # Used by the gui to set a train's passenger count
+    TRAIN_MODEL_GUI_SET_TRAIN_CREW_COUNT = 169 # Used by the gui to set a train's crew count
+    TRAIN_MODEL_GUI_UPDATE_DROP_DOWN = 170 # Used by the gui to update the drop-down that contains the trains
+    TRAIN_MODEL_GUI_RECEIVE_LIGHTS = 171 # Used by the swtrain to toggle lights
+    TRAIN_MODEL_GUI_RECEIVE_EVERYTHING = 172 # Used by the swtrain to toggle everything
 
     SWTRAIN_DISPATCH_TRAIN = 192 # Used by the train model to signify that a new train has been dispatched
     SWTRAIN_UPDATE_CURRENT_SPEED = 193 # Used by the train model to update a train's current speed
@@ -143,6 +141,7 @@ class RequestCode(Enum):
     SWTRAIN_GUI_SET_KP_KI = 209 # Used by the gui to set a train's kp/ki
     SWTRAIN_GUI_SWITCH_MODE = 210 # Used by gui to switch between automatic and manual mode
     SWTRAIN_TIME_TRIGGER = 211 # Used to trigger PID loop and calculate power
+    SWTRAIN_GUI_UPDATE_DROP_DOWN = 212 # Used by the gui to update the drop-down that contains the controllers
 
     HWTRAIN_PULL_EBRAKE = 224 # Used by the SW Train Ctrl to pull the train's ebrake
     HWTRAIN_SET_SETPOINT_SPEED = 225 # Used by the SW Train Ctrl to set a train's setpoint speed

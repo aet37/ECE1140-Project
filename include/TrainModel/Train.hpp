@@ -369,33 +369,33 @@ public:
 protected:
 private:
     // INTEGERS (Vital)
-    int m_destinationBlock;
-    int m_commandSpeed;
-    int m_currentSpeed; // THIS IS CALCULATED
-    int m_position; // THIS IS CALCULATED
-    int m_authority;
-    int m_currentLine;
-    int m_currentBlock;
+    int m_destinationBlock; // disp_destination_block
+    int m_commandSpeed; // disp_command_speed
+    int m_currentSpeed; // THIS IS CALCULATED // disp_current_speed
+    int m_position; // THIS IS CALCULATED // disp_position
+    int m_authority; // disp_authority
+    int m_currentLine; // disp_current_line
+    int m_currentBlock; // disp_current_block
     // INTEGERS (Nonvital)
-    int m_tempControl;
+    int m_tempControl; // disp_temperature_control
     // BOOLEANS (Vital)
-    bool m_emergencyPassengeBrake;
-    bool m_serviceBrake;
-    bool m_brakeCommand;
+    bool m_emergencyPassengeBrake; // disp_emergency_passenger_brake
+    bool m_serviceBrake; // disp_service_brake
+    bool m_brakeCommand; // disp_brake_command
     // BOOLEANS (Nonvital)
-    bool m_headLights;
-    bool m_cabinLights;
-    bool m_advertisements;
-    bool m_announcements;
-    bool m_doors;
+    bool m_headLights; // disp_head_lights
+    bool m_cabinLights; // disp_cabin_lights
+    bool m_advertisements; // disp_advertisements
+    bool m_announcements; // disp_announcements
+    bool m_doors; // disp_door
 
     // Parameter Inputs
     int m_trainLength;
     int m_trainWidth;
     int m_trainHeight;
     int m_trainMass;
-    int m_trainCrewCount;
-    int m_trainPassCount;
+    int m_trainCrewCount; // disp_crew_count
+    int m_trainPassCount; // disp_pass_count
 
     // Failure cases
     bool m_signalPickupFailure;
@@ -403,7 +403,7 @@ private:
     bool m_brakeFailure;
 
     // MISC.
-    bool m_mode;  // Auto or Manual
+    bool m_mode;  // Auto or Manual // disp_train_mode
 };
 
 } // namespace TrainModel

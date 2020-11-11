@@ -13,6 +13,10 @@
 #include "SWTrackControllerMain.hpp"
 #include "TrainModelMain.hpp"
 #include "TrackInfo.hpp"
+#include "Track.hpp"
+#include "Block.hpp"
+#include "Station.hpp"
+#include "Switch.hpp"
 
 namespace TrackModel
 {
@@ -138,7 +142,7 @@ void initializeRouteMaps(std::map<std::string, std::vector<uint32_t>>& rGreenLin
                 base.insert(base.end(), choice6.begin(), choice6.end());
                 }
                 base.insert(base.end(), base3.begin(), base3.end());
-                
+
                 for (int l = 0; l < 2; l++)
                 {
                     if (l == 0)
@@ -171,7 +175,7 @@ void initializeRouteMaps(std::map<std::string, std::vector<uint32_t>>& rGreenLin
                                 base.insert(base.end(), choice11.begin(), choice11.end());
                                 for (int o = 0; o < 2; o++)
                                 {
-                                    
+
                                     if (o == 0)
                                     {
                                         p = 0;
@@ -213,7 +217,7 @@ void initializeRouteMaps(std::map<std::string, std::vector<uint32_t>>& rGreenLin
 
     blocks = {};
     rRedLineRoutes.insert(std::pair<std::string, std::vector<uint32_t>>("01111101000001", blocks));
-*/   
+*/
 }
 
 void moduleMain()
@@ -267,14 +271,29 @@ void moduleMain()
                 std::string switchPositions = req.ParseData<std::string>(5);
 
 
+                std::string dispatchTrainString = std::to_string(trainId);
+                dispatchTrainString.append(" "+std::to_string(destinationBlock));
+                dispatchTrainString.append(" "+std::to_string(commandSpeed));
+                dispatchTrainString.append(" "+std::to_string(authority));
+                dispatchTrainString.append(" "+std::to_string(lineNumber));
 
+                if (lineNumber == 0)
+                {
+                    dispatchTrainString.append(" -1 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 85 84 83 82 81 80 79 78 77 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 -1");
+                }
+                else
+                {
+                    dispatchTrainString.append(" -1 9 8 7 6 5 4 3 2 1 16 17 18 19 20 21 22 23 24 25 26 27 76 75 74 73 72 33 34 35 36 37 38 71 70 69 68 67 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 52 51 50 49 48 47 46 45 44 43 42 41 40 39 38 37 36 35 34 33 32 31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 1 2 3 4 5 6 7 8 -1");
+                }
 
-                std::string theIntString = std::to_string(trainId);
-                Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_DISPATCH_TRAIN, theIntString);
+                //auto route = pGreenLinePaths->find(switchPositions)->first;
+
+                Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_DISPATCH_TRAIN, dispatchTrainString);
                 TrainModel::serviceQueue.Push(newRequest);
-                LOG_TRACK_MODEL("Track model dispatch train %s", theIntString.c_str());
+                LOG_TRACK_MODEL("Track model dispatch train %s", dispatchTrainString.c_str());
                 break;
             }
+
             case Common::RequestCode::TRACK_MODEL_GUI_TRACK_LAYOUT:
             {
                 // get line name from string
@@ -307,17 +326,18 @@ void moduleMain()
                 test.erase(0, 10);
                 int pos = test.find(',');
                 std::string gettingTrackNumber = test.substr(0, pos);
-                printf("test123\n");
+
                 int trackNumberInt = stoi(gettingTrackNumber);
 
                 // grab track using track number
                 Track *theTrack = TrackInfo::GetInstance().getTrack(trackNumberInt);
 
                 // get number of block, convert to int
-                test.erase(0, pos + 2);
+                //test.erase(0, pos+2); //???
+                test.erase(0, pos + 12);
                 pos = test.find(',');
                 std::string blockNumberString = test.substr(0, pos);
-                printf("test1234\n");
+
                 int blockNumber = stoi(blockNumberString);
                 test.erase(0, pos + 12);
 
@@ -336,7 +356,7 @@ void moduleMain()
                 // get get speed limit, convert to int
                 pos = test.find(',');
                 std::string blockSpeedLimitString = test.substr(0, pos);
-                printf("test12345\n");
+
                 int blockSpeedLimit = stoi(blockSpeedLimitString);
                 test.erase(0, pos + 15);
 
@@ -350,28 +370,110 @@ void moduleMain()
                 pos = test.find(',');
                 std::string blockCumulativeElevationString = test.substr(0, pos);
                 double blockCumulativeElevation = stod(blockCumulativeElevationString);
+                test.erase(0, pos + 16);
+
+                // get track block travel direction
+                pos = test.find("\",");
+                std::string blockDirection = test.substr(0, pos);
+                test.erase(0, pos + 19);
+
+                //get underground boolean
+                pos = test.find('\"');
+                std::string blockUnderground = test.substr(0, pos);
+                test.erase(0, pos + 15);
+
+                //get block section
+                pos = test.find('\"');
+                std::string blockSection = test.substr(0, pos);
 
                 // get StationInfo
-                if (test.find("Station\": \"") != std::string::npos){
+                std::string stationInfo = "";
+                if (test.find("Station\": \"") != std::string::npos)
+                {
                     pos = test.find("Station\": \"");
                     test.erase(0, pos + 11);
-                    //std::string stationInfo
+                    pos = test.find("\",");
+                    stationInfo = test.substr(0, pos);
+                    stationInfo.append(",");
+                    test.erase(0, pos + 17);
+                    pos = test.find('\"');
+                    std::string stationInfo2 = test.substr(0, pos);
+                    stationInfo.append(stationInfo2);
+                    test.erase(0, pos + 1);
+                    printf("\n\n\n");
+                    printf("info:\n\n");
+                    printf(stationInfo.c_str());
+                    printf("\n\n\n");
+                    // ex: NAME RIGHT
+                }
+                else
+                {
+                    stationInfo = "";
                 }
 
+                //get switchInfo
+                std::string switchInfo = "";
+                if (test.find("Switches") != std::string::npos)
+                {
+                    pos = test.find("Switches");
+                    test.erase(0, pos + 12);
+                    pos = test.find(',');
+                    switchInfo = test.substr(0, pos);
+                    test.erase(0, pos + 1);
+                    pos = test.find('\"');
+                    std::string secondSwitchString = test.substr(0, pos);
+                    switchInfo.append(" ").append(secondSwitchString);
+                    test.erase(0, pos + 1);
+                    // ex: 5 7
+                }
+                else
+                {
+                    switchInfo = "";
+                }
 
+                std::string railwayCrossing = "false";
+                if (test.find("Railway Crossing") != std::string::npos)
+                {
+                    pos = test.find("Railway Crossing");
+                    test.erase(0, pos + 20);
+                    pos = test.find('\"');
+                    railwayCrossing = test.substr(0, pos);
+                }
+                else
+                {
+                    railwayCrossing = "false";
+                }
 
+                // add block to track we got from block info before
+                theTrack->AddBlock(blockNumber, blockLength, blockGrade,
+                blockSpeedLimit, blockElevation, blockCumulativeElevation,
+                blockDirection, blockUnderground, blockSection, stationInfo, switchInfo, railwayCrossing);
+
+                break;
+            }
+            case Common::RequestCode::TRACK_MODEL_UPDATE_OCCUPANCY:
+            {
+                LOG_TRACK_MODEL("Received occupancy %s", req.GetData().c_str());
+                // (trainid, trackid, blockId, trainOrNot)
+                uint32_t trainId = req.ParseData<uint32_t>(0);
+                uint32_t trackId = req.ParseData<uint32_t>(1);
+                uint32_t blockId = req.ParseData<uint32_t>(2);
+                bool occupancy = req.ParseData<bool>(3);
+
+                // TODO: Process this info
+
+                // (trackId, blockId)
+                Common::Request newReq(Common::RequestCode::SWTRACK_SET_TRACK_OCCUPANCY);
+                newReq.AppendData(std::to_string(trackId));
+                newReq.AppendData(std::to_string(blockId));
+
+                SWTrackController::serviceQueue.Push(newReq);
                 break;
             }
             default:
                 ASSERT(false, "Unexpected request code %d", static_cast<uint16_t>(req.GetRequestCode()));
-
         }
-
-
     }
-
-
-
 }
 
 } // namespace TrackModel

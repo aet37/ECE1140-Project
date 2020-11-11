@@ -4,17 +4,31 @@ from PyQt5.QtCore import QTimer
 import sys
 sys.path.insert(1, 'src')
 from UI.server_functions import *
-from UI.Common.common import Alert
+from UI.Common.common import Alert, Confirmation
 
 class SWTrainUi(QtWidgets.QMainWindow):
 
     def __init__(self):
         super(SWTrainUi, self).__init__()
-        uic.loadUi('src/UI/SWTrainController/TrainController.ui', self)
 
-        # Create timer to update pages
-        self.train_actions_timer = QTimer()
-        #self.train_actions_timer.timeout.connect(self.update_data)
+        # Define timers
+        self.main_menu_timer = QTimer()
+        #self.controller_info_timer = QTimer()
+        #self.failure_info_timer = QTimer()
+        self.main_menu_timer.timeout.connect(self.update_controller_list)
+        #self.controller_info_timer.timeout.connect(self.update_gui1)
+        #self.failure_info_timer.timeout.connect(self.update_gui2)
+
+        # Define current train id
+        self.current_train_id = "1"
+
+        uic.loadUi('src/UI/SWTrainController/TrainController.ui', self)
+        self.stop_all_timers() # Restart timers
+        self.main_menu_timer.start(2000) # 2 seconds
+        
+        self.TrainIDBox.currentIndexChanged.connect(self.update_current_train_id) # Dropdown box
+        self.TrainIDBox2.currentIndexChanged.connect(self.update_current_train_id2) # Dropdown box
+        self.TrainIDBox3.currentIndexChanged.connect(self.update_current_train_id3) # Dropdown box
 
         # Initialize all buttons and the page of the UI
         self.initUI()
@@ -43,11 +57,13 @@ class SWTrainUi(QtWidgets.QMainWindow):
         # When User wants to toggle mode, go to toggle_mode function
         self.automatic_mode.clicked.connect(self.toggle_mode1)
         self.manual_mode.clicked.connect(self.toggle_mode2)
-        ##########################################
 
-        # Start timer to update train actions page
-        self.stopAllTimers()
-        self.train_actions_timer.start(250)
+        # When set setpoint button is clicked, go to set_setpoint function
+        self.set_setpoint_speed.clicked.connect(self.set_setpoint)
+
+        # When service brake button is clicked, go to toggle_service_brake function
+        self.service_brake.clicked.connect(self.toggle_service_brake)
+        ##########################################
 
         self.button2.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(2))
         self.return_button1.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(0))
@@ -93,6 +109,12 @@ class SWTrainUi(QtWidgets.QMainWindow):
         # Define Manual Mode button
         self.manual_mode = self.findChild(QtWidgets.QPushButton, 'ManualMode')
 
+        # Define set speed button
+        self.set_setpoint_speed = self.findChild(QtWidgets.QPushButton, 'SetSpeed')
+
+        # Define service brake button
+        self.service_brake = self.findChild(QtWidgets.QPushButton, 'ServiceBrake')
+
         self.defineToggles()
 
         #Define buttons on Information Page
@@ -109,6 +131,90 @@ class SWTrainUi(QtWidgets.QMainWindow):
         self.ads_button.setCheckable(True)
         self.ads_button.setStyleSheet("QPushButton{background-color:green;}QPushButton:checked{background-color:rgb(255, 51, 16);}")
 
+    def update_current_train_id(self):
+        self.current_train_id = self.TrainIDBox.currentText()
+    
+    def update_current_train_id2(self):
+        self.current_train_id = self.TrainIDBox2.currentText()
+    
+    def update_current_train_id3(self):
+        self.current_train_id = self.TrainIDBox3.currentText()
+
+    def update_controller_list(self):
+        # Update the drop down
+        responsecode, dataReceived = send_message(RequestCode.SWTRAIN_GUI_UPDATE_DROP_DOWN) #FILL WITH COLLIN REQUEST
+        if responsecode == ResponseCode.SUCCESS:
+            # Parse the data and update the gui.
+            dataParsed = int(dataReceived)
+            count = 1
+            currentIndex = self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentIndex()
+            currentIndex2 = self.findChild(QtWidgets.QComboBox, 'TrainIDBox2').currentIndex()
+            currentIndex3 = self.findChild(QtWidgets.QComboBox, 'TrainIDBox3').currentIndex()
+            self.findChild(QtWidgets.QComboBox, 'TrainIDBox').clear()
+            self.findChild(QtWidgets.QComboBox, 'TrainIDBox2').clear()
+            self.findChild(QtWidgets.QComboBox, 'TrainIDBox3').clear()
+            while(count < dataParsed + 1):
+                self.TrainIDBox.addItem(str(count))
+                self.TrainIDBox2.addItem(str(count))
+                self.TrainIDBox3.addItem(str(count))
+                count = count + 1
+
+            # Update the global train id
+            if self.stacked_widget.currentIndex() == 0:
+                self.update_current_train_id()
+                self.findChild(QtWidgets.QComboBox, 'TrainIDBox').setCurrentIndex(currentIndex)
+                self.findChild(QtWidgets.QComboBox, 'TrainIDBox2').setCurrentIndex(currentIndex)
+                self.findChild(QtWidgets.QComboBox, 'TrainIDBox3').setCurrentIndex(currentIndex)
+                print(str(self.stacked_widget.currentIndex()) + " If statement 1")
+            elif self.stacked_widget.currentIndex() == 1:
+                self.update_current_train_id2()
+                self.findChild(QtWidgets.QComboBox, 'TrainIDBox').setCurrentIndex(currentIndex2)
+                self.findChild(QtWidgets.QComboBox, 'TrainIDBox2').setCurrentIndex(currentIndex2)
+                self.findChild(QtWidgets.QComboBox, 'TrainIDBox3').setCurrentIndex(currentIndex2)
+                print(str(self.stacked_widget.currentIndex()) + " If statement 2")
+            else:
+                self.update_current_train_id3()
+                self.findChild(QtWidgets.QComboBox, 'TrainIDBox').setCurrentIndex(currentIndex3)
+                self.findChild(QtWidgets.QComboBox, 'TrainIDBox2').setCurrentIndex(currentIndex3)
+                self.findChild(QtWidgets.QComboBox, 'TrainIDBox3').setCurrentIndex(currentIndex3)
+                print(str(self.stacked_widget.currentIndex()) + " If statement 3")
+
+        if "" in self.current_train_id:
+            return
+
+        # Update Train's info
+        responsecode, dataReceived = send_message(RequestCode.SWTRAIN_GUI_GATHER_DATA, str(self.current_train_id))
+        if responsecode == ResponseCode.SUCCESS:
+            # Parse the data and update the gui.
+            dataParsed = dataReceived.split()
+
+            # Store all data into individual variables
+            self.doors_status = dataParsed[0]
+            self.lights_status = dataParsed[1]
+            self.announcements_status = dataParsed[2]
+            self.advertisements_status = dataParsed[3]
+            self.curr_speed = dataParsed[4]
+            self.com_speed = dataParsed[5]
+            self.setpoint_speed = dataParsed[6]
+            self.service_brake_status = dataParsed[7]
+            self.current_mode = dataParsed[8]
+
+            # Change GUI to reflect current data
+            if self.doors_status == "1":
+                self.doors_button.setStyleSheet("background-color: rgb(255, 51, 16);")
+            else:
+                self.doors_button.setStyleSheet("background-color: green;")
+            
+
+            #self.findChild(QtWidgets.QLabel, 'disp_acceleration_limit').setText(dataParsed[0] + " m/s²")
+            #self.findChild(QtWidgets.QLabel, 'disp_deceleration_limit').setText(dataParsed[1] + " m/s²")
+            #self.findChild(QtWidgets.QLabel, 'disp_block_elevation').setText(dataParsed[2] + " m")
+            #self.findChild(QtWidgets.QLabel, 'disp_block_slope').setText(dataParsed[3] + " m/s")
+            # UPDATE POSITION HERE
+            #self.findChild(QtWidgets.QLabel, 'disp_block_size').setText(dataParsed[4] + " m")
+            #self.findChild(QtWidgets.QLabel, 'disp_current_block').setText("block #" + dataParsed[5])
+            #self.findChild(QtWidgets.QLabel, 'disp_destination_block').setText("block #" + dataParsed[6])
+    
     def set_button_state(self, index):
         self.button1.setEnabled(True)
         self.button2.setEnabled(True)
@@ -147,7 +253,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
             return
 
         if int(temp) < 64 or int(temp) > 80 :
-            alert = Alert("Invalid Temperature!")
+            alert = Alert("Invalid temperature!")
             alert.exec_()
             return
         
@@ -155,18 +261,111 @@ class SWTrainUi(QtWidgets.QMainWindow):
         send_message(RequestCode.SWTRAIN_GUI_SET_SEAN_PAUL, ("1" + " " + temp) )
 
     def toggle_mode1(self):
-        # Toggle color of mode boxes
-        self.automatic_mode.setStyleSheet("background-color: green;")
-        self.manual_mode.setStyleSheet("background-color: rgb(255, 51, 16);")
+
+        # If automatic mode is green, button does nothing
+        if self.automatic_mode.styleSheet() == "background-color: green;" :
+            return
+
+        # Get attempted override code
+        override = self.findChild(QtWidgets.QLineEdit, "OverrideCode").text()
+
+        # Check if override code is correct
+        if override != "override" :
+            alert = Alert("Invalid override code!")
+            alert.exec_()
+            return
+        else: #Case if override code is correct, confirm choice
+            confirmation = Confirmation("Code is correct!\nSwitch mode to Automatic?")
+            response = confirmation.exec_()
+            if response == False:
+                return
+            else:
+                # Toggle color of mode boxes
+                self.automatic_mode.setStyleSheet("background-color: green;")
+                self.manual_mode.setStyleSheet("background-color: rgb(255, 51, 16);")
             
-        #send_message(RequestCode.SWTRAIN_GUI_SWITCH_MODE, "1")
+        send_message(RequestCode.SWTRAIN_GUI_SWITCH_MODE, "1")
 
     def toggle_mode2(self):
-        # Toggle color of mode boxes
-        self.automatic_mode.setStyleSheet("background-color: rgb(255, 51, 16);")
-        self.manual_mode.setStyleSheet("background-color: green;")
-            
-        #send_message(RequestCode.SWTRAIN_GUI_SWITCH_MODE, "1")
+        # If manual mode is green, button does nothing
+        if self.manual_mode.styleSheet() == "background-color: green;":
+            return
+
+        # Get attempted override code
+        override = self.findChild(QtWidgets.QLineEdit, "OverrideCode").text()
+
+        # Check if override code is correct
+        if override != "override" :
+            alert = Alert("Invalid override code!")
+            alert.exec_()
+            return
+        else: #Case if override code is correct, confirm choice
+            confirmation = Confirmation("Code is correct!\nSwitch mode to Manual?")
+            response = confirmation.exec_()
+            if response == False:
+                return
+            else:
+                # Toggle color of mode boxes
+                self.automatic_mode.setStyleSheet("background-color: rgb(255, 51, 16);")
+                self.manual_mode.setStyleSheet("background-color: green;")
+   
+        send_message(RequestCode.SWTRAIN_GUI_SWITCH_MODE, "1")
+    
+    def set_setpoint(self):
+        # Get setpoint speed
+        setpoint_speed = self.findChild(QtWidgets.QLineEdit, "EnterSpeed").text()
+
+        # Check if train is in manual mode
+        if self.manual_mode.styleSheet() != "background-color: green;":
+            alert = Alert("Cannot input value!\nTrain must be in manual mode!")
+            alert.exec_()
+            return
+        
+        # Check if number was entered
+        try:
+            int(setpoint_speed)
+        except ValueError:
+            alert = Alert("Setpoint speed must be an integer value")
+            alert.exec_()
+            return
+
+        # Check if speed entered is within valid range
+        if int(setpoint_speed) < 0 or int(setpoint_speed) > 43.496:
+            alert = Alert("Invalid speed entered!")
+            alert.exec_()
+            return
+        
+        # Check if speed entered is less than command speed
+        #com_sp = self.findChild(QtWidgets.QLabel, "CommandSpeedLabel").text()
+        #if int(setpoint_speed) > int(com_sp):
+        #    alert = Alert("Error! Entered speed must be lower than speed limit!")
+        #    alert.exec_()
+        #    return
+        
+        # If all conditions pass, check for confirmation
+        confirmation = Confirmation("Entered speed is valid!\nSet speed?")
+        response = confirmation.exec_()
+        if response == False:
+            return
+        else:
+            send_message(RequestCode.SWTRAIN_GUI_SET_SETPOINT_SPEED, "1")
+
+    def toggle_service_brake(self):
+        # Check if authority is zero
+        # <check here>
+
+        #Confirm use of service brake
+        confirmation = Confirmation("Turn service brake on?")
+        response = confirmation.exec_()
+        if response == False:
+            return
+        else:
+            if self.service_brake.styleSheet() == "background-color: green;":
+                self.service_brake.setStyleSheet("background-color: rgb(255, 51, 16);")
+            else:
+                self.service_brake.setStyleSheet("background-color: green;")
+
+            send_message(RequestCode.SWTRAIN_GUI_PRESS_SERVICE_BRAKE, "1")
 
     def logout(self):
         # This is executed when the button is pressed
@@ -190,8 +389,10 @@ class SWTrainUi(QtWidgets.QMainWindow):
     #        self.SpeedLimitLabel.setText(speed_limit + " MPH")
     #        send_message(RequestCode.SEND_TRAIN_MODEL_INFO, command_speed)
 
-    def stopAllTimers(self):
-        self.train_actions_timer.stop()
+    def stop_all_timers(self):
+        self.main_menu_timer.stop()
+        #self.controller_info_timer.stop()
+        #self.failure_info_timer.stop()
 
 app = QtWidgets.QApplication(sys.argv)
 windows = SWTrainUi()

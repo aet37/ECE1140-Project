@@ -21,7 +21,6 @@ Common::ServiceQueue<Common::Request> serviceQueue;
 void moduleMain()
 {
     LOG_SW_TRAIN_CONTROLLER("Thread starting...");
-    // ControlSystem TrainControllers;
     while(true)
     {
         Common::Request req = serviceQueue.Pop();
@@ -42,12 +41,19 @@ void moduleMain()
             }
             case Common::RequestCode::SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS:
             {
+                ControlSystem::getInstance().createNewController(1,2,3);
+                // Read train ID
                 uint32_t trainID = req.ParseData<uint32_t>(0);
-                // Controller tempController = TrainControllers.getControllerInstance(TrainID);
-                // uint32_t lightStatus = tempController.toggleLights();
-                // std::string lightStatusString = std::to_string(lightStatus);
-                // Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_SET_THE_DAMN_LIGHTS, lightStatusString)
-                // TrainModel::serviceQueue.Push(newRequest)
+                // toggle train lights
+                Controller tempController;
+                uint32_t lightStatus = tempController.toggleLights();
+                std::string trainIDString = std::to_string(trainID);
+                std::string lightStatusString = std::to_string(lightStatus);
+                // Create new request and send to Train Model
+                Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_LIGHTS);
+                newRequest.AppendData(trainIDString);
+                newRequest.AppendData(lightStatusString);
+                TrainModel::serviceQueue.Push(newRequest);
                 LOG_SW_TRAIN_CONTROLLER("SWTrainController lights: %d", trainID);
                 break;
             }
@@ -107,6 +113,41 @@ void moduleMain()
                 // Common::Request newRequest(Common::RequestCode:: , modeStatusString)
                 // TrainModel::serviceQueue.Push(newRequest)
                 LOG_SW_TRAIN_CONTROLLER("SWTrainController mode: %d", trainID);
+                break;
+            }
+            case Common::RequestCode::SWTRAIN_GUI_SET_SETPOINT_SPEED:
+            {
+                uint32_t trainID = req.ParseData<uint32_t>(0);
+                // uint32_t setpoint = req.ParseData<uint32_t>(1); 
+                // Controller tempController = TrainControllers.getControllerInstance(TrainID);
+                //tempController.setSetpointSpeed(setpoint);
+                // std::string setpointString = std::to_string(setpoint);
+                // Common::Request newRequest(Common::RequestCode:: , setpointString)
+                // TrainModel::serviceQueue.Push(newRequest)
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController setpoint speed: %d", trainID);
+                break;
+            }
+            case Common::RequestCode::SWTRAIN_GUI_PRESS_SERVICE_BRAKE:
+            {
+                uint32_t trainID = req.ParseData<uint32_t>(0);
+                // Controller tempController = TrainControllers.getControllerInstance(TrainID);
+                // uint32_t brakeStatus = tempController.toggleServiceBrake();
+                // std::string brakeStatusString = std::to_string(brakeStatus);
+                // Common::Request newRequest(Common::RequestCode:: , brakeStatusString)
+                // TrainModel::serviceQueue.Push(newRequest)
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController service brake: %d", trainID);
+                break;
+            }
+            case Common::RequestCode::SWTRAIN_GUI_GATHER_DATA:
+            {
+                uint32_t trainID = req.ParseData<uint32_t>(0);
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController update GUI");
+                break;
+            }
+            case Common::RequestCode::SWTRAIN_GUI_UPDATE_DROP_DOWN:
+            {
+
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController update drop-down");
                 break;
             }
             default:
