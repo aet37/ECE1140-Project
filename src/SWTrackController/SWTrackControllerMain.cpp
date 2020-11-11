@@ -75,6 +75,7 @@ void moduleMain()
             }
             case Common::RequestCode::SWTRACK_SET_TRACK_OCCUPANCY:
             {
+
                 /**
                  * Receiving this information:
                  * uint32_t lineId
@@ -170,52 +171,8 @@ void moduleMain()
                     TrackModel::serviceQueue.Push(SwitchUpdateTM);
                 }
 
-                /**
-                 * TODO:
-                 * Find the controllers that control this block. Set the specific block occupancy
-                 * To what was given above
-                */
+                
 
-                // BELOW CODE IS TEMPORARY ///////////////////////////////////////
-                /*Common::Request OccUpdate(Common::RequestCode::CTC_GET_OCCUPANCIES);
-
-                std::string occupancies = "";
-                for (int i = 1; i < 151; i++)
-                {
-                    if (i == blockId)
-                    {
-                        occupancies.push_back('1');
-                    }
-                    else
-                    {
-                        occupancies.push_back('0');
-                    }
-                }
-
-                occupancies.push_back(' ');
-
-                for (int i = 1; i < 76; i++)
-                {
-                    if (i == blockId)
-                    {
-                        occupancies.push_back('1');
-                    }
-                    else
-                    {
-                        occupancies.push_back('0');
-                    }
-                }
-                OccUpdate.SetData(occupancies);
-                CTC::serviceQueue.Push(OccUpdate);*/
-                //////////////////////////////////////////////////////////
-
-                /**
-                 * TODO: NOT FOR THURSDAY
-                 * Run PLC programs with new occupancies and send new switch positions
-                 * to both the CTC and Track Model
-                */
-
-                break;
             }
             case Common::RequestCode::SWTRACK_UPDATE_AUTHORITY:
             case Common::RequestCode::SWTRACK_SET_TRACK_SIGNAL:

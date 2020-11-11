@@ -8,7 +8,7 @@
 #include <iostream> // For std::cout
 
 // C++ PROJECT INCLUDES
-#include "TrackModelRequestManager.hpp" // Header for class 
+#include "TrackModelRequestManager.hpp" // Header for class
 #include "Request.hpp" // For Request
 #include "Response.hpp" // For Response
 #include "Logger.hpp"   // For logging (debugging)
@@ -58,7 +58,7 @@ void TrackModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
             rResponse.AppendData(std::to_string(theBlock.getBlockCumulativeElevation()));
 
             rResponse.AppendData(std::to_string(theBlock.getBlockLength()));
-                
+
             rResponse.AppendData(std::to_string(theBlock.getBlockGrade()));
 
             rResponse.AppendData(std::to_string(theBlock.getBlockSpeedLimit()));
@@ -82,15 +82,22 @@ void TrackModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
             else
             {
 				//stationName.replace(stationName.begin(), stationName.end(), ' ', '_');
-				pos = stationName.find(' ');
-				stationName[pos] = '_';
+				std::string tempStationName = stationName;
+				if (stationName.find(' ') != std::string::npos){
+					pos = stationName.find(' ');
+					std::string stationName2 = stationName.substr(0, pos);
+					tempStationName.erase(0, pos + 1);
+					stationName = stationName2.append("_").append(tempStationName);
+				}
+
+
 				rResponse.AppendData(stationName);
                 rResponse.AppendData(std::to_string(theBlock.getStationTicketsSold()));
                 rResponse.AppendData(std::to_string(theBlock.getStationPassengersBoarded()));
                 rResponse.AppendData(std::to_string(theBlock.getStationPassengersExited()));
                 rResponse.AppendData(theBlock.getStationExitSide());
             }
-                
+
             rResponse.AppendData(std::to_string(theBlock.getOccupiedBy()));
 
             //switch stuff
@@ -106,7 +113,7 @@ void TrackModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
             }
 
             rResponse.AppendData(std::to_string(theTrack->getTrackHeater()));
-                
+
             // Implement failure mode later
             rResponse.AppendData("None");
 
@@ -137,7 +144,7 @@ void TrackModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
                       << " received" << std::endl;
             rResponse.SetData("INVALID COMMAND");
             return;
-         
+
     }
 }
 }
