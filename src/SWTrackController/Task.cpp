@@ -19,11 +19,11 @@ void Task::AddRoutine(Routine* pRoutine, bool mainRoutine)
 {
     if(mainRoutine)
     {
-        m_routineList.Insert(pRoutine,0);
+        m_routineList.insert(m_routineList.begin(),pRoutine);
     }
     else
     {
-        m_routineList.Append(pRoutine);
+        m_routineList.push_back(pRoutine);
     }
     m_pMostRecentMadeRoutine = pRoutine;
     
