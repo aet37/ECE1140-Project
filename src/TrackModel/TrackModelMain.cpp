@@ -400,10 +400,6 @@ void moduleMain()
                     std::string stationInfo2 = test.substr(0, pos);
                     stationInfo.append(stationInfo2);
                     test.erase(0, pos + 1);
-                    printf("\n\n\n");
-                    printf("info:\n\n");
-                    printf(stationInfo.c_str());
-                    printf("\n\n\n");
                     // ex: NAME RIGHT
                 }
                 else
@@ -490,6 +486,7 @@ void moduleMain()
                 Common::Request newReq(Common::RequestCode::SWTRACK_SET_TRACK_OCCUPANCY);
                 newReq.AppendData(std::to_string(trackId));
                 newReq.AppendData(std::to_string(blockId));
+                newReq.AppendData(std::to_string(occupancy));
 
                 SWTrackController::serviceQueue.Push(newReq);
                 break;
