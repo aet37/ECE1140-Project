@@ -8,6 +8,7 @@ import polling
 
 logger = logging.getLogger(__name__)
 
+# HOST = '18.188.207.58'
 HOST = '3.23.104.34'  # The server's hostname or IP address
 PORT = 1234        # The port used by the server
 
@@ -91,6 +92,7 @@ class RequestCode(Enum):
     HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST = 105 # Used by the connector script to check if any requests exist for the hardware
     HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE = 106 # Used by the connector script to forward the hardware's response to the server
     HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE = 107 # Used by SW Track Ctrl to get response from the hardware
+    HWTRACK_GUI_GATHER_DATA = 108
 
     TRACK_MODEL_GUI_TRACK_LAYOUT = 129 # Used by the gui to signify that the track layout is starting to be sent
     TRACK_MODEL_GUI_BLOCK = 130 # Used by the gui to signify that a block is being sent

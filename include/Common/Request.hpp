@@ -102,6 +102,7 @@ enum class RequestCode : uint8_t
     HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST = 105, // Used by the connector script to check if any requests exist for the hardware
     HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE = 106, // Used by the connector script to forward the hardware's response to the server
     HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE = 107, // Used by SW Track Ctrl to get response from the hardware
+    HWTRACK_GUI_GATHER_DATA = 108, // Used by the gui to gather information from the hw track controller
 
     TRACK_MODEL_GUI_TRACK_LAYOUT = 129, // Used by the gui to signify that the track layout is being sent
     TRACK_MODEL_GUI_BLOCK = 130, // Used by the gui to signify that a block is being sent

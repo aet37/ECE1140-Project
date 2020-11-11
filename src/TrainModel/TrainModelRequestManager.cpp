@@ -61,6 +61,7 @@ void TrainModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
         case Common::RequestCode::TRAIN_MODEL_GUI_3_GATHER_DATA:
         {
             Train* pTrain = TrainCatalogue::GetInstance().GetTrain(rRequest.ParseData<uint32_t>(0)-1);
+
             Block* pBlock = BlockCatalogue::GetInstance().GetBlock(pTrain->GetCurrentBlock());
 
             rResponse.AppendData(std::to_string(pTrain->GetTrainPassCount())); // 0
