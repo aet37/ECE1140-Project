@@ -28,6 +28,7 @@ Controller::Controller()
     signalPickupFailure = 0;
     engineFailure = 0;
     brakeFailure = 0; 
+    NonVitalOperations();
 }
 
 /** 
@@ -55,6 +56,7 @@ Controller::Controller(int com_sp, int curr_sp, bool auth)
     signalPickupFailure = 0;
     engineFailure = 0;
     brakeFailure = 0;
+    NonVitalOperations();
 }
 
 ///////////////////////////////////////////////////////////////

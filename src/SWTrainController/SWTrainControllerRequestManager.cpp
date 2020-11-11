@@ -85,20 +85,40 @@ void SWTrainControllerRequestManager::HandleRequest(const Common::Request& rRequ
         }
         case Common::RequestCode::SWTRAIN_GUI_GATHER_DATA:
         {
-            Controller* pController = ControlSystem::getInstance().getControllerInstance(rRequest.ParseData<uint32_t>(0)-1);
+            LOG_SW_TRAIN_CONTROLLER("SWTrainController controllers: %d", ControlSystem::getInstance().getAmountofControllers());
+            if (ControlSystem::getInstance().getAmountofControllers() != 0)
+            {
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController controllers: %d", ControlSystem::getInstance().getAmountofControllers());
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController controller number: %d", rRequest.ParseData<uint32_t>(0)-1);
+                Controller* pController = ControlSystem::getInstance().getControllerInstance(rRequest.ParseData<uint32_t>(0)-1);
 
-            rResponse.AppendData(std::to_string(pController->getDoors()));            // 0
-            rResponse.AppendData(std::to_string(pController->getLights()));           // 1
-            rResponse.AppendData(std::to_string(pController->getAnnounceStations())); // 2
-            rResponse.AppendData(std::to_string(pController->getAds()));              // 3
-            rResponse.AppendData(std::to_string(pController->getCurrentSpeed()));     // 4
-            rResponse.AppendData(std::to_string(pController->getCommandSpeed()));     // 5
-            rResponse.AppendData(std::to_string(pController->getSetpointSpeed()));    // 6
-            rResponse.AppendData(std::to_string(pController->getServiceBrake()));     // 7
-            rResponse.AppendData(std::to_string(pController->getMode()));             // 8
+                rResponse.AppendData(std::to_string(pController->getDoors()));            // 0
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController lights: %d", pController->getDoors());
+                rResponse.AppendData(std::to_string(pController->getLights()));           // 1
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController lights: %d", pController->getLights());
+                rResponse.AppendData(std::to_string(pController->getAnnounceStations())); // 2
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController lights: %d", pController->getAnnounceStations());
+                rResponse.AppendData(std::to_string(pController->getAds()));              // 3
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController lights: %d", pController->getAds());
+                rResponse.AppendData(std::to_string(pController->getCurrentSpeed()));     // 4
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController lights: %d", pController->getCurrentSpeed());
+                rResponse.AppendData(std::to_string(pController->getCommandSpeed()));     // 5
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController lights: %d", pController->getCommandSpeed());
+                rResponse.AppendData(std::to_string(pController->getSetpointSpeed()));    // 6
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController lights: %d", pController->getSetpointSpeed());
+                rResponse.AppendData(std::to_string(pController->getServiceBrake()));     // 7
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController lights: %d", pController->getServiceBrake());
+                rResponse.AppendData(std::to_string(pController->getMode()));             // 8
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController lights: %d", pController->getMode());
 
-            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
-            break;
+                rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+                break;
+            }
+            else
+            {
+                rResponse.SetResponseCode(Common::ResponseCode::ERROR);
+                break;
+            }
         }
         case Common::RequestCode::SWTRAIN_GUI_UPDATE_DROP_DOWN:
         {
