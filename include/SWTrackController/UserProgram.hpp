@@ -4,14 +4,14 @@
 
 #ifndef USER_PROGRAM_HPP
 #define USER_PROGRAM_HPP
-#include <List.hpp>
+#include <vector>
 #include <Task.hpp>
 
 // class that holds information on a track controller
 class UserProgram
 {
 	private:
-	List<Task*> m_tasks;
+	std::vector<Task*> m_tasks;
     string m_pName;
 
 
@@ -41,7 +41,7 @@ class UserProgram
 
     Task* getMostRecentTask() const;
 
-    const List<Task*>& getTaskList() const
+    const std::vector<Task*>& getTaskList() const
     {
         return m_tasks;
     }

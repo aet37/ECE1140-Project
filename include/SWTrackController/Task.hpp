@@ -1,7 +1,7 @@
 #ifndef TASK_HPP
 #define TASK_HPP
 
-#include <List.hpp>
+#include <vector>
 #include <SystemTask.hpp>
 #include <Routine.hpp>
 
@@ -22,7 +22,7 @@ class Task : public SystemTask
 
     const string m_taskName;
 
-    List<Routine*> m_routineList;
+    std::vector<Routine*> m_routineList;
 
     Routine* m_pMostRecentMadeRoutine;
 
