@@ -42,5 +42,14 @@ class ControlSystem
          * @return Returns amount of controllers
          */
         int getAmountofControllers();
+
+        /**
+         * @brief Gets the singleton instance
+        */
+        static ControlSystem& GetInstance()
+        {
+            static ControlSystem* pInstance = new ControlSystem();
+            return *(pInstance);
+        }
 };
 #endif
