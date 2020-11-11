@@ -11,6 +11,11 @@
 #include "Logger.hpp" // For LOG macros
 #include "TrackModelMain.hpp"
 #include "CTCMain.hpp"
+#include <ctype.h>
+#include <TrackSystem.hpp>
+#include <HWTrackControllerRequestManager.hpp>
+#include <Response.hpp>
+
 
 namespace SWTrackController
 {
@@ -23,7 +28,14 @@ void moduleMain()
 
     while(true)
     {
+        Common::Request reqSend;
+	    // Clear Request code object if used
+	    reqSend.SetRequestCode(Common::RequestCode::ERROR); // Clear request code object
+	    reqSend.SetData("");    // Clear Previous Data
+        TrackSystem main;
+
         Common::Request receivedReq = serviceQueue.Pop();
+
 
     	switch(receivedReq.GetRequestCode())
         {
@@ -35,30 +47,140 @@ void moduleMain()
                 uint32_t suggestedSpeed = receivedReq.ParseData<uint32_t>(2);
                 uint32_t authority = receivedReq.ParseData<uint32_t>(3);
                 uint32_t line = receivedReq.ParseData<uint32_t>(4);
-                std::string switchPositions = receivedReq.ParseData<std::string>(5);
+                std::string switchPositionsString = receivedReq.ParseData<std::string>(5);
 
-                // Do some processing
-                // TODO
+                std::vector<bool> switchPositions;
 
-                // Pass information to Track Model
-                Common::Request newReq(Common::RequestCode::TRACK_MODEL_DISPATCH_TRAIN);
-                newReq.AppendData(receivedReq.ParseData<std::string>(0));
-                newReq.AppendData(receivedReq.ParseData<std::string>(1));
-                newReq.AppendData(receivedReq.ParseData<std::string>(2));
-                newReq.AppendData(receivedReq.ParseData<std::string>(3));
-                newReq.AppendData(receivedReq.ParseData<std::string>(4));
-                newReq.AppendData(receivedReq.ParseData<std::string>(5));
-                TrackModel::serviceQueue.Push(newReq);
-                LOG_SW_TRACK_CONTROLLER("SWTrackController dispatch train %d", trainId);
+                for (int i = 0; i < switchPositionsString.size(); i++)
+                {
+                    switchPositions.push_back(switchPositionsString[i]);
+                }
+
+                main.inputPositions(switchPositions, line);
+
+                if (line == 0)
+                {
+                    Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "switch " + switchPositionsString[0]);
+                    HWTrackController::HWTrackControllerRequestManager reqManager;
+                    Common::Response a;
+                    reqManager.HandleRequest(newReq, a);
+                }
+
+                LOG_SW_TRACK_CONTROLLER("HEREEERERERERER");
+                
+                Common::Request newRequest(Common::RequestCode::TRACK_MODEL_DISPATCH_TRAIN );
+                newRequest.SetData(receivedReq.GetData());
+                TrackModel::serviceQueue.Push(newRequest);
                 break;
             }
+            case Common::RequestCode::SWTRACK_SET_TRACK_OCCUPANCY:
+            {
+                bool line = receivedReq.GetData().at(0);
+                std::string block = receivedReq.GetData().substr(2,2);
+                int blockNum = stoi(block);
+
+                if(line ==0)
+                {
+                    if(blockNum==62)
+                    {
+                        Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block62Occupancy " + 1);
+                        HWTrackController::HWTrackControllerRequestManager reqManager;
+                        Common::Response a;
+                        reqManager.HandleRequest(newReq, a);
+                    }
+
+                    else if(blockNum==61)
+                    {
+                        Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block61Occupancy " + 1);
+                        HWTrackController::HWTrackControllerRequestManager reqManager;
+                        Common::Response a;
+                        reqManager.HandleRequest(newReq, a);
+                    }
+
+                    else if(blockNum==60)
+                    {
+                        Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block60Occupancy " + 1);
+                        HWTrackController::HWTrackControllerRequestManager reqManager;
+                        Common::Response a;
+                        reqManager.HandleRequest(newReq, a);
+                    }
+
+                    else if(blockNum==59)
+                    {
+                        Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block59Occupancy " + 1);
+                        HWTrackController::HWTrackControllerRequestManager reqManager;
+                        Common::Response a;
+                        reqManager.HandleRequest(newReq, a);
+                    }
+
+                     else if (blockNum==0)
+                    {
+                        Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block0Occupancy " + 1);
+                        HWTrackController::HWTrackControllerRequestManager reqManager;
+                         Common::Response a;
+                        reqManager.HandleRequest(newReq, a);
+                    }
+                }
+                else
+                {
+                    main.updateOccupied(line, blockNum);
+                }
+
+                Common::Request OccUpdate(Common::RequestCode::CTC_GET_OCCUPANCIES);
+                OccUpdate.SetData(main.makeOccupancies());
+                CTC::serviceQueue.Push(OccUpdate);
+
+                Common::Request SwitchUpdate(Common::RequestCode::CTC_GET_SWITCHES);
+                SwitchUpdate.SetData(main.makePositions());
+                CTC::serviceQueue.Push(SwitchUpdate);
+
+                int switchMaybeChanged= main.didSwitchMove();
+                bool singleSwitchPosition;
+                bool thing;
+
+                if(switchMaybeChanged<14)
+                {
+                    singleSwitchPosition= main.getSinglePosition(switchMaybeChanged);
+                    Common::Request SwitchUpdateTM(Common::RequestCode::TRACK_MODEL_UPDATE_SWITCH_POSITIONS);
+                    std::string out; 
+                    if (switchMaybeChanged<7)
+                    {
+                        thing = 0;
+                    }
+                    else
+                    {
+                        thing = 1;
+                    }
+                    
+                    out+= thing + ' ' + switchMaybeChanged + ' ' + singleSwitchPosition;
+                    SwitchUpdateTM.SetData(out);
+
+                    TrackModel::serviceQueue.Push(SwitchUpdateTM);
+                }
+
+            }
+
+
+
+
+        
+
+        
+
+        
+
+
+
+
+
+
+
             case Common::RequestCode::SWTRACK_UPDATE_AUTHORITY:
             case Common::RequestCode::SWTRACK_SET_TRACK_SIGNAL:
             case Common::RequestCode::SWTRACK_UPDATE_COMMAND_SPEED:
             case Common::RequestCode::SWTRACK_SET_TRACK_STATUS:
             case Common::RequestCode::SWTRACK_SET_SWITCH_POSITION:
             case Common::RequestCode::SWTRACK_SET_TRACK_FAILURE:
-            case Common::RequestCode::SWTRACK_SET_TRACK_OCCUPANCY:
             case Common::RequestCode::SWTRACK_SET_CROSSING:
             case Common::RequestCode::SWTRACK_SET_TRACK_HEATER:
             case Common::RequestCode::START_DOWNLOAD:
@@ -74,7 +196,9 @@ void moduleMain()
                 ASSERT(false, "Unhandled request code %d", static_cast<uint16_t>(receivedReq.GetRequestCode()));
                 break;
         }
+
     }
+
 }
 
 } // namespace SWTrackController

@@ -4,9 +4,9 @@
 
 #ifndef TRACK_CONTROLLER_HPP
 #define TRACK_CONTROLLER_HPP
-#include <UserProgram.hpp>
 #include <vector>
 #include <queue>
+#include "UserProgram.hpp"
 
 // class that holds information on a track controller
 class TrackController
@@ -24,32 +24,16 @@ class TrackController
 
 
 	public:
+
+	TrackController();
 	
-	bool getSwitchPos()
-	{
-		return switch_position;
-	}
+	bool getSwitchPos();
 
-	bool changeSwitchPos()
-	{
-		if(switch_position==0)
-		{
-			switch_position=1;
-			return switch_position;
-		}
-		else if(switch_position==1)
-		{
-			switch_position=0;
-			return switch_position;
-		}
-	}
+	bool changeSwitchPos();
 
-	std::vector<bool> getOccupancy()
-	{
-		return occupancy;
-	}
+	std::vector<bool> getOccupancy();
 
-	bool setOccupancy(std::vector<bool> newOccupancy)
+	/*bool setupOccupancy(std::vector<bool> newOccupancy)
 	{
 		if(newOccupancy.size()==occupancy.size()&&setup==1)
 		{
@@ -66,49 +50,25 @@ class TrackController
 		{
 			return 0;
 		}
-	}
+	}*/
 
-	int getSuggestedSpeed()
-	{
-		return suggested_speed;
-	}
+	void setOccupied(int a);
 
-	void setSuggestedSpeed(int a)
-	{
-		suggested_speed=a;
-	}
+	void setUnoccupied(int a);
 
-	void addToQueue(bool a)
-	{
-		positionQueue.push(a);
-	}
 
-	void setPopNext()
-	{
-		popNext=1;
-	}
+
+	int getSuggestedSpeed();
+
+	void setSuggestedSpeed(int a);
+
+	void addToQueue(bool a);
+
+	void setPopNext();
 	
-	bool queueUpdate()
-	{
-		if(popNext=1)
-		{
-			positionQueue.pop();
-			switch_position=positionQueue.front();
-			popNext=0;
-			
-		}
-		
-	}
+	bool queueUpdate();
 
-	void loop()
-	{
-		PLC_Program();
-		queueUpdate();
-
-
-
-
-	}
+	void loop();
 
 
 	
