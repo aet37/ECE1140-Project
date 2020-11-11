@@ -61,7 +61,6 @@ void moduleMain()
 
                 if (line == 0)
                 {
-                    //LOG_SW_TRACK_CONTROLLER("SWTrackController sending HWTrack: %s", switchPositionsString[0].c_str());
                     Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "switch " + switchPositionsString[0]);
                     HWTrackController::HWTrackControllerRequestManager reqManager;
                     Common::Response a;
@@ -84,92 +83,8 @@ void moduleMain()
                 */
                 LOG_SW_TRACK_CONTROLLER("Received: %s", receivedReq.GetData().c_str());
                 uint32_t line = receivedReq.ParseData<uint32_t>(0);
-                uint32_t blockNum = receivedReq.ParseData<uint32_t>(1);
+                uint32_t blockId = receivedReq.ParseData<uint32_t>(1);
                 bool occupancy = receivedReq.ParseData<bool>(2);
-
-
-                if(line ==0)
-                {
-                    if(blockNum==62)
-                    {
-                        Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block62Occupancy " + 1);
-                        HWTrackController::HWTrackControllerRequestManager reqManager;
-                        Common::Response a;
-                        reqManager.HandleRequest(newReq, a);
-                    }
-
-                    else if(blockNum==61)
-                    {
-                        Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block61Occupancy " + 1);
-                        HWTrackController::HWTrackControllerRequestManager reqManager;
-                        Common::Response a;
-                        reqManager.HandleRequest(newReq, a);
-                    }
-
-                    else if(blockNum==60)
-                    {
-                        Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block60Occupancy " + 1);
-                        HWTrackController::HWTrackControllerRequestManager reqManager;
-                        Common::Response a;
-                        reqManager.HandleRequest(newReq, a);
-                    }
-
-                    else if(blockNum==59)
-                    {
-                        Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block59Occupancy " + 1);
-                        HWTrackController::HWTrackControllerRequestManager reqManager;
-                        Common::Response a;
-                        reqManager.HandleRequest(newReq, a);
-                    }
-
-                     else if (blockNum==0)
-                    {
-                        Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block0Occupancy " + 1);
-                        HWTrackController::HWTrackControllerRequestManager reqManager;
-                         Common::Response a;
-                        reqManager.HandleRequest(newReq, a);
-                    }
-                }
-                else
-                {
-                    main.updateOccupied(line, blockNum);
-                }
-
-                LOG_SW_TRACK_CONTROLLER("SWTrackController sent CTC Block Occupancies: %s", main.makeOccupancies().c_str());
-
-                Common::Request OccUpdate(Common::RequestCode::CTC_GET_OCCUPANCIES);
-                OccUpdate.SetData(main.makeOccupancies());
-                CTC::serviceQueue.Push(OccUpdate);
-
-                LOG_SW_TRACK_CONTROLLER("SWTrackController sent CTC Block Occupancies: %s", main.makePositions().c_str());
-
-                Common::Request SwitchUpdate(Common::RequestCode::CTC_GET_SWITCHES);
-                SwitchUpdate.SetData(main.makePositions());
-                CTC::serviceQueue.Push(SwitchUpdate);
-
-                int switchMaybeChanged= main.didSwitchMove();
-                bool singleSwitchPosition;
-                bool thing;
-
-                if(switchMaybeChanged<14)
-                {
-                    singleSwitchPosition= main.getSinglePosition(switchMaybeChanged);
-                    Common::Request SwitchUpdateTM(Common::RequestCode::TRACK_MODEL_UPDATE_SWITCH_POSITIONS);
-                    std::string out; 
-                    if (switchMaybeChanged<7)
-                    {
-                        thing = 0;
-                    }
-                    else
-                    {
-                        thing = 1;
-                    }
-                    
-                    out+= thing + ' ' + switchMaybeChanged + ' ' + singleSwitchPosition;
-                    SwitchUpdateTM.SetData(out);
-
-                    TrackModel::serviceQueue.Push(SwitchUpdateTM);
-                }
 
                 /**
                  * TODO:
@@ -178,7 +93,7 @@ void moduleMain()
                 */
 
                 // BELOW CODE IS TEMPORARY ///////////////////////////////////////
-                /*Common::Request OccUpdate(Common::RequestCode::CTC_GET_OCCUPANCIES);
+                Common::Request OccUpdate(Common::RequestCode::CTC_GET_OCCUPANCIES);
 
                 if(line ==0)
                 {
@@ -252,6 +167,7 @@ void moduleMain()
                     {
                         thing = 1;
                     }
+
 
 
                     TrackModel::serviceQueue.Push(SwitchUpdateTM);
