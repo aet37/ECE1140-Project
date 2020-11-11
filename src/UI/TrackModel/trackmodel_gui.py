@@ -48,6 +48,9 @@ class Ui(QtWidgets.QMainWindow):
         logoutButton = self.findChild(QtWidgets.QPushButton, 'logout_button')
         logoutButton.clicked.connect(self.logout)
 
+        track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
+        track_heater_button.clicked.connect(self.trackHeaterGUI)
+
     # def update_times(self):
         # TODO get position string from Train Model in ??? UNITS
         # position_string = send_message(RequestCode.GET_POSITION_FROM_TRAINM)
@@ -123,7 +126,7 @@ class Ui(QtWidgets.QMainWindow):
                 
                 tracks = tracks + 1
                 # set track nmumber inside of trackInfo dictionary
-                trackInfo['tNumber'] = tracks
+                trackInfo['tNumber'] = tracks - 1
 
                 # set totalBlocks inside trackInfo
                 trackInfo['Total Blocks'] = records.number_of_rows()
@@ -162,7 +165,7 @@ class Ui(QtWidgets.QMainWindow):
                     blockDirection = records.column['Direction'][x]
                     blockSection = records.column['Section'][x]
 
-                    blockInfo['Track'] = tracks
+                    blockInfo['Track'] = tracks - 1
                     blockInfo['Number'] = blockNumber
                     blockInfo['Length'] = blockLength
                     blockInfo['Grade'] = blockGrade
@@ -200,7 +203,7 @@ class Ui(QtWidgets.QMainWindow):
             else:
                 print('error')
     def check_current_block(self):
-        if (tracks ==1):
+        if (tracks == 1):
             combo1.currentIndexChanged.connect(self.send_gather_data_message)
         elif(tracks == 2):
             combo1.currentIndexChanged.connect(self.send_gather_data_message)
@@ -216,7 +219,7 @@ class Ui(QtWidgets.QMainWindow):
         else:
             currentComboBlock = str(combo3.currentText())
 
-        lineNumber = (theTabWidget.currentIndex() + 1)
+        lineNumber = (theTabWidget.currentIndex())
         currentComboBlock = currentComboBlock[6:]
 
         data = str(lineNumber) + " " + str(currentComboBlock)
@@ -327,11 +330,31 @@ class Ui(QtWidgets.QMainWindow):
             track_heater_button.setText("On")
             track_heater_button.setStyleSheet("background-color : green")
         else:
-            track_heater_button.setText("On")
+            track_heater_button.setText("Off")
             track_heater_button.setStyleSheet("background-color : red")
 
         failure_mode_label = self.findChild(QtWidgets.QLabel, 'failure_mode_label')
         failure_mode_label.setText("Failure Mode:\n\n"+ failureMode)
+
+    def trackHeaterGUI(self):
+        theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
+        lineIndex = theTabWidget.currentIndex()
+
+        track_heater_button = self.findChild(QWidget.QPushButton, 'track_heater_button')
+        
+        if (track_heater_button.isChecked()):
+            heaterInput = True
+        else:
+            heaterInput = False
+
+        if (trackHeater == "true"):
+            track_heater_button.setText("On")
+            track_heater_button.setStyleSheet("background-color : green")
+        else:
+            track_heater_button.setText("Off")
+            track_heater_button.setStyleSheet("background-color : red")
+
+        send_message(RequestCode.TRACK_MODEL_GUI_SET_HEATER, lineIndex, heaterInput)
 
 
     def trackInfo1(self):
