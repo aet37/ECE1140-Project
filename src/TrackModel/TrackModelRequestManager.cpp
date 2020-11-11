@@ -85,18 +85,9 @@ void TrackModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
 				std::string tempStationName = stationName;
 				if (stationName.find(' ') != std::string::npos){
 					pos = stationName.find(' ');
-					printf("int is = ");
-					printf("%d", pos);
-					printf("\n");
 					std::string stationName2 = stationName.substr(0, pos);
-					printf(stationName.c_str());
-					printf("\n");
 					tempStationName.erase(0, pos + 1);
-					printf(tempStationName.c_str());
 					stationName = stationName2.append("_").append(tempStationName);
-					printf("\n\n\n\n");
-					printf(stationName.c_str());
-					printf("\n\n\n\n");
 				}
 				
 				
