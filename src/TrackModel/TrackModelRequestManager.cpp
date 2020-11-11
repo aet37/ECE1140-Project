@@ -84,6 +84,9 @@ void TrackModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
 				//stationName.replace(stationName.begin(), stationName.end(), ' ', '_');
 				pos = stationName.find(' ');
 				stationName[pos] = '_';
+				printf("\n\n\n\n");
+				printf(stationName.c_str());
+				printf("\n\n\n\n");
 				rResponse.AppendData(stationName);
                 rResponse.AppendData(std::to_string(theBlock.getStationTicketsSold()));
                 rResponse.AppendData(std::to_string(theBlock.getStationPassengersBoarded()));
