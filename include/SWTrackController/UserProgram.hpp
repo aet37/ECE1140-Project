@@ -2,8 +2,8 @@
 // Created by Nathan Swanson on 10.6.20
 //
 
-#ifndef User_Program_HPP
-#define User_Program_HPP
+#ifndef USER_PROGRAM_HPP
+#define USER_PROGRAM_HPP
 #include <List.hpp>
 #include <Task.hpp>
 
@@ -11,103 +11,41 @@
 class UserProgram
 {
 	private:
-	// Variables
-	UserProgram PLC_Program;
-	int suggested_speed=0;
-	std::vector<bool> occupancy;
-	std::vector<bool> prevOccupancy;
-	bool switch_position=0;
-	std::queue<bool> positionQueue;
-	bool setup=0;
-	bool popNext=0;
+	List<Task*> m_tasks;
+    string m_pName;
 
 
 	public:
 	
-	bool getSwitchPos()
-	{
-		return switch_position;
-	}
+	UserProgram(const char* name) :
+    
+        m_tasks(),
+        m_pName(name)
+        {}
 
-	bool changeSwitchPos()
-	{
-		if(switch_position==0)
-		{
-			switch_position=1;
-			return switch_position;
-		}
-		else if(switch_position==1)
-		{
-			switch_position=0;
-			return switch_position;
-		}
-	}
+    ~UserProgram(){}
 
-	std::vector<bool> getOccupancy()
-	{
-		return occupancy;
-	}
+    void ClearMemory();
 
-	bool setOccupancy(std::vector<bool> newOccupancy)
-	{
-		if(newOccupancy.size()==occupancy.size()&&setup==1)
-		{
-			prevOccupancy=occupancy;
-			occupancy=newOccupancy;
-			return 1;
-		}
-		else if(setup==0)
-		{
-			occupancy=newOccupancy;
-			setup=1;
-		}
-		else
-		{
-			return 0;
-		}
-	}
+    void setProgramName(const char* pProgramName)
+    {
+        m_pName = pProgramName;
+    }
 
-	int getSuggestedSpeed()
-	{
-		return suggested_speed;
-	}
+    const string& getProgramName() const
+    {
+        return m_pName;
+    }
 
-	void setSuggestedSpeed(int a)
-	{
-		suggested_speed=a;
-	}
+    void AddTask(Task* pTask);
 
-	void addToQueue(bool a)
-	{
-		positionQueue.push(a);
-	}
+    Task* getMostRecentTask() const;
 
-	void setPopNext()
-	{
-		popNext=1;
-	}
-	
-	bool queueUpdate()
-	{
-		if(popNext=1)
-		{
-			positionQueue.pop();
-			switch_position=positionQueue.front();
-			popNext=0;
-			
-		}
-		
-	}
-
-	void loop()
-	{
-		PLC_Program();
-		queueUpdate();
-
-
-
-
-	}
+    const List<Task*>& getTaskList() const
+    {
+        return m_tasks;
+    }
+    
 
 
 	

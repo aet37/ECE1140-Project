@@ -3,11 +3,11 @@
  * 
  * @brief Declarations of the SWTrackControllerRequestManager class
 */
-#ifndef SW_TrackController_REQUEST_MANAGER_HPP
-#define SW_TrackController_REQUEST_MANAGER_HPP
+#ifndef SWTRACKCONTROLLER_REQUEST_MANAGER_HPP
+#define SWTRACKCONTROLLER_REQUEST_MANAGER_HPP
 
 // SYSTEM INCLUDES
-#include <queue>
+// (None)
 
 // C++ PROJECT INCLUDES
 #include "RequestManagerIface.hpp" // For Common::RequestManagerIface
@@ -51,4 +51,4 @@ private:
 
 } // namespace SWTrackController
 
-#endif // SW_TrackController_REQUEST_MANAGER_HPP
+#endif // SWTRACKCONTROLLER_REQUEST_MANAGER_HPP
