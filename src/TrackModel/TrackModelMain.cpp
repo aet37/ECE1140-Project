@@ -458,7 +458,19 @@ void moduleMain()
                 newReq.AppendData(blockGradeString);
                 newReq.AppendData(blockLengthString);
                 newReq.AppendData(blockSpeedLimitString);
-                newReq.AppendData(blockDirection);
+
+                if (blockDirection == "Inbound")
+                {
+                    newReq.AppendData("0");
+                }
+                else if (blockDirection == "Outbound")
+                {
+                    newReq.AppendData("1");
+                }
+                else
+                {
+                    newReq.AppendData("2");
+                }
                 TrainModel::serviceQueue.Push(newReq);
 
                 break;

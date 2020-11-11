@@ -69,13 +69,14 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                 }
                 case Common::RequestCode::TRAIN_MODEL_RECEIVE_BLOCK:
                 {
+                    LOG_TRAIN_MODEL("Train Model received %s", receivedRequest.GetData().c_str());
                     // Parse stuff from Evan (trackId, blockId, elevation, grade, length, speedLimit, travelDirection)
                     uint32_t trackId = receivedRequest.ParseData<uint32_t>(0);
                     uint32_t blockId = receivedRequest.ParseData<uint32_t>(1);
 
                     Block block;
-                    block.m_elevation = receivedRequest.ParseData<int>(2);
-                    block.m_slope = receivedRequest.ParseData<int>(3);
+                    block.m_elevation = receivedRequest.ParseData<float>(2);
+                    block.m_slope = receivedRequest.ParseData<float>(3);
                     block.m_sizeOfBlock = receivedRequest.ParseData<uint32_t>(4);
                     block.m_speedLimit = receivedRequest.ParseData<uint32_t>(5);
                     block.m_travelDirection = receivedRequest.ParseData<uint32_t>(6);
@@ -84,10 +85,12 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     if (trackId == 0)
                     {
                         BlockCatalogue::GetInstance().AddGreenBlock(block);
+                        LOG_TRAIN_MODEL("Received a block. There are now %d blocks", BlockCatalogue::GetInstance().GetNumberOfGreenBlocks());
                     }
                     else
                     {
                         BlockCatalogue::GetInstance().AddRedBlock(block);
+                        LOG_TRAIN_MODEL("Received a block. There are now %d blocks", BlockCatalogue::GetInstance().GetNumberOfRedBlocks());
                     }
                     break;
                 }

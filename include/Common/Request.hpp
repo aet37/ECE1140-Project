@@ -246,6 +246,10 @@ public:
         {
             return m_data.substr(startingIndex, endIndex);
         }
+        else if constexpr (std::is_same<T, float>::value)
+        {
+            return static_cast<T>(std::stof(m_data.substr(startingIndex, endIndex)));
+        }
         else
         {
             return static_cast<T>(std::stoi(m_data.substr(startingIndex, endIndex)));
