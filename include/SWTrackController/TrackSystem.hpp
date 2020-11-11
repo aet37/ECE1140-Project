@@ -118,7 +118,7 @@ class TrackSystem
 			p_Controllers[count1].setOccupied(count2);
 
 			//setting the current array of switch positions to use later for comparison 
-			for(int i=0;i<27;i+2)
+			for(int i=0;i<26;i+2)
 			{
 				if(p_Controllers[i].getSwitchPos()==p_Controllers[i+1].getSwitchPos())
 				{
