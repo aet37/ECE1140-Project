@@ -1,0 +1,48 @@
+TAG heater = FALSE
+TAG switch = FALSE
+TAG signalSwitch = FALSE
+TAG block0Occupancy = FALSE
+TAG block62Occupancy = FALSE
+TAG block61Occupancy = FALSE
+TAG block60Occupancy = FALSE
+TAG block59Occupancy = FALSE
+TAG block0Status = FALSE
+TAG block62Status = FALSE
+TAG block61Status = FALSE
+TAG block60Status = FALSE
+TAG block59Status = FALSE
+TAG block0Authority = TRUE
+TAG block62Authority = TRUE
+TAG block61Authority = TRUE
+TAG block60Authority = TRUE
+TAG block59Authority = TRUE
+
+TASK<PERIOD=2000> MainTask
+    Routine Main
+        # Authority logic
+        RUNG
+            XIO block0Occupancy
+            OTE block62Authority
+            OTE block61Authority
+            OTE block60Authority
+            OTE block59Authority
+        ENDRUNG
+        RUNG
+            XIO block62Authority
+            XIO block61Authority
+            XIO block60Authority
+            XIO block59Authority
+            OTE block0Authority
+        ENDRUNG
+        # Switch logic
+        RUNG
+            XIO block0Occupancy
+            XIC block62Occupancy
+            OTE switch
+        ENDRUNG
+        RUNG
+            XIC heater
+            OTE output4
+        ENDRUNG
+    ENDROUTINE
+ENDTASK

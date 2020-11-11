@@ -17,7 +17,7 @@ from UI.server_functions import RequestCode, ResponseCode, send_message, send_me
 
 from UI.Common.common import Alert, Confirmation
 
-HWTRACK_CONTROLLER_NUMBER = '15'
+HWTRACK_CONTROLLER_NUMBER = '1'
 
 class SWTrackControllerUi(QtWidgets.QMainWindow):
     """GUI for the track controller module"""
@@ -26,6 +26,21 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         uic.loadUi('src/UI/SWTrackController/track_controller.ui', self)
 
         # All the track controllers and the blocks they control
+        self.green_line_controllers = [
+            [0, 62, 61, 60, 59], # Switch between J, K, and Yard @ block 62
+            [62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76],
+            [63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 101] + list(range(102, 151)), # Switch between M, N, and R @ block 77
+            [77, 78, 79, 80, 81, 82, 83, 84],
+            [85, 78, 79, 80, 81, 82, 83, 84], # Switch between N, O, and Q @ block 85
+            [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100],
+            list(range(101, 151)) + list(range(29, 58)), # Switch between Z, F, and G @ block 29
+            [29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14],
+            [28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13], # Switch between D, A, and C @ block 13
+            [13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
+            list(range(30, 59)), # Switch between I, J and Yard @ block 58
+            [58, 59, 60, 61]
+        ]
+
         self.red_line_controllers = [
             [1, 2, 3, 4, 5, 6, 7, 8, 9], # Switch between C and D @ block 9
             [0, 9, 10, 11, 12, 13, 14, 15],
@@ -41,21 +56,6 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             [44, 45, 46, 47, 48, 49, 50, 51],
             [45, 46, 47, 48, 49, 50, 51, 52], # Switch between J and N @ block 52
             [52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66]
-        ]
-
-        self.green_line_controllers = [
-            [0, 62, 61, 60, 59], # Switch between J, K, and Yard @ block 62
-            [62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76],
-            [63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 101] + list(range(102, 151)), # Switch between M, N, and R @ block 77
-            [77, 78, 79, 80, 81, 82, 83, 84],
-            [85, 78, 79, 80, 81, 82, 83, 84], # Switch between N, O, and Q @ block 85
-            [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100],
-            list(range(101, 151)) + list(range(29, 58)), # Switch between Z, F, and G @ block 29
-            [29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14],
-            [28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13], # Switch between D, A, and C @ block 13
-            [13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
-            list(range(30, 59)), # Switch between I, J and Yard @ block 58
-            [58, 59, 60, 61]
         ]
 
         # Current track controller and block selected
@@ -78,10 +78,10 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         self.block_combo_box.currentIndexChanged.connect(self.block_selected)
 
         # Add all of the options for the red/green line
-        for i in range(0, len(self.red_line_controllers)):
-            self.track_controller_combo_box.addItem('Red Line - Controller #{}'.format(i + 1))
         for i in range(0, len(self.green_line_controllers)):
             self.track_controller_combo_box.addItem('Green Line - Controller #{}'.format(i + 1))
+        for i in range(0, len(self.red_line_controllers)):
+            self.track_controller_combo_box.addItem('Red Line - Controller #{}'.format(i + 1))
         self.track_controller_combo_box.currentIndexChanged.connect(self.track_controller_selected)
 
         # Select the default
