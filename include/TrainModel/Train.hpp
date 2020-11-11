@@ -6,7 +6,8 @@
 #define TRAIN_MODEL_TRAIN_HPP
 
 // SYSTEM INCLUDES
-// (None)
+#include <stdint.h>
+#include <vector>
 
 // C++ PROJECT INCLUDES
 // (None)
@@ -223,18 +224,11 @@ public:
      */
     bool GetDoors() const { return m_doors; }
 
-    // CURRENT BLOCK
-    /**
-     * @brief Setter function for currentBlock
-     * @param currentBlock
-     */
-    void SetCurrentBlock(int currentBlock) { m_currentBlock = currentBlock; };
-
     /**
      * @brief gets currentBlock
      * @return returns currentBlock
      */
-    int GetCurrentBlock() const { return m_currentBlock; }
+    int GetCurrentBlock() const { return m_route.front(); }
 
     // POWER
     /**
@@ -379,6 +373,16 @@ public:
      */
     bool GetMode() const { return m_mode; }
 
+    /**
+     * @brief Sets the train's route
+    */
+    void SetRoute(std::vector<uint32_t> route) { m_route = route; }
+
+    /**
+     * @brief Gets the train's route
+    */
+    std::vector<uint32_t>& GetRoute() { return m_route; }
+
 protected:
 private:
     // INTEGERS (Vital)
@@ -388,8 +392,8 @@ private:
     int m_position; // THIS IS CALCULATED // disp_position
     int m_authority; // disp_authority
     int m_currentLine; // disp_current_line
-    int m_currentBlock; // disp_current_block
     int m_power;
+    std::vector<uint32_t> m_route;
     // INTEGERS (Nonvital)
     int m_tempControl; // disp_temperature_control
     // BOOLEANS (Vital)

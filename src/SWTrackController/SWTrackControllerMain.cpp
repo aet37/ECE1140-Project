@@ -66,7 +66,7 @@ void moduleMain()
                     Common::Response a;
                     reqManager.HandleRequest(newReq, a);
                 }
-                
+
                 Common::Request newRequest(Common::RequestCode::TRACK_MODEL_DISPATCH_TRAIN );
                 newRequest.SetData(receivedReq.GetData());
                 TrackModel::serviceQueue.Push(newRequest);
@@ -74,12 +74,29 @@ void moduleMain()
             }
             case Common::RequestCode::SWTRACK_SET_TRACK_OCCUPANCY:
             {
-                bool line = receivedReq.GetData().at(0);
-                std::string block = receivedReq.GetData().substr(2,2);
-                int blockNum = stoi(block);
+
+                /**
+                 * Receiving this information:
+                 * uint32_t lineId
+                 * uint32_t blockId
+                 * bool occupancy (0 - unoccupied, 1 - occupied)
+                */
+                LOG_SW_TRACK_CONTROLLER("Received: %s", receivedReq.GetData().c_str());
+                uint32_t line = receivedReq.ParseData<uint32_t>(0);
+                uint32_t blockNum = receivedReq.ParseData<uint32_t>(1);
+                bool occupancy = receivedReq.ParseData<bool>(2);
+
+                /**
+                 * TODO:
+                 * Find the controllers that control this block. Set the specific block occupancy
+                 * To what was given above
+                */
+
+                // BELOW CODE IS TEMPORARY ///////////////////////////////////////
+                //Common::Request OccUpdate(Common::RequestCode::CTC_GET_OCCUPANCIES);
 
                 if(line ==0)
-                {
+                { 
                     if(blockNum==62)
                     {
                         Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block62Occupancy " + 1);
@@ -150,30 +167,14 @@ void moduleMain()
                     {
                         thing = 1;
                     }
-                    
-                    out+= thing + ' ' + switchMaybeChanged + ' ' + singleSwitchPosition;
-                    SwitchUpdateTM.SetData(out);
+
+
 
                     TrackModel::serviceQueue.Push(SwitchUpdateTM);
                 }
+                
 
             }
-
-
-
-
-        
-
-        
-
-        
-
-
-
-
-
-
-
             case Common::RequestCode::SWTRACK_UPDATE_AUTHORITY:
             case Common::RequestCode::SWTRACK_SET_TRACK_SIGNAL:
             case Common::RequestCode::SWTRACK_UPDATE_COMMAND_SPEED:
@@ -182,6 +183,9 @@ void moduleMain()
             case Common::RequestCode::SWTRACK_SET_TRACK_FAILURE:
             case Common::RequestCode::SWTRACK_SET_CROSSING:
             case Common::RequestCode::SWTRACK_SET_TRACK_HEATER:
+
+
+            
             case Common::RequestCode::START_DOWNLOAD:
             case Common::RequestCode::END_DOWNLOAD:
             case Common::RequestCode::CREATE_TAG:

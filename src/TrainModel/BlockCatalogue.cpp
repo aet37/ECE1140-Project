@@ -13,14 +13,26 @@
 namespace TrainModel
 {
 
-Block* BlockCatalogue::GetBlock(int blockId)
+Block* BlockCatalogue::GetBlock(int trackId, int blockId)
 {
-   return &m_blockList[blockId];
+   if (trackId == 0)
+   {
+      return &m_greenBlockList[blockId];
+   }
+   else
+   {
+      return &m_redBlockList[blockId];
+   }
 }
 
-void BlockCatalogue::AddBlock(Block block)
+void BlockCatalogue::AddGreenBlock(Block block)
 {
-   m_blockList.push_back(block);
+   m_greenBlockList.push_back(block);
+}
+
+void BlockCatalogue::AddRedBlock(Block block)
+{
+   m_redBlockList.push_back(block);
 }
 
 } // namespace Common

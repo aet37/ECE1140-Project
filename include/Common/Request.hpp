@@ -65,7 +65,7 @@ enum class RequestCode : uint8_t
     CTC_GET_OCCUPANCIES = 63,
 
     SWTRACK_DISPATCH_TRAIN = 64, // Used by the CTC to signify that a new train has been dispatched // (trainID, destinationBlock, commandSpeed, authority, trackColor, switchPositions)
-    SWTRACK_UPDATE_AUTHORITY = 65, // Used by the CTC when a train's authority has been updated
+    SWTRACK_UPDATE_AUTHORITY = 65, // Used by the CTC when a train's authority has been updated (train_id, authority)
     SWTRACK_SET_TRACK_SIGNAL = 66, // Used by the CTC to set a track block's signal color
     SWTRACK_UPDATE_COMMAND_SPEED = 67, // Used by the CTC when a train's command speed is updated
     SWTRACK_SET_TRACK_STATUS = 68, // Used by the CTC when a block is closed/open for maintenance
@@ -89,7 +89,6 @@ enum class RequestCode : uint8_t
 
     SWTRACK_GUI_GATHER_DATA = 83, // Used by the gui to periodically gather data from the server // (trackColor, blockId) // (trackHeater, switchPosition, lightStatus, occupied, trackStatus, railwayCrossing, authority, suggestedSpeed, commandSpeed)
     SWTRACK_GUI_SET_SWITCH_POSITION = 84, // Used by the gui to set a switch's position // (trackController, newPosition)
-    SWTRACK_SET_TRACK_UNOCCUPANCY =85,
 
     HWTRACK_START_DOWNLOAD = 96, // Used by the SW Track Ctrl to signify download is starting // (string programName)
     HWTRACK_END_DOWNLOAD = 97, // Used by the SW Track Ctrl to signify download has completed // (void)
@@ -112,7 +111,7 @@ enum class RequestCode : uint8_t
     TRACK_MODEL_GUI_SET_FAILURE = 133, // Used by the gui when a track failure is induced
     TRACK_MODEL_GUI_GATHER_DATA = 134, // Used periodically by the gui to update the user interface
     TRACK_MODEL_GUI_EDIT_BLOCK_LENGTH = 135, // Used by the gui to edit block length
-    TRACK_MODEL_GIVE_POSITION = 136, // Used by the train model to give the track model the position of a train // (blockId, trainOrNot)
+    TRACK_MODEL_UPDATE_OCCUPANCY = 136, // Used by the train model to give the track model the position of a train // (trainid, trackid, blockId, trainOrNot)
     TRACK_MODEL_UPDATE_COMMAND_SPEED = 137, // Used by the track controller to update the command speed of a train // (trainId, newSpeed)
     TRACK_MODEL_UPDATE_SWITCH_POSITIONS = 138, // Used by the track controller to update a switch positions // (trackColor, switchNumberFromYard, switchPosition)
     TRACK_MODEL_UPDATE_AUTHORITY = 139, // Used by the track controller to update the authority of a train // (trainId, newAuthority)
@@ -140,6 +139,7 @@ enum class RequestCode : uint8_t
     TRAIN_MODEL_GUI_RECEIVE_RESOLVE_FAILURE = 178, // Used by the gui to resolve a train failure
     TRAIN_MODEL_GUI_RECEIVE_POWER = 179, // Used by the gui to set a train's kp/ki
     TRAIN_MODEL_GUI_RECEIVE_MODE = 180, // Used by gui to switch between automatic and manual mode
+    TRAIN_MODEL_RECEIVE_BLOCK = 181, // Used by the track model to send a block's information
 
     SWTRAIN_DISPATCH_TRAIN = 192, // Used by the train model to signify that a new train has been dispatched
     SWTRAIN_UPDATE_CURRENT_SPEED = 193, // Used by the train model to update a train's current speed
@@ -254,6 +254,10 @@ public:
         if constexpr (std::is_same<T, std::string>::value)
         {
             return m_data.substr(startingIndex, endIndex);
+        }
+        else if constexpr (std::is_same<T, float>::value)
+        {
+            return static_cast<T>(std::stof(m_data.substr(startingIndex, endIndex)));
         }
         else
         {

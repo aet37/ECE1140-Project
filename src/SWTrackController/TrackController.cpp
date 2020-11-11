@@ -1,16 +1,18 @@
 #include "TrackController.hpp"
 	
+	//constructor
     TrackController::TrackController()
     {
-        
 
     }
-    
+
+	//retuns switch position
     bool TrackController::getSwitchPos()
 	{
 		return switch_position;
 	}
 
+	//changes switch position
 	bool TrackController::changeSwitchPos()
 	{
 		if(switch_position==0)
@@ -25,6 +27,7 @@
 		}
 	}
 
+	//returns occupancy vector
 	std::vector<bool> TrackController::getOccupancy()
 	{
 		return occupancy;
@@ -49,6 +52,7 @@
 		}
 	}*/
 
+	//sets specified block as occupied 
 	void TrackController::setOccupied(int a)
 	{
 		prevOccupancy = occupancy;
@@ -56,6 +60,7 @@
 		occupancy[a] = 1;
 	}
 
+	//sets specified block as unoccupied
 	void TrackController::setUnoccupied(int a)
 	{
 		prevOccupancy = occupancy;
@@ -63,28 +68,31 @@
 		occupancy[a] = 0;
 	}
 
-
-
+	//returns suggested speed
 	int TrackController::getSuggestedSpeed()
 	{
 		return suggested_speed;
 	}
 
+	//sets suggested speed
 	void TrackController::setSuggestedSpeed(int a)
 	{
 		suggested_speed=a;
 	}
 
+	//adds a bool to the queue
 	void TrackController::addToQueue(bool a)
 	{
 		positionQueue.push(a);
 	}
 
+	//sets value to pop next
 	void TrackController::setPopNext()
 	{
 		popNext=1;
 	}
 	
+	//pops next, resets popnext
 	bool TrackController::queueUpdate()
 	{
 		if(popNext=1)
@@ -97,13 +105,10 @@
 		
 	}
 
+	//program that loops plc
 	void TrackController::loop()
 	{
 		//PLC_Program();
 		queueUpdate();
-
-
-
-
 	}
 
