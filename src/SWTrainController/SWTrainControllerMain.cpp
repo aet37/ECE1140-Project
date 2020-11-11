@@ -28,6 +28,7 @@ void moduleMain()
         {  
             case Common::RequestCode::SWTRAIN_DISPATCH_TRAIN:
             {
+                ControlSystem::getInstance().createNewController(13, 13, 13);
                 uint32_t theInt = req.ParseData<uint32_t>(0);
                 // uint32_t com_sp = req.ParseData<uint32_t>(1);
                 // uint32_t curr_sp = req.ParseData<uint32_t>(2);
@@ -118,7 +119,7 @@ void moduleMain()
                 // Get controller instance to set temperature
                 Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID);
                 tempController->setCabinTemp(temperature);
-                uint32_t tempStatus = tempController->getCabinTemp(temperature);
+                uint32_t tempStatus = tempController->getCabinTemp();
                 std::string tempStatusString = std::to_string(tempStatus);
                 Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_SEAN_PAUL , tempStatusString);
                 TrainModel::serviceQueue.Push(newRequest);
