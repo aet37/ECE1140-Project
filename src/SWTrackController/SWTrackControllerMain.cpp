@@ -41,6 +41,7 @@ void moduleMain()
         {
             case Common::RequestCode::SWTRACK_DISPATCH_TRAIN:
             {
+                LOG_SW_TRACK_CONTROLLER("SWTrackController received: %s", receivedReq.GetData().c_str());
                 // Parse stuff from the CTC
                 uint32_t trainId = receivedReq.ParseData<uint32_t>(0);
                 uint32_t destinationBlock = receivedReq.ParseData<uint32_t>(1);
@@ -65,8 +66,6 @@ void moduleMain()
                     Common::Response a;
                     reqManager.HandleRequest(newReq, a);
                 }
-
-                LOG_SW_TRACK_CONTROLLER("HEREEERERERERER");
                 
                 Common::Request newRequest(Common::RequestCode::TRACK_MODEL_DISPATCH_TRAIN );
                 newRequest.SetData(receivedReq.GetData());

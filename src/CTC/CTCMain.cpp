@@ -36,7 +36,7 @@ void moduleMain()
 		    case Common::RequestCode::CTC_GUI_DISPATCH_TRAIN:
 		    {
 		    	// Get Line train is on
-		    	int ln = std::stoi(req.GetData().substr(0, 1));
+		    	int ln = req.ParseData<int>(0);
 		    	Line line_on;
 		    	if(ln == 0)
 			    {
@@ -59,7 +59,7 @@ void moduleMain()
 			    // Set Suggested Speed and Authority
 			    pto_send->command_speed = 55;
 			    pto_send->authority = 3;
-
+				pto_send->line_on = line_on;
 			    // Set route
 			    if(line_on == LINE_GREEN)
 			    {
