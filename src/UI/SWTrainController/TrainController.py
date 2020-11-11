@@ -27,6 +27,8 @@ class SWTrainUi(QtWidgets.QMainWindow):
         self.main_menu_timer.start(2000) # 2 seconds
         
         self.TrainIDBox.currentIndexChanged.connect(self.update_current_train_id) # Dropdown box
+        self.TrainIDBox2.currentIndexChanged.connect(self.update_current_train_id2) # Dropdown box
+        self.TrainIDBox3.currentIndexChanged.connect(self.update_current_train_id3) # Dropdown box
 
         # Initialize all buttons and the page of the UI
         self.initUI()
@@ -131,6 +133,12 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
     def update_current_train_id(self):
         self.current_train_id = self.TrainIDBox.currentText()
+    
+    def update_current_train_id2(self):
+        self.current_train_id = self.TrainIDBox2.currentText()
+    
+    def update_current_train_id3(self):
+        self.current_train_id = self.TrainIDBox3.currentText()
 
     def update_controller_list(self):
         # Update the drop down
@@ -140,19 +148,64 @@ class SWTrainUi(QtWidgets.QMainWindow):
             dataParsed = int(dataReceived)
             count = 1
             currentIndex = self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentIndex()
+            currentIndex2 = self.findChild(QtWidgets.QComboBox, 'TrainIDBox2').currentIndex()
+            currentIndex3 = self.findChild(QtWidgets.QComboBox, 'TrainIDBox3').currentIndex()
             self.findChild(QtWidgets.QComboBox, 'TrainIDBox').clear()
+            self.findChild(QtWidgets.QComboBox, 'TrainIDBox2').clear()
+            self.findChild(QtWidgets.QComboBox, 'TrainIDBox3').clear()
             while(count < dataParsed + 1):
                 self.TrainIDBox.addItem(str(count))
+                self.TrainIDBox2.addItem(str(count))
+                self.TrainIDBox3.addItem(str(count))
                 count = count + 1
-            self.findChild(QtWidgets.QComboBox, 'TrainIDBox').setCurrentIndex(currentIndex)
+
             # Update the global train id
-            self.update_current_train_id()
+            if self.stacked_widget.currentIndex() == 0:
+                self.update_current_train_id()
+                self.findChild(QtWidgets.QComboBox, 'TrainIDBox').setCurrentIndex(currentIndex)
+                self.findChild(QtWidgets.QComboBox, 'TrainIDBox2').setCurrentIndex(currentIndex)
+                self.findChild(QtWidgets.QComboBox, 'TrainIDBox3').setCurrentIndex(currentIndex)
+                print(str(self.stacked_widget.currentIndex()) + " If statement 1")
+            elif self.stacked_widget.currentIndex() == 1:
+                self.update_current_train_id2()
+                self.findChild(QtWidgets.QComboBox, 'TrainIDBox').setCurrentIndex(currentIndex2)
+                self.findChild(QtWidgets.QComboBox, 'TrainIDBox2').setCurrentIndex(currentIndex2)
+                self.findChild(QtWidgets.QComboBox, 'TrainIDBox3').setCurrentIndex(currentIndex2)
+                print(str(self.stacked_widget.currentIndex()) + " If statement 2")
+            else:
+                self.update_current_train_id3()
+                self.findChild(QtWidgets.QComboBox, 'TrainIDBox').setCurrentIndex(currentIndex3)
+                self.findChild(QtWidgets.QComboBox, 'TrainIDBox2').setCurrentIndex(currentIndex3)
+                self.findChild(QtWidgets.QComboBox, 'TrainIDBox3').setCurrentIndex(currentIndex3)
+                print(str(self.stacked_widget.currentIndex()) + " If statement 3")
+
+        if "" in self.current_train_id:
+            return
 
         # Update Train's info
         responsecode, dataReceived = send_message(RequestCode.SWTRAIN_GUI_GATHER_DATA, str(self.current_train_id))
-        #if responsecode == ResponseCode.SUCCESS:
+        if responsecode == ResponseCode.SUCCESS:
             # Parse the data and update the gui.
-            #dataParsed = dataReceived.split()
+            dataParsed = dataReceived.split()
+
+            # Store all data into individual variables
+            self.doors_status = dataParsed[0]
+            self.lights_status = dataParsed[1]
+            self.announcements_status = dataParsed[2]
+            self.advertisements_status = dataParsed[3]
+            self.curr_speed = dataParsed[4]
+            self.com_speed = dataParsed[5]
+            self.setpoint_speed = dataParsed[6]
+            self.service_brake_status = dataParsed[7]
+            self.current_mode = dataParsed[8]
+
+            # Change GUI to reflect current data
+            if self.doors_status == "1":
+                self.doors_button.setStyleSheet("background-color: rgb(255, 51, 16);")
+            else:
+                self.doors_button.setStyleSheet("background-color: green;")
+            
+
             #self.findChild(QtWidgets.QLabel, 'disp_acceleration_limit').setText(dataParsed[0] + " m/s²")
             #self.findChild(QtWidgets.QLabel, 'disp_deceleration_limit').setText(dataParsed[1] + " m/s²")
             #self.findChild(QtWidgets.QLabel, 'disp_block_elevation').setText(dataParsed[2] + " m")
