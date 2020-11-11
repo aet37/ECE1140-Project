@@ -223,27 +223,38 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
     def toggle_lights(self):
         # Potential line for determining train ID to send
-        # self.findChild(QtWidgets.QComboBox, "TrainIDBox2").currentText()
-        send_message(RequestCode.SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS, "1")
+        # If no controllers have been created, button 
+        if "" in self.current_train_id:
+            return
+        send_message(RequestCode.SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS, self.current_train_id)
 
     def toggle_doors(self):
         # Potential line for determining train ID to send
         # self.findChild(QtWidgets.QComboBox, "TrainIDBox2").currentText()
-        send_message(RequestCode.SWTRAIN_GUI_TOGGLE_DAMN_DOORS, "1")
+        if "" in self.current_train_id:
+            return
+        send_message(RequestCode.SWTRAIN_GUI_TOGGLE_DAMN_DOORS, self.current_train_id)
 
     def toggle_announcements(self):
         # Potential line for determining train ID to send
         # self.findChild(QtWidgets.QComboBox, "TrainIDBox2").currentText()
-        send_message(RequestCode.SWTRAIN_GUI_ANNOUNCE_STATIONS, "1")
+        if "" in self.current_train_id:
+            return
+        send_message(RequestCode.SWTRAIN_GUI_ANNOUNCE_STATIONS, self.current_train_id)
 
     def toggle_ads(self):
         # Potential line for determining train ID to send
         # self.findChild(QtWidgets.QComboBox, "TrainIDBox2").currentText()
-        send_message(RequestCode.SWTRAIN_GUI_DISPLAY_ADS, "1")
+        if "" in self.current_train_id:
+            return
+        send_message(RequestCode.SWTRAIN_GUI_DISPLAY_ADS, self.current_train_id)
 
     def set_SeanPaul(self):
         # Potential line for determining train ID to send
         # self.findChild(QtWidgets.QComboBox, "TrainIDBox2").currentText()
+        if "" in self.current_train_id:
+            return
+
         temp = self.findChild(QtWidgets.QLineEdit, "InputTemp").text()
         try:
             int(temp)
@@ -258,7 +269,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
             return
         
         # If input temperature is valid, send request code
-        send_message(RequestCode.SWTRAIN_GUI_SET_SEAN_PAUL, ("1" + " " + temp) )
+        send_message(RequestCode.SWTRAIN_GUI_SET_SEAN_PAUL, (self.current_train_id + " " + temp) )
 
     def toggle_mode1(self):
 

@@ -122,26 +122,68 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     LOG_TRAIN_MODEL("Train Cabin Lights = %d, Train ID = %d", lightStatus, trainId);
                     break;
                 }
-                case Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_EVERYTHING:
+                case Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_EBRAKE:
                 {
-                    // TESTING
-                    // Train newTrain;
-                    // Block newBlock;
-                    // newBlock.m_elevation = 21;
-                    // newBlock.m_slope = 8;
-                    // newBlock.m_sizeOfBlock = 867;
-                    // newBlock.m_accelerationLimit = 1;
-                    // newBlock.m_decelerationLimit = 3;
-                    // newBlock.m_speedLimit = 70;
-                    // newTrain.SetCurrentBlock(0);
+                    // IMPLEMENTATION
+                    uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
+                    uint32_t eBrakeStatus = receivedRequest.ParseData<uint32_t>(1);
 
+                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId);
+                    tempTrain->SetEmergencyPassengeBrake(eBrakeStatus);
+
+                    LOG_TRAIN_MODEL("Train eBrakeStatus = %d, Train ID = %d", eBrakeStatus, trainId);
+                    break;
+                }
+                case Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_SERVICE_BRAKE:
+                {
+                    // IMPLEMENTATION
+                    uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
+                    uint32_t serviceBrakeStatus = receivedRequest.ParseData<uint32_t>(1);
+
+                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId);
+                    tempTrain->SetServiceBrake(serviceBrakeStatus);
+
+                    LOG_TRAIN_MODEL("Train serviceBrakeStatus = %d, Train ID = %d", serviceBrakeStatus, trainId);
+                    break;
+                }
+                case Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_DOORS:
+                {
+                    // IMPLEMENTATION
+                    uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
+                    uint32_t doorsStatus = receivedRequest.ParseData<uint32_t>(1);
+
+                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId);
+                    tempTrain->SetCabinLights(doorsStatus);
+
+                    LOG_TRAIN_MODEL("Train doorsStatus = %d, Train ID = %d", doorsStatus, trainId);
+                    break;
+                }
+                case Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_SEAN_PAUL:
+                {
+                    // IMPLEMENTATION
                     // uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
-                    // uint32_t lightStatus = receivedRequest.ParseData<uint32_t>(1);
+                    // uint32_t seanPaulStatus = receivedRequest.ParseData<uint32_t>(1);
 
-                    // newTrain.SetCabinLights(lightStatus);
-                    // TrainCatalogue::GetInstance().AddTrain(newTrain);
-                    // BlockCatalogue::GetInstance().AddBlock(newBlock);
+                    // Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId);
+                    // tempTrain->SetCabinLights(seanPaulStatus);
 
+                    // LOG_TRAIN_MODEL("Train seanPaulStatus = %d, Train ID = %d", seanPaulStatus, trainId);
+                    break;
+                }
+                case Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_ANNOUNCE_STATIONS:
+                {
+                    // IMPLEMENTATION
+                    uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
+                    uint32_t announcementsStatus = receivedRequest.ParseData<uint32_t>(1);
+
+                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId);
+                    tempTrain->SetCabinLights(announcementsStatus);
+
+                    LOG_TRAIN_MODEL("Train announcementsStatus = %d, Train ID = %d", announcementsStatus, trainId);
+                    break;
+                }
+                case Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_ADS:
+                {
                     // IMPLEMENTATION
                     // uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
                     // uint32_t lightStatus = receivedRequest.ParseData<uint32_t>(1);
@@ -149,7 +191,43 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     // Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId);
                     // tempTrain->SetCabinLights(lightStatus);
 
-                    // LOG_TRAIN_MODEL("Train Cabin Lights = %d, Train ID = %d", lightStatus, trainId);
+                    LOG_TRAIN_MODEL("Train Cabin Lights = %d, Train ID = %d", lightStatus, trainId);
+                    break;
+                }
+                case Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_RESOLVE_FAILURE:
+                {
+                    // IMPLEMENTATION
+                    // uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
+                    // uint32_t lightStatus = receivedRequest.ParseData<uint32_t>(1);
+
+                    // Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId);
+                    // tempTrain->SetCabinLights(lightStatus);
+
+                    LOG_TRAIN_MODEL("Train Cabin Lights = %d, Train ID = %d", lightStatus, trainId);
+                    break;
+                }
+                case Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_POWER:
+                {
+                    // IMPLEMENTATION
+                    // uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
+                    // uint32_t lightStatus = receivedRequest.ParseData<uint32_t>(1);
+
+                    // Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId);
+                    // tempTrain->SetCabinLights(lightStatus);
+
+                    LOG_TRAIN_MODEL("Train Cabin Lights = %d, Train ID = %d", lightStatus, trainId);
+                    break;
+                }
+                case Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_MODE:
+                {
+                    // IMPLEMENTATION
+                    // uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
+                    // uint32_t lightStatus = receivedRequest.ParseData<uint32_t>(1);
+
+                    // Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId);
+                    // tempTrain->SetCabinLights(lightStatus);
+
+                    LOG_TRAIN_MODEL("Train Cabin Lights = %d, Train ID = %d", lightStatus, trainId);
                     break;
                 }
                 default:

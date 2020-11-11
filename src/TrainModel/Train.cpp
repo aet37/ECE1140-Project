@@ -25,6 +25,7 @@ Train::Train()
     m_authority = 0;
     m_currentLine = 0; // Default green line
     m_currentBlock = 0;
+    m_power = 0;
     // INTEGERS (Nonvital)
     m_tempControl = 0;
     

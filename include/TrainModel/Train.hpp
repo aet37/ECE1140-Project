@@ -236,6 +236,19 @@ public:
      */
     int GetCurrentBlock() const { return m_currentBlock; }
 
+    // POWER
+    /**
+     * @brief Setter function for power
+     * @param power
+     */
+    void SetCurrentBlock(int power) { m_power = power; };
+
+    /**
+     * @brief gets power
+     * @return returns power
+     */
+    int GetCurrentBlock() const { return m_power; }
+
     // TRAIN LENGTH
     /**
      * @brief Setter function for trainLength
@@ -376,6 +389,7 @@ private:
     int m_authority; // disp_authority
     int m_currentLine; // disp_current_line
     int m_currentBlock; // disp_current_block
+    int m_power;
     // INTEGERS (Nonvital)
     int m_tempControl; // disp_temperature_control
     // BOOLEANS (Vital)

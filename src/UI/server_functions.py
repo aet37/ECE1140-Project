@@ -119,7 +119,16 @@ class RequestCode(Enum):
     TRAIN_MODEL_GUI_SET_TRAIN_CREW_COUNT = 169 # Used by the gui to set a train's crew count
     TRAIN_MODEL_GUI_UPDATE_DROP_DOWN = 170 # Used by the gui to update the drop-down that contains the trains
     TRAIN_MODEL_GUI_RECEIVE_LIGHTS = 171 # Used by the swtrain to toggle lights
-    TRAIN_MODEL_GUI_RECEIVE_EVERYTHING = 172 # Used by the swtrain to toggle everything
+    TRAIN_MODEL_GUI_RECEIVE_EBRAKE = 172 # Used by the gui to pull the train's ebrake
+    # TRAIN_MODEL_GUI_RECEIVE_SETPOINT_SPEED = 173 # Used by the gui to set a train's setpoint speed
+    TRAIN_MODEL_GUI_RECEIVE_SERVICE_BRAKE = 173 # Used by the gui to update use a train's service brake
+    TRAIN_MODEL_GUI_RECEIVE_DOORS = 174 # Used by the gui to toggle a train's door
+    TRAIN_MODEL_GUI_RECEIVE_SEAN_PAUL = 175 # Used by the gui to play temperature by sean paul
+    TRAIN_MODEL_GUI_RECEIVE_ANNOUNCE_STATIONS = 176 # Used by the gui to announce stations
+    TRAIN_MODEL_GUI_RECEIVE_ADS = 177 # Used by the gui to display a train's advertisements
+    TRAIN_MODEL_GUI_RECEIVE_RESOLVE_FAILURE = 178 # Used by the gui to resolve a train failure
+    TRAIN_MODEL_GUI_RECEIVE_POWER = 179 # Used by the gui to set a train's kp/ki
+    TRAIN_MODEL_GUI_RECEIVE_MODE = 180 # Used by gui to switch between automatic and manual mode
 
     SWTRAIN_DISPATCH_TRAIN = 192 # Used by the train model to signify that a new train has been dispatched
     SWTRAIN_UPDATE_CURRENT_SPEED = 193 # Used by the train model to update a train's current speed
