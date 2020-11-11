@@ -51,7 +51,7 @@ class TrackController
 		return occupancy;
 	}
 
-	bool setOccupancy(std::vector<bool> newOccupancy)
+	/*bool setupOccupancy(std::vector<bool> newOccupancy)
 	{
 		if(newOccupancy.size()==occupancy.size()&&setup==1)
 		{
@@ -68,7 +68,23 @@ class TrackController
 		{
 			return 0;
 		}
+	}*/
+
+	void setOccupied(int a)
+	{
+		prevOccupancy = occupancy;
+
+		occupancy[a] = 1;
 	}
+
+	void setUnoccupied(int a)
+	{
+		prevOccupancy = occupancy;
+
+		occupancy[a] = 0;
+	}
+
+
 
 	int getSuggestedSpeed()
 	{
@@ -104,7 +120,7 @@ class TrackController
 
 	void loop()
 	{
-		PLC_Program();
+		//PLC_Program();
 		queueUpdate();
 
 

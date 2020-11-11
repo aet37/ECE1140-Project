@@ -89,6 +89,7 @@ enum class RequestCode : uint8_t
 
     SWTRACK_GUI_GATHER_DATA = 83, // Used by the gui to periodically gather data from the server // (trackColor, blockId) // (trackHeater, switchPosition, lightStatus, occupied, trackStatus, railwayCrossing, authority, suggestedSpeed, commandSpeed)
     SWTRACK_GUI_SET_SWITCH_POSITION = 84, // Used by the gui to set a switch's position // (trackController, newPosition)
+    SWTRACK_SET_TRACK_UNOCCUPANCY =85,
 
     HWTRACK_START_DOWNLOAD = 96, // Used by the SW Track Ctrl to signify download is starting // (string programName)
     HWTRACK_END_DOWNLOAD = 97, // Used by the SW Track Ctrl to signify download has completed // (void)

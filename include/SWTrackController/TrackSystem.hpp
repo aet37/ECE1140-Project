@@ -8,6 +8,7 @@
 #include <vector>
 #include "TrackController.hpp"
 
+
 class TrackSystem
 {
 	private:
@@ -18,7 +19,9 @@ class TrackSystem
 
 		// Tracks
 		std::vector<TrackController> p_Controllers;
-		std::vector<int[]> blocks_Controlled;
+		std::vector<std::vector<int>> blocks_Controlled;
+		std::vector<bool> switchpositions;
+		std::vector<bool> prevswitchpositions;
 
 
 	
@@ -30,7 +33,8 @@ class TrackSystem
 		 */
 		TrackSystem()
 		{
-			blocks_Controlled.push_back({62,61,60,59});
+			std::vector<int> temp;
+			blocks_Controlled.push_back({0, 62,61,60,59});
 			blocks_Controlled.push_back({62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76});
 			blocks_Controlled.push_back({63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 101});
 			blocks_Controlled.push_back({77, 78, 79, 80, 81, 82, 83, 84});
@@ -45,7 +49,7 @@ class TrackSystem
 
 
 			blocks_Controlled.push_back({1, 2, 3, 4, 5, 6, 7, 8, 9});
-			blocks_Controlled.push_back({9, 10, 11, 12, 13, 14, 15});
+			blocks_Controlled.push_back({0, 9, 10, 11, 12, 13, 14, 15});
 			blocks_Controlled.push_back({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16});
 			blocks_Controlled.push_back({16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26});
 			blocks_Controlled.push_back({17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27});
@@ -67,11 +71,49 @@ class TrackSystem
 			}
 		}
 
+		void updateOccupied(bool a, int b)
+		{
+			int count1;
+			int count2;
+			if(a==0)
+			{
 
+				for(int i=0;i<blocks_Controlled.size()-1;i++)
+				{
+					count1=i;
+					
+					for(int j=0;j<blocks_Controlled[i].size();j++)
+					{
+						count2=j;
+						if(blocks_Controlled[i].at(j)==b)
+						{
+							break;
+						}
+
+					}
+				}
+			}
+			else if(a==1)
+			{
+
+			}
+
+			p_Controllers[count1].setOccupied(count2);
+
+			for(int i=0;i<27;i+2)
+		{
+			if(i==i+1)
+			{
+				switchpositions.push_back(p_Controllers[i].getSwitchPos());
+			}
+
+
+		}
+		}
 		
 
 
-		// update the occupancy of a single track
+		
 		string makeOccupancies()
 		{
 			//green line
@@ -220,12 +262,85 @@ class TrackSystem
 	{
 		string out="";
 
-		for(int i=0;i<27;i++)
+		for(int i=0;i<27;i+2)
 		{
-			out += p_Controllers[i].getSwitchPos();
+			if(i==i+1)
+			{
+				out += p_Controllers[i].getSwitchPos();
+			}
+			else
+			{
+				break;
+			}
 		}
 
 		return out;
+
+	}
+
+	bool getSinglePosition(int a)
+	{
+		return switchpositions[a];
+	}
+
+	int didSwitchMove()
+	{
+		for(int i=0;i<switchpositions.size();i++)
+		{
+			if(switchpositions.at(i)!=prevswitchpositions.at(i))
+			{
+				return i;
+			}
+			else
+			{
+				{
+					return 14;
+				}
+			}
+			
+		}
+
+
+
+	}
+
+	void inputPositions(std::vector<bool> input, bool a)
+	{
+			if(a==0)
+			{
+				p_Controllers[6].addToQueue(input[0]);
+				p_Controllers[7].addToQueue(input[0]);
+
+				p_Controllers[8].addToQueue(input[1]);
+				p_Controllers[9].addToQueue(input[1]);
+
+				p_Controllers[8].addToQueue(input[4]);
+				p_Controllers[9].addToQueue(input[4]);
+
+				p_Controllers[10].addToQueue(input[2]);
+				p_Controllers[11].addToQueue(input[2]);
+
+				p_Controllers[10].addToQueue(input[3]);
+				p_Controllers[11].addToQueue(input[3]);
+
+				p_Controllers[4].addToQueue(input[5]);
+				p_Controllers[5].addToQueue(input[5]);
+				
+				p_Controllers[4].addToQueue(input[8]);
+				p_Controllers[5].addToQueue(input[8]);
+
+				p_Controllers[1].addToQueue(input[6]);
+
+				p_Controllers[1].addToQueue(input[7]);
+
+				p_Controllers[6].addToQueue(input[9]);
+				p_Controllers[7].addToQueue(input[9]);
+			}
+			else if (a==1)
+			{
+
+
+			}
 
 	}
 
