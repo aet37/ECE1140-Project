@@ -130,6 +130,7 @@ enum class RequestCode : uint8_t
     TRAIN_MODEL_GUI_UPDATE_DROP_DOWN = 170, // Used by the gui to update the drop-down that contains the trains
     TRAIN_MODEL_GUI_RECEIVE_LIGHTS = 171, // Used by the swtrain to toggle lights
     TRAIN_MODEL_GUI_RECEIVE_EVERYTHING = 172, // Used by the swtrain to toggle everything
+    TRAIN_MODEL_RECEIVE_BLOCK = 173, // Used by the track model to send a block's information
 
     SWTRAIN_DISPATCH_TRAIN = 192, // Used by the train model to signify that a new train has been dispatched
     SWTRAIN_UPDATE_CURRENT_SPEED = 193, // Used by the train model to update a train's current speed
@@ -244,6 +245,10 @@ public:
         if constexpr (std::is_same<T, std::string>::value)
         {
             return m_data.substr(startingIndex, endIndex);
+        }
+        else if constexpr (std::is_same<T, float>::value)
+        {
+            return static_cast<T>(std::stof(m_data.substr(startingIndex, endIndex)));
         }
         else
         {
