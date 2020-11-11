@@ -18,6 +18,7 @@ class TrackSystem
 		
 
 		// Tracks
+		//vectors for storing variables
 		std::vector<TrackController> p_Controllers;
 		std::vector<std::vector<int>> blocks_Controlled;
 		std::vector<bool> switchpositions;
@@ -31,9 +32,10 @@ class TrackSystem
 		 * @brief	gets singleton instance
 		 * @return 	reference to this singleton TrackSystem Object
 		 */
+		//track system constructor
 		TrackSystem()
 		{
-			std::vector<int> temp;
+			//pushing all the blocks each controller controls into a vector
 			blocks_Controlled.push_back({0, 62,61,60,59});
 			blocks_Controlled.push_back({62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76});
 			blocks_Controlled.push_back({63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 101});
@@ -63,6 +65,7 @@ class TrackSystem
 			blocks_Controlled.push_back({45, 46, 47, 48, 49, 50, 51, 52});
 			blocks_Controlled.push_back({52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66});
 
+			//creating an empty track controller class and filling the p_Controllers vector with them
 			TrackController a;
 
 			for(int i=1;i<26;i++)
@@ -71,17 +74,21 @@ class TrackSystem
 			}
 		}
 
+		//update block b to be occupied (a)
 		void updateOccupied(bool a, int b)
 		{
 			int count1;
 			int count2;
+
+			//if green line
 			if(a==0)
 			{
-
-				for(int i=0;i<blocks_Controlled.size()-1;i++)
+				//iterate through each controller
+				for(int i=0;i<12;i++)
 				{
 					count1=i;
 					
+					//iterate through each block controlled by the controller until the one specified is found
 					for(int j=0;j<blocks_Controlled[i].size();j++)
 					{
 						count2=j;
@@ -93,44 +100,60 @@ class TrackSystem
 					}
 				}
 			}
+
+			//if red line
 			else if(a==1)
 			{
+				//iterate through each controller
+				for(int i=12;i<blocks_Controlled.size()-1;i++)
+				{
+					count1=i;
 
+					//iterate through each block controlled by the controller until the one specified is found
+					for(int j=0;j<blocks_Controlled[i].size();j++)
+					{
+						count2=j;
+						if(blocks_Controlled[i].at(j)==b)
+						{
+							break;
+						}
+					}
+				}
 			}
 
+			//setting the specified block in the controller as occupied
 			p_Controllers[count1].setOccupied(count2);
 
+			//setting the current array of switch positions to use later for comparison 
 			for(int i=0;i<27;i+2)
-		{
-			if(i==i+1)
 			{
+				if(i==i+1)
+				{
 				switchpositions.push_back(p_Controllers[i].getSwitchPos());
+				}
 			}
-
-
-		}
 		}
 		
-
-
-		
+		//class to generate the array of occupied blocks
 		string makeOccupancies()
 		{
-			//green line
-			 
-			
+
+			//string for output
 			string out = "";
 
+			//temporary vector to store values in
 			std::vector<bool> temp;
 
-			//green
+			//setting temp to controller 10
 			temp = p_Controllers[9].getOccupancy();
 
 			//blocks 1-13
 			for(int i =12;i>=0;i--)
 			{
 				out+=temp[i];
-				}
+			}
+
+			//setting temp to controller 8
 			temp= p_Controllers[7].getOccupancy();
 
 			//blocks 14-29
@@ -138,6 +161,8 @@ class TrackSystem
 			{
 				out+=temp[i];
 			}
+
+			//setting temp to controller 11
 			temp=p_Controllers[10].getOccupancy();
 
 			//blocks 30-59
@@ -145,6 +170,8 @@ class TrackSystem
 			{
 				out+=temp[i];
 			}
+
+			//setting temp to controller 12
 			temp=p_Controllers[11].getOccupancy();
 
 			//blocks 60-61
@@ -152,6 +179,8 @@ class TrackSystem
 			{
 				out+=temp[i];
 			}
+
+			//setting temp to controller 2
 			temp = p_Controllers[1].getOccupancy();
 
 			//blocks 62-76
@@ -160,6 +189,7 @@ class TrackSystem
 				out += temp[i];
 			}
 
+			//setting temp to controller 4
 			temp = p_Controllers[3].getOccupancy();
 
 			//blocks 77-84
@@ -168,6 +198,7 @@ class TrackSystem
 				out += temp[i];
 			}
 
+			//setting temp to controller 6
 			temp = p_Controllers[5].getOccupancy();
 
 			//blocks 85-100
@@ -176,7 +207,9 @@ class TrackSystem
 				out +=temp[i];
 			}
 
+			//setting temp to controller 7
 			temp = p_Controllers[6].getOccupancy();
+			
 			//blocks 101-151
 			for(int i=0;i<51;i++)
 			{
@@ -185,13 +218,14 @@ class TrackSystem
 
 			out+=" ";
 		
-			//red
+			//red line
 			//blocks 1-16
 			for(int i=0;i<17;i++)
 			{
 				out+=temp[i];
 			}
 
+			//setting temp to controller 17
 			temp = p_Controllers[16].getOccupancy();
 				
 			//blocks 17-27
@@ -200,6 +234,7 @@ class TrackSystem
 				out+=temp[i];
 			}
 
+			//setting temp to controller 18
 			temp = p_Controllers[17].getOccupancy();
 
 			//blocks 28-32
@@ -208,6 +243,7 @@ class TrackSystem
 				out+=temp[i];
 			}
 				
+			//setting temp to controller 20
 			temp = p_Controllers[19].getOccupancy();
 
 			//blocks 33-37
@@ -216,6 +252,7 @@ class TrackSystem
 				out+=temp[i];
 			}
 
+			//setting temp 22
 			temp = p_Controllers[21].getOccupancy();
 
 			//blocks 38-43
@@ -224,6 +261,7 @@ class TrackSystem
 				out+=temp[i];
 			}
 
+			//setting temp to 24
 			temp = p_Controllers[23].getOccupancy();
 
 			//blocks 44-51
@@ -232,13 +270,16 @@ class TrackSystem
 				out+=temp[i];
 			}
 
+			//setting temp to 26
 			temp = p_Controllers[25].getOccupancy();
+
 			//blocks 52-66
 			for(int i=0;i<15;i++)
 			{
 				out+=temp[i];
 			}
 
+			//setting temp to 22
 			temp = p_Controllers[21].getOccupancy();
 
 			//blocks 67-71
@@ -247,6 +288,7 @@ class TrackSystem
 				out+=temp[i];
 			}
 
+			//setting temp to 18
 			temp = p_Controllers[17].getOccupancy();
 
 			//blocks 72-76
@@ -255,57 +297,68 @@ class TrackSystem
 				out+=temp[i];
 			}
 
+			//returning out string
 			return out;
 		}
 
-	string makePositions()
-	{
-		string out="";
-
-		for(int i=0;i<27;i+2)
+		//string to generate switch positions
+		string makePositions()
 		{
-			if(i==i+1)
-			{
-				out += p_Controllers[i].getSwitchPos();
-			}
-			else
-			{
-				break;
-			}
-		}
+			//string to be output
+			string out="";
 
-		return out;
-
-	}
-
-	bool getSinglePosition(int a)
-	{
-		return switchpositions[a];
-	}
-
-	int didSwitchMove()
-	{
-		for(int i=0;i<switchpositions.size();i++)
-		{
-			if(switchpositions.at(i)!=prevswitchpositions.at(i))
+			//getting switch positions from 1 controller of the pairs
+			for(int i=0;i<26;i+2)
 			{
-				return i;
-			}
-			else
-			{
+				//making sure the controllers have the same output
+				if(p_Controllers[i].getSwitchPos()==p_Controllers[i+1].getSwitchPos())
 				{
-					return 14;
+					out += p_Controllers[i].getSwitchPos();
+				}
+				//if not, loop breaks
+				else
+				{
+					break;
 				}
 			}
-			
+
+			//returning switch position string 
+			return out;
+
 		}
 
+		//getting a single switches position
+		bool getSinglePosition(int a)
+		{
+			return switchpositions[a];
+		}
 
+		//function for checking if a switch move
+		int didSwitchMove()
+		{
+			//iterating through each switches position 
+			for(int i=0;i<switchpositions.size();i++)
+			{
+				//if one of them is different, return that switch number
+				if(switchpositions.at(i)!=prevswitchpositions.at(i))
+				{
+					return i;
+				}
 
-	}
+				//else, return a garbage value
+				else
+				{
+				
+					return 14;
+					
+				}
+			}
+		}
 
-	void inputPositions(std::vector<bool> input, bool a)
-	{
+		//function to input switch positions upon train dispatch
+		void inputPositions(std::vector<bool> input, bool a)
+		{		
+			//green line
 			if(a==0)
 			{
 				p_Controllers[6].addToQueue(input[0]);
@@ -325,7 +378,7 @@ class TrackSystem
 
 				p_Controllers[4].addToQueue(input[5]);
 				p_Controllers[5].addToQueue(input[5]);
-				
+
 				p_Controllers[4].addToQueue(input[8]);
 				p_Controllers[5].addToQueue(input[8]);
 
@@ -336,13 +389,54 @@ class TrackSystem
 				p_Controllers[6].addToQueue(input[9]);
 				p_Controllers[7].addToQueue(input[9]);
 			}
+
+			//red line 
 			else if (a==1)
 			{
+				p_Controllers[14].addToQueue(input[0]);
+				p_Controllers[15].addToQueue(input[0]);
 
+				p_Controllers[14].addToQueue(input[13]);
+				p_Controllers[15].addToQueue(input[13]);
 
+				p_Controllers[12].addToQueue(input[1]);
+				p_Controllers[13].addToQueue(input[1]);
+
+				p_Controllers[12].addToQueue(input[12]);
+				p_Controllers[13].addToQueue(input[12]);
+
+				p_Controllers[24].addToQueue(input[2]);
+				p_Controllers[25].addToQueue(input[2]);
+
+				p_Controllers[24].addToQueue(input[11]);
+				p_Controllers[25].addToQueue(input[11]);
+
+				p_Controllers[22].addToQueue(input[3]);
+				p_Controllers[23].addToQueue(input[3]);
+
+				p_Controllers[22].addToQueue(input[10]);
+				p_Controllers[23].addToQueue(input[10]);
+
+				p_Controllers[20].addToQueue(input[4]);
+				p_Controllers[21].addToQueue(input[4]);
+
+				p_Controllers[20].addToQueue(input[9]);
+				p_Controllers[21].addToQueue(input[9]);
+
+				p_Controllers[18].addToQueue(input[5]);
+				p_Controllers[19].addToQueue(input[5]);
+
+				p_Controllers[18].addToQueue(input[8]);
+				p_Controllers[19].addToQueue(input[8]);
+
+				p_Controllers[16].addToQueue(input[6]);
+				p_Controllers[17].addToQueue(input[6]);
+
+				p_Controllers[16].addToQueue(input[7]);
+				p_Controllers[17].addToQueue(input[7]);
 			}
 
-	}
+		}
 
 };
 
