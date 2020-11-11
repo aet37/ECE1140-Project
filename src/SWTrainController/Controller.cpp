@@ -28,6 +28,7 @@ Controller::Controller()
     signalPickupFailure = 0;
     engineFailure = 0;
     brakeFailure = 0; 
+    NonVitalOperations();
 }
 
 /** 
@@ -55,6 +56,7 @@ Controller::Controller(int com_sp, int curr_sp, bool auth)
     signalPickupFailure = 0;
     engineFailure = 0;
     brakeFailure = 0;
+    NonVitalOperations();
 }
 
 ///////////////////////////////////////////////////////////////
@@ -159,6 +161,55 @@ int Controller::getPowerCommand()
     return power_command;
 }
 
+/**
+ * @brief Getter function for mode
+ */
+bool Controller::getMode()
+{
+    return mode;
+}
+
+/**
+ * @brief Getter function for service brake
+ */
+bool Controller::getServiceBrake()
+{
+    return serviceBrake;
+}
+
+// Non-Vital Getters
+/**
+ * @brief open/close doors
+ */
+bool Controller::getDoors()
+{
+    return NVO.doors;
+}
+
+/**
+ * @brief turn lights on/off
+ */
+bool Controller::getLights()
+{
+    return NVO.lights;
+}
+
+/**
+ * @brief turn announcements on/off
+ */
+bool Controller::getAnnounceStations()
+{
+    return NVO.announcements;
+}
+
+/**
+ * @brief turn advertisements on/off
+ */
+bool Controller::getAds()
+{
+    return NVO.advertisements;
+}
+
 ///////////////////////////////////////////////////////////////
 // VITAL OPERATIONS
 ///////////////////////////////////////////////////////////////
@@ -224,6 +275,15 @@ void Controller::activateEmergencyBrake()
 void Controller::resetEmergencyBrake()
 {
     emergencyBrake = 0;
+}
+
+/**
+ * @brief toggle service brake on and off
+ */
+bool Controller::toggleServiceBrake()
+{
+    serviceBrake = !serviceBrake;
+    return serviceBrake;
 }
 
 /**

@@ -14,15 +14,9 @@ class ControlSystem
     private:
         // Controllers
         std::vector<Controller*> p_controllers;
+        ControlSystem() {}
 
     public:
-        /**
-         * @param com_sp = command speed
-         * @param curr_sp = current speed
-         * @param auth = authority
-         * @brief constructor to initialize a new controller
-         */
-        ControlSystem(int com_sp, int curr_sp, bool auth);
 
         /**
          * @param train_id = Train ID
@@ -36,5 +30,19 @@ class ControlSystem
          * @brief Returns individual Controller from vector
          */
         Controller* getControllerInstance(int id);
+
+        /**
+         * @return Returns amount of controllers
+         */
+        int getAmountofControllers();
+
+        /**
+         * @brief Gets the singleton instance
+        */
+        static ControlSystem& getInstance()
+        {
+            static ControlSystem* pInstance = new ControlSystem();
+            return *(pInstance);
+        }
 };
 #endif
