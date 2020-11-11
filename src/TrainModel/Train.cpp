@@ -44,8 +44,8 @@ Train::Train()
     m_trainWidth = 2.65; // Meters
     m_trainHeight = 3.42; // Meters
     m_trainMass = 40.9; // Tons
-    m_trainCrewCount = 0;
-    m_trainPassCount = 2; // HARDCODED (Unless told otherwise)
+    m_trainCrewCount = 2; // HARDCODED (Unless told otherwise)
+    m_trainPassCount = 0;
 
     // Failure cases
     m_signalPickupFailure = false;
