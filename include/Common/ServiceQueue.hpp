@@ -105,6 +105,18 @@ public:
         return GetSize() == 0;
     }
 
+    /**
+     * @brief Clears the queue
+    */
+    void Clear()
+    {
+        // Lock the queue
+        std::lock_guard<std::mutex> guard(m_queueMutex);
+
+        // Return the size
+        std::queue<T>().swap(m_queue);
+    }
+
 protected:
 private:
     /// Actual queue to hold the objects

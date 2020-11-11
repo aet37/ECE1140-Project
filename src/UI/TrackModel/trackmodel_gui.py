@@ -169,6 +169,7 @@ class Ui(QtWidgets.QMainWindow):
                     blockInfo['Speed Limit'] = blockSpeedLimit
                     blockInfo['Elevation'] = blockElevation
                     blockInfo['Cumulative Elevation'] = blockCumulativeElevation
+<<<<<<< HEAD
                     blockInfo['Direction'] = blockDirection
 
 
@@ -178,6 +179,9 @@ class Ui(QtWidgets.QMainWindow):
                         blockInfo['Underground']= "false"
 
                     blockInfo['Section'] = blockSection
+=======
+                    #blockInfo['']
+>>>>>>> master
 
                     if (records.column['Stations'][x] != ""):
                         blockInfo['Station'] = records.column['Stations'][x]

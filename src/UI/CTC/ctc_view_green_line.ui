@@ -6889,7 +6889,7 @@ color: rgb(255, 255, 255);</string>
    <widget class="QPushButton" name="SW3">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>330</x>
       <y>400</y>
       <width>31</width>
       <height>21</height>
@@ -6906,7 +6906,7 @@ color: rgb(255, 255, 255);</string>
    <widget class="QPushButton" name="SW4">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>80</x>
       <y>340</y>
       <width>31</width>
       <height>21</height>
@@ -6923,8 +6923,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QPushButton" name="SW5">
     <property name="geometry">
      <rect>
-      <x>910</x>
-      <y>430</y>
+      <x>960</x>
+      <y>460</y>
       <width>31</width>
       <height>21</height>
      </rect>
@@ -6934,7 +6934,7 @@ color: rgb(255, 255, 255);</string>
 color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
-     <string>77</string>
+     <string>76</string>
     </property>
    </widget>
    <widget class="QPushButton" name="SW6">
