@@ -172,8 +172,8 @@ void moduleMain()
 		    // Get Switches from Track Controller
 		    case Common::RequestCode::CTC_GET_SWITCHES:
 		    {
-			    std::string green_switches = req.GetData().substr(0, 6);  // get green switches
-			    std::string red_switches = req.GetData().substr(6, 7);    // get red switches
+			    std::string green_switches = req.ParseData<std::string>(0);  // get green switches
+			    std::string red_switches = req.ParseData<std::string>(1);    // get red switches
 
 			    for(int i = 0; i < TrainSystem::GetInstance().GetSwitchesArr(LINE_GREEN).size(); i++)
 			    {
