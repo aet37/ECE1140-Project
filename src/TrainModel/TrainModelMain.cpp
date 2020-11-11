@@ -149,7 +149,7 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     // Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId);
                     // tempTrain->SetCabinLights(lightStatus);
 
-                    LOG_TRAIN_MODEL("Train Cabin Lights = %d, Train ID = %d", lightStatus, trainId);
+                    // LOG_TRAIN_MODEL("Train Cabin Lights = %d, Train ID = %d", lightStatus, trainId);
                     break;
                 }
                 default:
