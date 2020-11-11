@@ -27,29 +27,11 @@ class TrackController
 
 	TrackController();
 	
-	bool getSwitchPos()
-	{
-		return switch_position;
-	}
+	bool getSwitchPos();
 
-	bool changeSwitchPos()
-	{
-		if(switch_position==0)
-		{
-			switch_position=1;
-			return switch_position;
-		}
-		else if(switch_position==1)
-		{
-			switch_position=0;
-			return switch_position;
-		}
-	}
+	bool changeSwitchPos();
 
-	std::vector<bool> getOccupancy()
-	{
-		return occupancy;
-	}
+	std::vector<bool> getOccupancy();
 
 	/*bool setupOccupancy(std::vector<bool> newOccupancy)
 	{
@@ -70,63 +52,23 @@ class TrackController
 		}
 	}*/
 
-	void setOccupied(int a)
-	{
-		prevOccupancy = occupancy;
+	void setOccupied(int a);
 
-		occupancy[a] = 1;
-	}
-
-	void setUnoccupied(int a)
-	{
-		prevOccupancy = occupancy;
-
-		occupancy[a] = 0;
-	}
+	void setUnoccupied(int a);
 
 
 
-	int getSuggestedSpeed()
-	{
-		return suggested_speed;
-	}
+	int getSuggestedSpeed();
 
-	void setSuggestedSpeed(int a)
-	{
-		suggested_speed=a;
-	}
+	void setSuggestedSpeed(int a);
 
-	void addToQueue(bool a)
-	{
-		positionQueue.push(a);
-	}
+	void addToQueue(bool a);
 
-	void setPopNext()
-	{
-		popNext=1;
-	}
+	void setPopNext();
 	
-	bool queueUpdate()
-	{
-		if(popNext=1)
-		{
-			positionQueue.pop();
-			switch_position=positionQueue.front();
-			popNext=0;
-			
-		}
-		
-	}
+	bool queueUpdate();
 
-	void loop()
-	{
-		//PLC_Program();
-		queueUpdate();
-
-
-
-
-	}
+	void loop();
 
 
 	

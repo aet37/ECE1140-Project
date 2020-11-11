@@ -25,6 +25,8 @@ class UserProgram
 
     ~UserProgram(){}
 
+    UserProgram();
+
     void ClearMemory();
 
     void setProgramName(const char* pProgramName)
