@@ -12,6 +12,8 @@
 #include "TrainSystem.hpp"  // Definition of class
 #include <vector>           // For accessing list of Trains, Tracks, Signals
 #include "Logger.hpp"       // For logging events (debugging purposes)
+#include "CTCMain.hpp"
+#include "SWTrackControllerMain.hpp"    // For sending information to the Train Controller
 
 /**
  * @brief	gets singleton instance
@@ -56,8 +58,8 @@ void TrainSystem::ImportTrackLayout()
 	Switch* sw2 = new Switch(30, 150);
 	Switch* sw3 = new Switch(-1, 59);
 	Switch* sw4 = new Switch(-1, 61);
-	Switch* sw5 = new Switch(77, 101);
-	Switch* sw6 = new Switch(86, 10);
+	Switch* sw5 = new Switch(76, 101);
+	Switch* sw6 = new Switch(86, 100);
 	p_switches_green.push_back(sw1);
 	p_switches_green.push_back(sw2);
 	p_switches_green.push_back(sw3);
@@ -216,9 +218,6 @@ void TrainSystem::SetTrackOccupied(int track_num, enum Line ln)
 	{
 		throw std::logic_error("TrainSystem::SetTrackOccupied() : Invalid input for Line");
 	}
-
-	// Log that a track is occupied
-	LOG_CTC("From TrainSystem::SetTrackOccupied() : Track %d is occupied", track_num);
 }
 
 /**
@@ -258,8 +257,6 @@ void TrainSystem::SetTrackNotOccupied(int track_num, enum Line ln)
 	{
 		throw std::logic_error("TrainSystem::SetTrackNotOccupied() : Invalid input for Line");
 	}
-	// Log that a track is occupied
-	LOG_CTC("From TrainSystem::SetTrackNotOccupied() : Track %d is NOT occupied", track_num);
 }
 
 /**
@@ -327,6 +324,7 @@ void TrainSystem::UpdateTrainPosition()
 				if(p_blocks_green[green_route_blocks[1] - 1]->occupied == false)
 				{
 					p_trains[i]->index_on_route++;
+					p_trains[i]->authority--;
 				}
 				else
 				{
@@ -346,6 +344,7 @@ void TrainSystem::UpdateTrainPosition()
 				if(p_blocks_green[p_trains[i]->index_on_route - 1]->occupied == false)
 				{
 					p_trains[i]->index_on_route++;
+					p_trains[i]->authority--;
 				}
 				else
 				{
@@ -360,6 +359,7 @@ void TrainSystem::UpdateTrainPosition()
 				if (p_blocks_red[red_route_blocks[1] - 1]->occupied == false)
 				{
 					p_trains[i]->index_on_route++;
+					p_trains[i]->authority--;
 				}
 				else
 				{
@@ -379,12 +379,29 @@ void TrainSystem::UpdateTrainPosition()
 				if (p_blocks_red[p_trains[i]->index_on_route - 1]->occupied == false)
 				{
 					p_trains[i]->index_on_route++;
+					p_trains[i]->authority--;
 				}
 				else
 				{
 					continue;
 				}
 			}
+		}
+
+		// Update Authority if needed
+		if(p_trains[i]->authority <= 1)
+		{
+			// Update internal variables
+			p_trains[i]->authority = 3;
+
+			// Send to Track Controller
+			Common::Request reqSend;
+			reqSend.SetRequestCode(Common::RequestCode::SWTRACK_UPDATE_AUTHORITY);
+			reqSend.SetData(std::to_string(i));
+			reqSend.SetData(std::to_string(3));
+			SWTrackController::serviceQueue.Push(reqSend);  // Push request to SW Track Controller Queue
+
+			LOG_CTC("Authority for train %d updated and sent to SWTC", i + 1);
 		}
 	}
 }

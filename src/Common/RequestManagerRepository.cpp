@@ -21,6 +21,7 @@
 #include "SWTrainControllerRequestManager.hpp" // For SWTrainController::SWTrainControllerRequestManager
 #include "TrackModelRequestManager.hpp" // For TrackModel::TrackModelRequestManager
 
+
 static Debug::DebugRequestManager debugRequestManager;
 static CTC::CTCRequestManager ctcRequestManager;
 static HWTrainController::HWTrainRequestManager hwTrainControllerRequestManager;

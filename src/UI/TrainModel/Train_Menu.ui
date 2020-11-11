@@ -96,7 +96,7 @@ border-color: rgb(0, 0, 0);</string>
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QComboBox" name="page1_train_combo">
+    <widget class="QComboBox" name="menu_train_combo">
      <property name="geometry">
       <rect>
        <x>110</x>
@@ -161,6 +161,12 @@ border-color: rgb(0, 0, 0);</string>
        <width>20</width>
        <height>20</height>
       </size>
+     </property>
+     <property name="default">
+      <bool>false</bool>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="train_reports_button">

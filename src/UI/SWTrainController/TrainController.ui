@@ -182,6 +182,9 @@ p, li { white-space: pre-wrap; }
         <height>51</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 51, 16);</string>
+      </property>
       <property name="text">
        <string>Manual Mode</string>
       </property>
@@ -642,7 +645,7 @@ p, li { white-space: pre-wrap; }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 51, 16)</string>
+       <string notr="true">background-color: rgb(255, 51, 16);</string>
       </property>
       <property name="text">
        <string>EMERGENCY BRAKE</string>
@@ -750,6 +753,14 @@ p, li { white-space: pre-wrap; }
         <width>271</width>
         <height>51</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: green;</string>
       </property>
       <property name="text">
        <string>Service Brake</string>
@@ -930,7 +941,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="CommandSpeedLabel">
       <property name="geometry">
        <rect>
-        <x>280</x>
+        <x>270</x>
         <y>70</y>
         <width>60</width>
         <height>16</height>
@@ -973,6 +984,9 @@ p, li { white-space: pre-wrap; }
         <width>151</width>
         <height>51</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: green;</string>
       </property>
       <property name="text">
        <string>Automatic Mode</string>
@@ -1230,7 +1244,6 @@ p, li { white-space: pre-wrap; }
     </widget>
    </widget>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>

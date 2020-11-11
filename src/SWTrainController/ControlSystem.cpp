@@ -5,23 +5,7 @@
 
 #include "ControlSystem.h"
 
-/**
- * @param com_sp = command speed
- * @param curr_sp = current speed
- * @param sp_lim = speed limit
- * @param auth = authority
- * @brief constructor to initialize a new controller
- */
-ControlSystem::ControlSystem(int com_sp, int curr_sp, int auth)
-{
-    // Create new controller
-    Controller* p_temp = new Controller(com_sp, curr_sp, auth);
-
-    // Add controller to vector of controllers (Keep everything singleton)
-    p_controllers.push_back(p_temp);
-}
-
-Controller* ControlSystem::createNewController(int com_sp, int curr_sp, int auth)
+Controller* ControlSystem::createNewController(int com_sp, int curr_sp, bool auth)
 {
     // Create new controller
     Controller* p_temp = new Controller(com_sp, curr_sp, auth);
@@ -40,4 +24,12 @@ Controller* ControlSystem::createNewController(int com_sp, int curr_sp, int auth
 Controller* ControlSystem::getControllerInstance(int id)
 {
     return p_controllers[id];
+}
+
+/**
+ * @return Returns amount of controllers
+ */
+int ControlSystem::getAmountofControllers()
+{
+    return p_controllers.size();
 }

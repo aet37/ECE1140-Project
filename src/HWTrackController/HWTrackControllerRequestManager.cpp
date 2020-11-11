@@ -24,63 +24,15 @@ void HWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequ
 {
     switch (rRequest.GetRequestCode())
     {
-        case Common::RequestCode::HWTRAIN_PULL_EBRAKE:
-        {
-            // Add the request to the queue
-            AddRequest(rRequest);
-            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
-            break;
-        }
-        case Common::RequestCode::HWTRAIN_SET_SETPOINT_SPEED:
-        {
-            // Add the request to the queue
-            AddRequest(rRequest);
-            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
-            break;
-        }
-        case Common::RequestCode::HWTRAIN_PRESS_SERVICE_BRAKE:
-        {
-            // Add the request to the queue
-            AddRequest(rRequest);
-            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
-            break;
-        }
-        case Common::RequestCode::HWTRAIN_TOGGLE_DAMN_DOORS:
-        {
-            // Add the request to the queue
-            AddRequest(rRequest);
-            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
-            break;
-        }
-        case Common::RequestCode::HWTRAIN_TOGGLE_CABIN_LIGHTS:
-        {
-            // Add the request to the queue
-            AddRequest(rRequest);
-            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
-            break;
-        }
-        case Common::RequestCode::HWTRAIN_SET_TEMPERATURE:
-        {
-            // Add the request to the queue
-            AddRequest(rRequest);
-            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
-            break;
-        }
-        case Common::RequestCode::HWTRAIN_ANNOUNCE_STATIONS:
-        {
-            // Add the request to the queue
-            AddRequest(rRequest);
-            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
-            break;
-        }
-        case Common::RequestCode::HWTRAIN_DISPLAY_ADS:
-        {
-            // Add the request to the queue
-            AddRequest(rRequest);
-            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
-            break;
-        }
-        case Common::RequestCode::HWTRAIN_DISPATCH_TRAIN:
+        case Common::RequestCode::HWTRACK_START_DOWNLOAD:
+        case Common::RequestCode::HWTRACK_END_DOWNLOAD:
+        case Common::RequestCode::HWTRACK_CREATE_TAG:
+        case Common::RequestCode::HWTRACK_CREATE_TASK:
+        case Common::RequestCode::HWTRACK_CREATE_ROUTINE:
+        case Common::RequestCode::HWTRACK_CREATE_RUNG:
+        case Common::RequestCode::HWTRACK_CREATE_INSTRUCTION:
+        case Common::RequestCode::HWTRACK_GET_TAG_VALUE:
+        case Common::RequestCode::HWTRACK_SET_TAG_VALUE:
         {
             // Add the request to the queue
             AddRequest(rRequest);
@@ -126,6 +78,22 @@ void HWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequ
                 // Respond with error if there are none
                 rResponse.SetResponseCode(Common::ResponseCode::ERROR);
             }
+            break;
+        }
+        case Common::RequestCode::HWTRACK_GUI_GATHER_DATA:
+        {
+            // Clear the response queue to prepare this response
+            m_responseQueue.Clear();
+
+            std::string tags[] = {"heater", "switch", "lightStatus", "occupied", "status",
+                                  "crossing", "authority", "suggestedSpeed", "commandSpeed"};
+
+            for (int i = 0; i < 9; i++)
+            {
+                AddRequest(Common::Request(Common::RequestCode::HWTRACK_GET_TAG_VALUE, tags[i]));
+            }
+
+            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
         default:

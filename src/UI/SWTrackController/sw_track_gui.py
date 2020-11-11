@@ -1,6 +1,8 @@
 """Software Track Controller GUI"""
 
 import os
+import threading
+from time import sleep
 import sys
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog
@@ -86,6 +88,9 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         self.block_combo_box.setCurrentIndex(0)
         self.block_selected()
 
+        # Flag to indicate we are updating the hardware
+        self.updating_hardware = False
+
         # Update the gui and start the periodic timer
         self.send_gather_data_message()
         self.update_timer = QTimer()
@@ -98,13 +103,16 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         """Method called when a different track controller is selected"""
         self.current_track_controller = self.track_controller_combo_box.currentText().split('#')[1]
 
+        if 'Green' in self.track_controller_combo_box.currentText():
+            self.current_track_controller = str(int(self.current_track_controller) + len(self.red_line_controllers))
+
         # Update the options in the block combo box
         self.block_combo_box.clear()
         if 'Red' in self.track_controller_combo_box.currentText():
             for block in self.red_line_controllers[int(self.current_track_controller) - 1]:
                 self.block_combo_box.addItem("Block #{}".format(block))
         else:
-            for block in self.green_line_controllers[int(self.current_track_controller) - 1]:
+            for block in self.green_line_controllers[int(self.current_track_controller) - len(self.red_line_controllers) - 1]:
                 self.block_combo_box.addItem("Block #{}".format(block))
 
     def block_selected(self):
@@ -161,8 +169,7 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             alert.exec_()
             return None
 
-    @staticmethod
-    def send_compiled_program(output_file):
+    def send_compiled_program(self, output_file):
         """Method used to read compiled program and send messages to the server
 
         :param str output_file: Name of the file containing the compiled program
@@ -171,6 +178,10 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             line = line.rstrip('\n')
             request_code, _, data = line.partition(' ')
             request_code = RequestCode[request_code]
+
+            # Add the track controller number if we are starting the download
+            if request_code == RequestCode.START_DOWNLOAD:
+                data += ' ' + self.current_track_controller
 
             send_message(request_code, data)
 
@@ -183,20 +194,66 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             current_position = switch_position_label.text()
             message = str(self.current_track_controller) + ' ' + ("0" if current_position == '1' else '1')
             send_message(RequestCode.SWTRACK_GUI_SET_SWITCH_POSITION, message)
+            switch_position_label.setText(("0" if current_position == '1' else '1'))
 
     def send_gather_data_message(self):
         """Method called periodically to send the gather data message to the server"""
         print(self.current_track_controller)
         print(self.current_block)
 
+        if self.updating_hardware:
+            print("Updating hardware")
+            return
+
         if (self.current_track_controller is not None) and \
            (self.current_block is not None):
-            data = str(self.current_track_controller) + str(self.current_block)
-            send_message_async(RequestCode.SWTRACK_GUI_GATHER_DATA,
-                               data=data,
-                               callback=self.update_gui)
+            if self.current_track_controller != "15":
+                data = str(self.current_track_controller) + ' ' + str(self.current_block)
+                send_message_async(RequestCode.SWTRACK_GUI_GATHER_DATA,
+                                   data=data,
+                                   callback=self.update_gui_sw)
+            else:
+                data = str(self.current_track_controller) + ' ' + str(self.current_block)
+                send_message_async(RequestCode.HWTRACK_GUI_GATHER_DATA,
+                                   data=data,
+                                   callback=self.update_gui_hw)
 
-    def update_gui(self, response_code, response_data):
+    def update_gui_hw(self, *args):
+        """Method called to periodically update the gui when the hw track controller is chosen"""
+        # Spawn a new thread to gather the responses
+        thread = threading.Thread(target=self.gather_data_from_hw)
+        thread.start()
+
+        # Don't let messages to be sent
+        self.updating_hardware = True
+
+    def gather_data_from_hw(self):
+        """Gets responses from the arduino for each of the messages that were sent"""
+        # Get response for each tag
+        i = 0
+
+        new_response_data = ''
+
+        while i < 8:
+            response_code, response_data = send_message(RequestCode.HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE)
+            if response_code == ResponseCode.SUCCESS:
+                splits = response_data.split(' ')
+                if splits[0] == '0':
+                    new_response_data += splits[1] + ' '
+                if splits[0] == '1':
+                    new_response_data += '-1' + ' '
+                i += 1
+            else:
+                sleep(0.5)
+
+        # If we are still looking at the hardware
+        if self.current_track_controller == 15:
+            self.update_gui_sw(ResponseCode.SUCCESS, new_response_data)
+
+        # Allow messages to be sent again
+        self.updating_hardware = False
+
+    def update_gui_sw(self, response_code, response_data):
         """Method called to periodically update the gui"""
         if response_code == ResponseCode.ERROR:
             print("There was a problem communicating with the server")
