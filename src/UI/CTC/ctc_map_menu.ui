@@ -113,6 +113,19 @@ color: rgb(255, 255, 255);</string>
      <string>(Enter valid train number in box)</string>
     </property>
    </widget>
+   <widget class="QLabel" name="ErrLabel">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>200</y>
+      <width>281</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

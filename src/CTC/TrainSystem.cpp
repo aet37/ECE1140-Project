@@ -12,6 +12,8 @@
 #include "TrainSystem.hpp"  // Definition of class
 #include <vector>           // For accessing list of Trains, Tracks, Signals
 #include "Logger.hpp"       // For logging events (debugging purposes)
+#include "CTCMain.hpp"
+#include "SWTrackControllerMain.hpp"    // For sending information to the Train Controller
 
 /**
  * @brief	gets singleton instance
@@ -322,6 +324,7 @@ void TrainSystem::UpdateTrainPosition()
 				if(p_blocks_green[green_route_blocks[1] - 1]->occupied == false)
 				{
 					p_trains[i]->index_on_route++;
+					p_trains[i]->authority--;
 				}
 				else
 				{
@@ -341,6 +344,7 @@ void TrainSystem::UpdateTrainPosition()
 				if(p_blocks_green[p_trains[i]->index_on_route - 1]->occupied == false)
 				{
 					p_trains[i]->index_on_route++;
+					p_trains[i]->authority--;
 				}
 				else
 				{
@@ -355,6 +359,7 @@ void TrainSystem::UpdateTrainPosition()
 				if (p_blocks_red[red_route_blocks[1] - 1]->occupied == false)
 				{
 					p_trains[i]->index_on_route++;
+					p_trains[i]->authority--;
 				}
 				else
 				{
@@ -374,12 +379,29 @@ void TrainSystem::UpdateTrainPosition()
 				if (p_blocks_red[p_trains[i]->index_on_route - 1]->occupied == false)
 				{
 					p_trains[i]->index_on_route++;
+					p_trains[i]->authority--;
 				}
 				else
 				{
 					continue;
 				}
 			}
+		}
+
+		// Update Authority if needed
+		if(p_trains[i]->authority <= 1)
+		{
+			// Update internal variables
+			p_trains[i]->authority = 3;
+
+			// Send to Track Controller
+			Common::Request reqSend;
+			reqSend.SetRequestCode(Common::RequestCode::SWTRACK_UPDATE_AUTHORITY);
+			reqSend.SetData(std::to_string(i));
+			reqSend.SetData(std::to_string(3));
+			SWTrackController::serviceQueue.Push(reqSend);  // Push request to SW Track Controller Queue
+
+			LOG_CTC("Authority for train %d updated and sent to SWTC", i + 1);
 		}
 	}
 }

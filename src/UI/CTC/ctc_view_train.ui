@@ -86,7 +86,7 @@
      <string>Blocks</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="BackToMap">
+   <widget class="QPushButton" name="BackToMapMenu">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -100,7 +100,7 @@
 color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
-     <string>Back to Map</string>
+     <string>Back to Map Menu</string>
     </property>
    </widget>
    <widget class="QLabel" name="SpeedLabel_2">

@@ -83,6 +83,28 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.button = self.findChild(QtWidgets.QPushButton, 'ViewRed') # Find the view green button
 		self.button.clicked.connect(self.RedMapWindow)
 
+		self.train_id_label = self.findChild(QtWidgets.QLineEdit, 'ViewTrainNum')	# Input for Train ID
+		self.error_label = self.findChild(QtWidgets.QLabel, 'ErrLabel')	# Input for Train ID
+		self.train_button = self.findChild(QtWidgets.QPushButton, 'ViewTrainButton')	# Get status of train
+		self.train_button.clicked.connect(self.OpenIfGood)
+
+
+	def OpenIfGood(self):
+		if((self.train_id_label.text() == '') | (self.train_id_label.text() == ' ')):
+			return
+
+		try:
+			int(self.train_id_label.text())
+		except:
+			self.error_label.setStyleSheet("color: red")
+			self.error_label.setText('Error: Invalid Train Num Entered')
+
+		if(int(self.train_id_label.text()) < 1):
+			self.error_label.setStyleSheet("color: red")
+			self.error_label.setText('Error: Invalid Train Num Entered')
+		else:
+			self.TrainInfoWindow()
+
 	#######################################################################################################################################
 	#######################################################################################################################################
 	# Opens Dispatch Train Window
@@ -194,6 +216,17 @@ class CTCUi(QtWidgets.QMainWindow):
 		#send_message(RequestCode.CTC_DISPATCH_TRAIN,  '0' + ' ' + self.d_time_label.text()[0] + self.d_time_label.text()[1] + ' ' + self.d_time_label.text()[3] + self.d_time_label.text()[4]+ ' ' + self.d_time_label.text()[5] + ' ' + self.d_block_label.text())
 
 		
+	#######################################################################################################################################
+	#######################################################################################################################################
+	# Opens Train Information Window
+	#######################################################################################################################################
+	#######################################################################################################################################
+	def TrainInfoWindow(self):
+		uic.loadUi('src/UI/CTC/ctc_view_train.ui', self)
+		self.setWindowTitle("CTC - View Train Info")
+
+		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMapMenu') # Find the button
+		self.button.clicked.connect(self.MapMenuWindow)
 
 	#######################################################################################################################################
 	#######################################################################################################################################
