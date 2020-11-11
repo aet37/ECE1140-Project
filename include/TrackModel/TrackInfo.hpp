@@ -11,7 +11,6 @@
 #define TRACK_INFO_HPP
 
 #include <vector>       // For list of trains, tracks, signals
-#include "TrackModelDef.hpp"     // For Train, Track, Signal objects
 #include "Logger.hpp"      // For Logging (debugging)
 
 
