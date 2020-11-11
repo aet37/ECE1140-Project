@@ -66,14 +66,21 @@ public:
      * 
      * @param blockId       Index of the block to get
     */
-    Block* GetBlock(int blockId);
+    Block* GetBlock(int trackId, int blockId);
 
     /**
      * @brief Adds a block to the end of the block list
      * 
      * @param block     Block to be added
     */
-    void AddBlock(Block block);
+    void AddGreenBlock(Block block);
+
+    /**
+     * @brief Adds a block to the end of the block list
+     * 
+     * @param block     Block to be added
+    */
+    void AddRedBlock(Block block);
 
     /**
      * @brief Gets the number of blocks in the list
@@ -82,8 +89,11 @@ public:
     
 protected:
 private:
-    /// List of blocks
-    std::vector<Block> m_blockList;
+    /// List of blocks on the green line
+    std::vector<Block> m_greenBlockList;
+
+    /// List of blocks on the red line
+    std::vector<Block> m_redBlockList;
 
     /**
      * @brief Constructs a new BlockCatalogue object
