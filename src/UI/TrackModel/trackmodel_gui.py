@@ -340,21 +340,21 @@ class Ui(QtWidgets.QMainWindow):
         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
         lineIndex = theTabWidget.currentIndex()
 
-        track_heater_button = self.findChild(QWidget.QPushButton, 'track_heater_button')
+        track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
         
         if (track_heater_button.isChecked()):
             heaterInput = True
         else:
             heaterInput = False
 
-        if (trackHeater == "true"):
+        if (heaterInput == True):
             track_heater_button.setText("On")
             track_heater_button.setStyleSheet("background-color : green")
         else:
             track_heater_button.setText("Off")
             track_heater_button.setStyleSheet("background-color : red")
 
-        send_message(RequestCode.TRACK_MODEL_GUI_SET_HEATER, lineIndex, heaterInput)
+        send_message(RequestCode.TRACK_MODEL_GUI_SET_TRACK_HEATER, str(lineIndex), str(heaterInput))
 
 
     def trackInfo1(self):

@@ -132,13 +132,18 @@ void TrackModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
             uint32_t trackId = rRequest.ParseData<uint32_t>(0);
             bool heaterInput = rRequest.ParseData<bool>(1);
 
+			printf("\n\n\n:");
+			printf("%s", std::to_string(trackId));
+			printf("\n\n\n:");
+			printf("%s", std::to_string(heaterInput));
+
             Track *theTrack = TrackInfo::GetInstance().getTrack(trackId);
 
             theTrack->setTrackHeater(heaterInput);
 
             rResponse.AppendData(std::to_string(heaterInput));
 			rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
-
+			break;
         }
 		case Common::RequestCode::TRACK_MODEL_GUI_TRACK_LAYOUT:
 		{
