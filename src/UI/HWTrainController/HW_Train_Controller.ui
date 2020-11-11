@@ -258,32 +258,6 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLCDNumber" name="KiLCD">
-    <property name="geometry">
-     <rect>
-      <x>580</x>
-      <y>200</y>
-      <width>101</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="value" stdset="0">
-     <double>0.000000000000000</double>
-    </property>
-    <property name="intValue" stdset="0">
-     <number>0</number>
-    </property>
-   </widget>
-   <widget class="QLCDNumber" name="KpLCD">
-    <property name="geometry">
-     <rect>
-      <x>390</x>
-      <y>202</y>
-      <width>101</width>
-      <height>41</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLabel" name="AnnounceLabel">
     <property name="geometry">
      <rect>
@@ -551,6 +525,32 @@
     </property>
     <property name="text">
      <string>Off</string>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="KpLCD">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>200</y>
+      <width>111</width>
+      <height>41</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="KiLCD">
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>200</y>
+      <width>111</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="smallDecimalPoint">
+     <bool>true</bool>
+    </property>
+    <property name="value" stdset="0">
+     <double>0.000000000000000</double>
     </property>
    </widget>
   </widget>

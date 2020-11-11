@@ -9,11 +9,6 @@
 #include "HWTrainControllerMain.hpp" // Header for functions
 #include "Logger.hpp" // For LOG macros
 #include "Assert.hpp"
-#include "Failures.h"
-#include "Distance.h"
-#include "Speedstuff.h"
-#include "Trainfunctions.h"
-#include "Insidetrain.h"
 
 namespace HWTrainController
 {
@@ -49,7 +44,7 @@ void moduleMain()
                 // std::string lightString = std::to_string(Intrain.getLights());
                 // Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_SET_THE_DAMN_LIGHTS, lightString)
                 // TrainModel::serviceQueue.Push(newRequest)
-                LOG_HW_TRAIN_CONTROLLER("HWTrain model dispatch train %d", lights);
+                LOG_HW_TRAIN_CONTROLLER("HWTrain train lights %d", lights);
             }
             default:
                 ASSERT(false, "Unexpected request code %d", static_cast<uint16_t>(req.GetRequestCode()));

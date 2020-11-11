@@ -32,7 +32,7 @@ class Ui(QtWidgets.QMainWindow):
         self.button.clicked.connect(self.Door)
 
         self.button = self.findChild(QtWidgets.QPushButton, 'TempButton') # Find the button
-        self.button.clicked.connect(self.LCDTemp)
+        self.button.clicked.connect(self.Temp)
 
         self.button = self.findChild(QtWidgets.QPushButton, 'AdsButton') # Find the button
         self.button.clicked.connect(self.Ads)
@@ -53,16 +53,16 @@ class Ui(QtWidgets.QMainWindow):
         self.button.clicked.connect(self.SignalFailure)
 
         self.button = self.findChild(QtWidgets.QPushButton, 'SpeedButton')# Find the button
-        self.button.clicked.connect(self.LCDSpeed)
+        self.button.clicked.connect(self.Speed)
 
         self.button = self.findChild(QtWidgets.QPushButton, 'PowerButton') # Find the button
-        self.button.clicked.connect(self.LCDPower)
+        self.button.clicked.connect(self.Power)
 
         self.button = self.findChild(QtWidgets.QPushButton, 'KpButton') # Find the button
-        self.button.clicked.connect(self.LCDKp)
+        self.button.clicked.connect(self.Kp)
 
         self.button = self.findChild(QtWidgets.QPushButton, 'KiButton') # Find the button
-        self.button.clicked.connect(self.LCDKi)
+        self.button.clicked.connect(self.Ki)
 
         self.button = self.findChild(QtWidgets.QPushButton, 'PEBrakebutton') # Find the button
         self.button.clicked.connect(self.PEBrake)
@@ -84,6 +84,7 @@ class Ui(QtWidgets.QMainWindow):
         else: 
             self.label1.setStyleSheet("color: green;")
             self.label1.setText("On")
+            send_message(RequestCode.HWTRAIN_ANNOUNCE_STATIONS, "1")
 
     def Door(self):
         self.label2 = self.findChild(QtWidgets.QLabel, 'DoorLabel')
@@ -93,6 +94,7 @@ class Ui(QtWidgets.QMainWindow):
         else: 
             self.label2.setStyleSheet("color: green;")
             self.label2.setText("On")
+            send_message(RequestCode.HWTRAIN_TOGGLE_DAMN_DOORS, "1")
 
     def Ads(self):
         self.label3 = self.findChild(QtWidgets.QLabel, 'AdsLabel')
@@ -102,6 +104,7 @@ class Ui(QtWidgets.QMainWindow):
         else: 
             self.label3.setStyleSheet("color: green;")
             self.label3.setText("On")
+            send_message(RequestCode.HWTRAIN_DISPLAY_ADS, "1")
 
     def Mode(self):
         self.label4 = self.findChild(QtWidgets.QLabel, 'ModeLabel')
@@ -111,6 +114,7 @@ class Ui(QtWidgets.QMainWindow):
         else: 
             self.label4.setStyleSheet("color: green;")
             self.label4.setText("On")
+            send_message(RequestCode.HWTRAIN_GUI_GET_MODE, "1")
 
     def BrakeFailure(self):
         self.label5 = self.findChild(QtWidgets.QLabel, 'BrakeFailureLabel')
@@ -120,6 +124,7 @@ class Ui(QtWidgets.QMainWindow):
         else: 
             self.label5.setStyleSheet("color: green;")
             self.label5.setText("On")
+            send_message(RequestCode.HWTRAIN_GUI_RESOLVE_FAILURE, "1")
 
     def EngineFailure(self):
         self.label6 = self.findChild(QtWidgets.QLabel, 'EngineFailureLabel')
@@ -129,6 +134,7 @@ class Ui(QtWidgets.QMainWindow):
         else: 
             self.label6.setStyleSheet("color: green;")
             self.label6.setText("On")
+            send_message(RequestCode.HWTRAIN_GUI_RESOLVE_FAILURE, "1")
 
     def SignalFailure(self):
         self.label7 = self.findChild(QtWidgets.QLabel, 'SignalFailureLabel')
@@ -138,6 +144,7 @@ class Ui(QtWidgets.QMainWindow):
         else: 
             self.label7.setStyleSheet("color: green;")
             self.label7.setText("On")
+            send_message(RequestCode.HWTRAIN_GUI_RESOLVE_FAILURE, "1")
     
     def PEBrake(self):
         self.label8 = self.findChild(QtWidgets.QLabel, 'PEBrakeLabel')
@@ -147,6 +154,7 @@ class Ui(QtWidgets.QMainWindow):
         else: 
             self.label8.setStyleSheet("color: green;")
             self.label8.setText("On")
+            send_message(RequestCode.HWTRAIN_PULL_PASSENGER_EBRAKE, "1")
     
     def EBrake(self):
         self.label9 = self.findChild(QtWidgets.QLabel, 'EBrakeLabel')
@@ -156,6 +164,7 @@ class Ui(QtWidgets.QMainWindow):
         else: 
             self.label9.setStyleSheet("color: green;")
             self.label9.setText("On")
+            send_message(RequestCode.HWTRAIN_PULL_EBRAKE, "1")
 
     def Brake(self):
         self.label10 = self.findChild(QtWidgets.QLabel, 'BrakeLabel')
@@ -165,6 +174,7 @@ class Ui(QtWidgets.QMainWindow):
         else: 
             self.label10.setStyleSheet("color: green;")
             self.label10.setText("On")
+            send_message(RequestCode.HWTRAIN_PRESS_SERVICE_BRAKE, "1")
     
     def Lights(self):
         self.label11 = self.findChild(QtWidgets.QLabel, 'LightsLabel')
@@ -176,25 +186,30 @@ class Ui(QtWidgets.QMainWindow):
             self.label11.setText("On")
         send_message(RequestCode.HWTRAIN_TOGGLE_CABIN_LIGHTS, "1")
 
-    def LCDTemp(self):
+    def Temp(self):
         self.LCD1 = self.findChild(QtWidgets.QLCDNumber, 'TempLCD')
+        self.LCD1.display(1.22)
+        send_message(RequestCode.HWTRAIN_SET_TEMPERATURE, "1")
 
-
-    def LCDSpeed(self):
+    def Speed(self):
         self.LCD2 = self.findChild(QtWidgets.QLCDNumber, 'SpeedLCD')
+        self.LCD2.display(2.44)
+        send_message(RequestCode.HWTRAIN_UPDATE_CURRENT_SPEED, "1")
 
-
-    def LCDPower(self):
+    def Power(self):
         self.LCD3 = self.findChild(QtWidgets.QLCDNumber, 'PowerLCD')
-
-
-    def LCDKp(self):
-        self.LCD4 = self.findChild(QtWidgets.QLCDNumber, 'KpLCD')
-
-
-    def LCDKi(self):
-        self.LCD5 = self.findChild(QtWidgets.QLCDNumber, 'KiLCD')
+        self.LCD3.display(3.66)
+        send_message(RequestCode.HWTRAIN_GUI_DISPLAY_POWER, "1")
         
+    def Kp(self):
+        self.LCD4 = self.findChild(QtWidgets.QLCDNumber, 'KpLCD')
+        self.LCD4.display(4.88)
+        send_message(RequestCode.HWTRAIN_GUI_SET_KP, "1")
+
+    def Ki(self):
+        self.LCD5 = self.findChild(QtWidgets.QLCDNumber, 'KiLCD')
+        self.LCD5.display(6)
+        send_message(RequestCode.HWTRAIN_GUI_SET_KI, "1")
 
     def logout(self):
         # This is executed when the button is pressed

@@ -48,6 +48,7 @@ void HWTrainRequestManager::HandleRequest(const Common::Request& rRequest, Commo
             // Add the request to the queue
             AddRequest(rRequest);
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+            LOG_HW_TRAIN_CONTROLLER("HWTrain train toggle lights");
             break;
         }
         case Common::RequestCode::HWTRAIN_SET_TEMPERATURE:
@@ -101,6 +102,8 @@ void HWTrainRequestManager::HandleRequest(const Common::Request& rRequest, Commo
             Common::Response resp(Common::ResponseCode::SUCCESS, rRequest.GetData());
             AddResponse(resp);
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+            // Parse through this request, have another big switch statement for everything that needs to be sent to kenny
+            rRequest.ParseData<std::string>(0);
             break;
         }
         case Common::RequestCode::HWTRAIN_GET_HW_TRAIN_CONTROLLER_RESPONSE:
