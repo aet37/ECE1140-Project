@@ -54,7 +54,7 @@ void moduleMain()
 
 			    // Call TrainSystem singleton instance to create a new train
 			    Train *pto_send;
-			    pto_send = TrainSystem::GetInstance().CreateNewTrain(block_to,line_on);
+			    pto_send = TrainSystem::GetInstance().CreateNewTrain(block_to, line_on);
 
 			    // Set Suggested Speed and Authority
 			    pto_send->command_speed = 55;
