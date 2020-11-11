@@ -6,7 +6,6 @@ include_directories("${PROJECT_SOURCE_DIR}/include/Debug")
 # Set source files
 set(SOURCES
     SWTrackControllerMain.cpp
-    TrackContoller.cpp
     SWTrackControllerRequestManager.cpp
 )
 set(CMAKE_CXX_STANDARD 17)
