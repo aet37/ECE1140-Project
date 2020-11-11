@@ -56,8 +56,8 @@ void TrainSystem::ImportTrackLayout()
 	Switch* sw2 = new Switch(30, 150);
 	Switch* sw3 = new Switch(-1, 59);
 	Switch* sw4 = new Switch(-1, 61);
-	Switch* sw5 = new Switch(77, 101);
-	Switch* sw6 = new Switch(86, 10);
+	Switch* sw5 = new Switch(76, 101);
+	Switch* sw6 = new Switch(86, 100);
 	p_switches_green.push_back(sw1);
 	p_switches_green.push_back(sw2);
 	p_switches_green.push_back(sw3);

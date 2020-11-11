@@ -7,6 +7,7 @@
 
 // C++ PROJECT INCLUDES
 #include "SWTrackControllerMain.hpp" // Header for functions
+#include "Assert.hpp" // For ASSERT
 #include "Logger.hpp" // For LOG macros
 #include "TrackModelMain.hpp"
 #include "CTCMain.hpp"
@@ -24,21 +25,22 @@ void moduleMain()
 {
     LOG_SW_TRACK_CONTROLLER("Thread starting...");
 
-    Common::Request reqSend;
-
     while(true)
     {
-        Common::Request req = serviceQueue.Pop();
 
 	    // Clear Request code object if used
 	    reqSend.SetRequestCode(Common::RequestCode::ERROR); // Clear request code object
 	    reqSend.SetData("");    // Clear Previous Data
         TrackSystem main;
 
-    	switch(req.GetRequestCode())
+        Common::Request receivedReq = serviceQueue.Pop();
+
+
+    	switch(receivedReq.GetRequestCode())
         {
             case Common::RequestCode::SWTRACK_DISPATCH_TRAIN:
             {
+
                 std::string indata = req.GetData();
                 bool line;
                 std::vector<bool> switchpos;
@@ -88,12 +90,8 @@ void moduleMain()
 			     //       pto_send->train_id, pto_send->destination_block);
 
                 break;
-
-
-
-
-
             }
+
 
             case Common::RequestCode::SWTRACK_SET_TRACK_OCCUPANCY:
             {
@@ -195,6 +193,29 @@ void moduleMain()
 
 
 
+
+
+            case Common::RequestCode::SWTRACK_UPDATE_AUTHORITY:
+            case Common::RequestCode::SWTRACK_SET_TRACK_SIGNAL:
+            case Common::RequestCode::SWTRACK_UPDATE_COMMAND_SPEED:
+            case Common::RequestCode::SWTRACK_SET_TRACK_STATUS:
+            case Common::RequestCode::SWTRACK_SET_SWITCH_POSITION:
+            case Common::RequestCode::SWTRACK_SET_TRACK_FAILURE:
+            case Common::RequestCode::SWTRACK_SET_CROSSING:
+            case Common::RequestCode::SWTRACK_SET_TRACK_HEATER:
+            case Common::RequestCode::START_DOWNLOAD:
+            case Common::RequestCode::END_DOWNLOAD:
+            case Common::RequestCode::CREATE_TAG:
+            case Common::RequestCode::CREATE_TASK:
+            case Common::RequestCode::CREATE_ROUTINE:
+            case Common::RequestCode::CREATE_RUNG:
+            case Common::RequestCode::CREATE_INSTRUCTION:
+            case Common::RequestCode::SET_TAG_VALUE:
+            case Common::RequestCode::GET_TAG_VALUE:
+            default:
+                ASSERT(false, "Unhandled request code %d", static_cast<uint16_t>(receivedReq.GetRequestCode()));
+                break;
+        }
 
     }
 

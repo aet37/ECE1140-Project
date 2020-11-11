@@ -1,5 +1,6 @@
 TAG MyTag = FALSE
 TAG output2 = FALSE
+TAG switch = FALSE
 
 TASK<PERIOD=2000> MainTask
     ROUTINE Main
@@ -11,6 +12,6 @@ TASK<PERIOD=2000> MainTask
         RUNG
             XIC output2
             OTE MyTag
-        ENDRUN
+        ENDRUNG
     ENDROUTINE
 ENDTASK

@@ -22,14 +22,14 @@ class ControlSystem
          * @param auth = authority
          * @brief constructor to initialize a new controller
          */
-        ControlSystem(int com_sp, int curr_sp, int auth);
+        ControlSystem(int com_sp, int curr_sp, bool auth);
 
         /**
          * @param train_id = Train ID
          * 
          * @return Pointer to Controller struct
          */ 
-        Controller* createNewController(int com_sp, int curr_sp, int auth);
+        Controller* createNewController(int com_sp, int curr_sp, bool auth);
 
         /**
          * @param id = train_id

@@ -269,7 +269,7 @@
        </font>
       </property>
       <property name="text">
-       <string>F17</string>
+       <string>0</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
