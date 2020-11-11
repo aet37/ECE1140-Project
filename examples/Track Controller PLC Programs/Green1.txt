@@ -1,3 +1,6 @@
+TAG MyTag = FALSE
+TAG output2 = FALSE
+TAG output4 = FALSE
 TAG heater = FALSE
 TAG switch = FALSE
 TAG signalSwitch = FALSE
@@ -18,7 +21,7 @@ TAG block60Authority = TRUE
 TAG block59Authority = TRUE
 
 TASK<PERIOD=2000> MainTask
-    Routine Main
+    ROUTINE Main
         # Authority logic
         RUNG
             XIO block0Occupancy
@@ -43,6 +46,16 @@ TASK<PERIOD=2000> MainTask
         RUNG
             XIC heater
             OTE output4
+        ENDRUNG
+        # Debug toggle stuff
+        RUNG
+            XIO MyTag
+            XIO output2
+            OTE output2
+        ENDRUNG
+        RUNG
+            XIC output2
+            OTE MyTag
         ENDRUNG
     ENDROUTINE
 ENDTASK

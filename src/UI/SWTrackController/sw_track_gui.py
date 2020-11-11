@@ -105,8 +105,8 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         """Method called when a different track controller is selected"""
         self.current_track_controller = self.track_controller_combo_box.currentText().split('#')[1]
 
-        if 'Green' in self.track_controller_combo_box.currentText():
-            self.current_track_controller = str(int(self.current_track_controller) + len(self.red_line_controllers))
+        if 'Red' in self.track_controller_combo_box.currentText():
+            self.current_track_controller = str(int(self.current_track_controller) + len(self.green_line_controllers))
 
         # Update the options in the block combo box
         self.block_combo_box.clear()
@@ -114,7 +114,7 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             for block in self.red_line_controllers[int(self.current_track_controller) - 1]:
                 self.block_combo_box.addItem("Block #{}".format(block))
         else:
-            for block in self.green_line_controllers[int(self.current_track_controller) - len(self.red_line_controllers) - 1]:
+            for block in self.green_line_controllers[int(self.current_track_controller) - len(self.green_line_controllers) - 1]:
                 self.block_combo_box.addItem("Block #{}".format(block))
 
     def block_selected(self):
@@ -230,7 +230,7 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
 
         if (self.current_track_controller is not None) and \
            (self.current_block is not None):
-            if self.current_track_controller != "15":
+            if self.current_track_controller != HWTRACK_CONTROLLER_NUMBER:
                 data = str(self.current_track_controller) + ' ' + str(self.current_block)
                 send_message_async(RequestCode.SWTRACK_GUI_GATHER_DATA,
                                    data=data,
