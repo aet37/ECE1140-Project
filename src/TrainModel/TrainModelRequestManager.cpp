@@ -25,7 +25,7 @@ void TrainModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
     {
         case Common::RequestCode::TRAIN_MODEL_GUI_GATHER_DATA:
         {
-            Train* pTrain = TrainCatalogue::GetInstance().GetTrain(rRequest.ParseData<uint32_t>(0));
+            Train* pTrain = TrainCatalogue::GetInstance().GetTrain(rRequest.ParseData<uint32_t>(0) - 1);
 
             rResponse.AppendData(std::to_string(pTrain->GetDestinationBlock())); // 0
             rResponse.AppendData(std::to_string(pTrain->GetCommandSpeed())); // 1

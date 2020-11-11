@@ -115,6 +115,29 @@ void moduleMain()
                 LOG_SW_TRAIN_CONTROLLER("SWTrainController mode: %d", trainID);
                 break;
             }
+            case Common::RequestCode::SWTRAIN_GUI_SET_SETPOINT_SPEED:
+            {
+                uint32_t trainID = req.ParseData<uint32_t>(0);
+                // uint32_t setpoint = req.ParseData<uint32_t>(1); 
+                // Controller tempController = TrainControllers.getControllerInstance(TrainID);
+                //tempController.setSetpointSpeed(setpoint);
+                // std::string setpointString = std::to_string(setpoint);
+                // Common::Request newRequest(Common::RequestCode:: , setpointString)
+                // TrainModel::serviceQueue.Push(newRequest)
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController setpoint speed: %d", trainID);
+                break;
+            }
+            case Common::RequestCode::SWTRAIN_GUI_PRESS_SERVICE_BRAKE:
+            {
+                uint32_t trainID = req.ParseData<uint32_t>(0);
+                // Controller tempController = TrainControllers.getControllerInstance(TrainID);
+                // uint32_t brakeStatus = tempController.toggleServiceBrake();
+                // std::string brakeStatusString = std::to_string(brakeStatus);
+                // Common::Request newRequest(Common::RequestCode:: , brakeStatusString)
+                // TrainModel::serviceQueue.Push(newRequest)
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController service brake: %d", trainID);
+                break;
+            }
             default:
                 ASSERT(false, "Unexpected request code %d", static_cast<uint16_t>(req.GetRequestCode()));
 

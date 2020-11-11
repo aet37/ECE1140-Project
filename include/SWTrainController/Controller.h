@@ -147,6 +147,11 @@ class Controller
          * @brief safety critical aspect to reset emergency brake
          */
         void resetEmergencyBrake();
+
+        /**
+         * @brief toggle service brake on and off
+         */
+        bool toggleServiceBrake();
         
         /**
          * @brief allows operator to switch between manual and automatic mode

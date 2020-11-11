@@ -227,6 +227,15 @@ void Controller::resetEmergencyBrake()
 }
 
 /**
+ * @brief toggle service brake on and off
+ */
+bool Controller::toggleServiceBrake()
+{
+    serviceBrake = !serviceBrake;
+    return serviceBrake;
+}
+
+/**
  * @brief allows operator to switch between manual and automatic mode
  * @param override = string code entered by operator to initiate manual override
  * @return returns boolean value to signify success of operation
