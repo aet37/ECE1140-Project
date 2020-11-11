@@ -41,59 +41,38 @@ void moduleMain()
         {
             case Common::RequestCode::SWTRACK_DISPATCH_TRAIN:
             {
+                // Parse stuff from the CTC
+                uint32_t trainId = receivedReq.ParseData<uint32_t>(0);
+                uint32_t destinationBlock = receivedReq.ParseData<uint32_t>(1);
+                uint32_t suggestedSpeed = receivedReq.ParseData<uint32_t>(2);
+                uint32_t authority = receivedReq.ParseData<uint32_t>(3);
+                uint32_t line = receivedReq.ParseData<uint32_t>(4);
+                std::string switchPositionsString = receivedReq.ParseData<std::string>(5);
 
-                std::string indata = receivedReq.GetData();
-                bool line;
-                std::vector<bool> switchpos;
+                std::vector<bool> switchPositions;
 
-                for(int i=0;i<indata.length()-1;i++)
+                for (int i = 0; i < switchPositionsString.size(); i++)
                 {
-                    int count=0;
-                    if(indata[i]==' ')
-                    {
-                        count++;
-
-                        if(count==4)
-                        {
-                            line=indata[i+1];
-                        }
-                        if(count==5)
-                        {
-    
-                            for(int j=i+1;i<indata.length()-1;i++)
-                            {
-                            switchpos[j]=indata[j];
-                            }
-                        }
-                    }
+                    switchPositions.push_back(switchPositionsString[i]);
                 }
-                main.inputPositions(switchpos,line);
-                if(line==0)
+
+                main.inputPositions(switchPositions, line);
+
+                if (line == 0)
                 {
-                    Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "switch " + switchpos[0]);
+                    Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "switch " + switchPositionsString[0]);
                     HWTrackController::HWTrackControllerRequestManager reqManager;
                     Common::Response a;
                     reqManager.HandleRequest(newReq, a);
                 }
 
-
+                LOG_SW_TRACK_CONTROLLER("HEREEERERERERER");
                 
                 Common::Request newRequest(Common::RequestCode::TRACK_MODEL_DISPATCH_TRAIN );
-                newRequest.SetData(indata);
+                newRequest.SetData(receivedReq.GetData());
                 TrackModel::serviceQueue.Push(newRequest);
-                //LOG_SW_TRACK_CONTROLLER("SWTrackController dispatch train %s", theIntString.c_str());
-                break;
-
-                
- 
-
-               // LOG_SW_TRACK_CONTROLLER("From ConnectionHandler.cpp (CTC_DISPATCH_TRAIN) : Sent Track C. Train %d to block %d",
-			     //       pto_send->train_id, pto_send->destination_block);
-
                 break;
             }
-
-
             case Common::RequestCode::SWTRACK_SET_TRACK_OCCUPANCY:
             {
                 bool line = receivedReq.GetData().at(0);

@@ -281,10 +281,11 @@ void moduleMain()
                 {
                     auto route = pGreenLinePaths->find(switchPositions)->first;
                 }
-                //dispatchTrainString.append(" "+switchPositions);
+
+                dispatchTrainString.append(" " + switchPositions);
                 Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_DISPATCH_TRAIN, dispatchTrainString);
                 TrainModel::serviceQueue.Push(newRequest);
-                //LOG_TRACK_MODEL("Track model dispatch train %s", theIntString.c_str());
+                LOG_TRACK_MODEL("Track model dispatch train %s", dispatchTrainString.c_str());
                 break;
             }
             
