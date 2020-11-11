@@ -46,5 +46,16 @@ Track* TrackInfo::getTrack(int trackNumber)
 {
     return m_pTrackList[trackNumber - 1];
 }
+Track* TrackInfo::getTrackByName(std::string trackName)
+{
+    for (int i = 0; i < m_pTrackList.size(); i++)
+    {
+        if (m_pTrackList[i]->getLineName() == trackName)
+        {
+            return m_pTrackList[i];
+        }
+    }
+    return NULL;
+}
 
 } // namespace TrackModel

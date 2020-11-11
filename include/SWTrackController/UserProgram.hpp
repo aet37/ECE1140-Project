@@ -18,12 +18,13 @@ class UserProgram
 	public:
 	
 	UserProgram(const char* name) :
-    
         m_tasks(),
         m_pName(name)
-        {}
+    {}
 
     ~UserProgram(){}
+
+    UserProgram() {};
 
     void ClearMemory();
 

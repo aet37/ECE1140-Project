@@ -11,7 +11,6 @@
 #define TRACK_INFO_HPP
 
 #include <vector>       // For list of trains, tracks, signals
-#include "TrackModelDef.hpp"     // For Train, Track, Signal objects
 #include "Logger.hpp"      // For Logging (debugging)
 
 
@@ -61,10 +60,20 @@ class TrackInfo
         * Also create a list of possible paths that can be taken on this track
 		* @param int trackNumber
 		*
-		* @return bool trackObtained
+		* @return *Track
 		*
 		*/
 		Track* getTrack(int trackNumber);
+
+		/**
+		* @brief Read in the layout of the track and add it to the list of tracks.
+        * Also create a list of possible paths that can be taken on this track
+		* @param int trackName
+		*
+		* @return *Track
+		*
+		*/
+		Track* getTrackByName(std::string trackName);
 
 
         /**
