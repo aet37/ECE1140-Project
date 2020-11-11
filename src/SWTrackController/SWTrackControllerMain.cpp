@@ -74,63 +74,89 @@ void moduleMain()
             }
             case Common::RequestCode::SWTRACK_SET_TRACK_OCCUPANCY:
             {
-                /**
-                 * Receiving this information:
-                 * uint32_t lineId
-                 * uint32_t blockId
-                 * bool occupancy (0 - unoccupied, 1 - occupied)
-                */
-                LOG_SW_TRACK_CONTROLLER("Received: %s", receivedReq.GetData().c_str());
-                uint32_t line = receivedReq.ParseData<uint32_t>(0);
-                uint32_t blockId = receivedReq.ParseData<uint32_t>(1);
-                bool occupancy = receivedReq.ParseData<bool>(2);
+                bool line = receivedReq.GetData().at(0);
+                std::string block = receivedReq.GetData().substr(2,2);
+                int blockNum = stoi(block);
 
-                /**
-                 * TODO:
-                 * Find the controllers that control this block. Set the specific block occupancy
-                 * To what was given above
-                */
+                if(line ==0)
+                {
+                    if(blockNum==62)
+                    {
+                        Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block62Occupancy " + 1);
+                        HWTrackController::HWTrackControllerRequestManager reqManager;
+                        Common::Response a;
+                        reqManager.HandleRequest(newReq, a);
+                    }
 
-                // BELOW CODE IS TEMPORARY ///////////////////////////////////////
+                    else if(blockNum==61)
+                    {
+                        Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block61Occupancy " + 1);
+                        HWTrackController::HWTrackControllerRequestManager reqManager;
+                        Common::Response a;
+                        reqManager.HandleRequest(newReq, a);
+                    }
+
+                    else if(blockNum==60)
+                    {
+                        Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block60Occupancy " + 1);
+                        HWTrackController::HWTrackControllerRequestManager reqManager;
+                        Common::Response a;
+                        reqManager.HandleRequest(newReq, a);
+                    }
+
+                    else if(blockNum==59)
+                    {
+                        Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block59Occupancy " + 1);
+                        HWTrackController::HWTrackControllerRequestManager reqManager;
+                        Common::Response a;
+                        reqManager.HandleRequest(newReq, a);
+                    }
+
+                     else if (blockNum==0)
+                    {
+                        Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block0Occupancy " + 1);
+                        HWTrackController::HWTrackControllerRequestManager reqManager;
+                         Common::Response a;
+                        reqManager.HandleRequest(newReq, a);
+                    }
+                }
+                else
+                {
+                    main.updateOccupied(line, blockNum);
+                }
+
                 Common::Request OccUpdate(Common::RequestCode::CTC_GET_OCCUPANCIES);
-
-                std::string occupancies = "";
-                for (int i = 1; i < 151; i++)
-                {
-                    if (i == blockId)
-                    {
-                        occupancies.push_back('1');
-                    }
-                    else
-                    {
-                        occupancies.push_back('0');
-                    }
-                }
-
-                occupancies.push_back(' ');
-
-                for (int i = 1; i < 76; i++)
-                {
-                    if (i == blockId)
-                    {
-                        occupancies.push_back('1');
-                    }
-                    else
-                    {
-                        occupancies.push_back('0');
-                    }
-                }
-                OccUpdate.SetData(occupancies);
+                OccUpdate.SetData(main.makeOccupancies());
                 CTC::serviceQueue.Push(OccUpdate);
-                //////////////////////////////////////////////////////////
 
-                /**
-                 * TODO: NOT FOR THURSDAY
-                 * Run PLC programs with new occupancies and send new switch positions
-                 * to both the CTC and Track Model
-                */
+                Common::Request SwitchUpdate(Common::RequestCode::CTC_GET_SWITCHES);
+                SwitchUpdate.SetData(main.makePositions());
+                CTC::serviceQueue.Push(SwitchUpdate);
 
-                break;
+                int switchMaybeChanged= main.didSwitchMove();
+                bool singleSwitchPosition;
+                bool thing;
+
+                if(switchMaybeChanged<14)
+                {
+                    singleSwitchPosition= main.getSinglePosition(switchMaybeChanged);
+                    Common::Request SwitchUpdateTM(Common::RequestCode::TRACK_MODEL_UPDATE_SWITCH_POSITIONS);
+                    std::string out; 
+                    if (switchMaybeChanged<7)
+                    {
+                        thing = 0;
+                    }
+                    else
+                    {
+                        thing = 1;
+                    }
+                    
+                    out+= thing + ' ' + switchMaybeChanged + ' ' + singleSwitchPosition;
+                    SwitchUpdateTM.SetData(out);
+
+                    TrackModel::serviceQueue.Push(SwitchUpdateTM);
+                }
+
             }
             case Common::RequestCode::SWTRACK_UPDATE_AUTHORITY:
             case Common::RequestCode::SWTRACK_SET_TRACK_SIGNAL:
