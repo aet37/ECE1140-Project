@@ -13,4 +13,4 @@ set(SOURCES
 set(CMAKE_CXX_STANDARD 17)
 
 add_library(SWTrainController STATIC ${SOURCES})
-target_link_libraries(SWTrainController debug_lib HWTrainController)
+target_link_libraries(SWTrainController debug_lib HWTrainController TrainModel)
