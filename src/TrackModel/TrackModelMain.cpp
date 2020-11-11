@@ -466,6 +466,7 @@ void moduleMain()
                 Common::Request newReq(Common::RequestCode::SWTRACK_SET_TRACK_OCCUPANCY);
                 newReq.AppendData(std::to_string(trackId));
                 newReq.AppendData(std::to_string(blockId));
+                newReq.AppendData(std::to_string(occupancy));
 
                 SWTrackController::serviceQueue.Push(newReq);
                 break;
