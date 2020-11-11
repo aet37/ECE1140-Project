@@ -88,8 +88,8 @@ void moduleMain()
                 std::string trainIDString = std::to_string(trainID);
                 std::string announcementStatusString = std::to_string(announcementStatus);
                 // Create new request and send to Train Model
-                Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_ANNOUNCE_STATIONS, announcementStatusString)
-                TrainModel::serviceQueue.Push(newRequest)
+                Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_ANNOUNCE_STATIONS, announcementStatusString);
+                TrainModel::serviceQueue.Push(newRequest);
                 LOG_SW_TRAIN_CONTROLLER("SWTrainController Train ID: %d", trainID);
                 LOG_SW_TRAIN_CONTROLLER("SWTrainController announcements: %d", announcementStatus);
                 break;
@@ -105,8 +105,8 @@ void moduleMain()
                 std::string trainIDString = std::to_string(trainID);
                 std::string adsStatusString = std::to_string(adsStatus);
                 // Create new request and send to Train Model
-                Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_ADS, adsStatusString)
-                TrainModel::serviceQueue.Push(newRequest)
+                Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_ADS, adsStatusString);
+                TrainModel::serviceQueue.Push(newRequest);
                 LOG_SW_TRAIN_CONTROLLER("SWTrainController Train ID: %d", trainID);
                 LOG_SW_TRAIN_CONTROLLER("SWTrainController advertisements: %d", trainID);
                 break;
@@ -117,11 +117,11 @@ void moduleMain()
                 uint32_t temperature = req.ParseData<uint32_t>(1);
                 // Get controller instance to set temperature
                 Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID);
-                tempController.setCabinTemp(temperature);
-                uint32_t tempStatus = tempController.getCabinTemp(temperature);
+                tempController->setCabinTemp(temperature);
+                uint32_t tempStatus = tempController->getCabinTemp(temperature);
                 std::string tempStatusString = std::to_string(tempStatus);
-                Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_SEAN_PAUL , tempStatusString)
-                TrainModel::serviceQueue.Push(newRequest)
+                Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_SEAN_PAUL , tempStatusString);
+                TrainModel::serviceQueue.Push(newRequest);
                 LOG_SW_TRAIN_CONTROLLER("SWTrainController Train ID: %d", trainID);
                 LOG_SW_TRAIN_CONTROLLER("SWTrainController current temperature: %d", temperature);
                 break;
