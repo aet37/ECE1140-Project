@@ -255,7 +255,7 @@ void moduleMain()
 
             //}
             case Common::RequestCode::TRACK_MODEL_DISPATCH_TRAIN:
-            {
+            {/*
                 // train id
                 // destination block
                 // command speed
@@ -271,11 +271,22 @@ void moduleMain()
                 std::string switchPositions = req.ParseData<std::string>(5);
 
 
-                std::string theIntString = std::to_string(trainId);
-                Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_DISPATCH_TRAIN, theIntString);
+                std::string dispatchTrainString = std::to_string(trainId);
+                dispatchTrainString.append(" "+std::to_string(destinationBlock));
+                dispatchTrainString.append(" "+std::to_string(commandSpeed));
+                dispatchTrainString.append(" "+std::to_string(authority));
+                dispatchTrainString.append(" "+std::to_string(lineNumber));
+
+                if (lineNumber == 0)
+                {
+                    //std::vector<uint32_t> &route = pGreenLinePaths->find(switchPositions);
+                }
+                //dispatchTrainString.append(" "+switchPositions);
+                Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_DISPATCH_TRAIN, dispatchTrainString);
                 TrainModel::serviceQueue.Push(newRequest);
-                LOG_TRACK_MODEL("Track model dispatch train %s", theIntString.c_str());
+                //LOG_TRACK_MODEL("Track model dispatch train %s", theIntString.c_str());
                 break;
+                */
             }
             
             case Common::RequestCode::TRACK_MODEL_GUI_TRACK_LAYOUT:

@@ -33,8 +33,10 @@ class Ui(QtWidgets.QMainWindow):
         self.initUI()
         #self.stacked_widget.currentChanged.connect(self.set_button_state)
         #self.stacked_widget.setCurrentIndex(0)
-
-
+        
+        self.update_timer = QTimer()
+        self.update_timer.timeout.connect(self.check_current_block)
+        self.update_timer.start(5000)
 
         self.show()
     def initUI(self):
@@ -197,6 +199,12 @@ class Ui(QtWidgets.QMainWindow):
 
             else:
                 print('error')
+    def check_current_block(self):
+        if (tracks ==1):
+            combo1.currentIndexChanged.connect(self.send_gather_data_message)
+        elif(tracks == 2):
+            combo1.currentIndexChanged.connect(self.send_gather_data_message)
+            combo2.currentIndexChanged.connect(self.send_gather_data_message)
 
     def send_gather_data_message(self):
         """Method called periodically to send the gather data message to the server"""
@@ -215,7 +223,6 @@ class Ui(QtWidgets.QMainWindow):
         send_message_async(RequestCode.TRACK_MODEL_GUI_GATHER_DATA, data=data, callback=self.update_gui)
 
     def update_gui(self, response_code, response_data):
-        print("test123")
         if response_code == ResponseCode.ERROR:
             print("There was a problem communicating with the server")
             return
@@ -248,7 +255,7 @@ class Ui(QtWidgets.QMainWindow):
         switchList1 = int(split_data[15])
         switchList2 = int(split_data[16])
         currentSwitch = int(split_data[17])
-        trackHeater = bool(split_data[18])
+        trackHeater = split_data[18]
         failureMode = split_data[19]
 
 
@@ -257,63 +264,66 @@ class Ui(QtWidgets.QMainWindow):
         line_name_label.setText(lineName + " Line")
 
         block_number_label = self.findChild(QtWidgets.QLabel, 'block_number_label')
-        block_number_label.setText("Block " + blockNumber)
+        block_number_label.setText("Block " + str(blockNumber))
 
         section_label = self.findChild(QtWidgets.QLabel, 'section_label')
         section_label.setText("Section: " + section)
 
         elevation_label = self.findChild(QtWidgets.QLabel, 'elevation_label')
-        elevation_label.setText("Elevation\n\n"+ elevation)
+        elevation_label.setText("Elevation\n\n"+ str(elevation)+ " m")
 
-        cumulative_elevation_label = self.findChild(QtWidgets.QLabel, 'elevation_label')
-        cumulative_elevation_label.setText("Cumulative Elevation\n\n"+ elevation)
+        cumulative_elevation_label = self.findChild(QtWidgets.QLabel, 'cumulative_elevation_label')
+        cumulative_elevation_label.setText("Cumulative Elevation\n\n"+ str(cumulativeElevation)+ " m")
 
         length_label = self.findChild(QtWidgets.QLabel, 'length_label')
-        length_label.setText("Block Length:\n\n"+ length)
+        length_label.setText("Block Length:\n\n"+ str(length)+ " m")
 
         grade_label = self.findChild(QtWidgets.QLabel, 'grade_label')
-        grade_label.setText("Block Grade:\n\n"+ length+'%')
+        grade_label.setText("Block Grade:\n\n"+ str(grade)+'%')
 
         speed_limit_label = self.findChild(QtWidgets.QLabel, 'speed_limit_label')
-        speed_limit_label.setText("Speed Limit:\n\n"+ speedLimit+" Km/Hr")
+        speed_limit_label.setText("Speed Limit:\n\n"+ str(speedLimit)+" Km/Hr")
 
         underground_label = self.findChild(QtWidgets.QLabel, 'underground_label')
-        underground_label.setText("Underground:\n\n"+ underground)
+        underground_label.setText("Underground:\n\n"+ str(underground))
 
         station_name_label = self.findChild(QtWidgets.QLabel, 'station_name_label')
         station_name_label.setText("Station Name:\n\n"+ stationName)
 
         tickets_sold_label = self.findChild(QtWidgets.QLabel, 'tickets_sold_label')
-        tickets_sold_label.setText("Tickets Sold:\n\n"+ ticketsSold)
+        tickets_sold_label.setText("Tickets Sold:\n\n"+ str(ticketsSold))
 
         passengers_boarded_label = self.findChild(QtWidgets.QLabel, 'passengers_boarded_label')
-        passengers_boarded_label.setText("Passengers Boarded:\n\n"+ passengersBoarded)
+        passengers_boarded_label.setText("Passengers Boarded:\n\n"+ str(passengersBoarded))
 
         passengers_exited_label = self.findChild(QtWidgets.QLabel, 'passengers_exited_label')
-        passengers_exited_label.setText("Passengers Exited:\n\n"+ passengersExited)
+        passengers_exited_label.setText("Passengers Exited:\n\n"+ str(passengersExited))
 
         exit_side_label = self.findChild(QtWidgets.QLabel, 'exit_side_label')
         exit_side_label.setText("Passengers Boarded:\n\n"+ exitSide)
 
         occupied_label = self.findChild(QtWidgets.QLabel, 'occupied_label')
-        occupied_label.setText("Occupied by:\n\n"+ occupied)
+        if (occupied == -1):
+            occupied_label.setText("Occupied by:\n\nNone")
+        else:
+            occupied_label.setText("Occupied by:\n\n"+ str(occupied))
 
         switch_list_label = self.findChild(QtWidgets.QLabel, 'switch_list_label')
         if (switchList1 == -1):
             switch_list_label.setText("Switches possible:\n\nNA")
         else:
-            switch_list_label.setText("Switches possible:\n\n"+ switchList1 +' '+ switchList2)
+            switch_list_label.setText("Switches possible:\n\n"+ str(switchList1) +' '+ str(switchList2))
 
         current_switch_label = self.findChild(QtWidgets.QLabel, 'current_switch_label')
 
         if (currentSwitch == -1):
             current_switch_label.setText("Switch flipped to:\n\nNA")
         else:
-            current_switch_label.setText("Switch flipped to: \n\n"+currentSwitch)
+            current_switch_label.setText("Switch flipped to: \n\n"+str(currentSwitch))
 
 
         track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
-        if (trackHeater == true):
+        if (trackHeater == "true"):
             track_heater_button.setText("On")
             track_heater_button.setStyleSheet("background-color : green")
         else:
