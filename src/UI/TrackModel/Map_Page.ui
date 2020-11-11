@@ -9,13 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-<<<<<<< HEAD
     <width>1237</width>
     <height>898</height>
-=======
-    <width>1235</width>
-    <height>891</height>
->>>>>>> master
    </rect>
   </property>
   <property name="windowTitle">
@@ -44,11 +39,7 @@
         <x>60</x>
         <y>70</y>
         <width>211</width>
-<<<<<<< HEAD
         <height>81</height>
-=======
-        <height>51</height>
->>>>>>> master
        </rect>
       </property>
       <property name="cursor">
