@@ -10,14 +10,23 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
     def __init__(self):
         super(SWTrainUi, self).__init__()
-        uic.loadUi('src/UI/SWTrainController/TrainController.ui', self)
+
+        # Define timers
+        self.main_menu_timer = QTimer()
+        #self.controller_info_timer = QTimer()
+        #self.failure_info_timer = QTimer()
+        self.main_menu_timer.timeout.connect(self.update_controller_list)
+        #self.controller_info_timer.timeout.connect(self.update_gui1)
+        #self.failure_info_timer.timeout.connect(self.update_gui2)
 
         # Define current train id
         self.current_train_id = "1"
 
-        # Create timer to update pages
-        self.train_actions_timer = QTimer()
-        #self.train_actions_timer.timeout.connect(self.update_data)
+        uic.loadUi('src/UI/SWTrainController/TrainController.ui', self)
+        self.stop_all_timers() # Restart timers
+        self.main_menu_timer.start(2000) # 2 seconds
+        
+        self.TrainIDBox.currentIndexChanged.connect(self.update_current_train_id) # Dropdown box
 
         # Initialize all buttons and the page of the UI
         self.initUI()
@@ -54,10 +63,6 @@ class SWTrainUi(QtWidgets.QMainWindow):
         self.service_brake.clicked.connect(self.toggle_service_brake)
         ##########################################
 
-        # Start timer to update train actions page
-        self.stopAllTimers()
-        self.train_actions_timer.start(250)
-
         self.button2.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(2))
         self.return_button1.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(0))
         self.return_button2.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(0))
@@ -78,7 +83,6 @@ class SWTrainUi(QtWidgets.QMainWindow):
         self.button1 = self.findChild(QtWidgets.QPushButton, 'TrainActions') # Find the button
         self.button2 = self.findChild(QtWidgets.QPushButton, 'Information') # Find the button
         self.stacked_widget = self.findChild(QtWidgets.QStackedWidget, 'stackedWidget') # Find stacked widget
-        self.current_train_id = self.TrainIDBox.currentData() # Dropdown button
 
         # Define buttons on Train Actions Page
         self.return_button1 = self.findChild(QtWidgets.QPushButton, 'MainMenu2')
@@ -125,6 +129,39 @@ class SWTrainUi(QtWidgets.QMainWindow):
         self.ads_button.setCheckable(True)
         self.ads_button.setStyleSheet("QPushButton{background-color:green;}QPushButton:checked{background-color:rgb(255, 51, 16);}")
 
+    def update_current_train_id(self):
+        self.current_train_id = self.TrainIDBox.currentText()
+
+    def update_controller_list(self):
+        # Update the drop down
+        responsecode, dataReceived = send_message(RequestCode.SWTRAIN_GUI_UPDATE_DROP_DOWN) #FILL WITH COLLIN REQUEST
+        if responsecode == ResponseCode.SUCCESS:
+            # Parse the data and update the gui.
+            dataParsed = int(dataReceived)
+            count = 1
+            currentIndex = self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentIndex()
+            self.findChild(QtWidgets.QComboBox, 'TrainIDBox').clear()
+            while(count < dataParsed + 1):
+                self.TrainIDBox.addItem(str(count))
+                count = count + 1
+            self.findChild(QtWidgets.QComboBox, 'TrainIDBox').setCurrentIndex(currentIndex)
+            # Update the global train id
+            self.update_current_train_id()
+
+        # Update Train's info
+        responsecode, dataReceived = send_message(RequestCode.SWTRAIN_GUI_GATHER_DATA, str(self.current_train_id))
+        if responsecode == ResponseCode.SUCCESS:
+            # Parse the data and update the gui.
+            #dataParsed = dataReceived.split()
+            #self.findChild(QtWidgets.QLabel, 'disp_acceleration_limit').setText(dataParsed[0] + " m/s²")
+            #self.findChild(QtWidgets.QLabel, 'disp_deceleration_limit').setText(dataParsed[1] + " m/s²")
+            #self.findChild(QtWidgets.QLabel, 'disp_block_elevation').setText(dataParsed[2] + " m")
+            #self.findChild(QtWidgets.QLabel, 'disp_block_slope').setText(dataParsed[3] + " m/s")
+            # UPDATE POSITION HERE
+            #self.findChild(QtWidgets.QLabel, 'disp_block_size').setText(dataParsed[4] + " m")
+            #self.findChild(QtWidgets.QLabel, 'disp_current_block').setText("block #" + dataParsed[5])
+            #self.findChild(QtWidgets.QLabel, 'disp_destination_block').setText("block #" + dataParsed[6])
+    
     def set_button_state(self, index):
         self.button1.setEnabled(True)
         self.button2.setEnabled(True)
@@ -299,8 +336,10 @@ class SWTrainUi(QtWidgets.QMainWindow):
     #        self.SpeedLimitLabel.setText(speed_limit + " MPH")
     #        send_message(RequestCode.SEND_TRAIN_MODEL_INFO, command_speed)
 
-    def stopAllTimers(self):
-        self.train_actions_timer.stop()
+    def stop_all_timers(self):
+        self.main_menu_timer.stop()
+        #self.controller_info_timer.stop()
+        #self.failure_info_timer.stop()
 
 app = QtWidgets.QApplication(sys.argv)
 windows = SWTrainUi()

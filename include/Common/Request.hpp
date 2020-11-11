@@ -151,6 +151,7 @@ enum class RequestCode : uint8_t
     SWTRAIN_GUI_SET_KP_KI = 209, // Used by the gui to set a train's kp/ki
     SWTRAIN_GUI_SWITCH_MODE = 210, // Used by gui to switch between automatic and manual mode
     SWTRAIN_TIME_TRIGGER = 211, // Used to trigger PID loop and calculate power
+    SWTRAIN_GUI_UPDATE_DROP_DOWN = 212, // Used by the gui to update the drop-down that contains the controllers
 
     HWTRAIN_PULL_EBRAKE = 224, // Used by the SW Train Ctrl to pull the train's ebrake
     HWTRAIN_SET_SETPOINT_SPEED = 225, // Used by the SW Train Ctrl to set a train's setpoint speed

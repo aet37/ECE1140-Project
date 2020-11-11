@@ -16,6 +16,7 @@ class ControlSystem
         std::vector<Controller*> p_controllers;
 
     public:
+        ControlSystem() {}
         /**
          * @param com_sp = command speed
          * @param curr_sp = current speed
@@ -36,5 +37,19 @@ class ControlSystem
          * @brief Returns individual Controller from vector
          */
         Controller* getControllerInstance(int id);
+
+        /**
+         * @return Returns amount of controllers
+         */
+        int getAmountofControllers();
+
+        /**
+         * @brief Gets the singleton instance
+        */
+        static ControlSystem& GetInstance()
+        {
+            static ControlSystem* pInstance = new ControlSystem();
+            return *(pInstance);
+        }
 };
 #endif
