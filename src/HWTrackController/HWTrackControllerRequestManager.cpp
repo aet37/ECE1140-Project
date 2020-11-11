@@ -86,9 +86,9 @@ void HWTrackControllerRequestManager::HandleRequest(const Common::Request& rRequ
             m_responseQueue.Clear();
 
             std::string tags[] = {"heater", "switch", "lightStatus", "occupied", "status",
-                                  "authority", "suggestedSpeed", "commandSpeed"};
+                                  "crossing", "authority", "suggestedSpeed", "commandSpeed"};
 
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 9; i++)
             {
                 AddRequest(Common::Request(Common::RequestCode::HWTRACK_GET_TAG_VALUE, tags[i]));
             }
