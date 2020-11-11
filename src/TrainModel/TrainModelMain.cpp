@@ -12,6 +12,7 @@
 #include "Logger.hpp" // For LOG macros
 #include "Train.hpp" // For TrainModel::Train
 #include "TrainCatalogue.hpp" // For TrainCatalogue
+#include "BlockCatalogue.hpp" // For BlockCatalogue
 
 namespace TrainModel
 {
@@ -29,16 +30,6 @@ Common::ServiceQueue<Common::Request> serviceQueue;
 
             switch (receivedRequest.GetRequestCode())
             {
-                case Common::RequestCode::TRAIN_MODEL_GIVE_POWER:
-                {
-                    uint32_t power = std::stoi(receivedRequest.GetData());
-                    currentSpeed = (power * 2);
-                    LOG_TRAIN_MODEL("currentSpeed = %d", currentSpeed);
-                    std::string currentSpeedSend = std::to_string(currentSpeed);
-                    Common::Request newRequest(Common::RequestCode::SWTRAIN_UPDATE_CURRENT_SPEED, currentSpeedSend);
-                    SWTrainController::serviceQueue.Push(newRequest);
-                    break;
-                }
                 case Common::RequestCode::TRAIN_MODEL_DISPATCH_TRAIN:
                 {
                     Train newTrain;
@@ -57,53 +48,6 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     std::string disDataSend = std::to_string(disData);
                     Common::Request newRequest(Common::RequestCode::SWTRAIN_DISPATCH_TRAIN, disDataSend);
                     SWTrainController::serviceQueue.Push(newRequest);
-                    break;
-                }
-                case Common::RequestCode::TRAIN_MODEL_GUI_GATHER_DATA:
-                {
-                    // uint32_t power = std::stoi(receivedRequest.GetData());
-                    // currentSpeed = (power * 2);
-                    // LOG_TRAIN_MODEL("currentSpeed = %d", currentSpeed);
-                    // std::string currentSpeedSend = std::to_string(currentSpeed);
-                    // Common::Request newRequest(Common::RequestCode::SWTRAIN_UPDATE_AUTHORITY, currentSpeedSend);
-                    // SWTrainController::serviceQueue.Push(newRequest);
-                    break;
-                }
-                case Common::RequestCode::TRAIN_MODEL_UPDATE_AUTHORITY:
-                {
-                    uint32_t Authority = std::stoi(receivedRequest.GetData());
-                    // Calculate Update here
-                    LOG_TRAIN_MODEL("Authority = %d", Authority);
-                    std::string AuthoritySend = std::to_string(Authority);
-                    Common::Request newRequest(Common::RequestCode::SWTRAIN_UPDATE_AUTHORITY, AuthoritySend);
-                    SWTrainController::serviceQueue.Push(newRequest);
-                    break;
-                }
-                case Common::RequestCode::TRAIN_MODEL_UPDATE_COMMAND_SPEED:
-                {
-                    uint32_t commandSpeed = std::stoi(receivedRequest.GetData());
-                    // Calculate Update here
-                    LOG_TRAIN_MODEL("commandSpeed = %d", commandSpeed);
-                    std::string commandSpeedSend = std::to_string(commandSpeed);
-                    Common::Request newRequest(Common::RequestCode::SWTRAIN_UPDATE_COMMAND_SPEED, commandSpeedSend);
-                    SWTrainController::serviceQueue.Push(newRequest);
-                    break;
-                }
-                case Common::RequestCode::TRAIN_MODEL_SET_THE_DAMN_LIGHTS:
-                {
-                    uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
-                    bool theLights = receivedRequest.ParseData<bool>(1);
-                    LOG_TRAIN_MODEL("Train Light Status = %d, Train ID = %d", theLights, trainId);
-                    break;
-                }
-                case Common::RequestCode::TRAIN_MODEL_GUI_CAUSE_FAILURE:
-                {
-                    // uint32_t power = std::stoi(receivedRequest.GetData());
-                    // currentSpeed = (power * 2);
-                    // LOG_TRAIN_MODEL("currentSpeed = %d", currentSpeed);
-                    // std::string currentSpeedSend = std::to_string(currentSpeed);
-                    // Common::Request newRequest(Common::RequestCode::SWTRAIN_UPDATE_CURRENT_SPEED, currentSpeedSend);
-                    // SWTrainController::serviceQueue.Push(newRequest);
                     break;
                 }
                 case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_LENGTH:
@@ -148,22 +92,25 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     LOG_TRAIN_MODEL("Train Crew Count = %d, Train ID = %d", trainCrewCount, trainId);
                     break;
                 }
-                case Common::RequestCode::TRAIN_MODEL_GUI_UPDATE_DROP_DOWN:
-                {
-                    //uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
-                    //uint32_t trainPassengerCount = receivedRequest.ParseData<uint32_t>(1);
-                    //LOG_TRAIN_MODEL("Train Passenger Count = %d, Train ID = %d", trainPassengerCount, trainId);
-                    break;
-                }
                 case Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_LIGHTS:
                 {
                     // TESTING
                     Train newTrain;
+                    Block newBlock;
+                    newBlock.m_elevation = 21;
+                    newBlock.m_slope = 8;
+                    newBlock.m_sizeOfBlock = 867;
+                    newBlock.m_accelerationLimit = 1;
+                    newBlock.m_decelerationLimit = 3;
+                    newBlock.m_speedLimit = 70;
+                    newTrain.SetCurrentBlock(0);
+
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
                     uint32_t lightStatus = receivedRequest.ParseData<uint32_t>(1);
 
                     newTrain.SetCabinLights(lightStatus);
                     TrainCatalogue::GetInstance().AddTrain(newTrain);
+                    BlockCatalogue::GetInstance().AddBlock(newBlock);
 
                     // IMPLEMENTATION
                     // uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
