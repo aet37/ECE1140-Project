@@ -65,7 +65,7 @@ enum class RequestCode : uint8_t
     CTC_GET_OCCUPANCIES = 63,
 
     SWTRACK_DISPATCH_TRAIN = 64, // Used by the CTC to signify that a new train has been dispatched // (trainID, destinationBlock, commandSpeed, authority, trackColor, switchPositions)
-    SWTRACK_UPDATE_AUTHORITY = 65, // Used by the CTC when a train's authority has been updated
+    SWTRACK_UPDATE_AUTHORITY = 65, // Used by the CTC when a train's authority has been updated (train_id, authority)
     SWTRACK_SET_TRACK_SIGNAL = 66, // Used by the CTC to set a track block's signal color
     SWTRACK_UPDATE_COMMAND_SPEED = 67, // Used by the CTC when a train's command speed is updated
     SWTRACK_SET_TRACK_STATUS = 68, // Used by the CTC when a block is closed/open for maintenance
