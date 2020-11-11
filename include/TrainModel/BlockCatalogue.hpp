@@ -64,6 +64,7 @@ public:
     /**
      * @brief Gets a block from the catalogue
      * 
+     * @param trackId       Id of the track to get the block from
      * @param blockId       Index of the block to get
     */
     Block* GetBlock(int trackId, int blockId);
@@ -83,9 +84,14 @@ public:
     void AddRedBlock(Block block);
 
     /**
-     * @brief Gets the number of blocks in the list
+     * @brief Gets the number of blocks in green track
     */
-    std::size_t GetNumberOfBlocks() const { return m_blockList.size(); }
+    std::size_t GetNumberOfGreenBlocks() const { return m_greenBlockList.size(); }
+
+    /**
+     * @brief Gets the number of blocks in red track
+    */
+    std::size_t GetNumberOfRedBlocks() const { return m_redBlockList.size(); }
     
 protected:
 private:

@@ -22,7 +22,6 @@ Common::ServiceQueue<Common::Request> serviceQueue;
     void moduleMain()
     {
         LOG_TRAIN_MODEL("Thread starting...");
-        int currentSpeed;
 
         while (true)
         {
@@ -38,16 +37,57 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     newTrain.SetCommandSpeed(receivedRequest.ParseData<uint32_t>(2));
                     newTrain.SetAuthority(receivedRequest.ParseData<uint32_t>(3));
                     newTrain.SetCurrentLine(receivedRequest.ParseData<uint32_t>(4));
-                    // Route info from Evan? receivedRequest.ParseData<uint32_t>(5);
 
+                    // Parse through the remainder to construct this train's route
+                    vector<uint32_t> route;
+                    for (int i = 5; true; i++)
+                    {
+                        try
+                        {
+                            uint32_t block = receivedRequest.ParseData<uint32_t>(i);
+                        }
+                        catch (const std::exception& rException)
+                        {
+                            break;
+                        }
+                        route.push_back(block);
+                    }
+                    newTrain.SetRoute(route);
 
+                    // Add the train to the catalogue
                     TrainCatalogue::GetInstance().AddTrain(newTrain);
 
-                    uint32_t disData = std::stoi(receivedRequest.GetData());
-                    LOG_TRAIN_MODEL("Dispatch Train = %d", disData);
-                    std::string disDataSend = std::to_string(disData);
-                    Common::Request newRequest(Common::RequestCode::SWTRAIN_DISPATCH_TRAIN, disDataSend);
+                    // Prepare a request for Collin (trainId, destinationBlock, commandSpeed, authority)
+                    Common::Request newRequest(Common::RequestCode::SWTRAIN_DISPATCH_TRAIN);
+                    newRequest.AppendData(std::to_string(trainId));
+                    newRequest.AppendData(std::to_string(receivedRequest.ParseData<uint32_t>(1)));
+                    newRequest.AppendData(std::to_string(receivedRequest.ParseData<uint32_t>(2)));
+                    newRequest.AppendData(std::to_string(receivedRequest.ParseData<uint32_t>(3)));
                     SWTrainController::serviceQueue.Push(newRequest);
+                    break;
+                }
+                case Common::RequestCode::TRAIN_MODEL_RECEIVE_BLOCK:
+                {
+                    // Parse stuff from Evan (trackId, blockId, elevation, grade, length, speedLimit, travelDirection)
+                    uint32_t trackId = receivedRequest.ParseData<uint32_t>(0);
+                    uint32_t blockId = receivedRequest.ParseData<uint32_t>(1);
+
+                    Block block;
+                    block.m_elevation = receivedRequest.ParseData<int>(2);
+                    block.m_slope = receivedRequest.ParseData<int>(3);
+                    block.m_sizeOfBlock = receivedRequest.ParseData<uint32_t>(4);
+                    block.m_speedLimit = receivedRequest.ParseData<uint32_t>(5);
+                    block.m_travelDirection = receivedRequest.ParseData<uint32_t>(6);
+
+                    // Add the block to the catalogue
+                    if (trackId == 0)
+                    {
+                        BlockCatalogue::GetInstance().AddGreenBlock(block);
+                    }
+                    else
+                    {
+                        BlockCatalogue::GetInstance().AddRedBlock(block);
+                    }
                     break;
                 }
                 case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_LENGTH:
