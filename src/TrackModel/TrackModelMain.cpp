@@ -449,6 +449,30 @@ void moduleMain()
                 blockSpeedLimit, blockElevation, blockCumulativeElevation,
                 blockDirection, blockUnderground, blockSection, stationInfo, switchInfo, railwayCrossing);
 
+                // Send block information to Kenneth (trackId, blockId, elevation, grade, length, speedLimit, travelDirection)
+                // Talk to Kenny about acceleration/deceleration
+                Common::Request newReq(Common::RequestCode::TRAIN_MODEL_RECEIVE_BLOCK);
+                newReq.AppendData(gettingTrackNumber);
+                newReq.AppendData(blockNumberString);
+                newReq.AppendData(blockElevationString);
+                newReq.AppendData(blockGradeString);
+                newReq.AppendData(blockLengthString);
+                newReq.AppendData(blockSpeedLimitString);
+
+                if (blockDirection == "Inbound")
+                {
+                    newReq.AppendData("0");
+                }
+                else if (blockDirection == "Outbound")
+                {
+                    newReq.AppendData("1");
+                }
+                else
+                {
+                    newReq.AppendData("2");
+                }
+                TrainModel::serviceQueue.Push(newReq);
+
                 break;
             }
             case Common::RequestCode::TRACK_MODEL_UPDATE_OCCUPANCY:
