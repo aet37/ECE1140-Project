@@ -129,6 +129,7 @@ enum class RequestCode : uint8_t
     TRAIN_MODEL_GUI_SET_TRAIN_CREW_COUNT = 169, // Used by the gui to set a train's crew count
     TRAIN_MODEL_GUI_UPDATE_DROP_DOWN = 170, // Used by the gui to update the drop-down that contains the trains
     TRAIN_MODEL_GUI_RECEIVE_LIGHTS = 171, // Used by the swtrain to toggle lights
+    TRAIN_MODEL_GUI_RECEIVE_EVERYTHING = 172, // Used by the swtrain to toggle everything
 
     SWTRAIN_DISPATCH_TRAIN = 192, // Used by the train model to signify that a new train has been dispatched
     SWTRAIN_UPDATE_CURRENT_SPEED = 193, // Used by the train model to update a train's current speed
