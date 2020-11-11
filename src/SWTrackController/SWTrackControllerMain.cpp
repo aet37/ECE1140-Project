@@ -61,6 +61,7 @@ void moduleMain()
 
                 if (line == 0)
                 {
+                    //LOG_SW_TRACK_CONTROLLER("SWTrackController sending HWTrack: %s", switchPositionsString[0].c_str());
                     Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "switch " + switchPositionsString[0]);
                     HWTrackController::HWTrackControllerRequestManager reqManager;
                     Common::Response a;
@@ -86,17 +87,9 @@ void moduleMain()
                 uint32_t blockNum = receivedReq.ParseData<uint32_t>(1);
                 bool occupancy = receivedReq.ParseData<bool>(2);
 
-                /**
-                 * TODO:
-                 * Find the controllers that control this block. Set the specific block occupancy
-                 * To what was given above
-                */
-
-                // BELOW CODE IS TEMPORARY ///////////////////////////////////////
-                //Common::Request OccUpdate(Common::RequestCode::CTC_GET_OCCUPANCIES);
 
                 if(line ==0)
-                { 
+                {
                     if(blockNum==62)
                     {
                         Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block62Occupancy " + 1);
@@ -142,9 +135,13 @@ void moduleMain()
                     main.updateOccupied(line, blockNum);
                 }
 
+                LOG_SW_TRACK_CONTROLLER("SWTrackController sent CTC Block Occupancies: %s", main.makeOccupancies().c_str());
+
                 Common::Request OccUpdate(Common::RequestCode::CTC_GET_OCCUPANCIES);
                 OccUpdate.SetData(main.makeOccupancies());
                 CTC::serviceQueue.Push(OccUpdate);
+
+                LOG_SW_TRACK_CONTROLLER("SWTrackController sent CTC Block Occupancies: %s", main.makePositions().c_str());
 
                 Common::Request SwitchUpdate(Common::RequestCode::CTC_GET_SWITCHES);
                 SwitchUpdate.SetData(main.makePositions());
@@ -167,11 +164,13 @@ void moduleMain()
                     {
                         thing = 1;
                     }
-
-
+                    
+                    out+= thing + ' ' + switchMaybeChanged + ' ' + singleSwitchPosition;
+                    SwitchUpdateTM.SetData(out);
 
                     TrackModel::serviceQueue.Push(SwitchUpdateTM);
                 }
+
                 
 
             }
