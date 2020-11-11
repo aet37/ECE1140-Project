@@ -83,7 +83,7 @@ void moduleMain()
                 */
                 LOG_SW_TRACK_CONTROLLER("Received: %s", receivedReq.GetData().c_str());
                 uint32_t line = receivedReq.ParseData<uint32_t>(0);
-                uint32_t blockId = receivedReq.ParseData<uint32_t>(1);
+                uint32_t blockNum = receivedReq.ParseData<uint32_t>(1);
                 bool occupancy = receivedReq.ParseData<bool>(2);
 
                 /**
@@ -172,7 +172,7 @@ void moduleMain()
 
                     TrackModel::serviceQueue.Push(SwitchUpdateTM);
                 }
-                */
+                
 
             }
             case Common::RequestCode::SWTRACK_UPDATE_AUTHORITY:
