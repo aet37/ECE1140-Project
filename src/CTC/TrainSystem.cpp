@@ -216,9 +216,6 @@ void TrainSystem::SetTrackOccupied(int track_num, enum Line ln)
 	{
 		throw std::logic_error("TrainSystem::SetTrackOccupied() : Invalid input for Line");
 	}
-
-	// Log that a track is occupied
-	LOG_CTC("From TrainSystem::SetTrackOccupied() : Track %d is occupied", track_num);
 }
 
 /**
@@ -258,8 +255,6 @@ void TrainSystem::SetTrackNotOccupied(int track_num, enum Line ln)
 	{
 		throw std::logic_error("TrainSystem::SetTrackNotOccupied() : Invalid input for Line");
 	}
-	// Log that a track is occupied
-	LOG_CTC("From TrainSystem::SetTrackNotOccupied() : Track %d is NOT occupied", track_num);
 }
 
 /**
