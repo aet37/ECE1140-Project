@@ -40,3 +40,11 @@ Controller* ControlSystem::getControllerInstance(int id)
 {
     return p_controllers[id];
 }
+
+/**
+ * @return Returns amount of controllers
+ */
+int ControlSystem::getAmountofControllers()
+{
+    return p_controllers.size();
+}
