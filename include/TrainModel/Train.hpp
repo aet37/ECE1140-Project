@@ -241,13 +241,13 @@ public:
      * @brief Setter function for power
      * @param power
      */
-    void SetCurrentBlock(int power) { m_power = power; };
+    void SetPower(int power) { m_power = power; };
 
     /**
      * @brief gets power
      * @return returns power
      */
-    int GetCurrentBlock() const { return m_power; }
+    int GetPower() const { return m_power; }
 
     // TRAIN LENGTH
     /**

@@ -258,7 +258,7 @@ class Ui(QtWidgets.QMainWindow):
             else:
                 self.findChild(QtWidgets.QLabel, 'disp_advertisements').setText("off")
                 self.findChild(QtWidgets.QLabel, 'disp_advertisements').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
-            
+            print(dataParsed[4]) # TEST PRINT
             if dataParsed[4] == 1:
                 self.findChild(QtWidgets.QLabel, 'disp_cabin_lights').setText("on")
                 self.findChild(QtWidgets.QLabel, 'disp_cabin_lights').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
