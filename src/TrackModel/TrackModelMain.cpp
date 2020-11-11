@@ -400,6 +400,10 @@ void moduleMain()
                     std::string stationInfo2 = test.substr(0, pos);
                     stationInfo.append(stationInfo2);
                     test.erase(0, pos + 1);
+                    printf("\n\n\n");
+                    printf("info:\n\n");
+                    printf(stationInfo.c_str());
+                    printf("\n\n\n");
                     // ex: NAME RIGHT
                 }
                 else
