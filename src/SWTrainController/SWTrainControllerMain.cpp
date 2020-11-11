@@ -21,11 +21,9 @@ Common::ServiceQueue<Common::Request> serviceQueue;
 void moduleMain()
 {
     LOG_SW_TRAIN_CONTROLLER("Thread starting...");
-    ControlSystem TrainControllers;
     while(true)
     {
         Common::Request req = serviceQueue.Pop();
-        TrainControllers.createNewController(1,2,3);
         switch(req.GetRequestCode())
         {  
             case Common::RequestCode::SWTRAIN_DISPATCH_TRAIN:
@@ -43,6 +41,7 @@ void moduleMain()
             }
             case Common::RequestCode::SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS:
             {
+                ControlSystem::getInstance().createNewController(1,2,3);
                 // Read train ID
                 uint32_t trainID = req.ParseData<uint32_t>(0);
                 // toggle train lights
