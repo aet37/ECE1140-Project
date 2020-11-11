@@ -9,29 +9,36 @@
 #include "include/Communications.hpp" // For Communications::CommsTask
 #include "include/Scheduler.hpp" // For Scheduler
 #include "include/UserProgram.hpp" // For UserProgram
-#include "include/Task.hpp" // For Task
-#include "include/Routine.hpp" // For Routine
-#include "include/Rung.hpp" // For Rung
-#include "include/Instruction.hpp" // For Instruction
-#include "include/TagDatabase.hpp" // For TagDatabase::AddTag
+#include "include/Lcd/LcdApi.hpp" // For LcdApi
+#include "include/TagDatabase.hpp" // For TagDatabase
+#include "include/SystemTask.hpp" // For SystemTask
 #include "include/ArduinoLogger.hpp" // For LOG
 
 static uint64_t currentTime;
+
+#define PIN23 23
 
 void setup()
 {
     // Initialize Serial
     Serial.begin(9600);
 
+    // Initialize the lcd display
+    LcdApi::Initialize();
+
     // Pin Initialization
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(PIN2, OUTPUT);
+    pinMode(PIN3, OUTPUT);
+    pinMode(PIN23, INPUT);
 
     // Initialize the user program
     UserProgram* pProg = new UserProgram("Blank Program");
+    LcdApi::Write("Blank Program");
 
     // Add tasks to the scheduler
     Scheduler::GetInstance().AddTask(new SystemTask(toggleTask, nullptr, 1000));
+    Scheduler::GetInstance().AddTask(new SystemTask(LcdApi::ScrollTask, nullptr, 500));
     Scheduler::GetInstance().AddTask(new SystemTask(Communications::CommsTask, static_cast<void*>(pProg), 100));
     Scheduler::GetInstance().AddTask(new SystemTask(TagDatabase::IoTask, nullptr, 100));
 }

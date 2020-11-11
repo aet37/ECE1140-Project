@@ -1,6 +1,7 @@
 """Test for downloading a program to the arduino"""
 
 import sys
+from time import sleep
 
 sys.path.insert(1, '../../../src')
 from HWTrackController.hw_track_controller_connector import send_request_to_controller, \
@@ -109,6 +110,16 @@ def test_program_download():
     # End download
     send_request_to_controller(bytes(str(RequestCode.HWTRACK_END_DOWNLOAD.value), 'utf-8'))
     assert get_response_from_controller() == b'0'
+
+def test_lcd_downloading():
+    """Verify that the lcd display shows Downloading... during a download"""
+    # Start download
+    send_request_to_controller(bytes(str(RequestCode.HWTRACK_START_DOWNLOAD.value), 'utf-8') +
+                                     bytes(" Test Program", 'utf-8'))
+    assert get_response_from_controller() == b'0'
+
+    # Given some time for verification
+    sleep(10)
 
 def test_ote_instruction():
     """Downloads a simple program with ote instructions to the arduino"""

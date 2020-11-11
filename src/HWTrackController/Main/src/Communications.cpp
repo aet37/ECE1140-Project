@@ -15,6 +15,7 @@
 #include "../include/Rung.hpp" // For Rung
 #include "../include/Instruction.hpp" // For Instruction
 #include "../include/Scheduler.hpp" // For Scheduler
+#include "../include/Lcd/LcdApi.hpp" // For LcdApi
 #include "../include/ArduinoLogger.hpp" // For LOG macros
 
 namespace Communications
@@ -101,6 +102,8 @@ static void HandleStartDownload(UserProgram* pProgram, const String& rProgramNam
     pProgram->ClearMemory();
     pProgram->SetProgramName(rProgramName.c_str());
     TagDatabase::Clear();
+    LcdApi::Clear();
+    LcdApi::Write("Download In Progress");
     SendResponse(ResponseCode::SUCCESS);
 }
 
@@ -308,6 +311,9 @@ static void HandleEndDownload(UserProgram* pProgram)
             Scheduler::GetInstance().AddEventDrivenTask(rTasks[i]);
         }
     }
+
+    LcdApi::Clear();
+    LcdApi::Write(pProgram->GetProgramName().c_str());
 
     SendResponse(ResponseCode::SUCCESS);
 }
