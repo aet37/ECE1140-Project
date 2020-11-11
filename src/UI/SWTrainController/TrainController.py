@@ -150,7 +150,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
         # Update Train's info
         responsecode, dataReceived = send_message(RequestCode.SWTRAIN_GUI_GATHER_DATA, str(self.current_train_id))
-        if responsecode == ResponseCode.SUCCESS:
+        #if responsecode == ResponseCode.SUCCESS:
             # Parse the data and update the gui.
             #dataParsed = dataReceived.split()
             #self.findChild(QtWidgets.QLabel, 'disp_acceleration_limit').setText(dataParsed[0] + " m/s²")

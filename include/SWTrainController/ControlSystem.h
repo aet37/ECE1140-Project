@@ -46,7 +46,7 @@ class ControlSystem
         /**
          * @brief Gets the singleton instance
         */
-        static ControlSystem& GetInstance()
+        static ControlSystem& getInstance()
         {
             static ControlSystem* pInstance = new ControlSystem();
             return *(pInstance);

@@ -13,6 +13,7 @@
 #include "Request.hpp" // For Request
 #include "Response.hpp" // For Response
 #include "Logger.hpp" // For LOG macros
+#include "ControlSystem.h"
 
 namespace SWTrainController
 {
@@ -84,15 +85,25 @@ void SWTrainControllerRequestManager::HandleRequest(const Common::Request& rRequ
         }
         case Common::RequestCode::SWTRAIN_GUI_GATHER_DATA:
         {
-            // Add the request to the queue
-            SWTrainController::serviceQueue.Push(rRequest);
+            Controller* pController = ControlSystem::getInstance().getControllerInstance(rRequest.ParseData<uint32_t>(0)-1);
+
+            rResponse.AppendData(std::to_string(pController->getDoors()));            // 0
+            rResponse.AppendData(std::to_string(pController->getLights()));           // 1
+            rResponse.AppendData(std::to_string(pController->getAnnounceStations())); // 2
+            rResponse.AppendData(std::to_string(pController->getAds()));              // 3
+            rResponse.AppendData(std::to_string(pController->getCurrentSpeed()));     // 4
+            rResponse.AppendData(std::to_string(pController->getCommandSpeed()));     // 5
+            rResponse.AppendData(std::to_string(pController->getSetpointSpeed()));    // 6
+            rResponse.AppendData(std::to_string(pController->getServiceBrake()));     // 7
+            rResponse.AppendData(std::to_string(pController->getMode()));             // 8
+
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }
         case Common::RequestCode::SWTRAIN_GUI_UPDATE_DROP_DOWN:
         {
-            // Add the request to the queue
-            SWTrainController::serviceQueue.Push(rRequest);
+            uint32_t numberOfControllers = ControlSystem::getInstance().getAmountofControllers();
+            rResponse.AppendData(std::to_string(numberOfControllers));
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
             break;
         }

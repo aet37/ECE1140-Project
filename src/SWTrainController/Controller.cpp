@@ -159,6 +159,55 @@ int Controller::getPowerCommand()
     return power_command;
 }
 
+/**
+ * @brief Getter function for mode
+ */
+bool Controller::getMode()
+{
+    return mode;
+}
+
+/**
+ * @brief Getter function for service brake
+ */
+bool Controller::getServiceBrake()
+{
+    return serviceBrake;
+}
+
+// Non-Vital Getters
+/**
+ * @brief open/close doors
+ */
+bool Controller::getDoors()
+{
+    return NVO.doors;
+}
+
+/**
+ * @brief turn lights on/off
+ */
+bool Controller::getLights()
+{
+    return NVO.lights;
+}
+
+/**
+ * @brief turn announcements on/off
+ */
+bool Controller::getAnnounceStations()
+{
+    return NVO.announcements;
+}
+
+/**
+ * @brief turn advertisements on/off
+ */
+bool Controller::getAds()
+{
+    return NVO.advertisements;
+}
+
 ///////////////////////////////////////////////////////////////
 // VITAL OPERATIONS
 ///////////////////////////////////////////////////////////////

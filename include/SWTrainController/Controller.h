@@ -123,6 +123,37 @@ class Controller
          */
         int getPowerCommand();
 
+        /**
+         * @brief Getter function for mode
+         */
+        bool getMode();
+
+        /**
+         * @brief Getter function for service brake
+         */
+        bool getServiceBrake();
+
+        // NON-VITAL GETTERS
+        /**
+         * @brief open/close doors
+         */
+        bool getDoors();
+
+        /**
+         * @brief turn lights on/off
+         */
+        bool getLights();
+
+        /**
+         * @brief turn announcements on/off
+         */
+        bool getAnnounceStations();
+
+        /**
+         * @brief turn advertisements on/off
+         */
+        bool getAds();
+
         ///////////////////////////////////////////////////////////////
         // VITAL OPERATIONS
         ///////////////////////////////////////////////////////////////

@@ -21,10 +21,11 @@ Common::ServiceQueue<Common::Request> serviceQueue;
 void moduleMain()
 {
     LOG_SW_TRAIN_CONTROLLER("Thread starting...");
-    // ControlSystem TrainControllers;
+    ControlSystem TrainControllers;
     while(true)
     {
         Common::Request req = serviceQueue.Pop();
+        TrainControllers.createNewController(1,2,3);
         switch(req.GetRequestCode())
         {  
             case Common::RequestCode::SWTRAIN_DISPATCH_TRAIN:
