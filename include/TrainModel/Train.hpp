@@ -6,6 +6,7 @@
 #define TRAIN_MODEL_TRAIN_HPP
 
 // SYSTEM INCLUDES
+#include <stdint.h>
 #include <vector>
 
 // C++ PROJECT INCLUDES

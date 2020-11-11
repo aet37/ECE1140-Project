@@ -39,12 +39,13 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     newTrain.SetCurrentLine(receivedRequest.ParseData<uint32_t>(4));
 
                     // Parse through the remainder to construct this train's route
-                    vector<uint32_t> route;
+                    std::vector<uint32_t> route;
                     for (int i = 5; true; i++)
                     {
+                        uint32_t block = 0;
                         try
                         {
-                            uint32_t block = receivedRequest.ParseData<uint32_t>(i);
+                            block = receivedRequest.ParseData<uint32_t>(i);
                         }
                         catch (const std::exception& rException)
                         {
@@ -143,14 +144,13 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     newBlock.m_accelerationLimit = 1;
                     newBlock.m_decelerationLimit = 3;
                     newBlock.m_speedLimit = 70;
-                    newTrain.SetCurrentBlock(0);
 
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
                     uint32_t lightStatus = receivedRequest.ParseData<uint32_t>(1);
 
                     newTrain.SetCabinLights(lightStatus);
                     TrainCatalogue::GetInstance().AddTrain(newTrain);
-                    BlockCatalogue::GetInstance().AddBlock(newBlock);
+                    BlockCatalogue::GetInstance().AddRedBlock(newBlock);
 
                     // IMPLEMENTATION
                     // uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);

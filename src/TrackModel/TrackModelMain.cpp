@@ -451,7 +451,7 @@ void moduleMain()
 
                 // Send block information to Kenneth (trackId, blockId, elevation, grade, length, speedLimit, travelDirection)
                 // Talk to Kenny about acceleration/deceleration
-                Common::Request newReq(Common::RequestCode:::TRAIN_MODEL_RECEIVE_BLOCK);
+                Common::Request newReq(Common::RequestCode::TRAIN_MODEL_RECEIVE_BLOCK);
                 newReq.AppendData(gettingTrackNumber);
                 newReq.AppendData(blockNumberString);
                 newReq.AppendData(blockElevationString);
