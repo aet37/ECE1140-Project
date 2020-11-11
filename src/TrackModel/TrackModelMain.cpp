@@ -142,7 +142,7 @@ void initializeRouteMaps(std::map<std::string, std::vector<uint32_t>>& rGreenLin
                 base.insert(base.end(), choice6.begin(), choice6.end());
                 }
                 base.insert(base.end(), base3.begin(), base3.end());
-                
+
                 for (int l = 0; l < 2; l++)
                 {
                     if (l == 0)
@@ -175,7 +175,7 @@ void initializeRouteMaps(std::map<std::string, std::vector<uint32_t>>& rGreenLin
                                 base.insert(base.end(), choice11.begin(), choice11.end());
                                 for (int o = 0; o < 2; o++)
                                 {
-                                    
+
                                     if (o == 0)
                                     {
                                         p = 0;
@@ -217,7 +217,7 @@ void initializeRouteMaps(std::map<std::string, std::vector<uint32_t>>& rGreenLin
 
     blocks = {};
     rRedLineRoutes.insert(std::pair<std::string, std::vector<uint32_t>>("01111101000001", blocks));
-*/   
+*/
 }
 
 void moduleMain()
@@ -293,7 +293,7 @@ void moduleMain()
                 LOG_TRACK_MODEL("Track model dispatch train %s", dispatchTrainString.c_str());
                 break;
             }
-            
+
             case Common::RequestCode::TRACK_MODEL_GUI_TRACK_LAYOUT:
             {
                 // get line name from string
@@ -430,7 +430,7 @@ void moduleMain()
                 {
                     switchInfo = "";
                 }
-                
+
                 std::string railwayCrossing = "false";
                 if (test.find("Railway Crossing") != std::string::npos)
                 {
@@ -445,22 +445,35 @@ void moduleMain()
                 }
 
                 // add block to track we got from block info before
-                theTrack->AddBlock(blockNumber, blockLength, blockGrade, 
-                blockSpeedLimit, blockElevation, blockCumulativeElevation, 
+                theTrack->AddBlock(blockNumber, blockLength, blockGrade,
+                blockSpeedLimit, blockElevation, blockCumulativeElevation,
                 blockDirection, blockUnderground, blockSection, stationInfo, switchInfo, railwayCrossing);
 
                 break;
             }
+            case Common::RequestCode::TRACK_MODEL_UPDATE_OCCUPANCY:
+            {
+                LOG_TRACK_MODEL("Received occupancy %s", req.GetData().c_str());
+                // (trainid, trackid, blockId, trainOrNot)
+                uint32_t trainId = req.ParseData<uint32_t>(0);
+                uint32_t trackId = req.ParseData<uint32_t>(1);
+                uint32_t blockId = req.ParseData<uint32_t>(2);
+                bool occupancy = req.ParseData<bool>(3);
+
+                // TODO: Process this info
+
+                // (trackId, blockId)
+                Common::Request newReq(Common::RequestCode::SWTRACK_SET_TRACK_OCCUPANCY);
+                newReq.AppendData(std::to_string(trackId));
+                newReq.AppendData(std::to_string(blockId));
+
+                SWTrackController::serviceQueue.Push(newReq);
+                break;
+            }
             default:
                 ASSERT(false, "Unexpected request code %d", static_cast<uint16_t>(req.GetRequestCode()));
-
         }
-
-
     }
-
-
-
 }
 
 } // namespace TrackModel

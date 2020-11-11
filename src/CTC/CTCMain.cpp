@@ -127,8 +127,9 @@ void moduleMain()
 			// Get Occupancies from Track Controller
 	    	case Common::RequestCode::CTC_GET_OCCUPANCIES:
 		    {
-			    std::string green_occupancies = req.GetData().substr(0, 150);  // get green block occupancies
-			    std::string red_occupancies = req.GetData().substr(150, 76);    // get red block occupancies
+				LOG_CTC("CTC received this: %s", req.GetData().c_str());
+			    std::string green_occupancies = req.ParseData<std::string>(0);  // get green block occupancies
+			    std::string red_occupancies = req.ParseData<std::string>(1);    // get red block occupancies
 
 			    for(int i = 0; i < TrainSystem::GetInstance().GetTrackArr(LINE_GREEN).size(); i++)
 			    {

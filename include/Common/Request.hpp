@@ -89,7 +89,6 @@ enum class RequestCode : uint8_t
 
     SWTRACK_GUI_GATHER_DATA = 83, // Used by the gui to periodically gather data from the server // (trackColor, blockId) // (trackHeater, switchPosition, lightStatus, occupied, trackStatus, railwayCrossing, authority, suggestedSpeed, commandSpeed)
     SWTRACK_GUI_SET_SWITCH_POSITION = 84, // Used by the gui to set a switch's position // (trackController, newPosition)
-    SWTRACK_SET_TRACK_UNOCCUPANCY =85,
 
     HWTRACK_START_DOWNLOAD = 96, // Used by the SW Track Ctrl to signify download is starting // (string programName)
     HWTRACK_END_DOWNLOAD = 97, // Used by the SW Track Ctrl to signify download has completed // (void)
@@ -112,7 +111,7 @@ enum class RequestCode : uint8_t
     TRACK_MODEL_GUI_SET_FAILURE = 133, // Used by the gui when a track failure is induced
     TRACK_MODEL_GUI_GATHER_DATA = 134, // Used periodically by the gui to update the user interface
     TRACK_MODEL_GUI_EDIT_BLOCK_LENGTH = 135, // Used by the gui to edit block length
-    TRACK_MODEL_GIVE_POSITION = 136, // Used by the train model to give the track model the position of a train // (blockId, trainOrNot)
+    TRACK_MODEL_UPDATE_OCCUPANCY = 136, // Used by the train model to give the track model the position of a train // (trainid, trackid, blockId, trainOrNot)
     TRACK_MODEL_UPDATE_COMMAND_SPEED = 137, // Used by the track controller to update the command speed of a train // (trainId, newSpeed)
     TRACK_MODEL_UPDATE_SWITCH_POSITIONS = 138, // Used by the track controller to update a switch positions // (trackColor, switchNumberFromYard, switchPosition)
     TRACK_MODEL_UPDATE_AUTHORITY = 139, // Used by the track controller to update the authority of a train // (trainId, newAuthority)
