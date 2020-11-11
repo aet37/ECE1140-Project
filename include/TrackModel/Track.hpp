@@ -7,6 +7,7 @@
 // SYSTEM INCLUDES
 #include <string>
 #include <vector>
+#include "Block.hpp"
 
 // FORWARD DECLARATIONS
 class Station;
@@ -27,29 +28,53 @@ public:
     Track(std::string lineColor, int totalBlocks, int blockNumber) :
         m_line(lineColor),
         m_totalBlocks(totalBlocks),
-        m_number(blockNumber)
+        m_number(blockNumber),
+        m_trackHeater(false)
         // m_stations(),
         // m_switches(),
         // m_blockList()
     {}
 
-    void AddBlock(std::string test)
+    void AddBlock(int blockNumber, double blockLength, double blockGrade, 
+    int blockSpeedLimit, double blockElevation, double blockCumulativeElevation, 
+    std::string blockDirection, std::string blockUnderground, std::string blockSection, std::string stationInfo, 
+    std::string switchInfo, std::string blockRailway)
     {
-        
-
-
+        m_blockList.push_back(Block(blockNumber, blockLength, blockGrade, blockSpeedLimit,
+        blockElevation, blockCumulativeElevation, blockDirection, blockUnderground, blockSection,
+        stationInfo, switchInfo, blockRailway));
     }
+    std::string getLineName()
+    {
+        return m_line;
+    }
+    Block getBlock(int blockNumber)
+    {
+        return m_blockList[blockNumber - 1];
+    }
+    bool getTrackHeater()
+    {
+        return m_trackHeater;
+    }
+    void setTrackHeater(bool heater)
+    {
+        m_trackHeater = heater;
+    }
+
 
 protected:
 private:
     /// Color of the line
     std::string m_line;
 
-    ///
+    /// number of total blocks
     int m_totalBlocks;
 
-    ///
+    /// number track
     int m_number;
+
+    ///track heater on or off for whole line
+    bool m_trackHeater;
 
     ///
     // std::vector<Station> m_stations;
@@ -58,7 +83,7 @@ private:
     // std::vector<Switch> m_switches;
 
     // instead of switch vector, int vector of blocks they're on
-    // std::vector<Block> m_blockList;
+    std::vector<Block> m_blockList;
 };
 
 } // namespace TrackModel
