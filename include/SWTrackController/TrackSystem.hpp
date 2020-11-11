@@ -120,7 +120,7 @@ class TrackSystem
 			//setting the current array of switch positions to use later for comparison 
 			for(int i=0;i<27;i+2)
 			{
-				if(i==i+1)
+				if(p_Controllers[i].getSwitchPos()==p_Controllers[i+1].getSwitchPos())
 				{
 
 
