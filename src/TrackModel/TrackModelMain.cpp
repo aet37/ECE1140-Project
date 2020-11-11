@@ -320,26 +320,18 @@ void moduleMain()
                 test.erase(0, 10);
                 int pos = test.find(',');
                 std::string gettingTrackNumber = test.substr(0, pos);
-<<<<<<< HEAD
-=======
-                printf("test123\n");
->>>>>>> master
+
                 int trackNumberInt = stoi(gettingTrackNumber);
 
                 // grab track using track number
                 Track *theTrack = TrackInfo::GetInstance().getTrack(trackNumberInt);
 
                 // get number of block, convert to int
-<<<<<<< HEAD
+                //test.erase(0, pos+2);
                 test.erase(0, pos + 12);
                 pos = test.find(',');
                 std::string blockNumberString = test.substr(0, pos);
-=======
-                test.erase(0, pos + 2);
-                pos = test.find(',');
-                std::string blockNumberString = test.substr(0, pos);
-                printf("test1234\n");
->>>>>>> master
+
                 int blockNumber = stoi(blockNumberString);
                 test.erase(0, pos + 12);
 
@@ -358,10 +350,7 @@ void moduleMain()
                 // get get speed limit, convert to int
                 pos = test.find(',');
                 std::string blockSpeedLimitString = test.substr(0, pos);
-<<<<<<< HEAD
-=======
-                printf("test12345\n");
->>>>>>> master
+
                 int blockSpeedLimit = stoi(blockSpeedLimitString);
                 test.erase(0, pos + 15);
 
@@ -375,7 +364,6 @@ void moduleMain()
                 pos = test.find(',');
                 std::string blockCumulativeElevationString = test.substr(0, pos);
                 double blockCumulativeElevation = stod(blockCumulativeElevationString);
-<<<<<<< HEAD
                 test.erase(0, pos + 16);
 
                 // get track block travel direction
@@ -450,17 +438,6 @@ void moduleMain()
                 theTrack->AddBlock(blockNumber, blockLength, blockGrade, 
                 blockSpeedLimit, blockElevation, blockCumulativeElevation, 
                 blockDirection, blockUnderground, blockSection, stationInfo, switchInfo, railwayCrossing);
-=======
-
-                // get StationInfo
-                if (test.find("Station\": \"") != std::string::npos){
-                    pos = test.find("Station\": \"");
-                    test.erase(0, pos + 11);
-                    //std::string stationInfo
-                }
-
-
->>>>>>> master
 
                 break;
             }
