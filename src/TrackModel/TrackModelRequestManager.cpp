@@ -134,7 +134,7 @@ void TrackModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
             std::string heaterInput = rRequest.ParseData<std::string>(1);
 
 			printf("\n\n\n:");
-			printf("%s", std::to_string(trackId));
+			printf("%s", trackId);
 			printf("\n\n\n:");
 			printf("%d", heaterInput);
 
