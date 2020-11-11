@@ -119,6 +119,7 @@ class RequestCode(Enum):
     TRAIN_MODEL_GUI_SET_TRAIN_CREW_COUNT = 169 # Used by the gui to set a train's crew count
     TRAIN_MODEL_GUI_UPDATE_DROP_DOWN = 170 # Used by the gui to update the drop-down that contains the trains
     TRAIN_MODEL_GUI_RECEIVE_LIGHTS = 171 # Used by the swtrain to toggle lights
+    TRAIN_MODEL_GUI_RECEIVE_EVERYTHING = 172 # Used by the swtrain to toggle everything
 
     SWTRAIN_DISPATCH_TRAIN = 192 # Used by the train model to signify that a new train has been dispatched
     SWTRAIN_UPDATE_CURRENT_SPEED = 193 # Used by the train model to update a train's current speed
@@ -140,6 +141,7 @@ class RequestCode(Enum):
     SWTRAIN_GUI_SET_KP_KI = 209 # Used by the gui to set a train's kp/ki
     SWTRAIN_GUI_SWITCH_MODE = 210 # Used by gui to switch between automatic and manual mode
     SWTRAIN_TIME_TRIGGER = 211 # Used to trigger PID loop and calculate power
+    SWTRAIN_GUI_UPDATE_DROP_DOWN = 212 # Used by the gui to update the drop-down that contains the controllers
 
     HWTRAIN_PULL_EBRAKE = 224 # Used by the SW Train Ctrl to pull the train's ebrake
     HWTRAIN_SET_SETPOINT_SPEED = 225 # Used by the SW Train Ctrl to set a train's setpoint speed
