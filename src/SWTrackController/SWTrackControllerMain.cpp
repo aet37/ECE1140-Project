@@ -93,10 +93,10 @@ void moduleMain()
                 */
 
                 // BELOW CODE IS TEMPORARY ///////////////////////////////////////
-                Common::Request OccUpdate(Common::RequestCode::CTC_GET_OCCUPANCIES);
+                //Common::Request OccUpdate(Common::RequestCode::CTC_GET_OCCUPANCIES);
 
                 if(line ==0)
-                {
+                { 
                     if(blockNum==62)
                     {
                         Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block62Occupancy " + 1);
