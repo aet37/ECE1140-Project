@@ -1,6 +1,6 @@
 //
-// Created by Nathan Swanson on on 10.6.20.
-// System which will run the SW Track Controller module
+// Last edited by Nathan Swanson on on 11.11.20.
+// System which will run the SW Track Controller TrackSystem
 //
 #ifndef SW_TRACK_SYSTEM_HPP
 #define SW_TRACK_SYSTEM_HPP
@@ -12,12 +12,7 @@
 class TrackSystem
 {
 	private:
-		/**
-		 * @brief constructor for singleton object TrackSystem
-		 */
-		
 
-		// Tracks
 		//vectors for storing variables
 		std::vector<TrackController> p_Controllers;
 		std::vector<std::vector<int>> blocks_Controlled;
@@ -28,10 +23,7 @@ class TrackSystem
 	
 
 	public:
-		/**
-		 * @brief	gets singleton instance
-		 * @return 	reference to this singleton TrackSystem Object
-		 */
+
 		//track system constructor
 		TrackSystem()
 		{
@@ -102,6 +94,7 @@ class TrackSystem
 			}
 
 			//if red line
+
 			else if(a==1)
 			{
 				//iterate through each controller
@@ -129,11 +122,14 @@ class TrackSystem
 			{
 				if(i==i+1)
 				{
-				switchpositions.push_back(p_Controllers[i].getSwitchPos());
+
+
+					switchpositions.push_back(p_Controllers[i].getSwitchPos());
+
 				}
 			}
 		}
-		
+
 		//class to generate the array of occupied blocks
 		string makeOccupancies()
 		{
@@ -209,7 +205,7 @@ class TrackSystem
 
 			//setting temp to controller 7
 			temp = p_Controllers[6].getOccupancy();
-			
+
 			//blocks 101-151
 			for(int i=0;i<51;i++)
 			{
@@ -301,6 +297,7 @@ class TrackSystem
 			return out;
 		}
 
+
 		//string to generate switch positions
 		string makePositions()
 		{
@@ -324,6 +321,7 @@ class TrackSystem
 
 			//returning switch position string 
 			return out;
+
 
 		}
 
@@ -352,8 +350,8 @@ class TrackSystem
 					return 14;
 					
 				}
-			}
-		}
+
+
 
 		//function to input switch positions upon train dispatch
 		void inputPositions(std::vector<bool> input, bool a)
@@ -364,17 +362,18 @@ class TrackSystem
 				p_Controllers[6].addToQueue(input[0]);
 				p_Controllers[7].addToQueue(input[0]);
 
-				p_Controllers[8].addToQueue(input[1]);
-				p_Controllers[9].addToQueue(input[1]);
+			p_Controllers[8].addToQueue(input[1]);
+			p_Controllers[9].addToQueue(input[1]);
 
-				p_Controllers[8].addToQueue(input[4]);
-				p_Controllers[9].addToQueue(input[4]);
+			p_Controllers[8].addToQueue(input[4]);
+			p_Controllers[9].addToQueue(input[4]);
 
-				p_Controllers[10].addToQueue(input[2]);
-				p_Controllers[11].addToQueue(input[2]);
+			p_Controllers[10].addToQueue(input[2]);
+			p_Controllers[11].addToQueue(input[2]);
 
-				p_Controllers[10].addToQueue(input[3]);
-				p_Controllers[11].addToQueue(input[3]);
+			p_Controllers[10].addToQueue(input[3]);
+			p_Controllers[11].addToQueue(input[3]);
+
 
 				p_Controllers[4].addToQueue(input[5]);
 				p_Controllers[5].addToQueue(input[5]);
@@ -382,9 +381,11 @@ class TrackSystem
 				p_Controllers[4].addToQueue(input[8]);
 				p_Controllers[5].addToQueue(input[8]);
 
-				p_Controllers[1].addToQueue(input[6]);
 
-				p_Controllers[1].addToQueue(input[7]);
+			p_Controllers[1].addToQueue(input[6]);
+
+			p_Controllers[1].addToQueue(input[7]);
+
 
 				p_Controllers[6].addToQueue(input[9]);
 				p_Controllers[7].addToQueue(input[9]);
@@ -438,6 +439,8 @@ class TrackSystem
 
 		}
 
+		
+	
 };
 
 #endif // SW_TRACK_SYSTEM_HPP
