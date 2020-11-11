@@ -255,7 +255,7 @@ void moduleMain()
 
             //}
             case Common::RequestCode::TRACK_MODEL_DISPATCH_TRAIN:
-            {/*
+            {
                 // train id
                 // destination block
                 // command speed
@@ -279,14 +279,13 @@ void moduleMain()
 
                 if (lineNumber == 0)
                 {
-                    //std::vector<uint32_t> &route = pGreenLinePaths->find(switchPositions);
+                    auto route = pGreenLinePaths->find(switchPositions)->first;
                 }
                 //dispatchTrainString.append(" "+switchPositions);
                 Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_DISPATCH_TRAIN, dispatchTrainString);
                 TrainModel::serviceQueue.Push(newRequest);
                 //LOG_TRACK_MODEL("Track model dispatch train %s", theIntString.c_str());
                 break;
-                */
             }
             
             case Common::RequestCode::TRACK_MODEL_GUI_TRACK_LAYOUT:
