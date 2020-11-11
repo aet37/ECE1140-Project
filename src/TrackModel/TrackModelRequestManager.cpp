@@ -93,11 +93,10 @@ void TrackModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
 					printf("\n");
 					tempStationName.erase(0, pos + 1);
 					printf(tempStationName.c_str());
-					stationName2 = stationName.append("_").append(tempStationName);
+					stationName = stationName2.append("_").append(tempStationName);
 					printf("\n\n\n\n");
-					printf(stationName2.c_str());
+					printf(stationName.c_str());
 					printf("\n\n\n\n");
-					stationName = stationName2;
 				}
 				
 				
