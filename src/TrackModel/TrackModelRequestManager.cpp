@@ -129,6 +129,7 @@ void TrackModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
 		}
 		case Common::RequestCode::TRACK_MODEL_GUI_SET_TRACK_HEATER:
         {
+			printf("\n\ndata is:%s", rRequest.GetData());
             uint32_t trackId = rRequest.ParseData<uint32_t>(0);
             bool heaterInput = rRequest.ParseData<bool>(1);
 
