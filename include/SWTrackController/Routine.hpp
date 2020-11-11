@@ -1,7 +1,7 @@
 #ifndef ROUTINE_HPP
 #define ROUTINE_HPP
 
-#include <List.hpp>
+#include <vector>
 #include <Rung.hpp>
 #include <string>
 using namespace std;
@@ -14,7 +14,7 @@ class Routine
 
         const string m_routineName;
 
-        List<Rung*> m_rungList;
+        std::vector<Rung*> m_rungList;
 
     public:
 
@@ -27,12 +27,12 @@ class Routine
 
         void AppendRung(Rung* pRung)
         {
-            m_rungList.Append(pRung);
+            m_rungList.push_back(pRung);
         }
 
         Rung* getMostRecentMadeRung() const
         {
-            return m_rungList[m_rungList.getLength()-1];
+            return m_rungList[m_rungList.size()-1];
         }
         
 };

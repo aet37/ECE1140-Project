@@ -1,13 +1,13 @@
 #ifndef RUNG_HPP
 #define RUNG_HPP
 
-#include <List.hpp>
+#include <vector>
 #include <Instruction.hpp>
 
 class Rung
 {
     private:
-        List<Instruction*> m_instructions;
+        std::vector<Instruction*> m_instructions;
 
     public:
         Rung():

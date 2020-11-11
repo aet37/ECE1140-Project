@@ -16,6 +16,7 @@
 #include <HWTrackControllerRequestManager.hpp>
 #include <Response.hpp>
 
+
 namespace SWTrackController
 {
 
@@ -27,7 +28,7 @@ void moduleMain()
 
     while(true)
     {
-
+        Common::Request reqSend;
 	    // Clear Request code object if used
 	    reqSend.SetRequestCode(Common::RequestCode::ERROR); // Clear request code object
 	    reqSend.SetData("");    // Clear Previous Data
@@ -41,7 +42,7 @@ void moduleMain()
             case Common::RequestCode::SWTRACK_DISPATCH_TRAIN:
             {
 
-                std::string indata = req.GetData();
+                std::string indata = receivedReq.GetData();
                 bool line;
                 std::vector<bool> switchpos;
 
@@ -95,8 +96,8 @@ void moduleMain()
 
             case Common::RequestCode::SWTRACK_SET_TRACK_OCCUPANCY:
             {
-                bool line = req.GetData().at(0);
-                std::string block = req.GetData().substr(2,2);
+                bool line = receivedReq.GetData().at(0);
+                std::string block = receivedReq.GetData().substr(2,2);
                 int blockNum = stoi(block);
 
                 if(line ==0)
@@ -183,7 +184,7 @@ void moduleMain()
 
 
 
-        }
+        
 
         
 
