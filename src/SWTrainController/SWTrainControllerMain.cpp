@@ -34,15 +34,18 @@ void moduleMain()
             case Common::RequestCode::SWTRAIN_DISPATCH_TRAIN:
             {
                 ControlSystem::getInstance().createNewController(13, 13, 13);
-                uint32_t theInt = req.ParseData<uint32_t>(0);
+                uint32_t trainID = req.ParseData<uint32_t>(0);
                 // uint32_t com_sp = req.ParseData<uint32_t>(1);
                 // uint32_t curr_sp = req.ParseData<uint32_t>(2);
                 // uint32_t auth = req.ParseData<uint32_t>(3);
-                std::string theIntString = std::to_string(theInt);
-                Common::Request newRequest(Common::RequestCode::HWTRAIN_DISPATCH_TRAIN, theIntString);
+                std::string trainIDString = std::to_string(trainID);
+                // std::string com_spString = std::to_string(com_sp)
+                // std::string curr_spString = std::to_string(curr_sp)
+                // std::string auth = std::to_string(auth)
+                Common::Request newRequest(Common::RequestCode::HWTRAIN_DISPATCH_TRAIN, trainIDString);
                 // TrainControllers.createNewController(com_sp, curr_sp, auth);
                 HWTrainController::serviceQueue.Push(newRequest);
-                LOG_SW_TRAIN_CONTROLLER("SWTrainController dispatch train %s", theIntString.c_str());
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController dispatch train %s", trainID);
                 break;
             }
             case Common::RequestCode::SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS:

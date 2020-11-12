@@ -5,7 +5,7 @@
 
 #include "ControlSystem.h"
 
-Controller* ControlSystem::createNewController(int com_sp, int curr_sp, bool auth)
+Controller* ControlSystem::createNewController(float com_sp, float curr_sp, bool auth)
 {
     // Create new controller
     Controller* p_temp = new Controller(com_sp, curr_sp, auth);
