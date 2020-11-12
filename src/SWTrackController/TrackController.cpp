@@ -44,8 +44,9 @@
 			LOG_SW_TRACK_CONTROLLER("IT GOT HERE Make Occupancies");
 			occupancy.push_back(newOccupancy[i]);
 
+			int d = newOccupancy[i];
 			
-			LOG_SW_TRACK_CONTROLLER("%s", <std::string>newOccupancy[i].c_str());
+			LOG_SW_TRACK_CONTROLLER("%s", d.c_str());
 		}
 	}
 
