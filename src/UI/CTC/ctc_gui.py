@@ -18,8 +18,6 @@ class CTCUi(QtWidgets.QMainWindow):
 		# In Main Window
 		self.button = self.findChild(QtWidgets.QPushButton, 'LoadSchedule') # Find the button
 		self.button.clicked.connect(self.LoadScheduleWindow)
-		self.button = self.findChild(QtWidgets.QPushButton, 'EditSchedule') # Find the button
-		self.button.clicked.connect(self.EditScheduleWindow)
 		self.button = self.findChild(QtWidgets.QPushButton, 'Exit') # Find the button
 		self.button.clicked.connect(self.ExitModule)
 		self.button = self.findChild(QtWidgets.QPushButton, 'Dispatch') # Find the button
@@ -90,20 +88,28 @@ class CTCUi(QtWidgets.QMainWindow):
 
 
 	def OpenIfGood(self):
-		if((self.train_id_label.text() == '') | (self.train_id_label.text() == ' ')):
+		if(self.train_id_label.text() == ''):
 			return
-
-		try:
-			int(self.train_id_label.text())
-		except:
-			self.error_label.setStyleSheet("color: red")
-			self.error_label.setText('Error: Invalid Train Num Entered')
-
-		if(int(self.train_id_label.text()) < 1):
-			self.error_label.setStyleSheet("color: red")
-			self.error_label.setText('Error: Invalid Train Num Entered')
 		else:
-			self.TrainInfoWindow()
+			try:
+				int(self.train_id_label.text())
+			except:
+				self.error_label.setStyleSheet("color: red")
+				self.error_label.setText('Error: Invalid Train Num Entered')
+				return
+
+			if(int(self.train_id_label.text()) < 1):
+				self.error_label.setStyleSheet("color: red")
+				self.error_label.setText('Error: Invalid Train Num Entered')
+				return
+
+			valid = send_message(RequestCode.CTC_SEND_GUI_VAILD_TRAIN, self.train_id_label.text())
+
+			if(valid == '0'):	# If sucessfuly found the train in the system
+				self.TrainInfoWindow(int(self.train_id_label.text()))
+			else:
+				self.error_label.setStyleSheet("color: red")
+				self.error_label.setText('Error: Invalid Train Num Entered')
 
 	#######################################################################################################################################
 	#######################################################################################################################################
@@ -221,12 +227,41 @@ class CTCUi(QtWidgets.QMainWindow):
 	# Opens Train Information Window
 	#######################################################################################################################################
 	#######################################################################################################################################
-	def TrainInfoWindow(self):
+	def TrainInfoWindow(self, tnum):
 		uic.loadUi('src/UI/CTC/ctc_view_train.ui', self)
 		self.setWindowTitle("CTC - View Train Info")
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMapMenu') # Find the button
-		self.button.clicked.connect(self.MapMenuWindow)
+		self.button.clicked.connect(self.LeaveThis)
+
+		self.location = self.findChild(QtWidgets.QLabel, 'BlockLabel') # Find the label
+		self.speed = self.findChild(QtWidgets.QLabel, 'BlockLabel') # Find the label
+		self.line = self.findChild(QtWidgets.QLabel, 'BlockLabel') # Find the label
+		self.authority = self.findChild(QtWidgets.QLabel, 'BlockLabel') # Find the label
+
+		self.RefreshTrainInfo(tnum)
+
+		# Automatically refresh Map after 5s
+		time_timr = QtCore.QTimer(self)
+		time_timr.timeout.connect(self.RefreshTrainInfo(tnum))
+		time_timr.start(5000)
+
+	def RefreshTrainInfo(tnum):
+		info_raw = send_message(RequestCode.CTC_SEND_GUI_TRAIN_INFO, str(tnum))
+		# If train no longer on tracks
+		if(info_raw == "1"):
+			self.LeaveThis()
+			return
+		info = info_raw[2:len(info_raw)]
+
+		if(info[0:1] == '0'):
+			self.line.setText('GREEN')
+		else:
+			self.line.setText('RED')
+
+		self.speed.setText(info[2:4])
+		self.authority.setText(info[5:6])
+		self.location.setText(info[7:len(info)])
 
 	#######################################################################################################################################
 	#######################################################################################################################################
@@ -240,9 +275,6 @@ class CTCUi(QtWidgets.QMainWindow):
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMapMenu') # Find the button
 		self.button.clicked.connect(self.LeaveThis)
-
-		self.SigButton = self.findChild(QtWidgets.QPushButton, 'ViewSignalButton')	# Find signal button
-		self.SigButton.clicked.connect(self.ViewSignalGreenGo)
 
 		# Automatically refresh Map after 700ms
 
@@ -290,27 +322,10 @@ class CTCUi(QtWidgets.QMainWindow):
 			except:
 				print('Warning: Screen has been closed before button could update')
 
-	def ViewSignalGreenGo(self):
-		global time_timr
-		time_timr.stop()
-		self.ViewSignalGreen()
-
 	def LeaveThis(self):
 		global time_timr
 		time_timr.stop()
-		self.MapMenuWindow()
-
-	#######################################################################################################################################
-	#######################################################################################################################################
-	# Opens Green Signal Info Window
-	#######################################################################################################################################
-	#######################################################################################################################################
-	def ViewSignalGreen(self):
-		uic.loadUi('src/UI/CTC/ctc_view_signal_green_line.ui', self)
-		self.setWindowTitle("CTC - View Green Line Signal")
-
-		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
-		self.button.clicked.connect(self.GreenMapWindow)
+		self.returnToMainWindow()
 
 	#######################################################################################################################################
 	#######################################################################################################################################
@@ -324,9 +339,6 @@ class CTCUi(QtWidgets.QMainWindow):
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMapMenu') # Find the button
 		self.button.clicked.connect(self.LeaveThis)
-
-		self.SigButton = self.findChild(QtWidgets.QPushButton, 'ViewSignalButton')	# Find signal button
-		self.SigButton.clicked.connect(self.ViewSignalRedGo)
 
 		# Automatically refresh Map after 700ms
 
@@ -374,28 +386,6 @@ class CTCUi(QtWidgets.QMainWindow):
 			except:
 				print('Warning: Screen has been closed before button could update')
 
-	def ViewSignalRedGo(self):
-		global time_timr
-		time_timr.stop()
-		self.ViewSignalRed()
-
-	def LeaveThis(self):
-		global time_timr
-		time_timr.stop()
-		self.MapMenuWindow()
-
-	#######################################################################################################################################
-	#######################################################################################################################################
-	# Opens Red Signal Info Window
-	#######################################################################################################################################
-	#######################################################################################################################################
-	def ViewSignalRed(self):
-		uic.loadUi('src/UI/CTC/ctc_view_signal_red_line.ui', self)
-		self.setWindowTitle("CTC - View Green Line Signal")
-
-		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
-		self.button.clicked.connect(self.RedMapWindow)
-
 	#######################################################################################################################################
 	#######################################################################################################################################
 	# Return to main window from all windows function
@@ -408,8 +398,6 @@ class CTCUi(QtWidgets.QMainWindow):
 		# In Main Window
 		self.button = self.findChild(QtWidgets.QPushButton, 'LoadSchedule') # Find the button
 		self.button.clicked.connect(self.LoadScheduleWindow)
-		self.button = self.findChild(QtWidgets.QPushButton, 'EditSchedule') # Find the button
-		self.button.clicked.connect(self.EditScheduleWindow)
 		self.button = self.findChild(QtWidgets.QPushButton, 'Exit') # Find the button
 		self.button.clicked.connect(self.ExitModule)
 		self.button = self.findChild(QtWidgets.QPushButton, 'Dispatch') # Find the button

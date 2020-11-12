@@ -609,7 +609,6 @@ class TrackSystem
 			}
 		}
 
-
 		//function to input switch positions upon train dispatch
 		void inputPositions(std::vector<bool> input, bool a)
 		{		

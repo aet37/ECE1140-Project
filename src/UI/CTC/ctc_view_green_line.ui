@@ -6820,55 +6820,6 @@ color: rgb(255, 255, 255);</string>
      <string>1</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_157">
-    <property name="geometry">
-     <rect>
-      <x>350</x>
-      <y>10</y>
-      <width>251</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>(Enter Track Number which Signal is on)</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="ViewTrainNum">
-    <property name="geometry">
-     <rect>
-      <x>280</x>
-      <y>10</y>
-      <width>61</width>
-      <height>21</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="InfoTrainLabel">
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>10</y>
-      <width>91</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Info For Signal:</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="ViewSignalButton">
-    <property name="geometry">
-     <rect>
-      <x>590</x>
-      <y>0</y>
-      <width>113</width>
-      <height>32</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>View Signal</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="SW2">
     <property name="geometry">
      <rect>
@@ -7014,7 +6965,7 @@ color: rgb(255, 255, 255);</string>
 color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
-     <string>Back to Map Menu</string>
+     <string>Back to CTC Menu</string>
     </property>
    </widget>
    <zorder>line_165</zorder>
@@ -7492,10 +7443,6 @@ color: rgb(255, 255, 255);</string>
    <zorder>pushButton_3</zorder>
    <zorder>label_155</zorder>
    <zorder>SW1</zorder>
-   <zorder>label_157</zorder>
-   <zorder>ViewTrainNum</zorder>
-   <zorder>InfoTrainLabel</zorder>
-   <zorder>ViewSignalButton</zorder>
    <zorder>SW2</zorder>
    <zorder>SW3</zorder>
    <zorder>SW4</zorder>
