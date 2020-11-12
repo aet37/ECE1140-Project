@@ -148,7 +148,6 @@ void moduleMain()
 					    std::cout << req.GetData() << std::endl;
 					    throw std::logic_error("CTC::CTCMain.cpp : Track Controller sent invalid Track Occupancy Array (Red)");
 				    }
-				    LOG_CTC("CTC Track Occupancies array");
 			    }
 
 			    // Update Train Positions based on updated track occupancies

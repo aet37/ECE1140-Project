@@ -36,9 +36,9 @@ void moduleMain()
         TrackSystem main;
 
         
-        cout<<std::endl<<main.makeOccupancies()<<endl;
+        // cout<<std::endl<<main.makeOccupancies()<<endl;
 
-        LOG_SW_TRACK_CONTROLLER("SWTrackController occupancies: %s", main.makeOccupancies().c_str());
+        // LOG_SW_TRACK_CONTROLLER("SWTrackController occupancies: %s", main.makeOccupancies().c_str());
 
         Common::Request receivedReq = serviceQueue.Pop();
 
@@ -94,13 +94,44 @@ void moduleMain()
                 uint32_t line = receivedReq.ParseData<uint32_t>(0);
                 uint32_t blockNum = receivedReq.ParseData<uint32_t>(1);
                 bool occupancy = receivedReq.ParseData<bool>(2);
+                // main.updateOccupied(line, blockNum);
 
-                LOG_SW_TRACK_CONTROLLER("SWTrackController sent CTC Block Occupancies: %s", main.makeOccupancies().c_str());
+                static std::string redLineOccupancies = "0000000000000000000000000000000000000000000000000000000000000000000000000000";
+                static std::string greenLineOccupancies = "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+
+                if (line == 0)
+                {
+                    if (occupancy)
+                    {
+                        greenLineOccupancies[blockNum - 1] = '1';
+                    }
+                    else
+                    {
+                        greenLineOccupancies[blockNum - 1] = '0';
+                    }
+                }
+                else
+                {
+                    if (occupancy)
+                    {
+                        redLineOccupancies[blockNum - 1] = '1';
+                    }
+                    else
+                    {
+                        redLineOccupancies[blockNum - 1] = '0';
+                    }
+                }
+
+                LOG_SW_TRACK_CONTROLLER("SWTrackController green occupancies = %s", greenLineOccupancies.c_str());
+                LOG_SW_TRACK_CONTROLLER("SWTrackController red occupancies = %s", redLineOccupancies.c_str());
 
                 Common::Request OccUpdate(Common::RequestCode::CTC_GET_OCCUPANCIES);
-                OccUpdate.AppendData(main.makeOccupancies());
-                OccUpdate.AppendData("0000000000000000000000000000000000000000000000000000000000000000000000");
+                OccUpdate.AppendData(greenLineOccupancies);
+                OccUpdate.AppendData(redLineOccupancies);
+                // OccUpdate.AppendData(main.makeOccupancies());
+                // OccUpdate.AppendData("0000000000000000000000000000000000000000000000000000000000000000000000");
                 CTC::serviceQueue.Push(OccUpdate);
+                LOG_SW_TRACK_CONTROLLER("Done sending occupancies");
 
                 // LOG_SW_TRACK_CONTROLLER("SWTrackController sent CTC Block Occupancies: %s", main.makePositions().c_str());
 
