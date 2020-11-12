@@ -403,12 +403,13 @@ class TrackSystem
 			//setting temp to controller 10
 			temp = p_Controllers[9].getOccupancy();
 
-
+			
 
 			//blocks 1-13
 			for(int i =12;i>=0;i--)
 			{
 				out+=temp[i];
+			
 				
 			}
 
