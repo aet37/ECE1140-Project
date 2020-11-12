@@ -393,11 +393,11 @@ class TrackSystem
 					}
 				}
 			}
-			cout<<std::endl<<i<<j<<holder<<std::endl;
+			cout<<std::endl<<controller1<<count1<<controller2<<count2<<holder<<std::endl;
 			//setting the specified block in the controller as occupied
 			p_Controllers.at(controller1).setOccupied(count1);
 
-			if(holder==1)
+			if(holder==2)
 			{
 				p_Controllers.at(controller2).setOccupied(count2);
 			}
