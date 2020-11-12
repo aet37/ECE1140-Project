@@ -24,6 +24,8 @@ namespace Devices
     unsigned long lastDebounceTime = 0;
     unsigned long debounceDelay = 50;
 
+    unsigned long current, previous=0, inter=500;
+
     // LCD
     void InitializeLCD()
     {
@@ -68,25 +70,32 @@ namespace Devices
 
     double JoystickRead(double data)
     {
-        int data = stod(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str()); 
         xPosition = analogRead(VRx);
         yPosition = analogRead(VRy);
-        if(yPosition >= 562){
-            data++;
-            return data;
-        } else if (yPosition <= 462){
-            data--;
-            return data;
+        current = millis();
+        if(xPosition >= 562){
+            if (current - previous >= inter) {
+                previous = current;
+                data--;
+                return data;
+            }
+        } else if (xPosition <= 462){
+             if (current - previous >= inter) {
+                previous = current;
+                data++;
+                return data;
+            }
         }
     }
-    void JoystickClick()
+    bool JoystickClick()
     {
         SW_state = digitalRead(SW);
+        //Serial.println(SW_state);
         if(SW_state == 1)
         {
-            return 0;
+            return true;
         } else {
-            return 1;
+            return false;
         }
     }
     void InitializeButton()
@@ -94,7 +103,7 @@ namespace Devices
         pinMode(buttonPin, INPUT);
     }
 
-    void ButtonClick(double data)
+    void ButtonClick()
     {
         buttonState = digitalRead(buttonPin);
         // if(buttonState == HIGH)

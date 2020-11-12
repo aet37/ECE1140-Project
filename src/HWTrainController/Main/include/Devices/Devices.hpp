@@ -26,7 +26,7 @@ bool JoystickClick();
 
 void InitializeButton();
 
-void ButtonClick(double data);
+void ButtonClick();
 
 }
 

@@ -2,9 +2,6 @@
 #include "include/Devices/Devices.hpp"
 #include "include/Scheduler.hpp"
 
-
-static uint64_t currentTime;
-
 void setup()
 {
   Serial.begin(9600);
