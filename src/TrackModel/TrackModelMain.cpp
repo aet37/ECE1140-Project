@@ -327,6 +327,7 @@ void moduleMain()
                 int pos = test.find(',');
                 std::string gettingTrackNumber = test.substr(0, pos);
 
+                printf("\n\n\ntrack number = %s\n\n\n", gettingTrackNumber.c_str());
                 int trackNumberInt = stoi(gettingTrackNumber);
 
                 // grab track using track number
