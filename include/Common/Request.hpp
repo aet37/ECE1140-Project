@@ -141,7 +141,7 @@ enum class RequestCode : uint8_t
     TRAIN_MODEL_GUI_RECEIVE_MODE = 180, // Used by gui to switch between automatic and manual mode
     TRAIN_MODEL_RECEIVE_BLOCK = 181, // Used by the track model to send a block's information
 
-    SWTRAIN_DISPATCH_TRAIN = 192, // Used by the train model to signify that a new train has been dispatched
+    SWTRAIN_DISPATCH_TRAIN = 192, // Used by the train model to signify that a new train has been dispatched // (trainid, command speed, current speed, authority)
     SWTRAIN_UPDATE_CURRENT_SPEED = 193, // Used by the train model to update a train's current speed
     SWTRAIN_UPDATE_COMMAND_SPEED = 194, // Used by the train model to update a train's command speed
     SWTRAIN_UPDATE_SPEED_LIMIT = 195, // Used by the train model to update a train's speed limit
@@ -152,14 +152,14 @@ enum class RequestCode : uint8_t
     SWTRAIN_GUI_PULL_EBRAKE = 200, // Used by the gui to pull the train's ebrake
     SWTRAIN_GUI_SET_SETPOINT_SPEED = 201, // Used by the gui to set a train's setpoint speed
     SWTRAIN_GUI_PRESS_SERVICE_BRAKE = 202, // Used by the gui to update use a train's service brake
-    SWTRAIN_GUI_TOGGLE_DAMN_DOORS = 203, // Used by the gui to toggle a train's door
-    SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS = 204, // Used by the gui to toggle a train's lights
-    SWTRAIN_GUI_SET_SEAN_PAUL = 205, // Used by the gui to play temperature by sean paul
-    SWTRAIN_GUI_ANNOUNCE_STATIONS = 206, // Used by the gui to announce stations
-    SWTRAIN_GUI_DISPLAY_ADS = 207, // Used by the gui to display a train's advertisements
+    SWTRAIN_GUI_TOGGLE_DAMN_DOORS = 203, // Used by the gui to toggle a train's door                        // (TrainID)
+    SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS = 204, // Used by the gui to toggle a train's lights                    // (TrainID)
+    SWTRAIN_GUI_SET_SEAN_PAUL = 205, // Used by the gui to play temperature by sean paul                    // (TrainID, temperature)
+    SWTRAIN_GUI_ANNOUNCE_STATIONS = 206, // Used by the gui to announce stations                            // (TrainID)
+    SWTRAIN_GUI_DISPLAY_ADS = 207, // Used by the gui to display a train's advertisements                   // (TrainID)
     SWTRAIN_GUI_RESOLVE_FAILURE = 208, // Used by the gui to resolve a train failure
-    SWTRAIN_GUI_SET_KP_KI = 209, // Used by the gui to set a train's kp/ki
-    SWTRAIN_GUI_SWITCH_MODE = 210, // Used by gui to switch between automatic and manual mode
+    SWTRAIN_GUI_SET_KP_KI = 209, // Used by the gui to set a train's kp/ki                                  // (TrainID, Kp, Ki)
+    SWTRAIN_GUI_SWITCH_MODE = 210, // Used by gui to switch between automatic and manual mode               // (TrainID, override)
     SWTRAIN_TIME_TRIGGER = 211, // Used to trigger PID loop and calculate power
     SWTRAIN_GUI_UPDATE_DROP_DOWN = 212, // Used by the gui to update the drop-down that contains the controllers
 

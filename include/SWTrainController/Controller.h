@@ -13,24 +13,24 @@ class Controller
 {
     private:
         // Safety critical information
-        int command_speed;
-        int current_speed;
-        int setpoint_speed;
-        int power_command;
+        float command_speed;
+        float current_speed;
+        float setpoint_speed;
+        float power_command;
         bool authority;
         bool mode; // 0 = Automatic, 1 = Manual
         bool serviceBrake;
         bool emergencyBrake;
 
         // Train Engineer inputs
-        int kp;
-        int ki;
+        float kp;
+        float ki;
 
         // Variables for power calculation
-        int uk;
-        int uk1;
-        int ek;
-        int ek1;
+        float uk;
+        float uk1;
+        float ek;
+        float ek1;
 
         // Failure cases
         bool signalPickupFailure;
@@ -52,7 +52,7 @@ class Controller
          * @param curr_sp = current speed
          * @param auth = authority
          */
-        Controller(int com_sp, int curr_sp, bool auth);
+        Controller(float com_sp, float curr_sp, bool auth);
 
         ///////////////////////////////////////////////////////////////
         // SETTERS AND GETTERS
@@ -62,31 +62,31 @@ class Controller
          * @brief Setter function for Kp
          * @param KP = kp
          */
-        void setKp(int KP);
+        void setKp(float KP);
 
         /**
          * @brief Setter function for Ki
          * @param KI = ki
          */
-        void setKi(int KI);
+        void setKi(float KI);
 
         /**
          * @brief Setter function for command speed
          * @param com_sp == command_speed
          */
-        void setCommandSpeed(int com_sp);
+        void setCommandSpeed(float com_sp);
 
         /**
          * @brief Setter function for current speed
          * @param curr_sp == current_speed
          */
-        void setCurrentSpeed(int curr_sp);
+        void setCurrentSpeed(float curr_sp);
 
         /**
          * @brief Setter function for setpoint speed
          * @param setp_sp == setpoint speed
          */
-        void setSetpointSpeed(int setp_sp);
+        void setSetpointSpeed(float setp_sp);
 
         /**
          * @brief Setter function for authority
@@ -98,19 +98,19 @@ class Controller
          * @brief Getter function for command speed
          * @return command_speed
          */
-        int getCommandSpeed();
+        float getCommandSpeed();
 
         /**
          * @brief Getter function for current speed
          * @return current_speed
          */
-        int getCurrentSpeed();
+        float getCurrentSpeed();
 
         /**
          * @brief Getter function for setpoint speed
          * @return setpoint speed
          */
-        int getSetpointSpeed();
+        float getSetpointSpeed();
 
         /**
          * @brief Getter function for authority
@@ -121,7 +121,7 @@ class Controller
         /**
          * @brief Getter function for power command
          */
-        int getPowerCommand();
+        float getPowerCommand();
 
         /**
          * @brief Getter function for mode
@@ -214,12 +214,12 @@ class Controller
          * @brief sets temperature of train cabin
          * @param temp = temperature cabin is set to
          */
-        void setCabinTemp(int temp);
+        void setCabinTemp(float temp);
         /**
          * @brief gets temperature of train cabin
          * @return returns temperature of cabin
          */
-        int getCabinTemp();
+        float getCabinTemp();
 
 };
 #endif
