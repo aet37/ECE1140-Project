@@ -8,6 +8,7 @@
 // C++ PROJECT INCLUDES
 #include "SWTrainControllerMain.hpp" // Header for functions
 #include "HWTrainControllerMain.hpp"
+#include "Timekeeper.hpp" // For Timekeeper
 #include "TrainModelMain.hpp"
 #include "Logger.hpp" // For LOG macros
 #include "Assert.hpp"
@@ -21,6 +22,10 @@ Common::ServiceQueue<Common::Request> serviceQueue;
 void moduleMain()
 {
     LOG_SW_TRAIN_CONTROLLER("Thread starting...");
+
+    // Add a periodic timer for the power loop
+    Common::Timekeeper::GetInstance().AddPeriodicTimer(Common::Timekeeper::SAMPLING_PERIOD_IN_MS, &serviceQueue);
+
     while(true)
     {
         Common::Request req = serviceQueue.Pop();
@@ -172,6 +177,26 @@ void moduleMain()
             {
 
                 LOG_SW_TRAIN_CONTROLLER("SWTrainController update drop-down");
+                break;
+            }
+            case Common::RequestCode::TIMER_EXPIRED:
+            {
+                int numberOfControllers = ControlSystem::getInstance().getAmountofControllers();
+                LOG_SW_TRAIN_CONTROLLER("Timer event received with %d trains", numberOfControllers);
+
+                for (int i = 0; i < numberOfControllers; i++)
+                {
+                    Controller* pController = ControlSystem::getInstance().getControllerInstance(i);
+
+                    // Calculate the power
+                    pController->calculatePower();
+
+                    // Construct a request to send Kenneth power
+                    Common::Request newReq(Common::RequestCode::TRAIN_MODEL_RECEIVE_POWER);
+                    newReq.AppendData(std::to_string(pController->getPowerCommand()));
+                    TrainModel::serviceQueue.Push(newReq);
+                }
+
                 break;
             }
             default:

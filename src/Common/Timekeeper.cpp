@@ -17,6 +17,7 @@ namespace Common
 
 void Timekeeper::KeepTime()
 {
+    LOG_SERVER("Timekeeper is keeping that time");
     while (true)
     {
         // Sleep until the next timer should expire
