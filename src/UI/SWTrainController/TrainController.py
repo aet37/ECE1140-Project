@@ -142,7 +142,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
     def update_controller_list(self):
         # Update the drop down
-        responsecode, dataReceived = send_message(RequestCode.SWTRAIN_GUI_UPDATE_DROP_DOWN) #FILL WITH COLLIN REQUEST
+        responsecode, dataReceived = send_message(RequestCode.SWTRAIN_GUI_UPDATE_DROP_DOWN)
         if responsecode == ResponseCode.SUCCESS:
             # Parse the data and update the gui.
             dataParsed = int(dataReceived)
@@ -159,27 +159,24 @@ class SWTrainUi(QtWidgets.QMainWindow):
                 self.TrainIDBox3.addItem(str(count))
                 count = count + 1
 
-            # Update the global train id
+            # Update all dropdowns depending on which page is up
             if self.stacked_widget.currentIndex() == 0:
                 self.update_current_train_id()
                 self.findChild(QtWidgets.QComboBox, 'TrainIDBox').setCurrentIndex(currentIndex)
                 self.findChild(QtWidgets.QComboBox, 'TrainIDBox2').setCurrentIndex(currentIndex)
                 self.findChild(QtWidgets.QComboBox, 'TrainIDBox3').setCurrentIndex(currentIndex)
-                print(str(self.stacked_widget.currentIndex()) + " If statement 1")
             elif self.stacked_widget.currentIndex() == 1:
                 self.update_current_train_id2()
                 self.findChild(QtWidgets.QComboBox, 'TrainIDBox').setCurrentIndex(currentIndex2)
                 self.findChild(QtWidgets.QComboBox, 'TrainIDBox2').setCurrentIndex(currentIndex2)
                 self.findChild(QtWidgets.QComboBox, 'TrainIDBox3').setCurrentIndex(currentIndex2)
-                print(str(self.stacked_widget.currentIndex()) + " If statement 2")
             else:
                 self.update_current_train_id3()
                 self.findChild(QtWidgets.QComboBox, 'TrainIDBox').setCurrentIndex(currentIndex3)
                 self.findChild(QtWidgets.QComboBox, 'TrainIDBox2').setCurrentIndex(currentIndex3)
                 self.findChild(QtWidgets.QComboBox, 'TrainIDBox3').setCurrentIndex(currentIndex3)
-                print(str(self.stacked_widget.currentIndex()) + " If statement 3")
 
-        if "" in self.current_train_id:
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
             return
 
         # Update Train's info
@@ -222,28 +219,36 @@ class SWTrainUi(QtWidgets.QMainWindow):
         self.return_button2.setEnabled(True)
 
     def toggle_lights(self):
-        # Potential line for determining train ID to send
-        # self.findChild(QtWidgets.QComboBox, "TrainIDBox2").currentText()
-        send_message(RequestCode.SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS, "1")
+        # If no controllers have been created, button does nothing
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            return
+
+        send_message(RequestCode.SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS, self.current_train_id)
 
     def toggle_doors(self):
-        # Potential line for determining train ID to send
-        # self.findChild(QtWidgets.QComboBox, "TrainIDBox2").currentText()
-        send_message(RequestCode.SWTRAIN_GUI_TOGGLE_DAMN_DOORS, "1")
+        # If no controllers have been created, button does nothing
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            return
+
+        send_message(RequestCode.SWTRAIN_GUI_TOGGLE_DAMN_DOORS, self.current_train_id)
 
     def toggle_announcements(self):
-        # Potential line for determining train ID to send
-        # self.findChild(QtWidgets.QComboBox, "TrainIDBox2").currentText()
-        send_message(RequestCode.SWTRAIN_GUI_ANNOUNCE_STATIONS, "1")
+        # If no controllers have been created, button does nothing
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            return
+        send_message(RequestCode.SWTRAIN_GUI_ANNOUNCE_STATIONS, self.current_train_id)
 
     def toggle_ads(self):
-        # Potential line for determining train ID to send
-        # self.findChild(QtWidgets.QComboBox, "TrainIDBox2").currentText()
-        send_message(RequestCode.SWTRAIN_GUI_DISPLAY_ADS, "1")
+        # If no controllers have been created, button does nothing
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            return
+        send_message(RequestCode.SWTRAIN_GUI_DISPLAY_ADS, self.current_train_id)
 
     def set_SeanPaul(self):
-        # Potential line for determining train ID to send
-        # self.findChild(QtWidgets.QComboBox, "TrainIDBox2").currentText()
+        # If no controllers have been created, button does nothing
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            return
+
         temp = self.findChild(QtWidgets.QLineEdit, "InputTemp").text()
         try:
             int(temp)
@@ -258,9 +263,12 @@ class SWTrainUi(QtWidgets.QMainWindow):
             return
         
         # If input temperature is valid, send request code
-        send_message(RequestCode.SWTRAIN_GUI_SET_SEAN_PAUL, ("1" + " " + temp) )
+        send_message(RequestCode.SWTRAIN_GUI_SET_SEAN_PAUL, (self.current_train_id + " " + temp) )
 
     def toggle_mode1(self):
+        # If no controllers have been created, button does nothing
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            return
 
         # If automatic mode is green, button does nothing
         if self.automatic_mode.styleSheet() == "background-color: green;" :
@@ -287,6 +295,10 @@ class SWTrainUi(QtWidgets.QMainWindow):
         send_message(RequestCode.SWTRAIN_GUI_SWITCH_MODE, "1")
 
     def toggle_mode2(self):
+        # If no controllers have been created, button does nothing
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            return
+
         # If manual mode is green, button does nothing
         if self.manual_mode.styleSheet() == "background-color: green;":
             return
@@ -312,6 +324,10 @@ class SWTrainUi(QtWidgets.QMainWindow):
         send_message(RequestCode.SWTRAIN_GUI_SWITCH_MODE, "1")
     
     def set_setpoint(self):
+        # If no controllers have been created, button does nothing
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            return
+
         # Get setpoint speed
         setpoint_speed = self.findChild(QtWidgets.QLineEdit, "EnterSpeed").text()
 
@@ -351,6 +367,10 @@ class SWTrainUi(QtWidgets.QMainWindow):
             send_message(RequestCode.SWTRAIN_GUI_SET_SETPOINT_SPEED, "1")
 
     def toggle_service_brake(self):
+        # If no controllers have been created, button does nothing
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            return
+
         # Check if authority is zero
         # <check here>
 

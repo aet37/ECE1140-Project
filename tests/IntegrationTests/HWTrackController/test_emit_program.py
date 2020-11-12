@@ -70,7 +70,7 @@ def test_emit_program():
 
     # End download
     send_request_to_controller(bytes(str(RequestCode.HWTRACK_END_DOWNLOAD.value), 'utf-8'))
-    assert get_response_from_controller() == b'0'
+    assert get_response_from_controller() == b'0 DOWNLOAD COMPLETE'
 
     # Wait a few seconds before setting the tag
     sleep(5)
@@ -79,6 +79,18 @@ def test_emit_program():
     send_request_to_controller(bytes(str(RequestCode.HWTRACK_SET_TAG_VALUE.value), 'utf-8') +
                                      bytes(" MyTag 1", 'utf-8'))
     assert get_response_from_controller() == b'0'
+
+def test_actual_program():
+    """Downloads the actually program to the plc"""
+    for line in open('../../../CompiledOutput.txt'):
+        splits = line.strip('\n').split(' ', 1)
+
+        if len(splits) == 1:
+            send_request_to_controller(bytes(str(RequestCode[splits[0]].value + 22), 'utf-8'))
+        else:
+            send_request_to_controller(bytes(str(RequestCode[splits[0]].value + 22), 'utf-8') +
+                                            bytes(" ", 'utf-8') +
+                                            bytes(str(splits[1]), 'utf-8'))
 
 
 if __name__ == "__main__":
