@@ -116,8 +116,6 @@ enum class RequestCode : uint8_t
     TRACK_MODEL_UPDATE_SWITCH_POSITIONS = 138, // Used by the track controller to update a switch positions // (trackColor, switchNumberFromYard, switchPosition)
     TRACK_MODEL_UPDATE_AUTHORITY = 139, // Used by the track controller to update the authority of a train // (trainId, newAuthority)
     TRACK_MODEL_DISPATCH_TRAIN = 140, // Used by the track controller to signify that a new train has been dispatched // (trainID, destinationBlock, commandSpeed, authority, trackColor)
-    // TRACK_MODEL_GUI_DISPLAY_OCCUPANCY = 141, // used by track model to update gui occupancy
-
 
     TRAIN_MODEL_DISPATCH_TRAIN = 160, // Used by the track model to signify that a new train has been dispatched
     TRAIN_MODEL_GUI_1_GATHER_DATA = 161, // Used periodically by the gui to update page 1 the user interface

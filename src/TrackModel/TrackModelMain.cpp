@@ -479,24 +479,8 @@ void moduleMain()
                 uint32_t blockId = req.ParseData<uint32_t>(2);
                 bool occupancy = req.ParseData<bool>(3);
 
-                Track *theTrack = TrackInfo::GetInstance().getTrack(trackId);
-                Block theBlock = theTrack->getBlock(blockId);
-                if (occupancy)
-                {
-                    theBlock.setOccupiedBy(trainId);
-                }
-                else
-                {
-                    theBlock.setOccupiedBy(0);
-                }
-                
+                // TODO: Process this info
 
-                // Common::Request newReq1(Common::RequestCode::TRACK_MODEL_GUI_DISPLAY_OCCUPANCY);
-                // newReq1.AppendData(std::to_string(trainId));
-                // newReq1.AppendData(std::to_string(trackId));
-                // newReq1.AppendData(std::to_string(blockId));
-                // newReq1.AppendData(std::to_string(occupancy));
-                // TrackModel::serviceQueue.Push(newReq1);
                 // (trackId, blockId)
                 Common::Request newReq(Common::RequestCode::SWTRACK_SET_TRACK_OCCUPANCY);
                 newReq.AppendData(std::to_string(trackId));

@@ -205,7 +205,6 @@ class Ui(QtWidgets.QMainWindow):
         elif(tracks == 2):
             combo1.currentIndexChanged.connect(self.send_gather_data_message)
             combo2.currentIndexChanged.connect(self.send_gather_data_message)
-        # self.update_gui_occupancies()
 
     def send_gather_data_message(self):
         """Method called periodically to send the gather data message to the server"""
