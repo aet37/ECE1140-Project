@@ -33,24 +33,10 @@
 		return occupancy;
 	}
 
-	/*bool setupOccupancy(std::vector<bool> newOccupancy)
+	void setupOccupancy(std::vector<bool> newOccupancy)
 	{
-		if(newOccupancy.size()==occupancy.size()&&setup==1)
-		{
-			prevOccupancy=occupancy;
-			occupancy=newOccupancy;
-			return 1;
-		}
-		else if(setup==0)
-		{
-			occupancy=newOccupancy;
-			setup=1;
-		}
-		else
-		{
-			return 0;
-		}
-	}*/
+		occupancy = newOccupancy;
+	}
 
 	//sets specified block as occupied 
 	void TrackController::setOccupied(int a)
