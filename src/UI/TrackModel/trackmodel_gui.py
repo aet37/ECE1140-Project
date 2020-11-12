@@ -121,9 +121,9 @@ class Ui(QtWidgets.QMainWindow):
                 # set Line inside trackInfo
                 trackInfo['Track'] = records.column['Line'][1]
                 
-                tracks = tracks + 1
                 # set track nmumber inside of trackInfo dictionary
                 trackInfo['tNumber'] = tracks
+                tracks = tracks + 1
 
                 # set totalBlocks inside trackInfo
                 trackInfo['Total Blocks'] = records.number_of_rows()
