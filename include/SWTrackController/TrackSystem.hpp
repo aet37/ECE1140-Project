@@ -708,7 +708,15 @@ class TrackSystem
 				//making sure the controllers have the same output
 				if(p_Controllers[i].getSwitchPos()==p_Controllers[i+1].getSwitchPos())
 				{
-					out += p_Controllers[i].getSwitchPos();
+					if(p_Controllers[i].getSwitchPos()==0)
+					{
+						out+='0';
+					}
+
+					if(p_Controllers[i].getSwitchPos()==1)
+					{
+						out+='1';
+					}
 				}
 				//if not, loop breaks
 				else
