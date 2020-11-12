@@ -15,6 +15,9 @@ class CTCUi(QtWidgets.QMainWindow):
 
 		self.setWindowTitle("CTC Main Page")
 
+		#init
+		self.tnum = -1
+
 		# In Main Window
 		self.button = self.findChild(QtWidgets.QPushButton, 'LoadSchedule') # Find the button
 		self.button.clicked.connect(self.LoadScheduleWindow)
@@ -106,7 +109,8 @@ class CTCUi(QtWidgets.QMainWindow):
 			valid = send_message(RequestCode.CTC_SEND_GUI_VAILD_TRAIN, self.train_id_label.text())
 
 			if(valid[0] == ResponseCode.SUCCESS):	# If sucessfuly found the train in the system
-				self.TrainInfoWindow(int(self.train_id_label.text()))
+				self.tnum = int(self.train_id_label.text())
+				self.TrainInfoWindow()
 			else:
 				self.error_label.setStyleSheet("color: red")
 				self.error_label.setText('Error: Invalid Train Num Entered')
@@ -227,7 +231,7 @@ class CTCUi(QtWidgets.QMainWindow):
 	# Opens Train Information Window
 	#######################################################################################################################################
 	#######################################################################################################################################
-	def TrainInfoWindow(self, tnum):
+	def TrainInfoWindow(self):
 		uic.loadUi('src/UI/CTC/ctc_view_train.ui', self)
 		self.setWindowTitle("CTC - View Train Info")
 
@@ -239,15 +243,15 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.line = self.findChild(QtWidgets.QLabel, 'BlockLabel') # Find the label
 		self.authority = self.findChild(QtWidgets.QLabel, 'BlockLabel') # Find the label
 
-		self.RefreshTrainInfo(tnum)
+		self.RefreshTrainInfo()
 
 		# Automatically refresh Map after 5s
 		time_timr = QtCore.QTimer(self)
-		time_timr.timeout.connect(self.RefreshTrainInfo(tnum))
+		time_timr.timeout.connect(self.RefreshTrainInfo)
 		time_timr.start(5000)
 
-	def RefreshTrainInfo(self, tnum):
-		info_raw = send_message(RequestCode.CTC_SEND_GUI_TRAIN_INFO, str(tnum))
+	def RefreshTrainInfo(self):
+		info_raw = send_message(RequestCode.CTC_SEND_GUI_TRAIN_INFO, str(self.tnum))
 		# If train no longer on tracks
 		if(info_raw[0] == ResponseCode.ERROR):
 			self.LeaveThis()
@@ -276,11 +280,13 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMapMenu') # Find the button
 		self.button.clicked.connect(self.LeaveThis)
 
-		# Automatically refresh Map after 700ms
+		# Initial Refresh
+		self.RefreshMapGreen()
 
+		# Automatically refresh Map after 1s
 		time_timr = QtCore.QTimer(self)
 		time_timr.timeout.connect(self.RefreshMapGreen)
-		time_timr.start(700)
+		time_timr.start(1000)
 
 		# Find the Blocks
 		for i in range(1, 151):
@@ -340,11 +346,13 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMapMenu') # Find the button
 		self.button.clicked.connect(self.LeaveThis)
 
-		# Automatically refresh Map after 700ms
-
+		#initial refresh
+		self.RefreshMapRed()
+		
+		# Automatically refresh Map after 1s
 		time_timr = QtCore.QTimer(self)
 		time_timr.timeout.connect(self.RefreshMapRed)
-		time_timr.start(700)
+		time_timr.start(1000)
 
 		# Find the Blocks
 		for i in range(1, 77):
