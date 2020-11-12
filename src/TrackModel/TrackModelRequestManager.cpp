@@ -133,7 +133,9 @@ void TrackModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
 			int pos = test.find(" ");
 			int trackId = std::stoi(test.substr(0, pos));
 
-			printf("\ntrackId = %d", trackId);
+			printf("\ntest = %s\n", test);
+			printf("\npos = %d\n", pos);
+			printf("\ntrackId = %d\n", trackId);
 			test.erase(0, pos + 1);
 
 			int heaterInt = std::stoi(test);
@@ -141,7 +143,6 @@ void TrackModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
 			printf("\nheaterInt = %d\n", heaterInt);
             Track *theTrack = TrackInfo::GetInstance().getTrack(trackId);
 
-			printf("testt3");
 			if (heaterInt == 0)
 			{
 				theTrack->setTrackHeater(false);
