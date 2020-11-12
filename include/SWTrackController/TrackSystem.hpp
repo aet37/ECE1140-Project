@@ -414,6 +414,14 @@ class TrackSystem
 				
 			}
 
+
+			if(switchpositions.empty()==1)
+			{
+				for(int i=0;i<13;i++)
+				{
+					switchpositions.push_back({0});
+				}
+			}
 			prevswitchpositions.clear();
 			for(int i=0;i<13;i++)
 			{
