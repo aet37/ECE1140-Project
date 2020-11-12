@@ -17,6 +17,8 @@ from UI.server_functions import RequestCode, ResponseCode, send_message, send_me
 
 from UI.Common.common import Alert, Confirmation
 
+HWTRACK_CONTROLLER_NUMBER = '1'
+
 class SWTrackControllerUi(QtWidgets.QMainWindow):
     """GUI for the track controller module"""
     def __init__(self):
@@ -24,6 +26,21 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         uic.loadUi('src/UI/SWTrackController/track_controller.ui', self)
 
         # All the track controllers and the blocks they control
+        self.green_line_controllers = [
+            [0, 62, 61, 60, 59], # Switch between J, K, and Yard @ block 62
+            [62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76],
+            [63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 101] + list(range(102, 151)), # Switch between M, N, and R @ block 77
+            [77, 78, 79, 80, 81, 82, 83, 84],
+            [85, 78, 79, 80, 81, 82, 83, 84], # Switch between N, O, and Q @ block 85
+            [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100],
+            list(range(101, 151)) + list(range(29, 58)), # Switch between Z, F, and G @ block 29
+            [29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14],
+            [28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13], # Switch between D, A, and C @ block 13
+            [13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
+            list(range(30, 59)), # Switch between I, J and Yard @ block 58
+            [58, 59, 60, 61]
+        ]
+
         self.red_line_controllers = [
             [1, 2, 3, 4, 5, 6, 7, 8, 9], # Switch between C and D @ block 9
             [0, 9, 10, 11, 12, 13, 14, 15],
@@ -39,21 +56,6 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             [44, 45, 46, 47, 48, 49, 50, 51],
             [45, 46, 47, 48, 49, 50, 51, 52], # Switch between J and N @ block 52
             [52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66]
-        ]
-
-        self.green_line_controllers = [
-            [0, 62, 61, 60, 59], # Switch between J, K, and Yard @ block 62
-            [62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76],
-            [63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 101] + list(range(102, 151)), # Switch between M, N, and R @ block 77
-            [77, 78, 79, 80, 81, 82, 83, 84],
-            [85, 78, 79, 80, 81, 82, 83, 84], # Switch between N, O, and Q @ block 85
-            [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100],
-            list(range(101, 151)) + list(range(29, 58)), # Switch between Z, F, and G @ block 29
-            [29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14],
-            [28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13], # Switch between D, A, and C @ block 13
-            [13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
-            list(range(30, 59)), # Switch between I, J and Yard @ block 58
-            [58, 59, 60, 61]
         ]
 
         # Current track controller and block selected
@@ -76,10 +78,10 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         self.block_combo_box.currentIndexChanged.connect(self.block_selected)
 
         # Add all of the options for the red/green line
-        for i in range(0, len(self.red_line_controllers)):
-            self.track_controller_combo_box.addItem('Red Line - Controller #{}'.format(i + 1))
         for i in range(0, len(self.green_line_controllers)):
             self.track_controller_combo_box.addItem('Green Line - Controller #{}'.format(i + 1))
+        for i in range(0, len(self.red_line_controllers)):
+            self.track_controller_combo_box.addItem('Red Line - Controller #{}'.format(i + 1))
         self.track_controller_combo_box.currentIndexChanged.connect(self.track_controller_selected)
 
         # Select the default
@@ -103,8 +105,8 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         """Method called when a different track controller is selected"""
         self.current_track_controller = self.track_controller_combo_box.currentText().split('#')[1]
 
-        if 'Green' in self.track_controller_combo_box.currentText():
-            self.current_track_controller = str(int(self.current_track_controller) + len(self.red_line_controllers))
+        if 'Red' in self.track_controller_combo_box.currentText():
+            self.current_track_controller = str(int(self.current_track_controller) + len(self.green_line_controllers))
 
         # Update the options in the block combo box
         self.block_combo_box.clear()
@@ -112,7 +114,7 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             for block in self.red_line_controllers[int(self.current_track_controller) - 1]:
                 self.block_combo_box.addItem("Block #{}".format(block))
         else:
-            for block in self.green_line_controllers[int(self.current_track_controller) - len(self.red_line_controllers) - 1]:
+            for block in self.green_line_controllers[int(self.current_track_controller) - len(self.green_line_controllers) - 1]:
                 self.block_combo_box.addItem("Block #{}".format(block))
 
     def block_selected(self):
@@ -174,6 +176,9 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
 
         :param str output_file: Name of the file containing the compiled program
         """
+        if self.current_track_controller == HWTRACK_CONTROLLER_NUMBER:
+            self.updating_hardware = True
+
         for line in open(output_file, 'r'):
             line = line.rstrip('\n')
             request_code, _, data = line.partition(' ')
@@ -184,6 +189,24 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
                 data += ' ' + self.current_track_controller
 
             send_message(request_code, data)
+
+        if self.current_track_controller == HWTRACK_CONTROLLER_NUMBER:
+            # Spawn a new thread to gather the responses
+            thread = threading.Thread(target=self.collect_download_responses)
+            thread.start()
+
+    def collect_download_responses(self):
+        """Method called when a program is downloaded to the hw controller"""
+        while True:
+            response_code, response_data = send_message(RequestCode.HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE)
+            if response_code == ResponseCode.SUCCESS:
+                if "DOWNLOAD COMPLETE" in response_data:
+                    break
+            sleep(1)
+
+        # Allow timer events again
+        self.updating_hardware = False
+        self.download_in_progress = False
 
     def switch_position_button_clicked(self):
         """Method called when the switch position button is pressed"""
@@ -207,7 +230,7 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
 
         if (self.current_track_controller is not None) and \
            (self.current_block is not None):
-            if self.current_track_controller != "15":
+            if self.current_track_controller != HWTRACK_CONTROLLER_NUMBER:
                 data = str(self.current_track_controller) + ' ' + str(self.current_block)
                 send_message_async(RequestCode.SWTRACK_GUI_GATHER_DATA,
                                    data=data,
@@ -231,23 +254,30 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         """Gets responses from the arduino for each of the messages that were sent"""
         # Get response for each tag
         i = 0
-
         new_response_data = ''
 
-        while i < 8:
-            response_code, response_data = send_message(RequestCode.HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE)
-            if response_code == ResponseCode.SUCCESS:
-                splits = response_data.split(' ')
-                if splits[0] == '0':
-                    new_response_data += splits[1] + ' '
-                if splits[0] == '1':
-                    new_response_data += '-1' + ' '
-                i += 1
-            else:
-                sleep(0.5)
+        try:
+            while i < 9:
+                if self.download_in_progress:
+                    raise Exception()
+
+                response_code, response_data = send_message(RequestCode.HWTRACK_GET_HW_TRACK_CONTROLLER_RESPONSE)
+                if response_code == ResponseCode.SUCCESS:
+                    splits = response_data.split(' ')
+                    print(splits)
+                    if splits[0] == '0':
+                        new_response_data += splits[1] + ' '
+                    else:
+                        new_response_data += '-1' + ' '
+                    i += 1
+                else:
+                    sleep(1)
+        except:
+            self.updating_hardware = False
+            return
 
         # If we are still looking at the hardware
-        if self.current_track_controller == 15:
+        if self.current_track_controller == HWTRACK_CONTROLLER_NUMBER:
             self.update_gui_sw(ResponseCode.SUCCESS, new_response_data)
 
         # Allow messages to be sent again
@@ -263,50 +293,80 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         split_data = response_data.split(' ')
 
         # Track and block attributes
-        track_heater_status = bool(split_data[0])
-        switch_position = bool(split_data[1])
+        track_heater_status = int(split_data[0])
+        switch_position = int(split_data[1])
         light_status = int(split_data[2])
-        occupied = bool(split_data[3])
+        occupied = int(split_data[3])
         track_status = int(split_data[4])
         railway_crossing = int(split_data[5])
 
         track_heater_label = self.findChild(QtWidgets.QLabel, 'track_heater_label')
-        track_heater_label.setText("ON" if track_heater_status else "OFF")
+        if track_heater_status == -1:
+            track_heater_label.setText("ERROR")
+        else:
+            track_heater_label.setText("ON" if bool(track_heater_status) else "OFF")
 
         switch_position_label = self.findChild(QtWidgets.QLabel, 'switch_position_label')
-        switch_position_label.setText("1" if switch_position else "0")
+        if switch_position == -1:
+            switch_position_label.setText("ERROR")
+        else:
+            switch_position_label.setText("1" if bool(switch_position) else "0")
 
         light_status_label = self.findChild(QtWidgets.QLabel, 'light_status_label')
         if light_status == 0:
-            light_status_label.setText("N/A")
-        elif light_status == 1:
             light_status_label.setText("RED")
-        else:
+        elif light_status == 1:
+            light_status_label.setText("YELLOW")
+        elif light_status == 2:
             light_status_label.setText("GREEN")
+        else:
+            light_status_label.setText("ERROR")
 
         occupied_label = self.findChild(QtWidgets.QLabel, 'occupied_label')
-        occupied_label.setText("YES" if occupied else "NO")
+        if occupied == -1:
+            occupied_label.setText("ERROR")
+        else:
+            occupied_label.setText("YES" if bool(occupied) else "NO")
 
         track_status_label = self.findChild(QtWidgets.QLabel, 'track_status_label')
-        track_status_label.setText("OK" if track_status != 0 else "CLOSED")
+        if track_status == -1:
+            track_status_label.setText("ERROR")
+        else:
+            track_status_label.setText("OK" if bool(track_status) else "CLOSED")
 
         railway_crossing_label = self.findChild(QtWidgets.QLabel, 'railway_crossing_label')
-        railway_crossing_label.setText("N/A" if railway_crossing == 0 else "DOWN")
+        if railway_crossing == -1:
+            railway_crossing_label.setText("N/A")
+        else:
+            railway_crossing_label.setText("UP" if bool(railway_crossing) else "DOWN")
 
         # Train attributes
-        if len(split_data > 6):
-            authority = bool(split_data[6])
-            suggest_speed = int(split_data[7])
+        authority_label = self.findChild(QtWidgets.QLabel, 'authority_label')
+        suggested_speed_label = self.findChild(QtWidgets.QLabel, 'suggested_speed_label')
+        command_speed_label = self.findChild(QtWidgets.QLabel, 'command_speed_label')
+        if len(split_data) > 6:
+            authority = int(split_data[6])
+            suggested_speed = int(split_data[7])
             command_speed = int(split_data[8])
 
-            authority_label = self.findChild(QtWidgets.QLabel, 'authority_label')
-            authority_label.setText("YES" if authority else "NO")
+            if authority == -1:
+                authority_label.setText("ERROR")
+            else:
+                authority_label.setText("YES" if bool(authority) else "NO")
 
-            suggest_speed_label = self.findChild(QtWidgets.QLabel, 'suggest_speed_label')
-            suggest_speed_label.setText(str(suggest_speed) + ' MPH')
+            if suggested_speed < 0:
+                suggested_speed_label.setText("ERROR")
+            else:
+                suggested_speed_label.setText(str(suggested_speed) + ' MPH')
 
-            command_speed_label = self.findChild(QtWidgets.QLabel, 'command_speed_label')
-            command_speed_label.setText(str(command_speed) + ' MPH')
+            if command_speed < 0:
+                command_speed_label.setText("ERROR")
+            else:
+                command_speed_label.setText(str(command_speed) + ' MPH')
+        else:
+            authority_label.setText("N/A")
+            suggested_speed_label.setText("N/A")
+            command_speed_label.setText("N/A")
 
     @staticmethod
     def logout():
