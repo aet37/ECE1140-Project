@@ -180,7 +180,7 @@ class Ui(QtWidgets.QMainWindow):
             dataParsed = dataReceived.split()
             self.findChild(QtWidgets.QLabel, 'disp_command_speed').setText(dataParsed[0] + " m/s")
 
-            if dataParsed[1] == 1:
+            if dataParsed[1] == "1":
                 self.findChild(QtWidgets.QLabel, 'disp_authority').setText("true")
                 self.findChild(QtWidgets.QLabel, 'disp_authority').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
             else:
@@ -190,28 +190,28 @@ class Ui(QtWidgets.QMainWindow):
             self.findChild(QtWidgets.QLabel, 'disp_current_speed').setText(dataParsed[2] + " m/s")
             self.findChild(QtWidgets.QLabel, 'disp_speed_limit').setText(dataParsed[3] + " km/h")
 
-            if dataParsed[4] == 1:
+            if dataParsed[4] == "1":
                 self.findChild(QtWidgets.QLabel, 'disp_brake_command').setText("on")
                 self.findChild(QtWidgets.QLabel, 'disp_brake_command').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
             else:
                 self.findChild(QtWidgets.QLabel, 'disp_brake_command').setText("off")
                 self.findChild(QtWidgets.QLabel, 'disp_brake_command').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
             
-            if dataParsed[5] == 1:
+            if dataParsed[5] == "1":
                 self.findChild(QtWidgets.QLabel, 'disp_service_brake').setText("on")
                 self.findChild(QtWidgets.QLabel, 'disp_service_brake').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
             else:
                 self.findChild(QtWidgets.QLabel, 'disp_service_brake').setText("off")
                 self.findChild(QtWidgets.QLabel, 'disp_service_brake').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
             
-            if dataParsed[6] == 1:
+            if dataParsed[6] == "1":
                 self.findChild(QtWidgets.QLabel, 'disp_emergency_passenger_brake').setText("on")
                 self.findChild(QtWidgets.QLabel, 'disp_emergency_passenger_brake').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
             else:
                 self.findChild(QtWidgets.QLabel, 'disp_emergency_passenger_brake').setText("off")
                 self.findChild(QtWidgets.QLabel, 'disp_emergency_passenger_brake').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
             
-            if dataParsed[7] == 1:
+            if dataParsed[7] == "1":
                 self.findChild(QtWidgets.QLabel, 'disp_current_line').setText("green")
                 self.findChild(QtWidgets.QLabel, 'disp_current_line').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
             else:
@@ -245,28 +245,28 @@ class Ui(QtWidgets.QMainWindow):
             self.findChild(QtWidgets.QLabel, 'disp_pass_count').setText(dataParsed[0] + " persons")
             self.findChild(QtWidgets.QLabel, 'disp_crew_count').setText(dataParsed[1] + " persons")
 
-            if dataParsed[2] == 1:
+            if dataParsed[2] == "1":
                 self.findChild(QtWidgets.QLabel, 'disp_announcements').setText("on")
                 self.findChild(QtWidgets.QLabel, 'disp_announcements').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
             else:
                 self.findChild(QtWidgets.QLabel, 'disp_announcements').setText("off")
                 self.findChild(QtWidgets.QLabel, 'disp_announcements').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
             
-            if dataParsed[3] == 1:
+            if dataParsed[3] == "1":
                 self.findChild(QtWidgets.QLabel, 'disp_advertisements').setText("on")
                 self.findChild(QtWidgets.QLabel, 'disp_advertisements').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
             else:
                 self.findChild(QtWidgets.QLabel, 'disp_advertisements').setText("off")
                 self.findChild(QtWidgets.QLabel, 'disp_advertisements').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
             print(dataParsed[4]) # TEST PRINT
-            if dataParsed[4] == 1:
+            if dataParsed[4] == "1":
                 self.findChild(QtWidgets.QLabel, 'disp_cabin_lights').setText("on")
                 self.findChild(QtWidgets.QLabel, 'disp_cabin_lights').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
             else:
                 self.findChild(QtWidgets.QLabel, 'disp_cabin_lights').setText("off")
                 self.findChild(QtWidgets.QLabel, 'disp_cabin_lights').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
             
-            if dataParsed[5] == 1:
+            if dataParsed[5] == "1":
                 self.findChild(QtWidgets.QLabel, 'disp_head_lights').setText("on")
                 self.findChild(QtWidgets.QLabel, 'disp_head_lights').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
             else:
@@ -275,7 +275,7 @@ class Ui(QtWidgets.QMainWindow):
             
             self.findChild(QtWidgets.QLabel, 'disp_temperature_control').setText(dataParsed[6] + " persons")
 
-            if dataParsed[7] == 1:
+            if dataParsed[7] == "1":
                 self.findChild(QtWidgets.QLabel, 'disp_doors').setText("open")
                 self.findChild(QtWidgets.QLabel, 'disp_doors').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
             else:

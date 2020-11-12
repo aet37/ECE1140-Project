@@ -176,7 +176,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
                 self.findChild(QtWidgets.QComboBox, 'TrainIDBox2').setCurrentIndex(currentIndex3)
                 self.findChild(QtWidgets.QComboBox, 'TrainIDBox3').setCurrentIndex(currentIndex3)
 
-        if "" in self.current_train_id:
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
             return
 
         # Update Train's info
@@ -220,33 +220,33 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
     def toggle_lights(self):
         # If no controllers have been created, button does nothing
-        if "" in self.current_train_id:
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
             return
 
         send_message(RequestCode.SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS, self.current_train_id)
 
     def toggle_doors(self):
         # If no controllers have been created, button does nothing
-        if "" in self.current_train_id:
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
             return
 
         send_message(RequestCode.SWTRAIN_GUI_TOGGLE_DAMN_DOORS, self.current_train_id)
 
     def toggle_announcements(self):
         # If no controllers have been created, button does nothing
-        if "" in self.current_train_id:
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
             return
         send_message(RequestCode.SWTRAIN_GUI_ANNOUNCE_STATIONS, self.current_train_id)
 
     def toggle_ads(self):
         # If no controllers have been created, button does nothing
-        if "" in self.current_train_id:
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
             return
         send_message(RequestCode.SWTRAIN_GUI_DISPLAY_ADS, self.current_train_id)
 
     def set_SeanPaul(self):
         # If no controllers have been created, button does nothing
-        if "" in self.current_train_id:
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
             return
 
         temp = self.findChild(QtWidgets.QLineEdit, "InputTemp").text()
@@ -267,7 +267,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
     def toggle_mode1(self):
         # If no controllers have been created, button does nothing
-        if "" in self.current_train_id:
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
             return
 
         # If automatic mode is green, button does nothing
@@ -296,7 +296,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
     def toggle_mode2(self):
         # If no controllers have been created, button does nothing
-        if "" in self.current_train_id:
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
             return
 
         # If manual mode is green, button does nothing
@@ -325,7 +325,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
     
     def set_setpoint(self):
         # If no controllers have been created, button does nothing
-        if "" in self.current_train_id:
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
             return
 
         # Get setpoint speed
@@ -368,7 +368,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
     def toggle_service_brake(self):
         # If no controllers have been created, button does nothing
-        if "" in self.current_train_id:
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
             return
 
         # Check if authority is zero
