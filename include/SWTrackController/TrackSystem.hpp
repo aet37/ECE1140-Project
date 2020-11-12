@@ -406,7 +406,8 @@ class TrackSystem
 			//setting the current array of switch positions to use later for comparison 
 			for(int i=0;i<=24;i+2)
 			{
-				cout<<std::endl<<"loop 1"<<std::endl;
+				
+				cout<<std::endl<<i<<"loop 1"<<std::endl;
 				if(p_Controllers.at(i).getSwitchPos()==p_Controllers.at(i+1).getSwitchPos())
 				{
 					temp.push_back(p_Controllers[i].getSwitchPos());
