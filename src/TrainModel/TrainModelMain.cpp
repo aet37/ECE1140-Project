@@ -251,7 +251,7 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     // LOG_TRAIN_MODEL("Train Cabin Lights = %d, Train ID = %d", lightStatus, trainId);
                     break;
                 }
-                case Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_POWER:
+                case Common::RequestCode::TRAIN_MODEL_RECEIVE_POWER:
                 {
                     // IMPLEMENTATION
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
