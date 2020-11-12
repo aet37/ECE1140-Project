@@ -25,14 +25,15 @@ enum class RequestCode
     HWTRAIN_UPDATE_CURRENT_SPEED = 236, // Used by the train model to update a train's current speed
     HWTRAIN_UPDATE_COMMAND_SPEED = 237, // Used by the train model to update a train's command speed
     HWTRAIN_UPDATE_AUTHORITY = 238, // Used by the train model to update a train's authority
-    HWTRAIN_CAUSE_FAILURE = 239, // Used by the train model to cause a train's failure
+    HWTRAIN_SIGNAL_FAILURE = 239, // Used by the train model to cause a train's failure
     HWTRAIN_PULL_PASSENGER_EBRAKE = 240, // Used by the train model to pull a train's passenger e-brake
     HWTRAIN_GUI_GATHER_DATA = 241, // Used by the gui to update the user interface
-    HWTRAIN_GUI_RESOLVE_FAILURE = 242, // Used by the gui to resolve a train failure
+    HWTRAIN_ENGINE_FAILURE = 242, // Used by the gui to resolve a train failure
     HWTRAIN_GUI_SET_KP = 243, // Set Kp
     HWTRAIN_GUI_GET_MODE = 244, // Displays the mode
     HWTRAIN_GUI_DISPLAY_POWER = 245, // Displays power
     HWTRAIN_GUI_SET_KI = 246, // Set Ki
+    HWTRAIN_BRAKE_FAILURE = 247,
 
 };
 

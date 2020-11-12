@@ -9,6 +9,7 @@
 #include "HWTrainControllerMain.hpp" // Header for functions
 #include "Logger.hpp" // For LOG macros
 #include "Assert.hpp"
+#include "Main/include/HWTrainCommunications.hpp"
 
 namespace HWTrainController
 {
@@ -18,11 +19,6 @@ Common::ServiceQueue<Common::Request> serviceQueue;
 void moduleMain()
 {
     LOG_HW_TRAIN_CONTROLLER("Thread starting...");
-    Failures Fail;
-    Distance Dist(20);
-    Speedstuff Spood;
-    Trainfunctions Train;
-    Insidetrain Intrain;
     while (true)
     {
         Common::Request req = serviceQueue.Pop();
@@ -39,12 +35,12 @@ void moduleMain()
             }
             case Common::RequestCode::HWTRAIN_TOGGLE_CABIN_LIGHTS:
             {
-                Intrain.setLights();
-                bool lights = Intrain.getLights();
+                
+                
                 // std::string lightString = std::to_string(Intrain.getLights());
                 // Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_SET_THE_DAMN_LIGHTS, lightString)
                 // TrainModel::serviceQueue.Push(newRequest)
-                LOG_HW_TRAIN_CONTROLLER("HWTrain train lights %d", lights);
+               // LOG_HW_TRAIN_CONTROLLER("HWTrain train lights %d", lights);
             }
             default:
                 ASSERT(false, "Unexpected request code %d", static_cast<uint16_t>(req.GetRequestCode()));

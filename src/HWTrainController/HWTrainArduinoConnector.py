@@ -9,6 +9,9 @@ import serial
 
 logger = logging.getLogger(__name__)
 
+#CONTINUALLY PING THE ARDRUINO TO GET BUTTON PRESSES
+
+
 # Communications with controller
 SERIAL_PORT = 'COM6'
 RATE = 9600

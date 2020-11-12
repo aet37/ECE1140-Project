@@ -81,6 +81,7 @@ class Ui(QtWidgets.QMainWindow):
         if(self.label1.styleSheet()=="color: green;"):
             self.label1.setStyleSheet("color: red;")
             self.label1.setText("Off")
+            send_message(RequestCode.HWTRAIN_ANNOUNCE_STATIONS, "0")
         else: 
             self.label1.setStyleSheet("color: green;")
             self.label1.setText("On")
@@ -91,6 +92,7 @@ class Ui(QtWidgets.QMainWindow):
         if(self.label2.styleSheet()=="color: green;"):
             self.label2.setStyleSheet("color: red;")
             self.label2.setText("Off")
+            send_message(RequestCode.HWTRAIN_TOGGLE_DAMN_DOORS, "0")
         else: 
             self.label2.setStyleSheet("color: green;")
             self.label2.setText("On")
@@ -101,6 +103,7 @@ class Ui(QtWidgets.QMainWindow):
         if(self.label3.styleSheet()=="color: green;"):
             self.label3.setStyleSheet("color: red;")
             self.label3.setText("Off")
+            send_message(RequestCode.HWTRAIN_DISPLAY_ADS, "0")
         else: 
             self.label3.setStyleSheet("color: green;")
             self.label3.setText("On")
@@ -111,6 +114,7 @@ class Ui(QtWidgets.QMainWindow):
         if(self.label4.styleSheet()=="color: green;"):
             self.label4.setStyleSheet("color: red;")
             self.label4.setText("Off")
+            send_message(RequestCode.HWTRAIN_GUI_GET_MODE, "0")
         else: 
             self.label4.setStyleSheet("color: green;")
             self.label4.setText("On")
@@ -121,6 +125,7 @@ class Ui(QtWidgets.QMainWindow):
         if(self.label5.styleSheet()=="color: green;"):
             self.label5.setStyleSheet("color: red;")
             self.label5.setText("Off")
+            send_message(RequestCode.HWTRAIN_GUI_RESOLVE_FAILURE, "0")
         else: 
             self.label5.setStyleSheet("color: green;")
             self.label5.setText("On")
@@ -131,6 +136,7 @@ class Ui(QtWidgets.QMainWindow):
         if(self.label6.styleSheet()=="color: green;"):
             self.label6.setStyleSheet("color: red;")
             self.label6.setText("Off")
+            send_message(RequestCode.HWTRAIN_GUI_RESOLVE_FAILURE, "0")
         else: 
             self.label6.setStyleSheet("color: green;")
             self.label6.setText("On")
@@ -141,6 +147,7 @@ class Ui(QtWidgets.QMainWindow):
         if(self.label7.styleSheet()=="color: green;"):
             self.label7.setStyleSheet("color: red;")
             self.label7.setText("Off")
+            send_message(RequestCode.HWTRAIN_GUI_RESOLVE_FAILURE, "0")
         else: 
             self.label7.setStyleSheet("color: green;")
             self.label7.setText("On")
@@ -151,6 +158,7 @@ class Ui(QtWidgets.QMainWindow):
         if(self.label8.styleSheet()=="color: green;"):
             self.label8.setStyleSheet("color: red;")
             self.label8.setText("Off")
+            send_message(RequestCode.HWTRAIN_PULL_PASSENGER_EBRAKE, "0")
         else: 
             self.label8.setStyleSheet("color: green;")
             self.label8.setText("On")
@@ -161,6 +169,7 @@ class Ui(QtWidgets.QMainWindow):
         if(self.label9.styleSheet()=="color: green;"):
             self.label9.setStyleSheet("color: red;")
             self.label9.setText("Off")
+            send_message(RequestCode.HWTRAIN_PULL_EBRAKE, "0")
         else: 
             self.label9.setStyleSheet("color: green;")
             self.label9.setText("On")
@@ -171,6 +180,7 @@ class Ui(QtWidgets.QMainWindow):
         if(self.label10.styleSheet()=="color: green;"):
             self.label10.setStyleSheet("color: red;")
             self.label10.setText("Off")
+            send_message(RequestCode.HWTRAIN_PRESS_SERVICE_BRAKE, "0")
         else: 
             self.label10.setStyleSheet("color: green;")
             self.label10.setText("On")
@@ -181,10 +191,11 @@ class Ui(QtWidgets.QMainWindow):
         if(self.label11.styleSheet()=="color: green;"):
             self.label11.setStyleSheet("color: red;")
             self.label11.setText("Off")
+            send_message(RequestCode.HWTRAIN_TOGGLE_CABIN_LIGHTS, "0")
         else: 
             self.label11.setStyleSheet("color: green;")
             self.label11.setText("On")
-        send_message(RequestCode.HWTRAIN_TOGGLE_CABIN_LIGHTS, "1")
+            send_message(RequestCode.HWTRAIN_TOGGLE_CABIN_LIGHTS, "1")
 
     def Temp(self):
         self.LCD1 = self.findChild(QtWidgets.QLCDNumber, 'TempLCD')

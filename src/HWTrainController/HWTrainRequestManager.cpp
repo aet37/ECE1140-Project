@@ -48,6 +48,9 @@ void HWTrainRequestManager::HandleRequest(const Common::Request& rRequest, Commo
             // Add the request to the queue
             AddRequest(rRequest);
             rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+           // Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_LIGHTS);
+            //newRequest.AppendData("1");
+           // newRequest.AppendData(lights);
             LOG_HW_TRAIN_CONTROLLER("HWTrain train toggle lights");
             break;
         }
