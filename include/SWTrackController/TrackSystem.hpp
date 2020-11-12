@@ -8,6 +8,7 @@
 #include <vector>
 #include "TrackController.hpp"
 #include <Logger.hpp>
+#include <iostream>
 
 
 
@@ -418,6 +419,7 @@ class TrackSystem
 					out+='1';
 				}	
 			}
+			cout<<std::endl<<out.length()<<std::endl;
 
 			LOG_SW_TRACK_CONTROLLER("%s", out.c_str());
 
@@ -437,6 +439,7 @@ class TrackSystem
 					out+='1';
 				}
 			}
+			cout<<endl<<out.length()<<endl;
 			//setting temp to controller 11
 			temp=p_Controllers[10].getOccupancy();
 
@@ -454,6 +457,7 @@ class TrackSystem
 				}
 			}
 
+			cout<<endl<<out.length()<<endl;
 			//setting temp to controller 12
 			temp=p_Controllers[11].getOccupancy();
 
@@ -471,6 +475,7 @@ class TrackSystem
 				}
 			}
 
+			cout<<endl<<out.length()<<endl;
 			//setting temp to controller 2
 			temp = p_Controllers[1].getOccupancy();
 
@@ -488,6 +493,7 @@ class TrackSystem
 				}
 			}
 
+			cout<<endl<<out.length()<<endl;
 			//setting temp to controller 4
 			temp = p_Controllers[3].getOccupancy();
 
@@ -505,6 +511,7 @@ class TrackSystem
 				}
 			}
 
+			cout<<endl<<out.length()<<endl;
 			//setting temp to controller 6
 			temp = p_Controllers[5].getOccupancy();
 
@@ -522,6 +529,7 @@ class TrackSystem
 				}
 			}
 
+			cout<<endl<<out.length()<<endl;
 			//setting temp to controller 7
 			temp = p_Controllers[6].getOccupancy();
 
@@ -539,11 +547,12 @@ class TrackSystem
 				}
 			}
 
+			cout<<endl<<out.length()<<endl;
 			out+=" ";
 		
 			//red line
 			//blocks 1-16
-			for(int i=0;i<17;i++)
+			for(int i=0;i<16;i++)
 			{
 				if(temp[i]==0)
 				{
