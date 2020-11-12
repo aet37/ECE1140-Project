@@ -45,7 +45,8 @@ void moduleMain()
                 // Read train ID
                 uint32_t trainID = req.ParseData<uint32_t>(0);
                 // Get controller instance to toggle lights
-                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID);
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController Train ID: %d", trainID);
+                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID-1);
                 // THIS IS WHAT COLLIN HAD BEFORE THE CRASH
                 uint32_t lightStatus = tempController->toggleLights();
                 std::string trainIDString = std::to_string(trainID);
