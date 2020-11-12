@@ -178,7 +178,7 @@ class Ui(QtWidgets.QMainWindow):
         if responsecode == ResponseCode.SUCCESS:
             # Parse the data and update the gui.
             dataParsed = dataReceived.split()
-            self.findChild(QtWidgets.QLabel, 'disp_command_speed').setText(dataParsed[0] + " m/s")
+            self.findChild(QtWidgets.QLabel, 'disp_command_speed').setText(dataParsed[0].split(".")[0] + " m/s") # Remove trailing zeros from float
 
             if dataParsed[1] == "1":
                 self.findChild(QtWidgets.QLabel, 'disp_authority').setText("true")
@@ -273,7 +273,7 @@ class Ui(QtWidgets.QMainWindow):
                 self.findChild(QtWidgets.QLabel, 'disp_head_lights').setText("off")
                 self.findChild(QtWidgets.QLabel, 'disp_head_lights').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
             
-            self.findChild(QtWidgets.QLabel, 'disp_temperature_control').setText(dataParsed[6] + " persons")
+            self.findChild(QtWidgets.QLabel, 'disp_temperature_control').setText(dataParsed[6] + " °F")
 
             if dataParsed[7] == "1":
                 self.findChild(QtWidgets.QLabel, 'disp_doors').setText("open")

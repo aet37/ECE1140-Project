@@ -58,7 +58,7 @@ void moduleMain()
                 uint32_t trainID = req.ParseData<uint32_t>(0);
                 // Get controller instance to toggle lights
                 LOG_SW_TRAIN_CONTROLLER("SWTrainController Train ID: %d", trainID);
-                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID-1);
+                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID - 1);
                 // THIS IS WHAT COLLIN HAD BEFORE THE CRASH
                 uint32_t lightStatus = tempController->toggleLights();
                 std::string trainIDString = std::to_string(trainID);
@@ -77,7 +77,7 @@ void moduleMain()
                 // Read train ID
                 uint32_t trainID = req.ParseData<uint32_t>(0);
                 // Get controller instance to toggle doors
-                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID-1);
+                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID - 1);
                 // Get boolean to represent doors and convert info to string
                 uint32_t doorStatus = tempController->toggleDoors();
                 std::string trainIDString = std::to_string(trainID);
@@ -96,7 +96,7 @@ void moduleMain()
                 // Read train ID
                 uint32_t trainID = req.ParseData<uint32_t>(0);
                 // Get controller instance to toggle announcements
-                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID-1);
+                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID - 1);
                 // Get boolean to represent announcements and convert info to string
                 uint32_t announcementStatus = tempController->announceStations();
                 std::string trainIDString = std::to_string(trainID);
@@ -115,7 +115,7 @@ void moduleMain()
                 // Read train ID
                 uint32_t trainID = req.ParseData<uint32_t>(0);
                 // Get controller instance to toggle advertisements
-                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID-1);
+                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID - 1);
                 // Get boolean to represent advertisements and convert info to string
                 uint32_t adsStatus = tempController->toggleAds();
                 std::string trainIDString = std::to_string(trainID);
@@ -134,7 +134,7 @@ void moduleMain()
                 uint32_t trainID = req.ParseData<uint32_t>(0);
                 float temperature = req.ParseData<float>(1);
                 // Get controller instance to set temperature
-                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID-1);
+                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID - 1);
                 tempController->setCabinTemp(temperature);
                 std::string trainIDString = std::to_string(trainID);
                 std::string tempStatusString = std::to_string(temperature);
@@ -151,14 +151,14 @@ void moduleMain()
                 uint32_t trainID = req.ParseData<uint32_t>(0);
                 std::string passcode = req.ParseData<std::string>(1);
                 // Get controller instance and toggle mode
-                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID);
+                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID - 1);
                 uint32_t modeStatus = tempController->toggleMode(passcode);
                 std::string trainIDString = std::to_string(trainID);
                 std::string modeStatusString = std::to_string(modeStatus);
                 Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_MODE);
                 newRequest.AppendData(trainIDString);
                 newRequest.AppendData(modeStatusString);
-                TrainModel::serviceQueue.Push(newRequest);
+                // TrainModel::serviceQueue.Push(newRequest); Not shown on kenny's gui atm
                 LOG_SW_TRAIN_CONTROLLER("SWTrainController Train ID: %d", trainID);
                 LOG_SW_TRAIN_CONTROLLER("SWTrainController mode: %d", modeStatus);
                 break;
@@ -168,7 +168,7 @@ void moduleMain()
                 uint32_t trainID = req.ParseData<uint32_t>(0);
                 uint32_t setpoint_speed = req.ParseData<uint32_t>(1);
                 // Get controller instance and set setpoint speed
-                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID);
+                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID - 1);
                 tempController->setSetpointSpeed(setpoint_speed);
                 LOG_SW_TRAIN_CONTROLLER("SWTrainController setpoint speed: %d", trainID);
                 break;
@@ -177,7 +177,7 @@ void moduleMain()
             {
                 uint32_t trainID = req.ParseData<uint32_t>(0);
                 // Get controller instance and toggle service brake
-                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID);
+                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID - 1);
                 bool brakeStatus = tempController->toggleServiceBrake();
                 // Create new request and send trainID and brakeStatus as strings
                 std::string trainIDString = std::to_string(trainID);
@@ -195,7 +195,7 @@ void moduleMain()
                 float kp = req.ParseData<float>(1);
                 float ki = req.ParseData<float>(2);
                 // Get controller instance to set kp and ki
-                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID-1);
+                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID - 1);
                 tempController->setKp(kp);
                 tempController->setKi(ki);
                 LOG_SW_TRAIN_CONTROLLER("SWTrainController Train ID: %d", trainID);
