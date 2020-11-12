@@ -20,6 +20,7 @@
 
 
 
+
 namespace SWTrackController
 {
 
@@ -40,6 +41,7 @@ void moduleMain()
         cout<<std::endl<<main.makeOccupancies()<<std::endl;
         main.updateOccupied(0,50);
         cout<<std::endl<<main.makeOccupancies()<<std::endl;
+
 
 
         Common::Request receivedReq = serviceQueue.Pop();  
