@@ -40,6 +40,8 @@ void moduleMain()
         cout<<"asdadasd";
         cout<<std::endl<<main.makeOccupancies()<<endl;
 
+        LOG_SW_TRACK_CONTROLLER("SWTrackController occupancies: %s", main.makeOccupancies().c_str());
+
     	switch(receivedReq.GetRequestCode())
         {
             case Common::RequestCode::SWTRACK_DISPATCH_TRAIN:

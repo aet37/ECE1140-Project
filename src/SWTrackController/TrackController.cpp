@@ -6,7 +6,7 @@
     TrackController::TrackController()
     {
 		occupancy.clear();
-		LOG_SW_TRACK_CONTROLLER("IT GOT HERE constructor");
+		
     }
 
 	//retuns switch position
