@@ -7,6 +7,9 @@
 
 #include <vector>
 #include "TrackController.hpp"
+#include <Logger.hpp>
+
+
 
 
 class TrackSystem
@@ -34,7 +37,7 @@ class TrackSystem
 			blocks_Controlled.push_back({77, 78, 79, 80, 81, 82, 83, 84}); //d
 			blocks_Controlled.push_back({85, 78, 79, 80, 81, 82, 83, 84}); //e
 			blocks_Controlled.push_back({85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100}); //f
-			blocks_Controlled.push_back({101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58});
+			blocks_Controlled.push_back({101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58});
 			blocks_Controlled.push_back({29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14}); //h
 			blocks_Controlled.push_back({28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13}); //i
 			blocks_Controlled.push_back({13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1}); //j
@@ -134,7 +137,7 @@ class TrackSystem
 
 			temp.clear();
 
-			for(int i=0;i<81;i++)
+			for(int i=0;i<80;i++)
 			{
 				temp.push_back({0});
 			}
@@ -218,6 +221,7 @@ class TrackSystem
 			{
 				temp.push_back({0});
 			}
+
 			q.setupOccupancy(temp);
 
 			temp.clear();
@@ -393,17 +397,30 @@ class TrackSystem
 			//string for output
 			string out = "";
 
+			LOG_SW_TRACK_CONTROLLER("IT GOT HERE Make Occupancies");
+
 			//temporary vector to store values in
 			std::vector<bool> temp;
 
 			//setting temp to controller 10
 			temp = p_Controllers[9].getOccupancy();
 
+			
 			//blocks 1-13
 			for(int i =12;i>=0;i--)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}	
 			}
+
+			LOG_SW_TRACK_CONTROLLER("%s", out.c_str());
 
 			//setting temp to controller 8
 			temp= p_Controllers[7].getOccupancy();
@@ -411,16 +428,32 @@ class TrackSystem
 			//blocks 14-29
 			for(int i=15;i>=0;i--)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//setting temp to controller 11
 			temp=p_Controllers[10].getOccupancy();
 
 			//blocks 30-59
-			for(int i=0;i<29;i++)
+			for(int i=0;i<30;i++)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//setting temp to controller 12
@@ -429,7 +462,15 @@ class TrackSystem
 			//blocks 60-61
 			for(int i=2;i<4;i++)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//setting temp to controller 2
@@ -438,7 +479,15 @@ class TrackSystem
 			//blocks 62-76
 			for(int i=0;i<15;i++)
 			{
-				out += temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//setting temp to controller 4
@@ -447,7 +496,15 @@ class TrackSystem
 			//blocks 77-84
 			for(int i=0;i<8;i++)
 			{
-				out += temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//setting temp to controller 6
@@ -456,34 +513,65 @@ class TrackSystem
 			//blocks 85-100
 			for(int i=0;i<16;i++)
 			{
-				out +=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//setting temp to controller 7
 			temp = p_Controllers[6].getOccupancy();
 
-			//blocks 101-151
-			for(int i=0;i<51;i++)
+			//blocks 101-150
+			for(int i=0;i<50;i++)
 			{
-				out += temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			out+=" ";
 		
 			//red line
 			//blocks 1-16
-			for(int i=0;i<17;i++)
+			for(int i=0;i<16;i++)
 			{
-				out+=temp[i];
-			}
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
 
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
+			}
 			//setting temp to controller 17
 			temp = p_Controllers[16].getOccupancy();
 				
 			//blocks 17-27
 			for(int i=0;i<11;i++)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//setting temp to controller 18
@@ -492,7 +580,15 @@ class TrackSystem
 			//blocks 28-32
 			for(int i=6;i<11;i++)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 				
 			//setting temp to controller 20
@@ -501,7 +597,15 @@ class TrackSystem
 			//blocks 33-37
 			for(int i=0;i<5;i++)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//setting temp 22
@@ -510,7 +614,15 @@ class TrackSystem
 			//blocks 38-43
 			for(int i=0;i<6;i++)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//setting temp to 24
@@ -519,7 +631,15 @@ class TrackSystem
 			//blocks 44-51
 			for(int i=0;i<8;i++)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//setting temp to 26
@@ -528,7 +648,15 @@ class TrackSystem
 			//blocks 52-66
 			for(int i=0;i<15;i++)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//setting temp to 22
@@ -537,7 +665,15 @@ class TrackSystem
 			//blocks 67-71
 			for(int i=10;i>5;i--)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//setting temp to 18
@@ -546,7 +682,15 @@ class TrackSystem
 			//blocks 72-76
 			for(int i=0;i<5;i++)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//returning out string
@@ -566,7 +710,15 @@ class TrackSystem
 				//making sure the controllers have the same output
 				if(p_Controllers[i].getSwitchPos()==p_Controllers[i+1].getSwitchPos())
 				{
-					out += p_Controllers[i].getSwitchPos();
+					if(p_Controllers[i].getSwitchPos()==0)
+					{
+						out+='0';
+					}
+
+					if(p_Controllers[i].getSwitchPos()==1)
+					{
+						out+='1';
+					}
 				}
 				//if not, loop breaks
 				else

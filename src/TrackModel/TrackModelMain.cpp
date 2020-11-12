@@ -468,7 +468,6 @@ void moduleMain()
                     newReq.AppendData("2");
                 }
                 TrainModel::serviceQueue.Push(newReq);
-
                 break;
             }
             case Common::RequestCode::TRACK_MODEL_UPDATE_OCCUPANCY:

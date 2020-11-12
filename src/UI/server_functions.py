@@ -9,7 +9,10 @@ import polling
 logger = logging.getLogger(__name__)
 
 # HOST = '18.188.207.58'
-HOST = '3.23.104.34'  # The server's hostname or IP address
+
+# HOST = '18.188.154.118'  # The server's hostname or IP address
+HOST = '18.188.207.58'
+
 PORT = 1234        # The port used by the server
 
 class RequestCode(Enum):
