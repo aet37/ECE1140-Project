@@ -149,7 +149,7 @@ void TrackModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
 			}
 			
 
-            rResponse.AppendData(std::to_string(heaterInput));
+            rResponse.AppendData(heaterInput);
 			rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
 			break;
         }
