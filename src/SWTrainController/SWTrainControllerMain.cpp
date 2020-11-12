@@ -33,7 +33,7 @@ void moduleMain()
         {  
             case Common::RequestCode::SWTRAIN_DISPATCH_TRAIN:
             {
-                ControlSystem::getInstance().createNewController(13, 13, 13);
+                ControlSystem::getInstance().createNewController(13, 13, 13); // FOR TESTING
                 uint32_t theInt = req.ParseData<uint32_t>(0);
                 // uint32_t com_sp = req.ParseData<uint32_t>(1);
                 // uint32_t curr_sp = req.ParseData<uint32_t>(2);
@@ -193,6 +193,7 @@ void moduleMain()
 
                     // Construct a request to send Kenneth power
                     Common::Request newReq(Common::RequestCode::TRAIN_MODEL_RECEIVE_POWER);
+                    newReq.AppendData(std::to_string(i + 1));
                     newReq.AppendData(std::to_string(pController->getPowerCommand()));
                     TrainModel::serviceQueue.Push(newReq);
                 }
