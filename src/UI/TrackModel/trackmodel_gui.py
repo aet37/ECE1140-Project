@@ -30,13 +30,18 @@ class Ui(QtWidgets.QMainWindow):
         global combo3 
         combo3 = QComboBox()
 
+        global greenHeater
+        greenHeater = 0
+        global redHeater
+        redHeater = 0
+
         self.initUI()
         #self.stacked_widget.currentChanged.connect(self.set_button_state)
         #self.stacked_widget.setCurrentIndex(0)
         
         self.update_timer = QTimer()
         self.update_timer.timeout.connect(self.check_current_block)
-        self.update_timer.start(2000)
+        self.update_timer.start(10000)
 
         self.show()
     def initUI(self):
@@ -49,7 +54,7 @@ class Ui(QtWidgets.QMainWindow):
         logoutButton.clicked.connect(self.logout)
 
         track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
-        track_heater_button.clicked.connect(self.trackHeaterGUI)
+        track_heater_button.clicked.connect(self.flipHeater)
 
     # def update_times(self):
         # TODO get position string from Train Model in ??? UNITS
@@ -261,6 +266,7 @@ class Ui(QtWidgets.QMainWindow):
         trackHeater = split_data[18]
         failureMode = split_data[19]
 
+        print("we here for rn")
 
 
         line_name_label = self.findChild(QtWidgets.QLabel, 'line_name_label')
@@ -326,37 +332,76 @@ class Ui(QtWidgets.QMainWindow):
 
 
         track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
+        print("\n\n\nHELLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n")
+        print(lineName)
         if (trackHeater == "true"):
-            track_heater_button.setText("On")
-            track_heater_button.setStyleSheet("background-color : green")
+            if (lineName == "Green"):
+                greenHeater = 1
+            else:
+                redHeater = 1
         else:
-            track_heater_button.setText("Off")
-            track_heater_button.setStyleSheet("background-color : red")
+            if (lineName == "Green"):
+                greenHeater = 0
+            else:
+                redHeater = 0
+
+        self.trackHeaterGUI()
 
         failure_mode_label = self.findChild(QtWidgets.QLabel, 'failure_mode_label')
         failure_mode_label.setText("Failure Mode:\n\n"+ failureMode)
 
+    def flipHeater(self):
+        global greenHeater
+        global redHeater
+        
+        theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
+        lineIndex = theTabWidget.currentIndex()
+        if (lineIndex == 0):
+            if (greenHeater == 0):
+                greenHeater = 1
+            else:
+                greenHeater = 0
+        else:
+            if(redHeater == 0):
+                redHeater = 1
+            else:
+                redHeater = 0
+        self.trackHeaterGUI()
+    
     def trackHeaterGUI(self):
         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
         lineIndex = theTabWidget.currentIndex()
 
         track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
-        print("hi")
-        print(track_heater_button.isChecked())
-        if (track_heater_button.isChecked()):
-            heaterInput = 1
+
+
+        # if (track_heater_button.isChecked()):
+        #     heaterInput = 1
+        # else:
+        #     heaterInput = 0
+        # print(heaterInput)
+
+        if (lineIndex == 0):
+            if (greenHeater == 1):
+                heaterInput = 1
+                track_heater_button.setText("On")
+                track_heater_button.setStyleSheet("background-color : green")
+            else:
+                heaterInput = 0
+                track_heater_button.setText("Off")
+                track_heater_button.setStyleSheet("background-color : red")
         else:
-            heaterInput = 0
-        print(heaterInput)
-        if (heaterInput == 1):
-            track_heater_button.setText("On")
-            track_heater_button.setStyleSheet("background-color : green")
-        else:
-            track_heater_button.setText("Off")
-            track_heater_button.setStyleSheet("background-color : red")
+            if (redHeater == 1):
+                heaterInput = 1
+                track_heater_button.setText("On")
+                track_heater_button.setStyleSheet("background-color : green")
+            else:
+                heaterInput = 0
+                track_heater_button.setText("Off")
+                track_heater_button.setStyleSheet("background-color : red")
         print("hello\n")
-        print(heaterInput)
-        send_message(RequestCode.TRACK_MODEL_GUI_SET_TRACK_HEATER, str(lineIndex), str(heaterInput))
+        trackString = str(lineIndex) + ' ' + str(heaterInput)
+        send_message(RequestCode.TRACK_MODEL_GUI_SET_TRACK_HEATER, trackString)
 
 
     def trackInfo1(self):
