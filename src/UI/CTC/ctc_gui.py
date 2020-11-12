@@ -248,6 +248,10 @@ class CTCUi(QtWidgets.QMainWindow):
 
 	def RefreshTrainInfo(tnum):
 		info_raw = send_message(RequestCode.CTC_SEND_GUI_TRAIN_INFO, str(tnum))
+		# If train no longer on tracks
+		if(info_raw == "1"):
+			self.LeaveThis()
+			return
 		info = info_raw[2:len(info_raw)]
 
 		if(info[0:1] == '0'):

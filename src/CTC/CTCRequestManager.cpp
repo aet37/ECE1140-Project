@@ -167,7 +167,8 @@ void CTCRequestManager::HandleRequest(const Common::Request& rRequest, Common::R
 			// throw exception if train_id was not found
 			if(indx == -1)
 			{
-				throw std::logic_error("CTCRequestManager:: Code CTC_SEND_GUI_TRAIN_INFO : Train Index out of Range");
+				rResponse.SetResponseCode(Common::ResponseCode::ERROR);
+				break;
 			}
 
 	    	rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
