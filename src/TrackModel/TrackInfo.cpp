@@ -44,7 +44,7 @@ void TrackInfo::AddTrackLayout(std::string line, int number, int totalBlocks)
 
 Track* TrackInfo::getTrack(int trackNumber)
 {
-    return m_pTrackList[trackNumber];
+    return m_pTrackList[trackNumber - 1];
 }
 Track* TrackInfo::getTrackByName(std::string trackName)
 {
