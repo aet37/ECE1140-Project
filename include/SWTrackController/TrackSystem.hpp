@@ -431,7 +431,7 @@ class TrackSystem
 			{
 				out+=temp[i];
 			}
-
+			cout<<endl<<out<<endl;
 			//setting temp to controller 11
 			temp=p_Controllers[10].getOccupancy();
 
@@ -449,7 +449,7 @@ class TrackSystem
 			{
 				out+=temp[i];
 			}
-
+			cout<<endl<<out<<endl;
 			//setting temp to controller 2
 			temp = p_Controllers[1].getOccupancy();
 
@@ -485,7 +485,7 @@ class TrackSystem
 			{
 				out += temp[i];
 			}
-
+			cout<<endl<<out<<endl;
 			out+=" ";
 		
 			//red line
@@ -494,7 +494,7 @@ class TrackSystem
 			{
 				out+=temp[i];
 			}
-
+			cout<<endl<<out<<endl;
 			//setting temp to controller 17
 			temp = p_Controllers[16].getOccupancy();
 				
