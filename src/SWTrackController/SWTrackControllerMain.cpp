@@ -38,6 +38,8 @@ void moduleMain()
 	    reqSend.SetData("");    // Clear Previous Data
         TrackSystem main;
 
+        cout<<main.makePositions();
+
         Common::Request receivedReq = serviceQueue.Pop();  
 
     	switch(receivedReq.GetRequestCode())

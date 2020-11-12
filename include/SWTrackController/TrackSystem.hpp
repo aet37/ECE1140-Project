@@ -764,7 +764,7 @@ class TrackSystem
 			string out="";
 
 			//getting switch positions from 1 controller of the pairs
-			for(int i=0;i<26;i+2)
+			for(int i=0;i<25;i++,i++)
 			{
 				//making sure the controllers have the same output
 				if(p_Controllers[i].getSwitchPos()==p_Controllers[i+1].getSwitchPos())
