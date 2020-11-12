@@ -68,6 +68,7 @@ void moduleMain()
                     reqManager.HandleRequest(newReq, a);
                 }
 
+                LOG_SW_TRACK_CONTROLLER("SWTrackController sent: %s", receivedReq.GetData().c_str());
                 Common::Request newRequest(Common::RequestCode::TRACK_MODEL_DISPATCH_TRAIN );
                 newRequest.SetData(receivedReq.GetData());
                 TrackModel::serviceQueue.Push(newRequest);

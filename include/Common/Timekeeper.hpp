@@ -22,6 +22,9 @@ class Request;
 class Timekeeper
 {
 public:
+    /// Period used for the power - velocity loop
+    static const uint32_t SAMPLING_PERIOD_IN_MS = 1000;
+    
     /**
      * @brief Gets the singleton instance
     */
@@ -55,9 +58,6 @@ public:
     void AddPointTimer(uint32_t time, ServiceQueue<Request>* pServiceQueue);
 protected:
 private:
-    /// Period used for the power - velocity loop
-    static const uint32_t SAMPLING_PERIOD_IN_MS = 1000;
-
     /// Max amount of time the thread can sleep for
     static const uint32_t MAX_SLEEP_DURATION_IN_MS = 5000;
 
