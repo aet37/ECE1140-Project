@@ -343,11 +343,11 @@ class Ui(QtWidgets.QMainWindow):
         track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
         
         if (track_heater_button.isChecked()):
-            heaterInput = True
+            heaterInput = 1
         else:
-            heaterInput = False
+            heaterInput = 0
 
-        if (heaterInput == True):
+        if (heaterInput == 1):
             track_heater_button.setText("On")
             track_heater_button.setStyleSheet("background-color : green")
         else:
