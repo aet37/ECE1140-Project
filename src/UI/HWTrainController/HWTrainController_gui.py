@@ -125,33 +125,33 @@ class Ui(QtWidgets.QMainWindow):
         if(self.label5.styleSheet()=="color: green;"):
             self.label5.setStyleSheet("color: red;")
             self.label5.setText("Off")
-            send_message(RequestCode.HWTRAIN_GUI_RESOLVE_FAILURE, "0")
+            send_message(RequestCode.HWTRAIN_BRAKE_FAILURE, "0")
         else: 
             self.label5.setStyleSheet("color: green;")
             self.label5.setText("On")
-            send_message(RequestCode.HWTRAIN_GUI_RESOLVE_FAILURE, "1")
+            send_message(RequestCode.HWTRAIN_BRAKE_FAILURE, "1")
 
     def EngineFailure(self):
         self.label6 = self.findChild(QtWidgets.QLabel, 'EngineFailureLabel')
         if(self.label6.styleSheet()=="color: green;"):
             self.label6.setStyleSheet("color: red;")
             self.label6.setText("Off")
-            send_message(RequestCode.HWTRAIN_GUI_RESOLVE_FAILURE, "0")
+            send_message(RequestCode.HWTRAIN_ENGINE_FAILURE, "0")
         else: 
             self.label6.setStyleSheet("color: green;")
             self.label6.setText("On")
-            send_message(RequestCode.HWTRAIN_GUI_RESOLVE_FAILURE, "1")
+            send_message(RequestCode.HWTRAIN_ENGINE_FAILURE, "1")
 
     def SignalFailure(self):
         self.label7 = self.findChild(QtWidgets.QLabel, 'SignalFailureLabel')
         if(self.label7.styleSheet()=="color: green;"):
             self.label7.setStyleSheet("color: red;")
             self.label7.setText("Off")
-            send_message(RequestCode.HWTRAIN_GUI_RESOLVE_FAILURE, "0")
+            send_message(RequestCode.HWTRAIN_SIGNAL_FAILURE, "0")
         else: 
             self.label7.setStyleSheet("color: green;")
             self.label7.setText("On")
-            send_message(RequestCode.HWTRAIN_GUI_RESOLVE_FAILURE, "1")
+            send_message(RequestCode.HWTRAIN_SIGNAL_FAILURE, "1")
     
     def PEBrake(self):
         self.label8 = self.findChild(QtWidgets.QLabel, 'PEBrakeLabel')

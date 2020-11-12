@@ -86,9 +86,6 @@ static void SendResponse(ResponseCode respCode, const char* pData = "")
 static void SetLights(const String& rData)
 {
     lights = atoi(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
-    Serial.print("Lights: ");
-    Serial.print(lights);
-    Serial.print("\n");
     digitalWrite(LED_BUILTIN, lights ? HIGH : LOW);
     SendResponse(ResponseCode::SUCCESS);
 }
@@ -109,9 +106,6 @@ static void GetLights(const String& rData)
 static void SetBrake(const String& rData)
 {
     brake = atoi(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
-    /*Serial.print("Lights: ");
-    Serial.print(lights);
-    Serial.print("\n");*/
     digitalWrite(LED_BUILTIN, brake ? HIGH : LOW);
     SendResponse(ResponseCode::SUCCESS);
 }
@@ -132,9 +126,6 @@ static void GetBrake(const String& rData)
 static void SetAnnounce(const String& rData)
 {
     announce = atoi(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
-    /*Serial.print("Lights: ");
-    Serial.print(lights);
-    Serial.print("\n");*/
     digitalWrite(LED_BUILTIN, announce ? HIGH : LOW);
     SendResponse(ResponseCode::SUCCESS);
 }
@@ -155,9 +146,6 @@ static void GetAnnounce(const String& rData)
 static void SetEBrake(const String& rData)
 {
     ebrake = atoi(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
-    /*Serial.print("Lights: ");
-    Serial.print(lights);
-    Serial.print("\n");*/
     digitalWrite(LED_BUILTIN, ebrake ? HIGH : LOW);
     SendResponse(ResponseCode::SUCCESS);
 }
@@ -178,9 +166,6 @@ static void GetEBrake(const String& rData)
 static void SetPEBrake(const String& rData)
 {
     pebrake = atoi(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
-    /*Serial.print("Lights: ");
-    Serial.print(lights);
-    Serial.print("\n");*/
     digitalWrite(LED_BUILTIN, pebrake ? HIGH : LOW);
     SendResponse(ResponseCode::SUCCESS);
 }
@@ -201,9 +186,6 @@ static void GetPEBrake(const String& rData)
 static void SetSignalFailure(const String& rData)
 {
     sigfail = atoi(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
-    /*Serial.print("Lights: ");
-    Serial.print(lights);
-    Serial.print("\n");*/
     digitalWrite(LED_BUILTIN, sigfail ? HIGH : LOW);
     SendResponse(ResponseCode::SUCCESS);
 }
@@ -224,9 +206,6 @@ static void GetSignalFailure(const String& rData)
 static void SetEngineFailure(const String& rData)
 {
     engfail = atoi(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
-    /*Serial.print("Lights: ");
-    Serial.print(lights);
-    Serial.print("\n");*/
     digitalWrite(LED_BUILTIN, engfail ? HIGH : LOW);
     SendResponse(ResponseCode::SUCCESS);
 }
@@ -247,9 +226,6 @@ static void GetEngineFailure(const String& rData)
 static void SetBrakeFailure(const String& rData)
 {
     brakefail = atoi(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
-    /*Serial.print("Lights: ");
-    Serial.print(lights);
-    Serial.print("\n");*/
     digitalWrite(LED_BUILTIN, brakefail ? HIGH : LOW);
     SendResponse(ResponseCode::SUCCESS);
 }
@@ -270,9 +246,6 @@ static void GetBrakeFailure(const String& rData)
 static void SetDoors(const String& rData)
 {
     doors = atoi(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
-    /*Serial.print("Lights: ");
-    Serial.print(lights);
-    Serial.print("\n");*/
     digitalWrite(LED_BUILTIN, doors ? HIGH : LOW);
     SendResponse(ResponseCode::SUCCESS);
 }
@@ -293,9 +266,6 @@ static void GetDoors(const String& rData)
 static void SetAds(const String& rData)
 {
     ads = atoi(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
-    /*Serial.print("Lights: ");
-    Serial.print(lights);
-    Serial.print("\n");*/
     digitalWrite(LED_BUILTIN, ads ? HIGH : LOW);
     SendResponse(ResponseCode::SUCCESS);
 }
@@ -318,6 +288,7 @@ void CommsTask()
     // Quickly return if nothing has been received
     if (Serial.available() == 0)
     {
+
         return;
     }
 
@@ -344,7 +315,7 @@ void CommsTask()
             break;
         case RequestCode::HWTRAIN_ANNOUNCE_STATIONS:
             SetAnnounce(data);
-            GetBrake(data);
+            GetAnnounce(data);
             break;
         case RequestCode::HWTRAIN_PULL_EBRAKE:
             SetEBrake(data);
