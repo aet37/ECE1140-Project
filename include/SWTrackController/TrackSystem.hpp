@@ -11,6 +11,7 @@
 
 
 
+
 class TrackSystem
 {
 	private:
@@ -437,11 +438,12 @@ class TrackSystem
 					out+='1';
 				}
 			}
+
 			//setting temp to controller 11
 			temp=p_Controllers[10].getOccupancy();
 
 			//blocks 30-59
-			for(int i=0;i<29;i++)
+			for(int i=0;i<30;i++)
 			{
 				if(temp[i]==0)
 				{
@@ -543,7 +545,7 @@ class TrackSystem
 		
 			//red line
 			//blocks 1-16
-			for(int i=0;i<17;i++)
+			for(int i=0;i<16;i++)
 			{
 				if(temp[i]==0)
 				{
