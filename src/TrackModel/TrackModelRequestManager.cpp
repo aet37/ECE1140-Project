@@ -133,7 +133,7 @@ void TrackModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
 			int pos = test.find(" ");
 			int trackId = std::stoi(test.substr(0, pos));
 
-			printf("\ntest = %s\n", test);
+			printf("\ntest = %s\n", test.c_str());
 			printf("\npos = %d\n", pos);
 			printf("\ntrackId = %d\n", trackId);
 			test.erase(0, pos + 1);
