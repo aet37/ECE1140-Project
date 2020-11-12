@@ -415,7 +415,16 @@ class TrackSystem
 			//blocks 1-13
 			for(int i =12;i>=0;i--)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
+
 
 				cout<<temp[i];
 			}
@@ -429,7 +438,15 @@ class TrackSystem
 			//blocks 14-29
 			for(int i=15;i>=0;i--)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 			cout<<endl<<out<<endl;
 			//setting temp to controller 11
@@ -438,7 +455,15 @@ class TrackSystem
 			//blocks 30-59
 			for(int i=0;i<29;i++)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//setting temp to controller 12
@@ -447,7 +472,15 @@ class TrackSystem
 			//blocks 60-61
 			for(int i=2;i<4;i++)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 			cout<<endl<<out<<endl;
 			//setting temp to controller 2
@@ -456,7 +489,15 @@ class TrackSystem
 			//blocks 62-76
 			for(int i=0;i<15;i++)
 			{
-				out += temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//setting temp to controller 4
@@ -465,7 +506,15 @@ class TrackSystem
 			//blocks 77-84
 			for(int i=0;i<8;i++)
 			{
-				out += temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//setting temp to controller 6
@@ -474,7 +523,15 @@ class TrackSystem
 			//blocks 85-100
 			for(int i=0;i<16;i++)
 			{
-				out +=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//setting temp to controller 7
@@ -483,7 +540,15 @@ class TrackSystem
 			//blocks 101-150
 			for(int i=0;i<50;i++)
 			{
-				out += temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 			cout<<endl<<out<<endl;
 			out+=" ";
@@ -492,7 +557,15 @@ class TrackSystem
 			//blocks 1-16
 			for(int i=0;i<17;i++)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 			cout<<endl<<out<<endl;
 			//setting temp to controller 17
@@ -501,7 +574,15 @@ class TrackSystem
 			//blocks 17-27
 			for(int i=0;i<11;i++)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//setting temp to controller 18
@@ -510,7 +591,15 @@ class TrackSystem
 			//blocks 28-32
 			for(int i=6;i<11;i++)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 				
 			//setting temp to controller 20
@@ -519,7 +608,15 @@ class TrackSystem
 			//blocks 33-37
 			for(int i=0;i<5;i++)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//setting temp 22
@@ -528,7 +625,15 @@ class TrackSystem
 			//blocks 38-43
 			for(int i=0;i<6;i++)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//setting temp to 24
@@ -537,7 +642,15 @@ class TrackSystem
 			//blocks 44-51
 			for(int i=0;i<8;i++)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//setting temp to 26
@@ -546,7 +659,15 @@ class TrackSystem
 			//blocks 52-66
 			for(int i=0;i<15;i++)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//setting temp to 22
@@ -555,7 +676,15 @@ class TrackSystem
 			//blocks 67-71
 			for(int i=10;i>5;i--)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//setting temp to 18
@@ -564,7 +693,15 @@ class TrackSystem
 			//blocks 72-76
 			for(int i=0;i<5;i++)
 			{
-				out+=temp[i];
+				if(temp[i]==0)
+				{
+					out+='0';
+				}
+
+				if(temp[i]==1)
+				{
+					out+='1';
+				}
 			}
 
 			//returning out string
