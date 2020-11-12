@@ -336,7 +336,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
                 self.automatic_mode.setStyleSheet("background-color: green;")
                 self.manual_mode.setStyleSheet("background-color: rgb(255, 51, 16);")
             
-        send_message(RequestCode.SWTRAIN_GUI_SWITCH_MODE, "1")
+        send_message(RequestCode.SWTRAIN_GUI_SWITCH_MODE, self.current_train_id + " " + override)
 
     def toggle_mode2(self):
         # If no controllers have been created, button does nothing
@@ -365,7 +365,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
                 self.automatic_mode.setStyleSheet("background-color: rgb(255, 51, 16);")
                 self.manual_mode.setStyleSheet("background-color: green;")
    
-        send_message(RequestCode.SWTRAIN_GUI_SWITCH_MODE, "1")
+        send_message(RequestCode.SWTRAIN_GUI_SWITCH_MODE, self.current_train_id + " " + override)
     
     def set_setpoint(self):
         # If no controllers have been created, button does nothing
@@ -408,7 +408,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         if response == False:
             return
         else:
-            send_message(RequestCode.SWTRAIN_GUI_SET_SETPOINT_SPEED, "1")
+            send_message(RequestCode.SWTRAIN_GUI_SET_SETPOINT_SPEED, self.current_train_id + " " + setpoint_speed)
 
     def toggle_service_brake(self):
         # If no controllers have been created, button does nothing
@@ -429,9 +429,13 @@ class SWTrainUi(QtWidgets.QMainWindow):
             else:
                 self.service_brake.setStyleSheet("background-color: green;")
 
-            send_message(RequestCode.SWTRAIN_GUI_PRESS_SERVICE_BRAKE, "1")
+            send_message(RequestCode.SWTRAIN_GUI_PRESS_SERVICE_BRAKE, self.current_train_id)
 
     def save_inputs(self):
+        # If no controllers have been created, button does nothing
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            return
+        
         # Get Kp and Ki
         Kp = self.findChild(QtWidgets.QLineEdit, "InputKp").text()
         Ki = self.findChild(QtWidgets.QLineEdit, "InputKi").text()
@@ -468,7 +472,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         if response == False:
             return
         
-        send_message(RequestCode.SWTRAIN_GUI_SET_KP_KI, "1")
+        send_message(RequestCode.SWTRAIN_GUI_SET_KP_KI,self.current_train_id + " " + Kp + " " + Ki)
 
     def logout(self):
         # This is executed when the button is pressed
