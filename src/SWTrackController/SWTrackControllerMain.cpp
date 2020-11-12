@@ -15,6 +15,7 @@
 #include <TrackSystem.hpp>
 #include <HWTrackControllerRequestManager.hpp>
 #include <Response.hpp>
+#include <iostream>
 
 
 namespace SWTrackController
@@ -36,6 +37,8 @@ void moduleMain()
 
         Common::Request receivedReq = serviceQueue.Pop();
 
+        
+        cout<<std::endl<<main.makeOccupancies()<<endl;
 
     	switch(receivedReq.GetRequestCode())
         {
