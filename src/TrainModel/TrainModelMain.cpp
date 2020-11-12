@@ -33,6 +33,7 @@ Common::ServiceQueue<Common::Request> serviceQueue;
             {
                 case Common::RequestCode::TRAIN_MODEL_DISPATCH_TRAIN:
                 {
+                    LOG_TRAIN_MODEL("TRAIN_MODEL_DISPATCH_TRAIN received %s", receivedRequest.GetData().c_str());
                     Train newTrain;
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
                     newTrain.SetDestinationBlock(receivedRequest.ParseData<uint32_t>(1));
@@ -53,8 +54,13 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                         {
                             break;
                         }
+                        if (block == -1)
+                        {
+                            block = 0;
+                        }
                         route.push_back(block);
                     }
+                    route.erase(route.begin());
                     newTrain.SetRoute(route);
 
                     // Add the train to the catalogue
@@ -68,15 +74,15 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     newRequest.AppendData(std::to_string(receivedRequest.ParseData<uint32_t>(3)));
                     SWTrainController::serviceQueue.Push(newRequest);
 
-                    // Hardcoded Test : To delete later
+                    // // Hardcoded Test : To delete later
 
-                    Common::Request to_push;
-                    to_push.SetRequestCode(Common::RequestCode::TRACK_MODEL_UPDATE_OCCUPANCY);
-                    to_push.AppendData("1");
-	                to_push.AppendData("0");
-	                to_push.AppendData("22");
-	                to_push.AppendData("1");
-	                TrackModel::serviceQueue.Push(to_push);
+                    // Common::Request to_push;
+                    // to_push.SetRequestCode(Common::RequestCode::TRACK_MODEL_UPDATE_OCCUPANCY);
+                    // to_push.AppendData("1");
+	                // to_push.AppendData("0");
+	                // to_push.AppendData("22");
+	                // to_push.AppendData("1");
+	                // TrackModel::serviceQueue.Push(to_push);
 
                     break;
                 }
@@ -95,15 +101,15 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     block.m_travelDirection = receivedRequest.ParseData<uint32_t>(6);
 
                     // Add the block to the catalogue
-                    if (trackId == 0)
+                    if ((trackId - 1) == 0)
                     {
                         BlockCatalogue::GetInstance().AddGreenBlock(block);
-                        LOG_TRAIN_MODEL("Received a block. There are now %d blocks", BlockCatalogue::GetInstance().GetNumberOfGreenBlocks());
+                        LOG_TRAIN_MODEL("Received a green block. There are now %d blocks", BlockCatalogue::GetInstance().GetNumberOfGreenBlocks());
                     }
                     else
                     {
                         BlockCatalogue::GetInstance().AddRedBlock(block);
-                        LOG_TRAIN_MODEL("Received a block. There are now %d blocks", BlockCatalogue::GetInstance().GetNumberOfRedBlocks());
+                        LOG_TRAIN_MODEL("Received a red block. There are now %d blocks", BlockCatalogue::GetInstance().GetNumberOfRedBlocks());
                     }
                     break;
                 }
@@ -266,19 +272,27 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                 }
                 case Common::RequestCode::TRAIN_MODEL_RECEIVE_POWER:
                 {
+                    LOG_TRAIN_MODEL("TRAIN_MODEL_RECEIVE_POWER received %s", receivedRequest.GetData().c_str());
                     // IMPLEMENTATION
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
                     float powerStatus = receivedRequest.ParseData<float>(1);
 
-                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId-1);
+                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId - 1);
 
                     uint32_t currentTrack = tempTrain->GetCurrentLine();
                     uint32_t currentBlock = tempTrain->GetCurrentBlock();
-                    Block *currentBlockInfo = BlockCatalogue::GetInstance().GetBlock(currentTrack, currentBlock);
+                    LOG_TRAIN_MODEL("currentTrack = %d", currentTrack);
+                    LOG_TRAIN_MODEL("currentBlock = %d", currentBlock);
+                    Block* currentBlockInfo = BlockCatalogue::GetInstance().GetBlock(currentTrack, currentBlock);
+                    LOG_TRAIN_MODEL("currentBlockInfo = 0x%x", currentBlockInfo);
+
+                    LOG_TRAIN_MODEL("Number of green line blocks = %d", BlockCatalogue::GetInstance().GetNumberOfGreenBlocks());
+                    LOG_TRAIN_MODEL("Number of trains = %d", TrainCatalogue::GetInstance().GetNumberOfTrains());
 
                     float currentBlockSize = currentBlockInfo->m_sizeOfBlock;
                     float speedLimitBlock = currentBlockInfo->m_speedLimit;
 
+                    LOG_TRAIN_MODEL("currentBlockSize = %d", currentBlockSize);
 
                     float commandSpeed = tempTrain->GetCommandSpeed();
                     float previousPosition = tempTrain->GetPosition();
@@ -317,28 +331,30 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     // POSITION
                     float positionCalc = (velocityCalc/samplePeriod);
                     float currentPosition = previousPosition + positionCalc;
-                    if(currentPosition > currentBlockSize){
+                    if(currentPosition > currentBlockSize) {
+                        LOG_TRAIN_MODEL("Moving to next block");
                         // Move to the next block!
                         currentPosition = currentPosition - currentBlockSize; // Catch overflow into next block
                         tempTrain->SetPosition(currentPosition); // Update position
                         tempTrain->RemoveCurrentBlock(); // Remove the block train is on to move to nect block
 
                         // Send block exited to Evan (trainid, trackid, blockId, trainOrNot)
-                        Common::Request newRequest(Common::RequestCode::TRACK_MODEL_UPDATE_OCCUPANCY);
-                        newRequest.AppendData(std::to_string(trainId));
-                        newRequest.AppendData(std::to_string(currentTrack));
-                        newRequest.AppendData(std::to_string(currentBlock)); // This is now the old block
-                        newRequest.AppendData(std::to_string(0));
-                        TrackModel::serviceQueue.Push(newRequest);
+                        Common::Request newRequest1(Common::RequestCode::TRACK_MODEL_UPDATE_OCCUPANCY);
+                        newRequest1.AppendData(std::to_string(trainId));
+                        newRequest1.AppendData(std::to_string(currentTrack));
+                        newRequest1.AppendData(std::to_string(currentBlock)); // This is now the old block
+                        newRequest1.AppendData(std::to_string(0));
+                        TrackModel::serviceQueue.Push(newRequest1);
 
                         // Send block entered to Evan (trainid, trackid, blockId, trainOrNot)
-                        Common::Request newRequest(Common::RequestCode::TRACK_MODEL_UPDATE_OCCUPANCY);
-                        newRequest.AppendData(std::to_string(trainId));
-                        newRequest.AppendData(std::to_string(currentTrack));
-                        newRequest.AppendData(std::to_string(tempTrain->GetCurrentBlock()));
-                        newRequest.AppendData(std::to_string(1));
-                        TrackModel::serviceQueue.Push(newRequest);
+                        Common::Request newRequest2(Common::RequestCode::TRACK_MODEL_UPDATE_OCCUPANCY);
+                        newRequest2.AppendData(std::to_string(trainId));
+                        newRequest2.AppendData(std::to_string(currentTrack));
+                        newRequest2.AppendData(std::to_string(tempTrain->GetCurrentBlock()));
+                        newRequest2.AppendData(std::to_string(1));
+                        TrackModel::serviceQueue.Push(newRequest2);
                     } else{
+                        LOG_TRAIN_MODEL("Staying in the same block: currentPosition = %f, blockSize = %f", currentPosition, currentBlockSize);
                         // Still in the same block
                         tempTrain->SetPosition(currentPosition);
                     }

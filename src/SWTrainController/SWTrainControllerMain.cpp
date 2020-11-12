@@ -200,6 +200,17 @@ void moduleMain()
 
                 break;
             }
+            case Common::RequestCode::SWTRAIN_UPDATE_CURRENT_SPEED:
+            {
+                LOG_SW_TRAIN_CONTROLLER("SWTRAIN_UPDATE_CURRENT_SPEED received %s", req.GetData().c_str());
+                uint32_t trainId = req.ParseData<uint32_t>(0);
+                float currentSpeed = req.ParseData<float>(1);
+
+                Controller* pController = ControlSystem::getInstance().getControllerInstance(trainId - 1);
+                pController->setCurrentSpeed(currentSpeed);
+
+                break;
+            }
             default:
                 ASSERT(false, "Unexpected request code %d", static_cast<uint16_t>(req.GetRequestCode()));
 
