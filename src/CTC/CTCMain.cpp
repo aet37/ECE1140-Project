@@ -120,6 +120,7 @@ void moduleMain()
 			    {
 			    	if(green_occupancies.at(i) == '1')
 				    {
+						LOG_CTC("i + 1 = %d, LINE_GREEN = %d ", i + 1, LINE_GREEN);
 			    		TrainSystem::GetInstance().SetTrackOccupied(i + 1, LINE_GREEN);
 				    }
 			    	else if(green_occupancies.at(i) == '0')
