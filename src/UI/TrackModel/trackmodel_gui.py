@@ -164,7 +164,7 @@ class Ui(QtWidgets.QMainWindow):
                     blockDirection = records.column['Direction'][x]
                     blockSection = records.column['Section'][x]
 
-                    blockInfo['Track'] = tracks
+                    blockInfo['Track'] = tracks - 1
                     blockInfo['Number'] = blockNumber
                     blockInfo['Length'] = blockLength
                     blockInfo['Grade'] = blockGrade
