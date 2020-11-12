@@ -8,7 +8,7 @@
 #include <vector>
 #include "TrackController.hpp"
 #include <Logger.hpp>
-#include <iostream>
+
 
 
 class TrackSystem
@@ -404,14 +404,7 @@ class TrackSystem
 			//setting temp to controller 10
 			temp = p_Controllers[9].getOccupancy();
 
-			cout<<endl<<"asdasdsadasdasd"<<endl;
-			for(int i=0;i<p_Controllers[9].getOccupancy().size();i++)
-			{
-				
-				cout<<endl<<p_Controllers[9].getOccupancy()[i]<<endl;
-			}
-
-			cout<<endl<<"pop"<<endl;
+			
 			//blocks 1-13
 			for(int i =12;i>=0;i--)
 			{
@@ -423,13 +416,9 @@ class TrackSystem
 				if(temp[i]==1)
 				{
 					out+='1';
-				}
-
-
-				cout<<temp[i];
+				}	
 			}
 
-			cout<<endl<<out<<endl;
 			LOG_SW_TRACK_CONTROLLER("%s", out.c_str());
 
 			//setting temp to controller 8
@@ -448,7 +437,6 @@ class TrackSystem
 					out+='1';
 				}
 			}
-			cout<<endl<<out<<endl;
 			//setting temp to controller 11
 			temp=p_Controllers[10].getOccupancy();
 
@@ -482,7 +470,7 @@ class TrackSystem
 					out+='1';
 				}
 			}
-			cout<<endl<<out<<endl;
+
 			//setting temp to controller 2
 			temp = p_Controllers[1].getOccupancy();
 
@@ -550,7 +538,7 @@ class TrackSystem
 					out+='1';
 				}
 			}
-			cout<<endl<<out<<endl;
+
 			out+=" ";
 		
 			//red line
@@ -567,7 +555,6 @@ class TrackSystem
 					out+='1';
 				}
 			}
-			cout<<endl<<out<<endl;
 			//setting temp to controller 17
 			temp = p_Controllers[16].getOccupancy();
 				

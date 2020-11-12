@@ -15,7 +15,7 @@
 #include <TrackSystem.hpp>
 #include <HWTrackControllerRequestManager.hpp>
 #include <Response.hpp>
-#include <iostream>
+
 
 
 namespace SWTrackController
@@ -35,7 +35,7 @@ void moduleMain()
 	    reqSend.SetData("");    // Clear Previous Data
         TrackSystem main;
 
-        cout<<"asdadasd";
+        
         cout<<std::endl<<main.makeOccupancies()<<endl;
 
         LOG_SW_TRACK_CONTROLLER("SWTrackController occupancies: %s", main.makeOccupancies().c_str());
