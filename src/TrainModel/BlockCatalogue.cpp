@@ -9,6 +9,7 @@
 
 // C++ PROJECT INCLUDES
 #include "BlockCatalogue.hpp" // Header for class
+#include "Logger.hpp"
 
 namespace TrainModel
 {
