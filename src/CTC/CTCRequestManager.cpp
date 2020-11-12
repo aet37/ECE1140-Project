@@ -40,10 +40,14 @@ void CTCRequestManager::HandleRequest(const Common::Request& rRequest, Common::R
 	        std::string to_send;
 
 	        // Add green line blocks
-	        for (int i = 0; i < TrainSystem::GetInstance().GetTrackArr(LINE_GREEN).size(); i++) {
-		        if (TrainSystem::GetInstance().GetTrackArr(LINE_GREEN)[i]->occupied) {
+	        for (int i = 0; i < TrainSystem::GetInstance().GetTrackArr(LINE_GREEN).size(); i++)
+	        {
+		        if (TrainSystem::GetInstance().GetTrackArr(LINE_GREEN)[i]->occupied)
+		        {
 			        to_send.push_back('t');
-		        } else {
+		        }
+		        else
+		        {
 			        to_send.push_back('f');
 		        }
 	        }
@@ -147,6 +151,47 @@ void CTCRequestManager::HandleRequest(const Common::Request& rRequest, Common::R
 			    rResponse.SetResponseCode(Common::ResponseCode::ERROR);
 		    }
 			break;
+	    }
+    	case Common::RequestCode::CTC_SEND_GUI_TRAIN_INFO:
+	    {
+	    	int tnum = rRequest.ParseData<int>(0);
+	    	int indx = -1;
+	    	// Find index of the train requested
+	    	for(int i = 0; i < TrainSystem::GetInstance().GetTrainArr().size(); i++)
+		    {
+	    		if (TrainSystem::GetInstance().GetTrainArr()[i]->train_id == tnum)
+			    {
+	    			indx = i;
+			    }
+		    }
+			// throw exception if train_id was not found
+			if(indx == -1)
+			{
+				rResponse.SetResponseCode(Common::ResponseCode::ERROR);
+				break;
+			}
+
+	    	rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+			if(TrainSystem::GetInstance().GetTrainArr()[indx]->line_on == LINE_GREEN)
+			{
+				rResponse.AppendData("0");
+			}
+			else
+			{
+				rResponse.AppendData("1");
+			}
+			rResponse.AppendData(std::to_string(TrainSystem::GetInstance().GetTrainArr()[indx]->command_speed));
+		    rResponse.AppendData(std::to_string(TrainSystem::GetInstance().GetTrainArr()[indx]->authority));
+
+		    if(TrainSystem::GetInstance().GetTrainArr()[indx]->line_on == LINE_GREEN)
+		    {
+			    rResponse.AppendData(std::to_string(TrainSystem::GetInstance().green_route_blocks[TrainSystem::GetInstance().GetTrainArr()[indx]->index_on_route]));
+		    }
+		    else
+		    {
+			    rResponse.AppendData(std::to_string(TrainSystem::GetInstance().red_route_blocks[TrainSystem::GetInstance().GetTrainArr()[indx]->index_on_route]));
+		    }
+	    	break;
 	    }
         default:
             std::cerr << "Invalid command " << static_cast<uint16_t>(rRequest.GetRequestCode())

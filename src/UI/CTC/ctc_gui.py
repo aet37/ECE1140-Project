@@ -232,7 +232,36 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.setWindowTitle("CTC - View Train Info")
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMapMenu') # Find the button
-		self.button.clicked.connect(self.MapMenuWindow)
+		self.button.clicked.connect(self.LeaveThis)
+
+		self.location = self.findChild(QtWidgets.QLabel, 'BlockLabel') # Find the label
+		self.speed = self.findChild(QtWidgets.QLabel, 'BlockLabel') # Find the label
+		self.line = self.findChild(QtWidgets.QLabel, 'BlockLabel') # Find the label
+		self.authority = self.findChild(QtWidgets.QLabel, 'BlockLabel') # Find the label
+
+		self.RefreshTrainInfo(tnum)
+
+		# Automatically refresh Map after 5s
+		time_timr = QtCore.QTimer(self)
+		time_timr.timeout.connect(self.RefreshTrainInfo(tnum))
+		time_timr.start(5000)
+
+	def RefreshTrainInfo(tnum):
+		info_raw = send_message(RequestCode.CTC_SEND_GUI_TRAIN_INFO, str(tnum))
+		# If train no longer on tracks
+		if(info_raw == "1"):
+			self.LeaveThis()
+			return
+		info = info_raw[2:len(info_raw)]
+
+		if(info[0:1] == '0'):
+			self.line.setText('GREEN')
+		else:
+			self.line.setText('RED')
+
+		self.speed.setText(info[2:4])
+		self.authority.setText(info[5:6])
+		self.location.setText(info[7:len(info)])
 
 	#######################################################################################################################################
 	#######################################################################################################################################
