@@ -347,6 +347,12 @@ class TrackSystem
 					//iterate through each block controlled by the controller until the one specified is found
 					for(int j=0;j<blocks_Controlled.at(i).size()-1;j++)
 					{
+						if(blocks_Controlled.at(i).at(j)==b&&holder==1)
+						{
+							controller2=i;
+							count2=j;
+							holder=2;
+						}
 						if(blocks_Controlled.at(i).at(j)==b&&holder==0)
 						{
 							controller1=i;
@@ -354,12 +360,7 @@ class TrackSystem
 							holder=1;
 
 						}
-						if(blocks_Controlled.at(i).at(j)==b&&holder==1)
-						{
-							controller2=i;
-							count2=j;
-							holder=2;
-						}
+						
 
 
 					}
@@ -376,13 +377,6 @@ class TrackSystem
 					//iterate through each block controlled by the controller until the one specified is found
 					for(int j=0;j<blocks_Controlled.at(i).size();j++)
 					{
-						if(blocks_Controlled.at(i).at(j)==b&&holder==0)
-						{
-							controller1=i;
-							count1=j;
-							holder=1;
-
-						}
 						if(blocks_Controlled.at(i).at(j)==b&&holder==1)
 						{
 							controller2=i;
@@ -390,6 +384,14 @@ class TrackSystem
 							holder=2;
 							
 						}
+						if(blocks_Controlled.at(i).at(j)==b&&holder==0)
+						{
+							controller1=i;
+							count1=j;
+							holder=1;
+
+						}
+						
 					}
 				}
 			}
