@@ -129,6 +129,7 @@ class RequestCode(Enum):
     TRAIN_MODEL_GUI_RECEIVE_RESOLVE_FAILURE = 178 # Used by the gui to resolve a train failure
     TRAIN_MODEL_GUI_RECEIVE_POWER = 179 # Used by the gui to set a train's kp/ki
     TRAIN_MODEL_GUI_RECEIVE_MODE = 180 # Used by gui to switch between automatic and manual mode
+    TRAIN_MODEL_RECEIVE_BLOCK = 181 # Used by the track model to send a block's information
 
     SWTRAIN_DISPATCH_TRAIN = 192 # Used by the train model to signify that a new train has been dispatched
     SWTRAIN_UPDATE_CURRENT_SPEED = 193 # Used by the train model to update a train's current speed
