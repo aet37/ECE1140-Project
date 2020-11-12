@@ -23,7 +23,7 @@ class Timekeeper
 {
 public:
     /// Period used for the power - velocity loop
-    static const uint32_t SAMPLING_PERIOD_IN_MS = 500;
+    static const uint32_t SAMPLING_PERIOD_IN_MS = 200;
     
     /**
      * @brief Gets the singleton instance

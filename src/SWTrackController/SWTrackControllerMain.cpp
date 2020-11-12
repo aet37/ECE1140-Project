@@ -99,14 +99,6 @@ void moduleMain()
                 static std::string redLineOccupancies = "0000000000000000000000000000000000000000000000000000000000000000000000000000";
                 static std::string greenLineOccupancies = "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
 
-                if (blockNum == 62)
-                {
-                    Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "switch 1");
-                    HWTrackController::HWTrackControllerRequestManager reqManager;
-                    Common::Response a;
-                    reqManager.HandleRequest(newReq, a);
-                }
-
                 if (line == 0)
                 {
                     if (occupancy)
