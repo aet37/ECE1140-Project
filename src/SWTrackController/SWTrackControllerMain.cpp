@@ -101,7 +101,7 @@ void moduleMain()
 
                 if (blockNum == 62)
                 {
-                    Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "switch 1");
+                    Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "b62O 1");
                     HWTrackController::HWTrackControllerRequestManager reqManager;
                     Common::Response a;
                     reqManager.HandleRequest(newReq, a);
