@@ -6,7 +6,7 @@
     TrackController::TrackController()
     {
 		occupancy.clear();
-		LOG_SW_TRACK_CONTROLLER("IT GOT HERE constructor");
+		
     }
 
 	//retuns switch position
@@ -42,10 +42,9 @@
 		
 		for(int i=0;i<newOccupancy.size();i++)
 		{
-			LOG_SW_TRACK_CONTROLLER("IT GOT HERE Make Occupancies");
-			occupancy.push_back(newOccupancy[i]);
 
-			std::cout<<std::endl<<newOccupancy[i]<<std::endl;
+			
+			occupancy.push_back(newOccupancy[i]);
 
 			int d = (int)newOccupancy[i];
 			
