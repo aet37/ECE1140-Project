@@ -46,8 +46,7 @@
 			
 			occupancy.push_back(newOccupancy[i]);
 
-			std::cout<<std::endl<<i<<std::endl;
-			std::cout<<std::endl<<occupancy[i]<<std::endl;
+			
 			
 
 

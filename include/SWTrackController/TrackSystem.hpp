@@ -8,6 +8,7 @@
 #include <vector>
 #include "TrackController.hpp"
 #include <Logger.hpp>
+#include <iostream>
 
 
 class TrackSystem
@@ -413,6 +414,7 @@ class TrackSystem
 				
 			}
 
+			cout<<endl<<out<<endl;
 			LOG_SW_TRACK_CONTROLLER("%s", out.c_str());
 
 			//setting temp to controller 8
