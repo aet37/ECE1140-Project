@@ -46,6 +46,7 @@ void moduleMain()
                 //newRequest.AppendData(trainIDString);
                 //newRequest.AppendData(command_speedString);
                 //newRequest.AppendData(current_speedString);
+                //newRequest.AppendData(authorityString);
                 // TrainControllers.createNewController(com_sp, curr_sp, auth);
                 HWTrainController::serviceQueue.Push(newRequest);
                 LOG_SW_TRAIN_CONTROLLER("SWTrainController dispatch train %s", trainID);
@@ -167,7 +168,7 @@ void moduleMain()
                 uint32_t trainID = req.ParseData<uint32_t>(0);
                 uint32_t setpoint_speed = req.ParseData<uint32_t>(1);
                 // Get controller instance and set setpoint speed
-                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID);
+                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID-1);
                 tempController->setSetpointSpeed(setpoint_speed);
                 LOG_SW_TRAIN_CONTROLLER("SWTrainController setpoint speed: %d", trainID);
                 break;
@@ -176,7 +177,7 @@ void moduleMain()
             {
                 uint32_t trainID = req.ParseData<uint32_t>(0);
                 // Get controller instance and toggle service brake
-                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID);
+                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID-1);
                 bool brakeStatus = tempController->toggleServiceBrake();
                 // Create new request and send trainID and brakeStatus as strings
                 std::string trainIDString = std::to_string(trainID);
