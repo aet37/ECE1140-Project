@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 # HOST = '3.23.104.34'  # Andrew's Server: The server's hostname or IP address
 HOST = '3.137.149.231' # Kenny's Server
 
-PORT = 1234        # The port used by the server
+PORT = 1235        # The port used by the server
 
 class RequestCode(Enum):
     """Codes to begin communication to the server
