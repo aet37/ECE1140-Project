@@ -17,6 +17,7 @@
 #include <Response.hpp>
 
 
+
 namespace SWTrackController
 {
 
@@ -34,8 +35,14 @@ void moduleMain()
 	    reqSend.SetData("");    // Clear Previous Data
         TrackSystem main;
 
+        
+        cout<<std::endl<<main.makeOccupancies()<<endl;
+
+        LOG_SW_TRACK_CONTROLLER("SWTrackController occupancies: %s", main.makeOccupancies().c_str());
+
         Common::Request receivedReq = serviceQueue.Pop();
 
+        
 
     	switch(receivedReq.GetRequestCode())
         {
@@ -195,6 +202,7 @@ void moduleMain()
             case Common::RequestCode::CREATE_INSTRUCTION:
             case Common::RequestCode::SET_TAG_VALUE:
             case Common::RequestCode::GET_TAG_VALUE:
+            	break;
             default:
                 ASSERT(false, "Unhandled request code %d", static_cast<uint16_t>(receivedReq.GetRequestCode()));
                 break;
