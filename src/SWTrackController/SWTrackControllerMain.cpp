@@ -15,6 +15,7 @@
 #include <TrackSystem.hpp>
 #include <HWTrackControllerRequestManager.hpp>
 #include <Response.hpp>
+#include <iostream>
 
 
 
@@ -35,6 +36,11 @@ void moduleMain()
 	    reqSend.SetRequestCode(Common::RequestCode::ERROR); // Clear request code object
 	    reqSend.SetData("");    // Clear Previous Data
         TrackSystem main;
+
+        cout<<std::endl<<main.makeOccupancies()<<std::endl;
+        main.updateOccupied(0,50);
+        cout<<std::endl<<main.makeOccupancies()<<std::endl;
+
 
         Common::Request receivedReq = serviceQueue.Pop();  
 

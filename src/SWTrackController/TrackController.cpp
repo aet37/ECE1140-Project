@@ -33,7 +33,7 @@
 	//returns occupancy vector
 	std::vector<bool> TrackController::getOccupancy()
 	{
-		LOG_SW_TRACK_CONTROLLER("IT GOT HERE get occupancy");
+		
 		return occupancy;
 	}
 
@@ -43,12 +43,8 @@
 		for(int i=0;i<newOccupancy.size();i++)
 		{
 
-			
 			occupancy.push_back(newOccupancy[i]);
 
-			int d = (int)newOccupancy[i];
-			
-			//LOG_SW_TRACK_CONTROLLER("%s", d.c_str());
 		}
 	}
 
@@ -64,7 +60,6 @@
 	void TrackController::setUnoccupied(int a)
 	{
 
-		occupancy = prevOccupancy;
 		prevOccupancy = occupancy;
 
 		occupancy[a] = 0;
