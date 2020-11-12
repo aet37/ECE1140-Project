@@ -337,21 +337,16 @@ class TrackSystem
 			int count2;
 			int holder=0;
 
-			cout<<std::endl<<blocks_Controlled.at(0).size()-1<<std::endl;
-
-			cout<<std::endl<<"got to updateocc"<<std::endl;
 			//if green line
 			if(a==0)
 			{
 				//iterate through each controller
 				for(int i=0;i<12;i++)
 				{
-					cout<<std::endl<<"got to loop1"<<std::endl;
+
 					//iterate through each block controlled by the controller until the one specified is found
 					for(int j=0;j<blocks_Controlled.at(i).size()-1;j++)
 					{
-						cout<<std::endl<<'1'<<blocks_Controlled.at(i).size()-1<<std::endl;
-						cout<<std::endl<<"got to loop2"<<std::endl;
 						if(blocks_Controlled.at(i).at(j)==b&&holder==0)
 						{
 							controller1=i;
@@ -378,12 +373,9 @@ class TrackSystem
 				//iterate through each controller
 				for(int i=12;i<blocks_Controlled.size()-1;i++)
 				{
-					cout<<std::endl<<"got to loop3"<<std::endl;
 					//iterate through each block controlled by the controller until the one specified is found
 					for(int j=0;j<blocks_Controlled.at(i).size();j++)
 					{
-						cout<<std::endl<<"got to loop4"<<std::endl;
-						cout<<std::endl<<'2'<<blocks_Controlled.at(i).size()-1<<std::endl;
 						if(blocks_Controlled.at(i).at(j)==b&&holder==0)
 						{
 							controller1=i;
@@ -412,10 +404,8 @@ class TrackSystem
 			std::vector<bool> temp;
 
 			//setting the current array of switch positions to use later for comparison 
-			for(int i=0;i<26;i+2)
+			for(int i=0;i<25;i+2)
 			{
-				cout<<std::endl<<"got to loop5"<<std::endl;
-				cout<<std::endl<<'3'<<blocks_Controlled.at(i).size()-1<<std::endl;
 				if(p_Controllers.at(i).getSwitchPos()==p_Controllers.at(i+1).getSwitchPos())
 				{
 					temp.push_back(p_Controllers[i].getSwitchPos());
@@ -425,8 +415,6 @@ class TrackSystem
 			prevswitchpositions.clear();
 			for(int i=0;i<13;i++)
 			{
-				cout<<std::endl<<"got to loop6"<<std::endl;
-				cout<<std::endl<<'4'<<blocks_Controlled.at(i).size()-1<<std::endl;
 				if(switchpositions.at(i)==0)
 				{
 					prevswitchpositions.push_back(0);
@@ -440,8 +428,6 @@ class TrackSystem
 			switchpositions.clear();
 			for(int i=0;i<13;i++)
 			{
-				cout<<std::endl<<"got to loop7"<<std::endl;
-				cout<<std::endl<<'5'<<blocks_Controlled.at(i).size()-1<<std::endl;
 				if(temp.at(i)==0)
 				{
 					switchpositions.push_back(0);
