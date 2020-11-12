@@ -409,6 +409,7 @@ class TrackSystem
 			for(int i =12;i>=0;i--)
 			{
 				out+=temp[i];
+
 				
 			}
 
