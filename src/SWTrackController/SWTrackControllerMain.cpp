@@ -95,90 +95,103 @@ void moduleMain()
                 uint32_t blockNum = receivedReq.ParseData<uint32_t>(1);
                 bool occupancy = receivedReq.ParseData<bool>(2);
 
-
-                if(line == 0)
-                {
-                    LOG_SW_TRACK_CONTROLLER("");
-                    // if(blockNum==62)
-                    // {
-                    //     Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block62Occupancy " + 1);
-                    //     HWTrackController::HWTrackControllerRequestManager reqManager;
-                    //     Common::Response a;
-                    //     reqManager.HandleRequest(newReq, a);
-                    // }
-
-                    // else if(blockNum==61)
-                    // {
-                    //     Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block61Occupancy " + 1);
-                    //     HWTrackController::HWTrackControllerRequestManager reqManager;
-                    //     Common::Response a;
-                    //     reqManager.HandleRequest(newReq, a);
-                    // }
-
-                    // else if(blockNum==60)
-                    // {
-                    //     Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block60Occupancy " + 1);
-                    //     HWTrackController::HWTrackControllerRequestManager reqManager;
-                    //     Common::Response a;
-                    //     reqManager.HandleRequest(newReq, a);
-                    // }
-
-                    // else if(blockNum==59)
-                    // {
-                    //     Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block59Occupancy " + 1);
-                    //     HWTrackController::HWTrackControllerRequestManager reqManager;
-                    //     Common::Response a;
-                    //     reqManager.HandleRequest(newReq, a);
-                    // }
-
-                    //  else if (blockNum==0)
-                    // {
-                    //     Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block0Occupancy " + 1);
-                    //     HWTrackController::HWTrackControllerRequestManager reqManager;
-                    //      Common::Response a;
-                    //     reqManager.HandleRequest(newReq, a);
-                    // }
-                }
-                else
-                {
-                    main.updateOccupied(line, blockNum);
-                }
-
                 LOG_SW_TRACK_CONTROLLER("SWTrackController sent CTC Block Occupancies: %s", main.makeOccupancies().c_str());
 
                 Common::Request OccUpdate(Common::RequestCode::CTC_GET_OCCUPANCIES);
-                OccUpdate.SetData(main.makeOccupancies());
+                OccUpdate.AppendData(main.makeOccupancies());
+                OccUpdate.AppendData("0000000000000000000000000000000000000000000000000000000000000000000000");
                 CTC::serviceQueue.Push(OccUpdate);
 
-                LOG_SW_TRACK_CONTROLLER("SWTrackController sent CTC Block Occupancies: %s", main.makePositions().c_str());
+                // LOG_SW_TRACK_CONTROLLER("SWTrackController sent CTC Block Occupancies: %s", main.makePositions().c_str());
 
-                Common::Request SwitchUpdate(Common::RequestCode::CTC_GET_SWITCHES);
-                SwitchUpdate.SetData(main.makePositions());
-                CTC::serviceQueue.Push(SwitchUpdate);
+                // Common::Request SwitchUpdate(Common::RequestCode::CTC_GET_SWITCHES);
+                // SwitchUpdate.SetData(main.makePositions());
+                // CTC::serviceQueue.Push(SwitchUpdate);
 
-                int switchMaybeChanged= main.didSwitchMove();
-                bool singleSwitchPosition;
-                bool thing;
 
-                if(switchMaybeChanged<14)
-                {
-                    singleSwitchPosition= main.getSinglePosition(switchMaybeChanged);
-                    Common::Request SwitchUpdateTM(Common::RequestCode::TRACK_MODEL_UPDATE_SWITCH_POSITIONS);
-                    std::string out; 
-                    if (switchMaybeChanged<7)
-                    {
-                        thing = 0;
-                    }
-                    else
-                    {
-                        thing = 1;
-                    }
+                // if(line == 0)
+                // {
+                //     LOG_SW_TRACK_CONTROLLER("");
+                //     // if(blockNum==62)
+                //     // {
+                //     //     Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block62Occupancy " + 1);
+                //     //     HWTrackController::HWTrackControllerRequestManager reqManager;
+                //     //     Common::Response a;
+                //     //     reqManager.HandleRequest(newReq, a);
+                //     // }
+
+                //     // else if(blockNum==61)
+                //     // {
+                //     //     Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block61Occupancy " + 1);
+                //     //     HWTrackController::HWTrackControllerRequestManager reqManager;
+                //     //     Common::Response a;
+                //     //     reqManager.HandleRequest(newReq, a);
+                //     // }
+
+                //     // else if(blockNum==60)
+                //     // {
+                //     //     Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block60Occupancy " + 1);
+                //     //     HWTrackController::HWTrackControllerRequestManager reqManager;
+                //     //     Common::Response a;
+                //     //     reqManager.HandleRequest(newReq, a);
+                //     // }
+
+                //     // else if(blockNum==59)
+                //     // {
+                //     //     Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block59Occupancy " + 1);
+                //     //     HWTrackController::HWTrackControllerRequestManager reqManager;
+                //     //     Common::Response a;
+                //     //     reqManager.HandleRequest(newReq, a);
+                //     // }
+
+                //     //  else if (blockNum==0)
+                //     // {
+                //     //     Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block0Occupancy " + 1);
+                //     //     HWTrackController::HWTrackControllerRequestManager reqManager;
+                //     //      Common::Response a;
+                //     //     reqManager.HandleRequest(newReq, a);
+                //     // }
+                // }
+                // else
+                // {
+                //     main.updateOccupied(line, blockNum);
+                // }
+
+                // LOG_SW_TRACK_CONTROLLER("SWTrackController sent CTC Block Occupancies: %s", main.makeOccupancies().c_str());
+
+                // Common::Request OccUpdate(Common::RequestCode::CTC_GET_OCCUPANCIES);
+                // OccUpdate.SetData(main.makeOccupancies());
+                // CTC::serviceQueue.Push(OccUpdate);
+
+                // LOG_SW_TRACK_CONTROLLER("SWTrackController sent CTC Block Occupancies: %s", main.makePositions().c_str());
+
+                // Common::Request SwitchUpdate(Common::RequestCode::CTC_GET_SWITCHES);
+                // SwitchUpdate.SetData(main.makePositions());
+                // CTC::serviceQueue.Push(SwitchUpdate);
+
+                // int switchMaybeChanged= main.didSwitchMove();
+                // bool singleSwitchPosition;
+                // bool thing;
+
+                // if(switchMaybeChanged<14)
+                // {
+                //     singleSwitchPosition= main.getSinglePosition(switchMaybeChanged);
+                //     Common::Request SwitchUpdateTM(Common::RequestCode::TRACK_MODEL_UPDATE_SWITCH_POSITIONS);
+                //     std::string out; 
+                //     if (switchMaybeChanged<7)
+                //     {
+                //         thing = 0;
+                //     }
+                //     else
+                //     {
+                //         thing = 1;
+                //     }
                     
-                    out+= thing + ' ' + switchMaybeChanged + ' ' + singleSwitchPosition;
-                    SwitchUpdateTM.SetData(out);
+                //     out+= thing + ' ' + switchMaybeChanged + ' ' + singleSwitchPosition;
+                //     SwitchUpdateTM.SetData(out);
 
-                    TrackModel::serviceQueue.Push(SwitchUpdateTM);
-                }
+                //     TrackModel::serviceQueue.Push(SwitchUpdateTM);
+                // }
 
                 
                 break;
