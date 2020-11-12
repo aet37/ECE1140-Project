@@ -100,7 +100,7 @@
 color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
-     <string>Back to Map Menu</string>
+     <string>Back to CTC Menu</string>
     </property>
    </widget>
    <widget class="QLabel" name="SpeedLabel_2">
@@ -135,6 +135,9 @@ color: rgb(255, 255, 255);</string>
       <pointsize>18</pointsize>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 255);</string>
+    </property>
     <property name="text">
      <string>RED</string>
     </property>
@@ -152,6 +155,9 @@ color: rgb(255, 255, 255);</string>
      <font>
       <pointsize>18</pointsize>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 255);</string>
     </property>
     <property name="text">
      <string>55</string>
@@ -171,8 +177,50 @@ color: rgb(255, 255, 255);</string>
       <pointsize>18</pointsize>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 255);</string>
+    </property>
     <property name="text">
      <string>3</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="SpeedLabel_4">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>310</y>
+      <width>91</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Block On</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="BlockLabel">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>360</y>
+      <width>81</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 255);</string>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>
