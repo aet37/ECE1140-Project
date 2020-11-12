@@ -7,6 +7,7 @@
 
 #include <vector>
 #include "TrackController.hpp"
+#include <Logger.hpp>
 
 
 class TrackSystem
@@ -218,6 +219,7 @@ class TrackSystem
 			{
 				temp.push_back({0});
 			}
+
 			q.setupOccupancy(temp);
 
 			temp.clear();
@@ -393,17 +395,24 @@ class TrackSystem
 			//string for output
 			string out = "";
 
+			LOG_SW_TRACK_CONTROLLER("IT GOT HERE Make Occupancies");
+
 			//temporary vector to store values in
 			std::vector<bool> temp;
 
 			//setting temp to controller 10
 			temp = p_Controllers[9].getOccupancy();
 
+
+
 			//blocks 1-13
 			for(int i =12;i>=0;i--)
 			{
 				out+=temp[i];
+				
 			}
+
+			LOG_SW_TRACK_CONTROLLER("%s", out.c_str());
 
 			//setting temp to controller 8
 			temp= p_Controllers[7].getOccupancy();
