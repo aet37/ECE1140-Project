@@ -162,16 +162,10 @@ void moduleMain()
                 LOG_SW_TRAIN_CONTROLLER("SWTrainController service brake: %d", trainID);
                 break;
             }
-            case Common::RequestCode::SWTRAIN_GUI_GATHER_DATA:
+            case Common::RequestCode::SWTRAIN_GUI_SET_KP_KI:
             {
                 uint32_t trainID = req.ParseData<uint32_t>(0);
-                LOG_SW_TRAIN_CONTROLLER("SWTrainController update GUI");
-                break;
-            }
-            case Common::RequestCode::SWTRAIN_GUI_UPDATE_DROP_DOWN:
-            {
-
-                LOG_SW_TRAIN_CONTROLLER("SWTrainController update drop-down");
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController kp/ki: %d", trainID);
                 break;
             }
             default:
