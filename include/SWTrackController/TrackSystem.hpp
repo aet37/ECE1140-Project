@@ -219,6 +219,7 @@ class TrackSystem
 			{
 				temp.push_back({0});
 			}
+
 			q.setupOccupancy(temp);
 
 			temp.clear();
