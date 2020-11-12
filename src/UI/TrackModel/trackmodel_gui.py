@@ -124,6 +124,8 @@ class Ui(QtWidgets.QMainWindow):
                 # set track nmumber inside of trackInfo dictionary
                 trackInfo['tNumber'] = tracks
                 tracks = tracks + 1
+                print("HELLOOOOOOOOOOOOOOOOOO")
+                print(trackInfo['tNumber'])
 
                 # set totalBlocks inside trackInfo
                 trackInfo['Total Blocks'] = records.number_of_rows()
