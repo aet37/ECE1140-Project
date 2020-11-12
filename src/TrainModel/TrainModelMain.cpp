@@ -258,7 +258,31 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     uint32_t powerStatus = receivedRequest.ParseData<uint32_t>(1);
 
                     Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId-1);
+
+                    uint32_t commandSpeed = tempTrain->GetCommandSpeed();
+                    uint32_t trainMass = tempTrain->GetTrainMass();
+                    uint32_t serviceBrake = tempTrain->GetServiceBrake();
+                    uint32_t emergencyBrake = tempTrain->GetEmergencyPassengeBrake();
+                    uint32_t samplePeriod = 10; // ASK COLLIN FOR SAMPLE PERIOD
+
+                    uint32_t forceCalc = (powerStatus/commandSpeed);
+                    uint32_t accelerationCalc = (forceCalc/trainMass); // Acceleration Limit: 0.5 m/s^2     Deceleration Limit(service brake): 1.2 m/s^2    Deceleration Limit(emergency brake): 2.73 m/s^2
+                    if(accelerationCalc > 0.5 && serviceBrake == 0 && emergencyBrake == 0){
+                        // If all brakes are OFF and accelerationCalc is above the limit
+                        accelerationCalc = 0.5;
+                    } else if(accelerationCalc < -1.2 && serviceBrake == 1 && emergencyBrake == 0){
+                        // If the service brake is ON and accelerationCalc is below the limit
+                        accelerationCalc = -1.2;
+                    } else if(accelerationCalc < -2.73 && serviceBrake == 0 && emergencyBrake == 1){
+                        // If the emergency brake is ON and accelerationCalc is below the limit
+                        accelerationCalc = -2.73;
+                    }
+                    uint32_t velocityCalc = (accelerationCalc/samplePeriod); // Velocity Limit: 70km/h
+                    uint32_t positionCalc = (velocityCalc/samplePeriod);
+
+                    // Set all the parameters in the train object
                     tempTrain->SetPower(powerStatus);
+                    tempTrain->SetCurrentSpeed(velocityCalc);
 
                     LOG_TRAIN_MODEL("Train powerStatus = %d, Train ID = %d", powerStatus, trainId);
                     break;
