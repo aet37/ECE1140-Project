@@ -46,10 +46,6 @@
 			
 			occupancy.push_back(newOccupancy[i]);
 
-			
-			
-
-
 			int d = (int)newOccupancy[i];
 			
 			//LOG_SW_TRACK_CONTROLLER("%s", d.c_str());
