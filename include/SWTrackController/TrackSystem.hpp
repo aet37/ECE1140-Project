@@ -393,7 +393,7 @@ class TrackSystem
 					}
 				}
 			}
-
+			cout<<std::endl<<i<<j<<holder<<std::endl;
 			//setting the specified block in the controller as occupied
 			p_Controllers.at(controller1).setOccupied(count1);
 
@@ -406,7 +406,6 @@ class TrackSystem
 			//setting the current array of switch positions to use later for comparison 
 			for(int i=0;i<25;i++,i++)
 			{
-				cout<<std::endl<<i<<"loop 1"<<std::endl;
 				if(p_Controllers.at(i).getSwitchPos()==p_Controllers.at(i+1).getSwitchPos())
 				{
 					temp.push_back(p_Controllers[i].getSwitchPos());
@@ -425,7 +424,6 @@ class TrackSystem
 			prevswitchpositions.clear();
 			for(int i=0;i<13;i++)
 			{
-				cout<<std::endl<<"loop 2"<<std::endl;
 				if(switchpositions.at(i)==0)
 				{
 					prevswitchpositions.push_back(0);
@@ -439,7 +437,6 @@ class TrackSystem
 			switchpositions.clear();
 			for(int i=0;i<13;i++)
 			{
-				cout<<std::endl<<"loop 3"<<std::endl;
 				if(temp.at(i)==0)
 				{
 					switchpositions.push_back(0);
@@ -449,7 +446,6 @@ class TrackSystem
 					switchpositions.push_back(1);
 				}
 			}
-			cout<<"reached end";
 		}
 
 		//class to generate the array of occupied blocks
