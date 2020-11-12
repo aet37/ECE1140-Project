@@ -768,8 +768,8 @@ class TrackSystem
 			//getting switch positions from 1 controller of the pairs
 			for(int i=0;i<25;i++,i++)
 			{
-				cout<<i;
-				cout<<"asdaasdasd";
+				//cout<<i;
+				//cout<<"asdaasdasd";
 				//making sure the controllers have the same output
 				if(p_Controllers.at(i).getSwitchPos()==p_Controllers.at(i+1).getSwitchPos())
 				{
