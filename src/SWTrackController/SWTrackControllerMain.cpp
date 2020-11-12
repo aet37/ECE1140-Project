@@ -38,8 +38,8 @@ void moduleMain()
 	    reqSend.SetData("");    // Clear Previous Data
         TrackSystem main;
 
-        //cout<<"ASD";
-        //cout<<main.makePositions();
+        cout<<"ASD";
+        cout<<main.makePositions();
 
         Common::Request receivedReq = serviceQueue.Pop();  
 
