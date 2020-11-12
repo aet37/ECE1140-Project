@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1237</width>
-    <height>898</height>
+    <width>1235</width>
+    <height>891</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -89,7 +89,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        <enum>Qt::LeftToRight</enum>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="text">
        <string>Track Model Main Page</string>
@@ -174,7 +174,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -201,7 +201,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -228,7 +228,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -255,7 +255,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -282,7 +282,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -309,7 +309,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -336,7 +336,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
@@ -363,7 +363,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -390,7 +390,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -417,7 +417,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -444,7 +444,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -471,7 +471,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -498,7 +498,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -525,7 +525,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -552,7 +552,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -579,7 +579,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -609,7 +609,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        <enum>Qt::LeftToRight</enum>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="text">
        <string>Block #</string>
@@ -633,7 +633,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
@@ -660,7 +660,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
