@@ -37,7 +37,7 @@ void moduleMain()
 
         Common::Request receivedReq = serviceQueue.Pop();
 
-        
+        cout<<"asdadasd";
         cout<<std::endl<<main.makeOccupancies()<<endl;
 
     	switch(receivedReq.GetRequestCode())
