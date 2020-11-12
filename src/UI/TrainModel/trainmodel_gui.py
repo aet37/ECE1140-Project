@@ -211,7 +211,7 @@ class Ui(QtWidgets.QMainWindow):
                 self.findChild(QtWidgets.QLabel, 'disp_emergency_passenger_brake').setText("off")
                 self.findChild(QtWidgets.QLabel, 'disp_emergency_passenger_brake').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
             
-            if dataParsed[7] == "1":
+            if dataParsed[7] == "0":
                 self.findChild(QtWidgets.QLabel, 'disp_current_line').setText("green")
                 self.findChild(QtWidgets.QLabel, 'disp_current_line').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
             else:
