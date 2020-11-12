@@ -223,13 +223,13 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                 case Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_SEAN_PAUL:
                 {
                     // IMPLEMENTATION
-                    // uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
-                    // bool seanPaulStatus = receivedRequest.ParseData<bool>(1);
+                    uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
+                    float tempStatus = receivedRequest.ParseData<float>(1);
 
-                    // Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId);
-                    // tempTrain->SetCabinLights(seanPaulStatus);
+                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId-1);
+                    tempTrain->SetTempControl(tempStatus);
 
-                    // LOG_TRAIN_MODEL("Train seanPaulStatus = %d, Train ID = %d", seanPaulStatus, trainId);
+                    LOG_TRAIN_MODEL("Train tempStatus = %f, Train ID = %d", tempStatus, trainId);
                     break;
                 }
                 case Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_ANNOUNCE_STATIONS:
