@@ -29,30 +29,30 @@ void TrackModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
 {
     switch (rRequest.GetRequestCode())
     {
-        // case Common::RequestCode::TRACK_MODEL_GUI_DISPLAY_OCCUPANCY:
-        // {
-        //     uint32_t trainId = rRequest.ParseData<uint32_t>(0);
-        //     uint32_t trackId = rRequest.ParseData<uint32_t>(1);
-        //     uint32_t blockId = rRequest.ParseData<uint32_t>(2);
-        //     bool occupancy = rRequest.ParseData<bool>(3);
+        case Common::RequestCode::TRACK_MODEL_GUI_DISPLAY_OCCUPANCY:
+        {
+            uint32_t trainId = rRequest.ParseData<uint32_t>(0);
+            uint32_t trackId = rRequest.ParseData<uint32_t>(1);
+            uint32_t blockId = rRequest.ParseData<uint32_t>(2);
+            bool occupancy = rRequest.ParseData<bool>(3);
 
-        //     rResponse.SetData("");
+            rResponse.SetData("");
 
-        //     if (occupancy)
-        //     {
-        //     rResponse.AppendData(std::to_string(trainId));
-        //     }
-        //     else
-        //     {
-        //         rResponse.AppendData("0");
-        //     }
-        //     rResponse.AppendData(std::to_string(trackId));
-        //     rResponse.AppendData(std::to_string(blockId));            
+            if (occupancy)
+            {
+            rResponse.AppendData(std::to_string(trainId));
+            }
+            else
+            {
+                rResponse.AppendData("0");
+            }
+            rResponse.AppendData(std::to_string(trackId));
+            rResponse.AppendData(std::to_string(blockId));            
 
-        //     rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
 
-        //     break;
-        // }
+            break;
+        }
 		case Common::RequestCode::TRACK_MODEL_GUI_GATHER_DATA:
 		{
 			//TrackModel::serviceQueue.Push(rRequest);
