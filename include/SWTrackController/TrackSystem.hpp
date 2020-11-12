@@ -404,14 +404,20 @@ class TrackSystem
 			//setting temp to controller 10
 			temp = p_Controllers[9].getOccupancy();
 
+			cout<<endl<<"asdasdsadasdasd"<<endl;
+			for(int i=0;i<p_Controllers[9].getOccupancy().size();i++)
+			{
+				
+				cout<<endl<<p_Controllers[9].getOccupancy()[i]<<endl;
+			}
 
-
+			cout<<endl<<"pop"<<endl;
 			//blocks 1-13
 			for(int i =12;i>=0;i--)
 			{
 				out+=temp[i];
 
-				
+				cout<<temp[i];
 			}
 
 			cout<<endl<<out<<endl;
