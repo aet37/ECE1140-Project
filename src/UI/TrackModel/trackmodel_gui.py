@@ -36,7 +36,7 @@ class Ui(QtWidgets.QMainWindow):
         
         self.update_timer = QTimer()
         self.update_timer.timeout.connect(self.check_current_block)
-        self.update_timer.start(5000)
+        self.update_timer.start(2000)
 
         self.show()
     def initUI(self):
@@ -300,7 +300,7 @@ class Ui(QtWidgets.QMainWindow):
         passengers_exited_label.setText("Passengers Exited:\n\n"+ str(passengersExited))
 
         exit_side_label = self.findChild(QtWidgets.QLabel, 'exit_side_label')
-        exit_side_label.setText("Passengers Boarded:\n\n"+ exitSide)
+        exit_side_label.setText("Exit Side:\n\n"+ exitSide)
 
         occupied_label = self.findChild(QtWidgets.QLabel, 'occupied_label')
         if (occupied == -1):

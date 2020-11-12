@@ -24,7 +24,6 @@ Train::Train()
     m_position = 0; // THIS IS CALCULATED
     m_authority = 0;
     m_currentLine = 0; // Default green line
-    m_currentBlock = 0;
     // INTEGERS (Nonvital)
     m_tempControl = 0;
     
