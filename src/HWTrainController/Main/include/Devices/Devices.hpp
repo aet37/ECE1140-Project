@@ -20,11 +20,13 @@ void ScrollTask(void* pNothing);
 
 void InitializeJoystick();
 
-void JoystickRead();
+double JoystickRead(double data);
+
+bool JoystickClick();
 
 void InitializeButton();
 
-void ButtonClick();
+void ButtonClick(double data);
 
 }
 

@@ -13,8 +13,6 @@ void setup()
   Devices::InitializeJoystick();
   Devices::InitializeButton();
 
-  // Pin Initialization
-
 
   // Initialize the LCD
   Devices::WriteCharLCD("WELCOME");
@@ -23,5 +21,4 @@ void setup()
 void loop()
 {
   HWTrainCommunications::CommsTask();
-  //Devices::ScrollRight();
 }

@@ -14,6 +14,7 @@ static bool announce;
 static bool pebrake;
 static bool sigfail, engfail, brakefail;
 static bool ads;
+double temp, ntemp;
 // Determines the request code
 static RequestCode ParseCode(const String& rMsg)
 {
@@ -280,6 +281,17 @@ static void GetAds(const String& rData)
     } else {
         Devices::ClearLCD();
         Devices::WriteCharLCD("Ads are off");
+    }
+}
+
+static void DisplayTemp(const String& rData)
+{
+    while(Devices::JoystickClick())
+    {
+    temp = stod(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
+    ntemp = Devices::JoystickRead(temp);
+    Devices::ClearLCD();
+    Devices::WriteCharLCD(ntemp.to_string)
     }
 }
 

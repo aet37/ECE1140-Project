@@ -198,29 +198,54 @@ class Ui(QtWidgets.QMainWindow):
             send_message(RequestCode.HWTRAIN_TOGGLE_CABIN_LIGHTS, "1")
 
     def Temp(self):
-        self.LCD1 = self.findChild(QtWidgets.QLCDNumber, 'TempLCD')
-        self.LCD1.display(1.22)
-        send_message(RequestCode.HWTRAIN_SET_TEMPERATURE, "1")
+        self.LCD1 = self.findChild(QtWidgets.QLabel, 'TempLabel')
+        if(self.LCD1.styleSheet()=="color: green;"):
+            self.LCD1.setStyleSheet("color: red;")
+            self.LCD1.setText("Off")
+        else: 
+            self.LCD1.setStyleSheet("color: green;")
+            self.LCD1.setText("On")
+            send_message(RequestCode.HWTRAIN_SET_TEMPERATURE, "50")
 
     def Speed(self):
-        self.LCD2 = self.findChild(QtWidgets.QLCDNumber, 'SpeedLCD')
-        self.LCD2.display(2.44)
-        send_message(RequestCode.HWTRAIN_UPDATE_CURRENT_SPEED, "1")
+        self.LCD2 = self.findChild(QtWidgets.QLCDNumber, 'SpeedLabel')
+        if(self.LCD2.styleSheet()=="color: green;"):
+            self.LCD2.setStyleSheet("color: red;")
+            self.LCD2.setText("Off")
+        else: 
+            self.LCD2.setStyleSheet("color: green;")
+            self.LCD2.setText("On")
+            send_message(RequestCode.HWTRAIN_UPDATE_CURRENT_SPEED, "10")
 
     def Power(self):
-        self.LCD3 = self.findChild(QtWidgets.QLCDNumber, 'PowerLCD')
-        self.LCD3.display(3.66)
-        send_message(RequestCode.HWTRAIN_GUI_DISPLAY_POWER, "1")
+        self.LCD3 = self.findChild(QtWidgets.QLCDNumber, 'PowerLabel')
+        if(self.LCD3.styleSheet()=="color: green;"):
+            self.LCD3.setStyleSheet("color: red;")
+            self.LCD3.setText("Off")
+        else: 
+            self.LCD3.setStyleSheet("color: green;")
+            self.LCD3.setText("On")
+        send_message(RequestCode.HWTRAIN_GUI_DISPLAY_POWER, "5")
         
     def Kp(self):
-        self.LCD4 = self.findChild(QtWidgets.QLCDNumber, 'KpLCD')
-        self.LCD4.display(4.88)
-        send_message(RequestCode.HWTRAIN_GUI_SET_KP, "1")
+        self.LCD4 = self.findChild(QtWidgets.QLCDNumber, 'KpLabel')
+        if(self.LCD4.styleSheet()=="color: green;"):
+            self.LCD4.setStyleSheet("color: red;")
+            self.LCD4.setText("Off")
+        else: 
+            self.LCD4.setStyleSheet("color: green;")
+            self.LCD4.setText("On")
+            send_message(RequestCode.HWTRAIN_GUI_SET_KP, "2")
 
     def Ki(self):
-        self.LCD5 = self.findChild(QtWidgets.QLCDNumber, 'KiLCD')
-        self.LCD5.display(6)
-        send_message(RequestCode.HWTRAIN_GUI_SET_KI, "1")
+        self.LCD5 = self.findChild(QtWidgets.QLCDNumber, 'KiLabel')
+        if(self.LCD5.styleSheet()=="color: green;"):
+            self.LCD5.setStyleSheet("color: red;")
+            self.LCD4.setText("Off")
+        else: 
+            self.LCD5.setStyleSheet("color: green;")
+            self.LCD5.setText("On")
+            send_message(RequestCode.HWTRAIN_GUI_SET_KI, "3")
 
     def logout(self):
         # This is executed when the button is pressed

@@ -66,27 +66,40 @@ namespace Devices
         pinMode(SW, INPUT_PULLUP);
     }
 
-    void JoystickRead()
+    double JoystickRead(double data)
     {
+        int data = stod(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str()); 
         xPosition = analogRead(VRx);
         yPosition = analogRead(VRy);
-        SW_state = digitalRead(SW);
-        //if(xPosition = )
+        if(yPosition >= 562){
+            data++;
+            return data;
+        } else if (yPosition <= 462){
+            data--;
+            return data;
+        }
     }
-
+    void JoystickClick()
+    {
+        SW_state = digitalRead(SW);
+        if(SW_state == 1)
+        {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
     void InitializeButton()
     {
         pinMode(buttonPin, INPUT);
     }
 
-    void ButtonClick()
+    void ButtonClick(double data)
     {
         buttonState = digitalRead(buttonPin);
-        if(buttonState == HIGH)
-        {
-            
-        } else {
-            JoystickRead();
-        }
+        // if(buttonState == HIGH)
+        // {
+        //     JoystickRead(rData);
+        // }
     }
 }
