@@ -292,7 +292,7 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     float currentBlockSize = currentBlockInfo->m_sizeOfBlock;
                     float speedLimitBlock = currentBlockInfo->m_speedLimit;
 
-                    LOG_TRAIN_MODEL("currentBlockSize = %d", currentBlockSize);
+                    LOG_TRAIN_MODEL("currentBlockSize = %f", currentBlockSize);
 
                     float commandSpeed = tempTrain->GetCommandSpeed();
                     float previousPosition = tempTrain->GetPosition();
@@ -328,10 +328,28 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                         velocityCalc = speedLimitBlock;
                     }
 
-                    // POSITION
-                    float positionCalc = (velocityCalc/samplePeriod);
-                    // float currentPosition = previousPosition + positionCalc;
-                    float currentPosition = previousPosition + 50;
+                    float currentPosition;
+                    float positionCalc;
+
+                    if(currentBlock == tempTrain->GetDestinationBlock()){
+                        // Set all the parameters in the train object
+                        tempTrain->SetPower(powerStatus);
+                        tempTrain->SetCurrentSpeed(0); // For display stopping purposes
+
+                        // Send to Collin
+                        Common::Request newRequest(Common::RequestCode::SWTRAIN_UPDATE_CURRENT_SPEED);
+                        newRequest.AppendData(std::to_string(trainId));
+                        newRequest.AppendData(std::to_string(0)); // For display stopping purposes
+                        SWTrainController::serviceQueue.Push(newRequest);
+
+                        LOG_TRAIN_MODEL("Train powerStatus = %d, Train ID = %d", powerStatus, trainId);
+                        break;
+                    } else{
+                        // POSITION
+                        positionCalc = (velocityCalc/samplePeriod);
+                        // float currentPosition = previousPosition + positionCalc;
+                        currentPosition = previousPosition + 50;
+                    }
                     if(currentPosition > currentBlockSize) {
                         // Move to the next block!
                         currentPosition = currentPosition - currentBlockSize; // Catch overflow into next block
