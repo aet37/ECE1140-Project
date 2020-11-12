@@ -3,7 +3,7 @@
 	//constructor
     TrackController::TrackController()
     {
-
+		occupancy.clear();
     }
 
 	//retuns switch position
@@ -33,9 +33,13 @@
 		return occupancy;
 	}
 
-	void setupOccupancy(std::vector<bool> newOccupancy)
+	void TrackController::setupOccupancy(std::vector<bool> newOccupancy)
 	{
-		occupancy = newOccupancy;
+		
+		for(int i=0;i<newOccupancy.size();i++)
+		{
+			occupancy.push_back(newOccupancy[i]);
+		}
 	}
 
 	//sets specified block as occupied 
@@ -49,6 +53,8 @@
 	//sets specified block as unoccupied
 	void TrackController::setUnoccupied(int a)
 	{
+
+		occupancy = prevOccupancy;
 		prevOccupancy = occupancy;
 
 		occupancy[a] = 0;
