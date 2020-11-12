@@ -19,6 +19,7 @@
 
 
 
+
 namespace SWTrackController
 {
 
@@ -203,6 +204,7 @@ void moduleMain()
             case Common::RequestCode::CREATE_INSTRUCTION:
             case Common::RequestCode::SET_TAG_VALUE:
             case Common::RequestCode::GET_TAG_VALUE:
+            	break;
             default:
                 ASSERT(false, "Unhandled request code %d", static_cast<uint16_t>(receivedReq.GetRequestCode()));
                 break;

@@ -12,6 +12,7 @@
 
 
 
+
 class TrackSystem
 {
 	private:
@@ -439,7 +440,9 @@ class TrackSystem
 					out+='1';
 				}
 			}
+
 			cout<<endl<<out.length()<<endl;
+
 			//setting temp to controller 11
 			temp=p_Controllers[10].getOccupancy();
 
