@@ -65,7 +65,7 @@ void moduleMain()
                 // Read train ID
                 uint32_t trainID = req.ParseData<uint32_t>(0);
                 // Get controller instance to toggle doors
-                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID);
+                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID-1);
                 // Get boolean to represent doors and convert info to string
                 uint32_t doorStatus = tempController->toggleDoors();
                 std::string trainIDString = std::to_string(trainID);
@@ -84,7 +84,7 @@ void moduleMain()
                 // Read train ID
                 uint32_t trainID = req.ParseData<uint32_t>(0);
                 // Get controller instance to toggle announcements
-                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID);
+                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID-1);
                 // Get boolean to represent announcements and convert info to string
                 uint32_t announcementStatus = tempController->announceStations();
                 std::string trainIDString = std::to_string(trainID);
@@ -101,7 +101,7 @@ void moduleMain()
                 // Read train ID
                 uint32_t trainID = req.ParseData<uint32_t>(0);
                 // Get controller instance to toggle advertisements
-                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID);
+                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID-1);
                 // Get boolean to represent advertisements and convert info to string
                 uint32_t adsStatus = tempController->toggleAds();
                 std::string trainIDString = std::to_string(trainID);
@@ -118,7 +118,7 @@ void moduleMain()
                 uint32_t trainID = req.ParseData<uint32_t>(0);
                 uint32_t temperature = req.ParseData<uint32_t>(1);
                 // Get controller instance to set temperature
-                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID);
+                Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID-1);
                 tempController->setCabinTemp(temperature);
                 uint32_t tempStatus = tempController->getCabinTemp();
                 std::string tempStatusString = std::to_string(tempStatus);

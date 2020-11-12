@@ -171,7 +171,7 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
                     uint32_t eBrakeStatus = receivedRequest.ParseData<uint32_t>(1);
 
-                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId);
+                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId-1);
                     tempTrain->SetEmergencyPassengeBrake(eBrakeStatus);
 
                     LOG_TRAIN_MODEL("Train eBrakeStatus = %d, Train ID = %d", eBrakeStatus, trainId);
@@ -183,7 +183,7 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
                     uint32_t serviceBrakeStatus = receivedRequest.ParseData<uint32_t>(1);
 
-                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId);
+                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId-1);
                     tempTrain->SetServiceBrake(serviceBrakeStatus);
 
                     LOG_TRAIN_MODEL("Train serviceBrakeStatus = %d, Train ID = %d", serviceBrakeStatus, trainId);
@@ -195,7 +195,7 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
                     uint32_t doorsStatus = receivedRequest.ParseData<uint32_t>(1);
 
-                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId);
+                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId-1);
                     tempTrain->SetDoors(doorsStatus);
 
                     LOG_TRAIN_MODEL("Train doorsStatus = %d, Train ID = %d", doorsStatus, trainId);
@@ -217,9 +217,11 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                 {
                     // IMPLEMENTATION
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
+                    LOG_TRAIN_MODEL("Train Train ID = %d", trainId);
                     uint32_t announcementsStatus = receivedRequest.ParseData<uint32_t>(1);
+                    LOG_TRAIN_MODEL("Train announcementsStatus = %d", announcementsStatus);
 
-                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId);
+                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId-1);
                     tempTrain->SetAnnouncements(announcementsStatus);
 
                     LOG_TRAIN_MODEL("Train announcementsStatus = %d, Train ID = %d", announcementsStatus, trainId);
@@ -231,7 +233,7 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
                     uint32_t adsStatus = receivedRequest.ParseData<uint32_t>(1);
 
-                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId);
+                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId-1);
                     tempTrain->SetAdvertisements(adsStatus);
 
                     LOG_TRAIN_MODEL("Train adsStatus = %d, Train ID = %d", adsStatus, trainId);
@@ -255,7 +257,7 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
                     uint32_t powerStatus = receivedRequest.ParseData<uint32_t>(1);
 
-                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId);
+                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId-1);
                     tempTrain->SetPower(powerStatus);
 
                     LOG_TRAIN_MODEL("Train powerStatus = %d, Train ID = %d", powerStatus, trainId);
@@ -267,7 +269,7 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
                     uint32_t modeStatus = receivedRequest.ParseData<uint32_t>(1);
 
-                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId);
+                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId-1);
                     tempTrain->SetMode(modeStatus);
 
                     LOG_TRAIN_MODEL("Train modeStatus = %d, Train ID = %d", modeStatus, trainId);
