@@ -68,6 +68,7 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     SWTrainController::serviceQueue.Push(newRequest);
 
                     // Hardcoded Test : To delete later
+                    /*
                     Common::Request to_push;
                     to_push.SetRequestCode(Common::RequestCode::TRACK_MODEL_UPDATE_OCCUPANCY);
                     to_push.AppendData("1");
@@ -75,6 +76,7 @@ Common::ServiceQueue<Common::Request> serviceQueue;
 	                to_push.AppendData("22");
 	                to_push.AppendData("1");
 	                TrackModel::serviceQueue.Push(to_push);
+                     */
                     break;
                 }
                 case Common::RequestCode::TRAIN_MODEL_RECEIVE_BLOCK:
