@@ -83,60 +83,61 @@ void moduleMain()
             }
             case Common::RequestCode::SWTRACK_SET_TRACK_OCCUPANCY:
             {
-
+                
                 /**
                  * Receiving this information:
                  * uint32_t lineId
                  * uint32_t blockId
                  * bool occupancy (0 - unoccupied, 1 - occupied)
                 */
-                LOG_SW_TRACK_CONTROLLER("Received: %s", receivedReq.GetData().c_str());
+                LOG_SW_TRACK_CONTROLLER("SWTRACK_SET_TRACK_OCCUPANCY Received: %s", receivedReq.GetData().c_str());
                 uint32_t line = receivedReq.ParseData<uint32_t>(0);
                 uint32_t blockNum = receivedReq.ParseData<uint32_t>(1);
                 bool occupancy = receivedReq.ParseData<bool>(2);
 
 
-                if(line ==0)
+                if(line == 0)
                 {
-                    if(blockNum==62)
-                    {
-                        Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block62Occupancy " + 1);
-                        HWTrackController::HWTrackControllerRequestManager reqManager;
-                        Common::Response a;
-                        reqManager.HandleRequest(newReq, a);
-                    }
+                    LOG_SW_TRACK_CONTROLLER("");
+                    // if(blockNum==62)
+                    // {
+                    //     Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block62Occupancy " + 1);
+                    //     HWTrackController::HWTrackControllerRequestManager reqManager;
+                    //     Common::Response a;
+                    //     reqManager.HandleRequest(newReq, a);
+                    // }
 
-                    else if(blockNum==61)
-                    {
-                        Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block61Occupancy " + 1);
-                        HWTrackController::HWTrackControllerRequestManager reqManager;
-                        Common::Response a;
-                        reqManager.HandleRequest(newReq, a);
-                    }
+                    // else if(blockNum==61)
+                    // {
+                    //     Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block61Occupancy " + 1);
+                    //     HWTrackController::HWTrackControllerRequestManager reqManager;
+                    //     Common::Response a;
+                    //     reqManager.HandleRequest(newReq, a);
+                    // }
 
-                    else if(blockNum==60)
-                    {
-                        Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block60Occupancy " + 1);
-                        HWTrackController::HWTrackControllerRequestManager reqManager;
-                        Common::Response a;
-                        reqManager.HandleRequest(newReq, a);
-                    }
+                    // else if(blockNum==60)
+                    // {
+                    //     Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block60Occupancy " + 1);
+                    //     HWTrackController::HWTrackControllerRequestManager reqManager;
+                    //     Common::Response a;
+                    //     reqManager.HandleRequest(newReq, a);
+                    // }
 
-                    else if(blockNum==59)
-                    {
-                        Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block59Occupancy " + 1);
-                        HWTrackController::HWTrackControllerRequestManager reqManager;
-                        Common::Response a;
-                        reqManager.HandleRequest(newReq, a);
-                    }
+                    // else if(blockNum==59)
+                    // {
+                    //     Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block59Occupancy " + 1);
+                    //     HWTrackController::HWTrackControllerRequestManager reqManager;
+                    //     Common::Response a;
+                    //     reqManager.HandleRequest(newReq, a);
+                    // }
 
-                     else if (blockNum==0)
-                    {
-                        Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block0Occupancy " + 1);
-                        HWTrackController::HWTrackControllerRequestManager reqManager;
-                         Common::Response a;
-                        reqManager.HandleRequest(newReq, a);
-                    }
+                    //  else if (blockNum==0)
+                    // {
+                    //     Common::Request newReq(Common::RequestCode::HWTRACK_SET_TAG_VALUE, "block0Occupancy " + 1);
+                    //     HWTrackController::HWTrackControllerRequestManager reqManager;
+                    //      Common::Response a;
+                    //     reqManager.HandleRequest(newReq, a);
+                    // }
                 }
                 else
                 {
@@ -180,7 +181,7 @@ void moduleMain()
                 }
 
                 
-
+                break;
             }
             case Common::RequestCode::SWTRACK_UPDATE_AUTHORITY:
             case Common::RequestCode::SWTRACK_SET_TRACK_SIGNAL:

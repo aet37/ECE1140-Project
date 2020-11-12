@@ -33,22 +33,23 @@ void moduleMain()
         {  
             case Common::RequestCode::SWTRAIN_DISPATCH_TRAIN:
             {
-                ControlSystem::getInstance().createNewController(13, 13, 13);
+                LOG_SW_TRAIN_CONTROLLER("SWTRAIN_DISPATCH_TRAIN received %s", req.GetData().c_str());
                 uint32_t trainID = req.ParseData<uint32_t>(0);
-                // uint32_t command_speed = req.ParseData<uint32_t>(1);
-                // uint32_t current_speed = req.ParseData<uint32_t>(2);
-                // uint32_t authority = req.ParseData<uint32_t>(3);
-                std::string trainIDString = std::to_string(trainID);
+                float command_speed = req.ParseData<float>(1);
+                float current_speed = req.ParseData<float>(2);
+                bool authority = req.ParseData<bool>(3);
+                ControlSystem::getInstance().createNewController(command_speed, current_speed, authority);
+                // std::string trainIDString = std::to_string(trainID);
                 // std::string command_speedString = std::to_string(command_speed)
                 // std::string current_speedString = std::to_string(current_speed)
                 // std::string authorityString = std::to_string(auth)
-                Common::Request newRequest(Common::RequestCode::HWTRAIN_DISPATCH_TRAIN);
+                // Common::Request newRequest(Common::RequestCode::HWTRAIN_DISPATCH_TRAIN);
                 //newRequest.AppendData(trainIDString);
                 //newRequest.AppendData(command_speedString);
                 //newRequest.AppendData(current_speedString);
                 // TrainControllers.createNewController(com_sp, curr_sp, auth);
-                HWTrainController::serviceQueue.Push(newRequest);
-                LOG_SW_TRAIN_CONTROLLER("SWTrainController dispatch train %s", trainID);
+                // HWTrainController::serviceQueue.Push(newRequest);
+                LOG_SW_TRAIN_CONTROLLER("SWTrainController dispatch train %d", trainID);
                 break;
             }
             case Common::RequestCode::SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS:

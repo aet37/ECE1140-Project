@@ -330,13 +330,15 @@ Common::ServiceQueue<Common::Request> serviceQueue;
 
                     // POSITION
                     float positionCalc = (velocityCalc/samplePeriod);
-                    float currentPosition = previousPosition + positionCalc;
+                    // float currentPosition = previousPosition + positionCalc;
+                    float currentPosition = previousPosition + 50;
                     if(currentPosition > currentBlockSize) {
-                        LOG_TRAIN_MODEL("Moving to next block");
                         // Move to the next block!
                         currentPosition = currentPosition - currentBlockSize; // Catch overflow into next block
                         tempTrain->SetPosition(currentPosition); // Update position
                         tempTrain->RemoveCurrentBlock(); // Remove the block train is on to move to nect block
+
+                        LOG_TRAIN_MODEL("Current block is now %d", tempTrain->GetCurrentBlock());
 
                         // Send block exited to Evan (trainid, trackid, blockId, trainOrNot)
                         Common::Request newRequest1(Common::RequestCode::TRACK_MODEL_UPDATE_OCCUPANCY);
