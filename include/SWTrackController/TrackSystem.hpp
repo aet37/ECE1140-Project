@@ -337,7 +337,7 @@ class TrackSystem
 			int count2;
 			int holder=0;
 
-			cout<<std::endl<<blocks_Controlled.at(i).size()-1<<std::endl;
+			cout<<std::endl<<blocks_Controlled.at(0).size()-1<<std::endl;
 
 			//if green line
 			if(a==0)
