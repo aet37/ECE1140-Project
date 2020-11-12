@@ -105,7 +105,7 @@ class CTCUi(QtWidgets.QMainWindow):
 
 			valid = send_message(RequestCode.CTC_SEND_GUI_VAILD_TRAIN, self.train_id_label.text())
 
-			if(valid == '0'):	# If sucessfuly found the train in the system
+			if(valid[0] == ResponseCode.SUCCESS):	# If sucessfuly found the train in the system
 				self.TrainInfoWindow(int(self.train_id_label.text()))
 			else:
 				self.error_label.setStyleSheet("color: red")
@@ -246,13 +246,13 @@ class CTCUi(QtWidgets.QMainWindow):
 		time_timr.timeout.connect(self.RefreshTrainInfo(tnum))
 		time_timr.start(5000)
 
-	def RefreshTrainInfo(tnum):
+	def RefreshTrainInfo(self, tnum):
 		info_raw = send_message(RequestCode.CTC_SEND_GUI_TRAIN_INFO, str(tnum))
 		# If train no longer on tracks
-		if(info_raw == "1"):
+		if(info_raw[0] == ResponseCode.ERROR):
 			self.LeaveThis()
 			return
-		info = info_raw[2:len(info_raw)]
+		info = info_raw[1][2:len(info_raw)]
 
 		if(info[0:1] == '0'):
 			self.line.setText('GREEN')
