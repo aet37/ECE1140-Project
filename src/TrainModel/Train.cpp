@@ -1,6 +1,6 @@
 /**
  * @file Train.cpp
- * 
+ *
  * @author Kenny Meier
 */
 
@@ -24,9 +24,10 @@ Train::Train()
     m_position = 0; // THIS IS CALCULATED
     m_authority = 0;
     m_currentLine = 0; // Default green line
+    m_power = 0;
     // INTEGERS (Nonvital)
     m_tempControl = 0;
-    
+
     // BOOLEANS (Vital)
     m_emergencyPassengeBrake = false;
     m_serviceBrake = false;
@@ -43,8 +44,8 @@ Train::Train()
     m_trainWidth = 2.65; // Meters
     m_trainHeight = 3.42; // Meters
     m_trainMass = 40.9; // Tons
-    m_trainCrewCount = 0;
-    m_trainPassCount = 2; // HARDCODED (Unless told otherwise)
+    m_trainCrewCount = 2; // HARDCODED (Unless told otherwise)
+    m_trainPassCount = 0;
 
     // Failure cases
     m_signalPickupFailure = false;

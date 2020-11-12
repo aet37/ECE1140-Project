@@ -33,6 +33,7 @@ void TrainModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
             rResponse.AppendData(std::to_string(pTrain->GetAuthority())); // 1
             rResponse.AppendData(std::to_string(pTrain->GetCurrentSpeed())); // 2
             rResponse.AppendData(std::to_string(pBlock->m_speedLimit)); // 3
+            //rResponse.AppendData(std::to_string(3)); // 3
             rResponse.AppendData(std::to_string(pTrain->GetBrakeCommand())); // 4
             rResponse.AppendData(std::to_string(pTrain->GetServiceBrake())); // 5
             rResponse.AppendData(std::to_string(pTrain->GetEmergencyPassengeBrake())); // 6
@@ -61,7 +62,6 @@ void TrainModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
         case Common::RequestCode::TRAIN_MODEL_GUI_3_GATHER_DATA:
         {
             Train* pTrain = TrainCatalogue::GetInstance().GetTrain(rRequest.ParseData<uint32_t>(0) - 1);
-
             Block* pBlock = BlockCatalogue::GetInstance().GetBlock(pTrain->GetCurrentLine(), pTrain->GetCurrentBlock());
 
             rResponse.AppendData(std::to_string(pTrain->GetTrainPassCount())); // 0

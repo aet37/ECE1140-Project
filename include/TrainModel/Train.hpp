@@ -230,6 +230,19 @@ public:
      */
     int GetCurrentBlock() const { return m_route.front(); }
 
+    // POWER
+    /**
+     * @brief Setter function for power
+     * @param power
+     */
+    void SetPower(int power) { m_power = power; };
+
+    /**
+     * @brief gets power
+     * @return returns power
+     */
+    int GetPower() const { return m_power; }
+
     // TRAIN LENGTH
     /**
      * @brief Setter function for trainLength
@@ -379,6 +392,7 @@ private:
     int m_position; // THIS IS CALCULATED // disp_position
     int m_authority; // disp_authority
     int m_currentLine; // disp_current_line
+    int m_power;
     std::vector<uint32_t> m_route;
     // INTEGERS (Nonvital)
     int m_tempControl; // disp_temperature_control
