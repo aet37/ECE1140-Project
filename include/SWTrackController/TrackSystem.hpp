@@ -404,7 +404,7 @@ class TrackSystem
 			std::vector<bool> temp;
 
 			//setting the current array of switch positions to use later for comparison 
-			for(int i=0;i<=24;i++)
+			for(int i=0;i<25;i++)
 			{
 				i=i+1;
 				cout<<std::endl<<i<<"loop 1"<<std::endl;
