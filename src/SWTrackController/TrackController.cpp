@@ -44,7 +44,7 @@
 			LOG_SW_TRACK_CONTROLLER("IT GOT HERE Make Occupancies");
 			occupancy.push_back(newOccupancy[i]);
 
-			int d = newOccupancy[i];
+			int d = (int)newOccupancy[i];
 			
 			LOG_SW_TRACK_CONTROLLER("%s", d.c_str());
 		}
