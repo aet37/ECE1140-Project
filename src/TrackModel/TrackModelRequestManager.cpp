@@ -133,12 +133,12 @@ void TrackModelRequestManager::HandleRequest(const Common::Request& rRequest, Co
 			int pos = test.find(" ");
 			int trackId = std::stoi(test.substr(0, pos));
 
-			printf("test");
+			printf("\ntrackId = %d", trackId);
 			test.erase(0, pos + 1);
 
 			int heaterInt = std::stoi(test);
 
-			printf("test2");
+			printf("\nheaterInt = %d\n", heaterInt);
             Track *theTrack = TrackInfo::GetInstance().getTrack(trackId);
 
 			printf("testt3");
