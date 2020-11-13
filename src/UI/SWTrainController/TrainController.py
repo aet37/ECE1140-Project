@@ -470,6 +470,45 @@ class SWTrainUi(QtWidgets.QMainWindow):
         
         send_message(RequestCode.SWTRAIN_GUI_SET_KP_KI,self.current_train_id + " " + Kp + " " + Ki)
 
+    def save_inputs(self):
+        # Get Kp and Ki
+        Kp = self.findChild(QtWidgets.QLineEdit, "InputKp").text()
+        Ki = self.findChild(QtWidgets.QLineEdit, "InputKi").text()
+
+        # Check to make sure values entered are integers
+        try:
+            int(Kp)
+        except ValueError:
+            alert = Alert("Kp must be an integer value")
+            alert.exec_()
+            return
+
+        try:
+            int(Ki)
+        except ValueError:
+            alert = Alert("Ki must be an integer value")
+            alert.exec_()
+            return
+
+        # Make sure sure values entered are not negative
+        if int(Kp) <= 0:
+            alert = Alert("Invalid Kp entered!")
+            alert.exec_()
+            return
+        
+        if int(Ki) <= 0:
+            alert = Alert("Invalid Ki entered!")
+            alert.exec_()
+            return
+
+        # Ask for confirmation to ensure values are as desired
+        confirmation = Confirmation("Confirm Kp and Ki:")
+        response = confirmation.exec_()
+        if response == False:
+            return
+        
+        send_message(RequestCode.SWTRAIN_GUI_SET_KP_KI, "1")
+
     def logout(self):
         # This is executed when the button is pressed
         if(sys.platform == 'darwin'):
