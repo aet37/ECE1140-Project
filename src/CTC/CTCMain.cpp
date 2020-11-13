@@ -114,11 +114,13 @@ void moduleMain()
 				LOG_CTC("CTC received this: %s", req.GetData().c_str());
 			    std::string green_occupancies = req.ParseData<std::string>(0);  // get green block occupancies
 			    std::string red_occupancies = req.ParseData<std::string>(1);    // get red block occupancies
+				green_occupancies.push_back('0');
 
 			    for(int i = 0; i < TrainSystem::GetInstance().GetTrackArr(LINE_GREEN).size(); i++)
 			    {
 			    	if(green_occupancies.at(i) == '1')
 				    {
+						LOG_CTC("i + 1 = %d, LINE_GREEN = %d ", i + 1, LINE_GREEN);
 			    		TrainSystem::GetInstance().SetTrackOccupied(i + 1, LINE_GREEN);
 				    }
 			    	else if(green_occupancies.at(i) == '0')
@@ -147,7 +149,6 @@ void moduleMain()
 					    std::cout << req.GetData() << std::endl;
 					    throw std::logic_error("CTC::CTCMain.cpp : Track Controller sent invalid Track Occupancy Array (Red)");
 				    }
-				    LOG_CTC("CTC Track Occupancies array");
 			    }
 
 			    // Update Train Positions based on updated track occupancies

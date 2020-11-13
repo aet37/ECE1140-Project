@@ -11,21 +11,21 @@
 /*
  * Test creation of new singleton controller
  */
-TEST_CASE( "Test ControlSystem createNewController", "[ControlSystem::createNewController(int, int, bool)]" )
-{
+//TEST_CASE( "Test ControlSystem createNewController", "[ControlSystem::createNewController(int, int, bool)]" )
+//{
     //ControlSystem testSystem;
 	//Controller* p_testPtr = testSystem.createNewController(3,4,1);
 	
 	// Use getControllerInstance method to test creation
 	//REQUIRE(p_testPtr == testSystem.getControllerInstance(0));
     //REQUIRE(testSystem.getAmountofControllers() == 1);
-}
+//}
 
 /*
  * Test getControllerInstance by creating multiple controllers
  */
-TEST_CASE( "Test ControlSystem getControllerInstance", "[ControlSystem::getControllerInstance(int)]")
-{
+//TEST_CASE( "Test ControlSystem getControllerInstance", "[ControlSystem::getControllerInstance(int)]")
+//{
     // Create two controllers
     //ControlSystem testSystem(3,4,1);
     //testSystem.createNewController(1,2,1);
@@ -36,4 +36,4 @@ TEST_CASE( "Test ControlSystem getControllerInstance", "[ControlSystem::getContr
     //REQUIRE(p_testPtr != testSystem.getControllerInstance(1));
     //REQUIRE(p_testPtr2 != testSystem.getControllerInstance(0));
     //REQUIRE(testSystem.getAmountofControllers() == 2);
-}
+//}

@@ -22,13 +22,13 @@ namespace TrainModel
 struct Block
 {
     /// Elevation of block
-    int m_elevation;
+    float m_elevation;
 
     /// Slope of the block
-    int m_slope;
+    float m_slope;
 
     /// Size of the block
-    int m_sizeOfBlock;
+    float m_sizeOfBlock;
 
     /// Acceleration limit of the block
     int m_accelerationLimit;
@@ -37,7 +37,7 @@ struct Block
     int m_decelerationLimit;
 
     /// Speed limit of the block
-    int m_speedLimit;
+    float m_speedLimit;
 
     /// Travel Direction
     /// TODO(KEM): Talk to Evan about this

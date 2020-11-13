@@ -472,7 +472,7 @@ void moduleMain()
             }
             case Common::RequestCode::TRACK_MODEL_UPDATE_OCCUPANCY:
             {
-                LOG_TRACK_MODEL("Received occupancy %s", req.GetData().c_str());
+                LOG_TRACK_MODEL("TRACK_MODEL_UPDATE_OCCUPANCY received occupancy %s", req.GetData().c_str());
                 // (trainid, trackid, blockId, trainOrNot)
                 uint32_t trainId = req.ParseData<uint32_t>(0);
                 uint32_t trackId = req.ParseData<uint32_t>(1);

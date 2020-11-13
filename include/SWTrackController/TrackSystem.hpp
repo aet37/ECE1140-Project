@@ -8,6 +8,8 @@
 #include <vector>
 #include "TrackController.hpp"
 #include <Logger.hpp>
+#include <iostream>
+
 
 
 
@@ -328,8 +330,12 @@ class TrackSystem
 		//update block b to be occupied (a)
 		void updateOccupied(bool a, int b)
 		{
+
+			int controller1;
+			int controller2;
 			int count1;
 			int count2;
+			int holder=0;
 
 			//if green line
 			if(a==0)
@@ -337,16 +343,25 @@ class TrackSystem
 				//iterate through each controller
 				for(int i=0;i<12;i++)
 				{
-					count1=i;
-					
+
 					//iterate through each block controlled by the controller until the one specified is found
-					for(int j=0;j<blocks_Controlled[i].size();j++)
+					for(int j=0;j<blocks_Controlled.at(i).size()-1;j++)
 					{
-						count2=j;
-						if(blocks_Controlled[i].at(j)==b)
+						if(blocks_Controlled.at(i).at(j)==b&&holder==1)
 						{
-							break;
+							controller2=i;
+							count2=j;
+							holder=2;
 						}
+						if(blocks_Controlled.at(i).at(j)==b&&holder==0)
+						{
+							controller1=i;
+							count1=j;
+							holder=1;
+
+						}
+						
+
 
 					}
 				}
@@ -359,32 +374,78 @@ class TrackSystem
 				//iterate through each controller
 				for(int i=12;i<blocks_Controlled.size()-1;i++)
 				{
-					count1=i;
-
 					//iterate through each block controlled by the controller until the one specified is found
-					for(int j=0;j<blocks_Controlled[i].size();j++)
+					for(int j=0;j<blocks_Controlled.at(i).size();j++)
 					{
-						count2=j;
-						if(blocks_Controlled[i].at(j)==b)
+						if(blocks_Controlled.at(i).at(j)==b&&holder==1)
 						{
-							break;
+							controller2=i;
+							count2=j;
+							holder=2;
+							
 						}
+						if(blocks_Controlled.at(i).at(j)==b&&holder==0)
+						{
+							controller1=i;
+							count1=j;
+							holder=1;
+
+						}
+						
 					}
 				}
 			}
-
 			//setting the specified block in the controller as occupied
-			p_Controllers[count1].setOccupied(count2);
+			p_Controllers.at(controller1).setOccupied(count1);
+
+			if(holder==2)
+			{
+				p_Controllers.at(controller2).setOccupied(count2);
+			}
+			std::vector<bool> temp;
 
 			//setting the current array of switch positions to use later for comparison 
-			for(int i=0;i<26;i+2)
+			for(int i=0;i<25;i++,i++)
 			{
-				if(p_Controllers[i].getSwitchPos()==p_Controllers[i+1].getSwitchPos())
+				if(p_Controllers.at(i).getSwitchPos()==p_Controllers.at(i+1).getSwitchPos())
 				{
+					temp.push_back(p_Controllers[i].getSwitchPos());
+	
+				}
+				
+			}
+			//asd
 
-
-					switchpositions.push_back(p_Controllers[i].getSwitchPos());
-
+			if(switchpositions.empty()==1)
+			{
+				for(int i=0;i<13;i++)
+				{
+					switchpositions.push_back({0});
+				}
+			}
+			prevswitchpositions.clear();
+			for(int i=0;i<13;i++)
+			{
+				if(switchpositions.at(i)==0)
+				{
+					prevswitchpositions.push_back(0);
+				}
+				if(switchpositions.at(i)==1)
+				{
+					prevswitchpositions.push_back(1);
+				}
+			}
+			
+			switchpositions.clear();
+			for(int i=0;i<13;i++)
+			{
+				if(temp.at(i)==0)
+				{
+					switchpositions.push_back(0);
+				}
+				if(temp.at(i)==1)
+				{
+					switchpositions.push_back(1);
 				}
 			}
 		}
@@ -437,11 +498,12 @@ class TrackSystem
 					out+='1';
 				}
 			}
+
 			//setting temp to controller 11
 			temp=p_Controllers[10].getOccupancy();
 
 			//blocks 30-59
-			for(int i=0;i<29;i++)
+			for(int i=0;i<30;i++)
 			{
 				if(temp[i]==0)
 				{
@@ -543,7 +605,7 @@ class TrackSystem
 		
 			//red line
 			//blocks 1-16
-			for(int i=0;i<17;i++)
+			for(int i=0;i<16;i++)
 			{
 				if(temp[i]==0)
 				{
@@ -703,19 +765,19 @@ class TrackSystem
 			string out="";
 
 			//getting switch positions from 1 controller of the pairs
-			for(int i=0;i<26;i+2)
+			for(int i=0;i<25;i++,i++)
 			{
 				//making sure the controllers have the same output
-				if(p_Controllers[i].getSwitchPos()==p_Controllers[i+1].getSwitchPos())
+				if(p_Controllers.at(i).getSwitchPos()==p_Controllers.at(i+1).getSwitchPos())
 				{
-					if(p_Controllers[i].getSwitchPos()==0)
+					if(p_Controllers.at(i).getSwitchPos()==0)
 					{
-						out+='0';
+						out+="0";
 					}
 
-					if(p_Controllers[i].getSwitchPos()==1)
+					if(p_Controllers.at(i).getSwitchPos()==1)
 					{
-						out+='1';
+						out+="1";
 					}
 				}
 				//if not, loop breaks

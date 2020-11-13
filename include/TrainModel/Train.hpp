@@ -45,39 +45,39 @@ public:
      * @brief Setter function for Command Speed
      * @param commandSpeed
      */
-    void SetCommandSpeed(int commandSpeed) { m_commandSpeed = commandSpeed; };
+    void SetCommandSpeed(float commandSpeed) { m_commandSpeed = commandSpeed; };
 
     /**
      * @brief gets CommandSpeed
      * @return returns CommandSpeed
      */
-    int GetCommandSpeed() const { return m_commandSpeed; }
+    float GetCommandSpeed() const { return m_commandSpeed; }
 
     // CURRENT SPEED
     /**
      * @brief Setter function for currentSpeed
      * @param currentSpeed
      */
-    void SetCurrentSpeed(int currentSpeed) { m_currentSpeed = currentSpeed; };
+    void SetCurrentSpeed(float currentSpeed) { m_currentSpeed = currentSpeed; };
 
     /**
      * @brief gets currentSpeed
      * @return returns currentSpeed
      */
-    int GetCurrentSpeed() const { return m_currentSpeed; }
+    float GetCurrentSpeed() const { return m_currentSpeed; }
 
     // POSITION
     /**
      * @brief Setter function for position
      * @param position
      */
-    void SetPosition(int position) { m_position = position; };
+    void SetPosition(float position) { m_position = position; };
 
     /**
      * @brief gets position
      * @return returns position
      */
-    int GetPosition() const { return m_position; }
+    float GetPosition() const { return m_position; }
 
     // AUTHORITY
     /**
@@ -230,70 +230,75 @@ public:
      */
     int GetCurrentBlock() const { return m_route.front(); }
 
+    /**
+     * @brief removes currentBlock
+     */
+    void RemoveCurrentBlock() { m_route.erase(m_route.begin()); }
+
     // POWER
     /**
      * @brief Setter function for power
      * @param power
      */
-    void SetPower(int power) { m_power = power; };
+    void SetPower(float power) { m_power = power; };
 
     /**
      * @brief gets power
      * @return returns power
      */
-    int GetPower() const { return m_power; }
+    float GetPower() const { return m_power; }
 
     // TRAIN LENGTH
     /**
      * @brief Setter function for trainLength
      * @param trainLength
      */
-    void SetTrainLength(int trainLength) { m_trainLength = trainLength; };
+    void SetTrainLength(float trainLength) { m_trainLength = trainLength; };
 
     /**
      * @brief gets trainLength
      * @return returns trainLength
      */
-    int GetTrainLength() const { return m_trainLength; }
+    float GetTrainLength() const { return m_trainLength; }
 
     // TRAIN WIDTH
     /**
      * @brief Setter function for trainWidth
      * @param trainLength
      */
-    void SetTrainWidth(int trainWidth) { m_trainWidth = trainWidth; };
+    void SetTrainWidth(float trainWidth) { m_trainWidth = trainWidth; };
 
     /**
      * @brief gets trainWidth
      * @return returns trainWidth
      */
-    int GetTrainWidth() const { return m_trainWidth; }
+    float GetTrainWidth() const { return m_trainWidth; }
 
     // TRAIN HEIGHT
     /**
      * @brief Setter function for trainHeight
      * @param trainHeight
      */
-    void SetTrainHeight(int trainHeight) { m_trainHeight = trainHeight; };
+    void SetTrainHeight(float trainHeight) { m_trainHeight = trainHeight; };
 
     /**
      * @brief gets trainHeight
      * @return returns trainHeight
      */
-    int GetTrainHeight() const { return m_trainHeight; }
+    float GetTrainHeight() const { return m_trainHeight; }
 
     // TRAIN MASS
     /**
      * @brief Setter function for trainMass
      * @param trainMass
      */
-    void SetTrainMass(int trainMass) { m_trainMass = trainMass; };
+    void SetTrainMass(float trainMass) { m_trainMass = trainMass; };
 
     /**
      * @brief gets trainMass
      * @return returns trainMass
      */
-    int GetTrainMass() const { return m_trainMass; }
+    float GetTrainMass() const { return m_trainMass; }
 
     // TRAIN CREW COUNT
     /**
@@ -387,12 +392,12 @@ protected:
 private:
     // INTEGERS (Vital)
     int m_destinationBlock; // disp_destination_block
-    int m_commandSpeed; // disp_command_speed
-    int m_currentSpeed; // THIS IS CALCULATED // disp_current_speed
-    int m_position; // THIS IS CALCULATED // disp_position
+    float m_commandSpeed; // disp_command_speed
+    float m_currentSpeed; // THIS IS CALCULATED // disp_current_speed
+    float m_position; // THIS IS CALCULATED // disp_position
     int m_authority; // disp_authority
     int m_currentLine; // disp_current_line
-    int m_power;
+    float m_power;
     std::vector<uint32_t> m_route;
     // INTEGERS (Nonvital)
     int m_tempControl; // disp_temperature_control
@@ -408,10 +413,10 @@ private:
     bool m_doors; // disp_door
 
     // Parameter Inputs
-    int m_trainLength;
-    int m_trainWidth;
-    int m_trainHeight;
-    int m_trainMass;
+    float m_trainLength;
+    float m_trainWidth;
+    float m_trainHeight;
+    float m_trainMass;
     int m_trainCrewCount; // disp_crew_count
     int m_trainPassCount; // disp_pass_count
 
