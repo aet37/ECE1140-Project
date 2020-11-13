@@ -28,7 +28,7 @@
 			switch_position=0;
 			return switch_position;
 		}
-	}
+	}//asd
 
 	//returns occupancy vector
 	std::vector<bool> TrackController::getOccupancy()
