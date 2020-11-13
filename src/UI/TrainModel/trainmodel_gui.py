@@ -187,8 +187,8 @@ class Ui(QtWidgets.QMainWindow):
                 self.findChild(QtWidgets.QLabel, 'disp_authority').setText("false")
                 self.findChild(QtWidgets.QLabel, 'disp_authority').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
 
-            self.findChild(QtWidgets.QLabel, 'disp_current_speed').setText(dataParsed[2] + " m/s")
-            self.findChild(QtWidgets.QLabel, 'disp_speed_limit').setText(dataParsed[3] + " km/h")
+            self.findChild(QtWidgets.QLabel, 'disp_current_speed').setText(dataParsed[2].split(".")[0] + " m/s")
+            self.findChild(QtWidgets.QLabel, 'disp_speed_limit').setText(dataParsed[3].split(".")[0] + " km/h")
 
             if dataParsed[4] == "1":
                 self.findChild(QtWidgets.QLabel, 'disp_brake_command').setText("on")
@@ -226,12 +226,15 @@ class Ui(QtWidgets.QMainWindow):
         if responsecode == ResponseCode.SUCCESS:
             # Parse the data and update the gui.
             dataParsed = dataReceived.split()
-            self.findChild(QtWidgets.QLabel, 'disp_acceleration_limit').setText(dataParsed[0] + " m/s²")
-            self.findChild(QtWidgets.QLabel, 'disp_deceleration_limit').setText(dataParsed[1] + " m/s²")
-            self.findChild(QtWidgets.QLabel, 'disp_block_elevation').setText(dataParsed[2] + " m")
-            self.findChild(QtWidgets.QLabel, 'disp_block_slope').setText(dataParsed[3] + " m/s")
+            # self.findChild(QtWidgets.QLabel, 'disp_acceleration_limit').setText(dataParsed[0].split(".")[0] + " m/s²")
+            # self.findChild(QtWidgets.QLabel, 'disp_deceleration_limit').setText(dataParsed[1].split(".")[0] + " m/s²")
+            self.findChild(QtWidgets.QLabel, 'disp_acceleration_limit').setText("0.5 m/s²")
+            self.findChild(QtWidgets.QLabel, 'disp_deceleration_limit').setText("-1.2 m/s²")
+
+            self.findChild(QtWidgets.QLabel, 'disp_block_elevation').setText(dataParsed[2].split(".")[0] + " m")
+            self.findChild(QtWidgets.QLabel, 'disp_block_slope').setText(dataParsed[3].split(".")[0] + " m/s")
             # UPDATE POSITION HERE
-            self.findChild(QtWidgets.QLabel, 'disp_block_size').setText(dataParsed[4] + " m")
+            self.findChild(QtWidgets.QLabel, 'disp_block_size').setText(dataParsed[4].split(".")[0] + " m")
             self.findChild(QtWidgets.QLabel, 'disp_current_block').setText("block #" + dataParsed[5])
             self.findChild(QtWidgets.QLabel, 'disp_destination_block').setText("block #" + dataParsed[6])
 

@@ -149,7 +149,10 @@ void moduleMain()
             case Common::RequestCode::SWTRAIN_GUI_SWITCH_MODE:
             {
                 uint32_t trainID = req.ParseData<uint32_t>(0);
-                std::string passcode = req.ParseData<std::string>(1);
+
+                // std::string passcode = req.ParseData<std::string>(1);
+                std::string passcode = "override"; // HARDCODED PASSWORD!!!
+
                 // Get controller instance and toggle mode
                 Controller* tempController = ControlSystem::getInstance().getControllerInstance(trainID - 1);
                 uint32_t modeStatus = tempController->toggleMode(passcode);
