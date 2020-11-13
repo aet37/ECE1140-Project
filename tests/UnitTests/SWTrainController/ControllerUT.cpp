@@ -76,7 +76,7 @@ TEST_CASE( "Test setCommandSpeed(int) and getCommandSpeed()", "[Controller::setC
 
     // Test with double value
     testObj.setCommandSpeed(3.1);
-    REQUIRE(testObj.getCommandSpeed() == 3);
+    REQUIRE(testObj.getCommandSpeed() == 3.1f);
 }
 
 /*
@@ -98,7 +98,7 @@ TEST_CASE( "Test setCurrentSpeed(int) and getCurrentSpeed()", "[Controller::setC
 
     // Test with double value
     testObj.setCurrentSpeed(3.3);
-    REQUIRE(testObj.getCurrentSpeed() == 3);
+    REQUIRE(testObj.getCurrentSpeed() == 3.3f);
 }
 
 /*
@@ -120,7 +120,7 @@ TEST_CASE( "Test setSetpointSpeed(int) and getSetpointSpeed()", "[Controller::se
 
     // Test with double value
     testObj.setSetpointSpeed(3.6);
-    REQUIRE(testObj.getSetpointSpeed() == 3);
+    REQUIRE(testObj.getSetpointSpeed() == 3.6f);
 }
 
 /*
