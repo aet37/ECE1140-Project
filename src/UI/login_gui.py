@@ -47,7 +47,7 @@ class LoginPage(QtWidgets.QMainWindow):
             self.alert_login.setStyleSheet("color: red;")
             return
 
-        if sys.platform == 'darwin':
+        if (sys.platform == 'darwin') | (sys.platform == 'linux'):
             os.system('python3 ' + file_path + ' &')
         else:
             os.system('start /B python ' + file_path)

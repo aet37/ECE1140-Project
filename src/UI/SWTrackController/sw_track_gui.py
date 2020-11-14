@@ -371,7 +371,7 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
     @staticmethod
     def logout():
         """Method invoked when the logout button is pressed"""
-        if sys.platform == 'darwin':
+        if (sys.platform == 'darwin') | (sys.platform == 'linux'):
             os.system('python3 src/UI/login_gui.py &')
         else:
             os.system('start /B python src/UI/login_gui.py')
