@@ -5,6 +5,9 @@ import sys
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import Qt
 
+from UI.window_manager import window_list
+from UI.TrainModel.trainmodel_gui import TrainModelUi
+from UI.SWTrainController.TrainController import SWTrainUi
 class LoginPage(QtWidgets.QMainWindow):
     """Page shown to user upon application startup"""
     def __init__(self):
@@ -21,8 +24,11 @@ class LoginPage(QtWidgets.QMainWindow):
         self.button = self.findChild(QtWidgets.QPushButton, 'login_button')# Find the button
         self.button.clicked.connect(self.login_parse)
         self.button = self.findChild(QtWidgets.QPushButton, 'TurnOff') # Find the button
-        self.button.clicked.connect(leave)
+        self.button.clicked.connect(self.stuff)
         self.show()
+
+    def stuff(self):
+        print(window_list.remove(self))
 
     def login_parse(self):
         """Checks the user's credentials and starts the specific module's ui if correct"""
@@ -31,6 +37,7 @@ class LoginPage(QtWidgets.QMainWindow):
         file_path = ''
         if username == "trainmodel" and password == "jerry":
             file_path = 'src/UI/TrainModel/trainmodel_gui.py'
+            window_list.append(TrainModelUi())
         elif username == "trackmodel" and password == "jerry":
             file_path = 'src/UI/TrackModel/trackmodel_gui.py'
         elif username == "swtrack" and password == "jerry":
@@ -40,18 +47,14 @@ class LoginPage(QtWidgets.QMainWindow):
         elif username == "hwtrain" and password == "jerry":
             print("hwtrain")
         elif username == "swtrain" and password == "jerry":
-            file_path = 'src/UI/SWTrainController/TrainController.py'
+            window_list.append(SWTrainUi())
         elif username == "engineer" and password == "jerry":
             file_path = 'src/UI/SWTrainController/TrainEngineer.py'
         else:
             self.alert_login.setStyleSheet("color: red;")
             return
 
-        if (sys.platform == 'darwin') | (sys.platform == 'linux'):
-            os.system('python3 ' + file_path + ' &')
-        else:
-            os.system('start /B python ' + file_path)
-        app.exit()
+        # window_list.remove(self)
 
     def keyPressEvent(self, event): # pylint: disable=invalid-name
         """Handles a keypress event"""
@@ -59,12 +62,3 @@ class LoginPage(QtWidgets.QMainWindow):
             super().keyPressEvent(event)
         else:
             self.login_parse()
-
-def leave():
-    """Closes the page"""
-    app.exit()
-
-# Main Login Screen
-app = QtWidgets.QApplication(sys.argv)
-window = LoginPage()
-app.exec_()
