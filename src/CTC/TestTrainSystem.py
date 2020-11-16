@@ -63,6 +63,59 @@ class MyTestCase(unittest.TestCase):
 		self.assertEqual(ctc.switches_green_arr[3].pointing_to == -1, True)
 		self.assertEqual(ctc.switches_red_arr[4].pointing_to == 39, True)
 
+	"""
+		Test Setting Switches
+	"""
+	def test_dispatch(self):
+		# Test that the train array is empty
+		self.assertEqual(len(ctc.trains_arr) == 0, True)
+		self.assertEqual(len(ctc.train_numbers) == 0, True)
+
+		# Dispatch a Train
+		ctc.DispatchTrain(10, Line.LINE_GREEN)
+
+		# Test that train was dispatched
+		self.assertEqual(len(ctc.trains_arr) == 1, True)
+		self.assertEqual(len(ctc.train_numbers) == 1, True)
+
+		# Check that the train number is 1
+		self.assertEqual(ctc.trains_arr[0].train_id == 1, True)
+		self.assertEqual(ctc.train_numbers[0] == 1, True)
+
+		# Check that train is on green line and destination block, command speed and authority are right
+		self.assertEqual(ctc.trains_arr[0].line_on == Line.LINE_GREEN, True)
+		self.assertEqual(ctc.trains_arr[0].destination_block == 10, True)
+		self.assertEqual(ctc.trains_arr[0].command_speed == 55, True)
+		self.assertEqual(ctc.trains_arr[0].authority == 3, True)
+		self.assertEqual(ctc.trains_arr[0].index_on_route == 0, True)
+
+		# Remove train from array
+		ctc.trains_arr.pop()
+		ctc.train_numbers.pop()
+
+		# Test that train was removed
+		self.assertEqual(len(ctc.trains_arr) == 0, True)
+		self.assertEqual(len(ctc.train_numbers) == 0, True)
+
+		# Dispatch another train
+		ctc.DispatchTrain(13, Line.LINE_RED)
+
+		# Test that train was dispatched
+		self.assertEqual(len(ctc.trains_arr) == 1, True)
+		self.assertEqual(len(ctc.train_numbers) == 1, True)
+
+		# Check that the train number is 2
+		self.assertEqual(ctc.trains_arr[0].train_id == 2, True)
+		self.assertEqual(ctc.train_numbers[0] == 2, True)
+
+		# Check that train is on green line and destination block, command speed and authority are right
+		self.assertEqual(ctc.trains_arr[0].line_on == Line.LINE_RED, True)
+		self.assertEqual(ctc.trains_arr[0].destination_block == 13, True)
+		self.assertEqual(ctc.trains_arr[0].command_speed == 55, True)
+		self.assertEqual(ctc.trains_arr[0].authority == 3, True)
+		self.assertEqual(ctc.trains_arr[0].index_on_route == 0, True)
+
+
 # Main function Checker
 if __name__ == '__main__':
 	unittest.main()

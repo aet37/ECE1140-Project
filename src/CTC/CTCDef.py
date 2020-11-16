@@ -30,8 +30,8 @@ class Line(Enum):
 	@brief Structure that holds data about a single train (id, command speed, authority, destination block)
 """
 class Train:
-	def __init__(self, id, block, line):
-		self.train_id = 0
+	def __init__(self, id_n, block, line):
+		self.train_id = id_n
 		self.command_speed = 0
 		self.authority = 0
 		self.destination_block = block
