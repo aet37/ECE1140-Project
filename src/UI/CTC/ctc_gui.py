@@ -2,9 +2,8 @@ import os
 from PyQt5 import QtWidgets, uic, QtCore
 import sys
 
-sys.path.insert(1, 'src/UI')
-from server_functions import *
-from UI.window_manager import window_list
+from src.UI.server_functions import *
+from src.UI.window_manager import window_list
 
 # GLOBALS
 class CTCUi(QtWidgets.QMainWindow):

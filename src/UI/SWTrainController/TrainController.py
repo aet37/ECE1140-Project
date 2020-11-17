@@ -2,12 +2,11 @@ import os
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QTimer
 import sys
-sys.path.insert(1, 'src')
-from UI.server_functions import *
-from UI.Common.common import Alert, Confirmation
+from src.UI.server_functions import *
+from src.UI.Common.common import Alert, Confirmation
 
-from UI.signals import Signals
-from UI.window_manager import window_list
+from src.UI.signals import Signals
+from src.UI.window_manager import window_list
 
 class SWTrainUi(QtWidgets.QMainWindow):
 

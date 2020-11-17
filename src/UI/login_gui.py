@@ -3,17 +3,17 @@
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import Qt
 
-from UI.window_manager import window_list
-from UI.CTC.ctc_gui import CTCUi
-from UI.SWTrackController.sw_track_gui import SWTrackControllerUi
-from UI.TrackModel.trackmodel_gui import TrackModelUi
-from UI.TrainModel.trainmodel_gui import TrainModelUi
-from UI.SWTrainController.TrainController import SWTrainUi
-class LoginPage(QtWidgets.QMainWindow):
+from src.UI.window_manager import window_list
+from src.UI.CTC.ctc_gui import CTCUi
+from src.UI.SWTrackController.sw_track_gui import SWTrackControllerUi
+from src.UI.TrackModel.trackmodel_gui import TrackModelUi
+from src.UI.TrainModel.trainmodel_gui import TrainModelUi
+from src.UI.SWTrainController.TrainController import SWTrainUi
+class LoginUi(QtWidgets.QMainWindow):
     """Page shown to user upon application startup"""
     def __init__(self):
         super().__init__()
-        uic.loadUi('src/UI/Login_Page.ui', self)
+        uic.loadUi('src/UI/login_page.ui', self)
 
         self.alert_login = self.findChild(QtWidgets.QLabel, 'alert_login')
         self.username_in = self.findChild(QtWidgets.QLineEdit, 'username_in')

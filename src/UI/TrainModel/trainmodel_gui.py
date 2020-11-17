@@ -6,9 +6,9 @@ from PyQt5.QtGui import QScreen
 from PyQt5.QtCore import QTimer
 import sys
 
-sys.path.insert(1, 'src')
-from UI.server_functions import send_message_async, RequestCode, send_message, ResponseCode
-from UI.signals import Signals
+from src.UI.server_functions import send_message_async, RequestCode, send_message, ResponseCode
+from src.UI.signals import Signals
+from src.UI.window_manager import window_list
 
 class TrainModelUi(QtWidgets.QMainWindow):
     """UI class for the Train Model"""
@@ -372,14 +372,9 @@ class TrainModelUi(QtWidgets.QMainWindow):
         self.alert_sent2.setStyleSheet("color: rgb(133, 158, 166);")
         self.alert_sent3.setStyleSheet("color: green;")
 
-    @staticmethod
     def logout(self):
         """Method invoked when the logout button is pressed"""
-        if (sys.platform == 'darwin') | (sys.platform == 'linux'):
-            os.system('python3 src/UI/login_gui.py &')
-        else:
-            os.system('start /B python src/UI/login_gui.py')
-        app.exit()
+        window_list.remove(self)
 
     # def stop_all_timers(self):
     #     self.train_menu_timer.stop()

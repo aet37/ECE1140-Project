@@ -4,9 +4,8 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QPushButton, QStackedWidget, QLabel, QComboBox
 import sys
 from PyQt5.QtCore import QTimer
-sys.path.insert(1, 'src')
-from UI.server_functions import *
-from UI.window_manager import window_list
+from src.UI.server_functions import *
+from src.UI.window_manager import window_list
 import pyexcel
 import pyexcel_io
 import json
