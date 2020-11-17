@@ -7,7 +7,9 @@
 """
 
 import unittest
-from TrainSystem import *
+import sys
+sys.path.insert(1, '../../..')
+from src.CTC.TrainSystem import *
 
 """
 	Unit Testing Class

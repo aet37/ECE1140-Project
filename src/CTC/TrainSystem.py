@@ -7,10 +7,8 @@
 
 	@date 10.01.2020
 """
-import sys
 
-sys.path.insert(1, 'src/CTC')
-from CTCDef import *
+from src.CTC.CTCDef import *
 
 """
 	@class TrainSystem

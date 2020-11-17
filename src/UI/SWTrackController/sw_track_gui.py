@@ -8,14 +8,14 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import Qt, QTimer
 
-sys.path.insert(1, 'src')
-from SWTrackController.Compiler.lexer import CompilationError, Lexer
-from SWTrackController.Compiler.emitter import Emitter
-from SWTrackController.Compiler.parse import Parser
+from src.SWTrackController.Compiler.lexer import CompilationError, Lexer
+from src.SWTrackController.Compiler.emitter import Emitter
+from src.SWTrackController.Compiler.parse import Parser
 
-from UI.server_functions import RequestCode, ResponseCode, send_message, send_message_async
+from src.UI.server_functions import RequestCode, ResponseCode, send_message, send_message_async
 
-from UI.Common.common import Alert, Confirmation
+from src.UI.Common.common import Alert, Confirmation
+from src.UI.window_manager import window_list
 
 HWTRACK_CONTROLLER_NUMBER = '1'
 
@@ -64,7 +64,7 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
 
         # Find elements and connect them accordingly
         logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button')
-        logout_button.clicked.connect(SWTrackControllerUi.logout)
+        logout_button.clicked.connect(self.logout)
 
         switch_position_button = self.findChild(QtWidgets.QPushButton, 'switch_position_button')
         switch_position_button.setAttribute(Qt.WA_TranslucentBackground)
@@ -97,7 +97,7 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         self.send_gather_data_message()
         self.update_timer = QTimer()
         self.update_timer.timeout.connect(self.send_gather_data_message)
-        self.update_timer.start(5000)
+        # self.update_timer.start(5000)
 
         self.show()
 
@@ -368,15 +368,12 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             suggested_speed_label.setText("N/A")
             command_speed_label.setText("N/A")
 
-    @staticmethod
-    def logout():
+    def logout(self):
         """Method invoked when the logout button is pressed"""
-        if (sys.platform == 'darwin') | (sys.platform == 'linux'):
-            os.system('python3 src/UI/login_gui.py &')
-        else:
-            os.system('start /B python src/UI/login_gui.py')
-        app.exit()
+        self.close()
+        window_list.remove(self)
 
-app = QtWidgets.QApplication(sys.argv)
-window = SWTrackControllerUi()
-app.exec_()
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    window = SWTrackControllerUi()
+    app.exec_()

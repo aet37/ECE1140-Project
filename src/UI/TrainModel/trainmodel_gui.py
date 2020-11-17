@@ -6,22 +6,23 @@ from PyQt5.QtGui import QScreen
 from PyQt5.QtCore import QTimer
 import sys
 
-sys.path.insert(1, 'src')
-from UI.server_functions import send_message_async, RequestCode, send_message, ResponseCode
+from src.UI.server_functions import send_message_async, RequestCode, send_message, ResponseCode
+from src.UI.signals import Signals
+from src.UI.window_manager import window_list
 
-class Ui(QtWidgets.QMainWindow):
+class TrainModelUi(QtWidgets.QMainWindow):
     """UI class for the Train Model"""
     def __init__(self):
-        super(Ui, self).__init__()
+        super().__init__()
 
-        self.train_menu_timer = QTimer()
-        self.train1_info_timer = QTimer()
-        self.train2_info_timer = QTimer()
-        self.train3_info_timer = QTimer()
-        self.train_menu_timer.timeout.connect(self.update_train_list)
-        self.train1_info_timer.timeout.connect(self.update_gui1)
-        self.train2_info_timer.timeout.connect(self.update_gui2)
-        self.train3_info_timer.timeout.connect(self.update_gui3)
+        # self.train_menu_timer = QTimer()
+        # self.train1_info_timer = QTimer()
+        # self.train2_info_timer = QTimer()
+        # self.train3_info_timer = QTimer()
+        # self.train_menu_timer.timeout.connect(self.update_train_list)
+        # self.train1_info_timer.timeout.connect(self.update_gui1)
+        # self.train2_info_timer.timeout.connect(self.update_gui2)
+        # self.train3_info_timer.timeout.connect(self.update_gui3)
 
         self.current_train_id = "1"
         self.train_menu()
@@ -33,8 +34,8 @@ class Ui(QtWidgets.QMainWindow):
         """Method called after a train is selected"""
         uic.loadUi('src/UI/TrainModel/Train_Menu.ui', self)
 
-        self.stop_all_timers() # Restart timers
-        self.train_menu_timer.start(2000)
+        # self.stop_all_timers() # Restart timers
+        # self.train_menu_timer.start(2000)
 
         # TESTING DYNAMIC SCREEN SIZE!!!!!!!!!!!!!
         # screen = app.primaryScreen()
@@ -62,13 +63,22 @@ class Ui(QtWidgets.QMainWindow):
         # Show the page
         self.show()
 
+    def update_lights_label(self, light_status):
+        print("Here")
+        if light_status:
+            self.findChild(QtWidgets.QLabel, 'disp_cabin_lights').setText("on")
+            self.findChild(QtWidgets.QLabel, 'disp_cabin_lights').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
+        else:
+            self.findChild(QtWidgets.QLabel, 'disp_cabin_lights').setText("off")
+            self.findChild(QtWidgets.QLabel, 'disp_cabin_lights').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
+
     def update_current_train_id(self):
         self.current_train_id = self.menu_train_combo.currentText()[-1]
         print(self.current_train_id)
 
     def train_info_1(self):
-        self.stop_all_timers() # Restart timers
-        self.train1_info_timer.start(2000)
+        # self.stop_all_timers() # Restart timers
+        # self.train1_info_timer.start(2000)
         # This is executed when the button is pressed
         uic.loadUi('src/UI/TrainModel/Train_Info_Page1.ui', self)
 
@@ -89,8 +99,8 @@ class Ui(QtWidgets.QMainWindow):
         disp_command_speed = self.findChild(QtWidgets.QLabel, 'disp_command_speed')
 
     def train_info_2(self):
-        self.stop_all_timers() # Restart timers
-        self.train2_info_timer.start(2000)
+        # self.stop_all_timers() # Restart timers
+        # self.train2_info_timer.start(2000)
         # This is executed when the button is pressed
         uic.loadUi('src/UI/TrainModel/Train_Info_Page2.ui', self)
 
@@ -111,10 +121,12 @@ class Ui(QtWidgets.QMainWindow):
         logoutbutton.clicked.connect(self.train_menu)
 
     def train_info_3(self):
-        self.stop_all_timers() # Restart timers
-        self.train3_info_timer.start(2000)
+        # self.stop_all_timers() # Restart timers
+        # self.train3_info_timer.start(2000)
         # This is executed when the button is pressed
         uic.loadUi('src/UI/TrainModel/Train_Info_Page3.ui', self)
+
+        Signals.lights_toggled.connect(self.update_lights_label)
 
         # Update Label page3_train_label
         if "Select Train..." not in self.current_train_id:
@@ -131,7 +143,7 @@ class Ui(QtWidgets.QMainWindow):
         logoutbutton.clicked.connect(self.train_menu)
 
     def train_parameters(self):
-        self.stop_all_timers() # Restart timers
+        # self.stop_all_timers() # Restart timers
         """Called to used the train parameters page"""
         uic.loadUi('src/UI/TrainModel/train_parameter.ui', self)
 
@@ -146,7 +158,7 @@ class Ui(QtWidgets.QMainWindow):
         save_button.clicked.connect(self.save_parameters)
 
     def train_reports(self):
-        self.stop_all_timers() # Restart timers
+        # self.stop_all_timers() # Restart timers
         """Method called when the train reports button is pressed"""
         uic.loadUi('src/UI/TrainModel/Train_Report.ui', self)
 
@@ -360,21 +372,17 @@ class Ui(QtWidgets.QMainWindow):
         self.alert_sent2.setStyleSheet("color: rgb(133, 158, 166);")
         self.alert_sent3.setStyleSheet("color: green;")
 
-    @staticmethod
     def logout(self):
         """Method invoked when the logout button is pressed"""
-        if (sys.platform == 'darwin') | (sys.platform == 'linux'):
-            os.system('python3 src/UI/login_gui.py &')
-        else:
-            os.system('start /B python src/UI/login_gui.py')
-        app.exit()
+        window_list.remove(self)
 
-    def stop_all_timers(self):
-        self.train_menu_timer.stop()
-        self.train1_info_timer.stop()
-        self.train2_info_timer.stop()
-        self.train3_info_timer.stop()
+    # def stop_all_timers(self):
+    #     self.train_menu_timer.stop()
+    #     self.train1_info_timer.stop()
+    #     self.train2_info_timer.stop()
+    #     self.train3_info_timer.stop()
 
-app = QtWidgets.QApplication(sys.argv)
-window = Ui()
-app.exec_()
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    window = TrainModelUi()
+    app.exec_()
