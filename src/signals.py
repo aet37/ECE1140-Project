@@ -3,7 +3,7 @@
 from PyQt5.QtCore import QObject
 from PyQt5.Qt import pyqtSignal
 
-from src.CommonDef import *
+from src.common_def import *
 
 # pylint: disable=too-few-public-methods
 class SignalsClass(QObject):
