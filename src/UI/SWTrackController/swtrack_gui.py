@@ -1,7 +1,6 @@
 """Software Track Controller GUI"""
 
 import os
-import threading
 import sys
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog
@@ -13,8 +12,6 @@ from src.SWTrackController.Compiler.parse import Parser
 
 from src.UI.Common.common import Alert, Confirmation
 from src.UI.window_manager import window_list
-
-HWTRACK_CONTROLLER_NUMBER = '1'
 
 class SWTrackControllerUi(QtWidgets.QMainWindow):
     """GUI for the track controller module"""
