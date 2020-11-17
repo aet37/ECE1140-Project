@@ -2,7 +2,7 @@
 
 ## Build Status
 
-![Full Build](https://github.com/aet37/ECE1140-Project/workflows/System%20Build/badge.svg)
+![Testing](https://github.com/aet37/ECE1140-Project/workflows/Testing/badge.svg)
 
 ## Coding Standard Status
 
