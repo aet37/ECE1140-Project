@@ -7,22 +7,8 @@
 
     @date 10.01.2020
 """
-from enum import Enum
 
-
-"""
-    @enum Line
-    
-    @brief Enumerated type telling line or train
-
-    @li LINE_GREEN
-    @li LINE_RED
-    @li LINE_UNSPEC
-"""
-class Line(Enum):
-	LINE_GREEN = 0
-	LINE_RED = 1
-	LINE_UNSPEC = 2
+from src.CommonDef import *
 
 """
 	@struct Train
@@ -37,7 +23,6 @@ class Train:
 		self.destination_block = block
 		self.line_on = line
 		self.index_on_route = 0
-		self.route_blocks_arr = []
 		self.route_switches_arr = []
 
 

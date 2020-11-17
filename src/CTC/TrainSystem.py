@@ -9,6 +9,7 @@
 """
 
 from src.CTC.CTCDef import *
+from src.signals import *
 
 """
 	@class TrainSystem
@@ -40,6 +41,7 @@ class TrainSystem:
 	def __init__(self):
 		self.ImportTrackLayout()
 		self.next_train_num = 1
+		self.throughput = 0
 		self.train_numbers = []
 		self.trains_arr = []
 		self.green_route_blocks = [-1, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81,
@@ -58,6 +60,13 @@ class TrainSystem:
 		                         45, 44, 43, 42, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24,
 		                         23, 22, 21, 20, 19, 18, 17, 16, 1, 2, 3, 4, 5, 6, 7, 8, -1]
 		self.red_route_switches = [0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1]
+
+		# Signal Connections
+		signals.update_green_occupancies.connect(self.UpdateGreenBlocks)
+		signals.update_red_occupancies.connect(self.UpdateRedBlocks)
+		signals.update_green_switches.connect(self.UpdateGreenSwitches)
+		signals.update_red_switches.connect(self.UpdateRedSwitches)
+		signals.update_throughput.connect(self.UpdateThroughput)
 
 	"""
 		@brief Import the layout of the track
@@ -116,9 +125,18 @@ class TrainSystem:
 		temp_train.authority = 3
 		temp_train.command_speed = 55
 
+		# Add blocks to train object
+		if line == Line.LINE_GREEN:
+			temp_train.route_switches_arr = self.green_route_switches
+		else:
+			temp_train.route_switches_arr = self.red_route_switches
+
 		# Add train to this array
 		self.trains_arr.append(temp_train)
 		self.train_numbers.append(self.next_train_num)
+
+		# Send signal to Track Controller
+		signals.swtrack_dispatch_train.emit(temp_train.train_id, temp_train.destination_block, temp_train.command_speed, temp_train.authority, temp_train.line_on, temp_train.route_switches_arr)
 
 		# Increment the next train number counter
 		self.next_train_num += 1
@@ -163,6 +181,71 @@ class TrainSystem:
 			raise Exception('CTC : TrainSystem.ReturnSwitchPositions recieved an erronious input')
 		return to_send
 
+	"""
+		@breif Function which updates occupancies on green route
+
+		@param[in]  list of bool
+
+		@return none
+	"""
+
+	def UpdateGreenBlocks(self, occ_arr):
+		if len(occ_arr) != 150:
+			raise Exception('CTC Recived Erronious Green Block Array')
+		for i in range(len(occ_arr)):
+			self.blocks_green_arr[i].occupied = occ_arr[i]
+
+	"""
+		@breif Function which updates occupancies on red route
+
+		@param[in]  list of bool
+
+		@return none
+	"""
+
+	def UpdateRedBlocks(self, occ_arr):
+		if len(occ_arr) != 76:
+			raise Exception('CTC Recived Erronious Red Block Array')
+		for i in range(len(occ_arr)):
+			self.blocks_red_arr[i].occupied = occ_arr[i]
+
+	"""
+		@breif Function which updates occupancies on green route
+
+		@param[in]  list of bool
+
+		@return none
+	"""
+
+	def UpdateGreenSwitches(self, sw_arr):
+		if len(sw_arr) != 6:
+			raise Exception('CTC Recived Erronious Green Switch Array')
+		for i in range(len(sw_arr)):
+			self.switches_green_arr[i].occupied = sw_arr[i]
+
+	"""
+		@breif Function which updates occupancies on red route
+
+		@param[in]  list of bool
+
+		@return none
+	"""
+
+	def UpdateRedSwitches(self, sw_arr):
+		if len(sw_arr) != 7:
+			raise Exception('CTC Recived Erronious Red Switch Array')
+		for i in range(len(sw_arr)):
+			self.switches_red_arr[i].occupied = sw_arr[i]
+
+	"""
+		@breif Function which updates throughput of system
+
+		@param[in]  throuhgput int
+
+		@return none
+	"""
+	def UpdateThroughput(self, thr):
+		self.throughput = thr
 
 # Define a TrainSystem object to use; acts as equivalent of singleton class
 ctc = TrainSystem()
