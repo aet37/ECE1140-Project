@@ -21,6 +21,7 @@
  *
  * @li LINE_GREEN
  * @li LINE_RED
+ * @li LINE_UNSPEC
  *
  */
 enum Line {LINE_GREEN, LINE_RED, LINE_UNSPEC};
