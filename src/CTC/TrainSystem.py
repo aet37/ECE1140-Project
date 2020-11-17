@@ -7,7 +7,6 @@
 
 	@date 10.01.2020
 """
-import sys
 
 from src.CTC.CTCDef import *
 
