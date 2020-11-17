@@ -18,6 +18,9 @@ class CTCUi(QtWidgets.QMainWindow):
 		#init
 		self.tnum = -1
 
+		# For reloading throughput value
+		global time_timr
+
 		# In Main Window
 		self.button = self.findChild(QtWidgets.QPushButton, 'LoadSchedule') # Find the button
 		self.button.clicked.connect(self.LoadScheduleWindow)
@@ -32,8 +35,21 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.checkbox.clicked.connect(self.ToggleAutomaicMode)
 
 		self.tplabel = self.findChild(QtWidgets.QLabel, 'ThroughputValue') # Find the label
+		self.ShowThroughput()
+
+		# Automatically refresh Map after 10s
+		time_timr = QtCore.QTimer(self)
+		time_timr.timeout.connect(self.ShowThroughput)
+		time_timr.start(10000)
+
 
 		self.show()
+
+	def ShowThroughput(self):
+		try:
+			self.tplabel.setText(str(ctc.throughput))
+		except:
+			pass
 
 
 	#######################################################################################################################################
@@ -426,6 +442,9 @@ class CTCUi(QtWidgets.QMainWindow):
 		uic.loadUi('src/UI/CTC/ctc_main.ui', self)
 		self.setWindowTitle("CTC Main Page")
 
+		# For reloading throughput value
+		global time_timr
+
 		# In Main Window
 		self.button = self.findChild(QtWidgets.QPushButton, 'LoadSchedule') # Find the button
 		self.button.clicked.connect(self.LoadScheduleWindow)
@@ -440,6 +459,12 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.checkbox.clicked.connect(self.ToggleAutomaicMode)
 
 		self.tplabel = self.findChild(QtWidgets.QLabel, 'ThroughputValue') # Find the label
+		self.ShowThroughput()
+
+		# Automatically refresh Map after 10s
+		time_timr = QtCore.QTimer(self)
+		time_timr.timeout.connect(self.ShowThroughput)
+		time_timr.start(10000)
 
 
 	#######################################################################################################################################
@@ -456,6 +481,9 @@ class CTCUi(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def ExitModule(self):
+		global time_timr
+		time_timr.stop()
+
 		"""Removes the window from the list"""
 		window_list.remove(self)
 

@@ -115,7 +115,6 @@ class MyTestCase(unittest.TestCase):
 		self.assertEqual(ctc.trains_arr[0].authority == 3, True)
 		self.assertEqual(ctc.trains_arr[0].index_on_route == 0, True)
 
-
 # Main function Checker
 if __name__ == '__main__':
 	unittest.main()
