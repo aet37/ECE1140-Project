@@ -1,5 +1,5 @@
 """
-	@file TrainSystem.hpp
+	@file TrainSystem.py
 
 	@brief Declaration of the TrainSystem class; will run the CTC module
 
