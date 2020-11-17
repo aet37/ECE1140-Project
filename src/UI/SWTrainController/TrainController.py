@@ -5,7 +5,7 @@ import sys
 from src.UI.server_functions import *
 from src.UI.Common.common import Alert, Confirmation
 
-from src.UI.signals import Signals
+from src.signals import signals
 from src.UI.window_manager import window_list
 
 class SWTrainUi(QtWidgets.QMainWindow):

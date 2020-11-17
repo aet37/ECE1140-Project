@@ -7,7 +7,7 @@ from PyQt5.QtCore import QTimer
 import sys
 
 from src.UI.server_functions import send_message_async, RequestCode, send_message, ResponseCode
-from src.UI.signals import Signals
+from src.signals import signals
 from src.UI.window_manager import window_list
 
 class TrainModelUi(QtWidgets.QMainWindow):
