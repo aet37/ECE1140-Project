@@ -1,0 +1,39 @@
+name: Testing
+
+on:
+  push:
+    paths-ignore:
+      - 'docs/**'
+    branches: [ master ]
+  pull_request:
+    paths-ignore:
+      - 'docs/**'
+
+jobs:
+  Tests:
+
+    runs-on: ubuntu-latest
+    needs: [Build]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Run requirements file
+      run: pip install -r requirements.txt
+
+    - name: Run CTC tests
+      run: |
+        pushd tests/UnitTests/CTC
+        python *.py
+        popd
+
+    - name: Run SWTrack tests
+      run: |
+        pushd tests/UnitTests/SWTrackController/Compiler
+        pytest --setup-show
+        popd

@@ -6,6 +6,7 @@ import sys
 from PyQt5.QtCore import QTimer
 sys.path.insert(1, 'src')
 from UI.server_functions import *
+from UI.window_manager import window_list
 import pyexcel
 import pyexcel_io
 import json
@@ -13,10 +14,10 @@ tracks = 0
 
 
 
-class Ui(QtWidgets.QMainWindow):
+class TrackModelUi(QtWidgets.QMainWindow):
     
     def __init__(self):
-        super(Ui, self).__init__()
+        super().__init__()
         # self.track1_info_timer = QTimer()
         # self.track1_info_timer.timeout.connect(self.update_times)
 
@@ -342,13 +343,10 @@ class Ui(QtWidgets.QMainWindow):
         self.track1_info_timer.stop()
 
     def logout(self):
-        # This is executed when the button is pressed
-        if (sys.platform == 'darwin') | (sys.platform == 'linux'):
-            os.system('python3 src/UI/login_gui.py &')
-        else:
-            os.system('start /B python src/UI/login_gui.py')
-        app.exit()
+        """Removes this window from the list"""
+        window_list.remove(self)
 
-app = QtWidgets.QApplication(sys.argv)
-window = Ui()
-app.exec_()
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    window = TrackModelUi()
+    app.exec_()

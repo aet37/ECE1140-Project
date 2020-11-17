@@ -7,6 +7,7 @@ from UI.server_functions import *
 from UI.Common.common import Alert, Confirmation
 
 from UI.signals import Signals
+from UI.window_manager import window_list
 
 class SWTrainUi(QtWidgets.QMainWindow):
 
@@ -514,11 +515,8 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
     def logout(self):
         # This is executed when the button is pressed
-        if (sys.platform == 'darwin') | (sys.platform == 'linux'):
-            os.system('python3 src/UI/login_gui.py &')
-        else:
-            os.system('start /B python src/UI/login_gui.py')
-        app.exit()
+        self.close()
+        window_list.remove(self)
 
     # def stop_all_timers(self):
     #     self.main_menu_timer.stop()

@@ -4,6 +4,7 @@ import sys
 
 sys.path.insert(1, 'src/UI')
 from server_functions import *
+from UI.window_manager import window_list
 
 # GLOBALS
 class CTCUi(QtWidgets.QMainWindow):
@@ -433,16 +434,13 @@ class CTCUi(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def ExitModule(self):
-		if (sys.platform == 'darwin') | (sys.platform == 'linux'):
-			os.system('python3 src/UI/login_gui.py &')
-		else:
-			os.system('start /B python src/UI/login_gui.py')
-		app.exit()
+		"""Removes the window from the list"""
+		window_list.remove(self)
 
-
-app = QtWidgets.QApplication(sys.argv)
-window = CTCUi()
-app.exec_()
+if __name__ == "__main__":
+	app = QtWidgets.QApplication(sys.argv)
+	window = CTCUi()
+	app.exec_()
 
 
 

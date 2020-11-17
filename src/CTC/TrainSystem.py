@@ -9,8 +9,7 @@
 """
 import sys
 
-sys.path.insert(1, 'src/CTC')
-from CTCDef import *
+from src.CTC.CTCDef import *
 
 """
 	@class TrainSystem
