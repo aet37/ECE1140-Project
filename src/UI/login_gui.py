@@ -4,6 +4,7 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import Qt
 
 from src.UI.window_manager import window_list
+from src.UI.timekeeper_gui import TimekeeperUi
 from src.UI.CTC.ctc_gui import CTCUi
 from src.UI.SWTrackController.sw_track_gui import SWTrackControllerUi
 from src.UI.TrackModel.trackmodel_gui import TrackModelUi
@@ -41,13 +42,17 @@ class LoginUi(QtWidgets.QMainWindow):
             pass
         elif username == "swtrain" and password == "jerry":
             window_list.append(SWTrainUi())
+        elif username == "timekeeper" and password == "jerry":
+            window_list.append(TimekeeperUi())
         else:
             self.alert_login.setStyleSheet("color: red;")
             return
 
-    def keyPressEvent(self, event): # pylint: disable=invalid-name
+    # pylint: disable=invalid-name
+    def keyPressEvent(self, event):
         """Handles a keypress event"""
         if event.key() not in (Qt.Key_Enter, Qt.Key_Return):
             super().keyPressEvent(event)
         else:
             self.login_parse()
+    # pylint: enable=invalid-name
