@@ -8,7 +8,7 @@
     @date 10.01.2020
 """
 
-from src.CommonDef import *
+from src.common_def import *
 
 """
 	@struct Train
