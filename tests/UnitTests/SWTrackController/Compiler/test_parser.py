@@ -4,10 +4,10 @@ import sys
 from mock import MagicMock
 import pytest
 
-sys.path.insert(1, '../../../../src')
-from SWTrackController.Compiler.parse import Parser
-from SWTrackController.Compiler.lexer import Lexer, CompilationError
-from SWTrackController.Compiler.emitter import Emitter
+sys.path.insert(1, '../../../..')
+from src.SWTrackController.Compiler.parse import Parser
+from src.SWTrackController.Compiler.lexer import Lexer, CompilationError
+from src.SWTrackController.Compiler.emitter import Emitter
 
 # pylint: disable=redefined-outer-name
 @pytest.fixture(scope='function')

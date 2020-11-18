@@ -2,8 +2,8 @@ import os
 from PyQt5 import QtWidgets, uic, QtCore
 import sys
 
-sys.path.insert(1, 'src/UI')
-from server_functions import *
+from src.CTC.TrainSystem import *
+from src.UI.window_manager import window_list
 
 # GLOBALS
 class CTCUi(QtWidgets.QMainWindow):
@@ -17,6 +17,9 @@ class CTCUi(QtWidgets.QMainWindow):
 
 		#init
 		self.tnum = -1
+
+		# For reloading throughput value
+		global time_timr
 
 		# In Main Window
 		self.button = self.findChild(QtWidgets.QPushButton, 'LoadSchedule') # Find the button
@@ -32,8 +35,21 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.checkbox.clicked.connect(self.ToggleAutomaicMode)
 
 		self.tplabel = self.findChild(QtWidgets.QLabel, 'ThroughputValue') # Find the label
+		self.ShowThroughput()
+
+		# Automatically refresh Map after 10s
+		time_timr = QtCore.QTimer(self)
+		time_timr.timeout.connect(self.ShowThroughput)
+		time_timr.start(10000)
+
 
 		self.show()
+
+	def ShowThroughput(self):
+		try:
+			self.tplabel.setText(str(ctc.throughput))
+		except:
+			pass
 
 
 	#######################################################################################################################################
@@ -72,11 +88,15 @@ class CTCUi(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def MapMenuWindow(self):
+		global time_timr
+
 		uic.loadUi('src/UI/CTC/ctc_map_menu.ui', self)
 		self.setWindowTitle("CTC - Map Menu")
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button to return to main menu
-		self.button.clicked.connect(self.returnToMainWindow)
+		self.button.clicked.connect(self.LeaveThis)
+
+		self.trains_label = self.findChild(QtWidgets.QLabel, 'TrainsLabel')	# Find label which displays valid trains
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'ViewGreen') # Find the view green button
 		self.button.clicked.connect(self.GreenMapWindow)
@@ -88,6 +108,27 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.error_label = self.findChild(QtWidgets.QLabel, 'ErrLabel')	# Input for Train ID
 		self.train_button = self.findChild(QtWidgets.QPushButton, 'ViewTrainButton')	# Get status of train
 		self.train_button.clicked.connect(self.OpenIfGood)
+
+		self.UpdateTrainsList()
+
+		# Automatically refresh Map after 5s
+		time_timr = QtCore.QTimer(self)
+		time_timr.timeout.connect(self.UpdateTrainsList)
+		time_timr.start(5000)
+
+
+	def UpdateTrainsList(self):
+		if len(ctc.train_numbers) == 0:
+			try:
+				self.trains_label.setText('NO TRAINS DISPATCHED')
+			except:
+				pass
+		else:
+			try:
+				self.trains_label.setText(str(ctc.train_numbers))
+			except:
+				pass
+
 
 
 	def OpenIfGood(self):
@@ -106,9 +147,9 @@ class CTCUi(QtWidgets.QMainWindow):
 				self.error_label.setText('Error: Invalid Train Num Entered')
 				return
 
-			valid = send_message(RequestCode.CTC_SEND_GUI_VAILD_TRAIN, self.train_id_label.text())
+			valid = int(self.train_id_label.text()) in ctc.train_numbers
 
-			if(valid[0] == ResponseCode.SUCCESS):	# If sucessfuly found the train in the system
+			if(valid == True):	# If sucessfuly found the train in the system
 				self.tnum = int(self.train_id_label.text())
 				self.TrainInfoWindow()
 			else:
@@ -209,22 +250,19 @@ class CTCUi(QtWidgets.QMainWindow):
 				self.d_conf_label.setText('Train Dispatched to Block ' + self.d_block_label.text() + ' at ' + self.d_time_label.text())
 				self.d_speed_label.setText('Command Speed [to Track Controller]: 55 km/hr')
 				self.d_auth_label.setText('Authority [to Track Controller]: 3 Blocks')
-				##### Send data to server #####
-				##### data = "block hour minute a/p"
-				send_message(RequestCode.CTC_DISPATCH_TRAIN,  str(int(self.red_radio.isChecked())) + ' ' + self.d_time_label.text()[0] + self.d_time_label.text()[1] + ' ' + self.d_time_label.text()[3] + self.d_time_label.text()[4]+ ' ' + self.d_time_label.text()[5] + ' ' + self.d_block_label.text())
+				##### Send to CTC #####
+
+				#send_message(RequestCode.CTC_DISPATCH_TRAIN,  str(int(self.red_radio.isChecked())) + ' ' + self.d_time_label.text()[0] + self.d_time_label.text()[1] + ' ' + self.d_time_label.text()[3] + self.d_time_label.text()[4]+ ' ' + self.d_time_label.text()[5] + ' ' + self.d_block_label.text())
 
 		else:
 			self.d_conf_label.setStyleSheet("color: green")
 			self.d_conf_label.setText('Train Dispatched to Block ' + self.d_block_label.text() + ' Now')
 			self.d_speed_label.setText('Command Speed [to Track Controller]: 55 km/hr')
 			self.d_auth_label.setText('Authority [to Track Controller]: 3 Blocks')
-			send_message(RequestCode.CTC_DISPATCH_TRAIN,  str(int(self.red_radio.isChecked())) + ' 00 00 a ' + self.d_block_label.text())
-
-
-		##### Send data to server #####
-		##### data = "block hour minute a/p"
-		#send_message(RequestCode.CTC_DISPATCH_TRAIN,  '0' + ' ' + self.d_time_label.text()[0] + self.d_time_label.text()[1] + ' ' + self.d_time_label.text()[3] + self.d_time_label.text()[4]+ ' ' + self.d_time_label.text()[5] + ' ' + self.d_block_label.text())
-
+			if self.red_radio.isChecked():
+				ctc.DispatchTrain(int(self.d_block_label.text()), Line.LINE_RED)
+			else:
+				ctc.DispatchTrain(int(self.d_block_label.text()), Line.LINE_GREEN)
 		
 	#######################################################################################################################################
 	#######################################################################################################################################
@@ -232,6 +270,7 @@ class CTCUi(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def TrainInfoWindow(self):
+		global time_timr
 		uic.loadUi('src/UI/CTC/ctc_view_train.ui', self)
 		self.setWindowTitle("CTC - View Train Info")
 
@@ -239,9 +278,9 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.button.clicked.connect(self.LeaveThis)
 
 		self.location = self.findChild(QtWidgets.QLabel, 'BlockLabel') # Find the label
-		self.speed = self.findChild(QtWidgets.QLabel, 'BlockLabel') # Find the label
-		self.line = self.findChild(QtWidgets.QLabel, 'BlockLabel') # Find the label
-		self.authority = self.findChild(QtWidgets.QLabel, 'BlockLabel') # Find the label
+		self.speed = self.findChild(QtWidgets.QLabel, 'SpeedLabel_3') # Find the label
+		self.line = self.findChild(QtWidgets.QLabel, 'LineLabel') # Find the label
+		self.authority = self.findChild(QtWidgets.QLabel, 'AuthorityLabel_2') # Find the label
 
 		self.RefreshTrainInfo()
 
@@ -251,21 +290,31 @@ class CTCUi(QtWidgets.QMainWindow):
 		time_timr.start(5000)
 
 	def RefreshTrainInfo(self):
-		info_raw = send_message(RequestCode.CTC_SEND_GUI_TRAIN_INFO, str(self.tnum))
 		# If train no longer on tracks
-		if(info_raw[0] == ResponseCode.ERROR):
+		if(self.tnum not in ctc.train_numbers):
 			self.LeaveThis()
 			return
-		info = info_raw[1][2:len(info_raw)]
 
-		if(info[0:1] == '0'):
-			self.line.setText('GREEN')
+		train_ind = ctc.train_numbers.index(self.tnum)
+
+		if ctc.trains_arr[train_ind].line_on == Line.LINE_GREEN:
+			try:
+				self.line.setText('GREEN')
+				self.location.setText(str(ctc.green_route_blocks[ctc.trains_arr[train_ind].index_on_route]))
+			except:
+				pass
 		else:
-			self.line.setText('RED')
+			try:
+				self.line.setText('RED')
+				self.location.setText(str(ctc.red_route_blocks[ctc.trains_arr[train_ind].index_on_route]))
+			except:
+				pass
+		try:
+			self.speed.setText(str(ctc.trains_arr[train_ind].command_speed))
+			self.authority.setText(str(ctc.trains_arr[train_ind].authority))
+		except:
+			pass
 
-		self.speed.setText(info[2:4])
-		self.authority.setText(info[5:6])
-		self.location.setText(info[7:len(info)])
 
 	#######################################################################################################################################
 	#######################################################################################################################################
@@ -283,50 +332,45 @@ class CTCUi(QtWidgets.QMainWindow):
 		# Initial Refresh
 		self.RefreshMapGreen()
 
-		# Automatically refresh Map after 1s
+		# Automatically refresh Map after 500ms
 		time_timr = QtCore.QTimer(self)
 		time_timr.timeout.connect(self.RefreshMapGreen)
-		time_timr.start(1000)
+		time_timr.start(500)
 
 		# Find the Blocks
 		for i in range(1, 151):
 			exec('self.GB%s = self.findChild(QtWidgets.QPushButton, \'G%s\')' % (str(i), str(i)))
 
-		 # Find the Switches
+		# Find the Switches
 		for i in range(1, 7):
 			exec('self.S%s = self.findChild(QtWidgets.QPushButton, \'SW%s\')' % (str(i), str(i)))
 
 	def RefreshMapGreen(self):
-		# Ping server for track occupancies
-		m_tuple_data = send_message(RequestCode.CTC_SEND_GUI_GREEN_OCCUPANCIES)
+		# Get Track Occupancies
+		tr_oc = ctc.ReturnOccupancies(Line.LINE_GREEN)
 
-		# Extract string data from tuple
-		m_data = m_tuple_data[1]
-
-		for i in range(len(m_data)):
-			if(m_data[i] == 't'):
+		for i in range(len(tr_oc)):
+			if tr_oc[i]:
 				try:
 					eval('self.GB%s.setStyleSheet(\"background-color: rgb(255, 255, 10);\")' % str(i + 1))		# if occupied change block color to yellow
 				except:
-					print(i, 'Warning: Screen has been closed before button could update')
+					pass
 			else:
 				try:
 					eval('self.GB%s.setStyleSheet(\"background-color: rgb(33, 255, 128);\")' % str(i + 1))		# if not occupied, change block color to green
 				except:
-					print('Warning: Screen has been closed before  button could update')
+					pass
 
-		# Ping server for track occupancies
-		m_tuple_data = send_message(RequestCode.CTC_SEND_GUI_SWITCH_POS_GREEN)
+		# Get Switch Positions
+		sw_pos = ctc.ReturnSwitchPositions(Line.LINE_GREEN)
 
-		# Extract string data from tuple
-		m_data = m_tuple_data[1]
-
-		for i in range(1, 7):
-			wrtxt = m_data[(4 * (i - 1)):(3 + (4 * (i - 1)))]
+		wrtxt_arr = ctc.ReturnSwitchPositions(Line.LINE_GREEN)
+		for i in range(len(wrtxt_arr)):
+			wrtxt = wrtxt_arr[i]
 			try:
-				eval('self.SW%s.setText(\'%s\')' % (str(i), wrtxt))
+				eval('self.SW%s.setText(\'%s\')' % (str(i + 1), wrtxt))
 			except:
-				print('Warning: Screen has been closed before button could update')
+				pass
 
 	def LeaveThis(self):
 		global time_timr
@@ -358,41 +402,36 @@ class CTCUi(QtWidgets.QMainWindow):
 		for i in range(1, 77):
 			exec('self.R%s = self.findChild(QtWidgets.QPushButton, \'RB%s\')' % (str(i), str(i)))
 
-		 # Find the Switches
+		# Find the Switches
 		for i in range(1, 8):
 			exec('self.S%s = self.findChild(QtWidgets.QPushButton, \'SW%s\')' % (str(i), str(i)))
 
 	def RefreshMapRed(self):
-		# Ping server for track occupancies
-		m_tuple_data = send_message(RequestCode.CTC_SEND_GUI_RED_OCCUPANICES)
+		# Get Track Occupancies
+		tr_oc = ctc.ReturnOccupancies(Line.LINE_RED)
 
-		# Extract string data from tuple
-		m_data = m_tuple_data[1]
-
-		for i in range(len(m_data)):
-			if(m_data[i] == 't'):
+		for i in range(len(tr_oc)):
+			if tr_oc[i]:
 				try:
-					eval('self.R%s.setStyleSheet(\"background-color: rgb(255, 255, 10);\")' % str(i + 1))		# if occupied change block color to yellow
+					eval('self.GB%s.setStyleSheet(\"background-color: rgb(255, 255, 10);\")' % str(i + 1))		# if occupied change block color to yellow
 				except:
-					print(i, 'Warning: Screen has been closed before button could update')
+					pass
 			else:
 				try:
-					eval('self.R%s.setStyleSheet(\"background-color: rgb(33, 255, 128);\")' % str(i + 1))		# if not occupied, change block color to green
+					eval('self.GB%s.setStyleSheet(\"background-color: rgb(33, 255, 128);\")' % str(i + 1))		# if not occupied, change block color to green
 				except:
-					print('Warning: Screen has been closed before  button could update')
+					pass
 
-		# Ping server for switch positions
-		m_tuple_data = send_message(RequestCode.CTC_SEND_GUI_SWITCH_POS_RED)
+		# Get Switch Positions
+		sw_pos = ctc.ReturnSwitchPositions(Line.LINE_RED)
 
-		# Extract string data from tuple
-		m_data = m_tuple_data[1]
-
-		for i in range(1, 8):
-			wrtxt = m_data[(4 * (i - 1)):(3 + (4 * (i - 1)))]
+		wrtxt_arr = ctc.ReturnSwitchPositions(Line.LINE_RED)
+		for i in range(len(wrtxt_arr)):
+			wrtxt = wrtxt_arr[i]
 			try:
-				eval('self.SW%s.setText(\'%s\')' % (str(i), wrtxt))
+				eval('self.SW%s.setText(\'%s\')' % (str(i + 1), wrtxt))
 			except:
-				print('Warning: Screen has been closed before button could update')
+				pass
 
 	#######################################################################################################################################
 	#######################################################################################################################################
@@ -402,6 +441,9 @@ class CTCUi(QtWidgets.QMainWindow):
 	def returnToMainWindow(self):
 		uic.loadUi('src/UI/CTC/ctc_main.ui', self)
 		self.setWindowTitle("CTC Main Page")
+
+		# For reloading throughput value
+		global time_timr
 
 		# In Main Window
 		self.button = self.findChild(QtWidgets.QPushButton, 'LoadSchedule') # Find the button
@@ -417,6 +459,12 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.checkbox.clicked.connect(self.ToggleAutomaicMode)
 
 		self.tplabel = self.findChild(QtWidgets.QLabel, 'ThroughputValue') # Find the label
+		self.ShowThroughput()
+
+		# Automatically refresh Map after 10s
+		time_timr = QtCore.QTimer(self)
+		time_timr.timeout.connect(self.ShowThroughput)
+		time_timr.start(10000)
 
 
 	#######################################################################################################################################
@@ -433,16 +481,14 @@ class CTCUi(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def ExitModule(self):
-		if (sys.platform == 'darwin') | (sys.platform == 'linux'):
-			os.system('python3 src/UI/login_gui.py &')
-		else:
-			os.system('start /B python src/UI/login_gui.py')
-		app.exit()
+		global time_timr
+		time_timr.stop()
+
+		"""Removes the window from the list"""
+		window_list.remove(self)
 
 
-app = QtWidgets.QApplication(sys.argv)
-window = CTCUi()
-app.exec_()
-
-
-
+if __name__ == "__main__":
+	app = QtWidgets.QApplication(sys.argv)
+	window = CTCUi()
+	app.exec_()

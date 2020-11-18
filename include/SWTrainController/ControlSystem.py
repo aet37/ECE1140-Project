@@ -9,7 +9,7 @@
 #include "Controller.h"
 #include <vector>
 from include.SWTrainController.Controller import Controller
-from UI.signals import Signals
+from src.signals import signals
 
 class ControlSystem:
     def __init__ (self):
@@ -17,9 +17,9 @@ class ControlSystem:
         self.p_controllers = []
 
         # Receive dispatch train signal
-        Signals.SWTRAIN_DISPATCH_TRAIN.connect(self.SWTRAIN_DISPATCH_TRAIN)
+        signals.SWTRAIN_DISPATCH_TRAIN.connect(self.SWTRAIN_DISPATCH_TRAIN)
         # Receive lights signal
-        Signals.SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS.connect(self.SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS)
+        signals.SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS.connect(self.SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS)
 
 
     # @param train_id = Train ID
@@ -46,11 +46,11 @@ class ControlSystem:
     ### SIGNAL DEFINITION ###
     def SWTRAIN_DISPATCH_TRAIN(self, com_sp, curr_sp, auth):
         self.createNewController(com_sp, curr_sp, auth)
-        Signals.HWTRAIN_DISPATCH_TRAIN.emit(com_sp, curr_sp, auth)
+        signals.HWTRAIN_DISPATCH_TRAIN.emit(com_sp, curr_sp, auth)
 
     def SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS(self, trainID):
         self.p_controllers[trainID].toggleLights()
-        Signals.TRAIN_MODEL_GUI_RECEIVE_LIGHTS.emit(trainID)
+        signals.TRAIN_MODEL_GUI_RECEIVE_LIGHTS.emit(trainID)
 
 control_system = ControlSystem()
 #endif

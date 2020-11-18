@@ -142,23 +142,6 @@ background-color: rgb(186, 116, 79);</string>
       <string>Incorrect username or password!</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="TurnOff">
-     <property name="geometry">
-      <rect>
-       <x>492</x>
-       <y>10</y>
-       <width>121</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(252, 1, 7);
-color: rgb(255, 255, 255)</string>
-     </property>
-     <property name="text">
-      <string>Shut Down System</string>
-     </property>
-    </widget>
    </widget>
   </widget>
  </widget>
