@@ -17,6 +17,7 @@ class SignalsClass(QObject):
     update_green_switches = pyqtSignal(list)	# Used by SWTrack Controller to send CTC green line switches in array of BOOL
     update_red_switches = pyqtSignal(list)		# Used by SWTrack Controller to send CTC red line switches in array of BOOL
     update_throughput = pyqtSignal(int)			# Used by Track Model to send CTC throughput (ticket sales)
+    dispatch_scheduled_train = pyqtSignal(int, Line)	# Used by Timekeeper to send CTC a dispatch commmand
 
 
     # Track Controller Signals
