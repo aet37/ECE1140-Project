@@ -8,6 +8,7 @@ from src.common_def import *
 # pylint: disable=too-few-public-methods
 class SignalsClass(QObject):
     """Class to hold all the signals"""
+    timer_expired = pyqtSignal(int, int, int) # Current hours, minutes, seconds
     lights_toggled = pyqtSignal(bool)
 
     # CTC Signals
