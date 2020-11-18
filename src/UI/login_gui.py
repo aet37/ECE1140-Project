@@ -3,13 +3,10 @@
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import Qt
 
-from src.UI.window_manager import window_list
-from src.UI.CTC.ctc_gui import CTCUi
-from src.UI.SWTrackController.swtrack_gui import SWTrackControllerUi
-from src.UI.TrackModel.trackmodel_gui import TrackModelUi
-from src.UI.TrainModel.trainmodel_gui import TrainModelUi
-from src.UI.SWTrainController.TrainController import SWTrainUi
-class LoginUi(QtWidgets.QMainWindow):
+from UI.window_manager import window_list
+from UI.TrainModel.trainmodel_gui import TrainModelUi
+from UI.SWTrainController.TrainController import SWTrainUi
+class LoginPage(QtWidgets.QMainWindow):
     """Page shown to user upon application startup"""
     def __init__(self):
         super().__init__()
@@ -19,10 +16,14 @@ class LoginUi(QtWidgets.QMainWindow):
         self.username_in = self.findChild(QtWidgets.QLineEdit, 'username_in')
         self.password_in = self.findChild(QtWidgets.QLineEdit, 'password_in')
 
-        self.login_button = self.findChild(QtWidgets.QPushButton, 'login_button')
-        self.login_button.clicked.connect(self.login_parse)
-
+        self.button = self.findChild(QtWidgets.QPushButton, 'login_button')# Find the button
+        self.button.clicked.connect(self.login_parse)
+        self.button = self.findChild(QtWidgets.QPushButton, 'TurnOff') # Find the button
+        self.button.clicked.connect(self.stuff)
         self.show()
+
+    def stuff(self):
+        print(window_list.remove(self))
 
     def login_parse(self):
         """Checks the user's credentials and starts the specific module's ui if correct"""
@@ -30,6 +31,7 @@ class LoginUi(QtWidgets.QMainWindow):
         password = self.password_in.text()
 
         if username == "trainmodel" and password == "jerry":
+            file_path = 'src/UI/TrainModel/trainmodel_gui.py'
             window_list.append(TrainModelUi())
         elif username == "trackmodel" and password == "jerry":
             window_list.append(TrackModelUi())
@@ -41,9 +43,13 @@ class LoginUi(QtWidgets.QMainWindow):
             pass
         elif username == "swtrain" and password == "jerry":
             window_list.append(SWTrainUi())
+        elif username == "engineer" and password == "jerry":
+            file_path = 'src/UI/SWTrainController/TrainEngineer.py'
         else:
             self.alert_login.setStyleSheet("color: red;")
             return
+
+        # window_list.remove(self)
 
     def keyPressEvent(self, event): # pylint: disable=invalid-name
         """Handles a keypress event"""

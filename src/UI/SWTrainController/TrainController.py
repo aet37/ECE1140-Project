@@ -8,6 +8,8 @@ from src.UI.Common.common import Alert, Confirmation
 from src.signals import signals
 from src.UI.window_manager import window_list
 
+from UI.signals import Signals
+
 class SWTrainUi(QtWidgets.QMainWindow):
 
     def __init__(self):
