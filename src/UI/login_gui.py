@@ -36,7 +36,6 @@ class LoginPage(QtWidgets.QMainWindow):
         password = self.password_in.text()
         file_path = ''
         if username == "trainmodel" and password == "jerry":
-            file_path = 'src/UI/TrainModel/trainmodel_gui.py'
             window_list.append(TrainModelUi())
         elif username == "trackmodel" and password == "jerry":
             file_path = 'src/UI/TrackModel/trackmodel_gui.py'

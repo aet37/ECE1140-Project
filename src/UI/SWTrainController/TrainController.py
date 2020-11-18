@@ -5,6 +5,10 @@ import sys
 sys.path.insert(1, 'src')
 from UI.server_functions import *
 from UI.Common.common import Alert, Confirmation
+from UI.window_manager import window_list
+# Import singleton instance of control system
+from include.SWTrainController.ControlSystem import control_system 
+
 
 from UI.signals import Signals
 
@@ -270,7 +274,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         #     return
 
         # send_message(RequestCode.SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS, self.current_train_id)
-        Signals.lights_toggled.emit(self.lights_button.isChecked())
+        Signals.lights_toggled.emit(self.current_train_id)
 
     def toggle_doors(self):
         # If no controllers have been created, button does nothing
@@ -514,11 +518,13 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
     def logout(self):
         # This is executed when the button is pressed
-        if (sys.platform == 'darwin') | (sys.platform == 'linux'):
-            os.system('python3 src/UI/login_gui.py &')
-        else:
-            os.system('start /B python src/UI/login_gui.py')
-        app.exit()
+        self.close()
+        window_list.remove(self)
+        #if (sys.platform == 'darwin') | (sys.platform == 'linux'):
+        #    os.system('python3 src/UI/login_gui.py &')
+        #else:
+        #    os.system('start /B python src/UI/login_gui.py')
+        #app.exit()
 
     # def stop_all_timers(self):
     #     self.main_menu_timer.stop()
