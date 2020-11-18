@@ -128,8 +128,10 @@ class TrainSystem:
 		# Add blocks to train object
 		if line == Line.LINE_GREEN:
 			temp_train.route_switches_arr = self.green_route_switches
+			temp_train.route_blocks_arr = self.green_route_blocks
 		else:
 			temp_train.route_switches_arr = self.red_route_switches
+			temp_train.route_blocks_arr = self.red_route_blocks
 
 		# Add train to this array
 		self.trains_arr.append(temp_train)
@@ -194,6 +196,7 @@ class TrainSystem:
 			raise Exception('CTC Recived Erronious Green Block Array')
 		for i in range(len(occ_arr)):
 			self.blocks_green_arr[i].occupied = occ_arr[i]
+		self.UpdateTrainLoc()
 
 	"""
 		@breif Function which updates occupancies on red route
@@ -208,6 +211,7 @@ class TrainSystem:
 			raise Exception('CTC Recived Erronious Red Block Array')
 		for i in range(len(occ_arr)):
 			self.blocks_red_arr[i].occupied = occ_arr[i]
+		self.UpdateTrainLoc()
 
 	"""
 		@breif Function which updates occupancies on green route
@@ -244,8 +248,109 @@ class TrainSystem:
 
 		@return none
 	"""
+
 	def UpdateThroughput(self, thr):
 		self.throughput = thr
+
+	"""
+		@breif Function which updates location of a train on the green line
+
+		@param	none
+
+		@return none
+	"""
+
+	def UpdateTrainLoc(self):
+		trains_on_green = []	# Keep running list of blocks a train is on
+		trains_on_red = []
+
+		for i in range(len(self.trains_arr)):
+			if self.trains_arr[i].line_on == Line.LINE_GREEN:
+				
+				# If train has not made it out of the yard yet
+				if self.trains_arr[i].index_on_route == 0:
+					if self.trains_arr[i].route_blocks_arr[1] not in trains_on_green:
+						if self.blocks_green_arr[self.trains_arr[i].route_blocks_arr[1] - 1].occupied:
+							self.trains_arr[i].index_on_route += 1
+							trains_on_green.append(self.trains_arr[i].route_blocks_arr[1])	# append to list which trains are on
+						else:
+							continue
+				# If train has reached the yard
+				elif self.trains_arr[i].index_on_route == len(self.trains_arr[i].route_blocks_arr - 1):
+					self.trains_arr.pop(i)
+					self.train_numbers.pop(i)
+					i -= 1
+				# If train is already on tracks; Advance train if block it says its on is not occupied
+				else:
+					if not self.blocks_green_arr[self.trains_arr[i].route_blocks_arr[self.trains_arr[i].index_on_route] - 1].occupied:
+						
+						self.trains_arr[i].index_on_route += 1
+
+						if self.trains_arr[i].authority == 1:
+							self.trains_arr[i].authority = 3
+						else:
+							self.trains_arr[i].authority -= 1
+
+						if self.trains_arr[i].command_speed == 55:
+							self.trains_arr[i].command_speed = 54
+						else:
+							self.trains_arr[i].command_speed = 55
+
+						# Send upated command speed and authority to SW Track Controller
+						signals.swtrack_update_authority.emit(self.trains_arr[i].train_id, self.trains_arr[i].authority)
+						signals.swtrack_update_speed.emit(self.trains_arr[i].train_id, self.trains_arr[i].command_speed)
+						trains_on_green.append(self.trains_arr[i].route_blocks_arr[self.trains_arr[i].index_on_route])	# append to list which trains are on
+					else:
+						continue
+
+			# If Line on RED			
+			else:
+				# If train has not made it out of the yard yet
+				if self.trains_arr[i].index_on_route == 0:
+					if self.trains_arr[i].route_blocks_arr[1] not in trains_on_red:
+						if self.blocks_red_arr[self.trains_arr[i].route_blocks_arr[1] - 1].occupied:
+							self.trains_arr[i].index_on_route += 1
+							trains_on_red.append(self.trains_arr[i].route_blocks_arr[1])	# append to list which trains are on
+						else:
+							continue
+				# If train has reached the yard
+				elif self.trains_arr[i].index_on_route == len(self.trains_arr[i].route_blocks_arr - 1):
+					self.trains_arr.pop(i)
+					self.train_numbers.pop(i)
+					i -= 1
+				# If train is already on tracks; Advance train if block it says its on is not occupied
+				else:
+					if not self.blocks_red_arr[self.trains_arr[i].route_blocks_arr[self.trains_arr[i].index_on_route] - 1].occupied:
+						
+						self.trains_arr[i].index_on_route += 1
+
+						if self.trains_arr[i].authority == 1:
+							self.trains_arr[i].authority = 3
+						else:
+							self.trains_arr[i].authority -= 1
+
+						if self.trains_arr[i].command_speed == 55:
+							self.trains_arr[i].command_speed = 54
+						else:
+							self.trains_arr[i].command_speed = 55
+
+						# Send upated command speed and authority to SW Track Controller
+						signals.swtrack_update_authority.emit(self.trains_arr[i].train_id, self.trains_arr[i].authority)
+						signals.swtrack_update_speed.emit(self.trains_arr[i].train_id, self.trains_arr[i].command_speed)
+						trains_on_red.append(self.trains_arr[i].route_blocks_arr[self.trains_arr[i].index_on_route])	# append to list which trains are on
+					else:
+						continue
+
+	"""
+		@breif Function which updates location of a train on the red line
+
+		@param	none
+
+		@return none
+	"""
+
+	def UpdateTrainLocRed(self):
+		return
 
 # Define a TrainSystem object to use; acts as equivalent of singleton class
 ctc = TrainSystem()
