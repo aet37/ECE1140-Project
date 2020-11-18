@@ -6,7 +6,7 @@ from PyQt5.QtCore import Qt
 from src.UI.window_manager import window_list
 from src.UI.timekeeper_gui import TimekeeperUi
 from src.UI.CTC.ctc_gui import CTCUi
-from src.UI.SWTrackController.sw_track_gui import SWTrackControllerUi
+from src.UI.SWTrackController.swtrack_gui import SWTrackControllerUi
 from src.UI.TrackModel.trackmodel_gui import TrackModelUi
 from src.UI.TrainModel.trainmodel_gui import TrainModelUi
 from src.UI.SWTrainController.TrainController import SWTrainUi

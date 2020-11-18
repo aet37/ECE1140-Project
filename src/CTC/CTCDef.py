@@ -8,7 +8,7 @@
     @date 10.01.2020
 """
 
-from src.CommonDef import *
+from src.common_def import *
 
 """
 	@struct Train
@@ -24,7 +24,7 @@ class Train:
 		self.line_on = line
 		self.index_on_route = 0
 		self.route_switches_arr = []
-
+		self.route_blocks_arr = []
 
 """
 	@struct Track

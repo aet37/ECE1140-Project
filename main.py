@@ -1,3 +1,4 @@
+"""Main file to run"""
 
 import sys
 from PyQt5 import QtWidgets
