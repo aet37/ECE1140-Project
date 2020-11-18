@@ -60,9 +60,9 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button')
         logout_button.clicked.connect(self.logout)
 
-        switch_position_button = self.findChild(QtWidgets.QPushButton, 'switch_position_button')
-        switch_position_button.setAttribute(Qt.WA_TranslucentBackground)
-        switch_position_button.clicked.connect(self.switch_position_button_clicked)
+        # switch_position_button = self.findChild(QtWidgets.QPushButton, 'switch_position_button')
+        # switch_position_button.setAttribute(Qt.WA_TranslucentBackground)
+        # switch_position_button.clicked.connect(self.switch_position_button_clicked)
 
         download_program_button = self.findChild(QtWidgets.QPushButton, 'download_program_button')
         download_program_button.clicked.connect(self.download_program)
