@@ -1,43 +1,9 @@
-"""
-	@file TrainSystem.py
-
-	@brief Declaration of the TrainSystem class; will run the CTC module
-
-	@author Andrew Toader
-
-	@date 10.01.2020
-"""
 
 from src.CTC.CTCDef import *
 from src.signals import *
 
-"""
-	@class TrainSystem
-
-	@brief Singleton class responsible for running vital operations of the CTC
-	
-	@members 
-		@li train_numbers
-		@li trains_arr
-		@li blocks_green_arr
-		@li blocks_red_arr
-		@li switches_green_arr
-		@li switches_red_arr
-		@li green_route_blocks
-		@li green_route_switches
-		@li red_route_blocks
-		@li red_route_switches
-		
-	@methods
-		@li ImportTrackLayout
-		@li DispatchTrain
-		@li ReturnOccupancies
-		@li ReturnSwitchPositions
-		
-"""
-
-
 class TrainSystem:
+	""" class responsible for running vital operations of the CTC """
 	def __init__(self):
 		self.ImportTrackLayout()
 		self.next_train_num = 1
@@ -67,16 +33,11 @@ class TrainSystem:
 		signals.update_green_switches.connect(self.UpdateGreenSwitches)
 		signals.update_red_switches.connect(self.UpdateRedSwitches)
 		signals.update_throughput.connect(self.UpdateThroughput)
+		signals.dispatch_scheduled_train.connect(self.DispatchTrain)
 
-	"""
-		@brief Import the layout of the track
-		
-		@param[out] updates green and red blocks and switches
-		
-		@return None
-	"""
 
 	def ImportTrackLayout(self):
+		""" Import the layout of the track """
 		self.blocks_green_arr = []
 		self.blocks_red_arr = []
 		self.switches_green_arr = []
@@ -108,16 +69,9 @@ class TrainSystem:
 		rsw7 = Switch(53, 66)
 		self.switches_red_arr = [rsw1, rsw2, rsw3, rsw4, rsw5, rsw6, rsw7]
 
-	"""
-		@brief Create(dispatch) a new train by creating the Train object then adding it to the class member vector
-
-		@param[in]	block_to
-		@param[in]  line_on
-
-		@return pointer to newly created Train struct
-	"""
-
 	def DispatchTrain(self, block_to, line):
+		""" Create(dispatch) a new train by creating the Train object then adding it to the class member vector """
+
 		# Create the train which will dispatch
 		temp_train = Train(self.next_train_num, block_to, line)
 
@@ -143,15 +97,9 @@ class TrainSystem:
 		# Increment the next train number counter
 		self.next_train_num += 1
 
-	"""
-		@breif Function which returns an array of track occupancies which the CTC GUI can use to dispaly on the screen
-		
-		@param[in]  line to return track occupancies
-		
-		@return array of boolean values
-	"""
-
 	def ReturnOccupancies(self, line):
+		""" Function which returns an array of track occupancies which the CTC GUI can use to dispaly on the screen """
+
 		to_send = []
 		if line == Line.LINE_GREEN:
 			for i in range(len(self.blocks_green_arr)):
@@ -163,15 +111,9 @@ class TrainSystem:
 			raise Exception('CTC : TrainSystem.ReturnOccupancies recieved an erronious input')
 		return to_send
 
-	"""
-		@breif Function which returns an array of track occupancies which the CTC GUI can use to dispaly on the screen
-
-		@param[in]  line to return track occupancies
-
-		@return array of boolean values
-	"""
-
 	def ReturnSwitchPositions(self, line):
+		""" Function which returns an array of track occupancies which the CTC GUI can use to dispaly on the screen """
+
 		to_send = []
 		if line == Line.LINE_GREEN:
 			for i in range(len(self.switches_green_arr)):
@@ -183,84 +125,42 @@ class TrainSystem:
 			raise Exception('CTC : TrainSystem.ReturnSwitchPositions recieved an erronious input')
 		return to_send
 
-	"""
-		@breif Function which updates occupancies on green route
-
-		@param[in]  list of bool
-
-		@return none
-	"""
-
 	def UpdateGreenBlocks(self, occ_arr):
+		""" Function which updates occupancies on green route """
 		if len(occ_arr) != 150:
 			raise Exception('CTC Recived Erronious Green Block Array')
 		for i in range(len(occ_arr)):
 			self.blocks_green_arr[i].occupied = occ_arr[i]
 		self.UpdateTrainLoc()
 
-	"""
-		@breif Function which updates occupancies on red route
-
-		@param[in]  list of bool
-
-		@return none
-	"""
-
 	def UpdateRedBlocks(self, occ_arr):
+		""" Function which updates occupancies on red route """
 		if len(occ_arr) != 76:
 			raise Exception('CTC Recived Erronious Red Block Array')
 		for i in range(len(occ_arr)):
 			self.blocks_red_arr[i].occupied = occ_arr[i]
 		self.UpdateTrainLoc()
 
-	"""
-		@breif Function which updates occupancies on green route
-
-		@param[in]  list of bool
-
-		@return none
-	"""
-
 	def UpdateGreenSwitches(self, sw_arr):
+		""" Function which updates occupancies on green route """
 		if len(sw_arr) != 6:
 			raise Exception('CTC Recived Erronious Green Switch Array')
 		for i in range(len(sw_arr)):
 			self.switches_green_arr[i].occupied = sw_arr[i]
 
-	"""
-		@breif Function which updates occupancies on red route
-
-		@param[in]  list of bool
-
-		@return none
-	"""
-
 	def UpdateRedSwitches(self, sw_arr):
+		""" Function which updates occupancies on red route """
 		if len(sw_arr) != 7:
 			raise Exception('CTC Recived Erronious Red Switch Array')
 		for i in range(len(sw_arr)):
 			self.switches_red_arr[i].occupied = sw_arr[i]
 
-	"""
-		@breif Function which updates throughput of system
-
-		@param[in]  throuhgput int
-
-		@return none
-	"""
-
 	def UpdateThroughput(self, thr):
+		""" Function which updates throughput of system """
 		self.throughput = thr
 
-	"""
-		@breif Function which updates location of a train on the green line
-
-		@param	none
-
-		@return none
-	"""
-
 	def UpdateTrainLoc(self):
+		""" Function which updates location of a train on the green line """
 		trains_on_green = []	# Keep running list of blocks a train is on
 		trains_on_red = []
 
@@ -340,17 +240,6 @@ class TrainSystem:
 						trains_on_red.append(self.trains_arr[i].route_blocks_arr[self.trains_arr[i].index_on_route])	# append to list which trains are on
 					else:
 						continue
-
-	"""
-		@breif Function which updates location of a train on the red line
-
-		@param	none
-
-		@return none
-	"""
-
-	def UpdateTrainLocRed(self):
-		return
 
 # Define a TrainSystem object to use; acts as equivalent of singleton class
 ctc = TrainSystem()

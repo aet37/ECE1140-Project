@@ -4,6 +4,7 @@ import threading
 import time
 
 from src.signals import signals
+from src.CTC.CTCDef import InterruptTrain
 
 class Timekeeper:
     """Class responsible for keeping the system time"""
@@ -15,6 +16,9 @@ class Timekeeper:
         self.current_time_hour = 0
         self.run_lock = threading.Lock()
         self.running = True
+
+        # For CTC to store trains to be dispatched
+        self.ctc_trains_backlog = []
 
     def timer_function(self):
         """Thread function for monitoring time and emitting signals"""
@@ -37,6 +41,13 @@ class Timekeeper:
                 signals.timer_expired.emit(self.current_time_hour,
                                            self.current_time_min,
                                            self.current_time_sec)
+
+                # Dispatch train if needed
+                for item in self.ctc_trains_backlog:
+                    if (item.hour == self.current_time_hour) & (item.min == self.current_time_min):
+                        signals.dispatch_scheduled_train.emit(item.destination_block, item.line_on)
+                        # Remove the train from backlog if dispatched
+                        self.ctc_trains_backlog.remove(item)
 
     def start_time(self):
         """Initially starts the thread"""
