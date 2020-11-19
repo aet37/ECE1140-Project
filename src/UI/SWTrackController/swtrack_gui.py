@@ -4,7 +4,6 @@ import os
 import sys
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog
-from PyQt5.QtCore import Qt
 
 from src.SWTrackController.Compiler.lexer import CompilationError, Lexer
 from src.SWTrackController.Compiler.emitter import Emitter
@@ -12,9 +11,14 @@ from src.SWTrackController.Compiler.parse import Parser
 
 from src.UI.Common.common import Alert, Confirmation
 from src.UI.window_manager import window_list
+from src.HWTrackController.hw_track_controller_connector import HWTrackCtrlConnector
 
 class SWTrackControllerUi(QtWidgets.QMainWindow):
     """GUI for the track controller module"""
+
+    # The hardware will represent the first track controller
+    HWTRACK_CTRL_NUMBER = 1
+
     def __init__(self):
         super().__init__()
         uic.loadUi('src/UI/SWTrackController/track_controller.ui', self)
@@ -161,8 +165,13 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
 
         :param str output_file: Name of the file containing the compiled program
         """
-        pass
-        # TODO(ljk): Emit signal to download program
+        if int(self.current_track_controller) == SWTrackControllerUi.HWTRACK_CTRL_NUMBER:
+            connector = HWTrackCtrlConnector()
+            connector.download_program(output_file)
+        else:
+            for line in open(output_file, 'r'):
+                # TODO(nns): Download program to software module
+                pass
 
     def switch_position_button_clicked(self):
         """Method called when the switch position button is pressed"""
