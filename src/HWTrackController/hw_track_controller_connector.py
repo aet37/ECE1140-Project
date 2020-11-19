@@ -2,10 +2,13 @@
 
 from time import sleep
 import logging
+from PyQt5.QtCore import QThread
 import serial
 import threading
 from serial.serialutil import SerialException
 from enum import Enum
+
+from src.UI.Common.common import DownloadInProgress
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +26,7 @@ class Code(Enum):
     CREATE_INSTRUCTION = 102 # Used by the gui to create an instruction
     SET_TAG_VALUE = 103 # Used by the gui to set a tag's value
     GET_TAG_VALUE = 104 # Used by the gui to get a tag's value
+    GET_ALL_TAG_VALUES = 105 # Used by the gui to get all tag values
 
 class HWTrackCtrlConnector:
     """Class responsible for communicating with the hw track controller"""
@@ -57,8 +61,14 @@ class HWTrackCtrlConnector:
         return response.rstrip(b'\t\r\n ')
 
     def download_program(self, compiled_program):
-        """"""
-        with self.comms_lock:
+        """Reads the compiled program and downloads it to the controller
+
+        :param file compiled_program: Path to the compiled PLC program
+        """
+        progress = DownloadInProgress()
+
+        def _download_program():
+            commands = []
             for line in open(compiled_program, 'r'):
                 line = line.rstrip('\n')
                 try:
@@ -68,7 +78,19 @@ class HWTrackCtrlConnector:
 
                 # Construct the new line with the code replaced
                 line = str(Code[line[:spaceIndex]].value) + line[spaceIndex:]
+                commands.append(line)
 
-                self.send_message(bytes(line, 'utf-8'))
-                sleep(0.2)
-                logger.info(self.get_response())
+            with self.comms_lock:
+                for i, command in enumerate(commands):
+                    self.send_message(bytes(command, 'utf-8'))
+                    sleep(0.2)
+                    logger.info(self.get_response())
+                    print((i + 1) / len(commands))
+                    progress.progress_updated.emit((i + 1) / len(commands) * 100)
+
+            progress.download_complete.emit()
+
+        download_thread = threading.Thread(target=_download_program)
+        download_thread.start()
+
+        progress.exec()
