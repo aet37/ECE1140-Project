@@ -121,9 +121,10 @@ class TrackModelUi(QtWidgets.QMainWindow):
                 # set Line inside trackInfo
                 trackInfo['Track'] = records.column['Line'][1]
                 
-                tracks = tracks + 1
                 # set track nmumber inside of trackInfo dictionary
                 trackInfo['tNumber'] = tracks
+
+                tracks = tracks + 1
 
                 # set totalBlocks inside trackInfo
                 trackInfo['Total Blocks'] = records.number_of_rows()
@@ -182,18 +183,26 @@ class TrackModelUi(QtWidgets.QMainWindow):
                     if (records.column['Stations'][x] != ""):
                         blockInfo['Station'] = records.column['Stations'][x]
                         blockInfo['Exit Side'] = records.column['Exit Side'][x]
+                    else:
+                        blockInfo['Station'] = ""
+                        blockInfo['Exit Side'] = ""
 
                     if (records.column['Switches'][x] != ""):
                         blockInfo['Switches'] = records.column['Switches'][x]
+                    else:
+                        blockInfo['Switches'] = ""
 
                     if (records.column['Railway Crossing'][x] != ""):
                         blockInfo['Railway Crossing'] = "true"
                     else:
                         blockInfo['RailwayCrossing'] = "false"
 
-                    jsonString = json.dumps(blockInfo)
+
+
+
+                    #jsonString = json.dumps(blockInfo)
                     #print(jsonString)
-                    send_message(RequestCode.TRACK_MODEL_GUI_BLOCK, str(jsonString))
+                    #send_message(RequestCode.TRACK_MODEL_GUI_BLOCK, str(jsonString))
 
                 self.send_gather_data_message()
 
