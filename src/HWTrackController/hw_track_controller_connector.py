@@ -44,8 +44,7 @@ class HWTrackCtrlConnector:
 
         :param str msg: Message to send
         """
-        print(msg)
-        bytes_written = self.arduino.write(msg)
+        bytes_written = self.arduino.write(bytes(str(msg), 'utf-8'))
         logger.info("%d bytes written to the controller", bytes_written)
 
     def get_response(self):
@@ -82,10 +81,9 @@ class HWTrackCtrlConnector:
 
             with self.comms_lock:
                 for i, command in enumerate(commands):
-                    self.send_message(bytes(command, 'utf-8'))
-                    sleep(0.2)
+                    self.send_message(command)
+                    # No need for sleep here because of the get response
                     logger.info(self.get_response())
-                    print((i + 1) / len(commands))
                     progress.progress_updated.emit((i + 1) / len(commands) * 100)
 
             progress.download_complete.emit()
