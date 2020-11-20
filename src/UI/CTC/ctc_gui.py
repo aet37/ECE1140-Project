@@ -4,6 +4,7 @@ import sys
 
 from src.CTC.TrainSystem import *
 from src.UI.window_manager import window_list
+from src.timekeeper import timekeeper
 
 # GLOBALS
 class CTCUi(QtWidgets.QMainWindow):
@@ -111,10 +112,10 @@ class CTCUi(QtWidgets.QMainWindow):
 
 		self.UpdateTrainsList()
 
-		# Automatically refresh Map after 5s
+		# Automatically refresh Map after 1s
 		time_timr = QtCore.QTimer(self)
 		time_timr.timeout.connect(self.UpdateTrainsList)
-		time_timr.start(5000)
+		time_timr.start(1000)
 
 
 	def UpdateTrainsList(self):
@@ -250,10 +251,25 @@ class CTCUi(QtWidgets.QMainWindow):
 				self.d_conf_label.setText('Train Dispatched to Block ' + self.d_block_label.text() + ' at ' + self.d_time_label.text())
 				self.d_speed_label.setText('Command Speed [to Track Controller]: 55 km/hr')
 				self.d_auth_label.setText('Authority [to Track Controller]: 3 Blocks')
-				##### Send to CTC #####
 
-				#send_message(RequestCode.CTC_DISPATCH_TRAIN,  str(int(self.red_radio.isChecked())) + ' ' + self.d_time_label.text()[0] + self.d_time_label.text()[1] + ' ' + self.d_time_label.text()[3] + self.d_time_label.text()[4]+ ' ' + self.d_time_label.text()[5] + ' ' + self.d_block_label.text())
+				##### Send to Timekeeper class #####
+				hr = int(self.d_time_label.text()[0:2])
+				if hr == 12:
+					if self.d_time_label.text()[5] == 'a':
+						hr = 0
+				elif self.d_time_label.text()[5] == 'p':
+					hr += 12
+				else:
+					pass
+				minute = int(self.d_time_label.text()[3:5])
 
+				if self.red_radio.isChecked():
+					temp_time_train = InterruptTrain(int(self.d_block_label.text()), Line.LINE_RED, hr, minute)
+				else:
+					temp_time_train = InterruptTrain(int(self.d_block_label.text()), Line.LINE_GREEN, hr, minute)
+
+				# Add the train to the interrupt list
+				timekeeper.ctc_trains_backlog.append(temp_time_train)
 		else:
 			self.d_conf_label.setStyleSheet("color: green")
 			self.d_conf_label.setText('Train Dispatched to Block ' + self.d_block_label.text() + ' Now')

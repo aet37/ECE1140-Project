@@ -1,21 +1,7 @@
-"""
-    @file CTCDef.py
-
-    @brief Declaration of Structs and Enums used in CTC
-
-    @author Andrew Toader
-
-    @date 10.01.2020
-"""
-
 from src.common_def import *
 
-"""
-	@struct Train
-
-	@brief Structure that holds data about a single train (id, command speed, authority, destination block)
-"""
 class Train:
+	""" Structure that holds data about a single train (id, command speed, authority, destination block) """
 	def __init__(self, id_n, block, line):
 		self.train_id = id_n
 		self.command_speed = 0
@@ -26,24 +12,26 @@ class Train:
 		self.route_switches_arr = []
 		self.route_blocks_arr = []
 
-"""
-	@struct Track
 
-	@brief Structure that holds data about a single track (open, occupied)
-"""
+class InterruptTrain:
+	""" Used to hold information about a train while it is waiting to be dispatched """
+	def __init__(self, block, line, hr, mn):
+		self.destination_block = block
+		self.line_on = line
+		self.hour = hr
+		self.min = mn
+		self.loops = 0	# Used for trains imported from schedule
+
 class Track:
+	""" Structure that holds data about a single track (open, occupied) """
+
 	def __init__(self):
 		self.open = True
 		self.occupied = False
 
-"""
-	@struct Switch
-
-	@brief Structure that holds data about a single Switch (pointing to)
-
-	@note -1 denotes yard
-"""
 class Switch:
+	""" Structure that holds data about a single Switch (pointing to) """
+
 	def __init__(self, less, greater):
 		self.less_block = less
 		self.greater_block = greater
