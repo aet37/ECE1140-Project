@@ -26,26 +26,25 @@ class SignalsClass(QObject):
     swtrack_set_block_status = pyqtSignal(int, bool)	# Used by CTC to open/close (true/false) a block for mainenence (block_num, status)
 
     # SWTrainController Signals
-    # SWTrainController Signals #
-    SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS = pyqtSignal(int) # TrainID
-    SWTRAIN_DISPATCH_TRAIN = pyqtSignal(float, float, bool) # command speed, current speed, authority
-    SWTRAIN_UPDATE_CURRENT_SPEED = pyqtSignal(int, float) # TrainID, current speed
-    SWTRAIN_UPDATE_COMMAND_SPEED = pyqtSignal(int, float) # TrainID, command speed 
-    SWTRAIN_UPDATE_AUTHORITY = pyqtSignal(int, bool) # TrainID, authority
-    SWTRAIN_CAUSE_FAILURE = pyqtSignal(bool, bool, bool) # Failures
-    SWTRAIN_PULL_PASSENGER_EBRAKE = pyqtSignal(int) # TrainID
-    SWTRAIN_GUI_PULL_EBRAKE = pyqtSignal(int) # TrainID
-    SWTRAIN_GUI_SET_SETPOINT_SPEED = pyqtSignal(int, float) # TrainID, Setpoint Speed
-    SWTRAIN_GUI_PRESS_SERVICE_BRAKE = pyqtSignal(int) # TrainID
-    SWTRAIN_GUI_TOGGLE_DAMN_DOORS = pyqtSignal(int) # TrainID 
-    SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS = pyqtSignal(int) # TrainID
-    SWTRAIN_GUI_SET_SEAN_PAUL = pyqtSignal(int, float) # TrainID, temperature
-    SWTRAIN_GUI_ANNOUNCE_STATIONS = pyqtSignal(int) # TrainID 
-    SWTRAIN_GUI_DISPLAY_ADS = pyqtSignal(int) # TrainID
-    SWTRAIN_GUI_RESOLVE_FAILURE = pyqtSignal(int) # TrainID
-    SWTRAIN_GUI_SET_KP_KI = pyqtSignal(int, float, float) # TrainID, setKp, setKi
-    SWTRAIN_GUI_SWITCH_MODE = pyqtSignal(int, str) # TrainID, override code
-    SWTRAIN_TIME_TRIGGER = pyqtSignal()
+    swtrain_gui_toggle_cabin_lights = pyqtSignal(int) # TrainID
+    swtrain_dispatch_train = pyqtSignal(float, float, bool) # command speed, current speed, authority
+    swtrain_update_current_speed = pyqtSignal(int, float) # TrainID, current speed
+    swtrain_update_command_speed = pyqtSignal(int, float) # TrainID, command speed 
+    swtrain_update_authority = pyqtSignal(int, bool) # TrainID, authority
+    swtrain_cause_failure = pyqtSignal(bool, bool, bool) # Failures
+    swtrain_pull_passenger_ebrake = pyqtSignal(int) # TrainID
+    swtrain_gui_pull_ebrake = pyqtSignal(int) # TrainID
+    swtrain_gui_set_setpoint_speed = pyqtSignal(int, float) # TrainID, Setpoint Speed
+    swtrain_gui_press_service_brake = pyqtSignal(int) # TrainID
+    swtrain_gui_toggle_damn_doors = pyqtSignal(int) # TrainID 
+    swtrain_gui_toggle_cabin_lights = pyqtSignal(int) # TrainID
+    swtrain_gui_set_sean_paul = pyqtSignal(int, float) # TrainID, temperature
+    swtrain_gui_announce_stations = pyqtSignal(int) # TrainID 
+    swtrain_gui_display_ads = pyqtSignal(int) # TrainID
+    swtrain_gui_resolve_failure = pyqtSignal(int) # TrainID
+    swtrain_gui_set_kp_ki = pyqtSignal(int, float, float) # TrainID, setKp, setKi
+    swtrain_gui_switch_mode = pyqtSignal(int, str) # TrainID, override code
+    swtrain_time_trigger = pyqtSignal()
 
 # Single instance to be used by other modules
 signals = SignalsClass()

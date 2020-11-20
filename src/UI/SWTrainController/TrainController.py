@@ -8,7 +8,7 @@ from src.UI.Common.common import Alert, Confirmation
 from src.signals import signals
 from src.UI.window_manager import window_list
 # Import singleton instance of control system
-from include.SWTrainController.ControlSystem import control_system 
+from include.SWTrainController.ControlSystem import control_system
 
 class SWTrainUi(QtWidgets.QMainWindow):
 
@@ -29,7 +29,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         uic.loadUi('src/UI/SWTrainController/TrainController.ui', self)
         # self.stop_all_timers() # Restart timers
         # self.main_menu_timer.start(2000) # 2 seconds
-        
+
         self.TrainIDBox.currentIndexChanged.connect(self.update_current_train_id) # Dropdown box
         self.TrainIDBox2.currentIndexChanged.connect(self.update_current_train_id2) # Dropdown box
         self.TrainIDBox3.currentIndexChanged.connect(self.update_current_train_id3) # Dropdown box
@@ -74,7 +74,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         ##########################################
 
         # Define buttons on Failures page ##########################################
-        
+
         ##########################################
 
         # Define buttons on Engineer page ##########################################
@@ -99,7 +99,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         ##########################################
 
         self.show()
-    
+
     # Initialize buttons in UI
     def initUI(self):
         # Define buttons on main page ########################################################
@@ -111,22 +111,22 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
         # Define buttons on Train Actions Page ########################################################
         self.return_button1 = self.findChild(QtWidgets.QPushButton, 'MainMenu2')
-        
+
         # Define button for doors
         self.doors_button = self.findChild(QtWidgets.QPushButton, 'Doors')
-        
+
         # Define button for lights
         self.lights_button = self.findChild(QtWidgets.QPushButton, 'Lights')
-        
+
         # Define button for announcements
         self.announceStations_button = self.findChild(QtWidgets.QPushButton, 'Announcements')
-        
+
         # Define button for advertisements
         self.ads_button = self.findChild(QtWidgets.QPushButton, 'Advertisements')
-        
+
         # Define button for setting temperature
         self.sean_paul_buttton = self.findChild(QtWidgets.QPushButton, 'SeanPaul')
-        
+
         # Define Automatic Mode button
         self.automatic_mode = self.findChild(QtWidgets.QPushButton, 'AutomaticMode')
         # Define Manual Mode button
@@ -166,15 +166,15 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
     def update_current_train_id(self):
         self.current_train_id = self.TrainIDBox.currentText()
-    
+
     def update_current_train_id2(self):
         self.current_train_id = self.TrainIDBox2.currentText()
-    
+
     def update_current_train_id3(self):
         self.current_train_id = self.TrainIDBox3.currentText()
 
     def update_current_train_id4(self):
-        self.current_train_id = self.TrainIDBox4.currentText() 
+        self.current_train_id = self.TrainIDBox4.currentText()
 
     def update_controller_list(self):
         # Update the drop down
@@ -249,7 +249,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
                 self.doors_button.setStyleSheet("background-color: rgb(255, 51, 16);")
             else:
                 self.doors_button.setStyleSheet("background-color: green;")
-            
+
 
             #self.findChild(QtWidgets.QLabel, 'disp_acceleration_limit').setText(dataParsed[0] + " m/s²")
             #self.findChild(QtWidgets.QLabel, 'disp_deceleration_limit').setText(dataParsed[1] + " m/s²")
@@ -259,7 +259,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
             #self.findChild(QtWidgets.QLabel, 'disp_block_size').setText(dataParsed[4] + " m")
             #self.findChild(QtWidgets.QLabel, 'disp_current_block').setText("block #" + dataParsed[5])
             #self.findChild(QtWidgets.QLabel, 'disp_destination_block').setText("block #" + dataParsed[6])
-    
+
     def set_button_state(self, index):
         self.button1.setEnabled(True)
         self.button2.setEnabled(True)
@@ -271,8 +271,8 @@ class SWTrainUi(QtWidgets.QMainWindow):
         # if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
         #     return
 
-        signals.lights_toggled.emit(self.current_train_id)
-        
+        signals.swtrain_gui_toggle_cabin_lights.emit(self.current_train_id)
+
     def toggle_doors(self):
         # If no controllers have been created, button does nothing
         if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
@@ -309,7 +309,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
             alert = Alert("Invalid temperature!")
             alert.exec_()
             return
-        
+
         # If input temperature is valid, send request code
         send_message(RequestCode.SWTRAIN_GUI_SET_SEAN_PAUL, (self.current_train_id + " " + temp) )
 
@@ -339,7 +339,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
                 # Toggle color of mode boxes
                 self.automatic_mode.setStyleSheet("background-color: green;")
                 self.manual_mode.setStyleSheet("background-color: rgb(255, 51, 16);")
-            
+
         send_message(RequestCode.SWTRAIN_GUI_SWITCH_MODE, self.current_train_id + " " + override)
 
     def toggle_mode2(self):
@@ -368,9 +368,9 @@ class SWTrainUi(QtWidgets.QMainWindow):
                 # Toggle color of mode boxes
                 self.automatic_mode.setStyleSheet("background-color: rgb(255, 51, 16);")
                 self.manual_mode.setStyleSheet("background-color: green;")
-   
+
         send_message(RequestCode.SWTRAIN_GUI_SWITCH_MODE, self.current_train_id + " " + override)
-    
+
     def set_setpoint(self):
         # If no controllers have been created, button does nothing
         if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
@@ -384,7 +384,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
             alert = Alert("Cannot input value!\nTrain must be in manual mode!")
             alert.exec_()
             return
-        
+
         # Check if number was entered
         try:
             int(setpoint_speed)
@@ -398,14 +398,14 @@ class SWTrainUi(QtWidgets.QMainWindow):
             alert = Alert("Invalid speed entered!")
             alert.exec_()
             return
-        
+
         # Check if speed entered is less than command speed
         #com_sp = self.findChild(QtWidgets.QLabel, "CommandSpeedLabel").text()
         #if int(setpoint_speed) > int(com_sp):
         #    alert = Alert("Error! Entered speed must be lower than speed limit!")
         #    alert.exec_()
         #    return
-        
+
         # If all conditions pass, check for confirmation
         confirmation = Confirmation("Entered speed is valid!\nSet speed?")
         response = confirmation.exec_()
@@ -460,7 +460,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
             alert = Alert("Invalid Kp entered!")
             alert.exec_()
             return
-        
+
         if int(Ki) <= 0:
             alert = Alert("Invalid Ki entered!")
             alert.exec_()
@@ -471,7 +471,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         response = confirmation.exec_()
         if response == False:
             return
-        
+
         send_message(RequestCode.SWTRAIN_GUI_SET_KP_KI,self.current_train_id + " " + Kp + " " + Ki)
 
     def save_inputs(self):
@@ -499,7 +499,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
             alert = Alert("Invalid Kp entered!")
             alert.exec_()
             return
-        
+
         if int(Ki) <= 0:
             alert = Alert("Invalid Ki entered!")
             alert.exec_()
@@ -510,7 +510,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         response = confirmation.exec_()
         if response == False:
             return
-        
+
         send_message(RequestCode.SWTRAIN_GUI_SET_KP_KI, "1")
 
     def logout(self):
