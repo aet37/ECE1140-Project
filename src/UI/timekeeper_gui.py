@@ -47,7 +47,15 @@ class TimekeeperUi(QtWidgets.QMainWindow):
 
         """
         days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-        time_text = "{} {:02}:{:02}:{:02}".format(days[day], hours, mins, secs)
+
+        period = 'am'
+        if (hours >= 12) and (hours < 24):
+            period = 'pm'
+
+        if hours > 12:
+            hours -= 12
+
+        time_text = "{} {:02}:{:02}:{:02} {}".format(days[day], hours, mins, secs, period)
 
         time_label = self.findChild(QtWidgets.QLabel, 'time_label')
         time_label.setText(time_text)
@@ -59,5 +67,5 @@ class TimekeeperUi(QtWidgets.QMainWindow):
         """
         periods = [1, 0.5, 0.2, 0.1, 0.05, 0.01]
 
-        with timekeeper.run_lock:
-            timekeeper.timer_period_in_sec = periods[abs(self.button_group.checkedId()) - 2]
+        # We don't need the lock here because this variable is only being used for the sleep time
+        timekeeper.timer_period_in_sec = periods[abs(self.button_group.checkedId()) - 2]
