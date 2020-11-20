@@ -41,7 +41,24 @@ def test_statement_tag_2(mock_emitter):
 
     with pytest.raises(CompilationError) as pytest_wrapped_e:
         par.program()
-    assert "Parsing error line #2 : Expected FALSE, but found notAKeyword" == str(pytest_wrapped_e.value)
+    assert "Parsing error line #1 : Expected "\
+           "FALSE, but found notAKeyword" == str(pytest_wrapped_e.value)
+
+def test_statement_tag_3(mock_emitter):
+    """Test for a tag name being too long
+
+    PRECONDITIONS: Create parser with line source_code
+    EXECUTION: par.statement()
+    POSTCONDITION: Exception is thrown with correct error message
+
+    """
+    source_code = "TAG myLongTagName = FALSE"
+    par = Parser(Lexer(source_code), mock_emitter)
+
+    with pytest.raises(CompilationError) as pytest_wrapped_e:
+        par.program()
+    assert "Parsing error line #0 : Tag name myLongTagName "\
+           "too long. The limit is 7 characters" == str(pytest_wrapped_e.value)
 
 def test_statement_task_1(mock_emitter):
     """Tests the statement method
@@ -82,7 +99,7 @@ def test_statement_task_3(mock_emitter):
 
     with pytest.raises(CompilationError) as pytest_wrapped_e:
         par.statement()
-    assert "Parsing error line #1 : Invalid task type CONTINUOUS" == str(pytest_wrapped_e.value)
+    assert "Parsing error line #0 : Invalid task type CONTINUOUS" == str(pytest_wrapped_e.value)
 
 def test_statement_routine_success(mock_emitter):
     """Tests the statement method
@@ -112,7 +129,8 @@ def test_statement_routine_failure(mock_emitter):
 
     with pytest.raises(CompilationError) as pytest_wrapped_e:
         par.statement()
-    assert "Parsing error line #2 : Expected IDENTIFIER, but found \n" == str(pytest_wrapped_e.value)
+    assert "Parsing error line #1 : Expected "\
+           "IDENTIFIER, but found \n" == str(pytest_wrapped_e.value)
 
 def test_statement_rung_1(mock_emitter):
     """Tests the statement method
@@ -176,6 +194,7 @@ def test_statement_end(mock_emitter):
     par.main_flag = True
 
     par.program()
+
 
 if __name__ == "__main__":
     raise Exception("Run with pytest")
