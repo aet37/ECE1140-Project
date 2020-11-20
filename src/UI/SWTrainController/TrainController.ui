@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QComboBox" name="TrainIDBox">
@@ -917,7 +917,7 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Current Speed:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
-     <widget class="QLabel" name="CurrentSpeedLabel">
+     <widget class="QLabel" name="current_speed_label">
       <property name="geometry">
        <rect>
         <x>60</x>
@@ -956,7 +956,7 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Command Speed:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
-     <widget class="QLabel" name="CommandSpeedLabel">
+     <widget class="QLabel" name="command_speed_label">
       <property name="geometry">
        <rect>
         <x>270</x>
@@ -1062,7 +1062,7 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Setpoint Speed:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
-     <widget class="QLabel" name="SpeedLimitLabel">
+     <widget class="QLabel" name="setpoint_speed_label">
       <property name="geometry">
        <rect>
         <x>160</x>

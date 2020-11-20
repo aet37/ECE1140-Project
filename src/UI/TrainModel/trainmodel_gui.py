@@ -6,9 +6,11 @@ from PyQt5.QtGui import QScreen
 from PyQt5.QtCore import QTimer
 import sys
 
-from UI.server_functions import send_message_async, RequestCode, send_message, ResponseCode
-from signals import signals
-from UI.window_manager import window_list
+from src.UI.server_functions import send_message_async, RequestCode, send_message, ResponseCode
+from src.signals import signals
+from src.UI.window_manager import window_list
+from src.TrainModel.TrainCatalogue import train_catalogue
+from src.TrainModel.BlockCatalogue import block_catalogue
 
 class TrainModelUi(QtWidgets.QMainWindow):
     """UI class for the Train Model"""
@@ -24,6 +26,14 @@ class TrainModelUi(QtWidgets.QMainWindow):
         # self.train2_info_timer.timeout.connect(self.update_gui2)
         # self.train3_info_timer.timeout.connect(self.update_gui3)
 
+        # Receive dispatch train signal and add a train to the drop down
+        signals.TRAIN_MODEL_DISPATCH_TRAIN.connect(self.update_train_list)
+
+        # Receive dispatch train signal
+        signals.TRAIN_MODEL_DISPATCH_TRAIN.connect(self.train_model_dispatch_train)
+        # Receive lights signal
+        signals.TRAIN_MODEL_GUI_RECEIVE_LIGHTS.connect(self.train_model_receive_lights)
+
         self.current_train_id = "1"
         self.train_menu()
 
@@ -33,6 +43,13 @@ class TrainModelUi(QtWidgets.QMainWindow):
     def train_menu(self):
         """Method called after a train is selected"""
         uic.loadUi('src/UI/TrainModel/Train_Menu.ui', self)
+
+        # Update the train drop down
+        currentIndex = self.findChild(QtWidgets.QComboBox, 'menu_train_combo').currentIndex()
+        self.findChild(QtWidgets.QComboBox, 'menu_train_combo').clear()
+        for i in train_catalogue.m_trainList.count():
+            self.menu_train_combo.addItem("Train #" + str(i))
+        self.findChild(QtWidgets.QComboBox, 'menu_train_combo').setCurrentIndex(currentIndex)
 
         # self.stop_all_timers() # Restart timers
         # self.train_menu_timer.start(2000)
@@ -126,7 +143,7 @@ class TrainModelUi(QtWidgets.QMainWindow):
         # This is executed when the button is pressed
         uic.loadUi('src/UI/TrainModel/Train_Info_Page3.ui', self)
 
-        Signals.lights_toggled.connect(self.update_lights_label)
+        signals.lights_toggled.connect(self.update_lights_label)
 
         # Update Label page3_train_label
         if "Select Train..." not in self.current_train_id:
@@ -186,131 +203,107 @@ class TrainModelUi(QtWidgets.QMainWindow):
     def update_gui1(self):
         if "Select Train..." in self.current_train_id:
             return
-        responsecode, dataReceived = send_message(RequestCode.TRAIN_MODEL_GUI_1_GATHER_DATA, str(self.current_train_id))
-        if responsecode == ResponseCode.SUCCESS:
-            # Parse the data and update the gui.
-            dataParsed = dataReceived.split()
-            self.findChild(QtWidgets.QLabel, 'disp_command_speed').setText(dataParsed[0].split(".")[0] + " m/s") # Remove trailing zeros from float
 
-            if dataParsed[1] == "1":
-                self.findChild(QtWidgets.QLabel, 'disp_authority').setText("true")
-                self.findChild(QtWidgets.QLabel, 'disp_authority').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
-            else:
-                self.findChild(QtWidgets.QLabel, 'disp_authority').setText("false")
-                self.findChild(QtWidgets.QLabel, 'disp_authority').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
+        self.findChild(QtWidgets.QLabel, 'disp_command_speed').setText(str(train_catalogue.m_trainList[self.current_train_id].m_commandSpeed) + " m/s") # Remove trailing zeros from float
 
-            self.findChild(QtWidgets.QLabel, 'disp_current_speed').setText(dataParsed[2].split(".")[0] + " m/s")
-            self.findChild(QtWidgets.QLabel, 'disp_speed_limit').setText(dataParsed[3].split(".")[0] + " km/h")
+        if str(train_catalogue.m_trainList[self.current_train_id].m_authority) == "1":
+            self.findChild(QtWidgets.QLabel, 'disp_authority').setText("true")
+            self.findChild(QtWidgets.QLabel, 'disp_authority').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
+        else:
+            self.findChild(QtWidgets.QLabel, 'disp_authority').setText("false")
+            self.findChild(QtWidgets.QLabel, 'disp_authority').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
 
-            if dataParsed[4] == "1":
-                self.findChild(QtWidgets.QLabel, 'disp_brake_command').setText("on")
-                self.findChild(QtWidgets.QLabel, 'disp_brake_command').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
-            else:
-                self.findChild(QtWidgets.QLabel, 'disp_brake_command').setText("off")
-                self.findChild(QtWidgets.QLabel, 'disp_brake_command').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
-            
-            if dataParsed[5] == "1":
-                self.findChild(QtWidgets.QLabel, 'disp_service_brake').setText("on")
-                self.findChild(QtWidgets.QLabel, 'disp_service_brake').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
-            else:
-                self.findChild(QtWidgets.QLabel, 'disp_service_brake').setText("off")
-                self.findChild(QtWidgets.QLabel, 'disp_service_brake').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
-            
-            if dataParsed[6] == "1":
-                self.findChild(QtWidgets.QLabel, 'disp_emergency_passenger_brake').setText("on")
-                self.findChild(QtWidgets.QLabel, 'disp_emergency_passenger_brake').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
-            else:
-                self.findChild(QtWidgets.QLabel, 'disp_emergency_passenger_brake').setText("off")
-                self.findChild(QtWidgets.QLabel, 'disp_emergency_passenger_brake').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
-            
-            if dataParsed[7] == "0":
-                self.findChild(QtWidgets.QLabel, 'disp_current_line').setText("green")
-                self.findChild(QtWidgets.QLabel, 'disp_current_line').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
-            else:
-                self.findChild(QtWidgets.QLabel, 'disp_current_line').setText("red")
-                self.findChild(QtWidgets.QLabel, 'disp_current_line').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
+        self.findChild(QtWidgets.QLabel, 'disp_current_speed').setText(str(train_catalogue.m_trainList[self.current_train_id].m_currentSpeed) + " m/s")
+        self.findChild(QtWidgets.QLabel, 'disp_speed_limit').setText(str(train_catalogue.m_trainList[self.current_train_id].m_route[0].m_speedLimit) + " km/h")
+
+        if str(train_catalogue.m_trainList[self.current_train_id].m_brakeCommand) == "True":
+            self.findChild(QtWidgets.QLabel, 'disp_brake_command').setText("on")
+            self.findChild(QtWidgets.QLabel, 'disp_brake_command').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
+        else:
+            self.findChild(QtWidgets.QLabel, 'disp_brake_command').setText("off")
+            self.findChild(QtWidgets.QLabel, 'disp_brake_command').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
+        
+        if str(train_catalogue.m_trainList[self.current_train_id].m_serviceBrake) == "1":
+            self.findChild(QtWidgets.QLabel, 'disp_service_brake').setText("on")
+            self.findChild(QtWidgets.QLabel, 'disp_service_brake').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
+        else:
+            self.findChild(QtWidgets.QLabel, 'disp_service_brake').setText("off")
+            self.findChild(QtWidgets.QLabel, 'disp_service_brake').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
+        
+        if str(train_catalogue.m_trainList[self.current_train_id].m_emergencyPassengeBrake) == "1":
+            self.findChild(QtWidgets.QLabel, 'disp_emergency_passenger_brake').setText("on")
+            self.findChild(QtWidgets.QLabel, 'disp_emergency_passenger_brake').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
+        else:
+            self.findChild(QtWidgets.QLabel, 'disp_emergency_passenger_brake').setText("off")
+            self.findChild(QtWidgets.QLabel, 'disp_emergency_passenger_brake').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
+        
+        if str(train_catalogue.m_trainList[self.current_train_id].m_currentLine) == "0":
+            self.findChild(QtWidgets.QLabel, 'disp_current_line').setText("green")
+            self.findChild(QtWidgets.QLabel, 'disp_current_line').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
+        else:
+            self.findChild(QtWidgets.QLabel, 'disp_current_line').setText("red")
+            self.findChild(QtWidgets.QLabel, 'disp_current_line').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
             
 
     def update_gui2(self):
         if "Select Train..." in self.current_train_id:
             return
-        responsecode, dataReceived = send_message(RequestCode.TRAIN_MODEL_GUI_2_GATHER_DATA, str(self.current_train_id))
-        if responsecode == ResponseCode.SUCCESS:
-            # Parse the data and update the gui.
-            dataParsed = dataReceived.split()
-            # self.findChild(QtWidgets.QLabel, 'disp_acceleration_limit').setText(dataParsed[0].split(".")[0] + " m/s²")
-            # self.findChild(QtWidgets.QLabel, 'disp_deceleration_limit').setText(dataParsed[1].split(".")[0] + " m/s²")
-            self.findChild(QtWidgets.QLabel, 'disp_acceleration_limit').setText("0.5 m/s²")
-            self.findChild(QtWidgets.QLabel, 'disp_deceleration_limit').setText("-1.2 m/s²")
 
-            self.findChild(QtWidgets.QLabel, 'disp_block_elevation').setText(dataParsed[2].split(".")[0] + " m")
-            self.findChild(QtWidgets.QLabel, 'disp_block_slope').setText(dataParsed[3].split(".")[0] + " m/s")
-            # UPDATE POSITION HERE
-            self.findChild(QtWidgets.QLabel, 'disp_block_size').setText(dataParsed[4].split(".")[0] + " m")
-            self.findChild(QtWidgets.QLabel, 'disp_current_block').setText("block #" + dataParsed[5])
-            self.findChild(QtWidgets.QLabel, 'disp_destination_block').setText("block #" + dataParsed[6])
+        # self.findChild(QtWidgets.QLabel, 'disp_acceleration_limit').setText(dataParsed[0].split(".")[0] + " m/s²")
+        # self.findChild(QtWidgets.QLabel, 'disp_deceleration_limit').setText(dataParsed[1].split(".")[0] + " m/s²")
+        self.findChild(QtWidgets.QLabel, 'disp_acceleration_limit').setText("0.5 m/s²")
+        self.findChild(QtWidgets.QLabel, 'disp_deceleration_limit').setText("-1.2 m/s²")
+
+        self.findChild(QtWidgets.QLabel, 'disp_block_elevation').setText(str(train_catalogue.m_trainList[self.current_train_id].m_route[0].m_elevation) + " m")
+        self.findChild(QtWidgets.QLabel, 'disp_block_slope').setText(str(train_catalogue.m_trainList[self.current_train_id].m_route[0].m_slope) + " m/s")
+        # UPDATE POSITION HERE
+        self.findChild(QtWidgets.QLabel, 'disp_block_size').setText(str(train_catalogue.m_trainList[self.current_train_id].m_route[0].m_sizeOfBlock) + " m")
+        self.findChild(QtWidgets.QLabel, 'disp_current_block').setText("block #" + str(train_catalogue.m_trainList[self.current_train_id].m_route[0]))
+        self.findChild(QtWidgets.QLabel, 'disp_destination_block').setText("block #" + str(train_catalogue.m_trainList[self.current_train_id].m_destinationBlock))
 
     def update_gui3(self):
         if "Select Train..." in self.current_train_id:
             return
-        responsecode, dataReceived = send_message(RequestCode.TRAIN_MODEL_GUI_3_GATHER_DATA, str(self.current_train_id))
-        if responsecode == ResponseCode.SUCCESS:
-            # Parse the data and update the gui.
-            dataParsed = dataReceived.split()
-            self.findChild(QtWidgets.QLabel, 'disp_pass_count').setText(dataParsed[0] + " persons")
-            self.findChild(QtWidgets.QLabel, 'disp_crew_count').setText(dataParsed[1] + " persons")
 
-            if dataParsed[2] == "1":
-                self.findChild(QtWidgets.QLabel, 'disp_announcements').setText("on")
-                self.findChild(QtWidgets.QLabel, 'disp_announcements').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
-            else:
-                self.findChild(QtWidgets.QLabel, 'disp_announcements').setText("off")
-                self.findChild(QtWidgets.QLabel, 'disp_announcements').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
-            
-            if dataParsed[3] == "1":
-                self.findChild(QtWidgets.QLabel, 'disp_advertisements').setText("on")
-                self.findChild(QtWidgets.QLabel, 'disp_advertisements').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
-            else:
-                self.findChild(QtWidgets.QLabel, 'disp_advertisements').setText("off")
-                self.findChild(QtWidgets.QLabel, 'disp_advertisements').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
-            print(dataParsed[4]) # TEST PRINT
-            if dataParsed[4] == "1":
-                self.findChild(QtWidgets.QLabel, 'disp_cabin_lights').setText("on")
-                self.findChild(QtWidgets.QLabel, 'disp_cabin_lights').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
-            else:
-                self.findChild(QtWidgets.QLabel, 'disp_cabin_lights').setText("off")
-                self.findChild(QtWidgets.QLabel, 'disp_cabin_lights').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
-            
-            if dataParsed[5] == "1":
-                self.findChild(QtWidgets.QLabel, 'disp_head_lights').setText("on")
-                self.findChild(QtWidgets.QLabel, 'disp_head_lights').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
-            else:
-                self.findChild(QtWidgets.QLabel, 'disp_head_lights').setText("off")
-                self.findChild(QtWidgets.QLabel, 'disp_head_lights').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
-            
-            self.findChild(QtWidgets.QLabel, 'disp_temperature_control').setText(dataParsed[6] + " °F")
+        self.findChild(QtWidgets.QLabel, 'disp_pass_count').setText(str(train_catalogue.m_trainList[self.current_train_id].m_trainPassCount) + " persons")
+        self.findChild(QtWidgets.QLabel, 'disp_crew_count').setText(str(train_catalogue.m_trainList[self.current_train_id].m_trainCrewCount) + " persons")
 
-            if dataParsed[7] == "1":
-                self.findChild(QtWidgets.QLabel, 'disp_doors').setText("open")
-                self.findChild(QtWidgets.QLabel, 'disp_doors').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
-            else:
-                self.findChild(QtWidgets.QLabel, 'disp_doors').setText("closed")
-                self.findChild(QtWidgets.QLabel, 'disp_doors').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
-            
+        if str(train_catalogue.m_trainList[self.current_train_id].m_announcements) == "1":
+            self.findChild(QtWidgets.QLabel, 'disp_announcements').setText("on")
+            self.findChild(QtWidgets.QLabel, 'disp_announcements').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
+        else:
+            self.findChild(QtWidgets.QLabel, 'disp_announcements').setText("off")
+            self.findChild(QtWidgets.QLabel, 'disp_announcements').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
+        
+        if str(train_catalogue.m_trainList[self.current_train_id].m_advertisements) == "1":
+            self.findChild(QtWidgets.QLabel, 'disp_advertisements').setText("on")
+            self.findChild(QtWidgets.QLabel, 'disp_advertisements').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
+        else:
+            self.findChild(QtWidgets.QLabel, 'disp_advertisements').setText("off")
+            self.findChild(QtWidgets.QLabel, 'disp_advertisements').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
+        # print(dataParsed[4]) # TEST PRINT
+        if str(train_catalogue.m_trainList[self.current_train_id].m_cabinLights) == "1":
+            self.findChild(QtWidgets.QLabel, 'disp_cabin_lights').setText("on")
+            self.findChild(QtWidgets.QLabel, 'disp_cabin_lights').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
+        else:
+            self.findChild(QtWidgets.QLabel, 'disp_cabin_lights').setText("off")
+            self.findChild(QtWidgets.QLabel, 'disp_cabin_lights').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
+        
+        if str(train_catalogue.m_trainList[self.current_train_id].m_headLights) == "1":
+            self.findChild(QtWidgets.QLabel, 'disp_head_lights').setText("on")
+            self.findChild(QtWidgets.QLabel, 'disp_head_lights').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
+        else:
+            self.findChild(QtWidgets.QLabel, 'disp_head_lights').setText("off")
+            self.findChild(QtWidgets.QLabel, 'disp_head_lights').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
+        
+        self.findChild(QtWidgets.QLabel, 'disp_temperature_control').setText(str(train_catalogue.m_trainList[self.current_train_id].m_tempControl) + " °F")
 
-    def update_train_list(self):
-        responsecode, dataReceived = send_message(RequestCode.TRAIN_MODEL_GUI_UPDATE_DROP_DOWN)
-        if responsecode == ResponseCode.SUCCESS:
-            # Parse the data and update the gui.
-            dataParsed = int(dataReceived)
-            count = 1
-            currentIndex = self.findChild(QtWidgets.QComboBox, 'menu_train_combo').currentIndex()
-            #self.menu_train_combo.clear()
-            self.findChild(QtWidgets.QComboBox, 'menu_train_combo').clear()
-            while(count < dataParsed + 1):
-                self.menu_train_combo.addItem("Train #" + str(count))
-                count = count + 1
-            self.findChild(QtWidgets.QComboBox, 'menu_train_combo').setCurrentIndex(currentIndex)
+        if str(train_catalogue.m_trainList[self.current_train_id].m_doors) == "1":
+            self.findChild(QtWidgets.QLabel, 'disp_doors').setText("open")
+            self.findChild(QtWidgets.QLabel, 'disp_doors').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
+        else:
+            self.findChild(QtWidgets.QLabel, 'disp_doors').setText("closed")
+            self.findChild(QtWidgets.QLabel, 'disp_doors').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
     
     def save_parameters(self):
         """Sends all the entered parameters to the cloud"""
