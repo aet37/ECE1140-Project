@@ -1,10 +1,11 @@
 """Classes used during the parsing process"""
 
-import sys
 import logging
 from src.SWTrackController.Compiler.lexer import TokenType, CompilationError
 
 logger = logging.getLogger(__name__)
+
+TAG_CHARACTER_LIMIT = 7
 
 class Parser:
     """Class used to parse source code"""
@@ -316,6 +317,12 @@ class Parser:
         """Production step for "TAG" identifier "=" (true | false)"""
         self.match(TokenType.IDENTIFIER)
         self.emitter.emit("CREATE_TAG " + self.previous_token.text)
+
+        # Enforce a character limit on tag names
+        if len(self.previous_token.text) > TAG_CHARACTER_LIMIT:
+            self.abort("Tag name {} too long. The limit is {} characters".format(self.previous_token.text,
+                                                                                 TAG_CHARACTER_LIMIT))
+
         self.tags.add(self.previous_token.text)
         self.match(TokenType.EQ)
 
