@@ -1,7 +1,6 @@
 """Module containing classes relevant to the lexing stage"""
 
 import enum
-import sys
 import logging
 logger = logging.getLogger(__name__)
 
@@ -47,7 +46,6 @@ class Lexer:
 
         """
         raise CompilationError("Lexing error line #{} : {}".format(self.line_number, message))
-        sys.exit("Lexing error : " + message)
 
     def skip_whitespace(self):
         """Skips over whitespace characters"""

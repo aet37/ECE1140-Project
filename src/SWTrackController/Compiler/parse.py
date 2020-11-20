@@ -70,7 +70,7 @@ class Parser:
         :param str message: Message to be printed prior to exiting
 
         """
-        raise CompilationError("Parsing error line #{} : {}".format(self.lexer.line_number, message))
+        raise CompilationError("Parsing error line #{} : {}".format(self.lexer.line_number - 1, message))
 
     def program(self, program_name=''):
         """Production step for program ::= {statement}

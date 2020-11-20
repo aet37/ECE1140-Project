@@ -41,7 +41,7 @@ def test_statement_tag_2(mock_emitter):
 
     with pytest.raises(CompilationError) as pytest_wrapped_e:
         par.program()
-    assert "Parsing error line #2 : Expected FALSE, but found notAKeyword" == str(pytest_wrapped_e.value)
+    assert "Parsing error line #1 : Expected FALSE, but found notAKeyword" == str(pytest_wrapped_e.value)
 
 def test_statement_task_1(mock_emitter):
     """Tests the statement method
@@ -82,7 +82,7 @@ def test_statement_task_3(mock_emitter):
 
     with pytest.raises(CompilationError) as pytest_wrapped_e:
         par.statement()
-    assert "Parsing error line #1 : Invalid task type CONTINUOUS" == str(pytest_wrapped_e.value)
+    assert "Parsing error line #0 : Invalid task type CONTINUOUS" == str(pytest_wrapped_e.value)
 
 def test_statement_routine_success(mock_emitter):
     """Tests the statement method
@@ -112,7 +112,7 @@ def test_statement_routine_failure(mock_emitter):
 
     with pytest.raises(CompilationError) as pytest_wrapped_e:
         par.statement()
-    assert "Parsing error line #2 : Expected IDENTIFIER, but found \n" == str(pytest_wrapped_e.value)
+    assert "Parsing error line #1 : Expected IDENTIFIER, but found \n" == str(pytest_wrapped_e.value)
 
 def test_statement_rung_1(mock_emitter):
     """Tests the statement method
