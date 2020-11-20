@@ -1,70 +1,67 @@
 """Main page displayed to the user when they start the application"""
 
-import os
-import sys
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import Qt
 
-class LoginPage(QtWidgets.QMainWindow):
+from src.UI.window_manager import window_list
+from src.timekeeper import timekeeper
+from src.UI.timekeeper_gui import TimekeeperUi
+from src.UI.CTC.ctc_gui import CTCUi
+from src.UI.SWTrackController.swtrack_gui import SWTrackControllerUi
+from src.UI.TrackModel.trackmodel_gui import TrackModelUi
+from src.UI.TrainModel.trainmodel_gui import TrainModelUi
+from src.UI.SWTrainController.TrainController import SWTrainUi
+class LoginUi(QtWidgets.QMainWindow):
     """Page shown to user upon application startup"""
     def __init__(self):
         super().__init__()
-        self.login()
+        uic.loadUi('src/UI/login_page.ui', self)
 
-    def login(self):
-        """Loads the login page ui and displays it"""
-        uic.loadUi('src/UI/Login_Page.ui', self)
         self.alert_login = self.findChild(QtWidgets.QLabel, 'alert_login')
         self.username_in = self.findChild(QtWidgets.QLineEdit, 'username_in')
         self.password_in = self.findChild(QtWidgets.QLineEdit, 'password_in')
 
-        self.button = self.findChild(QtWidgets.QPushButton, 'login_button')# Find the button
-        self.button.clicked.connect(self.login_parse)
-        self.button = self.findChild(QtWidgets.QPushButton, 'TurnOff') # Find the button
-        self.button.clicked.connect(leave)
+        self.login_button = self.findChild(QtWidgets.QPushButton, 'login_button')
+        self.login_button.clicked.connect(self.login_parse)
+
         self.show()
 
     def login_parse(self):
         """Checks the user's credentials and starts the specific module's ui if correct"""
         username = self.username_in.text()
         password = self.password_in.text()
-        file_path = ''
+
         if username == "trainmodel" and password == "jerry":
-            file_path = 'src/UI/TrainModel/trainmodel_gui.py'
+            window_list.append(TrainModelUi())
         elif username == "trackmodel" and password == "jerry":
-            file_path = 'src/UI/TrackModel/trackmodel_gui.py'
+            window_list.append(TrackModelUi())
         elif username == "swtrack" and password == "jerry":
-            file_path = 'src/UI/SWTrackController/sw_track_gui.py'
+            window_list.append(SWTrackControllerUi())
         elif username == "ctc" and password == "jerry":
-            file_path = 'src/UI/CTC/ctc_gui.py'
+            window_list.append(CTCUi())
         elif username == "hwtrain" and password == "jerry":
-            print("hwtrain")
+            pass
         elif username == "swtrain" and password == "jerry":
-            file_path = 'src/UI/SWTrainController/TrainController.py'
-        elif username == "engineer" and password == "jerry":
-            file_path = 'src/UI/SWTrainController/TrainEngineer.py'
+            window_list.append(SWTrainUi())
+        elif username == "timekeeper" and password == "jerry":
+            window_list.append(TimekeeperUi())
         else:
             self.alert_login.setStyleSheet("color: red;")
             return
 
-        if sys.platform == 'darwin':
-            os.system('python3 ' + file_path + ' &')
-        else:
-            os.system('start /B python ' + file_path)
-        app.exit()
-
-    def keyPressEvent(self, event): # pylint: disable=invalid-name
+    # pylint: disable=invalid-name
+    def keyPressEvent(self, event):
         """Handles a keypress event"""
         if event.key() not in (Qt.Key_Enter, Qt.Key_Return):
             super().keyPressEvent(event)
         else:
             self.login_parse()
 
-def leave():
-    """Closes the page"""
-    app.exit()
+    def closeEvent(self, event):
+        """Method to run when the login page is closed"""
+        # Kill timer thread
+        timekeeper.running = False
+        timekeeper.timer_thread.join()
 
-# Main Login Screen
-app = QtWidgets.QApplication(sys.argv)
-window = LoginPage()
-app.exec_()
+        # Close all the windows
+        window_list.clear()

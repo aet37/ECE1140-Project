@@ -19,7 +19,7 @@
      <rect>
       <x>170</x>
       <y>200</y>
-      <width>161</width>
+      <width>221</width>
       <height>41</height>
      </rect>
     </property>
@@ -55,7 +55,7 @@
      <rect>
       <x>510</x>
       <y>200</y>
-      <width>101</width>
+      <width>181</width>
       <height>31</height>
      </rect>
     </property>
@@ -73,7 +73,7 @@
      <rect>
       <x>570</x>
       <y>240</y>
-      <width>71</width>
+      <width>101</width>
       <height>31</height>
      </rect>
     </property>
@@ -108,7 +108,7 @@ color: rgb(255, 255, 255);</string>
      <rect>
       <x>370</x>
       <y>100</y>
-      <width>81</width>
+      <width>111</width>
       <height>41</height>
      </rect>
     </property>
@@ -145,9 +145,9 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLabel" name="SpeedLabel_3">
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>200</x>
       <y>240</y>
-      <width>31</width>
+      <width>41</width>
       <height>31</height>
      </rect>
     </property>
@@ -189,7 +189,7 @@ color: rgb(255, 255, 255);</string>
      <rect>
       <x>360</x>
       <y>310</y>
-      <width>91</width>
+      <width>111</width>
       <height>41</height>
      </rect>
     </property>
@@ -207,7 +207,7 @@ color: rgb(255, 255, 255);</string>
      <rect>
       <x>370</x>
       <y>360</y>
-      <width>81</width>
+      <width>111</width>
       <height>41</height>
      </rect>
     </property>
@@ -230,7 +230,7 @@ color: rgb(255, 255, 255);</string>
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuCTC_Train_View">

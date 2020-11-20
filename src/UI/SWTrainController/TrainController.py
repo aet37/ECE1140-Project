@@ -2,20 +2,22 @@ import os
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QTimer
 import sys
-sys.path.insert(1, 'src')
-from UI.server_functions import *
-from UI.Common.common import Alert, Confirmation
+from src.UI.server_functions import *
+from src.UI.Common.common import Alert, Confirmation
+
+from src.signals import signals
+from src.UI.window_manager import window_list
 
 class SWTrainUi(QtWidgets.QMainWindow):
 
     def __init__(self):
-        super(SWTrainUi, self).__init__()
+        super().__init__()
 
         # Define timers
-        self.main_menu_timer = QTimer()
+        # self.main_menu_timer = QTimer()
         #self.controller_info_timer = QTimer()
         #self.failure_info_timer = QTimer()
-        self.main_menu_timer.timeout.connect(self.update_controller_list)
+        # self.main_menu_timer.timeout.connect(self.update_controller_list)
         #self.controller_info_timer.timeout.connect(self.update_gui1)
         #self.failure_info_timer.timeout.connect(self.update_gui2)
 
@@ -23,8 +25,8 @@ class SWTrainUi(QtWidgets.QMainWindow):
         self.current_train_id = "1"
 
         uic.loadUi('src/UI/SWTrainController/TrainController.ui', self)
-        self.stop_all_timers() # Restart timers
-        self.main_menu_timer.start(2000) # 2 seconds
+        # self.stop_all_timers() # Restart timers
+        # self.main_menu_timer.start(2000) # 2 seconds
         
         self.TrainIDBox.currentIndexChanged.connect(self.update_current_train_id) # Dropdown box
         self.TrainIDBox2.currentIndexChanged.connect(self.update_current_train_id2) # Dropdown box
@@ -264,10 +266,11 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
     def toggle_lights(self):
         # If no controllers have been created, button does nothing
-        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
-            return
+        # if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+        #     return
 
-        send_message(RequestCode.SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS, self.current_train_id)
+        # send_message(RequestCode.SWTRAIN_GUI_TOGGLE_CABIN_LIGHTS, self.current_train_id)
+        Signals.lights_toggled.emit(self.lights_button.isChecked())
 
     def toggle_doors(self):
         # If no controllers have been created, button does nothing
@@ -511,17 +514,15 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
     def logout(self):
         # This is executed when the button is pressed
-        if(sys.platform == 'darwin'):
-            os.system('python3 src/UI/login_gui.py &')
-        else:
-            os.system('start /B python src/UI/login_gui.py')
-        app.exit()
+        self.close()
+        window_list.remove(self)
 
-    def stop_all_timers(self):
-        self.main_menu_timer.stop()
+    # def stop_all_timers(self):
+    #     self.main_menu_timer.stop()
         #self.controller_info_timer.stop()
         #self.failure_info_timer.stop()
 
-app = QtWidgets.QApplication(sys.argv)
-windows = SWTrainUi()
-app.exec_()
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    windows = SWTrainUi()
+    app.exec_()

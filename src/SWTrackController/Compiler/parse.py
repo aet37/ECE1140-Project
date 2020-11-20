@@ -2,8 +2,7 @@
 
 import sys
 import logging
-from SWTrackController.Compiler.lexer import TokenType, CompilationError
-from SWTrackController.Compiler.emitter import Emitter
+from src.SWTrackController.Compiler.lexer import TokenType, CompilationError
 
 logger = logging.getLogger(__name__)
 
