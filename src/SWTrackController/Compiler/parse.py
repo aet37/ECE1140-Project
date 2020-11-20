@@ -6,7 +6,9 @@ from src.SWTrackController.Compiler.lexer import TokenType, CompilationError
 logger = logging.getLogger(__name__)
 
 TAG_CHARACTER_LIMIT = 7
+PERIOD_LIMIT = 20
 
+# pylint: disable=too-many-instance-attributes
 class Parser:
     """Class used to parse source code"""
     def __init__(self, lexer, emitter):
@@ -71,7 +73,8 @@ class Parser:
         :param str message: Message to be printed prior to exiting
 
         """
-        raise CompilationError("Parsing error line #{} : {}".format(self.lexer.line_number - 1, message))
+        raise CompilationError("Parsing error line #{} : {}".format(self.lexer.line_number - 1,
+                                                                    message))
 
     def program(self, program_name=''):
         """Production step for program ::= {statement}
@@ -211,8 +214,7 @@ class Parser:
         self.match(TokenType.NUMBER)
         self.emitter.emit(self.previous_token.text)
 
-        PERIOD_LIMIT = 20
-        if (int(self.previous_token.text) < PERIOD_LIMIT):
+        if int(self.previous_token.text) < PERIOD_LIMIT:
             self.abort("Period below allowable limit {}".format(PERIOD_LIMIT))
 
     def event_type(self):
@@ -272,8 +274,8 @@ class Parser:
         if instruction_type == 'RET':
             self.emitter.emit_line('')
             return
-        else:
-            self.match(TokenType.IDENTIFIER)
+
+        self.match(TokenType.IDENTIFIER)
 
         if instruction_type == 'JSR':
             # Add the routine name to a list to be verified later
@@ -320,8 +322,8 @@ class Parser:
 
         # Enforce a character limit on tag names
         if len(self.previous_token.text) > TAG_CHARACTER_LIMIT:
-            self.abort("Tag name {} too long. The limit is {} characters".format(self.previous_token.text,
-                                                                                 TAG_CHARACTER_LIMIT))
+            self.abort("Tag name {} too long. The limit is {} characters"
+                       .format(self.previous_token.text, TAG_CHARACTER_LIMIT))
 
         self.tags.add(self.previous_token.text)
         self.match(TokenType.EQ)

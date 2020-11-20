@@ -57,7 +57,8 @@ def test_missing_main():
 
     with pytest.raises(CompilationError) as pytest_wrapped_e:
         par.program()
-    assert "Parsing error line #11 : There must be a single Main routine" == str(pytest_wrapped_e.value)
+    assert "Parsing error line #11 : There must be a " \
+           "single Main routine" == str(pytest_wrapped_e.value)
 
 def test_multiple_mains():
     """Tests a program with multiple mains"""
@@ -84,7 +85,8 @@ def test_multiple_mains():
 
     with pytest.raises(CompilationError) as pytest_wrapped_e:
         par.program()
-    assert "Parsing error line #10 : There can only be one Main routine" == str(pytest_wrapped_e.value)
+    assert "Parsing error line #10 : There can " \
+           "only be one Main routine" == str(pytest_wrapped_e.value)
 
 def test_no_tag():
     """Test program that uses a nonexistent tag"""
@@ -105,7 +107,8 @@ def test_no_tag():
 
     with pytest.raises(CompilationError) as pytest_wrapped_e:
         par.program()
-    assert "Parsing error line #6 : Referencing tag input2 before assignment" == str(pytest_wrapped_e.value)
+    assert "Parsing error line #6 : Referencing tag "\
+           "input2 before assignment" == str(pytest_wrapped_e.value)
 
 def test_nonexistent_event():
     """Test program that uses a nonexistent event"""
@@ -150,7 +153,8 @@ def test_nonexistent_routine():
 
     with pytest.raises(CompilationError) as pytest_wrapped_e:
         par.program()
-    assert "Parsing error line #12 : Routine MissingRoutine does not exist" == str(pytest_wrapped_e.value)
+    assert "Parsing error line #12 : Routine "\
+           "MissingRoutine does not exist" == str(pytest_wrapped_e.value)
 
 def test_too_many_ends():
     """Test program that too many end statements"""

@@ -179,4 +179,3 @@ class TokenType(enum.Enum):
 
 class CompilationError(Exception):
     """Class to represent a general compilation error"""
-    pass
