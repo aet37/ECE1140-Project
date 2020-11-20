@@ -13,7 +13,8 @@ class Timekeeper:
         self.timer_period_in_sec = 0.1
         self.current_time_sec = 0
         self.current_time_min = 0
-        self.current_time_hour = 0
+        self.current_time_hour = 1
+        self.current_day = 0
         self.run_lock = threading.Lock()
         self.running = True
 
@@ -37,8 +38,10 @@ class Timekeeper:
 
                 if self.current_time_hour == 24:
                     self.current_time_hour = 0
+                    self.current_day = (self.current_day + 1) % 6
 
-                signals.timer_expired.emit(self.current_time_hour,
+                signals.timer_expired.emit(self.current_day,
+                                           self.current_time_hour,
                                            self.current_time_min,
                                            self.current_time_sec)
 

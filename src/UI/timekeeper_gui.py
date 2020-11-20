@@ -1,5 +1,6 @@
 """GUI class for the timekeeper"""
 
+from time import time
 from PyQt5 import QtWidgets, uic
 
 from src.signals import signals
@@ -19,13 +20,14 @@ class TimekeeperUi(QtWidgets.QMainWindow):
 
         signals.timer_expired.connect(self.update_time)
 
-        self.update_time(timekeeper.current_time_hour,
+        self.update_time(timekeeper.current_day,
+                         timekeeper.current_time_hour,
                          timekeeper.current_time_min,
                          timekeeper.current_time_sec)
 
         self.show()
 
-    def update_time(self, hours, mins, secs):
+    def update_time(self, day, hours, mins, secs):
         """Updates the time label
 
         :param int hours: Current hours
@@ -33,7 +35,8 @@ class TimekeeperUi(QtWidgets.QMainWindow):
         :param int secs: Current seconds
 
         """
-        time_text = "{:02}:{:02}:{:02}".format(hours, mins, secs)
+        days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        time_text = "{} {:02}:{:02}:{:02}".format(days[day], hours, mins, secs)
 
         time_label = self.findChild(QtWidgets.QLabel, 'time_label')
         time_label.setText(time_text)
