@@ -33,7 +33,7 @@ class DownloadInProgress(QtWidgets.QDialog):
     """Window shown to user while a program is downloading"""
 
     download_complete = pyqtSignal()
-    progress_updated = pyqtSignal(float)
+    progress_updated = pyqtSignal(int)
 
     def __init__(self):
         super().__init__()
@@ -42,9 +42,4 @@ class DownloadInProgress(QtWidgets.QDialog):
         self.progress_bar = self.findChild(QtWidgets.QProgressBar, 'progress_bar')
 
         self.download_complete.connect(self.close)
-        self.progress_updated.connect(self.set_value)
-
-    def set_value(self, value):
-        """"""
-        print("Setting value to {}".format(value))
-        self.progress_bar.setValue(value)
+        self.progress_updated.connect(lambda value: self.progress_bar.setValue(value))
