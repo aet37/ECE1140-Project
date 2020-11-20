@@ -1,6 +1,5 @@
 """GUI class for the timekeeper"""
 
-from time import time
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QButtonGroup
 
@@ -41,6 +40,7 @@ class TimekeeperUi(QtWidgets.QMainWindow):
     def update_time(self, day, hours, mins, secs):
         """Updates the time label
 
+        :param int day: Current day
         :param int hours: Current hours
         :param int mins: Current minutes
         :param int secs: Current seconds
