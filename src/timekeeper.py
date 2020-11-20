@@ -10,7 +10,7 @@ class Timekeeper:
     """Class responsible for keeping the system time"""
     def __init__(self):
         self.timer_thread = threading.Thread(target=self.timer_function)
-        self.timer_period_in_sec = 0.1
+        self.timer_period_in_sec = 1
         self.current_time_sec = 0
         self.current_time_min = 0
         self.current_time_hour = 1

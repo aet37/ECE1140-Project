@@ -2,11 +2,10 @@
 
 from time import sleep
 import logging
-from PyQt5.QtCore import QThread
-import serial
 import threading
-from serial.serialutil import SerialException
 from enum import Enum
+import serial
+from serial.serialutil import SerialException
 
 from src.UI.Common.common import DownloadInProgress
 
@@ -17,6 +16,7 @@ SERIAL_PORT = 'COM3'
 RATE = 9600
 
 class Code(Enum):
+    """Codes to be sent to the arduino"""
     START_DOWNLOAD = 96 # Used by the gui to start a download
     END_DOWNLOAD = 97 # Used by the gui to end a download
     CREATE_TAG = 98 # Used by the gui to create a tag
@@ -72,12 +72,12 @@ class HWTrackCtrlConnector:
             for line in open(compiled_program, 'r'):
                 line = line.rstrip('\n')
                 try:
-                    spaceIndex = line.index(' ')
+                    space_index = line.index(' ')
                 except ValueError:
-                    spaceIndex = len(line)
+                    space_index = len(line)
 
                 # Construct the new line with the code replaced
-                line = str(Code[line[:spaceIndex]].value) + line[spaceIndex:]
+                line = str(Code[line[:space_index]].value) + line[space_index:]
                 commands.append(line)
 
             with self.comms_lock:
