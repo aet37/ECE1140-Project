@@ -2,6 +2,7 @@ import os
 from PyQt5 import QtWidgets, uic, QtCore
 import sys
 from functools import partial
+import pandas as pd
 
 from src.CTC.TrainSystem import *
 from src.UI.window_manager import window_list
@@ -22,6 +23,7 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.auto_mode = False
 		self.num_blocks_closed_green = 0
 		self.num_blocks_closed_red = 0
+		self.open_file = ''
 
 		# For reloading throughput value
 		global time_timr
@@ -78,24 +80,69 @@ class CTCUi(QtWidgets.QMainWindow):
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
 		self.button.clicked.connect(self.returnToMainWindow)
+	
+		self.chose_file = self.findChild(QtWidgets.QPushButton, 'ChoseFile') # Find the button
+		self.chose_file.clicked.connect(self.ChoseAFile)
+
+		self.upload_and_run = self.findChild(QtWidgets.QPushButton, 'UploadAndRun') # Find the button
+		self.upload_and_run.clicked.connect(self.RunSchedule)
+
+		self.file_path = self.findChild(QtWidgets.QLabel, 'FilePath') # Find the Label
+		self.error_conf = self.findChild(QtWidgets.QLabel, 'ConfErr') # Find the Label
+
+		# Initialize to blank
+		self.open_file = ''
+
+	def ChoseAFile(self):
+		"""  """
+		dialog = QtWidgets.QFileDialog(self)
+		fname = dialog.getOpenFileName(self)
+
+		if fname[0][-5:len(fname[0])] != '.xlsx':
+			self.error_conf.setStyleSheet('color: rgb(252, 1, 7);')
+			self.error_conf.setText('Please Chose an Excel File!')
+		else:
+			self.open_file = fname[0]
+			self.file_path.setText(self.open_file)
+			self.error_conf.setText('')
+
+	def RunSchedule(self):
+		"""  """
+		# Trains to append to time keeper class if import sucessful
+		to_add = []
+
+		# Read the Excel File
+		myxl = pd.read_excel(self.open_file, dtype=str)
+
+		# Determine Line
+		if myxl[myxl.columns[0]][0] == 'Green':
+			line = Line.LINE_GREEN
+		else:
+			line = Line.LINE_RED
+
+		for i in range(4, len(myxl.columns)):
+			try:
+				hour = int(myxl[myxl.columns[i]][0][0:2])
+				muinute = int(myxl[myxl.columns[i]][0][3:5])
+				temp_time_train = InterruptTrain(-1, line, hour, muinute)
+				to_add.append(temp_time_train)
+			except:
+				self.error_conf.setStyleSheet('color: rgb(252, 1, 7);')
+				self.error_conf.setText('Faulty Excel File. Please Scrupulously look for error in file.')
+				return
+			
+
+		# If passed, add the trains to the time class
+		for i in range(len(to_add)):
+			timekeeper.ctc_trains_backlog.append(to_add[i])
+
+		# Display Sucess on Screen
+		self.file_path.setText('')
+		self.open_file = ''
+		self.error_conf.setStyleSheet('color: rgb(33, 255, 6);')
+		self.error_conf.setText('Sucess! Schedule starting to run...')
 
 
-	#######################################################################################################################################
-	#######################################################################################################################################
-	# Opens Edit Schedule Page
-	#######################################################################################################################################
-	#######################################################################################################################################
-	def EditScheduleWindow(self):
-		uic.loadUi('src/UI/CTC/ctc_schedule_edit.ui', self)
-		self.setWindowTitle("CTC - Edit Schedule")
-
-		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
-		self.button.clicked.connect(self.returnToMainWindow)
-		self.button = self.findChild(QtWidgets.QPushButton, 'ScheduleSaveButton') # Find the button
-		self.button.clicked.connect(self.saveEditedSchedule)
-
-	def saveEditedSchedule(self):
-		app.exit()
 
 	#######################################################################################################################################
 	#######################################################################################################################################
