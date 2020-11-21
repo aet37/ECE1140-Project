@@ -6968,6 +6968,27 @@ color: rgb(255, 255, 255);</string>
      <string>Back to CTC Menu</string>
     </property>
    </widget>
+   <widget class="QLabel" name="MaintModeGr">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>10</y>
+      <width>391</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(252, 1, 7);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
    <zorder>line_165</zorder>
    <zorder>line_166</zorder>
    <zorder>line_24</zorder>
@@ -7452,6 +7473,7 @@ color: rgb(255, 255, 255);</string>
    <zorder>label_158</zorder>
    <zorder>label_159</zorder>
    <zorder>BackToMapMenu</zorder>
+   <zorder>MaintModeGr</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -7459,7 +7481,7 @@ color: rgb(255, 255, 255);</string>
      <x>0</x>
      <y>0</y>
      <width>1223</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuCTC_View_Green_Line">
