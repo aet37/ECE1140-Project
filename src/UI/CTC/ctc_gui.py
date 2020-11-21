@@ -112,7 +112,12 @@ class CTCUi(QtWidgets.QMainWindow):
 		to_add = []
 
 		# Read the Excel File
-		myxl = pd.read_excel(self.open_file, dtype=str)
+		try:
+			myxl = pd.read_excel(self.open_file, dtype=str)
+		except:
+			self.error_conf.setStyleSheet('color: rgb(252, 1, 7);')
+			self.error_conf.setText('Could not open excel file...')
+			return
 
 		# Determine Line
 		if myxl[myxl.columns[0]][0] == 'Green':
