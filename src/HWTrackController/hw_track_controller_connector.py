@@ -1,15 +1,15 @@
 """Module containing classes to communicate with the hw track controller"""
 
 from time import sleep
-import logging
 import threading
 from enum import Enum
 import serial
 from serial.serialutil import SerialException
 
 from src.UI.Common.common import DownloadInProgress
+from src.logger import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 # Communications with controller
 SERIAL_PORT = 'COM3'
