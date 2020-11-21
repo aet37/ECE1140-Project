@@ -83,18 +83,6 @@ void HWTrainRequestManager::HandleRequest(const Common::Request& rRequest, Commo
             break;
         }
 
-
-
-
-
-        // IMPLEMENT REST OF THE CODES
-
-
-
-
-
-
-
         case Common::RequestCode::HWTRAIN_GET_HW_TRAIN_CONTROLLER_REQUEST:
         {
             // Retrieve the next request from the request queue
