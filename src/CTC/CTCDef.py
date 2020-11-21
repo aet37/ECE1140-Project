@@ -20,7 +20,6 @@ class InterruptTrain:
 		self.line_on = line
 		self.hour = hr
 		self.min = mn
-		self.loops = 0	# Used for trains imported from schedule
 
 class Track:
 	""" Structure that holds data about a single track (open, occupied) """

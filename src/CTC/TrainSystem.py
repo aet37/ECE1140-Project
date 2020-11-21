@@ -101,6 +101,7 @@ class TrainSystem:
 		# Add blocks to train object
 		if line == Line.LINE_GREEN:
 			if block_to in self.green_blocks_inter:
+				print('Long Route Green')
 				temp_train.route_switches_arr = self.green_route_switches
 				temp_train.route_blocks_arr = self.green_route_blocks
 				
@@ -114,31 +115,14 @@ class TrainSystem:
 				temp_train.route_switches_arr.extend(self.green_route_switches_inter)
 				temp_train.route_switches_arr.pop()
 				temp_train.route_switches_arr.append(0)
-			# For Scheduled trains
-			elif block_to == -1:
-				temp_train.route_switches_arr = self.green_route_switches
-				temp_train.route_blocks_arr = self.green_route_blocks
-
-				for i in range(temp_train.loops - 1):
-					if i == 0:
-						temp_train.route_blocks_arr.pop()
-						temp_train.route_switches_arr.pop()
-						temp_train.route_switches_arr.append(1)
-					temp_train.route_blocks_arr.extend(self.green_blocks_inter)
-					temp_train.route_blocks_arr.extend(self.green_route_blocks_multiple)
-
-				temp_train.route_blocks_arr.append(-1)
-				temp_train.route_switches_arr.pop()
-				temp_train.route_switches_arr.append(0)
-
-
-
 			else:
+				print('Short Route Green')
 				temp_train.route_switches_arr = self.green_route_switches
 				temp_train.route_blocks_arr = self.green_route_blocks
 
 		else:
 			if block_to in self.red_blocks_inter:
+				print('Long Route Red')
 				temp_train.route_switches_arr = self.red_route_switches
 				temp_train.route_blocks_arr = self.red_route_blocks
 				
@@ -151,28 +135,12 @@ class TrainSystem:
 				temp_train.route_switches_arr.extend(self.red_route_switches_inter)
 				temp_train.route_switches_arr.pop()
 				temp_train.route_switches_arr.append(0)
-			# For scheduled Trains
-			elif block_to == -1:
-				temp_train.route_switches_arr = self.red_route_switches
-				temp_train.route_blocks_arr = self.red_route_blocks
-
-				for i in range(temp_train.loops - 1):
-					if i == 0:
-						temp_train.route_blocks_arr.pop()
-						temp_train.route_switches_arr.pop()
-					temp_train.route_blocks_arr.extend(self.red_blocks_inter)
-					temp_train.route_blocks_arr.extend(self.red_route_blocks_multiple)
-					temp_train.route_switches_arr.extend(self.red_route_switches_inter)
-
-				temp_train.route_blocks_arr.append(-1)
-				temp_train.route_switches_arr.pop()
-				temp_train.route_switches_arr.append(0)
-				
 			else:
+				print('Short Route Red')
 				temp_train.route_switches_arr = self.red_route_switches
 				temp_train.route_blocks_arr = self.red_route_blocks
 
-		#print(list(map(bool, temp_train.route_switches_arr)))
+		print(list(map(bool, temp_train.route_switches_arr)))
 		#print(temp_train.route_blocks_arr)
 		
 		# Add train to this array
