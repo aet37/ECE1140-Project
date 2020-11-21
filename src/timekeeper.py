@@ -25,7 +25,7 @@ class Timekeeper:
 
     def timer_function(self):
         """Thread function for monitoring time and emitting signals"""
-        logger.info("Timekeeper starting...")
+        logger.critical("Timekeeper starting...")
         while self.running:
             time.sleep(self.timer_period_in_sec)
 
