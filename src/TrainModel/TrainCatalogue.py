@@ -19,6 +19,18 @@ class TrainCatalogue:
         signals.train_model_dispatch_train.connect(self.train_model_dispatch_train)
         # Receive lights signal
         signals.train_model_gui_receive_lights.connect(self.train_model_receive_lights)
+        # Receive doors signal
+        signals.train_model_gui_receive_doors.connect(self.train_model_receive_doors)
+        # Receive announcements signal
+        signals.train_model_gui_receive_announce_stations.connect(self.train_model_gui_receive_announce_stations)
+        # Receive advertisements signal
+        signals.train_model_gui_receive_ads.connect(self.train_model_gui_receive_ads)
+        # Receive temperature signal
+        signals.train_model_gui_receive_sean_paul.connect(self.train_model_gui_receive_sean_paul)
+        # Receive mode signal
+        signals.train_model_gui_receive_mode.connect(self.train_model_gui_receive_mode)
+        # Receive service brake signal
+        signals.train_model_gui_receive_service_brake.connect(self.train_model_gui_receive_service_brake)
 
     # print(sys.path)
 
@@ -48,9 +60,37 @@ class TrainCatalogue:
         
     # @brief Toggles the train lights
     def train_model_receive_lights(self, trainId, cabinLights):
-        print("These are the lights:" + str(cabinLights))
         self.m_trainList[trainId].m_cabinLights = cabinLights
         signals.train_model_something_has_been_changed.emit()
 
+    # @brief Toggles the train doors
+    def train_model_receive_doors(self, trainId, doors):
+        self.m_trainList[trainId].m_doors = doors
+        signals.train_model_something_has_been_changed.emit()
+
+    # @brief Toggles the announcements
+    def train_model_gui_receive_announce_stations(self, trainId, announcements):
+        self.m_trainList[trainId].m_announcements = announcements
+        signals.train_model_something_has_been_changed.emit()
+
+    # @brief Toggles the advertisements
+    def train_model_gui_receive_ads(self, trainId, ads):
+        self.m_trainList[trainId].m_advertisements = ads
+        signals.train_model_something_has_been_changed.emit()
+
+    # @brief Sets the temperature
+    def train_model_gui_receive_sean_paul(self, trainId, temperature):
+        self.m_trainList[trainId].m_tempControl = temperature
+        signals.train_model_something_has_been_changed.emit()
+
+    # @brief Toggles the train mode
+    def train_model_gui_receive_mode(self, trainId, mode):
+        self.m_trainList[trainId].m_mode = mode
+        signals.train_model_something_has_been_changed.emit()
+
+    def train_model_gui_receive_service_brake(self, trainId, service_brake):
+        self.m_trainList[trainId].m_serviceBrake = service_brake
+        signals.train_model_something_has_been_changed.emit()
+        pass
 
 train_catalogue = TrainCatalogue()

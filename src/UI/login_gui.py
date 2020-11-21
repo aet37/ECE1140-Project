@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt
 import sys
 sys.path.append(".")
 
-from UI.window_manager import window_list
+from src.UI.window_manager import window_list
 from src.timekeeper import timekeeper
 from src.UI.timekeeper_gui import TimekeeperUi
 from src.UI.CTC.ctc_gui import CTCUi

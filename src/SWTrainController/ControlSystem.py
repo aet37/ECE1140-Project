@@ -44,11 +44,6 @@ class ControlSystem:
         # Add controller to vector of controllers (Keep everything singleton)
         self.p_controllers.append(p_temp)
 
-
-    def get_controller_instance(self, train_id):
-        """ Returns instance of controller from set """
-        return self.p_controllers[train_id]
-
     def get_amount_of_controllers(self):
         """ Returns amount of controllers in system """
         return len(self.p_controllers)
@@ -73,7 +68,7 @@ class ControlSystem:
     def swtrain_gui_press_service_brake(self, train_id):
         """ Handler for swtrain_gui_press_service_brake """
         self.p_controllers[train_id].toggle_service_brake()
-        signals.train_model_gui_receive_service_brake(train_id, self.p_controllers[train_id].service_brake)
+        signals.train_model_gui_receive_service_brake.emit(train_id, self.p_controllers[train_id].service_brake)
 
     def swtrain_gui_set_kp_ki(self, train_id, Kp, Ki):
         """ Handler for swtrain_gui_set_kp_ki """
@@ -83,12 +78,12 @@ class ControlSystem:
     ## NonVital Signal Definitions ##
     def swtrain_gui_toggle_cabin_lights(self, train_id):
         """ Handler for swtrain_gui_toggle_lights signal """
-        print("hello collin")
         self.p_controllers[train_id].toggle_lights()
         signals.train_model_gui_receive_lights.emit(train_id, self.p_controllers[train_id].lights)
 
     def swtrain_gui_toggle_damn_doors(self, train_id):
         """ Handler for swtrain_gui_toggle_damn_doors """
+        print("hello collin")
         self.p_controllers[train_id].toggle_doors()
         signals.train_model_gui_receive_doors.emit(train_id, self.p_controllers[train_id].doors)
 
@@ -105,6 +100,6 @@ class ControlSystem:
     def swtrain_gui_set_sean_paul(self, train_id, temperature):
         """ Handler for swtrain_gui_set_sean_paul """
         self.p_controllers[train_id].temperature = temperature
-        signals.train_model_gui_receive_sean_paul(train_id, temperature)
+        signals.train_model_gui_receive_sean_paul.emit(train_id, temperature)
 
 control_system = ControlSystem()

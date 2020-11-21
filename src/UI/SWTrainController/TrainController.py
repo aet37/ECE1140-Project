@@ -4,7 +4,6 @@ from PyQt5.QtCore import QTimer
 import sys
 from SWTrainController.Controller import Controller
 sys.path.append(".")
-from src.UI.server_functions import *
 from src.UI.Common.common import Alert, Confirmation
 
 from src.signals import signals
@@ -277,8 +276,8 @@ class SWTrainUi(QtWidgets.QMainWindow):
             self.automatic_mode.setStyleSheet("background-color: rgb(255, 51, 16);")
             self.manual_mode.setStyleSheet("background-color: green;")
         else:
-            self.automatic_mode.setStyleSheet("background-color: rgb(255, 51, 16);")
-            self.manual_mode.setStyleSheet("background-color: green;")
+            self.automatic_mode.setStyleSheet("background-color: green;")
+            self.manual_mode.setStyleSheet("background-color: rgb(255, 51, 16);")
 
     def set_button_state(self, index):
         self.button1.setEnabled(True)
@@ -309,7 +308,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         signals.swtrain_gui_toggle_damn_doors.emit(int(self.current_train_id) - 1)
 
         # Toggle door button color
-        if self.doors_button.styleSheet("background-color: green;"):
+        if self.doors_button.styleSheet() == "background-color: green;":
             self.doors_button.setStyleSheet("background-color: rgb(255, 51, 16);")
         else:
             self.doors_button.setStyleSheet("background-color: green;")
@@ -323,7 +322,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         signals.swtrain_gui_announce_stations.emit(int(self.current_train_id) - 1)
 
         # Toggle announcement button color
-        if self.announcements_button.styleSheet("background-color: green;"):
+        if self.announcements_button.styleSheet() == "background-color: green;":
             self.announcements_button.setStyleSheet("background-color: rgb(255, 51, 16);")
         else:
             self.announcements_button.setStyleSheet("background-color: green;")
@@ -337,7 +336,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         signals.swtrain_gui_display_ads.emit(int(self.current_train_id) - 1)
 
         # Toggle advertisement button color
-        if self.advertisements_button.styleSheet("background-color: green;"):
+        if self.advertisements_button.styleSheet() == "background-color: green;":
             self.advertisements_button.setStyleSheet("background-color: rgb(255, 51, 16);")
         else:
             self.advertisements_button.setStyleSheet("background-color: green;")
@@ -349,13 +348,13 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
         temp = self.findChild(QtWidgets.QLineEdit, "InputTemp").text()
         try:
-            int(temp)
+            float(temp)
         except ValueError:
-            alert = Alert("Temperature must be an integer value")
+            alert = Alert("Temperature must be an numeric value")
             alert.exec_()
             return
 
-        if int(temp) < 64 or int(temp) > 80 :
+        if float(temp) < 64 or float(temp) > 80 :
             alert = Alert("Invalid temperature!")
             alert.exec_()
             return
@@ -365,7 +364,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         alert.exec_()
 
         # If input temperature is valid, emit signal
-        signals.swtrain_gui_set_sean_paul(int(self.current_train_id) - 1, temp)
+        signals.swtrain_gui_set_sean_paul.emit( (int(self.current_train_id) - 1), float(temp) )
 
     def toggle_mode1(self):
         # If no controllers have been created, button does nothing
@@ -481,20 +480,21 @@ class SWTrainUi(QtWidgets.QMainWindow):
                 response = confirmation.exec_()
                 if response == True:
                     self.service_brake.setStyleSheet("background-color: rgb(255, 51, 16);")
+                    # Send signal to notify status of service brake
+                    signals.swtrain_gui_press_service_brake.emit(int(self.current_train_id) - 1)
                 else:
-                    self.service_brake.setStyleSheet("background-color: green;")
-                return
+                    return
             else:
                 #Confirm turning off service brake
                 confirmation = Confirmation("Turn service brake off?")
                 response = confirmation.exec_()
                 if response == True:
                     self.service_brake.setStyleSheet("background-color: green;")
+                    # Send signal to notify status of service brake
+                    signals.swtrain_gui_press_service_brake.emit(int(self.current_train_id) - 1)
                 else:
-                    self.service_brake.setStyleSheet("background-color: rgb(255, 51, 16);")
+                    return
 
-            # Send signal to notify status of service brake
-            signals.swtrain_gui_press_service_brake(int(self.current_train_id) - 1)
         else:
             alert = Alert("Service brake cannot be activated until authority is 0!")
             alert.exec_()
@@ -545,8 +545,8 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
     def logout(self):
         # This is executed when the button is pressed
-        self.close()
         window_list.remove(self)
+        self.close()
 
     # def stop_all_timers(self):
     #     self.main_menu_timer.stop()

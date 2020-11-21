@@ -131,7 +131,7 @@ class Controller:
         """ Turn lights on/off """
         self.lights = not self.lights
 
-    def announce_stations(self):
+    def toggle_announcements(self):
         """ Turn announcements on/off """
         self.announcements = not self.announcements
 

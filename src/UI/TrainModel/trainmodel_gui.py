@@ -187,7 +187,11 @@ class TrainModelUi(QtWidgets.QMainWindow):
             self.findChild(QtWidgets.QLabel, 'disp_authority').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
 
         self.findChild(QtWidgets.QLabel, 'disp_current_speed').setText(str(train_catalogue.m_trainList[self.current_train_id - 1].m_currentSpeed) + " m/s")
-        self.findChild(QtWidgets.QLabel, 'disp_speed_limit').setText(str(train_catalogue.m_trainList[self.current_train_id - 1].m_route[0].m_speedLimit) + " km/h")
+        
+        if len(train_catalogue.m_trainList[self.current_train_id - 1].m_route) == 0:
+            self.findChild(QtWidgets.QLabel, 'disp_speed_limit').setText(str(0.0) + " km/h")
+        else:
+            self.findChild(QtWidgets.QLabel, 'disp_speed_limit').setText(str(train_catalogue.m_trainList[self.current_train_id - 1].m_route[0].m_speedLimit) + " km/h")
 
         if str(train_catalogue.m_trainList[self.current_train_id - 1].m_brakeCommand) == "True":
             self.findChild(QtWidgets.QLabel, 'disp_brake_command').setText("on")
