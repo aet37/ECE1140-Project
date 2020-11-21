@@ -2,6 +2,8 @@ import os
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QTimer
 import sys
+from SWTrainController.Controller import Controller
+sys.path.append(".")
 from src.UI.server_functions import *
 from src.UI.Common.common import Alert, Confirmation
 
@@ -25,6 +27,8 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
         # Define current train id
         self.current_train_id = "1"
+        # Define amount of trains
+        self.controller_count = 0
 
         uic.loadUi('src/UI/SWTrainController/TrainController.ui', self)
 
@@ -144,8 +148,6 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
         # Define service brake button
         self.service_brake = self.findChild(QtWidgets.QPushButton, 'ServiceBrake')
-
-        self.defineToggles()
         ###################################
 
         # Define buttons on Information Page #
@@ -158,18 +160,6 @@ class SWTrainUi(QtWidgets.QMainWindow):
         # Define button to input Kp and Ki
         self.save_kp_ki = self.findChild(QtWidgets.QPushButton, 'SaveInputs')
         ##################################
-
-
-    def defineToggles(self):
-        # Give buttons capability to toggle in appearance
-        self.doors_button.setCheckable(True)
-        self.doors_button.setStyleSheet("QPushButton{background-color:green;}QPushButton:checked{background-color:rgb(255, 51, 16);}")
-        self.lights_button.setCheckable(True)
-        self.lights_button.setStyleSheet("QPushButton{background-color:green;}QPushButton:checked{background-color:rgb(255, 51, 16);}")
-        self.announcements_button.setCheckable(True)
-        self.announcements_button.setStyleSheet("QPushButton{background-color:green;}QPushButton:checked{background-color:rgb(255, 51, 16);}")
-        self.advertisements_button.setCheckable(True)
-        self.advertisements_button.setStyleSheet("QPushButton{background-color:green;}QPushButton:checked{background-color:rgb(255, 51, 16);}")
 
     def update_current_train_id(self):
         self.current_train_id = self.TrainIDBox.currentText()
@@ -185,10 +175,11 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
     def update_controller_list(self):
         # Whenever the swtrain_dispatch_train signal is called, add another controller to list
-        self.TrainIDBox.addItem(str(control_system.get_amount_of_controllers() + 1))
-        self.TrainIDBox2.addItem(str(control_system.get_amount_of_controllers() + 1))
-        self.TrainIDBox3.addItem(str(control_system.get_amount_of_controllers() + 1))
-        self.TrainIDBox4.addItem(str(control_system.get_amount_of_controllers() + 1))
+        self.controller_count += 1
+        self.TrainIDBox.addItem(str(self.controller_count))
+        self.TrainIDBox2.addItem(str(self.controller_count))
+        self.TrainIDBox3.addItem(str(self.controller_count))
+        self.TrainIDBox4.addItem(str(self.controller_count))
 
     def update_dropdowns(self):
         # Find current index of all dropdowns
@@ -231,15 +222,15 @@ class SWTrainUi(QtWidgets.QMainWindow):
             return
 
         # Store all data into individual variables
-        self.doors_status = control_system.p_controllers[self.current_train_id].doors
-        self.lights_status = control_system.p_controllers[self.current_train_id].lights
-        self.announcements_status = control_system.p_controllers[self.current_train_id].announcements
-        self.advertisements_status = control_system.p_controllers[self.current_train_id].advertisements
-        self.curr_speed = control_system.p_controllers[self.current_train_id].current_speed
-        self.com_speed = control_system.p_controllers[self.current_train_id].command_speed
-        self.setpoint_speed = control_system.p_controllers[self.current_train_id].setpoint_speed
-        self.service_brake_status = control_system.p_controllers[self.current_train_id].service_brake
-        self.current_mode = control_system.p_controllers[self.current_train_id].mode
+        self.doors_status = control_system.p_controllers[int(self.current_train_id) - 1].doors
+        self.lights_status = control_system.p_controllers[int(self.current_train_id) - 1].lights
+        self.announcements_status = control_system.p_controllers[int(self.current_train_id) - 1].announcements
+        self.advertisements_status = control_system.p_controllers[int(self.current_train_id) - 1].advertisements
+        self.curr_speed = control_system.p_controllers[int(self.current_train_id) - 1].current_speed
+        self.com_speed = control_system.p_controllers[int(self.current_train_id) - 1].command_speed
+        self.setpoint_speed = control_system.p_controllers[int(self.current_train_id) - 1].setpoint_speed
+        self.service_brake_status = control_system.p_controllers[int(self.current_train_id) - 1].service_brake
+        self.mode_status = control_system.p_controllers[int(self.current_train_id) - 1].mode
 
         # Change GUI to reflect current data
         # Update doors
@@ -282,7 +273,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
             self.service_brake.setStyleSheet("background-color: green;")
 
         # Update mode buttons
-        if self.current_mode == 1:
+        if self.mode_status == 1:
             self.automatic_mode.setStyleSheet("background-color: rgb(255, 51, 16);")
             self.manual_mode.setStyleSheet("background-color: green;")
         else:
@@ -301,10 +292,10 @@ class SWTrainUi(QtWidgets.QMainWindow):
              return
 
         # Tell train to toggle lights
-        signals.swtrain_gui_toggle_cabin_lights.emit(self.current_train_id)
+        signals.swtrain_gui_toggle_cabin_lights.emit(int(self.current_train_id) - 1)
 
         # Toggle light button color
-        if self.lights_button.styleSheet("background-color: green;"):
+        if self.lights_button.styleSheet() == "background-color: green;":
             self.lights_button.setStyleSheet("background-color: rgb(255, 51, 16);")
         else:
             self.lights_button.setStyleSheet("background-color: green;")
@@ -315,7 +306,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
             return
 
         # Tell train to toggle doors
-        signals.swtrain_gui_toggle_damn_doors.emit(self.current_train_id)
+        signals.swtrain_gui_toggle_damn_doors.emit(int(self.current_train_id) - 1)
 
         # Toggle door button color
         if self.doors_button.styleSheet("background-color: green;"):
@@ -329,7 +320,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
             return
 
         # Tell train to toggle announcements
-        signals.swtrain_gui_announce_stations.emit(self.current_train_id)
+        signals.swtrain_gui_announce_stations.emit(int(self.current_train_id) - 1)
 
         # Toggle announcement button color
         if self.announcements_button.styleSheet("background-color: green;"):
@@ -343,7 +334,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
             return
 
         # Tell train to toggle advertisements
-        signals.swtrain_gui_display_ads.emit(self.current_train_id)
+        signals.swtrain_gui_display_ads.emit(int(self.current_train_id) - 1)
 
         # Toggle advertisement button color
         if self.advertisements_button.styleSheet("background-color: green;"):
@@ -374,7 +365,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         alert.exec_()
 
         # If input temperature is valid, emit signal
-        signals.swtrain_gui_set_sean_paul(self.current_train_id, temp)
+        signals.swtrain_gui_set_sean_paul(int(self.current_train_id) - 1, temp)
 
     def toggle_mode1(self):
         # If no controllers have been created, button does nothing
@@ -403,7 +394,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
                 self.automatic_mode.setStyleSheet("background-color: green;")
                 self.manual_mode.setStyleSheet("background-color: rgb(255, 51, 16);")
 
-        signals.swtrain_gui_switch_mode.emit(self.current_train_id, override)
+        signals.swtrain_gui_switch_mode.emit(int(self.current_train_id) - 1, override)
 
     def toggle_mode2(self):
         # If no controllers have been created, button does nothing
@@ -432,7 +423,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
                 self.automatic_mode.setStyleSheet("background-color: rgb(255, 51, 16);")
                 self.manual_mode.setStyleSheet("background-color: green;")
 
-        signals.swtrain_gui_switch_mode.emit(self.current_train_id, override)
+        signals.swtrain_gui_switch_mode.emit(int(self.current_train_id) - 1, override)
 
     def set_setpoint(self):
         # If no controllers have been created, button does nothing
@@ -475,7 +466,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         if response == False:
             return
         else:
-            signals.swtrain_gui_set_setpoint_speed(self.current_train_id, setpoint_speed)
+            signals.swtrain_gui_set_setpoint_speed(int(self.current_train_id) - 1, setpoint_speed)
 
     def toggle_service_brake(self):
         # If no controllers have been created, button does nothing
@@ -483,7 +474,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
             return
 
         # Check if authority is zero
-        if control_system.p_controllers[self.current_train_id].authority == 0:
+        if control_system.p_controllers[int(self.current_train_id) - 1].authority == 0:
             if self.service_brake.styleSheet() == "background-color: green;":
                 #Confirm use of service brake
                 confirmation = Confirmation("Turn service brake on?")
@@ -503,7 +494,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
                     self.service_brake.setStyleSheet("background-color: rgb(255, 51, 16);")
 
             # Send signal to notify status of service brake
-            signals.swtrain_gui_press_service_brake(self.current_train_id)
+            signals.swtrain_gui_press_service_brake(int(self.current_train_id) - 1)
         else:
             alert = Alert("Service brake cannot be activated until authority is 0!")
             alert.exec_()
@@ -550,7 +541,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         self.KpLabel.setText(str(Kp))
         self.KiLabel.setText(str(Ki))
 
-        signals.swtrain_gui_set_kp_ki(self.current_train_id, Kp, Ki)
+        signals.swtrain_gui_set_kp_ki(int(self.current_train_id) - 1, Kp, Ki)
 
     def logout(self):
         # This is executed when the button is pressed

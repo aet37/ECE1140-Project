@@ -48,6 +48,7 @@ class TrainCatalogue:
         
     # @brief Toggles the train lights
     def train_model_receive_lights(self, trainId, cabinLights):
+        print("These are the lights:" + str(cabinLights))
         self.m_trainList[trainId].m_cabinLights = cabinLights
         signals.train_model_something_has_been_changed.emit()
 

@@ -44,8 +44,6 @@ class ControlSystem:
         # Add controller to vector of controllers (Keep everything singleton)
         self.p_controllers.append(p_temp)
 
-        # Return instance of controller
-        return p_temp
 
     def get_controller_instance(self, train_id):
         """ Returns instance of controller from set """
@@ -58,7 +56,7 @@ class ControlSystem:
     ### SIGNAL DEFINITIONS ###
     def swtrain_dispatch_train(self, com_sp, curr_sp, auth):
         """ Handler for swtrain_dispatch_train signal """
-        self.create_new_controller(com_sp, curr_sp, auth)
+        control_system.create_new_controller(com_sp, curr_sp, auth)
         # If first train, dispatch to HWTrainController
         if self.get_amount_of_controllers == 0:
             signals.hwtrain_dispatch_train.emit(com_sp, curr_sp, auth)
@@ -85,6 +83,7 @@ class ControlSystem:
     ## NonVital Signal Definitions ##
     def swtrain_gui_toggle_cabin_lights(self, train_id):
         """ Handler for swtrain_gui_toggle_lights signal """
+        print("hello collin")
         self.p_controllers[train_id].toggle_lights()
         signals.train_model_gui_receive_lights.emit(train_id, self.p_controllers[train_id].lights)
 
