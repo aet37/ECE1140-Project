@@ -1,3 +1,4 @@
+import copy
 
 from src.CTC.CTCDef import *
 from src.signals import *
@@ -101,9 +102,8 @@ class TrainSystem:
 		# Add blocks to train object
 		if line == Line.LINE_GREEN:
 			if block_to in self.green_blocks_inter:
-				#print('Long Route Green')
-				temp_train.route_switches_arr = self.green_route_switches
-				temp_train.route_blocks_arr = self.green_route_blocks
+				temp_train.route_switches_arr = copy.deepcopy(self.green_route_switches)
+				temp_train.route_blocks_arr = copy.deepcopy(self.green_route_blocks)
 				
 				temp_train.route_blocks_arr.pop()
 				temp_train.route_blocks_arr.extend(self.green_blocks_inter)
@@ -116,15 +116,13 @@ class TrainSystem:
 				temp_train.route_switches_arr.pop()
 				temp_train.route_switches_arr.append(0)
 			else:
-				#print('Short Route Green')
 				temp_train.route_switches_arr = self.green_route_switches
 				temp_train.route_blocks_arr = self.green_route_blocks
 
 		else:
 			if block_to in self.red_blocks_inter:
-				#print('Long Route Red')
-				temp_train.route_switches_arr = self.red_route_switches
-				temp_train.route_blocks_arr = self.red_route_blocks
+				temp_train.route_switches_arr = copy.deepcopy(self.red_route_switches)
+				temp_train.route_blocks_arr = copy.deepcopy(self.red_route_blocks)
 				
 				temp_train.route_blocks_arr.pop()
 				temp_train.route_blocks_arr.extend(self.red_blocks_inter)
@@ -136,7 +134,6 @@ class TrainSystem:
 				temp_train.route_switches_arr.pop()
 				temp_train.route_switches_arr.append(0)
 			else:
-				#print('Short Route Red')
 				temp_train.route_switches_arr = self.red_route_switches
 				temp_train.route_blocks_arr = self.red_route_blocks
 
