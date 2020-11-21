@@ -8,7 +8,7 @@ from src.UI.Common.common import Alert, Confirmation
 from src.signals import signals
 from src.UI.window_manager import window_list
 # Import singleton instance of control system
-from include.SWTrainController.ControlSystem import control_system
+from src.SWTrainController.ControlSystem import control_system
 
 class SWTrainUi(QtWidgets.QMainWindow):
 
@@ -52,13 +52,13 @@ class SWTrainUi(QtWidgets.QMainWindow):
         self.lights_button.clicked.connect(self.toggle_lights)
 
         # When announcements button is clicked, go to toggle_announcements function
-        self.announceStations_button.clicked.connect(self.toggle_announcements)
+        self.announcements_button.clicked.connect(self.toggle_announcements)
 
         # When advertisements button is clicked go to toggle_ads function
-        self.ads_button.clicked.connect(self.toggle_ads)
+        self.advertisements_button.clicked.connect(self.toggle_ads)
 
-        # When temperature button is clicked go to set_SeanPaul function
-        self.sean_paul_buttton.clicked.connect(self.set_SeanPaul)
+        # When temperature button is clicked go to set_sean_paul function
+        self.sean_paul_buttton.clicked.connect(self.set_sean_paul)
 
         # When User wants to toggle mode, go to toggle_mode function
         self.automatic_mode.clicked.connect(self.toggle_mode1)
@@ -83,10 +83,10 @@ class SWTrainUi(QtWidgets.QMainWindow):
         signals.swtrain_dispatch_train.connect(self.update_controller_list)
 
         # Define function so comboboxes change synchronously #
-        self.TrainIDBox.currentIndexChanged(self.update_dropdowns)
-        self.TrainIDBox2.currentIndexChanged(self.update_dropdowns)
-        self.TrainIDBox3.currentIndexChanged(self.update_dropdowns)
-        self.TrainIDBox4.currentIndexChanged(self.update_dropdowns)
+        self.TrainIDBox.currentIndexChanged.connect(self.update_dropdowns)
+        self.TrainIDBox2.currentIndexChanged.connect(self.update_dropdowns)
+        self.TrainIDBox3.currentIndexChanged.connect(self.update_dropdowns)
+        self.TrainIDBox4.currentIndexChanged.connect(self.update_dropdowns)
 
         # Define main menu buttons #
         self.return_button1.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(0))
@@ -126,10 +126,10 @@ class SWTrainUi(QtWidgets.QMainWindow):
         self.lights_button = self.findChild(QtWidgets.QPushButton, 'Lights')
 
         # Define button for announcements
-        self.announceStations_button = self.findChild(QtWidgets.QPushButton, 'Announcements')
+        self.announcements_button = self.findChild(QtWidgets.QPushButton, 'Announcements')
 
         # Define button for advertisements
-        self.ads_button = self.findChild(QtWidgets.QPushButton, 'Advertisements')
+        self.advertisements_button = self.findChild(QtWidgets.QPushButton, 'Advertisements')
 
         # Define button for setting temperature
         self.sean_paul_buttton = self.findChild(QtWidgets.QPushButton, 'SeanPaul')
@@ -166,10 +166,10 @@ class SWTrainUi(QtWidgets.QMainWindow):
         self.doors_button.setStyleSheet("QPushButton{background-color:green;}QPushButton:checked{background-color:rgb(255, 51, 16);}")
         self.lights_button.setCheckable(True)
         self.lights_button.setStyleSheet("QPushButton{background-color:green;}QPushButton:checked{background-color:rgb(255, 51, 16);}")
-        self.announceStations_button.setCheckable(True)
-        self.announceStations_button.setStyleSheet("QPushButton{background-color:green;}QPushButton:checked{background-color:rgb(255, 51, 16);}")
-        self.ads_button.setCheckable(True)
-        self.ads_button.setStyleSheet("QPushButton{background-color:green;}QPushButton:checked{background-color:rgb(255, 51, 16);}")
+        self.announcements_button.setCheckable(True)
+        self.announcements_button.setStyleSheet("QPushButton{background-color:green;}QPushButton:checked{background-color:rgb(255, 51, 16);}")
+        self.advertisements_button.setCheckable(True)
+        self.advertisements_button.setStyleSheet("QPushButton{background-color:green;}QPushButton:checked{background-color:rgb(255, 51, 16);}")
 
     def update_current_train_id(self):
         self.current_train_id = self.TrainIDBox.currentText()
@@ -231,15 +231,15 @@ class SWTrainUi(QtWidgets.QMainWindow):
             return
 
         # Store all data into individual variables
-        self.doors_status = control_system.p_controller[self.current_train_id].doors
-        self.lights_status = control_system.p_controller[self.current_train_id].lights
-        self.announcements_status = control_system.p_controller[self.current_train_id].announcements
-        self.advertisements_status = control_system.p_controller[self.current_train_id].advertisements
-        self.curr_speed = control_system.p_controller[self.current_train_id].current_speed
-        self.com_speed = control_system.p_controller[self.current_train_id].command_speed
-        self.setpoint_speed = control_system.p_controller[self.current_train_id].setpoint_speed
-        self.service_brake_status = control_system.p_controller[self.current_train_id].service_brake
-        self.current_mode = control_system.p_controller[self.current_train_id].mode
+        self.doors_status = control_system.p_controllers[self.current_train_id].doors
+        self.lights_status = control_system.p_controllers[self.current_train_id].lights
+        self.announcements_status = control_system.p_controllers[self.current_train_id].announcements
+        self.advertisements_status = control_system.p_controllers[self.current_train_id].advertisements
+        self.curr_speed = control_system.p_controllers[self.current_train_id].current_speed
+        self.com_speed = control_system.p_controllers[self.current_train_id].command_speed
+        self.setpoint_speed = control_system.p_controllers[self.current_train_id].setpoint_speed
+        self.service_brake_status = control_system.p_controllers[self.current_train_id].service_brake
+        self.current_mode = control_system.p_controllers[self.current_train_id].mode
 
         # Change GUI to reflect current data
         # Update doors
@@ -297,31 +297,61 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
     def toggle_lights(self):
         # If no controllers have been created, button does nothing
-        # if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
-        #     return
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+             return
 
+        # Tell train to toggle lights
         signals.swtrain_gui_toggle_cabin_lights.emit(self.current_train_id)
+
+        # Toggle light button color
+        if self.lights_button.styleSheet("background-color: green;"):
+            self.lights_button.setStyleSheet("background-color: rgb(255, 51, 16);")
+        else:
+            self.lights_button.setStyleSheet("background-color: green;")
 
     def toggle_doors(self):
         # If no controllers have been created, button does nothing
         if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
             return
 
-        send_message(RequestCode.SWTRAIN_GUI_TOGGLE_DAMN_DOORS, self.current_train_id)
+        # Tell train to toggle doors
+        signals.swtrain_gui_toggle_damn_doors.emit(self.current_train_id)
+
+        # Toggle door button color
+        if self.doors_button.styleSheet("background-color: green;"):
+            self.doors_button.setStyleSheet("background-color: rgb(255, 51, 16);")
+        else:
+            self.doors_button.setStyleSheet("background-color: green;")
 
     def toggle_announcements(self):
         # If no controllers have been created, button does nothing
         if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
             return
-        send_message(RequestCode.SWTRAIN_GUI_ANNOUNCE_STATIONS, self.current_train_id)
+
+        # Tell train to toggle announcements
+        signals.swtrain_gui_announce_stations.emit(self.current_train_id)
+
+        # Toggle announcement button color
+        if self.announcements_button.styleSheet("background-color: green;"):
+            self.announcements_button.setStyleSheet("background-color: rgb(255, 51, 16);")
+        else:
+            self.announcements_button.setStyleSheet("background-color: green;")
 
     def toggle_ads(self):
         # If no controllers have been created, button does nothing
         if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
             return
-        send_message(RequestCode.SWTRAIN_GUI_DISPLAY_ADS, self.current_train_id)
 
-    def set_SeanPaul(self):
+        # Tell train to toggle advertisements
+        signals.swtrain_gui_display_ads.emit(self.current_train_id)
+
+        # Toggle advertisement button color
+        if self.advertisements_button.styleSheet("background-color: green;"):
+            self.advertisements_button.setStyleSheet("background-color: rgb(255, 51, 16);")
+        else:
+            self.advertisements_button.setStyleSheet("background-color: green;")
+
+    def set_sean_paul(self):
         # If no controllers have been created, button does nothing
         if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
             return
@@ -339,8 +369,12 @@ class SWTrainUi(QtWidgets.QMainWindow):
             alert.exec_()
             return
 
-        # If input temperature is valid, send request code
-        send_message(RequestCode.SWTRAIN_GUI_SET_SEAN_PAUL, (self.current_train_id + " " + temp) )
+        # Send alert to notify if temperature was set correctly
+        alert = Alert("Temperature set: " + str(temp) + "°F")
+        alert.exec_()
+
+        # If input temperature is valid, emit signal
+        signals.swtrain_gui_set_sean_paul(self.current_train_id, temp)
 
     def toggle_mode1(self):
         # If no controllers have been created, button does nothing
@@ -369,7 +403,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
                 self.automatic_mode.setStyleSheet("background-color: green;")
                 self.manual_mode.setStyleSheet("background-color: rgb(255, 51, 16);")
 
-        send_message(RequestCode.SWTRAIN_GUI_SWITCH_MODE, self.current_train_id + " " + override)
+        signals.swtrain_gui_switch_mode.emit(self.current_train_id, override)
 
     def toggle_mode2(self):
         # If no controllers have been created, button does nothing
@@ -398,7 +432,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
                 self.automatic_mode.setStyleSheet("background-color: rgb(255, 51, 16);")
                 self.manual_mode.setStyleSheet("background-color: green;")
 
-        send_message(RequestCode.SWTRAIN_GUI_SWITCH_MODE, self.current_train_id + " " + override)
+        signals.swtrain_gui_switch_mode.emit(self.current_train_id, override)
 
     def set_setpoint(self):
         # If no controllers have been created, button does nothing
@@ -406,7 +440,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
             return
 
         # Get setpoint speed
-        setpoint_speed = self.findChild(QtWidgets.QLineEdit, "EnterSpeed").text()
+        setpoint_speed = self.findChild(QtWidgets.QLineEdit, "setpoint_speed_label").text()
 
         # Check if train is in manual mode
         if self.manual_mode.styleSheet() != "background-color: green;":
@@ -429,11 +463,11 @@ class SWTrainUi(QtWidgets.QMainWindow):
             return
 
         # Check if speed entered is less than command speed
-        #com_sp = self.findChild(QtWidgets.QLabel, "CommandSpeedLabel").text()
-        #if int(setpoint_speed) > int(com_sp):
-        #    alert = Alert("Error! Entered speed must be lower than speed limit!")
-        #    alert.exec_()
-        #    return
+        com_sp = self.findChild(QtWidgets.QLabel, "command_speed_label").text()
+        if int(setpoint_speed) > int(com_sp):
+            alert = Alert("Error! Entered speed must be lower than speed limit!")
+            alert.exec_()
+            return
 
         # If all conditions pass, check for confirmation
         confirmation = Confirmation("Entered speed is valid!\nSet speed?")
@@ -441,7 +475,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         if response == False:
             return
         else:
-            send_message(RequestCode.SWTRAIN_GUI_SET_SETPOINT_SPEED, self.current_train_id + " " + setpoint_speed)
+            signals.swtrain_gui_set_setpoint_speed(self.current_train_id, setpoint_speed)
 
     def toggle_service_brake(self):
         # If no controllers have been created, button does nothing
@@ -449,20 +483,31 @@ class SWTrainUi(QtWidgets.QMainWindow):
             return
 
         # Check if authority is zero
-        # <check here>
-
-        #Confirm use of service brake
-        confirmation = Confirmation("Turn service brake on?")
-        response = confirmation.exec_()
-        if response == False:
-            return
-        else:
+        if control_system.p_controllers[self.current_train_id].authority == 0:
             if self.service_brake.styleSheet() == "background-color: green;":
-                self.service_brake.setStyleSheet("background-color: rgb(255, 51, 16);")
+                #Confirm use of service brake
+                confirmation = Confirmation("Turn service brake on?")
+                response = confirmation.exec_()
+                if response == True:
+                    self.service_brake.setStyleSheet("background-color: rgb(255, 51, 16);")
+                else:
+                    self.service_brake.setStyleSheet("background-color: green;")
+                return
             else:
-                self.service_brake.setStyleSheet("background-color: green;")
+                #Confirm turning off service brake
+                confirmation = Confirmation("Turn service brake off?")
+                response = confirmation.exec_()
+                if response == True:
+                    self.service_brake.setStyleSheet("background-color: green;")
+                else:
+                    self.service_brake.setStyleSheet("background-color: rgb(255, 51, 16);")
 
-            send_message(RequestCode.SWTRAIN_GUI_PRESS_SERVICE_BRAKE, self.current_train_id)
+            # Send signal to notify status of service brake
+            signals.swtrain_gui_press_service_brake(self.current_train_id)
+        else:
+            alert = Alert("Service brake cannot be activated until authority is 0!")
+            alert.exec_()
+            return
 
     def save_inputs(self):
         # Get Kp and Ki
@@ -501,46 +546,11 @@ class SWTrainUi(QtWidgets.QMainWindow):
         if response == False:
             return
 
-        send_message(RequestCode.SWTRAIN_GUI_SET_KP_KI,self.current_train_id + " " + Kp + " " + Ki)
+        # Change Kp and Ki text displays
+        self.KpLabel.setText(str(Kp))
+        self.KiLabel.setText(str(Ki))
 
-    def save_inputs(self):
-        # Get Kp and Ki
-        Kp = self.findChild(QtWidgets.QLineEdit, "InputKp").text()
-        Ki = self.findChild(QtWidgets.QLineEdit, "InputKi").text()
-
-        # Check to make sure values entered are integers
-        try:
-            int(Kp)
-        except ValueError:
-            alert = Alert("Kp must be an integer value")
-            alert.exec_()
-            return
-
-        try:
-            int(Ki)
-        except ValueError:
-            alert = Alert("Ki must be an integer value")
-            alert.exec_()
-            return
-
-        # Make sure sure values entered are not negative
-        if int(Kp) <= 0:
-            alert = Alert("Invalid Kp entered!")
-            alert.exec_()
-            return
-
-        if int(Ki) <= 0:
-            alert = Alert("Invalid Ki entered!")
-            alert.exec_()
-            return
-
-        # Ask for confirmation to ensure values are as desired
-        confirmation = Confirmation("Confirm Kp and Ki:")
-        response = confirmation.exec_()
-        if response == False:
-            return
-
-        send_message(RequestCode.SWTRAIN_GUI_SET_KP_KI, "1")
+        signals.swtrain_gui_set_kp_ki(self.current_train_id, Kp, Ki)
 
     def logout(self):
         # This is executed when the button is pressed

@@ -112,16 +112,12 @@ class Controller:
     def toggle_service_brake(self):
         """ Toggle service brake on and off """
         self.service_brake = not self.service_brake
-        return self.service_brake
 
     def toggle_mode(self, override):
         """ Allows operator to switch between manual and automatic mode """
         # Check if override code is correct
         if override == PASSWORD:
             self.mode = not self.mode
-            return self.mode
-
-        return False
 
     ###############################/
     # NON-VITAL OPERATIONS
@@ -130,19 +126,15 @@ class Controller:
     def toggle_doors(self):
         """ Open/close doors """
         self.doors = not self.doors
-        return self.doors
 
     def toggle_lights(self):
         """ Turn lights on/off """
         self.lights = not self.lights
-        return self.lights
 
     def announce_stations(self):
         """ Turn announcements on/off """
         self.announcements = not self.announcements
-        return self.announcements
 
     def toggle_ads(self):
         """ Turn advertisements on/off """
         self.advertisements = not self.advertisements
-        return self.advertisements

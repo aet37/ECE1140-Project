@@ -1,67 +1,55 @@
 """Train Model GUI"""
 
-import os
+from enum import Enum
 from PyQt5 import QtWidgets, uic, QtGui
 from PyQt5.QtGui import QScreen
 from PyQt5.QtCore import QTimer
 import sys
+sys.path.append(".")
 
-from src.UI.server_functions import send_message_async, RequestCode, send_message, ResponseCode
 from src.signals import signals
 from src.UI.window_manager import window_list
 from src.TrainModel.TrainCatalogue import train_catalogue
 from src.TrainModel.BlockCatalogue import block_catalogue
+from src.UI.Common.common import Alert
+
+class Page(Enum):
+    MENU = 0
+    INFO_1 = 1
+    INFO_2 = 2
+    INFO_3 = 3
+    PARAMETERS = 4
+    REPORTS = 5
 
 class TrainModelUi(QtWidgets.QMainWindow):
     """UI class for the Train Model"""
     def __init__(self):
         super().__init__()
 
-        # self.train_menu_timer = QTimer()
-        # self.train1_info_timer = QTimer()
-        # self.train2_info_timer = QTimer()
-        # self.train3_info_timer = QTimer()
-        # self.train_menu_timer.timeout.connect(self.update_train_list)
-        # self.train1_info_timer.timeout.connect(self.update_gui1)
-        # self.train2_info_timer.timeout.connect(self.update_gui2)
-        # self.train3_info_timer.timeout.connect(self.update_gui3)
+        # Receive a change
+        signals.train_model_something_has_been_changed.connect(self.update_current_page)
 
-        # Receive dispatch train signal and add a train to the drop down
-        signals.TRAIN_MODEL_DISPATCH_TRAIN.connect(self.update_train_list)
+        # Current train id that's selected in the drop down menu
+        self.current_train_id = 0
 
-        # Receive dispatch train signal
-        signals.TRAIN_MODEL_DISPATCH_TRAIN.connect(self.train_model_dispatch_train)
-        # Receive lights signal
-        signals.TRAIN_MODEL_GUI_RECEIVE_LIGHTS.connect(self.train_model_receive_lights)
+        # Current page that's being displayed
+        self.current_page = Page.MENU
 
-        self.current_train_id = "1"
+        self.testDispTrainCount = 1
+
+        # Start by displaying the train menu page
         self.train_menu()
 
-    #######################################################################
-    ############################## GUI PAGES ##############################
-    #######################################################################
+        # Show the page
+        self.show()
+
     def train_menu(self):
         """Method called after a train is selected"""
         uic.loadUi('src/UI/TrainModel/Train_Menu.ui', self)
+        self.current_page = Page.MENU
 
-        # Update the train drop down
-        currentIndex = self.findChild(QtWidgets.QComboBox, 'menu_train_combo').currentIndex()
-        self.findChild(QtWidgets.QComboBox, 'menu_train_combo').clear()
-        for i in train_catalogue.m_trainList.count():
-            self.menu_train_combo.addItem("Train #" + str(i))
-        self.findChild(QtWidgets.QComboBox, 'menu_train_combo').setCurrentIndex(currentIndex)
-
-        # self.stop_all_timers() # Restart timers
-        # self.train_menu_timer.start(2000)
-
-        # TESTING DYNAMIC SCREEN SIZE!!!!!!!!!!!!!
-        # screen = app.primaryScreen()
-        # print('Screen: %s' % screen.name())
-        # size = screen.size()
-        # print('Size: %d x %d' % (size.width(), size.height()))
-        # rect = screen.availableGeometry()
-        # print('Available: %d x %d' % (rect.width(), rect.height()))
-        # TESTING DYNAMIC SCREEN SIZE!!!!!!!!!!!!!
+        # Update the dropdown accordingly
+        self.update_dropdown()
 
         # Find all elements and connect them accordingly
         logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button_menu')
@@ -77,31 +65,26 @@ class TrainModelUi(QtWidgets.QMainWindow):
         train_reports_button = self.findChild(QtWidgets.QPushButton, 'train_reports_button')
         train_reports_button.clicked.connect(self.train_reports)
 
-        # Show the page
-        self.show()
-
-    def update_lights_label(self, light_status):
-        print("Here")
-        if light_status:
-            self.findChild(QtWidgets.QLabel, 'disp_cabin_lights').setText("on")
-            self.findChild(QtWidgets.QLabel, 'disp_cabin_lights').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
-        else:
-            self.findChild(QtWidgets.QLabel, 'disp_cabin_lights').setText("off")
-            self.findChild(QtWidgets.QLabel, 'disp_cabin_lights').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
-
     def update_current_train_id(self):
-        self.current_train_id = self.menu_train_combo.currentText()[-1]
-        print(self.current_train_id)
+        """Updates the current train id with what's selected"""
+        if "Select Train..." in self.menu_train_combo.currentText():
+            self.current_train_id = 0
+        else:
+            self.current_train_id = int(self.menu_train_combo.currentText().split('#')[1])
 
     def train_info_1(self):
-        # self.stop_all_timers() # Restart timers
-        # self.train1_info_timer.start(2000)
-        # This is executed when the button is pressed
+        """This is executed when the button is pressed"""
+        # Block the user from reaching this page without a train selected
+        if self.current_train_id == 0:
+            alert = Alert("Please select a train from the drop down menu")
+            alert.exec_()
+            return
+
         uic.loadUi('src/UI/TrainModel/Train_Info_Page1.ui', self)
+        self.current_page = Page.INFO_1
 
         # Update Label page1_train_label
-        if "Select Train..." not in self.current_train_id:
-            self.findChild(QtWidgets.QLabel, 'page1_train_label').setText("Train #" + self.current_train_id + " Info")
+        self.findChild(QtWidgets.QLabel, 'page1_train_label').setText("Train #{} Info".format(self.current_train_id))
 
         logoutbutton = self.findChild(QtWidgets.QPushButton, 'logout_button_info1')
         logoutbutton.clicked.connect(self.logout)
@@ -116,14 +99,12 @@ class TrainModelUi(QtWidgets.QMainWindow):
         disp_command_speed = self.findChild(QtWidgets.QLabel, 'disp_command_speed')
 
     def train_info_2(self):
-        # self.stop_all_timers() # Restart timers
-        # self.train2_info_timer.start(2000)
         # This is executed when the button is pressed
         uic.loadUi('src/UI/TrainModel/Train_Info_Page2.ui', self)
+        self.current_page = Page.INFO_2
 
         # Update Label page2_train_label
-        if "Select Train..." not in self.current_train_id:
-            self.findChild(QtWidgets.QLabel, 'page2_train_label').setText("Train #" + self.current_train_id + " Info")
+        self.findChild(QtWidgets.QLabel, 'page2_train_label').setText("Train #{} Info".format(self.current_train_id))
         
         logoutbutton = self.findChild(QtWidgets.QPushButton, 'logout_button_info2')
         logoutbutton.clicked.connect(self.logout)
@@ -138,16 +119,12 @@ class TrainModelUi(QtWidgets.QMainWindow):
         logoutbutton.clicked.connect(self.train_menu)
 
     def train_info_3(self):
-        # self.stop_all_timers() # Restart timers
-        # self.train3_info_timer.start(2000)
         # This is executed when the button is pressed
         uic.loadUi('src/UI/TrainModel/Train_Info_Page3.ui', self)
-
-        signals.lights_toggled.connect(self.update_lights_label)
+        self.current_page = Page.INFO_3
 
         # Update Label page3_train_label
-        if "Select Train..." not in self.current_train_id:
-            self.findChild(QtWidgets.QLabel, 'page3_train_label').setText("Train #" + self.current_train_id + " Info")
+        self.findChild(QtWidgets.QLabel, 'page3_train_label').setText("Train #{} Info".format(self.current_train_id))
         
         logoutbutton = self.findChild(QtWidgets.QPushButton, 'logout_button_info3')
         logoutbutton.clicked.connect(self.logout)
@@ -160,9 +137,9 @@ class TrainModelUi(QtWidgets.QMainWindow):
         logoutbutton.clicked.connect(self.train_menu)
 
     def train_parameters(self):
-        # self.stop_all_timers() # Restart timers
-        """Called to used the train parameters page"""
+        """Called to display the train parameters page"""
         uic.loadUi('src/UI/TrainModel/train_parameter.ui', self)
+        self.current_page = Page.PARAMETERS
 
         # Find all the elements and connect the methods
         logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button_parameters')
@@ -175,9 +152,9 @@ class TrainModelUi(QtWidgets.QMainWindow):
         save_button.clicked.connect(self.save_parameters)
 
     def train_reports(self):
-        # self.stop_all_timers() # Restart timers
         """Method called when the train reports button is pressed"""
         uic.loadUi('src/UI/TrainModel/Train_Report.ui', self)
+        self.current_page = Page.REPORTS
 
         # Find all elements and connect them
         logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button_report')
@@ -199,11 +176,7 @@ class TrainModelUi(QtWidgets.QMainWindow):
     ############################ HELPER METHODS ###########################
     #######################################################################
 
-    # ADD CURRENT PAGE VARIABLE
     def update_gui1(self):
-        if "Select Train..." in self.current_train_id:
-            return
-
         self.findChild(QtWidgets.QLabel, 'disp_command_speed').setText(str(train_catalogue.m_trainList[self.current_train_id].m_commandSpeed) + " m/s") # Remove trailing zeros from float
 
         if str(train_catalogue.m_trainList[self.current_train_id].m_authority) == "1":
@@ -246,9 +219,6 @@ class TrainModelUi(QtWidgets.QMainWindow):
             
 
     def update_gui2(self):
-        if "Select Train..." in self.current_train_id:
-            return
-
         # self.findChild(QtWidgets.QLabel, 'disp_acceleration_limit').setText(dataParsed[0].split(".")[0] + " m/s²")
         # self.findChild(QtWidgets.QLabel, 'disp_deceleration_limit').setText(dataParsed[1].split(".")[0] + " m/s²")
         self.findChild(QtWidgets.QLabel, 'disp_acceleration_limit').setText("0.5 m/s²")
@@ -262,9 +232,6 @@ class TrainModelUi(QtWidgets.QMainWindow):
         self.findChild(QtWidgets.QLabel, 'disp_destination_block').setText("block #" + str(train_catalogue.m_trainList[self.current_train_id].m_destinationBlock))
 
     def update_gui3(self):
-        if "Select Train..." in self.current_train_id:
-            return
-
         self.findChild(QtWidgets.QLabel, 'disp_pass_count').setText(str(train_catalogue.m_trainList[self.current_train_id].m_trainPassCount) + " persons")
         self.findChild(QtWidgets.QLabel, 'disp_crew_count').setText(str(train_catalogue.m_trainList[self.current_train_id].m_trainCrewCount) + " persons")
 
@@ -305,45 +272,36 @@ class TrainModelUi(QtWidgets.QMainWindow):
             self.findChild(QtWidgets.QLabel, 'disp_doors').setText("closed")
             self.findChild(QtWidgets.QLabel, 'disp_doors').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
     
+    def update_dropdown(self):
+        """
+        This will update the dropdown when a train is dispatched
+        """
+        # Update the train drop down
+        currentIndex = self.findChild(QtWidgets.QComboBox, 'menu_train_combo').currentIndex()
+        self.findChild(QtWidgets.QComboBox, 'menu_train_combo').clear()
+        for i in range(0, len(train_catalogue.m_trainList)):
+            self.menu_train_combo.addItem("Train #" + str(i + 1))
+        self.findChild(QtWidgets.QComboBox, 'menu_train_combo').setCurrentIndex(currentIndex)
+        self.update_current_train_id()
+
+    def update_current_page(self):
+        """
+        This will update the current page that we are on
+        """
+        if self.current_page == Page.MENU:
+            self.update_dropdown()
+        elif self.current_page == Page.INFO_1:
+            self.update_gui1()
+        elif self.current_page == Page.INFO_2:
+            self.update_gui2()
+        elif self.current_page == Page.INFO_3:
+            self.update_gui3()
+        else:
+            print("Nothing to update I guess...")
+    
     def save_parameters(self):
         """Sends all the entered parameters to the cloud"""
-        parameters = { RequestCode.TRAIN_MODEL_GUI_SET_TRAIN_LENGTH : "",
-                       RequestCode.TRAIN_MODEL_GUI_SET_TRAIN_MASS : "",
-                       RequestCode.TRAIN_MODEL_GUI_SET_TRAIN_HEIGHT : "",
-                       RequestCode.TRAIN_MODEL_GUI_SET_TRAIN_PASSENGER_COUNT : "",
-                       RequestCode.TRAIN_MODEL_GUI_SET_TRAIN_WIDTH : "",
-                       RequestCode.TRAIN_MODEL_GUI_SET_TRAIN_CREW_COUNT : ""
-        }
-
-        # Get all the text
-        parameters[RequestCode.TRAIN_MODEL_GUI_SET_TRAIN_LENGTH] = self.in_length.text()
-        parameters[RequestCode.TRAIN_MODEL_GUI_SET_TRAIN_MASS] = self.in_mass.text()
-        parameters[RequestCode.TRAIN_MODEL_GUI_SET_TRAIN_HEIGHT] = self.in_height.text()
-        parameters[RequestCode.TRAIN_MODEL_GUI_SET_TRAIN_PASSENGER_COUNT] = self.in_pass.text()
-        parameters[RequestCode.TRAIN_MODEL_GUI_SET_TRAIN_WIDTH] = self.in_width.text()
-        parameters[RequestCode.TRAIN_MODEL_GUI_SET_TRAIN_CREW_COUNT] = self.in_crew.text()
-
-        # Verify the user's input
-        for value in parameters.values():
-            if value == "":
-                self.fail_alert.setText("Some of the parameters are missing")
-                self.fail_alert.setStyleSheet("color: red;")
-                return
-                
-            try:
-                int(value)
-            except ValueError:
-                self.fail_alert.setText("All parameters must be integer values")
-                self.fail_alert.setStyleSheet("color: red;")
-                return
-
-            
-
-        # Send the data to the cloud
-        for request_code, value in parameters.items():
-            send_message_async(request_code, str(self.current_train_id) + ' ' + value,
-                               lambda *args: None)
-
+        # TODO(KEM): Implement this
         self.save_alert.setStyleSheet("color: green;")
         self.fail_alert.setStyleSheet("color: rgb(133, 158, 166);")
 
@@ -367,13 +325,9 @@ class TrainModelUi(QtWidgets.QMainWindow):
 
     def logout(self):
         """Method invoked when the logout button is pressed"""
-        window_list.remove(self)
+        signals.train_model_dispatch_train.emit(self.testDispTrainCount, 0, 0, 0, 0)
+        self.testDispTrainCount += 1
 
-    # def stop_all_timers(self):
-    #     self.train_menu_timer.stop()
-    #     self.train1_info_timer.stop()
-    #     self.train2_info_timer.stop()
-    #     self.train3_info_timer.stop()
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
