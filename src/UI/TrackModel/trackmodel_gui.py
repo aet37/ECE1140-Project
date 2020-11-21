@@ -4,13 +4,16 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QPushButton, QStackedWidget, QLabel, QComboBox
 import sys
 from PyQt5.QtCore import QTimer
-from src.UI.server_functions import *
-from src.UI.window_manager import window_list
+#from src.UI.server_functions import *
+#from src.UI.window_manager import window_list
 import pyexcel
 import pyexcel_io
 import json
-tracks = 0
-
+sys.path.insert(0, "C:\\Users\\Evan\\OneDrive\\Documents\\GitHub\\ECE1140-Project\\src\\TrackModel")
+import TrackModelDef
+trackList = []
+greenSwitchNumber = 0
+redSwitchNumber = 0
 
 
 class TrackModelUi(QtWidgets.QMainWindow):
@@ -27,8 +30,6 @@ class TrackModelUi(QtWidgets.QMainWindow):
         combo1 = QComboBox()
         global combo2 
         combo2 = QComboBox()
-        global combo3 
-        combo3 = QComboBox()
 
         self.initUI()
         #self.stacked_widget.currentChanged.connect(self.set_button_state)
@@ -96,7 +97,8 @@ class TrackModelUi(QtWidgets.QMainWindow):
         # else:
         #     print('fail')
     def readInData(self):
-        global tracks
+        global greenSwitchNumber
+        global redSwitchNumber
         dialog = QtWidgets.QFileDialog(self)
         fileInfo = dialog.getOpenFileName(self)
         
@@ -121,31 +123,28 @@ class TrackModelUi(QtWidgets.QMainWindow):
                 # set Line inside trackInfo
                 trackInfo['Track'] = records.column['Line'][1]
                 
-                # set track nmumber inside of trackInfo dictionary
-                trackInfo['tNumber'] = tracks
-
-                tracks = tracks + 1
+                if (records.column['Line'][1] == "Red"):
+                    trackInfo['tNumber'] = 1
+                else:
+                    trackInfo['tNumber'] = 0
 
                 # set totalBlocks inside trackInfo
                 trackInfo['Total Blocks'] = records.number_of_rows()
 
-                jsonString = json.dumps(trackInfo)
-                send_message(RequestCode.TRACK_MODEL_GUI_TRACK_LAYOUT, str(jsonString))
-                #print(str(jsonString))
-
+                newTrack = TrackModelDef.Track(trackInfo['Track'], trackInfo['Total Blocks'], trackInfo['tNumber'])
+                trackList.append(newTrack)
 
                 theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
                 line = records.column['Line'][1]
                 #combo1.addItem("Select "+line+" Line block")
-                if (tracks == 1):
+                if (line == "Green"):
                     theTabWidget.addTab(combo1, line+" Line")
                     theCombo = combo1
-                elif (tracks == 2):
+                    trackNumber = 0
+                elif (line == "Red"):
                     theTabWidget.addTab(combo2, line+" Line")
                     theCombo = combo2
-                else:
-                    theTabWidget.addTab(combo3, line+" Line")
-                    theCombo = combo3
+                    trackNumber = 1
 
 
                 for x in range(records.number_of_rows()):
@@ -162,8 +161,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
                     blockCumulativeElevation = round(records.column['Cumulative Elevation (m)'][x], 2)
                     blockDirection = records.column['Direction'][x]
                     blockSection = records.column['Section'][x]
-
-                    blockInfo['Track'] = tracks
+                    blockInfo['Track'] = trackNumber
                     blockInfo['Number'] = blockNumber
                     blockInfo['Length'] = blockLength
                     blockInfo['Grade'] = blockGrade
@@ -175,28 +173,47 @@ class TrackModelUi(QtWidgets.QMainWindow):
 
                     if (records.column['Underground'][x] != ""):
                         blockInfo['Underground'] = "true"
+                        blockUnderground = True
                     else:
-                        blockInfo['Underground']= "false"
+                        blockInfo['Underground'] = "false"
+                        blockUnderground = False
 
                     blockInfo['Section'] = blockSection
 
-                    if (records.column['Stations'][x] != ""):
-                        blockInfo['Station'] = records.column['Stations'][x]
-                        blockInfo['Exit Side'] = records.column['Exit Side'][x]
-                    else:
-                        blockInfo['Station'] = ""
-                        blockInfo['Exit Side'] = ""
-
-                    if (records.column['Switches'][x] != ""):
-                        blockInfo['Switches'] = records.column['Switches'][x]
-                    else:
-                        blockInfo['Switches'] = ""
+ 
 
                     if (records.column['Railway Crossing'][x] != ""):
                         blockInfo['Railway Crossing'] = "true"
+                        blockRailwayCrossing = True
                     else:
                         blockInfo['RailwayCrossing'] = "false"
+                        blockRailwayCrossing = False
 
+                    theBlock = TrackModelDef.Block(blockNumber, blockLength, blockGrade, blockSpeedLimit,
+                    blockElevation, blockCumulativeElevation, blockDirection, blockUnderground,
+                    blockSection, blockRailwayCrossing)
+
+                    if (records.column['Stations'][x] != ""):
+                        stationName = records.column['Stations'][x]
+                        stationExitSide = records.column['Exit Side'][x]
+                        theBlock.addStation(stationName, stationExitSide)
+
+                    if (records.column['Switches'][x] != ""):
+                        switchList = records.column['Switches'][x]
+                        switchList = switchList.split(',')
+                        if (line == "Green"):
+                            greenSwitchNumber = greenSwitchNumber + 1
+                            switchNumber = greenSwitchNumber
+                        else:
+                            redSwitchNumber = redSwitchNumber + 1
+                            switchNumber = redSwitchNumber
+
+                        block1 = int(switchList[0])
+                        block2 = int(switchList[1])
+                        theBlock.addSwitch(switchNumber, block1, block2)
+
+
+                    newTrack.addBlock(theBlock)
 
 
 
@@ -204,143 +221,117 @@ class TrackModelUi(QtWidgets.QMainWindow):
                     #print(jsonString)
                     #send_message(RequestCode.TRACK_MODEL_GUI_BLOCK, str(jsonString))
 
-                self.send_gather_data_message()
+                self.switch_block()
 
             else:
                 print('error')
     def check_current_block(self):
-        if (tracks ==1):
-            combo1.currentIndexChanged.connect(self.send_gather_data_message)
-        elif(tracks == 2):
-            combo1.currentIndexChanged.connect(self.send_gather_data_message)
-            combo2.currentIndexChanged.connect(self.send_gather_data_message)
-
-    def send_gather_data_message(self):
-        """Method called periodically to send the gather data message to the server"""
         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
-        if (theTabWidget.currentIndex() == 0):
-            currentComboBlock = str(combo1.currentText())
-        elif(theTabWidget.currentIndex() == 1):
-            currentComboBlock = str(combo2.currentText())
-        else:
-            currentComboBlock = str(combo3.currentText())
-
-        lineNumber = (theTabWidget.currentIndex() + 1)
-        currentComboBlock = currentComboBlock[6:]
-
-        data = str(lineNumber) + " " + str(currentComboBlock)
-        send_message_async(RequestCode.TRACK_MODEL_GUI_GATHER_DATA, data=data, callback=self.update_gui)
-
-    def update_gui(self, response_code, response_data):
-        if response_code == ResponseCode.ERROR:
-            print("There was a problem communicating with the server")
-            return
-
-        # line name, block number, section, elevation, cumulative elevation
-        # length, grade, speed limit, underground, stationName
-        # ticketsSold, passengersBoarded, passengersExited, exit side, occupied by
-        # switchList, currentSwitch, trackHeater, failure mode
-        
-        split_data = response_data.split(' ')
-
-        lineName = split_data[0]
-        blockNumber = int(split_data[1])
-        section = split_data[2]
-        elevation = float(split_data[3])
-        cumulativeElevation = float(split_data[4])
-        length = float(split_data[5])
-        grade = float(split_data[6])
-        speedLimit = int(split_data[7])
-        underground = split_data[8]
-        stationName = split_data[9]
-
-        stationName = stationName.replace('_', ' ')
-
-        ticketsSold = int(split_data[10])
-        passengersBoarded = int(split_data[11])
-        passengersExited = int(split_data[12])
-        exitSide = split_data[13]
-        occupied = int(split_data[14])
-        switchList1 = int(split_data[15])
-        switchList2 = int(split_data[16])
-        currentSwitch = int(split_data[17])
-        trackHeater = split_data[18]
-        failureMode = split_data[19]
+        if (theTabWidget.tabText(theTabWidget.currentIndex()) == "Green"):
+            combo1.currentIndexChanged.connect(self.switch_block)
+        elif (theTabWidget.tabText(theTabWidget.currentIndex()) == "Red"):
+            combo1.currentIndexChanged.connect(self.switch_block)
+            combo2.currentIndexChanged.connect(self.switch_block)
+    
+    def getTrack(self, trackColor):
+        for x in trackList:
+            if (x.lineName == trackColor):
+                return x
+        return ""
 
 
+    def switch_block(self):
+        theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
+        theIndex = theTabWidget.currentIndex()
+        theLine = theTabWidget.tabText(theIndex)
+        theLine = theLine.replace(" Line", "")
 
-        line_name_label = self.findChild(QtWidgets.QLabel, 'line_name_label')
-        line_name_label.setText(lineName + " Line")
+        if (self.getTrack(theLine) != ""):
+            theTrack = self.getTrack(theLine)
+            
+            line_name_label = self.findChild(QtWidgets.QLabel, 'line_name_label')
+            line_name_label.setText(theLine + " Line")
 
-        block_number_label = self.findChild(QtWidgets.QLabel, 'block_number_label')
-        block_number_label.setText("Block " + str(blockNumber))
+            if (theLine == "Green"):
+                currentComboBlock = str(combo1.currentText())
+            else:
+                currentComboBlock = str(combo2.currentText())
+            
+            currentComboBlock = currentComboBlock[6:]
 
-        section_label = self.findChild(QtWidgets.QLabel, 'section_label')
-        section_label.setText("Section: " + section)
+            block_number_label = self.findChild(QtWidgets.QLabel, 'block_number_label')
+            block_number_label.setText("Block " + currentComboBlock)
 
-        elevation_label = self.findChild(QtWidgets.QLabel, 'elevation_label')
-        elevation_label.setText("Elevation\n\n"+ str(elevation)+ " m")
+            theBlock = theTrack.getBlock(int(currentComboBlock))
 
-        cumulative_elevation_label = self.findChild(QtWidgets.QLabel, 'cumulative_elevation_label')
-        cumulative_elevation_label.setText("Cumulative Elevation\n\n"+ str(cumulativeElevation)+ " m")
+            section_label = self.findChild(QtWidgets.QLabel, 'section_label')
+            section_label.setText("Section: " + str(theBlock.blockSection))
 
-        length_label = self.findChild(QtWidgets.QLabel, 'length_label')
-        length_label.setText("Block Length:\n\n"+ str(length)+ " m")
+            elevation_label = self.findChild(QtWidgets.QLabel, 'elevation_label')
+            elevation_label.setText("Elevation\n\n"+ str(theBlock.blockElevation) + " m")
 
-        grade_label = self.findChild(QtWidgets.QLabel, 'grade_label')
-        grade_label.setText("Block Grade:\n\n"+ str(grade)+'%')
+            cumulative_elevation_label = self.findChild(QtWidgets.QLabel, 'cumulative_elevation_label')
+            cumulative_elevation_label.setText("Cumulative Elevation\n\n"+ str(theBlock.blockCumulativeElevation)+ " m")
 
-        speed_limit_label = self.findChild(QtWidgets.QLabel, 'speed_limit_label')
-        speed_limit_label.setText("Speed Limit:\n\n"+ str(speedLimit)+" Km/Hr")
+            length_label = self.findChild(QtWidgets.QLabel, 'length_label')
+            length_label.setText("Block Length:\n\n"+ str(theBlock.blockLength)+ " m")
 
-        underground_label = self.findChild(QtWidgets.QLabel, 'underground_label')
-        underground_label.setText("Underground:\n\n"+ str(underground))
+            grade_label = self.findChild(QtWidgets.QLabel, 'grade_label')
+            grade_label.setText("Block Grade:\n\n"+ str(theBlock.blockGrade)+'%')
 
-        station_name_label = self.findChild(QtWidgets.QLabel, 'station_name_label')
-        station_name_label.setText("Station Name:\n\n"+ stationName)
+            speed_limit_label = self.findChild(QtWidgets.QLabel, 'speed_limit_label')
+            speed_limit_label.setText("Speed Limit:\n\n"+ str(theBlock.blockSpeedLimit)+" Km/Hr")
 
-        tickets_sold_label = self.findChild(QtWidgets.QLabel, 'tickets_sold_label')
-        tickets_sold_label.setText("Tickets Sold:\n\n"+ str(ticketsSold))
+            underground_label = self.findChild(QtWidgets.QLabel, 'underground_label')
+            underground_label.setText("Underground:\n\n"+ str(theBlock.blockUnderground))
 
-        passengers_boarded_label = self.findChild(QtWidgets.QLabel, 'passengers_boarded_label')
-        passengers_boarded_label.setText("Passengers Boarded:\n\n"+ str(passengersBoarded))
+            station_name_label = self.findChild(QtWidgets.QLabel, 'station_name_label')
+            station_name_label.setText("Station Name:\n\n"+ theBlock.getStationName())
 
-        passengers_exited_label = self.findChild(QtWidgets.QLabel, 'passengers_exited_label')
-        passengers_exited_label.setText("Passengers Exited:\n\n"+ str(passengersExited))
+            tickets_sold_label = self.findChild(QtWidgets.QLabel, 'tickets_sold_label')
+            tickets_sold_label.setText("Tickets Sold:\n\n"+ str(theBlock.getTicketsSold()))
 
-        exit_side_label = self.findChild(QtWidgets.QLabel, 'exit_side_label')
-        exit_side_label.setText("Exit Side:\n\n"+ exitSide)
+            passengers_boarded_label = self.findChild(QtWidgets.QLabel, 'passengers_boarded_label')
+            passengers_boarded_label.setText("Passengers Boarded:\n\n"+ str(theBlock.getPassengersBoarded()))
 
-        occupied_label = self.findChild(QtWidgets.QLabel, 'occupied_label')
-        if (occupied == -1):
-            occupied_label.setText("Occupied by:\n\nNone")
-        else:
-            occupied_label.setText("Occupied by:\n\n"+ str(occupied))
+            passengers_exited_label = self.findChild(QtWidgets.QLabel, 'passengers_exited_label')
+            passengers_exited_label.setText("Passengers Exited:\n\n"+ str(theBlock.getPassengersExited()))
 
-        switch_list_label = self.findChild(QtWidgets.QLabel, 'switch_list_label')
-        if (switchList1 == -1):
-            switch_list_label.setText("Switches possible:\n\nNA")
-        else:
-            switch_list_label.setText("Switches possible:\n\n"+ str(switchList1) +' '+ str(switchList2))
+            exit_side_label = self.findChild(QtWidgets.QLabel, 'exit_side_label')
+            exit_side_label.setText("Exit Side:\n\n"+ theBlock.getExitSide())
 
-        current_switch_label = self.findChild(QtWidgets.QLabel, 'current_switch_label')
+            occupied_label = self.findChild(QtWidgets.QLabel, 'occupied_label')
+            occupancy = theBlock.blockOccupied
+            if (occupancy == -1):
+                occupied_label.setText("Occupied by:\n\nNone")
+            else:
+                occupied_label.setText("Occupied by:\n\n"+ str(occupancy))
 
-        if (currentSwitch == -1):
-            current_switch_label.setText("Switch flipped to:\n\nNA")
-        else:
-            current_switch_label.setText("Switch flipped to: \n\n"+str(currentSwitch))
+            switch_list_label = self.findChild(QtWidgets.QLabel, 'switch_list_label')
+            switch_list_label.setText("Switches possible:\n\n" + theBlock.getSwitchBlocksString())
 
+            current_switch_label = self.findChild(QtWidgets.QLabel, 'current_switch_label')
+            current_switch_label.setText("Switch flipped to:\n\n" + theBlock.getSwitchCurrentString())
 
-        track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
-        if (trackHeater == "true"):
-            track_heater_button.setText("On")
-            track_heater_button.setStyleSheet("background-color : green")
-        else:
-            track_heater_button.setText("On")
-            track_heater_button.setStyleSheet("background-color : red")
+            track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
+            trackHeater = theTrack.trackHeater
+            if (trackHeater):
+                track_heater_button.setText("On")
+                track_heater_button.setStyleSheet("background-color : green")
+            else:
+                track_heater_button.setText("Off")
+                track_heater_button.setStyleSheet("background-color : red")
 
-        failure_mode_label = self.findChild(QtWidgets.QLabel, 'failure_mode_label')
-        failure_mode_label.setText("Failure Mode:\n\n"+ failureMode)
+            failure_mode_label = self.findChild(QtWidgets.QLabel, 'failure_mode_label')
+            failure = theBlock.failureMode
+            if (failure == 0):
+                failure_mode_label.setText("Failure Mode:\n\n"+ "No Failures")
+            elif (failure == 1):
+                failure_mode_label.setText("Failure Mode:\n\n"+ "Power Failure")
+            elif (failure == 2):
+                failure_mode_label.setText("Failure Mode:\n\n"+ "Broken Track")
+            elif (failure == 3):
+                failure_mode_label.setText("Failure Mode:\n\n"+ "Track Circuit Failure")
 
 
     def trackInfo1(self):
