@@ -204,8 +204,22 @@ class TrainSystem:
 			raise Exception('CTC : TrainSystem.ReturnOccupancies recieved an erronious input')
 		return to_send
 
+	def ReturnClosures(self, line):
+		""" Function which returns an array of track closures which the CTC GUI can use to dispaly on the screen """
+
+		to_send = []
+		if line == Line.LINE_GREEN:
+			for i in range(len(self.blocks_green_arr)):
+				to_send.append(self.blocks_green_arr[i].open)
+		elif line == Line.LINE_RED:
+			for i in range(len(self.blocks_red_arr)):
+				to_send.append(self.blocks_red_arr[i].open)
+		else:
+			raise Exception('CTC : TrainSystem.ReturnOccupancies recieved an erronious input')
+		return to_send
+
 	def ReturnSwitchPositions(self, line):
-		""" Function which returns an array of track occupancies which the CTC GUI can use to dispaly on the screen """
+		""" Function which returns an array of switches which the CTC GUI can use to dispaly on the screen """
 
 		to_send = []
 		if line == Line.LINE_GREEN:
