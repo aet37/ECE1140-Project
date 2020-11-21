@@ -1,3 +1,4 @@
+import copy
 
 from src.CTC.CTCDef import *
 from src.signals import *
@@ -101,8 +102,8 @@ class TrainSystem:
 		# Add blocks to train object
 		if line == Line.LINE_GREEN:
 			if block_to in self.green_blocks_inter:
-				temp_train.route_switches_arr = self.green_route_switches
-				temp_train.route_blocks_arr = self.green_route_blocks
+				temp_train.route_switches_arr = copy.deepcopy(self.green_route_switches)
+				temp_train.route_blocks_arr = copy.deepcopy(self.green_route_blocks)
 				
 				temp_train.route_blocks_arr.pop()
 				temp_train.route_blocks_arr.extend(self.green_blocks_inter)
@@ -114,33 +115,14 @@ class TrainSystem:
 				temp_train.route_switches_arr.extend(self.green_route_switches_inter)
 				temp_train.route_switches_arr.pop()
 				temp_train.route_switches_arr.append(0)
-			# For Scheduled trains
-			elif block_to == -1:
-				temp_train.route_switches_arr = self.green_route_switches
-				temp_train.route_blocks_arr = self.green_route_blocks
-
-				for i in range(temp_train.loops - 1):
-					if i == 0:
-						temp_train.route_blocks_arr.pop()
-						temp_train.route_switches_arr.pop()
-						temp_train.route_switches_arr.append(1)
-					temp_train.route_blocks_arr.extend(self.green_blocks_inter)
-					temp_train.route_blocks_arr.extend(self.green_route_blocks_multiple)
-
-				temp_train.route_blocks_arr.append(-1)
-				temp_train.route_switches_arr.pop()
-				temp_train.route_switches_arr.append(0)
-
-
-
 			else:
 				temp_train.route_switches_arr = self.green_route_switches
 				temp_train.route_blocks_arr = self.green_route_blocks
 
 		else:
 			if block_to in self.red_blocks_inter:
-				temp_train.route_switches_arr = self.red_route_switches
-				temp_train.route_blocks_arr = self.red_route_blocks
+				temp_train.route_switches_arr = copy.deepcopy(self.red_route_switches)
+				temp_train.route_blocks_arr = copy.deepcopy(self.red_route_blocks)
 				
 				temp_train.route_blocks_arr.pop()
 				temp_train.route_blocks_arr.extend(self.red_blocks_inter)
@@ -151,28 +133,11 @@ class TrainSystem:
 				temp_train.route_switches_arr.extend(self.red_route_switches_inter)
 				temp_train.route_switches_arr.pop()
 				temp_train.route_switches_arr.append(0)
-			# For scheduled Trains
-			elif block_to == -1:
-				temp_train.route_switches_arr = self.red_route_switches
-				temp_train.route_blocks_arr = self.red_route_blocks
-
-				for i in range(temp_train.loops - 1):
-					if i == 0:
-						temp_train.route_blocks_arr.pop()
-						temp_train.route_switches_arr.pop()
-					temp_train.route_blocks_arr.extend(self.red_blocks_inter)
-					temp_train.route_blocks_arr.extend(self.red_route_blocks_multiple)
-					temp_train.route_switches_arr.extend(self.red_route_switches_inter)
-
-				temp_train.route_blocks_arr.append(-1)
-				temp_train.route_switches_arr.pop()
-				temp_train.route_switches_arr.append(0)
-				
 			else:
 				temp_train.route_switches_arr = self.red_route_switches
 				temp_train.route_blocks_arr = self.red_route_blocks
 
-		#print(temp_train.route_switches_arr)
+		#print(list(map(bool, temp_train.route_switches_arr)))
 		#print(temp_train.route_blocks_arr)
 		
 		# Add train to this array
@@ -180,7 +145,12 @@ class TrainSystem:
 		self.train_numbers.append(self.next_train_num)
 
 		# Send signal to Track Controller
-		signals.swtrack_dispatch_train.emit(temp_train.train_id, temp_train.destination_block, temp_train.command_speed, temp_train.authority, temp_train.line_on, temp_train.route_switches_arr)
+		signals.swtrack_dispatch_train.emit(temp_train.train_id,
+											temp_train.destination_block,
+											temp_train.command_speed,
+											temp_train.authority,
+											temp_train.line_on,
+											list(map(bool, temp_train.route_switches_arr)))
 
 		# Increment the next train number counter
 		self.next_train_num += 1
@@ -199,8 +169,22 @@ class TrainSystem:
 			raise Exception('CTC : TrainSystem.ReturnOccupancies recieved an erronious input')
 		return to_send
 
+	def ReturnClosures(self, line):
+		""" Function which returns an array of track closures which the CTC GUI can use to dispaly on the screen """
+
+		to_send = []
+		if line == Line.LINE_GREEN:
+			for i in range(len(self.blocks_green_arr)):
+				to_send.append(self.blocks_green_arr[i].open)
+		elif line == Line.LINE_RED:
+			for i in range(len(self.blocks_red_arr)):
+				to_send.append(self.blocks_red_arr[i].open)
+		else:
+			raise Exception('CTC : TrainSystem.ReturnOccupancies recieved an erronious input')
+		return to_send
+
 	def ReturnSwitchPositions(self, line):
-		""" Function which returns an array of track occupancies which the CTC GUI can use to dispaly on the screen """
+		""" Function which returns an array of switches which the CTC GUI can use to dispaly on the screen """
 
 		to_send = []
 		if line == Line.LINE_GREEN:

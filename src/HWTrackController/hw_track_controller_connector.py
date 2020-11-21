@@ -1,15 +1,15 @@
 """Module containing classes to communicate with the hw track controller"""
 
 from time import sleep
-import logging
 import threading
 from enum import Enum
 import serial
 from serial.serialutil import SerialException
 
 from src.UI.Common.common import DownloadInProgress
+from src.logger import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 # Communications with controller
 SERIAL_PORT = 'COM3'
@@ -44,8 +44,7 @@ class HWTrackCtrlConnector:
 
         :param str msg: Message to send
         """
-        print(msg)
-        bytes_written = self.arduino.write(msg)
+        bytes_written = self.arduino.write(bytes(str(msg), 'utf-8'))
         logger.info("%d bytes written to the controller", bytes_written)
 
     def get_response(self):
@@ -82,10 +81,9 @@ class HWTrackCtrlConnector:
 
             with self.comms_lock:
                 for i, command in enumerate(commands):
-                    self.send_message(bytes(command, 'utf-8'))
-                    sleep(0.2)
+                    self.send_message(command)
+                    # No need for sleep here because of the get response
                     logger.info(self.get_response())
-                    print((i + 1) / len(commands))
                     progress.progress_updated.emit((i + 1) / len(commands) * 100)
 
             progress.download_complete.emit()

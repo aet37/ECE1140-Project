@@ -1,6 +1,8 @@
 import os
 from PyQt5 import QtWidgets, uic, QtCore
 import sys
+from functools import partial
+import pandas as pd
 
 from src.CTC.TrainSystem import *
 from src.UI.window_manager import window_list
@@ -18,6 +20,10 @@ class CTCUi(QtWidgets.QMainWindow):
 
 		#init
 		self.tnum = -1
+		self.auto_mode = False
+		self.num_blocks_closed_green = 0
+		self.num_blocks_closed_red = 0
+		self.open_file = ''
 
 		# For reloading throughput value
 		global time_timr
@@ -28,12 +34,17 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.button = self.findChild(QtWidgets.QPushButton, 'Exit') # Find the button
 		self.button.clicked.connect(self.ExitModule)
 		self.button = self.findChild(QtWidgets.QPushButton, 'Dispatch') # Find the button
-		self.button.clicked.connect(self.DispatchTrainWindow)
+		self.button.clicked.connect(self.CheckAutoMode)
 		self.button = self.findChild(QtWidgets.QPushButton, 'Map') # Find the button
 		self.button.clicked.connect(self.MapMenuWindow)
 
-		self.checkbox = self.findChild(QtWidgets.QCheckBox, 'AutomaticToggle') # Find the check box
-		self.checkbox.clicked.connect(self.ToggleAutomaicMode)
+		self.auto = self.findChild(QtWidgets.QCheckBox, 'AutomaticToggle') # Find the check box
+		self.auto.clicked.connect(self.ToggleAutomaicMode)
+
+		self.mode_text = self.findChild(QtWidgets.QLabel, 'automodetext')
+
+		if self.auto_mode:
+			self.auto.setChecked(True)
 
 		self.tplabel = self.findChild(QtWidgets.QLabel, 'ThroughputValue') # Find the label
 		self.ShowThroughput()
@@ -52,6 +63,11 @@ class CTCUi(QtWidgets.QMainWindow):
 		except:
 			pass
 
+	def CheckAutoMode(self):
+		if self.auto_mode == True:
+			self.mode_text.setText('ERROR: Cannot Dispatch in Automatic Mode')
+		else:
+			self.DispatchTrainWindow()
 
 	#######################################################################################################################################
 	#######################################################################################################################################
@@ -64,24 +80,74 @@ class CTCUi(QtWidgets.QMainWindow):
 
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
 		self.button.clicked.connect(self.returnToMainWindow)
+	
+		self.chose_file = self.findChild(QtWidgets.QPushButton, 'ChoseFile') # Find the button
+		self.chose_file.clicked.connect(self.ChoseAFile)
+
+		self.upload_and_run = self.findChild(QtWidgets.QPushButton, 'UploadAndRun') # Find the button
+		self.upload_and_run.clicked.connect(self.RunSchedule)
+
+		self.file_path = self.findChild(QtWidgets.QLabel, 'FilePath') # Find the Label
+		self.error_conf = self.findChild(QtWidgets.QLabel, 'ConfErr') # Find the Label
+
+		# Initialize to blank
+		self.open_file = ''
+
+	def ChoseAFile(self):
+		"""  """
+		dialog = QtWidgets.QFileDialog(self)
+		fname = dialog.getOpenFileName(self)
+
+		if fname[0][-5:len(fname[0])] != '.xlsx':
+			self.error_conf.setStyleSheet('color: rgb(252, 1, 7);')
+			self.error_conf.setText('Please Chose an Excel File!')
+		else:
+			self.open_file = fname[0]
+			self.file_path.setText(self.open_file)
+			self.error_conf.setText('')
+
+	def RunSchedule(self):
+		"""  """
+		# Trains to append to time keeper class if import sucessful
+		to_add = []
+
+		# Read the Excel File
+		try:
+			myxl = pd.read_excel(self.open_file, dtype=str)
+		except:
+			self.error_conf.setStyleSheet('color: rgb(252, 1, 7);')
+			self.error_conf.setText('Could not open excel file...')
+			return
+
+		# Determine Line
+		if myxl[myxl.columns[0]][0] == 'Green':
+			line = Line.LINE_GREEN
+		else:
+			line = Line.LINE_RED
+
+		for i in range(4, len(myxl.columns)):
+			try:
+				hour = int(myxl[myxl.columns[i]][0][0:2])
+				muinute = int(myxl[myxl.columns[i]][0][3:5])
+				temp_time_train = InterruptTrain(-1, line, hour, muinute)
+				to_add.append(temp_time_train)
+			except:
+				self.error_conf.setStyleSheet('color: rgb(252, 1, 7);')
+				self.error_conf.setText('Faulty Excel File. Please Scrupulously look for error in file.')
+				return
+			
+
+		# If passed, add the trains to the time class
+		for i in range(len(to_add)):
+			timekeeper.ctc_trains_backlog.append(to_add[i])
+
+		# Display Sucess on Screen
+		self.file_path.setText('')
+		self.open_file = ''
+		self.error_conf.setStyleSheet('color: rgb(33, 255, 6);')
+		self.error_conf.setText('Sucess! Schedule starting to run...')
 
 
-	#######################################################################################################################################
-	#######################################################################################################################################
-	# Opens Edit Schedule Page
-	#######################################################################################################################################
-	#######################################################################################################################################
-	def EditScheduleWindow(self):
-		uic.loadUi('src/UI/CTC/ctc_schedule_edit.ui', self)
-		self.setWindowTitle("CTC - Edit Schedule")
-
-		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMainMenu') # Find the button
-		self.button.clicked.connect(self.returnToMainWindow)
-		self.button = self.findChild(QtWidgets.QPushButton, 'ScheduleSaveButton') # Find the button
-		self.button.clicked.connect(self.saveEditedSchedule)
-
-	def saveEditedSchedule(self):
-		app.exit()
 
 	#######################################################################################################################################
 	#######################################################################################################################################
@@ -345,6 +411,8 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMapMenu') # Find the button
 		self.button.clicked.connect(self.LeaveThis)
 
+		self.maint_mode_green = self.findChild(QtWidgets.QLabel, 'MaintModeGr')
+
 		# Initial Refresh
 		self.RefreshMapGreen()
 
@@ -356,21 +424,28 @@ class CTCUi(QtWidgets.QMainWindow):
 		# Find the Blocks
 		for i in range(1, 151):
 			exec('self.GB%s = self.findChild(QtWidgets.QPushButton, \'G%s\')' % (str(i), str(i)))
-
+			eval('self.GB%s.clicked.connect(partial(self.ToggleBlockGreen, %d))' % (str(i), i))
 		# Find the Switches
 		for i in range(1, 7):
 			exec('self.S%s = self.findChild(QtWidgets.QPushButton, \'SW%s\')' % (str(i), str(i)))
+			eval('self.S%s.clicked.connect(partial(self.ToggleSwitchGreen, %d))' % (str(i), i))
 
 	def RefreshMapGreen(self):
 		# Get Track Occupancies
 		tr_oc = ctc.ReturnOccupancies(Line.LINE_GREEN)
+		tr_op = ctc.ReturnClosures(Line.LINE_GREEN)
 
 		for i in range(len(tr_oc)):
-			if tr_oc[i]:
+			if tr_oc[i] and tr_op[i]:
 				try:
 					eval('self.GB%s.setStyleSheet(\"background-color: rgb(255, 255, 10);\")' % str(i + 1))		# if occupied change block color to yellow
 				except:
 					pass
+			elif not tr_op[i]:
+				try:
+					eval('self.GB%s.setStyleSheet(\"background-color: rgb(252, 1, 7);\")' % str(i + 1))		# if occupied change block color to yellow
+				except:
+					pass	
 			else:
 				try:
 					eval('self.GB%s.setStyleSheet(\"background-color: rgb(33, 255, 128);\")' % str(i + 1))		# if not occupied, change block color to green
@@ -387,6 +462,44 @@ class CTCUi(QtWidgets.QMainWindow):
 				eval('self.SW%s.setText(\'%s\')' % (str(i + 1), wrtxt))
 			except:
 				pass
+
+		# Maintence mode label
+		if self.num_blocks_closed_green > 0:
+			self.maint_mode_green.setText('!!!! IN MAINTENCENCE MODE !!!!')
+		else:
+			self.maint_mode_green.setText('')
+
+	def ToggleBlockGreen(self, b_num):
+		""" Toggle switch block for maintence mode or not """
+
+		# Close the block if it is open
+		if ctc.blocks_green_arr[b_num - 1].open:
+			self.num_blocks_closed_green += 1
+			ctc.blocks_green_arr[b_num - 1].open = False
+			# Altert SW Track
+			signals.swtrack_set_block_status.emit(Line.LINE_GREEN, b_num, False)
+		else:
+			self.num_blocks_closed_green -= 1
+			ctc.blocks_green_arr[b_num - 1].open = True
+			# Altert SW Track
+			signals.swtrack_set_block_status.emit(Line.LINE_GREEN, b_num, True)
+
+		if self.num_blocks_closed_green > 0:
+			self.maint_mode_green.setText('!!!! IN MAINTENCENCE MODE !!!!')
+		else:
+			self.maint_mode_green.setText('')
+
+	def ToggleSwitchGreen(self, s_num):
+		""" Toggle switch if block is in maintence mode """
+		if self.num_blocks_closed_green > 0:
+			if ctc.switches_green_arr[s_num - 1].pointing_to == ctc.switches_green_arr[s_num - 1].less_block:
+				# Send High to TC if pointing low
+				signals.swtrack_set_switch_position.emit(Line.LINE_GREEN,s_num, True)
+			else:
+				# Send Low to TC if pointing High
+				signals.swtrack_set_switch_position.emit(Line.LINE_GREEN, s_num, False)
+		else:
+			self.maint_mode_green.setText('Don\'t try to switch; Activate Maint. Mode')
 
 	def LeaveThis(self):
 		global time_timr
@@ -406,6 +519,8 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.button = self.findChild(QtWidgets.QPushButton, 'BackToMapMenu') # Find the button
 		self.button.clicked.connect(self.LeaveThis)
 
+		self.maint_mode_red = self.findChild(QtWidgets.QLabel, 'MaintModeRd')
+
 		#initial refresh
 		self.RefreshMapRed()
 		
@@ -417,24 +532,32 @@ class CTCUi(QtWidgets.QMainWindow):
 		# Find the Blocks
 		for i in range(1, 77):
 			exec('self.R%s = self.findChild(QtWidgets.QPushButton, \'RB%s\')' % (str(i), str(i)))
+			eval('self.R%s.clicked.connect(partial(self.ToggleBlockRed, %d))' % (str(i), i))
 
 		# Find the Switches
 		for i in range(1, 8):
 			exec('self.S%s = self.findChild(QtWidgets.QPushButton, \'SW%s\')' % (str(i), str(i)))
+			eval('self.S%s.clicked.connect(partial(self.ToggleSwitchRed, %d))' % (str(i), i))
 
 	def RefreshMapRed(self):
 		# Get Track Occupancies
 		tr_oc = ctc.ReturnOccupancies(Line.LINE_RED)
+		tr_op = ctc.ReturnClosures(Line.LINE_RED)
 
 		for i in range(len(tr_oc)):
-			if tr_oc[i]:
+			if tr_oc[i] and tr_op[i]:
 				try:
-					eval('self.GB%s.setStyleSheet(\"background-color: rgb(255, 255, 10);\")' % str(i + 1))		# if occupied change block color to yellow
+					eval('self.R%s.setStyleSheet(\"background-color: rgb(255, 255, 10);\")' % str(i + 1))		# if occupied change block color to yellow
+				except:
+					pass
+			elif not tr_op[i]:
+				try:
+					eval('self.R%s.setStyleSheet(\"background-color: rgb(252, 1, 7);\")' % str(i + 1))		# if occupied change block color to yellow
 				except:
 					pass
 			else:
 				try:
-					eval('self.GB%s.setStyleSheet(\"background-color: rgb(33, 255, 128);\")' % str(i + 1))		# if not occupied, change block color to green
+					eval('self.R%s.setStyleSheet(\"background-color: rgb(33, 255, 128);\")' % str(i + 1))		# if not occupied, change block color to green
 				except:
 					pass
 
@@ -445,9 +568,47 @@ class CTCUi(QtWidgets.QMainWindow):
 		for i in range(len(wrtxt_arr)):
 			wrtxt = wrtxt_arr[i]
 			try:
-				eval('self.SW%s.setText(\'%s\')' % (str(i + 1), wrtxt))
+				eval('self.S%s.setText(\'%s\')' % (str(i + 1), wrtxt))
 			except:
 				pass
+
+		# Maintence mode label
+		if self.num_blocks_closed_red > 0:
+			self.maint_mode_red.setText('!!!! IN MAINTENCENCE MODE !!!!')
+		else:
+			self.maint_mode_red.setText('')
+
+	def ToggleBlockRed(self, b_num):
+		""" Toggle switch block for maintence mode or not """
+
+		# Close the block if it is open
+		if ctc.blocks_red_arr[b_num - 1].open:
+			self.num_blocks_closed_red += 1
+			ctc.blocks_red_arr[b_num - 1].open = False
+			# Altert SW Track
+			signals.swtrack_set_block_status.emit(Line.LINE_RED, b_num, False)
+		else:
+			self.num_blocks_closed_red -= 1
+			ctc.blocks_red_arr[b_num - 1].open = True
+			# Altert SW Track
+			signals.swtrack_set_block_status.emit(Line.LINE_RED, b_num, True)
+
+		if self.num_blocks_closed_red > 0:
+			self.maint_mode_red.setText('!!!! IN MAINTENCENCE MODE !!!!')
+		else:
+			self.maint_mode_red.setText('')
+
+	def ToggleSwitchRed(self, s_num):
+		""" Toggle switch if block is in maintence mode """
+		if self.num_blocks_closed_red > 0:
+			if ctc.switches_red_arr[s_num - 1].pointing_to == ctc.switches_red_arr[s_num - 1].less_block:
+				# Send High to TC if pointing low
+				signals.swtrack_set_switch_position.emit(Line.LINE_RED, s_num, True)
+			else:
+				# Send Low to TC if pointing High
+				signals.swtrack_set_switch_position.emit(Line.LINE_RED, s_num, False)
+		else:
+			self.maint_mode_red.setText('Don\'t try to switch; Activate Maint. Mode')
 
 	#######################################################################################################################################
 	#######################################################################################################################################
@@ -467,12 +628,17 @@ class CTCUi(QtWidgets.QMainWindow):
 		self.button = self.findChild(QtWidgets.QPushButton, 'Exit') # Find the button
 		self.button.clicked.connect(self.ExitModule)
 		self.button = self.findChild(QtWidgets.QPushButton, 'Dispatch') # Find the button
-		self.button.clicked.connect(self.DispatchTrainWindow)
+		self.button.clicked.connect(self.CheckAutoMode)
 		self.button = self.findChild(QtWidgets.QPushButton, 'Map') # Find the button
 		self.button.clicked.connect(self.MapMenuWindow)
 
-		self.checkbox = self.findChild(QtWidgets.QCheckBox, 'AutomaticToggle') # Find the check box
-		self.checkbox.clicked.connect(self.ToggleAutomaicMode)
+		self.auto = self.findChild(QtWidgets.QCheckBox, 'AutomaticToggle') # Find the check box
+		self.auto.clicked.connect(self.ToggleAutomaicMode)
+
+		self.mode_text = self.findChild(QtWidgets.QLabel, 'automodetext')
+
+		if self.auto_mode:
+			self.auto.setChecked(True)
 
 		self.tplabel = self.findChild(QtWidgets.QLabel, 'ThroughputValue') # Find the label
 		self.ShowThroughput()
@@ -489,7 +655,11 @@ class CTCUi(QtWidgets.QMainWindow):
 	#######################################################################################################################################
 	#######################################################################################################################################
 	def ToggleAutomaicMode(self):
-		return None
+		self.mode_text.setText('')
+		if self.auto.isChecked():
+			self.auto_mode = True
+		else:
+			self.auto_mode = False
 
 	#######################################################################################################################################
 	#######################################################################################################################################
