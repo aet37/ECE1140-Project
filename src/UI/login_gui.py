@@ -2,6 +2,8 @@
 
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import Qt
+import sys
+sys.path.append(".")
 
 from src.UI.window_manager import window_list
 from src.timekeeper import timekeeper
@@ -26,6 +28,9 @@ class LoginUi(QtWidgets.QMainWindow):
         self.login_button.clicked.connect(self.login_parse)
 
         self.show()
+
+    def stuff(self):
+        print(window_list.remove(self))
 
     def login_parse(self):
         """Checks the user's credentials and starts the specific module's ui if correct"""
