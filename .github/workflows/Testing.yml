@@ -36,3 +36,7 @@ jobs:
         pushd tests/UnitTests/SWTrackController/Compiler
         pytest --setup-show
         popd
+
+    - name: Run Common tests
+      run: |
+        pytest tests/IntegrationTests/test_common.py
