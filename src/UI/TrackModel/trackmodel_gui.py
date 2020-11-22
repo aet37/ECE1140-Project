@@ -59,6 +59,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
 
 
         signals.trackmodel_dispatch_train.connect(self.dispatchTrain)
+        signals.trackmodel_update_occupancy.connect(self.updateOccupancy)
 
     def initUI(self):
         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
@@ -322,7 +323,24 @@ class TrackModelUi(QtWidgets.QMainWindow):
             for i in red_route_blocks:
                 theBlock = theTrack.getBlock(i)
                 signals.train_model_receive_block.emit(1, i, theBlock.getElevation(), theBlock.getGrade(), theBlock.getLength(), theBlock.getSpeedLimit(), theBlock.getDirection())
+    def updateOccupancy(self, trainId, line, blockId, trainOrNot):
+        if (Line == GREEN_LINE):
+            theTrack = self.getTrack("Green")
+            theBlock = theTrack.getBlock(blockId)
+            if (trainOrNot == 0):
+                theBlock.updateOccupancy(trainId)
+            else:
+                theBlock.updateOccupancy(-1)
+        else:
+            theTrack = self.getTrack("Red")
+            theBlock = theTrack.getBlock(blockId)
+            if (trainOrNot == 0):
+                theBlock.updateOccupancy(trainId)
+            else:
+                theBlock.updateOccupancy(-1)
 
+        # TODO Tell swtrack the occupancy
+        
     def trackInfo1(self):
         self.stopAllTimers()
         self.track1_info_timer.start(1000)
