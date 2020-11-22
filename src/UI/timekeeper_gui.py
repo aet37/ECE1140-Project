@@ -6,6 +6,8 @@ from PyQt5.QtWidgets import QButtonGroup
 from src.signals import signals
 from src.timekeeper import timekeeper
 
+PERIODS = [1, 0.5, 0.2, 0.1, 0.05, 0.01]
+
 class TimekeeperUi(QtWidgets.QMainWindow):
     """User interface for the timekeeper"""
     def __init__(self):
@@ -31,7 +33,12 @@ class TimekeeperUi(QtWidgets.QMainWindow):
         self.button_group.addButton(self.findChild(QtWidgets.QPushButton, 'five_times_button'))
         self.button_group.addButton(self.findChild(QtWidgets.QPushButton, 'ten_times_button'))
         self.button_group.addButton(self.findChild(QtWidgets.QPushButton, 'fifty_times_button'))
-        self.button_group.addButton(self.findChild(QtWidgets.QPushButton, 'one_hundred_times_button'))
+        self.button_group.addButton(self.findChild(QtWidgets.QPushButton,
+                                                   'one_hundred_times_button'))
+
+        # Set the correct button according to the time factor
+        self.button_group.button(PERIODS.index(timekeeper.timer_period_in_sec)*-1 - 2) \
+                                 .setChecked(True)
 
         self.button_group.buttonClicked.connect(self.update_speed)
 
@@ -49,7 +56,7 @@ class TimekeeperUi(QtWidgets.QMainWindow):
         days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
         period = 'am'
-        if (hours >= 12) and (hours < 24):
+        if hours in range(12, 24):
             period = 'pm'
 
         if hours > 12:
@@ -65,7 +72,5 @@ class TimekeeperUi(QtWidgets.QMainWindow):
 
         Note: Button ids start at -2 and go down for some god awful reason
         """
-        periods = [1, 0.5, 0.2, 0.1, 0.05, 0.01]
-
         # We don't need the lock here because this variable is only being used for the sleep time
-        timekeeper.timer_period_in_sec = periods[abs(self.button_group.checkedId()) - 2]
+        timekeeper.timer_period_in_sec = PERIODS[abs(self.button_group.checkedId()) - 2]
