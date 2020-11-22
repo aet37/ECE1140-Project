@@ -3,8 +3,8 @@ from src.SWTrackController.TrackControllerdef import *
 
 class TrackSystem:
     def __init__(self):
-
-
+        self.switchpos_arr = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.prevswitchpos_arr = []
         self.controller0blocks = [0, 62,61,60,59] #a
 		self.controller1blocks = [62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76] #b
 		self.controller2blocks = [63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 101] #c
@@ -63,5 +63,258 @@ class TrackSystem:
         controller25 = TrackController(25,15)
 
         self.TrackController_arr = [controller0, controller1, controller2, controller3, controller4, controller5, controller6, controller7, controller8, controller9, controller10, controller11, controller12, controller13, controller14, controller15, controller16, controller17, controller18, controller19, controller20, controller21, controller22, controller23, controller24, controller25]
+    def updateOccupied(self,Line,blockNumber):
+        self.prevswitchpos_arr = self.switchpos_arr
+        controller1 = 0
+        controller2 = 0
+        count1 = 0
+        count2 = 0
+        holder =0
+        if a==0:
+            for i in range (0,12):
+                for j in self.blocksControlled[i]:
+                    if self.blocksControlled[i][j] == blockNumber:
+                        if holder==1:
+                            controller2 = i
+                            count2 = j
+                            holder = 2
+                        if holder == 0:
+                            controller1 = i
+                            count1 = j
+                            holder = 1
+        elif a==1:
+            for i in range (12,26)
+                for j in self.blocksControlled[i]:
+                    if self.blocksControlled[i][j] == blockNumber:
+                        if holder==1:
+                            controller2 = i
+                            count2 = j
+                            holder = 2
+                        if holder == 0:
+                            controller1 = i
+                            count1 = j
+                            holder = 1
+        self.TrackController_arr[controller1].setOccupied(count1)
+
+        if holder==2:
+            self.TrackController_arr[controller2].setOccupied(count2)
+
+        for i in range (0,25,2):
+            if(self.TrackController_arr[i].getSwitchPos()==self.TrackController_arr[i+1].getSwitchPos())
+                self.switchpos_arr[i] = self.TrackController_arr[i].getSwitchPos()
+    def makeOccupancies(self):
+        output = "" 
+        temp = self.TrackController_arr[0].getOccupancy()
+        output = temp[0]
+        temp = self.TrackController_arr[9].getOccupancy()
+        for i in range (12,0)
+            if temp[i]==0
+                output = output + "0"
+            elif temp[i]==1
+                output = output + "1"
+        temp = self.TrackController_arr[7].getOccupancy()
+        for i in range(15,0)
+            if temp[i]==0
+                output = output + "0"
+            elif temp[i]==1
+                output = output + "1"
+        temp = self.TrackController_arr[10].getOccupancy()
+        for i in range (0,30)
+            if temp[i]==0
+                output = output + "0"
+            elif temp[i]==1
+                output = output + "1"
+        temp = self.TrackController_arr[11].getOccupancy()
+        for i in range (2,4)
+            if temp[i]==0
+                output = output + "0"
+            elif temp[i]==1
+                output = output + "1"
+        temp = self.TrackController_arr[1].getOccupancy()
+        for i in range (0,15)
+            if temp[i]==0
+                output = output + "0"
+            elif temp[i]==1
+                output = output + "1"
+        temp = self.TrackController_arr[3].getOccupancy()
+        for i in range (0,8)
+            if temp[i]==0
+                output = output + "0"
+            elif temp[i]==1
+                output = output + "1"
+        temp = self.TrackController_arr[5].getOccupancy()
+        for i in range (0,16)
+            if temp[i]==0
+                output = output + "0"
+            elif temp[i]==1
+                output = output + "1"
+        temp = self.TrackController_arr[6].getOccupancy()
+        for i in range (0,50)
+            if temp[i]==0
+                output = output + "0"
+            elif temp[i]==1
+                output = output + "1"
+        output = output + " "
+        temp = self.TrackController_arr[13].getOccupancy()
+        output = output + temp[0]
+        temp = self.TrackController_arr[12].getOccupancy()
+        for i in range (0,16)
+            if temp[i]==0
+                output = output + "0"
+            elif temp[i]==1
+                output = output + "1"
+        temp = self.TrackController_arr[16].getOccupancy()
+        for i in range (0,11)
+            if temp[i]==0
+                output = output + "0"
+            elif temp[i]==1
+                output = output + "1"
+        temp = self.TrackController_arr[17].getOccupancy()
+        for i in range (6,11)
+            if temp[i]==0
+                output = output + "0"
+            elif temp[i]==1
+                output = output + "1"
+        temp = self.TrackController_arr[20].getOccupancy()
+        for i in range (0,5)
+            if temp[i]==0
+                output = output + "0"
+            elif temp[i]==1
+                output = output + "1"
+        temp = self.TrackController_arr[21].getOccupancy()
+        for i in range (0,6)
+            if temp[i]==0
+                output = output + "0"
+            elif temp[i]==1
+                output = output + "1"
+        temp = self.TrackController_arr[23].getOccupancy()
+        for i in range (0,8)
+            if temp[i]==0
+                output = output + "0"
+            elif temp[i]==1
+                output = output + "1"
+        temp = self.TrackController_arr[25].getOccupancy()
+        for i in range (0,15)
+            if temp[i]==0
+                output = output + "0"
+            elif temp[i]==1
+                output = output + "1"
+        temp = self.TrackController_arr[21].getOccupancy()
+        for i in range (10,5)
+            if temp[i]==0
+                output = output + "0"
+            elif temp[i]==1
+                output = output + "1"
+        temp = self.TrackController_arr[17].getOccupancy()
+        for i in range (0,5)
+            if temp[i]==0
+                output = output + "0"
+            elif temp[i]==1
+                output = output + "1"
+        return output
+    def makePositions(self):
+        output = ""
+        for i in range(0,25,2):
+            if self.TrackController_arr[i].getSwitchPos()==self.TrackController_arr[i+1].getSwitchPos():
+                if self.TrackController_arr[i].getSwitchPos()==0:
+                    output = output + "0"
+                elif self.TrackController_arr[i].getSwitchPos()==1:
+                    output = output + "1"
+        return output
+    def didSwitchMove(self):
+        for i in range(0,self.switchpos_arr.__sizeof__):
+            if self.switchpos_arr[i] != self.prevswitchpos_arr[i]:
+                return i
+            else:
+                return 14
+    def inputPositions(self, input,Line):
+        if Line==0:
+            self.TrackController_arr[6].addToQueue(input[0])
+            self.TrackController_arr[7].addToQueue(input[0])
+
+            self.TrackController_arr[8].addToQueue(input[1])
+            self.TrackController_arr[9].addToQueue(input[1])
+
+            self.TrackController_arr[8].addToQueue(input[4])
+            self.TrackController_arr[9].addToQueue(input[4])
+
+            self.TrackController_arr[10].addToQueue(input[2])
+            self.TrackController_arr[11].addToQueue(input[2])
+
+            self.TrackController_arr[10].addToQueue(input[3])
+            self.TrackController_arr[11].addToQueue(input[3])
+
+            self.TrackController_arr[4].addToQueue(input[5])
+            self.TrackController_arr[5].addToQueue(input[5])
+
+            self.TrackController_arr[4].addToQueue(input[8])
+            self.TrackController_arr[5].addToQueue(input[8])
+
+            self.TrackController_arr[1].addToQueue(input[6])
+
+            self.TrackController_arr[1].addToQueue(input[7])
+
+            self.TrackController_arr[6].addToQueue(input[9])
+            self.TrackController_arr[7].addToQueue(input[9])
+
+        elif Line==1:
+            self.TrackController_arr[14].addToQueue(input[0])
+            self.TrackController_arr[15].addToQueue(input[0])
+
+            self.TrackController_arr[14].addToQueue(input[13])
+            self.TrackController_arr[15].addToQueue(input[13])
+
+            self.TrackController_arr[12].addToQueue(input[1])
+            self.TrackController_arr[13].addToQueue(input[1])
+
+            self.TrackController_arr[12].addToQueue(input[12])
+            self.TrackController_arr[13].addToQueue(input[12])
+
+            self.TrackController_arr[24].addToQueue(input[11])
+            self.TrackController_arr[25].addToQueue(input[11])
+
+            self.TrackController_arr[24].addToQueue(input[2])
+            self.TrackController_arr[25].addToQueue(input[2])
+
+            self.TrackController_arr[24].addToQueue(input[11])
+            self.TrackController_arr[25].addToQueue(input[11])
+
+            self.TrackController_arr[22].addToQueue(input[3])
+            self.TrackController_arr[23].addToQueue(input[3])
+
+            self.TrackController_arr[22].addToQueue(input[10])
+            self.TrackController_arr[23].addToQueue(input[10])
+
+            self.TrackController_arr[20].addToQueue(input[4])
+            self.TrackController_arr[21].addToQueue(input[4])
+
+            self.TrackController_arr[20].addToQueue(input[9])
+            self.TrackController_arr[21].addToQueue(input[9])
+
+            self.TrackController_arr[18].addToQueue(input[5])
+            self.TrackController_arr[19].addToQueue(input[5])
+
+            self.TrackController_arr[18].addToQueue(input[8])
+            self.TrackController_arr[19].addToQueue(input[8])
+
+            self.TrackController_arr[16].addToQueue(input[6])
+            self.TrackController_arr[17].addToQueue(input[6])
+
+            self.TrackController_arr[16].addToQueue(input[7])
+            self.TrackController_arr[17].addToQueue(input[7])
+            
+
+
+            
+
+
+
+
+        
+        
+
+                    
+
+
 
 
