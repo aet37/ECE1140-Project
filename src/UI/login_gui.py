@@ -13,6 +13,7 @@ from src.UI.SWTrackController.swtrack_gui import SWTrackControllerUi
 from src.UI.TrackModel.trackmodel_gui import TrackModelUi
 from src.UI.TrainModel.trainmodel_gui import TrainModelUi
 from src.UI.SWTrainController.TrainController import SWTrainUi
+
 class LoginUi(QtWidgets.QMainWindow):
     """Page shown to user upon application startup"""
     def __init__(self):
@@ -44,8 +45,6 @@ class LoginUi(QtWidgets.QMainWindow):
             window_list.append(SWTrackControllerUi())
         elif username == "ctc" and password == "jerry":
             window_list.append(CTCUi())
-        elif username == "hwtrain" and password == "jerry":
-            pass
         elif username == "swtrain" and password == "jerry":
             window_list.append(SWTrainUi())
         elif username == "timekeeper" and password == "jerry":
@@ -64,9 +63,5 @@ class LoginUi(QtWidgets.QMainWindow):
 
     def closeEvent(self, event):
         """Method to run when the login page is closed"""
-        # Kill timer thread
-        timekeeper.running = False
-        timekeeper.timer_thread.join()
-
         # Close all the windows
         window_list.clear()
