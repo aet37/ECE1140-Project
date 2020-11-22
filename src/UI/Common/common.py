@@ -34,6 +34,7 @@ class DownloadInProgress(QtWidgets.QDialog):
 
     download_complete = pyqtSignal()
     progress_updated = pyqtSignal(int)
+    abort_clicked = pyqtSignal()
 
     def __init__(self):
         super().__init__()
@@ -41,5 +42,12 @@ class DownloadInProgress(QtWidgets.QDialog):
 
         self.progress_bar = self.findChild(QtWidgets.QProgressBar, 'progress_bar')
 
+        self.button_box = self.findChild(QtWidgets.QDialogButtonBox, 'button_box')
+        self.abort_button = self.button_box.button(QtWidgets.QDialogButtonBox.Abort)
+        self.abort_button.clicked.connect(lambda: self.abort_clicked.emit())
+
         self.download_complete.connect(self.close)
         self.progress_updated.connect(lambda value: self.progress_bar.setValue(value))
+
+        # Hide help button
+        self.setWindowFlags(Qt.WindowTitleHint)
