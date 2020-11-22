@@ -33,7 +33,7 @@ green_route_blocks = [62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76
 		                           43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58]
 
 class TrackModelUi(QtWidgets.QMainWindow):
-    
+
     def __init__(self):
         super().__init__()
         # self.track1_info_timer = QTimer()
@@ -44,13 +44,13 @@ class TrackModelUi(QtWidgets.QMainWindow):
         self.show()
         global combo1
         combo1 = QComboBox()
-        global combo2 
+        global combo2
         combo2 = QComboBox()
 
         self.initUI()
         #self.stacked_widget.currentChanged.connect(self.set_button_state)
         #self.stacked_widget.setCurrentIndex(0)
-        
+
         self.update_timer = QTimer()
         self.update_timer.timeout.connect(self.switch_block)
         self.update_timer.start(3000)
@@ -75,7 +75,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
         global redSwitchNumber
         dialog = QtWidgets.QFileDialog(self)
         fileInfo = dialog.getOpenFileName(self)
-        
+
         testXlsx = fileInfo[0].split('.')
         if (testXlsx[1] != 'xlsx'):
             print('File type must be .xlsx, your file was of type: .'+testXlsx[1])
@@ -96,7 +96,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
             if (records.number_of_rows() > 0):
                 # set Line inside trackInfo
                 trackInfo['Track'] = records.column['Line'][1]
-                
+
                 if (records.column['Line'][1] == "Red"):
                     trackInfo['tNumber'] = 1
                 else:
@@ -124,7 +124,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
                 for x in range(records.number_of_rows()):
                     blockInfo = {}
                     blockNumber = records.column['Block Number'][x]
-                    theCombo.addItem("Block "+str(blockNumber)) 
+                    theCombo.addItem("Block "+str(blockNumber))
 
                     blockLength = records.column['Block Length (m)'][x]
                     blockGrade = records.column['Block Grade (%)'][x]
@@ -154,7 +154,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
 
                     blockInfo['Section'] = blockSection
 
- 
+
 
                     if (records.column['Railway Crossing'][x] != ""):
                         blockInfo['Railway Crossing'] = "true"
@@ -206,7 +206,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
         elif (theTabWidget.tabText(theTabWidget.currentIndex()) == "Red Line"):
             #combo1.currentIndexChanged.connect(self.switch_block)
             combo2.currentIndexChanged.connect(self.switch_block)
-    
+
     # "Green" or "Red"
     def getTrack(self, trackColor):
         for x in trackList:
@@ -223,7 +223,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
 
         if (self.getTrack(theLine) != ""):
             theTrack = self.getTrack(theLine)
-            
+
             line_name_label = self.findChild(QtWidgets.QLabel, 'line_name_label')
             line_name_label.setText(theLine + " Line")
 
@@ -231,7 +231,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
                 currentComboBlock = str(combo1.currentText())
             else:
                 currentComboBlock = str(combo2.currentText())
-            
+
             currentComboBlock = currentComboBlock[6:]
 
             block_number_label = self.findChild(QtWidgets.QLabel, 'block_number_label')
@@ -340,7 +340,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
                 theBlock.updateOccupancy(-1)
 
         # TODO Tell swtrack the occupancy
-        
+
     def trackInfo1(self):
         self.stopAllTimers()
         self.track1_info_timer.start(1000)

@@ -60,8 +60,3 @@ class LoginUi(QtWidgets.QMainWindow):
             super().keyPressEvent(event)
         else:
             self.login_parse()
-
-    def closeEvent(self, event):
-        """Method to run when the login page is closed"""
-        # Close all the windows
-        window_list.clear()
