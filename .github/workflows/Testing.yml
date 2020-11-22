@@ -42,4 +42,4 @@ jobs:
     - name: Run Common tests
       run: |
         ulimit -c unlimited
-        sudo catchsegv xvfb-run --auto-servernum `which coverage` run -m pytest tests/IntegrationTests/test_common.py
+        sudo catchsegv xvfb --auto-servernum `which coverage` run -m pytest tests/IntegrationTests/test_common.py
