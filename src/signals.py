@@ -27,9 +27,6 @@ class SignalsClass(QObject):
     swtrack_set_block_status = pyqtSignal(Line, int, bool)	# Used by CTC to open/close (true/false) a block for mainenence (block_num, status)
     swtrack_update_occupancies = pyqtSignal(list,Line) # Used by Track Model to update occupancies (occupancy_arr(BOOL), Line)
 
-    #Track Model Signals
-    track_model_dispatch_train = pyqtSignal(int, int, int, int, Line) # Used by the SW Track Controller to send dispatch Train info (train_id, destination_block, command_speed, authority, Line)
-
     # Train Model Signals
     train_model_dispatch_train = pyqtSignal(int, int, float, int, int) #  Used by the track model to signify that a new train has been dispatched FORMAT: (train_id, destination_block, command_speed, authority, Line)
     train_model_receive_block = pyqtSignal(int, int, float, float, float, float, int) #  Used by the track model to send a block's information FORMAT: (track_id, block_id, elevation, slope, sizeOfBlock, speedLimit, travelDirection)
