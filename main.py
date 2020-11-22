@@ -26,15 +26,15 @@ def start(arguments):
                                  help='Launch the application for testing')
     args = argument_parser.parse_args(arguments)
 
-    # Create the application
-    app = QtWidgets.QApplication(sys.argv)
-
     # Start the timekeeper
     timekeeper.start_time()
 
     # If we are testing, pass control back to test script
     if args.testing:
-        return app
+        return
+
+    # Create the application
+    app = QtWidgets.QApplication(sys.argv)
 
     window_list.append(LoginUi())
     try:
