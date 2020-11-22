@@ -315,7 +315,7 @@ static void HandleEndDownload(UserProgram* pProgram)
     LcdApi::Clear();
     LcdApi::Write(pProgram->GetProgramName().c_str());
 
-    SendResponse(ResponseCode::SUCCESS, "DOWNLOAD COMPLETE");
+    SendResponse(ResponseCode::SUCCESS);
 }
 
 /**

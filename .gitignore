@@ -51,3 +51,6 @@ build
 # Track controller compiler output
 CompiledOutput.txt
 .idea/workspace.xml
+
+# Debug log
+debug.log

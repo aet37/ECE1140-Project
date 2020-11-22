@@ -34,8 +34,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QPushButton" name="DispatchButton">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>290</y>
+      <x>300</x>
+      <y>270</y>
       <width>131</width>
       <height>41</height>
      </rect>
@@ -51,8 +51,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLineEdit" name="BlockInput">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>180</y>
+      <x>340</x>
+      <y>160</y>
       <width>61</width>
       <height>21</height>
      </rect>
@@ -64,8 +64,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLineEdit" name="TimeInput">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>230</y>
+      <x>340</x>
+      <y>210</y>
       <width>61</width>
       <height>21</height>
      </rect>
@@ -77,8 +77,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>180</y>
+      <x>220</x>
+      <y>160</y>
       <width>121</width>
       <height>21</height>
      </rect>
@@ -90,21 +90,21 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>280</x>
-      <y>230</y>
-      <width>81</width>
+      <x>260</x>
+      <y>210</y>
+      <width>91</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>Arrival Time:</string>
+     <string>Time:</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>440</x>
-      <y>230</y>
+      <x>410</x>
+      <y>210</y>
       <width>111</width>
       <height>21</height>
      </rect>
@@ -116,8 +116,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLabel" name="ConfirmationLabel">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>370</y>
+      <x>220</x>
+      <y>350</y>
       <width>311</width>
       <height>21</height>
      </rect>
@@ -129,8 +129,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>430</y>
+      <x>340</x>
+      <y>410</y>
       <width>60</width>
       <height>16</height>
      </rect>
@@ -142,8 +142,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLabel" name="SpeedOut">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>460</y>
+      <x>210</x>
+      <y>440</y>
       <width>311</width>
       <height>20</height>
      </rect>
@@ -155,8 +155,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLabel" name="AuthorityOut">
     <property name="geometry">
      <rect>
-      <x>260</x>
-      <y>490</y>
+      <x>230</x>
+      <y>470</y>
       <width>281</width>
       <height>21</height>
      </rect>
@@ -168,8 +168,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QRadioButton" name="RedRadio">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>140</y>
+      <x>300</x>
+      <y>120</y>
       <width>100</width>
       <height>20</height>
      </rect>
@@ -181,14 +181,514 @@ color: rgb(255, 255, 255);</string>
    <widget class="QRadioButton" name="GreenRadio">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>110</y>
+      <x>300</x>
+      <y>90</y>
       <width>100</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>GREEN Line</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>60</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(252, 1, 7);</string>
+    </property>
+    <property name="text">
+     <string>Red Stations</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>90</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(252, 1, 7);</string>
+    </property>
+    <property name="text">
+     <string>Shadyside = 7</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>120</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(252, 1, 7);</string>
+    </property>
+    <property name="text">
+     <string>Herron Ave. = 16</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>150</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(252, 1, 7);</string>
+    </property>
+    <property name="text">
+     <string>Swissvale = 21</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_9">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>180</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(252, 1, 7);</string>
+    </property>
+    <property name="text">
+     <string>Penn Station = 25</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_10">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>210</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(252, 1, 7);</string>
+    </property>
+    <property name="text">
+     <string>Steel Plaza = 35</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_11">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>240</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(252, 1, 7);</string>
+    </property>
+    <property name="text">
+     <string>First Ave. = 45</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_12">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>270</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(252, 1, 7);</string>
+    </property>
+    <property name="text">
+     <string>Station Square = 48</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_13">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>300</y>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(252, 1, 7);</string>
+    </property>
+    <property name="text">
+     <string>South Hills Junction = 60</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_14">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>10</y>
+      <width>121</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(16, 128, 1);</string>
+    </property>
+    <property name="text">
+     <string>Green Stations</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_15">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>40</y>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(16, 128, 1);</string>
+    </property>
+    <property name="text">
+     <string>Pioneer = 2</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_16">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>70</y>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(16, 128, 1);</string>
+    </property>
+    <property name="text">
+     <string>Edgebrook = 9</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_17">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>90</y>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(16, 128, 1);</string>
+    </property>
+    <property name="text">
+     <string>Station = 16</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_18">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>120</y>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(16, 128, 1);</string>
+    </property>
+    <property name="text">
+     <string>Whited = 22</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_19">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>150</y>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(16, 128, 1);</string>
+    </property>
+    <property name="text">
+     <string>South Bank = 31</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_20">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>180</y>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(16, 128, 1);</string>
+    </property>
+    <property name="text">
+     <string>Central = 38</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_21">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>210</y>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(16, 128, 1);</string>
+    </property>
+    <property name="text">
+     <string>Inglewood = 47</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_22">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>240</y>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(16, 128, 1);</string>
+    </property>
+    <property name="text">
+     <string>Overbrook = 56</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_23">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>270</y>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(16, 128, 1);</string>
+    </property>
+    <property name="text">
+     <string>Glenbury = 65</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_24">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>300</y>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(16, 128, 1);</string>
+    </property>
+    <property name="text">
+     <string>Dormont = 73</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_25">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>330</y>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(16, 128, 1);</string>
+    </property>
+    <property name="text">
+     <string>Mt. Lebanon = 77</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_26">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>360</y>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(16, 128, 1);</string>
+    </property>
+    <property name="text">
+     <string>Poplar = 88</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_27">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>390</y>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(16, 128, 1);</string>
+    </property>
+    <property name="text">
+     <string>Castle Shannon = 96</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_28">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>420</y>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(16, 128, 1);</string>
+    </property>
+    <property name="text">
+     <string>Dormont = 105</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_29">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>450</y>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(16, 128, 1);</string>
+    </property>
+    <property name="text">
+     <string>Glenburypt2 = 114</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_30">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>480</y>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(16, 128, 1);</string>
+    </property>
+    <property name="text">
+     <string>Overbrookpt2 = 122</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_31">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>500</y>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(16, 128, 1);</string>
+    </property>
+    <property name="text">
+     <string>Inglewoodpt2 = 131</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_32">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>520</y>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(16, 128, 1);</string>
+    </property>
+    <property name="text">
+     <string>Centralpt2 = 140</string>
+    </property>
+   </widget>
+   <widget class="Line" name="line">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>0</y>
+      <width>20</width>
+      <height>571</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_2">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>30</y>
+      <width>231</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_3">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>80</y>
+      <width>171</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_4">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>60</y>
+      <width>20</width>
+      <height>571</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
     </property>
    </widget>
   </widget>
@@ -198,7 +698,7 @@ color: rgb(255, 255, 255);</string>
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuCTC_Dispatch_Train">
