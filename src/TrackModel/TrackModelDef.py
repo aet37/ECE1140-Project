@@ -8,8 +8,9 @@
     @date 11.18.2020
 """
 import sys
-sys.path.insert(0, "C:\\Users\\Evan\\OneDrive\\Documents\\GitHub\\ECE1140-Project\\src")
-from common_def import *
+sys.path.append(".")
+#sys.path.insert(0, "C:\\Users\\Evan\\OneDrive\\Documents\\GitHub\\ECE1140-Project\\src")
+from src.common_def import *
 
 """
 	@struct Track
