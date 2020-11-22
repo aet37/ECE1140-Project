@@ -23,7 +23,9 @@ jobs:
         python-version: 3.8
 
     - name: Run requirements file
-      run: pip install -r requirements.txt
+      run: |
+        pip install -r requirements.txt
+        sudo apt install -y xvfb x11-utils libxkbcommon-x11-0
 
     - name: Run CTC tests
       run: |
@@ -39,4 +41,5 @@ jobs:
 
     - name: Run Common tests
       run: |
-        pytest tests/IntegrationTests/test_common.py
+        ulimit -c unlimited
+        sudo catchsegv xvfb-run --auto-servernum `which coverage` run -m pytest tests/IntegrationTests/test_common.py
