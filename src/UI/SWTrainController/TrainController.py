@@ -2,7 +2,6 @@ import os
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QTimer
 import sys
-from SWTrainController.Controller import Controller
 sys.path.append(".")
 from src.UI.Common.common import Alert, Confirmation
 
@@ -230,6 +229,8 @@ class SWTrainUi(QtWidgets.QMainWindow):
         self.setpoint_speed = control_system.p_controllers[int(self.current_train_id) - 1].setpoint_speed
         self.service_brake_status = control_system.p_controllers[int(self.current_train_id) - 1].service_brake
         self.mode_status = control_system.p_controllers[int(self.current_train_id) - 1].mode
+        self.kp_status = control_system.p_controllers[int(self.current_train_id) - 1].kp
+        self.ki_status = control_system.p_controllers[int(self.current_train_id) - 1].ki
 
         # Change GUI to reflect current data
         # Update doors
@@ -278,6 +279,11 @@ class SWTrainUi(QtWidgets.QMainWindow):
         else:
             self.automatic_mode.setStyleSheet("background-color: green;")
             self.manual_mode.setStyleSheet("background-color: rgb(255, 51, 16);")
+
+        # Update Kp and Ki
+        self.KpLabel.setText(str(self.kp_status) + " W/(m/s)")
+        self.KiLabel.setText(str(self.ki_status) + " W/m")
+
 
     def set_button_state(self, index):
         self.button1.setEnabled(True)
@@ -430,7 +436,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
             return
 
         # Get setpoint speed
-        setpoint_speed = self.findChild(QtWidgets.QLineEdit, "setpoint_speed_label").text()
+        setpoint_speed = self.findChild(QtWidgets.QLineEdit, "EnterSpeed").text()
 
         # Check if train is in manual mode
         if self.manual_mode.styleSheet() != "background-color: green;":
@@ -440,24 +446,24 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
         # Check if number was entered
         try:
-            int(setpoint_speed)
+            float(setpoint_speed)
         except ValueError:
             alert = Alert("Setpoint speed must be an integer value")
             alert.exec_()
             return
 
         # Check if speed entered is within valid range
-        if int(setpoint_speed) < 0 or int(setpoint_speed) > 43.496:
+        if float(setpoint_speed) < 0 or float(setpoint_speed) > 43.496:
             alert = Alert("Invalid speed entered!")
             alert.exec_()
             return
 
         # Check if speed entered is less than command speed
-        com_sp = self.findChild(QtWidgets.QLabel, "command_speed_label").text()
-        if int(setpoint_speed) > int(com_sp):
-            alert = Alert("Error! Entered speed must be lower than speed limit!")
-            alert.exec_()
-            return
+        #com_sp = self.findChild(QtWidgets.QLabel, "command_speed_label").text()
+        #if int(setpoint_speed) > int(com_sp):
+        #    alert = Alert("Error! Entered speed must be lower than speed limit!")
+        #    alert.exec_()
+        #    return
 
         # If all conditions pass, check for confirmation
         confirmation = Confirmation("Entered speed is valid!\nSet speed?")
@@ -465,16 +471,22 @@ class SWTrainUi(QtWidgets.QMainWindow):
         if response == False:
             return
         else:
-            signals.swtrain_gui_set_setpoint_speed(int(self.current_train_id) - 1, setpoint_speed)
+            signals.swtrain_gui_set_setpoint_speed.emit(int(self.current_train_id) - 1, float(setpoint_speed))
+
+        self.update_gui()
 
     def toggle_service_brake(self):
         # If no controllers have been created, button does nothing
         if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
             return
 
-        # Check if authority is zero
-        if control_system.p_controllers[int(self.current_train_id) - 1].authority == 0:
-            if self.service_brake.styleSheet() == "background-color: green;":
+        # Check if authority is zero NEED METHOD TO AUTOMATICALLY TURN SERVICE BRAKE ON AUTOMATICALLY
+        #if control_system.p_controllers[int(self.current_train_id) - 1].authority == 0:
+            #self.service_brake.setStyleSheet("background-color: rgb(255, 51, 16);")
+            # Send signal to notify status of service brake
+            #signals.swtrain_gui_press_service_brake.emit(int(self.current_train_id) - 1)
+
+        if self.service_brake.styleSheet() == "background-color: green;":
                 #Confirm use of service brake
                 confirmation = Confirmation("Turn service brake on?")
                 response = confirmation.exec_()
@@ -484,21 +496,20 @@ class SWTrainUi(QtWidgets.QMainWindow):
                     signals.swtrain_gui_press_service_brake.emit(int(self.current_train_id) - 1)
                 else:
                     return
-            else:
-                #Confirm turning off service brake
-                confirmation = Confirmation("Turn service brake off?")
-                response = confirmation.exec_()
-                if response == True:
-                    self.service_brake.setStyleSheet("background-color: green;")
-                    # Send signal to notify status of service brake
-                    signals.swtrain_gui_press_service_brake.emit(int(self.current_train_id) - 1)
-                else:
-                    return
-
         else:
-            alert = Alert("Service brake cannot be activated until authority is 0!")
-            alert.exec_()
-            return
+            #Confirm turning off service brake
+            confirmation = Confirmation("Turn service brake off?")
+            response = confirmation.exec_()
+            if response == True:
+                self.service_brake.setStyleSheet("background-color: green;")
+                # Send signal to notify status of service brake
+                signals.swtrain_gui_press_service_brake.emit(int(self.current_train_id) - 1)
+            else:
+                return
+            
+        #alert = Alert("Service brake cannot be activated until authority is 0!")
+        #alert.exec_()
+        return
 
     def save_inputs(self):
         # Get Kp and Ki
@@ -537,11 +548,8 @@ class SWTrainUi(QtWidgets.QMainWindow):
         if response == False:
             return
 
-        # Change Kp and Ki text displays
-        self.KpLabel.setText(str(Kp))
-        self.KiLabel.setText(str(Ki))
-
-        signals.swtrain_gui_set_kp_ki(int(self.current_train_id) - 1, Kp, Ki)
+        signals.swtrain_gui_set_kp_ki.emit(int(self.current_train_id) - 1, float(Kp), float(Ki))
+        self.update_gui()
 
     def logout(self):
         # This is executed when the button is pressed

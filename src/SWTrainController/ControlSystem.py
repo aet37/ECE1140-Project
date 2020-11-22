@@ -23,6 +23,8 @@ class ControlSystem:
         signals.swtrain_gui_set_setpoint_speed.connect(self.swtrain_gui_set_setpoint_speed)
         # Receive service brake signal
         signals.swtrain_gui_press_service_brake.connect(self.swtrain_gui_press_service_brake)
+        # Receive kp and ki signal
+        signals.swtrain_gui_set_kp_ki.connect(self.swtrain_gui_set_kp_ki)
 
         ## RECEIVE NONVITAL SIGNALS ##
         # Receive lights signal
@@ -39,6 +41,8 @@ class ControlSystem:
     def create_new_controller(self, com_sp, curr_sp, auth):
         """ Method to create new controller instance """
         # Create new controller
+        # TRY TO CONNECT TO ARDUINO
+        # EXCEPT IF NOT CONNECTED
         p_temp = Controller(com_sp, curr_sp, auth)
 
         # Add controller to vector of controllers (Keep everything singleton)
@@ -52,9 +56,6 @@ class ControlSystem:
     def swtrain_dispatch_train(self, com_sp, curr_sp, auth):
         """ Handler for swtrain_dispatch_train signal """
         control_system.create_new_controller(com_sp, curr_sp, auth)
-        # If first train, dispatch to HWTrainController
-        if self.get_amount_of_controllers == 0:
-            signals.hwtrain_dispatch_train.emit(com_sp, curr_sp, auth)
 
     def swtrain_gui_switch_mode(self, train_id, override):
         """ Handler for swtrain_gui_switch_mode """
@@ -83,7 +84,6 @@ class ControlSystem:
 
     def swtrain_gui_toggle_damn_doors(self, train_id):
         """ Handler for swtrain_gui_toggle_damn_doors """
-        print("hello collin")
         self.p_controllers[train_id].toggle_doors()
         signals.train_model_gui_receive_doors.emit(train_id, self.p_controllers[train_id].doors)
 
