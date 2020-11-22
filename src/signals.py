@@ -19,7 +19,6 @@ class SignalsClass(QObject):
     update_throughput = pyqtSignal(int)			# Used by Track Model to send CTC throughput (ticket sales)
     dispatch_scheduled_train = pyqtSignal(int, Line)	# Used by Timekeeper to send CTC a dispatch commmand
 
-
     # Track Controller Signals
     swtrack_dispatch_train = pyqtSignal(int, int, int, int, Line, list) # Used by CTC to send dispatch Train (train_id, destination_block, command_speed, authority, Line, switches_arr(BOOL))
     swtrack_update_authority = pyqtSignal(int, int)	# Used by CTC to update authority of a train (train_id, new_authority)
@@ -76,6 +75,13 @@ class SignalsClass(QObject):
     swtrain_gui_set_kp_ki = pyqtSignal(int, float, float) # TrainID, setKp, setKi
     swtrain_gui_switch_mode = pyqtSignal(int, str) # TrainID, override code
     swtrain_time_trigger = pyqtSignal()
+
+    # Track Model Signals
+    trackmodel_dispatch_train = pyqtSignal(int, int, int, Line, list) # Used by SWTrack Controller to send dispatch Train (train_id, command_speed, authority, Line, switches_arr(boolean))
+    trackmodel_update_occupancy = pyqtSignal(int, Line, int, bool) # Used by train model to give track model info about a train's status on a particular block (trainId, Line, blockId, trainOrNot)
+    trackmodel_update_command_speed = pyqtSignal(int, int) # Used by the track controller to update the command speed of a train (trainId, newSpeed)
+    trackmodel_update_switch_positions = pyqtSignal(Line, int, int) # Used by the track controller to update a switch positions (Line, switchNumberFromYard, switchPosition)
+    trackmodel_update_authority = pyqtSignal(int, bool) # Used by the track controller to update the authority of a train (trainId, newAuthority)
 
 # Single instance to be used by other modules
 signals = SignalsClass()
