@@ -4,6 +4,9 @@ import threading
 import time
 
 from src.signals import signals
+from src.logger import get_logger
+
+logger = get_logger(__name__)
 
 class Timekeeper:
     """Class responsible for keeping the system time"""
@@ -22,6 +25,7 @@ class Timekeeper:
 
     def timer_function(self):
         """Thread function for monitoring time and emitting signals"""
+        logger.critical("Timekeeper starting...")
         while self.running:
             time.sleep(self.timer_period_in_sec)
 
