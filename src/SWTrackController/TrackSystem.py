@@ -1,5 +1,6 @@
 from src.common_def import *
 from src.SWTrackController.TrackControllerdef import *
+from src.CTC.TrainSystem import *
 
 class TrackSystem:
     def __init__(self):
@@ -70,7 +71,7 @@ class TrackSystem:
         count1 = 0
         count2 = 0
         holder =0
-        if a==0:
+        if Line==LINE_GREEN:
             for i in range (0,12):
                 for j in self.blocksControlled[i]:
                     if self.blocksControlled[i][j] == blockNumber:
@@ -82,7 +83,7 @@ class TrackSystem:
                             controller1 = i
                             count1 = j
                             holder = 1
-        elif a==1:
+        elif Line==LINE_RED:
             for i in range (12,26)
                 for j in self.blocksControlled[i]:
                     if self.blocksControlled[i][j] == blockNumber:
@@ -102,6 +103,28 @@ class TrackSystem:
         for i in range (0,25,2):
             if(self.TrackController_arr[i].getSwitchPos()==self.TrackController_arr[i+1].getSwitchPos())
                 self.switchpos_arr[i] = self.TrackController_arr[i].getSwitchPos()
+
+        greenOutput = []
+        redOutput = []
+
+        for i in range(0,6):
+            if switchpos_arr[i] == 0 :
+                greenOutput[i] == 0
+            if switchpos_arr[i] == 1 :
+                greenOutput[i] ==1
+
+        for i in range(6,13):
+            if switchpos_arr[i] == 0 :
+                redOutput[i] == 0
+            if switchpos_arr[i] == 1 :
+                redOutput[i] ==1
+
+
+        TrainSystem.UpdateGreenSwitches(greenOutput)
+
+        TrainSystem.UpdateRedSwitches(redOutput)
+
+        self.makeOccupancies()
     def makeOccupancies(self):
         output = "" 
         temp = self.TrackController_arr[0].getOccupancy()
@@ -154,7 +177,19 @@ class TrackSystem:
                 output = output + "0"
             elif temp[i]==1
                 output = output + "1"
-        output = output + " "
+        returnlist = []
+        for i in output:
+            if output[i] == 0:
+                returnlist[i] = 0
+            elif output[i] == 1:
+                returnlist[i] = 1
+        
+        #send green to ctc
+        TrainSystem.UpdateGreenBlocks(returnlist)
+
+        output = ""
+
+
         temp = self.TrackController_arr[13].getOccupancy()
         output = output + temp[0]
         temp = self.TrackController_arr[12].getOccupancy()
@@ -211,7 +246,16 @@ class TrackSystem:
                 output = output + "0"
             elif temp[i]==1
                 output = output + "1"
-        return output
+        returnlist = []
+        for i in output:
+            if output[i] == 0:
+                returnlist[i] = 0
+            elif output[i] == 1:
+                returnlist[i] = 1
+
+        #send red to ctc
+
+        TrainSystem.UpdateRedBlocks(returnlist)
     def makePositions(self):
         output = ""
         for i in range(0,25,2):
@@ -228,7 +272,7 @@ class TrackSystem:
             else:
                 return 14
     def inputPositions(self, input,Line):
-        if Line==0:
+        if Line==LINE_GREEN:
             self.TrackController_arr[6].addToQueue(input[0])
             self.TrackController_arr[7].addToQueue(input[0])
 
@@ -257,7 +301,7 @@ class TrackSystem:
             self.TrackController_arr[6].addToQueue(input[9])
             self.TrackController_arr[7].addToQueue(input[9])
 
-        elif Line==1:
+        elif Line==LINE_RED:
             self.TrackController_arr[14].addToQueue(input[0])
             self.TrackController_arr[15].addToQueue(input[0])
 
@@ -303,7 +347,10 @@ class TrackSystem:
             self.TrackController_arr[16].addToQueue(input[7])
             self.TrackController_arr[17].addToQueue(input[7])
             
+    def swtrack_dispatch_train(self, train_id, destination_block, command_speed, authority, Line, switch_arr):
 
+        self.inputPositions(switch_arr, Line)
+        
 
             
 
