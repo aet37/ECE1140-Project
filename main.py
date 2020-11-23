@@ -43,6 +43,7 @@ def cleanup():
     """Cleanup resources from application"""
     # Stop the timekeeper
     timekeeper.running = False
+    timekeeper.resume_time()
     timekeeper.timer_thread.join()
 
 def start(arguments):
