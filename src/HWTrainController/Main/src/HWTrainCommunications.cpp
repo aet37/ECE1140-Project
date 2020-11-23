@@ -306,85 +306,87 @@ static void DisplayTemp(const String& rData)
     }
 }
 
-// static void DisplaySpeed(const String& rData)
-// {
-//     SendResponse(ResponseCode::SUCCESS);
-//     bool toggle = Devices::JoystickClick();
-//     speed = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
-//     while(toggle)
-//     {
-//         currentTime = millis();
-//         Serial.println(speed);
-//         speed = Devices::JoystickRead(speed);
-//         if (currentTime - previousTime >= interval) {
-//             previousTime = currentTime;        
-//             Devices::ClearLCD();
-//             String str = String(speed);
-//             Devices::WriteLCD(str);
-//         }
-//         toggle = Devices::JoystickClick();
-//     }
-// }
+// 
 
-// static void DisplayKi(const String& rData)
-// {
-//     SendResponse(ResponseCode::SUCCESS);
-//     bool toggle = Devices::JoystickClick();
-//     ki = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
-//     while(toggle)
-//     {
-//         currentTime = millis();
-//         Serial.println(ki);
-//         ki = Devices::JoystickRead(ki);
-//         if (currentTime - previousTime >= interval) {
-//             previousTime = currentTime;        
-//             Devices::ClearLCD();
-//             String str = String(ki);
-//             Devices::WriteLCD(str);
-//         }
-//         toggle = Devices::JoystickClick();
-//     }
-// }
+static void DisplaySpeed(const String& rData)
+{
+    SendResponse(ResponseCode::SUCCESS);
+    bool toggle = Devices::JoystickClick();
+    speed = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
+    while(toggle)
+    {
+        currentTime = millis();
+        Serial.println(speed);
+        speed = Devices::JoystickRead(speed);
+        if (currentTime - previousTime >= interval) {
+            previousTime = currentTime;        
+            Devices::ClearLCD();
+            String str = String(speed);
+            Devices::WriteLCD(str);
+        }
+        toggle = Devices::JoystickClick();
+    }
+}
 
-// static void DisplayKp(const String& rData)
-// {
-//     SendResponse(ResponseCode::SUCCESS);
-//     bool toggle = Devices::JoystickClick();
-//     kp = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
-//     while(toggle)
-//     {
-//         currentTime = millis();
-//         Serial.println(kp);
-//         kp = Devices::JoystickRead(kp);
-//         if (currentTime - previousTime >= interval) {
-//             previousTime = currentTime;        
-//             Devices::ClearLCD();
-//             String str = String(kp);
-//             Devices::WriteLCD(str);
-//         }
-//         toggle = Devices::JoystickClick();
-//     }
-// }
+static void DisplayKi(const String& rData)
+{
+    SendResponse(ResponseCode::SUCCESS);
+    bool toggle = Devices::JoystickClick();
+    ki = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
+    while(toggle)
+    {
+        currentTime = millis();
+        Serial.println(ki);
+        ki = Devices::JoystickRead(ki);
+        if (currentTime - previousTime >= interval) {
+            previousTime = currentTime;        
+            Devices::ClearLCD();
+            String str = String(ki);
+            Devices::WriteLCD(str);
+        }
+        toggle = Devices::JoystickClick();
+    }
+}
 
-// static void DisplayPower(const String& rData)
-// {
-//     SendResponse(ResponseCode::SUCCESS);
-//     bool toggle = Devices::JoystickClick();
-//     power = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
-//     while(toggle)
-//     {
-//         currentTime = millis();
-//         Serial.println(power);
-//         power = Devices::JoystickRead(power);
-//         if (currentTime - previousTime >= interval) {
-//             previousTime = currentTime;        
-//             Devices::ClearLCD();
-//             String str = String(power);
-//             Devices::WriteLCD(str);
-//         }
-//         toggle = Devices::JoystickClick();
-//     }
-// }
+static void DisplayKp(const String& rData)
+{
+    SendResponse(ResponseCode::SUCCESS);
+    bool toggle = Devices::JoystickClick();
+    kp = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
+    while(toggle)
+    {
+        currentTime = millis();
+        Serial.println(kp);
+        kp = Devices::JoystickRead(kp);
+        if (currentTime - previousTime >= interval) {
+            previousTime = currentTime;        
+            Devices::ClearLCD();
+            String str = String(kp);
+            Devices::WriteLCD(str);
+        }
+        toggle = Devices::JoystickClick();
+    }
+}
+
+static void DisplayPower(const String& rData)
+{
+    SendResponse(ResponseCode::SUCCESS);
+    bool toggle = Devices::JoystickClick();
+    power = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
+    while(toggle)
+    {
+        currentTime = millis();
+        Serial.println(power);
+        power = Devices::JoystickRead(power);
+        if (currentTime - previousTime >= interval) {
+            previousTime = currentTime;        
+            Devices::ClearLCD();
+            String str = String(power);
+            Devices::WriteLCD(str);
+        }
+        toggle = Devices::JoystickClick();
+    }
+}
 
 void CommsTask()
 {
@@ -451,18 +453,18 @@ void CommsTask()
         case RequestCode::HWTRAIN_SET_TEMPERATURE:
             DisplayTemp(data);
             break;
-        // case RequestCode::HWTRAIN_UPDATE_CURRENT_SPEED:
-        //     DisplaySpeed(data);
-        //     break;
-        // case RequestCode::HWTRAIN_GUI_DISPLAY_POWER:
-        //     DisplayPower(data);
-        //     break;
-        // case RequestCode::HWTRAIN_GUI_SET_KP:
-        //     DisplayKp(data);
-        //     break;
-        // case RequestCode::HWTRAIN_GUI_SET_KI:
-        //     DisplayKi(data);
-        //     break;
+        case RequestCode::HWTRAIN_UPDATE_CURRENT_SPEED:
+            DisplaySpeed(data);
+            break;
+        case RequestCode::HWTRAIN_GUI_DISPLAY_POWER:
+            DisplayPower(data);
+            break;
+        case RequestCode::HWTRAIN_GUI_SET_KP:
+            DisplayKp(data);
+            break;
+        case RequestCode::HWTRAIN_GUI_SET_KI:
+            DisplayKi(data);
+            break;
         default:
             // We expect ParseCode to take care of this case
             assert(false);

@@ -1,7 +1,7 @@
 """Common pages such as a confirmation and alert"""
 
 from PyQt5 import QtWidgets, uic
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal
 
 class Alert(QtWidgets.QDialog):
     """Page shown to user to alert them to something"""
@@ -28,3 +28,18 @@ class Confirmation(QtWidgets.QDialog):
 
         # Hide help button
         self.setWindowFlags(Qt.WindowCloseButtonHint)
+
+class DownloadInProgress(QtWidgets.QDialog):
+    """Window shown to user while a program is downloading"""
+
+    download_complete = pyqtSignal()
+    progress_updated = pyqtSignal(int)
+
+    def __init__(self):
+        super().__init__()
+        uic.loadUi('src/UI/Common/downloading.ui', self)
+
+        self.progress_bar = self.findChild(QtWidgets.QProgressBar, 'progress_bar')
+
+        self.download_complete.connect(self.close)
+        self.progress_updated.connect(lambda value: self.progress_bar.setValue(value))

@@ -361,7 +361,7 @@ p, li { white-space: pre-wrap; }
       <string notr="true">background-color: rgb(255, 229, 153);</string>
      </property>
      <property name="text">
-      <string>°c</string>
+      <string>°F</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

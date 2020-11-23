@@ -1,5 +1,5 @@
 #include <Wire.h>
-#include "include/Joystick/Joystick.hpp"
+#include "../../include/Joystick/Joystick.hpp"
 
 namespace JoystickController
 {

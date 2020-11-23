@@ -3499,6 +3499,27 @@ color: rgb(255, 255, 255);</string>
      <enum>Qt::Vertical</enum>
     </property>
    </widget>
+   <widget class="QLabel" name="MaintModeRd">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>20</y>
+      <width>391</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(252, 1, 7);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
    <zorder>line_68</zorder>
    <zorder>line_18</zorder>
    <zorder>line_22</zorder>
@@ -3739,6 +3760,7 @@ color: rgb(255, 255, 255);</string>
    <zorder>label_217</zorder>
    <zorder>label_218</zorder>
    <zorder>label_219</zorder>
+   <zorder>MaintModeRd</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -3746,7 +3768,7 @@ color: rgb(255, 255, 255);</string>
      <x>0</x>
      <y>0</y>
      <width>1232</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuCTC_View_Green_Line">

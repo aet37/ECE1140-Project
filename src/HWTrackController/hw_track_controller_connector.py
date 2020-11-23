@@ -1,111 +1,94 @@
-"""API for the HW Track Controller Module."""
+"""Module containing classes to communicate with the hw track controller"""
 
-from argparse import ArgumentParser
-import socket
-import sys
 from time import sleep
 import logging
-import polling
+import threading
+from enum import Enum
 import serial
+from serial.serialutil import SerialException
+
+from src.UI.Common.common import DownloadInProgress
 
 logger = logging.getLogger(__name__)
 
 # Communications with controller
 SERIAL_PORT = 'COM3'
 RATE = 9600
-arduino = serial.Serial(SERIAL_PORT, RATE, timeout=5)
-sleep(2)
 
-# Communications with server
-# HOST = '18.188.207.58'
-HOST = '3.23.104.34'
-SERVER_PORT = 1234
-HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST = b'105'
-HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE = b'106'
+class Code(Enum):
+    """Codes to be sent to the arduino"""
+    START_DOWNLOAD = 96 # Used by the gui to start a download
+    END_DOWNLOAD = 97 # Used by the gui to end a download
+    CREATE_TAG = 98 # Used by the gui to create a tag
+    CREATE_TASK = 99 # Used by the gui to create a task
+    CREATE_ROUTINE = 100 # Used by the gui to create a routine
+    CREATE_RUNG = 101 # Used by the gui to create a rung
+    CREATE_INSTRUCTION = 102 # Used by the gui to create an instruction
+    SET_TAG_VALUE = 103 # Used by the gui to set a tag's value
+    GET_TAG_VALUE = 104 # Used by the gui to get a tag's value
+    GET_ALL_TAG_VALUES = 105 # Used by the gui to get all tag values
 
-def get_request():
-    """Retrieves a request from the server.
+class HWTrackCtrlConnector:
+    """Class responsible for communicating with the hw track controller"""
+    def __init__(self):
+        try:
+            self.arduino = serial.Serial(SERIAL_PORT, RATE, timeout=5)
+            sleep(2)
+        except SerialException:
+            print("No arduino")
 
-    :return: RequestCode followed by additional data. RequestCode
-    of 0 represents there are no requests pending
-    """
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.connect((HOST, SERVER_PORT))
-        sock.sendall(HWTRACK_GET_HW_TRACK_CONTROLLER_REQUEST)
-        data = sock.recv(1024)
+        self.comms_lock = threading.Lock()
 
-    return data
+    def send_message(self, msg):
+        """Writes the given message to the serial port
 
-def send_request_to_controller(request):
-    """Forwards the request from the server to the controller.
+        :param str msg: Message to send
+        """
+        bytes_written = self.arduino.write(bytes(str(msg), 'utf-8'))
+        logger.info("%d bytes written to the controller", bytes_written)
 
-    :param request: Request retrieved from the server
-    """
-    sleep(0.2)
-    bytes_written = arduino.write(request)
-    logger.info("%d bytes written to the controller", bytes_written)
+    def get_response(self):
+        """Gets the response from the controller.
 
-def get_response_from_controller():
-    """Gets the response from the controller.
+        :return: Response of the controller to the previous request
+        :rtype: bytes
+        """
+        self.arduino.flushInput()
+        response = self.arduino.readline()
+        logger.info("Response from controller %s", response)
+        # Remove \r\n from the end of the response
+        return response.rstrip(b'\t\r\n ')
 
-    :return: Response of the controller to the previous request
-    :rtype: bytes
-    """
-    arduino.flushInput()
-    response = arduino.readline()
-    logger.info("Response from controller %s", response)
-    # Remove \r\n from the end of the response
-    return response.rstrip(b'\t\r\n ')
+    def download_program(self, compiled_program):
+        """Reads the compiled program and downloads it to the controller
 
-def send_reponse_to_server(response):
-    """Sends response of the controller back to the server.
+        :param file compiled_program: Path to the compiled PLC program
+        """
+        progress = DownloadInProgress()
 
-    :param response: Response gathered from the controller
-    """
-    print(response[1:])
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.connect((HOST, SERVER_PORT))
-        sock.sendall(HWTRACK_SEND_HW_TRACK_CONTROLLER_RESPONSE + b' ' + response)
-        data = sock.recv(1024)
+        def _download_program():
+            commands = []
+            for line in open(compiled_program, 'r'):
+                line = line.rstrip('\n')
+                try:
+                    space_index = line.index(' ')
+                except ValueError:
+                    space_index = len(line)
 
-    logger.info("Received %s from server", data)
+                # Construct the new line with the code replaced
+                line = str(Code[line[:space_index]].value) + line[space_index:]
+                commands.append(line)
 
-    if data != b'0':
-        logger.error("Error response from server")
+            with self.comms_lock:
+                for i, command in enumerate(commands):
+                    self.send_message(command)
+                    # No need for sleep here because of the get response
+                    logger.info(self.get_response())
+                    progress.progress_updated.emit((i + 1) / len(commands) * 100)
 
-def main():
-    """Main entry point for the script."""
-    argument_parser = ArgumentParser(
-        prog='python hw_track_controller_api.py',
-        description='Polls the server to check for request from '
-                    'the hw track controller. Fulfills requests if any are found'
-	)
-    argument_parser.add_argument('--verbose', '-v', action='store_true')
-    args = argument_parser.parse_args()
+            progress.download_complete.emit()
 
-    if args.verbose:
-        logging.basicConfig(level=logging.DEBUG)
-    else:
-        logging.basicConfig(level=logging.INFO)
+        download_thread = threading.Thread(target=_download_program)
+        download_thread.start()
 
-    # Continually check and fulfill requests
-    while True:
-        request = polling.poll(get_request,
-                               step=1,
-                               poll_forever=True,
-                               ignore_exceptions=ConnectionRefusedError,
-                               check_success=lambda x: x != b'1')
-        logger.info("Request found : %s", request)
-
-        # Forward the request to the controller
-        send_request_to_controller(request)
-
-        # Gather the response bytes from the controller
-        response = get_response_from_controller()
-
-        # Forward response back to the server
-        send_reponse_to_server(response)
-
-
-if __name__ == "__main__":
-    sys.exit(main())
+        progress.exec()

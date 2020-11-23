@@ -23,7 +23,7 @@ class ControlSystem
          * 
          * @return Pointer to Controller struct
          */ 
-        Controller* createNewController(int com_sp, int curr_sp, bool auth);
+        Controller* createNewController(float com_sp, float curr_sp, bool auth);
 
         /**
          * @param id = train_id

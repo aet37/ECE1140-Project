@@ -7,13 +7,14 @@
 
 // C++ PROJECT INCLUDES
 #include "TrainModelMain.hpp" // Header for functions
+#include "TrackModelMain.hpp" // Header for functions
 #include "SWTrainControllerMain.hpp" // For SWTrainController::serviceQueue
 #include "Assert.hpp" // For ASSERT
 #include "Logger.hpp" // For LOG macros
 #include "Train.hpp" // For TrainModel::Train
 #include "TrainCatalogue.hpp" // For TrainCatalogue
 #include "BlockCatalogue.hpp" // For BlockCatalogue
-#include "TrackModelMain.hpp" // For sending to Track Controller
+#include "Timekeeper.hpp" // For time keeping
 
 namespace TrainModel
 {
@@ -32,10 +33,11 @@ Common::ServiceQueue<Common::Request> serviceQueue;
             {
                 case Common::RequestCode::TRAIN_MODEL_DISPATCH_TRAIN:
                 {
+                    LOG_TRAIN_MODEL("TRAIN_MODEL_DISPATCH_TRAIN received %s", receivedRequest.GetData().c_str());
                     Train newTrain;
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
                     newTrain.SetDestinationBlock(receivedRequest.ParseData<uint32_t>(1));
-                    newTrain.SetCommandSpeed(receivedRequest.ParseData<uint32_t>(2));
+                    newTrain.SetCommandSpeed(receivedRequest.ParseData<float>(2));
                     newTrain.SetAuthority(receivedRequest.ParseData<uint32_t>(3));
                     newTrain.SetCurrentLine(receivedRequest.ParseData<uint32_t>(4));
 
@@ -52,8 +54,13 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                         {
                             break;
                         }
+                        if (block == -1)
+                        {
+                            block = 0;
+                        }
                         route.push_back(block);
                     }
+                    route.erase(route.begin());
                     newTrain.SetRoute(route);
 
                     // Add the train to the catalogue
@@ -63,19 +70,19 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     Common::Request newRequest(Common::RequestCode::SWTRAIN_DISPATCH_TRAIN);
                     newRequest.AppendData(std::to_string(trainId));
                     newRequest.AppendData(std::to_string(receivedRequest.ParseData<uint32_t>(1)));
-                    newRequest.AppendData(std::to_string(receivedRequest.ParseData<uint32_t>(2)));
+                    newRequest.AppendData(std::to_string(receivedRequest.ParseData<float>(2)));
                     newRequest.AppendData(std::to_string(receivedRequest.ParseData<uint32_t>(3)));
                     SWTrainController::serviceQueue.Push(newRequest);
 
-                    // Hardcoded Test : To delete later
+                    // // Hardcoded Test : To delete later
 
-                    Common::Request to_push;
-                    to_push.SetRequestCode(Common::RequestCode::TRACK_MODEL_UPDATE_OCCUPANCY);
-                    to_push.AppendData("1");
-	                to_push.AppendData("0");
-	                to_push.AppendData("22");
-	                to_push.AppendData("1");
-	                TrackModel::serviceQueue.Push(to_push);
+                    // Common::Request to_push;
+                    // to_push.SetRequestCode(Common::RequestCode::TRACK_MODEL_UPDATE_OCCUPANCY);
+                    // to_push.AppendData("1");
+	                // to_push.AppendData("0");
+	                // to_push.AppendData("22");
+	                // to_push.AppendData("1");
+	                // TrackModel::serviceQueue.Push(to_push);
 
                     break;
                 }
@@ -89,49 +96,49 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     Block block;
                     block.m_elevation = receivedRequest.ParseData<float>(2);
                     block.m_slope = receivedRequest.ParseData<float>(3);
-                    block.m_sizeOfBlock = receivedRequest.ParseData<uint32_t>(4);
-                    block.m_speedLimit = receivedRequest.ParseData<uint32_t>(5);
+                    block.m_sizeOfBlock = receivedRequest.ParseData<float>(4);
+                    block.m_speedLimit = receivedRequest.ParseData<float>(5);
                     block.m_travelDirection = receivedRequest.ParseData<uint32_t>(6);
 
                     // Add the block to the catalogue
-                    if (trackId == 0)
+                    if ((trackId - 1) == 0)
                     {
                         BlockCatalogue::GetInstance().AddGreenBlock(block);
-                        LOG_TRAIN_MODEL("Received a block. There are now %d blocks", BlockCatalogue::GetInstance().GetNumberOfGreenBlocks());
+                        LOG_TRAIN_MODEL("Received a green block. There are now %d blocks", BlockCatalogue::GetInstance().GetNumberOfGreenBlocks());
                     }
                     else
                     {
                         BlockCatalogue::GetInstance().AddRedBlock(block);
-                        LOG_TRAIN_MODEL("Received a block. There are now %d blocks", BlockCatalogue::GetInstance().GetNumberOfRedBlocks());
+                        LOG_TRAIN_MODEL("Received a red block. There are now %d blocks", BlockCatalogue::GetInstance().GetNumberOfRedBlocks());
                     }
                     break;
                 }
                 case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_LENGTH:
                 {
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
-                    uint32_t trainLength = receivedRequest.ParseData<uint32_t>(1);
-                    LOG_TRAIN_MODEL("Train Length = %d, Train ID = %d", trainLength, trainId);
+                    float trainLength = receivedRequest.ParseData<float>(1);
+                    LOG_TRAIN_MODEL("Train Length = %f, Train ID = %d", trainLength, trainId);
                     break;
                 }
                 case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_MASS:
                 {
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
-                    uint32_t trainMass = receivedRequest.ParseData<uint32_t>(1);
-                    LOG_TRAIN_MODEL("Train Mass = %d, Train ID = %d", trainMass, trainId);
+                    float trainMass = receivedRequest.ParseData<float>(1);
+                    LOG_TRAIN_MODEL("Train Mass = %f, Train ID = %d", trainMass, trainId);
                     break;
                 }
                 case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_HEIGHT:
                 {
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
-                    uint32_t trainHeight = receivedRequest.ParseData<uint32_t>(1);
-                    LOG_TRAIN_MODEL("Train Height = %d, Train ID = %d", trainHeight, trainId);
+                    float trainHeight = receivedRequest.ParseData<float>(1);
+                    LOG_TRAIN_MODEL("Train Height = %f, Train ID = %d", trainHeight, trainId);
                     break;
                 }
                 case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_WIDTH:
                 {
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
-                    uint32_t trainWidth = receivedRequest.ParseData<uint32_t>(1);
-                    LOG_TRAIN_MODEL("Train Width = %d, Train ID = %d", trainWidth, trainId);
+                    float trainWidth = receivedRequest.ParseData<float>(1);
+                    LOG_TRAIN_MODEL("Train Width = %f, Train ID = %d", trainWidth, trainId);
                     break;
                 }
                 case Common::RequestCode::TRAIN_MODEL_GUI_SET_TRAIN_PASSENGER_COUNT:
@@ -161,7 +168,7 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     // newBlock.m_speedLimit = 70;
 
                     // uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
-                    // uint32_t lightStatus = receivedRequest.ParseData<uint32_t>(1);
+                    // bool lightStatus = receivedRequest.ParseData<bool>(1);
 
                     // newTrain.SetCabinLights(lightStatus);
                     // TrainCatalogue::GetInstance().AddTrain(newTrain);
@@ -169,7 +176,7 @@ Common::ServiceQueue<Common::Request> serviceQueue;
 
                     // IMPLEMENTATION
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
-                    uint32_t lightStatus = receivedRequest.ParseData<uint32_t>(1);
+                    bool lightStatus = receivedRequest.ParseData<bool>(1);
 
                     Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId-1);
                     tempTrain->SetCabinLights(lightStatus);
@@ -181,7 +188,7 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                 {
                     // IMPLEMENTATION
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
-                    uint32_t eBrakeStatus = receivedRequest.ParseData<uint32_t>(1);
+                    bool eBrakeStatus = receivedRequest.ParseData<bool>(1);
 
                     Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId-1);
                     tempTrain->SetEmergencyPassengeBrake(eBrakeStatus);
@@ -193,7 +200,7 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                 {
                     // IMPLEMENTATION
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
-                    uint32_t serviceBrakeStatus = receivedRequest.ParseData<uint32_t>(1);
+                    bool serviceBrakeStatus = receivedRequest.ParseData<bool>(1);
 
                     Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId-1);
                     tempTrain->SetServiceBrake(serviceBrakeStatus);
@@ -205,7 +212,7 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                 {
                     // IMPLEMENTATION
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
-                    uint32_t doorsStatus = receivedRequest.ParseData<uint32_t>(1);
+                    bool doorsStatus = receivedRequest.ParseData<bool>(1);
 
                     Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId-1);
                     tempTrain->SetDoors(doorsStatus);
@@ -216,13 +223,13 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                 case Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_SEAN_PAUL:
                 {
                     // IMPLEMENTATION
-                    // uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
-                    // uint32_t seanPaulStatus = receivedRequest.ParseData<uint32_t>(1);
+                    uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
+                    float tempStatus = receivedRequest.ParseData<float>(1);
 
-                    // Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId);
-                    // tempTrain->SetCabinLights(seanPaulStatus);
+                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId-1);
+                    tempTrain->SetDoors(tempStatus);
 
-                    // LOG_TRAIN_MODEL("Train seanPaulStatus = %d, Train ID = %d", seanPaulStatus, trainId);
+                    LOG_TRAIN_MODEL("Train tempStatus = %f, Train ID = %d", tempStatus, trainId);
                     break;
                 }
                 case Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_ANNOUNCE_STATIONS:
@@ -230,7 +237,7 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                     // IMPLEMENTATION
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
                     LOG_TRAIN_MODEL("Train Train ID = %d", trainId);
-                    uint32_t announcementsStatus = receivedRequest.ParseData<uint32_t>(1);
+                    bool announcementsStatus = receivedRequest.ParseData<bool>(1);
                     LOG_TRAIN_MODEL("Train announcementsStatus = %d", announcementsStatus);
 
                     Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId-1);
@@ -243,7 +250,7 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                 {
                     // IMPLEMENTATION
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
-                    uint32_t adsStatus = receivedRequest.ParseData<uint32_t>(1);
+                    bool adsStatus = receivedRequest.ParseData<bool>(1);
 
                     Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId-1);
                     tempTrain->SetAdvertisements(adsStatus);
@@ -255,7 +262,7 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                 {
                     // IMPLEMENTATION
                     // uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
-                    // uint32_t lightStatus = receivedRequest.ParseData<uint32_t>(1);
+                    // bool lightStatus = receivedRequest.ParseData<bool>(1);
 
                     // Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId);
                     // tempTrain->SetCabinLights(lightStatus);
@@ -265,12 +272,122 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                 }
                 case Common::RequestCode::TRAIN_MODEL_RECEIVE_POWER:
                 {
+                    LOG_TRAIN_MODEL("TRAIN_MODEL_RECEIVE_POWER received %s", receivedRequest.GetData().c_str());
                     // IMPLEMENTATION
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
-                    uint32_t powerStatus = receivedRequest.ParseData<uint32_t>(1);
+                    float powerStatus = receivedRequest.ParseData<float>(1);
 
-                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId-1);
+                    Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId - 1);
+
+                    uint32_t currentTrack = tempTrain->GetCurrentLine();
+                    uint32_t currentBlock = tempTrain->GetCurrentBlock();
+                    LOG_TRAIN_MODEL("currentTrack = %d", currentTrack);
+                    LOG_TRAIN_MODEL("currentBlock = %d", currentBlock);
+                    Block* currentBlockInfo = BlockCatalogue::GetInstance().GetBlock(currentTrack, currentBlock);
+                    LOG_TRAIN_MODEL("currentBlockInfo = 0x%x", currentBlockInfo);
+
+                    LOG_TRAIN_MODEL("Number of green line blocks = %d", BlockCatalogue::GetInstance().GetNumberOfGreenBlocks());
+                    LOG_TRAIN_MODEL("Number of trains = %d", TrainCatalogue::GetInstance().GetNumberOfTrains());
+
+                    float currentBlockSize = currentBlockInfo->m_sizeOfBlock;
+                    float speedLimitBlock = currentBlockInfo->m_speedLimit;
+
+                    LOG_TRAIN_MODEL("currentBlockSize = %f", currentBlockSize);
+
+                    float commandSpeed = tempTrain->GetCommandSpeed();
+                    float previousPosition = tempTrain->GetPosition();
+                    float trainMass = tempTrain->GetTrainMass();
+                    bool serviceBrake = tempTrain->GetServiceBrake();
+                    bool emergencyBrake = tempTrain->GetEmergencyPassengeBrake();
+                    float samplePeriod = (Common::Timekeeper::SAMPLING_PERIOD_IN_MS)/1000; // ASK COLLIN FOR SAMPLE PERIOD
+                    
+                    // FORCE
+                    float forceCalc = (powerStatus/commandSpeed);
+
+                    // ACCELERATION
+                    float accelerationCalc = (forceCalc/trainMass); // Acceleration Limit: 0.5 m/s^2     Deceleration Limit(service brake): 1.2 m/s^2    Deceleration Limit(emergency brake): 2.73 m/s^2
+                    if(accelerationCalc > 0.5 && !serviceBrake && !emergencyBrake){
+                        // If all brakes are OFF and accelerationCalc is above the limit
+                        accelerationCalc = 0.5;
+                    } else if(accelerationCalc < -1.2 && serviceBrake && !emergencyBrake){
+                        // If the service brake is ON and accelerationCalc is below the limit
+                        accelerationCalc = -1.2;
+                    } else if(accelerationCalc < -2.73 && !serviceBrake && emergencyBrake){
+                        // If the emergency brake is ON and accelerationCalc is below the limit
+                        accelerationCalc = -2.73;
+                    }
+
+                    // VELOCITY
+                    float velocityCalc = (accelerationCalc/samplePeriod); // Velocity Limit: 70km/h
+                    if(velocityCalc > 70){
+                        // If the velocity is GREATER than max train speed
+                        velocityCalc = 70; // km/h
+                    }
+                    if(velocityCalc > speedLimitBlock){
+                        // If the velocity is GREATER than the block's speed limit
+                        velocityCalc = speedLimitBlock;
+                    }
+
+                    float currentPosition;
+                    float positionCalc;
+
+                    if(currentBlock == tempTrain->GetDestinationBlock()){
+                        // Set all the parameters in the train object
+                        tempTrain->SetPower(powerStatus);
+                        tempTrain->SetCurrentSpeed(0); // For display stopping purposes
+
+                        // Send to Collin
+                        Common::Request newRequest(Common::RequestCode::SWTRAIN_UPDATE_CURRENT_SPEED);
+                        newRequest.AppendData(std::to_string(trainId));
+                        newRequest.AppendData(std::to_string(0)); // For display stopping purposes
+                        SWTrainController::serviceQueue.Push(newRequest);
+
+                        LOG_TRAIN_MODEL("Train powerStatus = %d, Train ID = %d", powerStatus, trainId);
+                        break;
+                    } else{
+                        // POSITION
+                        positionCalc = (velocityCalc/samplePeriod);
+                        // float currentPosition = previousPosition + positionCalc;
+                        currentPosition = previousPosition + 50;
+                    }
+                    if(currentPosition > currentBlockSize) {
+                        // Move to the next block!
+                        currentPosition = currentPosition - currentBlockSize; // Catch overflow into next block
+                        tempTrain->SetPosition(currentPosition); // Update position
+                        tempTrain->RemoveCurrentBlock(); // Remove the block train is on to move to nect block
+
+                        LOG_TRAIN_MODEL("Current block is now %d", tempTrain->GetCurrentBlock());
+
+                        // Send block exited to Evan (trainid, trackid, blockId, trainOrNot)
+                        Common::Request newRequest1(Common::RequestCode::TRACK_MODEL_UPDATE_OCCUPANCY);
+                        newRequest1.AppendData(std::to_string(trainId));
+                        newRequest1.AppendData(std::to_string(currentTrack));
+                        newRequest1.AppendData(std::to_string(currentBlock)); // This is now the old block
+                        newRequest1.AppendData(std::to_string(0));
+                        TrackModel::serviceQueue.Push(newRequest1);
+
+                        // Send block entered to Evan (trainid, trackid, blockId, trainOrNot)
+                        Common::Request newRequest2(Common::RequestCode::TRACK_MODEL_UPDATE_OCCUPANCY);
+                        newRequest2.AppendData(std::to_string(trainId));
+                        newRequest2.AppendData(std::to_string(currentTrack));
+                        newRequest2.AppendData(std::to_string(tempTrain->GetCurrentBlock()));
+                        newRequest2.AppendData(std::to_string(1));
+                        TrackModel::serviceQueue.Push(newRequest2);
+                    } else{
+                        LOG_TRAIN_MODEL("Staying in the same block: currentPosition = %f, blockSize = %f", currentPosition, currentBlockSize);
+                        // Still in the same block
+                        tempTrain->SetPosition(currentPosition);
+                    }
+
+                    // Set all the parameters in the train object
                     tempTrain->SetPower(powerStatus);
+                    tempTrain->SetCurrentSpeed(velocityCalc);
+
+                    // Send to Collin
+                    Common::Request newRequest(Common::RequestCode::SWTRAIN_UPDATE_CURRENT_SPEED);
+                    newRequest.AppendData(std::to_string(trainId));
+                    newRequest.AppendData(std::to_string(velocityCalc));
+                    SWTrainController::serviceQueue.Push(newRequest);
 
                     LOG_TRAIN_MODEL("Train powerStatus = %d, Train ID = %d", powerStatus, trainId);
                     break;
@@ -279,7 +396,7 @@ Common::ServiceQueue<Common::Request> serviceQueue;
                 {
                     // IMPLEMENTATION
                     uint32_t trainId = receivedRequest.ParseData<uint32_t>(0);
-                    uint32_t modeStatus = receivedRequest.ParseData<uint32_t>(1);
+                    bool modeStatus = receivedRequest.ParseData<bool>(1);
 
                     Train *tempTrain = TrainCatalogue::GetInstance().GetTrain(trainId-1);
                     tempTrain->SetMode(modeStatus);

@@ -37,7 +37,7 @@ Controller::Controller()
  * @param curr_sp = current speed
  * @param auth = authority
  */
-Controller::Controller(int com_sp, int curr_sp, bool auth)
+Controller::Controller(float com_sp, float curr_sp, bool auth)
 {
     command_speed = com_sp;
     current_speed = curr_sp;
@@ -67,7 +67,7 @@ Controller::Controller(int com_sp, int curr_sp, bool auth)
  * @brief Setter function for Kp
  * @param KP = kp
  */
-void Controller::setKp(int KP)
+void Controller::setKp(float KP)
 {
     kp = KP;
 }
@@ -76,7 +76,7 @@ void Controller::setKp(int KP)
  * @brief Setter function for Ki
  * @param KI = ki
  */
-void Controller::setKi(int KI)
+void Controller::setKi(float KI)
 {
     ki = KI;
 }
@@ -85,7 +85,7 @@ void Controller::setKi(int KI)
  * @brief Setter function for command speed
  * @param com_sp == command_speed
  */
-void Controller::setCommandSpeed(int com_sp)
+void Controller::setCommandSpeed(float com_sp)
 {
     command_speed = com_sp;
 }
@@ -94,7 +94,7 @@ void Controller::setCommandSpeed(int com_sp)
  * @brief Setter function for current speed
  * @param curr_sp == current_speed
  */
-void Controller::setCurrentSpeed(int curr_sp)
+void Controller::setCurrentSpeed(float curr_sp)
 {
     current_speed = curr_sp;
 }
@@ -103,7 +103,7 @@ void Controller::setCurrentSpeed(int curr_sp)
  * @brief Setter function for setpoint speed
  * @param setp_sp == setpoint speed
  */
-void Controller::setSetpointSpeed(int setp_sp)
+void Controller::setSetpointSpeed(float setp_sp)
 {
     setpoint_speed = setp_sp;
 }
@@ -121,7 +121,7 @@ void Controller::setAuthority(bool auth)
  * @brief Getter function for command speed
  * @return command_speed
  */
-int Controller::getCommandSpeed()
+float Controller::getCommandSpeed()
 {
     return command_speed;
 }
@@ -130,7 +130,7 @@ int Controller::getCommandSpeed()
  * @brief Getter function for current speed
  * @return current_speed
  */
-int Controller::getCurrentSpeed()
+float Controller::getCurrentSpeed()
 {
     return current_speed;
 }
@@ -139,7 +139,7 @@ int Controller::getCurrentSpeed()
  * @brief Getter function for setpoint speed
  * @return setpoint speed
  */
-int Controller::getSetpointSpeed()
+float Controller::getSetpointSpeed()
 {
     return setpoint_speed;
 }
@@ -156,7 +156,7 @@ bool Controller::getAuthority()
 /**
  * @brief Getter function for power command
  */
-int Controller::getPowerCommand()
+float Controller::getPowerCommand()
 {
     return power_command;
 }
@@ -219,7 +219,7 @@ bool Controller::getAds()
 void Controller::calculatePower()
 {
     // Find Verror depending on mode
-    int Verror = 0;
+    float Verror = 0;
     if (mode == 0) // Automatic Mode
         Verror = command_speed - current_speed;
     else // Manual Mode
@@ -346,7 +346,7 @@ bool Controller::toggleAds()
  * @brief sets temperature of train cabin
  * @param temp = temperature cabin is set to
  */
-void Controller::setCabinTemp(int temp)
+void Controller::setCabinTemp(float temp)
 {
     NVO.temperature = temp;
 }
@@ -355,7 +355,7 @@ void Controller::setCabinTemp(int temp)
  * @brief gets temperature of train cabin
  * @return returns temperature of cabin
  */
-int Controller::getCabinTemp()
+float Controller::getCabinTemp()
 {
     return NVO.temperature;
 }
