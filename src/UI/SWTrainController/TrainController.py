@@ -549,6 +549,8 @@ class SWTrainUi(QtWidgets.QMainWindow):
             return
 
         signals.swtrain_gui_set_kp_ki.emit(int(self.current_train_id) - 1, float(Kp), float(Ki))
+        # Turn service brake off to begin moving
+        control_system.p_controllers[int(self.current_train_id) - 1].service_brake = False
         self.update_gui()
 
     def logout(self):
