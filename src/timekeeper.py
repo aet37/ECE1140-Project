@@ -8,6 +8,7 @@ from src.logger import get_logger
 
 logger = get_logger(__name__)
 
+# pylint: disable=too-many-instance-attributes
 class Timekeeper:
     """Class responsible for keeping the system time"""
     def __init__(self):
