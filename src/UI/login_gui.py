@@ -2,6 +2,8 @@
 
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import Qt
+import sys
+sys.path.append(".")
 
 from src.UI.window_manager import window_list
 from src.timekeeper import timekeeper
@@ -11,6 +13,7 @@ from src.UI.SWTrackController.swtrack_gui import SWTrackControllerUi
 from src.UI.TrackModel.trackmodel_gui import TrackModelUi
 from src.UI.TrainModel.trainmodel_gui import TrainModelUi
 from src.UI.SWTrainController.TrainController import SWTrainUi
+
 class LoginUi(QtWidgets.QMainWindow):
     """Page shown to user upon application startup"""
     def __init__(self):
@@ -26,6 +29,9 @@ class LoginUi(QtWidgets.QMainWindow):
 
         self.show()
 
+    def stuff(self):
+        print(window_list.remove(self))
+
     def login_parse(self):
         """Checks the user's credentials and starts the specific module's ui if correct"""
         username = self.username_in.text()
@@ -39,12 +45,6 @@ class LoginUi(QtWidgets.QMainWindow):
             window_list.append(SWTrackControllerUi())
         elif username == "ctc" and password == "jerry":
             window_list.append(CTCUi())
-        elif username == "hwtrain" and password == "jerry":
-<<<<<<< HEAD
-            file_path = 'src/UI/HWTrainController/HWTrainController_gui.py'
-=======
-            pass
->>>>>>> origin/master
         elif username == "swtrain" and password == "jerry":
             window_list.append(SWTrainUi())
         elif username == "timekeeper" and password == "jerry":
@@ -53,6 +53,8 @@ class LoginUi(QtWidgets.QMainWindow):
             self.alert_login.setStyleSheet("color: red;")
             return
 
+        self.alert_login.setStyleSheet("color: rgb(133, 158, 166);")
+
     # pylint: disable=invalid-name
     def keyPressEvent(self, event):
         """Handles a keypress event"""
@@ -60,12 +62,3 @@ class LoginUi(QtWidgets.QMainWindow):
             super().keyPressEvent(event)
         else:
             self.login_parse()
-
-    def closeEvent(self, event):
-        """Method to run when the login page is closed"""
-        # Kill timer thread
-        timekeeper.running = False
-        timekeeper.timer_thread.join()
-
-        # Close all the windows
-        window_list.clear()
