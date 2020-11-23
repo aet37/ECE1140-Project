@@ -10,8 +10,8 @@ MAX_POWER = 120000 # Units for max power are kW
 # Define automatic to manual override password
 PASSWORD = "override"
 
-# Define sampling period for calculating power
-T = 0.25
+# Define sampling period for calculating power (1/10th of a second)
+T = 0.10
 
 class Controller:
     """ Defines controller to be used on each train """
@@ -30,7 +30,7 @@ class Controller:
         self.power_command = 0
         self.authority = auth
         self.mode = False # 0 = Automatic, 1 = Manual
-        self.service_brake = False
+        self.service_brake = True
         self.emergency_brake = False
 
         # Train Engineer inputs
