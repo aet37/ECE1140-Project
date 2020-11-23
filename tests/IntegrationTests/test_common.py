@@ -3,7 +3,7 @@
 import sys
 import pytest
 
-sys.path.insert(1, '.')
+sys.path.append(".")
 from main import start, cleanup
 from src.signals import signals
 from src.TrainModel.TrainCatalogue import train_catalogue

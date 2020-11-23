@@ -6,6 +6,7 @@
 
 from src.SWTrainController.Controller import Controller
 from src.signals import signals
+from serial.serialutil import SerialException
 
 class ControlSystem:
     """ Defines controller sytem that encompasses all active train controllers """
@@ -40,13 +41,23 @@ class ControlSystem:
 
     def create_new_controller(self, com_sp, curr_sp, auth):
         """ Method to create new controller instance """
-        # Create new controller
         # TRY TO CONNECT TO ARDUINO
-        # EXCEPT IF NOT CONNECTED
-        p_temp = Controller(com_sp, curr_sp, auth)
+        if len(self.p_controllers) == 0:
+            try:
+                # Try appending one of Tyler's objects into p_controllers
+                raise SerialException
+                pass
+            except SerialException:
+                # EXCEPT IF NOT CONNECTED
+                print("No arduino")
+                p_temp = Controller(com_sp, curr_sp, auth)
+                self.p_controllers.append(p_temp)
+        else:
+            # Create a new controller
+            p_temp = Controller(com_sp, curr_sp, auth)
 
-        # Add controller to vector of controllers (Keep everything singleton)
-        self.p_controllers.append(p_temp)
+            # Add controller to vector of controllers (Keep everything singleton)
+            self.p_controllers.append(p_temp)
 
     def get_amount_of_controllers(self):
         """ Returns amount of controllers in system """
