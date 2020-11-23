@@ -53,6 +53,8 @@ class LoginUi(QtWidgets.QMainWindow):
             self.alert_login.setStyleSheet("color: red;")
             return
 
+        self.alert_login.setStyleSheet("color: rgb(133, 158, 166);")
+
     # pylint: disable=invalid-name
     def keyPressEvent(self, event):
         """Handles a keypress event"""

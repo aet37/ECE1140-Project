@@ -10,9 +10,11 @@ logger = logging.getLogger(__name__)
 
 
 
+
 HOST = '18.188.207.58' # Luke's Server
 # HOST = '3.23.104.34'  # Andrew's Server: The server's hostname or IP address
 # HOST = '3.137.149.231' # Kenny's Server
+
 
 PORT = 1234        # The port used by the server
 
