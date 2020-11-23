@@ -1,11 +1,13 @@
 """API for the HW Track Controller Module."""
 
 from argparse import ArgumentParser
+from enum import Enum
 import socket
 import sys
 import logging
 import polling
 import serial
+from src.SWTrainController.Controller import Controller
 
 logger = logging.getLogger(__name__)
 
@@ -22,10 +24,12 @@ SERIAL_PORT = 'COM6'
 RATE = 9600
 arduino = serial.Serial(SERIAL_PORT, RATE, timeout=5)
 
-class Codes:
+class Codes(Enum):
+    HWTRAIN_PULL_EBRAKE = 224
+    HWTRAIN_SET_SETPOINT_SPEED = 225
     #PUT ALL MY REQUEST CODES HERE
 
-class HWController:
+class HWController(Controller):
     def __init__(self):
         try:
             self.arduino = serial.Serial(SERIAL_PORT, RATE, timeout=5)
