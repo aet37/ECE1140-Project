@@ -37,5 +37,8 @@ jobs:
         pytest --setup-show
         popd
 
+    - name: Run SWTrain tests
+      run: pytest tests/UnitTests/SWTrainController/ControllerUT.py
+
     - name: Run Common tests
       run: pytest tests/IntegrationTests/test_common.py
