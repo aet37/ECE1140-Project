@@ -1,7 +1,7 @@
 """Module for the track controller module"""
 
 from serial.serialutil import SerialException
-from src.common_def import Line
+from src.common_def import Line, pairwise
 from src.SWTrackController.track_controller import TrackController
 from src.HWTrackController.hw_track_controller_connector import HWTrackCtrlConnector
 from src.signals import signals
@@ -59,11 +59,6 @@ class TrackSystem:
 
         # Check whether the plc program will give the train authority
         authority = track_controllers[0].get_authority_of_block(0)
-
-        # Function used to iterate list in pairs
-        def pairwise(iterable):
-            a = iter(iterable)
-            return zip(a, a)
 
         # Gather all of the switch positions in case they've changed
         switch_positions = []

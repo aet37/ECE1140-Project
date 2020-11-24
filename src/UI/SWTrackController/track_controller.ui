@@ -266,7 +266,7 @@
               </font>
              </property>
              <property name="text">
-              <string>0</string>
+              <string>-</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -325,7 +325,7 @@
               </font>
              </property>
              <property name="text">
-              <string>OK</string>
+              <string>-</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -384,7 +384,7 @@
               </font>
              </property>
              <property name="text">
-              <string>N/A</string>
+              <string>-</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -443,7 +443,7 @@
               </font>
              </property>
              <property name="text">
-              <string>NO</string>
+              <string>-</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -502,7 +502,7 @@
               </font>
              </property>
              <property name="text">
-              <string>RED</string>
+              <string>-</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -560,7 +560,7 @@
            <item>
             <widget class="QLabel" name="track_heater_label">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -573,7 +573,7 @@
               </font>
              </property>
              <property name="text">
-              <string>OFF</string>
+              <string>-</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -729,7 +729,7 @@
               </font>
              </property>
              <property name="text">
-              <string>NO</string>
+              <string>-</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -788,7 +788,7 @@
               </font>
              </property>
              <property name="text">
-              <string>25 MPH</string>
+              <string>-</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -847,7 +847,7 @@
               </font>
              </property>
              <property name="text">
-              <string>25 MPH</string>
+              <string>-</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
