@@ -177,6 +177,41 @@ def test_ote_instruction(connector):
     connector.send_message("{}".format(Code.END_DOWNLOAD.value))
     assert connector.get_response() == b'0'
 
+def test_get_all_tag_values(connector):
+    """Downloads a program with just tags and verifies the GET_ALL_TAG_VALUES command"""
+    # Start download
+    connector.send_message("{}".format(Code.START_DOWNLOAD.value))
+    assert connector.get_response() == b'0'
+
+    # Create tags
+    connector.send_message("{} {} {}".format(Code.CREATE_TAG.value,
+                                             "heater",
+                                             "FALSE"))
+    assert connector.get_response() == b'0'
+
+    connector.send_message("{} {} {}".format(Code.CREATE_TAG.value,
+                                             "switch",
+                                             "FALSE"))
+    assert connector.get_response() == b'0'
+
+    connector.send_message("{} {} {}".format(Code.CREATE_TAG.value,
+                                             "b0O",
+                                             "TRUE"))
+    assert connector.get_response() == b'0'
+
+    connector.send_message("{} {} {}".format(Code.CREATE_TAG.value,
+                                             "output2",
+                                             "FALSE"))
+    assert connector.get_response() == b'0'
+
+    # End download
+    connector.send_message("{}".format(Code.END_DOWNLOAD.value))
+    assert connector.get_response() == b'0'
+
+    # Test the GET_ALL_TAG_VALUES command
+    connector.send_message("{}".format(Code.GET_ALL_TAG_VALUES.value))
+    assert connector.get_response() == b"heater 0 switch 0 b0O 1 output2 0"
+
 
 if __name__ == "__main__":
     raise Exception("Run using pytest")
