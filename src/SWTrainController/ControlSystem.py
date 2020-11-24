@@ -14,9 +14,6 @@ class ControlSystem:
     """ Defines controller sytem that encompasses all active train controllers """
 
     def __init__(self):
-        # Controllers
-        self.p_controllers = []
-
         # Receive setpoint speed signal
         signals.swtrain_gui_set_setpoint_speed.connect(self.swtrain_gui_set_setpoint_speed)
         # Receive service brake signal
