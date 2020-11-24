@@ -11,7 +11,6 @@ from src.SWTrackController.Compiler.parse import Parser
 
 from src.UI.Common.common import Alert, Confirmation
 from src.UI.window_manager import window_list
-from src.SWTrackController.TrackSystem import track_system
 from src.HWTrackController.hw_track_controller_connector import HWTrackCtrlConnector
 
 class SWTrackControllerUi(QtWidgets.QMainWindow):

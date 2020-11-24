@@ -39,8 +39,6 @@ jobs:
 
     - name: Run SWTrain tests
       run: pytest tests/UnitTests/SWTrainController/ControllerUT.py
-    - name: Run TrainModel-SWTrain Tests
-      run: pytest tests/IntegrationTests/test_trainmodel_swtrain.py
 
     - name: Run Common tests
       run: pytest tests/IntegrationTests/test_common.py

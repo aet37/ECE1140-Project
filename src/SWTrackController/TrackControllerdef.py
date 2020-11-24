@@ -2,7 +2,7 @@
 
 class TrackController:
 
-    def __init__(self, controller_id, mystery_argument):
+    def __init__(self, controller_id):
        # self.PLC_Program = 
 
         self.id = controller_id
