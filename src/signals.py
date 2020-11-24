@@ -9,7 +9,6 @@ from src.common_def import *
 class SignalsClass(QObject):
     """Class to hold all the signals"""
     timer_expired = pyqtSignal(int, int, int, int) # Current day, hours, minutes, seconds
-    lights_toggled = pyqtSignal(bool)
 
     # CTC Signals
     #update_green_occupancies = pyqtSignal(list)	# Used by SWTrack Controller to send CTC green line occupancies in array of BOOL

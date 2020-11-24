@@ -6,6 +6,9 @@
 
 from src.SWTrainController.Controller import Controller
 from src.signals import signals
+from src.logger import get_logger
+
+logger = get_logger(__name__)
 
 class ControlSystem:
     """ Defines controller sytem that encompasses all active train controllers """
@@ -55,6 +58,7 @@ class ControlSystem:
     ### SIGNAL DEFINITIONS ###
     def swtrain_dispatch_train(self, com_sp, curr_sp, auth):
         """ Handler for swtrain_dispatch_train signal """
+        logger.critical("Received swtrain_dispatch_train")
         control_system.create_new_controller(com_sp, curr_sp, auth)
 
     def swtrain_gui_switch_mode(self, train_id, override):

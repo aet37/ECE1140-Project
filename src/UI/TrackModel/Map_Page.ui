@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1237</width>
+    <width>1163</width>
     <height>898</height>
    </rect>
   </property>
@@ -89,7 +89,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        <enum>Qt::LeftToRight</enum>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="text">
        <string>Track Model Main Page</string>
@@ -152,8 +152,13 @@ QTabBar:: {background-color: rgb(255,255,255); }
         <height>30</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(0, 170, 0);</string>
+       <string notr="true">background-color: rgb(182, 215, 168);</string>
       </property>
       <property name="text">
        <string>Add Track Layout</string>
@@ -174,7 +179,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -201,13 +206,13 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Block Length:&lt;br/&gt;&lt;/p&gt;&lt;p&gt;50 m&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Block Length:&lt;br/&gt;&lt;/p&gt;&lt;p&gt;## m&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -228,7 +233,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -255,7 +260,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -282,7 +287,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -309,7 +314,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -336,7 +341,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
@@ -363,7 +368,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -390,7 +395,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -417,13 +422,13 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Underground:&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Yes&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Underground:&lt;br/&gt;&lt;/p&gt;&lt;p&gt;NA&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -444,7 +449,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -471,13 +476,13 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Passengers exit to:&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Right&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Passengers exit to:&lt;br/&gt;&lt;/p&gt;&lt;p&gt;NA&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -498,7 +503,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -525,7 +530,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -552,7 +557,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -579,7 +584,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
@@ -609,7 +614,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        <enum>Qt::LeftToRight</enum>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="text">
        <string>Block #</string>
@@ -633,7 +638,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
@@ -660,13 +665,13 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(85, 255, 127);</string>
+       <string notr="true">background-color: rgb(255, 229, 153);</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Speed Limit:&lt;br/&gt;&lt;/p&gt;&lt;p&gt;50 Km/Hr&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Speed Limit:&lt;br/&gt;&lt;/p&gt;&lt;p&gt;## Km/Hr&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -682,7 +687,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 0, 0);</string>
+       <string notr="true">background-color: rgb(234, 153, 153);</string>
       </property>
       <property name="text">
        <string>Off</string>
@@ -692,6 +697,51 @@ QTabBar:: {background-color: rgb(255,255,255); }
       </property>
       <property name="checked">
        <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="logout_button_2">
+      <property name="geometry">
+       <rect>
+        <x>480</x>
+        <y>220</y>
+        <width>200</width>
+        <height>60</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>1347</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>13</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(234, 153, 153);</string>
+      </property>
+      <property name="text">
+       <string>Create Track Faiure</string>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
       </property>
      </widget>
     </widget>
