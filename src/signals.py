@@ -52,6 +52,7 @@ class SignalsClass(QObject):
     train_model_receive_power = pyqtSignal(int, float) #  Used by the sw train controller to set a train's kp/ki FORMAT: (train_id, power_update)
     train_model_gui_receive_mode = pyqtSignal(int, bool) #  Used by gui to switch between automatic and manual mode FORMAT: (train_id, mode_status)
     train_model_something_has_been_changed = pyqtSignal() #  Used by gui to know that something has been changed FORMAT: ()
+    train_model_dropdown_has_been_changed = pyqtSignal() #  Used by gui to know that something has been changed FORMAT: ()
 
     # SWTrainController Signals
     swtrain_gui_toggle_cabin_lights = pyqtSignal(int) # TrainID

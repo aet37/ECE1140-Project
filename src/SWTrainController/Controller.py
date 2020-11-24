@@ -3,6 +3,7 @@
 
     Date: 10.7.20
 """
+from src.common_def import Converters
 
 # Defines the maximum power of the train engine
 MAX_POWER = 120000 # Units for max power are kW
@@ -11,7 +12,7 @@ MAX_POWER = 120000 # Units for max power are kW
 PASSWORD = "override"
 
 # Define sampling period for calculating power (1/10th of a second)
-T = 0.10
+T = 0.2
 
 class Controller:
     """ Defines controller to be used on each train """
@@ -71,12 +72,20 @@ class Controller:
                 ek/ek1: m/s
                 uk/uk1: m
         """
+        # Convert Command Speed, Current Speed, and Setpoint Speed into m/s
+        self.convert_command_speed = self.command_speed * Converters.KmHr_to_mps
+        self.convert_current_speed = self.current_speed * Converters.MPH_to_mps
+        self.convert_setpoint_speed = self.setpoint_speed * Converters.MPH_to_mps
+
         # Find Verror depending on mode
         velocity_error = 0
-        if self.mode == 0: # Automatic Mode
-            velocity_error = self.command_speed - self.current_speed
-        else: # Manual Mode
-            velocity_error = self.setpoint_speed - self.current_speed
+        if self.service_brake == False:
+            if self.mode == 0: # Automatic Mode
+                velocity_error = self.convert_command_speed - self.convert_current_speed
+            else: # Manual Mode
+                velocity_error = self.convert_setpoint_speed - self.convert_current_speed
+        else:
+            velocity_error = 0 - self.convert_current_speed
 
         # Set ek as the kth sample of velocity error
         self.ek = velocity_error
@@ -89,9 +98,9 @@ class Controller:
             self.uk = self.uk1
 
         # Find power command
-        if self.service_brake:
-            self.power_command = 0
-        elif(self.power_command > 120000):
+        #if self.service_brake:
+        #    self.power_command = 0
+        if(self.power_command > 120000):
             self.power_command = 120000
         else:
             self.power_command = (self.kp * self.ek) + (self.ki * self.uk)

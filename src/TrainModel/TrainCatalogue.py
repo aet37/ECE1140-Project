@@ -11,15 +11,27 @@ from src.TrainModel.Block import Block
 from src.TrainModel.BlockCatalogue import block_catalogue
 from src.signals import signals
 from src.logger import get_logger
+from src.common_def import Converters
 
 logger = get_logger(__name__)
 class TrainCatalogue:
+
+    
     # Call "m_trainlist.count()" for amount of trains
     # Call "m_trainlist.append()" to add a train
     # Call "m_trainlist[#]" to load a specific train
     def __init__ (self):
         self.m_trainList = []
         self.m_blockList = []
+
+        # Acceleration Limit: 0.5 m/s^2     Deceleration Limit(service brake): 1.2 m/s^2    Deceleration Limit(emergency brake): 2.73 m/s^2
+        self.MAX_FORCE = 18551.9333
+        self.GRAVITY = 9.8
+        self.FRICTION_COEFFICIENT = 0.01
+        self.ACCELERATION_LIMIT = 0.5
+        self.DECELERATION_LIMIT_SERVICE = -1.2
+        self.DECELERATION_LIMIT_EMERGENCY = -2.73
+        self.VELOCITY_LIMIT = 19.4444
 
         # Receive dispatch train signal
         signals.train_model_dispatch_train.connect(self.train_model_dispatch_train)
@@ -53,7 +65,7 @@ class TrainCatalogue:
 
         # Edit the train with the dispatched values
         newTrain.m_destinationBlock = destinationBlock
-        newTrain.m_commandSpeed = commandSpeed
+        newTrain.m_commandSpeed = commandSpeed * Converters.KmHr_to_MPH
         newTrain.m_authority = authority
         newTrain.m_currentLine = currentLine
 
@@ -64,7 +76,7 @@ class TrainCatalogue:
         signals.swtrain_dispatch_train.emit(commandSpeed, 0, authority)
 
         # Tell the gui something has changed
-        signals.train_model_something_has_been_changed.emit()
+        signals.train_model_dropdown_has_been_changed.emit()
         
     # @brief Toggles the train lights
     def train_model_receive_lights(self, trainId, cabinLights):
@@ -113,29 +125,33 @@ class TrainCatalogue:
 
         # currentBlockSize = self.m_blockList[currentBlock].m_sizeOfBlock
         # speedLimitBlock = self.m_blockList[currentBlock].m_speedLimit
-        currentBlockSize = 10000
-        speedLimitBlock = 70
+        currentBlockSize = 10000 # meters
+        speedLimitBlock = 70 # Km/hr
+        speedLimitBlock = speedLimitBlock * Converters.KmHr_to_mps
 
         # LOG_TRAIN_MODEL("currentBlockSize = %f", currentBlockSize);
 
         commandSpeed = self.m_trainList[trainId].m_commandSpeed
-        currentSpeed = self.m_trainList[trainId].m_currentSpeed
+        commandSpeed = commandSpeed * Converters.KmHr_to_mps # m/s
+        currentSpeed = self.m_trainList[trainId].m_currentSpeed # m/s
+        currentSpeed = currentSpeed * Converters.MPH_to_mps
         previousPosition = self.m_trainList[trainId].m_position
         trainMass = self.m_trainList[trainId].m_trainMass
-        trainMass = trainMass * 907.1850030836 # Convert to grams
+        trainMass = trainMass * Converters.Tons_to_kg # kg
         serviceBrake = self.m_trainList[trainId].m_serviceBrake
         emergencyBrake = self.m_trainList[trainId].m_emergencyPassengeBrake
-        samplePeriod = 1/10 # ASK COLLIN FOR SAMPLE PERIOD
+        samplePeriod = 1/5 # ASK COLLIN FOR SAMPLE PERIOD
         
+        logger.debug("powerStatus = %f", powerStatus)
 
         # FORCE
         try:
             forceCalc = (powerStatus/currentSpeed)
-            forceCalc -= (0.01) * (trainMass) * (9.8)
+            forceCalc -= self.FRICTION_COEFFICIENT * (trainMass) * self.GRAVITY
         except ZeroDivisionError:
             if(not serviceBrake):
-                forceCalc = 25718.69483742006
-                forceCalc -= (0.01) * (trainMass) * (9.8)
+                forceCalc = self.FRICTION_COEFFICIENT * (trainMass) * self.GRAVITY + 1000
+                forceCalc -= self.FRICTION_COEFFICIENT * (trainMass) * self.GRAVITY
             else:
                 forceCalc = 0.0
 
@@ -144,25 +160,29 @@ class TrainCatalogue:
         # ACCELERATION
         accelerationCalc = (forceCalc/trainMass) # Acceleration Limit: 0.5 m/s^2     Deceleration Limit(service brake): 1.2 m/s^2    Deceleration Limit(emergency brake): 2.73 m/s^2
         logger.debug("accelerationCalc = %f", accelerationCalc)
-        if (accelerationCalc > 0.5 and not serviceBrake and not emergencyBrake):
+        if (accelerationCalc > self.ACCELERATION_LIMIT and not serviceBrake and not emergencyBrake):
             # If all brakes are OFF and accelerationCalc is above the limit
-            accelerationCalc = 0.5
-        elif (accelerationCalc < -1.2 and serviceBrake and not emergencyBrake):
+            accelerationCalc = self.ACCELERATION_LIMIT
+        elif (accelerationCalc < self.DECELERATION_LIMIT_SERVICE and serviceBrake and not emergencyBrake):
             # If the service brake is ON and accelerationCalc is below the limit
-            accelerationCalc = -1.2
-        elif (accelerationCalc < -2.73 and not serviceBrake and emergencyBrake):
+            accelerationCalc = self.DECELERATION_LIMIT_SERVICE
+        elif (accelerationCalc < self.DECELERATION_LIMIT_EMERGENCY and not serviceBrake and emergencyBrake):
             # If the emergency brake is ON and accelerationCalc is below the limit
-            accelerationCalc = -2.73
+            accelerationCalc = self.DECELERATION_LIMIT_EMERGENCY
 
         # VELOCITY
-        velocityCalc = currentSpeed + (accelerationCalc/samplePeriod) # Velocity Limit: 70km/h
-        logger.debug("velocityCalc = %f", velocityCalc)
-        if(velocityCalc > 70):
+        velocityCalc = currentSpeed + (accelerationCalc/samplePeriod) # Velocity Limit: 19.4444 m/s
+        logger.debug("velocityCalc in MPH = %f", velocityCalc * Converters.mps_to_MPH)
+        if(velocityCalc >= self.VELOCITY_LIMIT):
             # If the velocity is GREATER than max train speed
-            velocityCalc = 70 # km/h
-        if(velocityCalc > speedLimitBlock):
+            velocityCalc = self.VELOCITY_LIMIT # m/s
+        if(velocityCalc >= speedLimitBlock):
             # If the velocity is GREATER than the block's speed limit
             velocityCalc = speedLimitBlock
+            logger.debug("speedLimitBlock = %f", speedLimitBlock)
+        if(velocityCalc <= 0):
+            # If the velocity is LESS than 0
+            velocityCalc = 0
 
         currentPosition = 0
         positionCalc = 0
@@ -212,10 +232,11 @@ class TrainCatalogue:
 
         # Set all the parameters in the train object
         self.m_trainList[trainId].m_power = powerStatus
-        self.m_trainList[trainId].m_currentSpeed = velocityCalc
+        self.m_trainList[trainId].m_currentSpeed = velocityCalc * Converters.mps_to_MPH
 
         # Send to Collin
-        signals.swtrain_update_current_speed.emit(trainId, velocityCalc)
+        signals.swtrain_update_current_speed.emit(trainId, velocityCalc * Converters.mps_to_MPH)
+        # if((accelerationCalc/samplePeriod) > 0): # Check for an actual change
         signals.train_model_something_has_been_changed.emit()
 
         # LOG_TRAIN_MODEL("Train powerStatus = %d, Train ID = %d", powerStatus, trainId)
