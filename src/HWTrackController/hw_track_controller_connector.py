@@ -91,10 +91,24 @@ class HWTrackCtrlConnector(TrackController):
 
         progress.exec()
 
-    def set_track_heater(self, status):
-        """Method to set the track heater
-        
-        :param bool status: Whether heater should be on or off
+    def get_tag_value(self, tag_name):
+        """Gets a tag's value from inside the plc
+
+        :param str tag_name: Name of the tag
+
+        :return: Value of the tag
+        :rtype: bool
         """
-        self.send_message(" ".join(map(str, (Code.SET_TAG_VALUE.value, "heater", int(status)))))
+        self.send_message(" ".join((str(Code.GET_TAG_VALUE.value), tag_name)))
+        response = self.get_response()
+        if (len(response.split()) == 2):
+            return bool(int(response.split()[1]))
+
+    def set_tag_value(self, tag_name, value):
+        """Sets a tag's value inside the plc
+
+        :param str tag_name: Name of the tag
+        :param bool value: Value to set to the tag to
+        """
+        self.send_message(" ".join(map(str, (Code.SET_TAG_VALUE.value, tag_name, int(value)))))
         logger.info(self.get_response())

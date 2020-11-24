@@ -14,6 +14,9 @@ from src.UI.window_manager import window_list
 from src.signals import signals
 from src.common_def import Line
 from src.SWTrackController.track_system import track_system
+from src.logger import get_logger
+
+logger = get_logger(__name__)
 
 class SWTrackControllerUi(QtWidgets.QMainWindow):
     """GUI for the track controller module"""
