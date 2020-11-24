@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QPushButton, QStackedWidget, QLabel, QComboBox
 import sys
 from PyQt5.QtCore import QTimer
 #from src.UI.server_functions import *
-#from src.UI.window_manager import window_list
+from src.UI.window_manager import window_list
 import pyexcel
 import pyexcel_io
 import json

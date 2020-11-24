@@ -84,6 +84,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         # Define Signal Connections #
         signals.swtrain_dispatch_train.connect(self.update_controller_list)
         signals.train_model_receive_power.connect(self.update_gui)
+        signals.swtrain_update_current_speed.connect(self.update_gui)
 
         # Define function so comboboxes change synchronously #
         self.TrainIDBox.currentIndexChanged.connect(self.update_dropdowns)

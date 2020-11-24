@@ -29,6 +29,8 @@ class ControlSystem:
         signals.swtrain_gui_set_kp_ki.connect(self.swtrain_gui_set_kp_ki)
         # Receive time trigger to calculate power
         signals.swtrain_time_trigger.connect(self.swtrain_time_trigger)
+        # Receive current speed
+        signals.swtrain_update_current_speed.connect(self.swtrain_update_current_speed)
 
         ## RECEIVE NONVITAL SIGNALS ##
         # Receive lights signal
@@ -97,6 +99,10 @@ class ControlSystem:
             self.p_controllers[train_id].calculate_power()
             # Send train_id and power to train model
             signals.train_model_receive_power.emit(train_id, self.p_controllers[train_id].power_command)
+
+    def swtrain_update_current_speed(self, train_id, curr_speed):
+        """ Updates current speed in train controller """
+        self.p_controllers[train_id].current_speed = curr_speed
 
 
     ## NonVital Signal Definitions ##

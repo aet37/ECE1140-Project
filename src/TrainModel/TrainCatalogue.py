@@ -34,6 +34,8 @@ class TrainCatalogue:
         signals.train_model_gui_receive_mode.connect(self.train_model_gui_receive_mode)
         # Receive service brake signal
         signals.train_model_gui_receive_service_brake.connect(self.train_model_gui_receive_service_brake)
+        # Receive Power Loop signal
+        signals.train_model_receive_power.connect(self.train_model_receive_power)
 
     # print(sys.path)
 
@@ -142,8 +144,8 @@ class TrainCatalogue:
             # If the velocity is GREATER than the block's speed limit
             velocityCalc = speedLimitBlock
 
-        currentPosition = 0;
-        positionCalc = 0;
+        currentPosition = 0
+        positionCalc = 0
 
         if(currentBlock == self.m_trainList[trainId].m_destinationBlock):
             # Set all the parameters in the train object
@@ -151,16 +153,13 @@ class TrainCatalogue:
             self.m_trainList[trainId].m_currentSpeed = 0 # For display stopping purposes
 
             # Send to Collin
-            # Common::Request newRequest(Common::RequestCode::SWTRAIN_UPDATE_CURRENT_SPEED);
-            # newRequest.AppendData(std::to_string(trainId));
-            # newRequest.AppendData(std::to_string(0)); # For display stopping purposes
-            # SWTrainController::serviceQueue.Push(newRequest);
+            signals.swtrain_update_current_speed.emit(trainId, 0)
 
             # LOG_TRAIN_MODEL("Train powerStatus = %d, Train ID = %d", powerStatus, trainId);
         else:
             # POSITION
             positionCalc = (velocityCalc/samplePeriod)
-            currentPosition = previousPosition + positionCalc;
+            currentPosition = previousPosition + positionCalc
             # currentPosition = previousPosition + 50 Hardcoded moving for test
         if(currentPosition > currentBlockSize):
             # Move to the next block!
@@ -195,10 +194,7 @@ class TrainCatalogue:
         self.m_trainList[trainId].m_currentSpeed = velocityCalc
 
         # Send to Collin
-        # Common::Request newRequest(Common::RequestCode::SWTRAIN_UPDATE_CURRENT_SPEED)
-        # newRequest.AppendData(std::to_string(trainId))
-        # newRequest.AppendData(std::to_string(velocityCalc))
-        # SWTrainController::serviceQueue.Push(newRequest)
+        signals.swtrain_update_current_speed.emit(trainId, velocityCalc)
 
         # LOG_TRAIN_MODEL("Train powerStatus = %d, Train ID = %d", powerStatus, trainId)
 
