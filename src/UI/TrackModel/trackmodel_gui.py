@@ -60,7 +60,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
         line = records.column['Line'][1]
         totalBlocks = records.number_of_rows()
         
-        TrackModelDef.SignalHandler.readInData(self, fileInfo)
+        TrackModelDef.SignalHandler.readInData(fileInfo)
         self.addTab(line, totalBlocks)
     
     def addTab(self, line, totalBlocks):
