@@ -32,7 +32,6 @@ class HWTrackCtrlConnector(TrackController):
     """Class responsible for communicating with the hw track controller"""
     def __init__(self):
         self.arduino = serial.Serial(SERIAL_PORT, RATE, timeout=5)
-        sleep(2)
 
         self.comms_lock = threading.Lock()
 
