@@ -9,8 +9,6 @@ from src.SWTrainController.ControlSystem import control_system
 from src.CTC.TrainSystem import ctc
 from src.common_def import Line
 from src.TrackModel import TrackModelDef
-from PyQt5 import QtWidgets, uic
-from PyQt5.QtWidgets import *
 import pyexcel
 import pyexcel_io
 
@@ -18,16 +16,11 @@ def test_dispatch_train(start_app):
     """Tests dispatching a train and ensures all modules react accordingly"""
 
     # Upload track
-    dialogGreen = QtWidgets.QFileDialog()
-    dialogGreen.selectFile("C:/Users/Evan/OneDrive/Documents/GitHub/ECE1140-Project/resources/Green Line.xlsx")
-    fileInfo = dialogGreen.getOpenFileName(self)
-    TrackModelDef.SignalHandler.readInData(self, fileInfo)
+    fileInfoGreen = ['C:/Users/Evan/OneDrive/Documents/GitHub/ECE1140-Project/resources/Green Line.xlsx', 'All Files (*)']
+    TrackModelDef.SignalHandler.readInData(self, fileInfoGreen)
 
-    dialogRed = QtWidgets.QFileDialog(self)
-    dialogRed.selectFile("C:/Users/Evan/OneDrive/Documents/GitHub/ECE1140-Project/resources/Red Line.xlsx")
-    fileInfo = dialogRed.getOpenFileName(self)
-    TrackModelDef.SignalHandler.readInData(self, fileInfo)
-    #TrackModelDef.SignalHandler.readInData("\'C:/Users/Evan/OneDrive/Documents/GitHub/ECE1140-Project/resources/Green Line.xlsx\', \'All Files (*)\')")
+    fileInfoRed = ['C:/Users/Evan/OneDrive/Documents/GitHub/ECE1140-Project/resources/Red Line.xlsx', 'All Files (*)']
+    TrackModelDef.SignalHandler.readInData(self, fileInfoRed)
 
 
     # Send dispatch signal
