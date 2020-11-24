@@ -45,6 +45,11 @@ void Clear()
     tags.Clear();
 }
 
+String GetAllTagValues()
+{
+    return tags.GetAllKeysAndValues();
+}
+
 static void ReadInputs()
 {
     static bool flipped = false;

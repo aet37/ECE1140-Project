@@ -195,6 +195,28 @@ public:
         return false;
     }
 
+    /**
+     * @brief Gets all the keys and values in a list
+     * separated by spaces
+    */
+    String GetAllKeysAndValues() const
+    {
+        String ret = "";
+
+        for (uint32_t i = 0; i < m_size; i++)
+        {
+            if (m_pKeys[i] != "")
+            {
+                ret += m_pKeys[i];
+                ret += " ";
+                ret += String(m_pValues[i]);
+                ret += " ";
+            }
+        }
+
+        return ret;
+    }
+
 protected:
 private:
     /// Array to store keys

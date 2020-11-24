@@ -52,6 +52,7 @@ static RequestCode ParseCode(const String& rMsg)
         case static_cast<int>(RequestCode::HWTRACK_END_DOWNLOAD):
         case static_cast<int>(RequestCode::HWTRACK_GET_TAG_VALUE):
         case static_cast<int>(RequestCode::HWTRACK_SET_TAG_VALUE):
+        case static_cast<int>(RequestCode::HWTRACK_GET_ALL_TAG_VALUES):
             return static_cast<RequestCode>(code);
         default:
             return RequestCode::INVALID;
@@ -350,6 +351,16 @@ static void SetTagValue(const String& rData)
     SendResponse(static_cast<ResponseCode>(!ret));
 }
 
+/**
+ * @brief Gets the values of all tags in the controller
+*/
+static void GetAllTagValues()
+{
+    String allTags = TagDatabase::GetAllTagValues();
+
+    SendResponse(ResponseCode::SUCCESS, allTags.c_str());
+}
+
 void CommsTask(void* pProgram)
 {
     // Quickly return if nothing has been received
@@ -398,6 +409,9 @@ void CommsTask(void* pProgram)
             break;
         case RequestCode::HWTRACK_SET_TAG_VALUE:
             SetTagValue(data);
+            break;
+        case RequestCode::HWTRACK_GET_ALL_TAG_VALUES:
+            GetAllTagValues();
             break;
         default:
             // We expect ParseCode to take care of this case
