@@ -45,6 +45,11 @@ void Clear()
     tags.Clear();
 }
 
+String GetAllTagValues()
+{
+    return tags.GetAllKeysAndValues();
+}
+
 static void ReadInputs()
 {
     static bool flipped = false;
@@ -73,6 +78,11 @@ void IoTask(void* pSomething)
     if (GetTagValue("switch", tagValue))
     {
         digitalWrite(PIN3, tagValue);
+    }
+
+    if (GetTagValue("output4", tagValue))
+    {
+        digitalWrite(PIN4, tagValue);
     }
 }
 

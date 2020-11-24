@@ -1,27 +1,23 @@
 import os
+import sys
 import PyQt5
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QPushButton, QStackedWidget, QLabel, QComboBox
-import sys
 from PyQt5.QtCore import QTimer
 #from src.UI.server_functions import *
 #from src.UI.window_manager import window_list
+import json
 import pyexcel
 import pyexcel_io
-import json
 sys.path.append(".")
-#sys.path.insert(0, "C:\\Users\\Evan\\OneDrive\\Documents\\GitHub\\ECE1140-Project\\src\\TrackModel")
 from src.TrackModel import TrackModelDef
-#sys.path.insert(0, "C:\\Users\\Evan\\OneDrive\\Documents\\GitHub\\ECE1140-Project\\src")
 from src.signals import *
 from src.UI.window_manager import window_list
 
-greenSwitchNumber = 0
-redSwitchNumber = 0
-
 
 class TrackModelUi(QtWidgets.QMainWindow):
-
+    global combo1
+    global combo2
     def __init__(self):
         super().__init__()
         # self.track1_info_timer = QTimer()
@@ -45,154 +41,49 @@ class TrackModelUi(QtWidgets.QMainWindow):
 
         self.show()
 
-        signals.trackmodel_update_occupancy.connect(self.updateOccupancy)
+        # signals.trackmodel_update_occupancy.connect(self.updateOccupancy)
 
     def initUI(self):
         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
         #self.button.clicked.connect(self.trainMenu1)
         addTrackButton = self.findChild(QtWidgets.QPushButton, 'add_track_button')
-        addTrackButton.clicked.connect(self.readInData)
+        addTrackButton.clicked.connect(self.getFileName)
 
         logoutButton = self.findChild(QtWidgets.QPushButton, 'logout_button')
         logoutButton.clicked.connect(self.logout)
 
-    def readInData(self):
-        global greenSwitchNumber
-        global redSwitchNumber
+    def getFileName(self):
         dialog = QtWidgets.QFileDialog(self)
         fileInfo = dialog.getOpenFileName(self)
-
-        testXlsx = fileInfo[0].split('.')
-        if (testXlsx[1] != 'xlsx'):
-            print('File type must be .xlsx, your file was of type: .'+testXlsx[1])
-        else:
-            #print(fileInfo[0])
-            records = pyexcel.get_sheet(file_name=fileInfo[0])
-            records.name_columns_by_row(0)
-            #print (records.number_of_rows())
-            # print(records.content)
-            trackInfo = {}
-            # stationList = []
-            # switchList = []
-            # trackInfo['Stations'] = stationList
-            # trackInfo['Switches'] = switchList
-            # trackInfo['Block List'] = ''
-            # stations = 0;
-
-            if (records.number_of_rows() > 0):
-                # set Line inside trackInfo
-                trackInfo['Track'] = records.column['Line'][1]
-
-                if (records.column['Line'][1] == "Red"):
-                    trackInfo['tNumber'] = 1
-                else:
-                    trackInfo['tNumber'] = 0
-
-                # set totalBlocks inside trackInfo
-                trackInfo['Total Blocks'] = records.number_of_rows()
-
-                newTrack = TrackModelDef.Track(trackInfo['Track'], trackInfo['Total Blocks'], trackInfo['tNumber'])
-                TrackModelDef.trackList.append(newTrack)
-
-                theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
-                line = records.column['Line'][1]
-                #combo1.addItem("Select "+line+" Line block")
-                if (line == "Green"):
-                    theTabWidget.addTab(combo1, line+" Line")
-                    theCombo = combo1
-                    trackNumber = 0
-                elif (line == "Red"):
-                    theTabWidget.addTab(combo2, line+" Line")
-                    theCombo = combo2
-                    trackNumber = 1
-
-
-                for x in range(records.number_of_rows()):
-                    blockInfo = {}
-                    blockNumber = records.column['Block Number'][x]
-                    theCombo.addItem("Block "+str(blockNumber))
-
-                    blockLength = records.column['Block Length (m)'][x]
-                    blockGrade = records.column['Block Grade (%)'][x]
-                    blockSpeedLimit = records.column['Speed Limit (Km/Hr)'][x]
-                    #blockStation = blockStation
-                    #blockSwitch = destinationSwitchList
-                    blockElevation = records.column['Elevation (m)'][x]
-                    blockCumulativeElevation = round(records.column['Cumulative Elevation (m)'][x], 2)
-                    blockDirection = records.column['Direction'][x]
-                    blockSection = records.column['Section'][x]
-                    blockInfo['Track'] = trackNumber
-                    blockInfo['Number'] = blockNumber
-                    blockInfo['Length'] = blockLength
-                    blockInfo['Grade'] = blockGrade
-                    blockInfo['Speed Limit'] = blockSpeedLimit
-                    blockInfo['Elevation'] = blockElevation
-                    blockInfo['Cumulative Elevation'] = blockCumulativeElevation
-                    blockInfo['Direction'] = blockDirection
-
-
-                    if (records.column['Underground'][x] != ""):
-                        blockInfo['Underground'] = "true"
-                        blockUnderground = True
-                    else:
-                        blockInfo['Underground'] = "false"
-                        blockUnderground = False
-
-                    blockInfo['Section'] = blockSection
-
-
-
-                    if (records.column['Railway Crossing'][x] != ""):
-                        blockInfo['Railway Crossing'] = "true"
-                        blockRailwayCrossing = True
-                    else:
-                        blockInfo['RailwayCrossing'] = "false"
-                        blockRailwayCrossing = False
-
-                    theBlock = TrackModelDef.Block(blockNumber, blockLength, blockGrade, blockSpeedLimit,
-                    blockElevation, blockCumulativeElevation, blockDirection, blockUnderground,
-                    blockSection, blockRailwayCrossing)
-
-                    if (records.column['Stations'][x] != ""):
-                        stationName = records.column['Stations'][x]
-                        stationExitSide = records.column['Exit Side'][x]
-                        theBlock.addStation(stationName, stationExitSide)
-
-                    if (records.column['Switches'][x] != ""):
-                        switchList = records.column['Switches'][x]
-                        switchList = switchList.split(',')
-                        if (line == "Green"):
-                            greenSwitchNumber = greenSwitchNumber + 1
-                            switchNumber = greenSwitchNumber
-                        else:
-                            redSwitchNumber = redSwitchNumber + 1
-                            switchNumber = redSwitchNumber
-
-                        block1 = int(switchList[0])
-                        block2 = int(switchList[1])
-                        theBlock.addSwitch(switchNumber, block1, block2)
-
-
-                    newTrack.addBlock(theBlock)
-
-
-
-                    #jsonString = json.dumps(blockInfo)
-                    #print(jsonString)
-                    #send_message(RequestCode.TRACK_MODEL_GUI_BLOCK, str(jsonString))
-
-                self.switch_block()
-
-            else:
-                print('error')
-    def check_current_block(self):
+        records = pyexcel.get_sheet(file_name = fileInfo[0])
+        records.name_columns_by_row(0)
+        line = records.column['Line'][1]
+        totalBlocks = records.number_of_rows()
+        
+        TrackModelDef.SignalHandler.readInData(fileInfo)
+        self.addTab(line, totalBlocks)
+    
+    def addTab(self, line, totalBlocks):
         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
-        if (theTabWidget.tabText(theTabWidget.currentIndex()) == "Green Line"):
-            combo1.currentIndexChanged.connect(self.switch_block)
-        elif (theTabWidget.tabText(theTabWidget.currentIndex()) == "Red Line"):
-            #combo1.currentIndexChanged.connect(self.switch_block)
-            combo2.currentIndexChanged.connect(self.switch_block)
+        if (line == "Green"):
+            theTabWidget.addTab(combo1, line+" Line")
+            theCombo = combo1
+            trackNumber = 0
+        elif (line == "Red"):
+            theTabWidget.addTab(combo2, line+" Line")
+            theCombo = combo2
+            trackNumber = 1
 
+        for x in range(totalBlocks):
+            theCombo.addItem("Block "+str(x + 1))
+    
+    # def check_current_block(self):
+    #     theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
+    #     if (theTabWidget.tabText(theTabWidget.currentIndex()) == "Green Line"):
+    #         combo1.currentIndexChanged.connect(self.switch_block)
+    #     elif (theTabWidget.tabText(theTabWidget.currentIndex()) == "Red Line"):
+    #         #combo1.currentIndexChanged.connect(self.switch_block)
+    #         combo2.currentIndexChanged.connect(self.switch_block)
 
     def switch_block(self):
         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
@@ -287,36 +178,3 @@ class TrackModelUi(QtWidgets.QMainWindow):
             elif (failure == 3):
                 failure_mode_label.setText("Failure Mode:\n\n"+ "Track Circuit Failure")
 
-    def updateOccupancy(self, trainId, line, blockId, trainOrNot):
-        if (line == Line.LINE_GREEN):
-            theTrack = TrackModelDef.getTrack("Green")
-            theBlock = theTrack.getBlock(blockId)
-            if (trainOrNot == 0):
-                theBlock.updateOccupancy(trainId)
-            else:
-                theBlock.updateOccupancy(-1)
-        else:
-            theTrack = TrackModelDef.getTrack("Red")
-            theBlock = theTrack.getBlock(blockId)
-            if (trainOrNot == 0):
-                theBlock.updateOccupancy(trainId)
-            else:
-                theBlock.updateOccupancy(-1)
-
-        # TODO Tell swtrack the occupancy
-
-    def trackInfo1(self):
-        self.stopAllTimers()
-        self.track1_info_timer.start(1000)
-
-    def stopAllTimers(self):
-        self.track1_info_timer.stop()
-
-    def logout(self):
-        """Removes this window from the list"""
-        window_list.remove(self)
-
-if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-    window = TrackModelUi()
-    app.exec_()

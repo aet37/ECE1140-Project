@@ -1,9 +1,7 @@
 """Test for downloading a program to the arduino"""
 
-import sys
 from time import sleep
 
-sys.path.insert(1, '../../..')
 from src.HWTrackController.hw_track_controller_connector import Code
 
 def test_blank_controller(connector):
@@ -176,6 +174,41 @@ def test_ote_instruction(connector):
     # End download
     connector.send_message("{}".format(Code.END_DOWNLOAD.value))
     assert connector.get_response() == b'0'
+
+def test_get_all_tag_values(connector):
+    """Downloads a program with just tags and verifies the GET_ALL_TAG_VALUES command"""
+    # Start download
+    connector.send_message("{} Get All Tag Values Test".format(Code.START_DOWNLOAD.value))
+    assert connector.get_response() == b'0'
+
+    # Create tags
+    connector.send_message("{} {} {}".format(Code.CREATE_TAG.value,
+                                             "heater",
+                                             "FALSE"))
+    assert connector.get_response() == b'0'
+
+    connector.send_message("{} {} {}".format(Code.CREATE_TAG.value,
+                                             "switch",
+                                             "FALSE"))
+    assert connector.get_response() == b'0'
+
+    connector.send_message("{} {} {}".format(Code.CREATE_TAG.value,
+                                             "b0O",
+                                             "TRUE"))
+    assert connector.get_response() == b'0'
+
+    connector.send_message("{} {} {}".format(Code.CREATE_TAG.value,
+                                             "output2",
+                                             "FALSE"))
+    assert connector.get_response() == b'0'
+
+    # End download
+    connector.send_message("{}".format(Code.END_DOWNLOAD.value))
+    assert connector.get_response() == b'0'
+
+    # Test the GET_ALL_TAG_VALUES command
+    connector.send_message("{}".format(Code.GET_ALL_TAG_VALUES.value))
+    assert connector.get_response() == b"0 b0O 1 heater 0 output2 0 switch 0"
 
 
 if __name__ == "__main__":

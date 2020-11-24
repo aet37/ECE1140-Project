@@ -60,6 +60,7 @@ class TrainCatalogue:
 
     # @brief Gets the train's route
     def train_model_dispatch_train(self, trainId, destinationBlock, commandSpeed, authority, currentLine):
+        logger.critical("Received train_model_dispatch_train")
         # Create new train object
         newTrain = Train(trainId)
 

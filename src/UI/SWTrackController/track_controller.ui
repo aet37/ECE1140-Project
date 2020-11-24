@@ -184,7 +184,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Train Present: No Train Present</string>
+           <string>Block Info</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>

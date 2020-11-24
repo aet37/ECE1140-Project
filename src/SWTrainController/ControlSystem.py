@@ -8,6 +8,9 @@ from src.SWTrainController.Controller import Controller
 from src.signals import signals
 from serial.serialutil import SerialException
 from src.HWTrainController.HWTrainArduinoConnector import HWController
+from src.logger import get_logger
+
+logger = get_logger(__name__)
 
 class ControlSystem:
     """ Defines controller sytem that encompasses all active train controllers """
@@ -72,6 +75,7 @@ class ControlSystem:
     def swtrain_dispatch_train(self, com_sp, curr_sp, auth):
         """ Handler for swtrain_dispatch_train signal """
         self.create_new_controller(com_sp, curr_sp, auth)
+        logger.critical("Received swtrain_dispatch_train")
 
     def swtrain_gui_switch_mode(self, train_id, override):
         """ Handler for swtrain_gui_switch_mode """

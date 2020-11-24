@@ -11,6 +11,10 @@ from src.UI.window_manager import window_list
 from src.SWTrainController.ControlSystem import control_system
 from src.common_def import Converters
 
+from src.logger import get_logger
+
+logger = get_logger(__name__)
+
 class SWTrainUi(QtWidgets.QMainWindow):
 
     def __init__(self):
@@ -114,6 +118,9 @@ class SWTrainUi(QtWidgets.QMainWindow):
         self.logout_button4.clicked.connect(self.logout)
         ###########################
 
+        for _ in range(0, len(control_system.p_controllers)):
+            self.update_controller_list()
+
         self.show()
 
     # Initialize buttons in UI
@@ -179,6 +186,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         self.current_train_id = self.TrainIDBox4.currentText()
 
     def update_controller_list(self):
+        logger.info("Updating controller list")
         # Whenever the swtrain_dispatch_train signal is called, add another controller to list
         self.controller_count += 1
         self.TrainIDBox.addItem(str(self.controller_count))

@@ -30,6 +30,7 @@ void setup()
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(PIN2, OUTPUT);
     pinMode(PIN3, OUTPUT);
+    pinMode(PIN4, OUTPUT);
     pinMode(PIN23, INPUT);
 
     // Initialize the user program
