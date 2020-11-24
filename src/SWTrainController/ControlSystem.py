@@ -95,7 +95,7 @@ class ControlSystem:
     def swtrain_time_trigger(self):
         """ Calculates new power every sampling period """
         # Create loop to calculate power command of all active controllers
-        for train_id in range(0, len(self.p_controllers)):
+        for train_id in range(0, len(self.p_controllers) - 1):
             self.p_controllers[train_id].calculate_power()
             # Send train_id and power to train model
             signals.train_model_receive_power.emit(train_id, self.p_controllers[train_id].power_command)
