@@ -25,7 +25,7 @@ class Train:
 
         # BOOLEANS (self, Vital)
         self.m_emergencyPassengeBrake = False
-        self.m_serviceBrake = False
+        self.m_serviceBrake = True
         self.m_brakeCommand = False
         # BOOLEANS (self, Nonvital)
         self.m_headLights = False
