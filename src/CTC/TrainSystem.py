@@ -48,8 +48,7 @@ class TrainSystem:
 		self.red_route_switches_inter = [1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1]
 
 		# Signal Connections
-		signals.update_green_occupancies.connect(self.UpdateGreenBlocks)
-		signals.update_red_occupancies.connect(self.UpdateRedBlocks)
+		signals.update_occupancy.connect(self.UpdateBlocks)
 		signals.update_green_switches.connect(self.UpdateGreenSwitches)
 		signals.update_red_switches.connect(self.UpdateRedSwitches)
 		signals.update_throughput.connect(self.UpdateThroughput)
@@ -197,21 +196,18 @@ class TrainSystem:
 			raise Exception('CTC : TrainSystem.ReturnSwitchPositions recieved an erronious input')
 		return to_send
 
-	def UpdateGreenBlocks(self, occ_arr):
-		""" Function which updates occupancies on green route """
-		if len(occ_arr) != 150:
-			raise Exception('CTC Recived Erronious Green Block Array')
-		for i in range(len(occ_arr)):
-			self.blocks_green_arr[i].occupied = occ_arr[i]
-		self.UpdateTrainLoc()
-
-	def UpdateRedBlocks(self, occ_arr):
-		""" Function which updates occupancies on red route """
-		if len(occ_arr) != 76:
-			raise Exception('CTC Recived Erronious Red Block Array')
-		for i in range(len(occ_arr)):
-			self.blocks_red_arr[i].occupied = occ_arr[i]
-		self.UpdateTrainLoc()
+	def UpdateBlocks(self, ln, block, occ):
+		""" Function which updates occupancies based on information recieved from the Track Controller """
+		if ln == Line.LINE_GREEN:
+			if (block < 1) or (block > 150):
+				raise Exception('TrainSystem : UpdateBlocks received blocks out of range for Green Line')
+			else:
+				self.blocks_green_arr[block - 1].occupied = occ
+		else:
+			if (block < 1) or (block > 76):
+				raise Exception('TrainSystem : UpdateBlocks received blocks out of range for Red Line')
+			else:
+				self.blocks_green_arr[block - 1].occupied = occ
 
 	def UpdateGreenSwitches(self, sw_arr):
 		""" Function which updates occupancies on green route """
