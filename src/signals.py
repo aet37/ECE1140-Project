@@ -25,7 +25,8 @@ class SignalsClass(QObject):
     swtrack_update_speed = pyqtSignal(int, int)	# Used by CTC to update suggested speed of train (train_id, new_speed)
     swtrack_set_switch_position = pyqtSignal(Line, int, bool)	# Used by CTC to set a switch position in maint mode (sw_number, position)
     swtrack_set_block_status = pyqtSignal(Line, int, bool)	# Used by CTC to open/close (true/false) a block for mainenence (block_num, status)
-    swtrack_update_occupancies = pyqtSignal(list,Line) # Used by Track Model to update occupancies (occupancy_arr(BOOL), Line)
+    swtrack_update_occupancies = pyqtSignal(list, Line) # Used by Track Model to update occupancies (occupancy_arr(BOOL), Line)
+    swtrack_set_track_heater = pyqtSignal(Line, bool) # Used by the Track Model to turn the heater on/off on a track
 
     # Train Model Signals
     train_model_dispatch_train = pyqtSignal(int, int, float, int, int) #  Used by the track model to signify that a new train has been dispatched FORMAT: (train_id, destination_block, command_speed, authority, Line)
@@ -74,7 +75,7 @@ class SignalsClass(QObject):
     swtrain_time_trigger = pyqtSignal()
 
     # Track Model Signals
-    trackmodel_dispatch_train = pyqtSignal(int, int, int, Line, list) # Used by SWTrack Controller to send dispatch Train (train_id, command_speed, authority, Line, switches_arr(boolean))
+    trackmodel_dispatch_train = pyqtSignal(int, int, float, bool, Line, list) # Used by SWTrack Controller to send dispatch Train (train_id, command_speed, authority, Line, switches_arr(boolean))
     trackmodel_update_occupancy = pyqtSignal(int, Line, int, bool) # Used by train model to give track model info about a train's status on a particular block (trainId, Line, blockId, trainOrNot)
     trackmodel_update_command_speed = pyqtSignal(int, int) # Used by the track controller to update the command speed of a train (trainId, newSpeed)
     trackmodel_update_switch_positions = pyqtSignal(Line, int, int) # Used by the track controller to update a switch positions (Line, switchNumberFromYard, switchPosition)

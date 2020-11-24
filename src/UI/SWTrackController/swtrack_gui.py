@@ -11,14 +11,12 @@ from src.SWTrackController.Compiler.parse import Parser
 
 from src.UI.Common.common import Alert, Confirmation
 from src.UI.window_manager import window_list
-from src.HWTrackController.hw_track_controller_connector import HWTrackCtrlConnector
+from src.signals import signals
+from src.common_def import Line
+from src.SWTrackController.track_system import track_system
 
 class SWTrackControllerUi(QtWidgets.QMainWindow):
     """GUI for the track controller module"""
-
-    # The hardware will represent the first track controller
-    HWTRACK_CTRL_NUMBER = 1
-
     def __init__(self):
         super().__init__()
         uic.loadUi('src/UI/SWTrackController/track_controller.ui', self)
@@ -92,18 +90,18 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
 
     def track_controller_selected(self):
         """Method called when a different track controller is selected"""
-        self.current_track_controller = self.track_controller_combo_box.currentText().split('#')[1]
+        self.current_track_controller = int(self.track_controller_combo_box.currentText().split('#')[1])
 
         if 'Red' in self.track_controller_combo_box.currentText():
-            self.current_track_controller = str(int(self.current_track_controller) + len(self.green_line_controllers))
+            self.current_track_controller = int(self.current_track_controller) + len(self.green_line_controllers)
 
         # Update the options in the block combo box
         self.block_combo_box.clear()
         if 'Red' in self.track_controller_combo_box.currentText():
-            for block in self.red_line_controllers[int(self.current_track_controller) - 1]:
+            for block in self.red_line_controllers[self.current_track_controller - 1]:
                 self.block_combo_box.addItem("Block #{}".format(block))
         else:
-            for block in self.green_line_controllers[int(self.current_track_controller) - len(self.green_line_controllers) - 1]:
+            for block in self.green_line_controllers[self.current_track_controller - len(self.green_line_controllers) - 1]:
                 self.block_combo_box.addItem("Block #{}".format(block))
 
     def block_selected(self):
@@ -161,17 +159,17 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             return None
 
     def send_compiled_program(self, output_file):
-        """Method used to read compiled program and send messages to the server
+        """Method used to download the compiled program to the currently selected
+        track controller instance
 
         :param str output_file: Name of the file containing the compiled program
         """
-        if int(self.current_track_controller) == SWTrackControllerUi.HWTRACK_CTRL_NUMBER:
-            connector = HWTrackCtrlConnector()
-            connector.download_program(output_file)
+        if 'Red' in self.track_controller_combo_box.currentText():
+            track_controller = track_system.red_track_controllers[self.current_track_controller - 1]
         else:
-            for line in open(output_file, 'r'):
-                # TODO(nns): Download program to software module
-                pass
+            track_controller = track_system.green_track_controllers[self.current_track_controller - 1]
+
+        track_controller.download_program(output_file)
 
     def switch_position_button_clicked(self):
         """Method called when the switch position button is pressed"""

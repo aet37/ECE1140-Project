@@ -4,8 +4,8 @@ from time import sleep
 import threading
 from enum import Enum
 import serial
-from serial.serialutil import SerialException
 
+from src.SWTrackController.track_controller import TrackController
 from src.UI.Common.common import DownloadInProgress
 from src.logger import get_logger
 
@@ -28,14 +28,11 @@ class Code(Enum):
     GET_TAG_VALUE = 104 # Used by the gui to get a tag's value
     GET_ALL_TAG_VALUES = 105 # Used by the gui to get all tag values
 
-class HWTrackCtrlConnector:
+class HWTrackCtrlConnector(TrackController):
     """Class responsible for communicating with the hw track controller"""
     def __init__(self):
-        try:
-            self.arduino = serial.Serial(SERIAL_PORT, RATE, timeout=5)
-            sleep(2)
-        except SerialException:
-            print("No arduino")
+        self.arduino = serial.Serial(SERIAL_PORT, RATE, timeout=5)
+        sleep(2)
 
         self.comms_lock = threading.Lock()
 
@@ -45,7 +42,7 @@ class HWTrackCtrlConnector:
         :param str msg: Message to send
         """
         bytes_written = self.arduino.write(bytes(str(msg), 'utf-8'))
-        logger.info("%d bytes written to the controller", bytes_written)
+        logger.info("%s written to the controller", str(msg))
 
     def get_response(self):
         """Gets the response from the controller.
@@ -64,6 +61,7 @@ class HWTrackCtrlConnector:
 
         :param file compiled_program: Path to the compiled PLC program
         """
+        logger.debug("Downloading program %s", compiled_program)
         progress = DownloadInProgress()
 
         def _download_program():
@@ -92,3 +90,11 @@ class HWTrackCtrlConnector:
         download_thread.start()
 
         progress.exec()
+
+    def set_track_heater(self, status):
+        """Method to set the track heater
+        
+        :param bool status: Whether heater should be on or off
+        """
+        self.send_message(" ".join(map(str, (Code.SET_TAG_VALUE.value, "heater", int(status)))))
+        logger.info(self.get_response())
