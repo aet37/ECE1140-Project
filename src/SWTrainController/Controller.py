@@ -89,7 +89,10 @@ class Controller:
             self.uk = self.uk1
 
         # Find power command
-        self.power_command = (self.kp * self.ek) + (self.ki * self.uk)
+        if self.service_brake == True:
+            self.power_command = 0
+        else:
+            self.power_command = (self.kp * self.ek) + (self.ki * self.uk)
 
         # Set past values of uk and ek
         self.uk1 = self.uk

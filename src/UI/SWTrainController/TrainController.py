@@ -83,6 +83,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
         # Define Signal Connections #
         signals.swtrain_dispatch_train.connect(self.update_controller_list)
+        signals.train_model_receive_power.connect(self.update_gui)
 
         # Define function so comboboxes change synchronously #
         self.TrainIDBox.currentIndexChanged.connect(self.update_dropdowns)
@@ -231,6 +232,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         self.mode_status = control_system.p_controllers[int(self.current_train_id) - 1].mode
         self.kp_status = control_system.p_controllers[int(self.current_train_id) - 1].kp
         self.ki_status = control_system.p_controllers[int(self.current_train_id) - 1].ki
+        self.power_status = control_system.p_controllers[int(self.current_train_id) - 1].power_command
 
         # Change GUI to reflect current data
         # Update doors
@@ -265,6 +267,9 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
         # Update setpoint speed
         self.setpoint_speed_label.setText(str(self.setpoint_speed) + "MPH")
+
+        # Update power
+        self.power_command_label.setText(str(self.power_status) + "W")
 
         # Update service brake
         if self.service_brake_status == 1:

@@ -7,6 +7,7 @@
 from src.SWTrainController.Controller import Controller
 from src.signals import signals
 from serial.serialutil import SerialException
+from src.HWTrainController.HWTrainArduinoConnector import HWController
 
 class ControlSystem:
     """ Defines controller sytem that encompasses all active train controllers """
@@ -26,6 +27,8 @@ class ControlSystem:
         signals.swtrain_gui_press_service_brake.connect(self.swtrain_gui_press_service_brake)
         # Receive kp and ki signal
         signals.swtrain_gui_set_kp_ki.connect(self.swtrain_gui_set_kp_ki)
+        # Receive time trigger to calculate power
+        signals.swtrain_time_trigger.connect(self.swtrain_time_trigger)
 
         ## RECEIVE NONVITAL SIGNALS ##
         # Receive lights signal
@@ -45,8 +48,8 @@ class ControlSystem:
         if len(self.p_controllers) == 0:
             try:
                 # Try appending one of Tyler's objects into p_controllers
-                raise SerialException
-                pass
+                p_temp = HWController()
+                self.p_controllers.append(p_temp)
             except SerialException:
                 # EXCEPT IF NOT CONNECTED
                 print("No arduino")
@@ -86,6 +89,15 @@ class ControlSystem:
         """ Handler for swtrain_gui_set_kp_ki """
         self.p_controllers[train_id].kp = Kp
         self.p_controllers[train_id].ki = Ki
+
+    def swtrain_time_trigger(self):
+        """ Calculates new power every sampling period """
+        # Create loop to calculate power command of all active controllers
+        for train_id in range(0, len(self.p_controllers)):
+            self.p_controllers[train_id].calculate_power()
+            # Send train_id and power to train model
+            signals.train_model_receive_power.emit(train_id, self.p_controllers[train_id].power_command)
+
 
     ## NonVital Signal Definitions ##
     def swtrain_gui_toggle_cabin_lights(self, train_id):
