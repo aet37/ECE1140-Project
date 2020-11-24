@@ -1,6 +1,5 @@
 """Module containing classes to communicate with the hw track controller"""
 
-from time import sleep
 import threading
 from enum import Enum
 import serial
