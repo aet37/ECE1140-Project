@@ -55,7 +55,6 @@ class TrackModelUi(QtWidgets.QMainWindow):
     def getFileName(self):
         dialog = QtWidgets.QFileDialog(self)
         fileInfo = dialog.getOpenFileName(self)
-        print(fileInfo)
         records = pyexcel.get_sheet(file_name = fileInfo[0])
         records.name_columns_by_row(0)
         line = records.column['Line'][1]
