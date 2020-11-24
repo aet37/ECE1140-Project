@@ -336,7 +336,7 @@ class SignalHandler:
                     #print(jsonString)
                     #send_message(RequestCode.TRACK_MODEL_GUI_BLOCK, str(jsonString))
 
-                self.switch_block()
+                # self.switch_block()
 
             else:
                 print('error')
