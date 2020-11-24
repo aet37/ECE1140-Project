@@ -13,11 +13,7 @@ logger = get_logger(__name__)
 class ControlSystem:
     """ Defines controller sytem that encompasses all active train controllers """
 
-
-        # Receive dispatch train signal
-        signals.swtrain_dispatch_train.connect(self.swtrain_dispatch_train)
-        # Receive mode signal
-        signals.swtrain_gui_switch_mode.connect(self.swtrain_gui_switch_mode)
+    def __init__(self):
         # Receive setpoint speed signal
         signals.swtrain_gui_set_setpoint_speed.connect(self.swtrain_gui_set_setpoint_speed)
         # Receive service brake signal
