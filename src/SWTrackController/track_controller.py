@@ -17,7 +17,7 @@ class TrackController:
 
     def download_program(self, compiled_program):
         """Constructs the plc program given the compiled output
-        
+
         :param file compiled_program: File containing the compiler output
         """
         logger.debug("Downloading program in %s", compiled_program)
@@ -90,10 +90,18 @@ class TrackController:
 
     def set_track_heater(self, status):
         """Method to set the track heater
-        
+
         :param bool status: Whether heater should be on or off
         """
         self.set_tag_value('heater', status)
+
+    def get_track_heater_status(self):
+        """Method to whether the heater is on or off
+
+        :return: Track heater status
+        :rtype: bool
+        """
+        return self.get_tag_value("heater")
 
 if __name__ == "__main__":
     raise Exception("Not to be run as a module")

@@ -107,12 +107,58 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             for block in self.green_line_controllers[self.current_track_controller - len(self.green_line_controllers) - 1]:
                 self.block_combo_box.addItem("Block #{}".format(block))
 
+        # Update gui since a new track controller was selected
+        # self.update_gui()
+
     def block_selected(self):
         """Method called when a different block is selected"""
         try:
             self.current_block = self.block_combo_box.currentText().split('#')[1]
         except IndexError:
             self.current_block = None
+
+        # Update gui since a new block was selected
+        # self.update_gui()
+
+    def update_gui(self):
+        """Updates the information in the gui using the currently selected
+        track controller and block
+        """
+        logger.info("Updating track controller gui")
+        # Get the correct track controller
+        if 'Red' in self.track_controller_combo_box.currentText():
+            track_controller = track_system.red_track_controllers[self.current_track_controller - 1]
+        else:
+            track_controller = track_system.green_track_controllers[self.current_track_controller - 1]
+
+        # Track heater label
+        track_heater_status = track_controller.get_track_heater_status()
+        track_heater_label = self.findChild(QtWidgets.QLabel, 'track_heater_label')
+        track_heater_label.setText("ON" if track_heater_status else "OFF")
+
+        # Switch Position
+        # switch_position = track_controller.get_switch_position()
+
+        # Light status
+        # light_status = track_controller.get_light_status()
+
+        # Occupied
+        # occupied = track_controller.get_block_occupancy(self.current_block)
+
+        # Block status
+        # block_status = track_controller.get_block_status(self.current_block)
+
+        # Railway crossing
+        # railway_crossing = track_controller.get_railway_crossing(self.current_block)
+
+        # Authority
+        # authority = track_controller.get_authority_of_block(self.current_block)
+
+        # Suggested Speed
+        # suggested_speed = track_controller.get_suggested_speed(self.current_block)
+
+        # Command Speed
+        # command_speed = track_controller.get_command_speed(self.current_block)
 
     def download_program(self):
         """Method called when the download program button is pressed"""
