@@ -10,6 +10,10 @@ from src.TrainModel.Train import Train
 from src.TrainModel.Block import Block
 from src.TrainModel.BlockCatalogue import block_catalogue
 from src.signals import signals
+from src.logger import get_logger
+
+logger = get_logger(__name__)
+
 class TrainCatalogue:
     # Call "m_trainlist.count()" for amount of trains
     # Call "m_trainlist.append()" to add a train
@@ -45,6 +49,7 @@ class TrainCatalogue:
 
     # @brief Gets the train's route
     def train_model_dispatch_train(self, trainId, destinationBlock, commandSpeed, authority, currentLine):
+        logger.critical("Received train_model_dispatch_train")
         # Create new train object
         newTrain = Train(trainId)
 

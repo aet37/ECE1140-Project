@@ -1,27 +1,35 @@
 """Common tests across modules"""
 
 import sys
-import pytest
 
-sys.path.append(".")
-from main import start, cleanup
+sys.path.insert(1, '.')
 from src.signals import signals
 from src.TrainModel.TrainCatalogue import train_catalogue
 from src.SWTrainController.ControlSystem import control_system
+from src.CTC.TrainSystem import ctc
+from src.common_def import Line
+from src.TrackModel.TrackModel import track_model
 
-@pytest.fixture(scope='function')
-def start_app():
-    """Starts the application with the testing flag"""
-    start(['--testing'])
-    yield
-    cleanup()
+def test_dispatch_train(start_app):
+    """Tests dispatching a train and ensures all modules react accordingly"""
 
-def test_toggle_lights(start_app):
-    """Testing toggling the lights"""
+    # Upload track
+    track_model.readExcelFile('Path/to/file')
 
-    signals.train_model_dispatch_train.emit(0, 0, 0, 0, 0)
+    # Send dispatch signal
+    signals.swtrack_dispatch_train.emit(0, 38, 25.0, 3, Line.LINE_GREEN,
+                                        [0, 0, 0, 1, 1, 1, 0, 1, 0, 0])
 
-    signals.swtrain_gui_toggle_cabin_lights.emit(0)
+    # Assert train is made in CTC
+    assert ctc.trains_arr[0].train_id == 0
 
-    assert control_system.p_controllers[0].lights
-    assert train_catalogue.m_trainList[0].m_cabinLights
+    # Assert train is made in swtrain, trainmodel
+    assert len(train_catalogue.m_trainList) == 1
+    assert len(control_system.p_controllers) == 1
+
+    # Assert received authority and command speed
+    assert train_catalogue.m_trainList[0].m_commandSpeed == 25.0
+    assert train_catalogue.m_trainList[0].m_authority
+
+    assert control_system.p_controllers[0].command_speed == 25.0
+    assert control_system.p_controllers[0].authority
