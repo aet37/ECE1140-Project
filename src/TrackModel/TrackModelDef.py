@@ -12,7 +12,7 @@ import sys
 sys.path.append(".")
 from src.signals import signals
 from src.logger import get_logger
-from src.UI.TrackModel import trackmodel_gui
+#from src.UI.TrackModel import trackmodel_gui
 
 import pyexcel
 import pyexcel_io

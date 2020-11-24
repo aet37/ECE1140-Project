@@ -8,7 +8,7 @@ from src.TrainModel.TrainCatalogue import train_catalogue
 from src.SWTrainController.ControlSystem import control_system
 from src.CTC.TrainSystem import ctc
 from src.common_def import Line
-from src.TrackModel.TrackModel import track_model
+from src.TrackModel import TrackModelDef#track_model
 
 def test_dispatch_train(start_app):
     """Tests dispatching a train and ensures all modules react accordingly"""
