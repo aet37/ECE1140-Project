@@ -251,12 +251,13 @@ private:
             }
             else
             {
-                for (uint32_t i = hash + 1; i < hash; i = (i + 1) % m_size)
+                for (uint32_t j = hash + 1; j != hash; j = (j + 1) % m_size)
                 {
-                    if (pNewKeys[i] == "")
+                    if (pNewKeys[j] == "")
                     {
-                        pNewKeys[hash] = m_pKeys[i];
-                        pNewValues[hash] = m_pValues[i];
+                        pNewKeys[j] = m_pKeys[i];
+                        pNewValues[j] = m_pValues[i];
+                        break;
                     }
                 }
             }
