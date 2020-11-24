@@ -9,6 +9,8 @@ from src.SWTrainController.ControlSystem import control_system
 from src.CTC.TrainSystem import ctc
 from src.common_def import Line
 from src.TrackModel import TrackModelDef
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import *
 import pyexcel
 import pyexcel_io
 
