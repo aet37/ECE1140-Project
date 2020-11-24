@@ -10,7 +10,7 @@
 #include "../include/TagDatabase.hpp" // For TagDatabase
 #include "../include/Scheduler.hpp" // For Scheduler
 
-bool Instruction::Evaluate()
+bool Instruction::Evaluate() const
 {
     bool result = false;
     switch (m_type)
