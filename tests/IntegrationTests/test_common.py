@@ -18,7 +18,7 @@ def test_dispatch_train(start_app):
     """Tests dispatching a train and ensures all modules react accordingly"""
 
     # Upload track
-    dialog = QtWidgets.QFileDialog.selectFile("C:/Users/Evan/OneDrive/Documents/GitHub/ECE1140-Project/resources/Green Line.xlsx")
+    dialog = QtWidgets.QFileDialog.selectFile(self, "C:/Users/Evan/OneDrive/Documents/GitHub/ECE1140-Project/resources/Green Line.xlsx")
     fileInfo = dialog.getOpenFileName(self)
     TrackModelDef.SignalHandler.readInData(self, fileInfo)
     dialog = QtWidgets.QFileDialog.selectFile("C:/Users/Evan/OneDrive/Documents/GitHub/ECE1140-Project/resources/Red Line.xlsx")
