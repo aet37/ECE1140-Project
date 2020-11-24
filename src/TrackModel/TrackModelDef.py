@@ -221,7 +221,7 @@ class SignalHandler:
     # Examples of fileInfo inputs below
     #('C:/Users/Evan/OneDrive/Documents/GitHub/ECE1140-Project/resources/Green Line.xlsx', 'All Files (*)')
     #('C:/Users/Evan/OneDrive/Documents/GitHub/ECE1140-Project/resources/Red Line.xlsx', 'All Files (*)')
-    def readInData(self, fileInfo):
+    def readInData(fileInfo):
         global greenSwitchNumber
         global redSwitchNumber
 
