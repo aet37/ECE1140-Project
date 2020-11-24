@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QComboBox" name="TrainIDBox">
@@ -778,7 +778,7 @@ p, li { white-space: pre-wrap; }
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: green;</string>
+       <string notr="true">background-color: rgb(255, 51, 16);</string>
       </property>
       <property name="text">
        <string>Service Brake</string>
@@ -1021,7 +1021,7 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>10</x>
         <y>520</y>
-        <width>355</width>
+        <width>361</width>
         <height>21</height>
        </rect>
       </property>
@@ -1051,7 +1051,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QTextBrowser" name="textBrowser_4">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>10</x>
         <y>110</y>
         <width>161</width>
         <height>51</height>
@@ -1071,7 +1071,49 @@ p, li { white-space: pre-wrap; }
      <widget class="QLabel" name="setpoint_speed_label">
       <property name="geometry">
        <rect>
-        <x>109</x>
+        <x>10</x>
+        <y>130</y>
+        <width>161</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QTextBrowser" name="textBrowser_7">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>110</y>
+        <width>161</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QTextBrowser {background-color: rgb(255, 210, 90);}</string>
+      </property>
+      <property name="html">
+       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.SF NS Text'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Power Command:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="power_command_label">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
         <y>130</y>
         <width>161</width>
         <height>20</height>
