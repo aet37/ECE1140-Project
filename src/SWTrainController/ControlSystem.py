@@ -71,7 +71,7 @@ class ControlSystem:
     ### SIGNAL DEFINITIONS ###
     def swtrain_dispatch_train(self, com_sp, curr_sp, auth):
         """ Handler for swtrain_dispatch_train signal """
-        control_system.create_new_controller(com_sp, curr_sp, auth)
+        self.create_new_controller(com_sp, curr_sp, auth)
 
     def swtrain_gui_switch_mode(self, train_id, override):
         """ Handler for swtrain_gui_switch_mode """
@@ -95,7 +95,7 @@ class ControlSystem:
     def swtrain_time_trigger(self):
         """ Calculates new power every sampling period """
         # Create loop to calculate power command of all active controllers
-        for train_id in range(0, len(self.p_controllers) - 1):
+        for train_id in range(0, len(self.p_controllers)):
             self.p_controllers[train_id].calculate_power()
             # Send train_id and power to train model
             signals.train_model_receive_power.emit(train_id, self.p_controllers[train_id].power_command)

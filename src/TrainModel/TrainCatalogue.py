@@ -1,4 +1,4 @@
-# Created by Kenneth Meier
+    # Created by Kenneth Meier
 # Train implementation class
 
 # SYSTEM INCLUDES
@@ -10,6 +10,9 @@ from src.TrainModel.Train import Train
 from src.TrainModel.Block import Block
 from src.TrainModel.BlockCatalogue import block_catalogue
 from src.signals import signals
+from src.logger import get_logger
+
+logger = get_logger(__name__)
 class TrainCatalogue:
     # Call "m_trainlist.count()" for amount of trains
     # Call "m_trainlist.append()" to add a train
@@ -100,7 +103,7 @@ class TrainCatalogue:
 
     def train_model_receive_power(self, trainId, powerStatus):
         currentTrack = self.m_trainList[trainId].m_currentLine
-        currentBlock = self.m_trainList[trainId].m_route[0]
+        # currentBlock = self.m_trainList[trainId].m_route[0]
         # LOG_TRAIN_MODEL("currentTrack = %d", currentTrack);
         # LOG_TRAIN_MODEL("currentBlock = %d", currentBlock);
         # LOG_TRAIN_MODEL("currentBlockInfo = 0x%x", currentBlockInfo);
@@ -108,23 +111,39 @@ class TrainCatalogue:
         # LOG_TRAIN_MODEL("Number of green line blocks = %d", BlockCatalogue::GetInstance().GetNumberOfGreenBlocks());
         # LOG_TRAIN_MODEL("Number of trains = %d", TrainCatalogue::GetInstance().GetNumberOfTrains());
 
-        currentBlockSize = self.m_blockList[currentBlock].m_sizeOfBlock
-        speedLimitBlock = self.m_blockList[currentBlock].m_speedLimit
+        # currentBlockSize = self.m_blockList[currentBlock].m_sizeOfBlock
+        # speedLimitBlock = self.m_blockList[currentBlock].m_speedLimit
+        currentBlockSize = 10000
+        speedLimitBlock = 70
 
         # LOG_TRAIN_MODEL("currentBlockSize = %f", currentBlockSize);
 
         commandSpeed = self.m_trainList[trainId].m_commandSpeed
+        currentSpeed = self.m_trainList[trainId].m_currentSpeed
         previousPosition = self.m_trainList[trainId].m_position
         trainMass = self.m_trainList[trainId].m_trainMass
+        trainMass = trainMass * 907.1850030836 # Convert to grams
         serviceBrake = self.m_trainList[trainId].m_serviceBrake
         emergencyBrake = self.m_trainList[trainId].m_emergencyPassengeBrake
         samplePeriod = 1/10 # ASK COLLIN FOR SAMPLE PERIOD
         
+
         # FORCE
-        forceCalc = (powerStatus/commandSpeed)
+        try:
+            forceCalc = (powerStatus/currentSpeed)
+            forceCalc -= (0.01) * (trainMass) * (9.8)
+        except ZeroDivisionError:
+            if(not serviceBrake):
+                forceCalc = 25718.69483742006
+                forceCalc -= (0.01) * (trainMass) * (9.8)
+            else:
+                forceCalc = 0.0
+
+        logger.debug("forceCalc = %f", forceCalc)
 
         # ACCELERATION
         accelerationCalc = (forceCalc/trainMass) # Acceleration Limit: 0.5 m/s^2     Deceleration Limit(service brake): 1.2 m/s^2    Deceleration Limit(emergency brake): 2.73 m/s^2
+        logger.debug("accelerationCalc = %f", accelerationCalc)
         if (accelerationCalc > 0.5 and not serviceBrake and not emergencyBrake):
             # If all brakes are OFF and accelerationCalc is above the limit
             accelerationCalc = 0.5
@@ -136,7 +155,8 @@ class TrainCatalogue:
             accelerationCalc = -2.73
 
         # VELOCITY
-        velocityCalc = (accelerationCalc/samplePeriod); # Velocity Limit: 70km/h
+        velocityCalc = currentSpeed + (accelerationCalc/samplePeriod) # Velocity Limit: 70km/h
+        logger.debug("velocityCalc = %f", velocityCalc)
         if(velocityCalc > 70):
             # If the velocity is GREATER than max train speed
             velocityCalc = 70 # km/h
@@ -147,25 +167,26 @@ class TrainCatalogue:
         currentPosition = 0
         positionCalc = 0
 
-        if(currentBlock == self.m_trainList[trainId].m_destinationBlock):
-            # Set all the parameters in the train object
-            self.m_trainList[trainId].m_power = powerStatus
-            self.m_trainList[trainId].m_currentSpeed = 0 # For display stopping purposes
+        # if(currentBlock == self.m_trainList[trainId].m_destinationBlock):
+        # # if(currentBlock == self.m_trainList[trainId].m_destinationBlock):
+        #     # Set all the parameters in the train object
+        #     self.m_trainList[trainId].m_power = powerStatus
+        #     self.m_trainList[trainId].m_currentSpeed = 0 # For display stopping purposes
 
-            # Send to Collin
-            signals.swtrain_update_current_speed.emit(trainId, 0)
+        #     # Send to Collin
+        #     signals.swtrain_update_current_speed.emit(trainId, 0)
 
-            # LOG_TRAIN_MODEL("Train powerStatus = %d, Train ID = %d", powerStatus, trainId);
-        else:
+        #     # LOG_TRAIN_MODEL("Train powerStatus = %d, Train ID = %d", powerStatus, trainId);
+        # else:
             # POSITION
-            positionCalc = (velocityCalc/samplePeriod)
-            currentPosition = previousPosition + positionCalc
+        positionCalc = (velocityCalc/samplePeriod)
+        currentPosition = previousPosition + positionCalc
             # currentPosition = previousPosition + 50 Hardcoded moving for test
         if(currentPosition > currentBlockSize):
             # Move to the next block!
             currentPosition = currentPosition - currentBlockSize # Catch overflow into next block
             self.m_trainList[trainId].m_position = currentPosition # Update position
-            self.m_trainList[trainId].m_route.pop(0) # Remove the block train is on to move to nect block
+            # self.m_trainList[trainId].m_route.pop(0) # Remove the block train is on to move to nect block
 
             # LOG_TRAIN_MODEL("Current block is now %d", tempTrain->GetCurrentBlock())
 
@@ -195,6 +216,7 @@ class TrainCatalogue:
 
         # Send to Collin
         signals.swtrain_update_current_speed.emit(trainId, velocityCalc)
+        signals.train_model_something_has_been_changed.emit()
 
         # LOG_TRAIN_MODEL("Train powerStatus = %d, Train ID = %d", powerStatus, trainId)
 

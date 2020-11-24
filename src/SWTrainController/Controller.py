@@ -26,22 +26,22 @@ class Controller:
         # Safety critical information
         self.command_speed = com_sp
         self.current_speed = curr_sp
-        self.setpoint_speed = 0
-        self.power_command = 0
+        self.setpoint_speed = 0.0
+        self.power_command = 0.0
         self.authority = auth
         self.mode = False # 0 = Automatic, 1 = Manual
         self.service_brake = True
         self.emergency_brake = False
 
         # Train Engineer inputs
-        self.kp = 0
-        self.ki = 0
+        self.kp = 0.0
+        self.ki = 0.0
 
         # Variables for power calculation
-        self.uk = 0
-        self.uk1 = 0
-        self.ek = 0
-        self.ek1 = 0
+        self.uk = 0.0
+        self.uk1 = 0.0
+        self.ek = 0.0
+        self.ek1 = 0.0
 
         # NonVital Operations (0 = ON, 1 = OFF)
         self.doors = 0
@@ -89,8 +89,10 @@ class Controller:
             self.uk = self.uk1
 
         # Find power command
-        if self.service_brake == True:
+        if self.service_brake:
             self.power_command = 0
+        elif(self.power_command > 120000):
+            self.power_command = 120000
         else:
             self.power_command = (self.kp * self.ek) + (self.ki * self.uk)
 

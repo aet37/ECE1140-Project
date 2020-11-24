@@ -86,6 +86,10 @@ class SWTrainUi(QtWidgets.QMainWindow):
         signals.train_model_receive_power.connect(self.update_gui)
         signals.swtrain_update_current_speed.connect(self.update_gui)
 
+        # Update controllers if received before opening
+        for _ in range(0, len(control_system.p_controllers) ):
+            self.update_controller_list()
+
         # Define function so comboboxes change synchronously #
         self.TrainIDBox.currentIndexChanged.connect(self.update_dropdowns)
         self.TrainIDBox2.currentIndexChanged.connect(self.update_dropdowns)
@@ -261,7 +265,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
             self.advertisements_button.setStyleSheet("background-color: green;")
 
         # Update current speed
-        self.current_speed_label.setText(str(self.curr_speed) + "MPH")
+        self.current_speed_label.setText("{:.2f} MPH".format(self.curr_speed))
 
         # Update command speed
         self.command_speed_label.setText(str(self.com_speed) + "MPH")
@@ -270,7 +274,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         self.setpoint_speed_label.setText(str(self.setpoint_speed) + "MPH")
 
         # Update power
-        self.power_command_label.setText(str(self.power_status) + "W")
+        self.power_command_label.setText("{:.2f} W".format(self.power_status))
 
         # Update service brake
         if self.service_brake_status == 1:
@@ -557,6 +561,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         signals.swtrain_gui_set_kp_ki.emit(int(self.current_train_id) - 1, float(Kp), float(Ki))
         # Turn service brake off to begin moving
         control_system.p_controllers[int(self.current_train_id) - 1].service_brake = False
+        signals.train_model_gui_receive_service_brake.emit(int(self.current_train_id) - 1, False)
         self.update_gui()
 
     def logout(self):
