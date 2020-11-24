@@ -47,6 +47,11 @@ bool GetTagValue(const String& rTagName, bool& rValue);
 void Clear();
 
 /**
+ * @brief Gets all the tag's and their values
+*/
+String GetAllTagValues();
+
+/**
  * @brief Task to handle input and outputs
  *
  * @param pNothing      This argument is not used

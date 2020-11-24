@@ -1,10 +1,8 @@
 """Test for downloading a program to the arduino"""
 
-import sys
 from time import sleep
 
-sys.path.insert(1, '../../../src')
-from HWTrackController.hw_track_controller_connector import Code
+from src.HWTrackController.hw_track_controller_connector import Code
 
 def test_emit_program(connector):
     """Downloads a program that uses an EMIT instruction"""
