@@ -60,14 +60,20 @@ class TrackSystem:
         # Check whether the plc program will give the train authority
         authority = track_controllers[0].get_authority_of_block(0)
 
+        # Function used to iterate list in pairs
+        def pairwise(iterable):
+            a = iter(iterable)
+            return zip(a, a)
+
         # Gather all of the switch positions in case they've changed
         switch_positions = []
-        for track_controller_1, track_controller_2 in track_controllers:
+        for track_controller_1, track_controller_2 in pairwise(track_controllers):
             # TODO(nns): Add safety architecture here
             switch_positions.append(track_controller_1.get_switch_position())
 
         # Send the to the track model and ctc
-        signals.trackmodel_update_switch_positions.emit(line, switch_positions)
+        for i, switch_position in enumerate(switch_positions):
+            signals.trackmodel_update_switch_positions.emit(line, i, switch_position)
 
         if line == Line.LINE_GREEN:
             signals.update_green_switches.emit(switch_positions)

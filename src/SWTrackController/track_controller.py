@@ -31,7 +31,11 @@ class TrackController:
         :return: Value of the tag
         :rtype: bool
         """
-        return self.tags[tag_name]
+        # TODO(nns): Remove this try catch once complete
+        try:
+            return self.tags[tag_name]
+        except KeyError:
+            return True
 
     def set_tag_value(self, tag_name, value):
         """Sets a tag's value inside the plc
