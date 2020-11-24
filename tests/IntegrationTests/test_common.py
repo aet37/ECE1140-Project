@@ -9,7 +9,7 @@ from src.SWTrainController.ControlSystem import control_system
 from src.CTC.TrainSystem import ctc
 from src.common_def import Line
 from src.TrackModel import TrackModelDef
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import *
 import pyexcel
 import pyexcel_io
@@ -18,7 +18,8 @@ def test_dispatch_train(start_app):
     """Tests dispatching a train and ensures all modules react accordingly"""
 
     # Upload track
-    dialog = QtWidgets.QFileDialog.selectFile(self, "C:/Users/Evan/OneDrive/Documents/GitHub/ECE1140-Project/resources/Green Line.xlsx")
+    dialog = QtWidgets.QFileDialog(self)
+    dialog.selectFile(self, "C:/Users/Evan/OneDrive/Documents/GitHub/ECE1140-Project/resources/Green Line.xlsx")
     fileInfo = dialog.getOpenFileName(self)
     TrackModelDef.SignalHandler.readInData(self, fileInfo)
     dialog = QtWidgets.QFileDialog.selectFile("C:/Users/Evan/OneDrive/Documents/GitHub/ECE1140-Project/resources/Red Line.xlsx")
