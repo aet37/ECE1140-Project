@@ -89,6 +89,9 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         self.block_combo_box.setCurrentIndex(0)
         self.block_selected()
 
+        # Connect to signals
+        signals.swtrack_update_gui.connect(self.update_gui)
+
         self.show()
 
     def track_controller_selected(self):
@@ -108,7 +111,7 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
                 self.block_combo_box.addItem("Block #{}".format(block))
 
         # Update gui since a new track controller was selected
-        # self.update_gui()
+        self.update_gui()
 
     def block_selected(self):
         """Method called when a different block is selected"""
@@ -118,13 +121,15 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             self.current_block = None
 
         # Update gui since a new block was selected
-        # self.update_gui()
+        self.update_gui()
 
     def update_gui(self):
         """Updates the information in the gui using the currently selected
         track controller and block
         """
         logger.info("Updating track controller gui")
+        # TODO(ljk): Check if a tag is None then insert - in ui
+
         # Get the correct track controller
         if 'Red' in self.track_controller_combo_box.currentText():
             track_controller = track_system.red_track_controllers[self.current_track_controller - 1]
@@ -137,19 +142,29 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         track_heater_label.setText("ON" if track_heater_status else "OFF")
 
         # Switch Position
-        # switch_position = track_controller.get_switch_position()
+        switch_position = track_controller.get_switch_position()
+        switch_position_label = self.findChild(QtWidgets.QLabel, 'switch_position_label')
+        switch_position_label.setText("0" if switch_position else "1")
 
         # Light status
-        # light_status = track_controller.get_light_status()
+        light_status = track_controller.get_light_status()
+        light_status_label = self.findChild(QtWidgets.QLabel, 'light_status_label')
+        light_status_label.setText("GREEN" if light_status else "RED")
 
         # Occupied
-        # occupied = track_controller.get_block_occupancy(self.current_block)
+        occupied = track_controller.get_block_occupancy(self.current_block)
+        occupied_label = self.findChild(QtWidgets.QLabel, 'occupied_label')
+        occupied_label.setText("YES" if occupied else "NO")
 
         # Block status
-        # block_status = track_controller.get_block_status(self.current_block)
+        block_status = track_controller.get_block_status(self.current_block)
+        block_status_label = self.findChild(QtWidgets.QLabel, 'block_status_label')
+        block_status_label.setText("OK" if block_status else "CLOSED")
 
         # Railway crossing
-        # railway_crossing = track_controller.get_railway_crossing(self.current_block)
+        railway_crossing = track_controller.get_railway_crossing(self.current_block)
+        railway_crossing_label = self.findChild(QtWidgets.QLabel, 'railway_crossing_label')
+        railway_crossing_label.setText("DOWN" if railway_crossing else "UP")
 
         # Authority
         # authority = track_controller.get_authority_of_block(self.current_block)

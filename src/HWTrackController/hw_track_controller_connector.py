@@ -7,6 +7,7 @@ import serial
 from src.common_def import pairwise
 from src.SWTrackController.track_controller import TrackController
 from src.UI.Common.common import DownloadInProgress
+from src.signals import signals
 from src.logger import get_logger
 
 logger = get_logger(__name__)
@@ -48,11 +49,15 @@ class HWTrackCtrlConnector(TrackController):
         """Periodic function to update tags in this object"""
         with self.comms_lock:
             self.send_message("{}".format(Code.GET_ALL_TAG_VALUES.value))
-            tag_values = str(self.get_response())
+            tag_values = str(self.get_response()).rstrip('\'')
         splits = tag_values.split(" ")
 
         # Ignore the response code
         for key, value in pairwise(splits[1:]):
+            if (key == "switch") and key in self.tags:
+                if self.tags[key] != bool(int(value)):
+                    signals.swtrack_update_gui.emit()
+
             self.tags.update({key : bool(int(value))})
 
         if HWTrackCtrlConnector.run_timer:

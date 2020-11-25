@@ -308,7 +308,7 @@
               </font>
              </property>
              <property name="text">
-              <string>Track Status</string>
+              <string>Block Status</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -316,7 +316,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="track_status_label">
+            <widget class="QLabel" name="block_status_label">
              <property name="font">
               <font>
                <pointsize>11</pointsize>
