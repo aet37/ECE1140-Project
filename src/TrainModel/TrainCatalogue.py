@@ -72,7 +72,7 @@ class TrainCatalogue:
         newTrain.m_authority = authority
         newTrain.m_currentLine = currentLine
         newTrain.m_route = route
-        logger.critical("route[0] = %f", route[len(route)-1])
+        logger.debug("route[0] = %f", route[len(route)-1])
 
         # Add the train to the array
         self.m_trainList.append(newTrain)
@@ -97,10 +97,10 @@ class TrainCatalogue:
         # Add the block to the catalogue
         if (track_id == 0):
             block_catalogue_green.m_blockList.append(newBlock)
-            logger.critical("Received a green block. There are now " + str(len(block_catalogue_green.m_blockList)))
+            logger.debug("Received a green block. There are now " + str(len(block_catalogue_green.m_blockList)))
         else:
             block_catalogue_red.m_blockList.append(newBlock)
-            logger.critical("Received a red block. There are now " + str(len(block_catalogue_red.m_blockList)))
+            logger.debug("Received a red block. There are now " + str(len(block_catalogue_red.m_blockList)))
         
     # @brief Toggles the train lights
     def train_model_receive_lights(self, trainId, cabinLights):
@@ -139,7 +139,7 @@ class TrainCatalogue:
 
     def train_model_receive_power(self, trainId, powerStatus):
         currentTrack = self.m_trainList[trainId].m_currentLine
-        # currentBlock = self.m_trainList[trainId].m_route[0]
+        currentBlock = self.m_trainList[trainId].m_route[0]
         # LOG_TRAIN_MODEL("currentTrack = %d", currentTrack);
         # LOG_TRAIN_MODEL("currentBlock = %d", currentBlock);
         # LOG_TRAIN_MODEL("currentBlockInfo = 0x%x", currentBlockInfo);
@@ -147,10 +147,14 @@ class TrainCatalogue:
         # LOG_TRAIN_MODEL("Number of green line blocks = %d", BlockCatalogue::GetInstance().GetNumberOfGreenBlocks());
         # LOG_TRAIN_MODEL("Number of trains = %d", TrainCatalogue::GetInstance().GetNumberOfTrains());
 
-        # currentBlockSize = self.m_blockList[currentBlock].m_sizeOfBlock
-        # speedLimitBlock = self.m_blockList[currentBlock].m_speedLimit
-        currentBlockSize = 10000 # meters
-        speedLimitBlock = 70 # Km/hr
+        if (currentTrack == 0):
+            currentBlockSize = block_catalogue_green.m_blockList[currentBlock].m_sizeOfBlock
+            speedLimitBlock = block_catalogue_green.m_blockList[currentBlock].m_speedLimit
+        else:
+            currentBlockSize = block_catalogue_red.m_blockList[currentBlock].m_sizeOfBlock
+            speedLimitBlock = block_catalogue_red.m_blockList[currentBlock].m_speedLimit
+        # currentBlockSize = 10000 # meters
+        # speedLimitBlock = 70 # Km/hr
         speedLimitBlock = speedLimitBlock * Converters.KmHr_to_mps
 
         # LOG_TRAIN_MODEL("currentBlockSize = %f", currentBlockSize);
