@@ -70,9 +70,15 @@ class TrackModelUi(QtWidgets.QMainWindow):
         logoutButton = self.findChild(QtWidgets.QPushButton, 'logout_button')
         logoutButton.clicked.connect(self.logout)
 
-    def readInData(self):
-        global greenSwitchNumber
-        global redSwitchNumber
+        for x in len(TrackModelDef.trackList):
+            print(x)
+            print(len(TrackModelDef.trackList))
+            theTrack = trackModelDef.trackList[x]
+            self.addTab(self, theTrack.lineName, theTrack.totalBlocks)
+            
+
+    def getFileName(self):
+
         dialog = QtWidgets.QFileDialog(self)
         fileInfo = dialog.getOpenFileName(self)
 
