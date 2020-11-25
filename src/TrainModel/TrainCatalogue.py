@@ -8,7 +8,7 @@ sys.path.append(".")
 # Python PROJECT INCLUDES
 from src.TrainModel.Train import Train
 from src.TrainModel.Block import Block
-from src.TrainModel.BlockCatalogue import block_catalogue
+from src.TrainModel.BlockCatalogue import block_catalogue_red, block_catalogue_green
 from src.signals import signals
 from src.logger import get_logger
 from src.common_def import Converters
@@ -51,6 +51,8 @@ class TrainCatalogue:
         signals.train_model_gui_receive_service_brake.connect(self.train_model_gui_receive_service_brake)
         # Receive Power Loop signal
         signals.train_model_receive_power.connect(self.train_model_receive_power)
+        # Receive Blocks
+        signals.train_model_receive_block.connect(self.train_model_receive_block)
 
     # print(sys.path)
 
@@ -59,8 +61,8 @@ class TrainCatalogue:
     ###############################################################
 
     # @brief Gets the train's route
-    def train_model_dispatch_train(self, trainId, destinationBlock, commandSpeed, authority, currentLine):
-        logger.critical("Received train_model_dispatch_train")
+    def train_model_dispatch_train(self, trainId, destinationBlock, commandSpeed, authority, currentLine, route):
+        logger.debug("Received train_model_dispatch_train")
         # Create new train object
         newTrain = Train(trainId)
 
@@ -69,6 +71,8 @@ class TrainCatalogue:
         newTrain.m_commandSpeed = commandSpeed * Converters.KmHr_to_MPH
         newTrain.m_authority = authority
         newTrain.m_currentLine = currentLine
+        newTrain.m_route = route
+        logger.critical("route[0] = %f", route[len(route)-1])
 
         # Add the train to the array
         self.m_trainList.append(newTrain)
@@ -78,6 +82,25 @@ class TrainCatalogue:
 
         # Tell the gui something has changed
         signals.train_model_dropdown_has_been_changed.emit()
+
+    # @brief Receives block information
+    def train_model_receive_block(self, track_id, block_id, elevation, slope, sizeOfBlock, speedLimit, travelDirection):
+        newBlock = Block(block_id)
+        # Parse stuff from Evan (trackId, blockId, elevation, grade, length, speedLimit, travelDirection)
+
+        newBlock.m_elevation = elevation
+        newBlock.m_slope = slope
+        newBlock.m_sizeOfBlock = sizeOfBlock
+        newBlock.m_speedLimit = speedLimit
+        newBlock.m_travelDirection = travelDirection
+
+        # Add the block to the catalogue
+        if (track_id == 0):
+            block_catalogue_green.m_blockList.append(newBlock)
+            logger.critical("Received a green block. There are now " + str(len(block_catalogue_green.m_blockList)))
+        else:
+            block_catalogue_red.m_blockList.append(newBlock)
+            logger.critical("Received a red block. There are now " + str(len(block_catalogue_red.m_blockList)))
         
     # @brief Toggles the train lights
     def train_model_receive_lights(self, trainId, cabinLights):

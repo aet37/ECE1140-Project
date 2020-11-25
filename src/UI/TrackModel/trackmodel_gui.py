@@ -13,6 +13,8 @@ sys.path.append(".")
 from src.TrackModel import TrackModelDef
 from src.signals import *
 from src.UI.window_manager import window_list
+from src.logger import get_logger
+logger = get_logger(__name__)
 
 
 class TrackModelUi(QtWidgets.QMainWindow):
@@ -37,7 +39,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
 
         self.update_timer = QTimer()
         self.update_timer.timeout.connect(self.switch_block)
-        self.update_timer.start(3000)
+        self.update_timer.start(500)
 
         self.show()
 
@@ -51,6 +53,12 @@ class TrackModelUi(QtWidgets.QMainWindow):
 
         logoutButton = self.findChild(QtWidgets.QPushButton, 'logout_button')
         logoutButton.clicked.connect(self.logout)
+        
+        if (len(TrackModelDef.trackList) > 0):
+            if (TrackModelDef.getTrack("Green") != None):
+                self.addTab("Green", 150)
+            if (TrackModelDef.getTrack("Red") != None):
+                self.addTab("Red", 76)
 
     def getFileName(self):
         dialog = QtWidgets.QFileDialog(self)
@@ -69,13 +77,14 @@ class TrackModelUi(QtWidgets.QMainWindow):
             theTabWidget.addTab(combo1, line+" Line")
             theCombo = combo1
             trackNumber = 0
-        elif (line == "Red"):
+        else:
             theTabWidget.addTab(combo2, line+" Line")
             theCombo = combo2
             trackNumber = 1
 
         for x in range(totalBlocks):
             theCombo.addItem("Block "+str(x + 1))
+        self.show()
     
     # def check_current_block(self):
     #     theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
@@ -178,3 +187,6 @@ class TrackModelUi(QtWidgets.QMainWindow):
             elif (failure == 3):
                 failure_mode_label.setText("Failure Mode:\n\n"+ "Track Circuit Failure")
 
+    def logout(self):
+        """Removes this window from the list"""
+        window_list.remove(self)
