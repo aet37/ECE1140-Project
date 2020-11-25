@@ -28,6 +28,7 @@ class TrainModelUi(QtWidgets.QMainWindow):
 
         # Receive a change
         signals.train_model_something_has_been_changed.connect(self.update_current_page)
+        signals.train_model_dropdown_has_been_changed.connect(self.update_dropdown)
 
         # Current train id that's selected in the drop down menu
         self.current_train_id = 0
@@ -174,10 +175,10 @@ class TrainModelUi(QtWidgets.QMainWindow):
 
     #######################################################################
     ############################ HELPER METHODS ###########################
-    #######################################################################
+    ####################################################################### "{:.2f} MPH".format(str(train_catalogue.m_trainList[self.current_train_id - 1].m_commandSpeed))
 
     def update_gui1(self):
-        self.findChild(QtWidgets.QLabel, 'disp_command_speed').setText(str(train_catalogue.m_trainList[self.current_train_id - 1].m_commandSpeed) + " m/s") # Remove trailing zeros from float
+        self.findChild(QtWidgets.QLabel, 'disp_command_speed').setText("{:.2f} MPH".format(train_catalogue.m_trainList[self.current_train_id - 1].m_commandSpeed)) # Remove trailing zeros from float
 
         if str(train_catalogue.m_trainList[self.current_train_id - 1].m_authority) == "1":
             self.findChild(QtWidgets.QLabel, 'disp_authority').setText("true")
@@ -186,7 +187,7 @@ class TrainModelUi(QtWidgets.QMainWindow):
             self.findChild(QtWidgets.QLabel, 'disp_authority').setText("false")
             self.findChild(QtWidgets.QLabel, 'disp_authority').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
 
-        self.findChild(QtWidgets.QLabel, 'disp_current_speed').setText(str(train_catalogue.m_trainList[self.current_train_id - 1].m_currentSpeed) + " m/s")
+        self.findChild(QtWidgets.QLabel, 'disp_current_speed').setText("{:.2f} MPH".format(train_catalogue.m_trainList[self.current_train_id - 1].m_currentSpeed))
         
         if len(train_catalogue.m_trainList[self.current_train_id - 1].m_route) == 0:
             self.findChild(QtWidgets.QLabel, 'disp_speed_limit').setText(str(0.0) + " km/h")
@@ -282,21 +283,24 @@ class TrainModelUi(QtWidgets.QMainWindow):
         """
         This will update the dropdown when a train is dispatched
         """
-        # Update the train drop down
-        currentIndex = self.findChild(QtWidgets.QComboBox, 'menu_train_combo').currentIndex()
-        self.findChild(QtWidgets.QComboBox, 'menu_train_combo').clear()
-        for i in range(0, len(train_catalogue.m_trainList)):
-            self.menu_train_combo.addItem("Train #" + str(i + 1))
-        self.findChild(QtWidgets.QComboBox, 'menu_train_combo').setCurrentIndex(currentIndex)
-        self.update_current_train_id()
+        if self.current_page == Page.MENU:
+            # Update the train drop down
+            currentIndex = self.findChild(QtWidgets.QComboBox, 'menu_train_combo').currentIndex()
+            self.findChild(QtWidgets.QComboBox, 'menu_train_combo').clear()
+            for i in range(0, len(train_catalogue.m_trainList)):
+                self.menu_train_combo.addItem("Train #" + str(i + 1))
+            self.findChild(QtWidgets.QComboBox, 'menu_train_combo').setCurrentIndex(currentIndex)
+            self.update_current_train_id()
 
     def update_current_page(self):
         """
         This will update the current page that we are on
         """
-        if self.current_page == Page.MENU:
-            self.update_dropdown()
-        elif self.current_page == Page.INFO_1:
+        # if self.current_page == Page.MENU:
+        #     self.update_dropdown()
+        # elif self.current_page == Page.INFO_1:
+        #     self.update_gui1()
+        if self.current_page == Page.INFO_1:
             self.update_gui1()
         elif self.current_page == Page.INFO_2:
             self.update_gui2()

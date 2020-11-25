@@ -330,6 +330,8 @@ class SignalHandler:
 
                     newTrack.addBlock(theBlock)
 
+                    signals.train_model_receive_block.emit(trackInfo['tNumber'], blockNumber - 1, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection)
+
 
 
                     #jsonString = json.dumps(blockInfo)

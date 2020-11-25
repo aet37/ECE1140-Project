@@ -294,7 +294,7 @@ background-color: rgba(255, 255, 255, 0);</string>
       <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
      </property>
      <property name="text">
-      <string>m/s</string>
+      <string>MPH</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -373,7 +373,7 @@ color: rgb(26, 171, 0);</string>
       <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
      </property>
      <property name="text">
-      <string>m/s</string>
+      <string>MPH</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -445,10 +445,10 @@ color: rgb(26, 171, 0);</string>
      </property>
      <property name="styleSheet">
       <string notr="true">background-color: rgba(255, 255, 255, 0);
-color: rgb(220, 44, 44);</string>
+color: rgb(26, 171, 0);;</string>
      </property>
      <property name="text">
-      <string>off</string>
+      <string>on</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

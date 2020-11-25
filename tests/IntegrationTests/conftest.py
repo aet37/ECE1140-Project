@@ -6,7 +6,7 @@ import pytest
 sys.path.insert(1, '.')
 from main import start, cleanup
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope='module')
 def start_app():
     """Starts the application with the testing flag"""
     start(['--testing'])
