@@ -53,7 +53,7 @@ class Track:
         self.switchList = [] # switchList.append(Switch(blah, blah))
         self.stationList = []
         self.blockList = []
-    
+
     def getBlock(self, blockNumber):
         return self.blockList[blockNumber - 1]
 
@@ -62,7 +62,7 @@ class Track:
 
 class Block:
     def __init__(self, blockNumber, blockLength, blockGrade, blockSpeedLimit,
-    blockElevation, blockCumulativeElevation, blockDirection, blockUnderground, 
+    blockElevation, blockCumulativeElevation, blockDirection, blockUnderground,
     blockSection, blockRailwayCrossing):
         self.blockNumber = blockNumber
         self.blockLength = blockLength
@@ -81,13 +81,13 @@ class Block:
 
     def addStation(self, stationName, stationExitSide):
         self.blockStation = Station(stationName, stationExitSide)
-    
+
     def addSwitch(self, switchNumber, block1, block2):
         self.blockSwitch = Switch(switchNumber, block1, block2)
 
     def updateOccupancy(self, occupancy):
         self.blockOccupied = occupancy
-    
+
     def getStationName(self):
         if (self.blockStation == None):
             return "NA"
@@ -145,7 +145,7 @@ class Station:
 
     def updateTicketsSold(self, ticketsSold):
         self.ticketsSold = ticketsSold
-    
+
     def updatePassengersBoarded(self, passengersBoarded):
         self.passengersBoarded = passengersBoarded
 
@@ -330,7 +330,10 @@ class SignalHandler:
 
                     newTrack.addBlock(theBlock)
 
-                    signals.train_model_receive_block.emit(trackInfo['tNumber'], blockNumber - 1, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection)
+                    if (blockNumber == 1):
+                        signals.train_model_receive_block.emit(trackInfo['tNumber'], 0, 0, 0, 10, blockSpeedLimit, blockDirection)
+
+                    signals.train_model_receive_block.emit(trackInfo['tNumber'], blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection)
 
 
 

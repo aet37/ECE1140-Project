@@ -14,6 +14,7 @@ from src.UI.SWTrainController.TrainController import SWTrainUi
 from src.UI.window_manager import window_list
 from src.timekeeper import timekeeper
 from src.TrackModel.TrackModelDef import SignalHandler
+from src.HWTrackController.hw_track_controller_connector import HWTrackCtrlConnector
 from src.logger import get_logger
 
 logger = get_logger(__name__)
@@ -55,10 +56,14 @@ def open_other_modules(args):
 
 def cleanup():
     """Cleanup resources from application"""
+    logger.critical("Cleaning up resources")
     # Stop the timekeeper
     timekeeper.running = False
     timekeeper.resume_time()
     timekeeper.timer_thread.join()
+
+    # Stop any hardware connectors
+    HWTrackCtrlConnector.run_timer = False
 
 def start(arguments):
     """Main entry point for application"""
