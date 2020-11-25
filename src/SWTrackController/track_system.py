@@ -107,7 +107,7 @@ class TrackSystem:
             else:
                 command_speed = self.suggested_speeds[train_id]
 
-            signals.trackmodel_update_command_speed(train_id, command_speed)
+            signals.trackmodel_update_command_speed.emit(train_id, command_speed)
 
     def swtrack_set_track_heater(self, line, status):
         """Method connected to the swtrack_set_track_heater signal"""

@@ -189,13 +189,10 @@ class SignalHandler:
     def updateOccupancy(self, trainId, line, currentBlock, trainOrNot):
         if (line == Line.LINE_GREEN):
             theTrack = getTrack("Green")
-            #print("Current block = " + str(currentBlock))
             theBlock = theTrack.getBlock(currentBlock)
             if (trainOrNot):
-                #print("BLOCK " + str(currentBlock) +" OCCUPIED")
                 theBlock.updateOccupancy(trainId)
             else:
-                #print("BLOCK " + str(currentBlock) +" NOT OCCUPIED")
                 theBlock.updateOccupancy(-1)
         else:
             theTrack = getTrack("Red")
