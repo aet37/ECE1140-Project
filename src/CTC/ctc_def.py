@@ -1,7 +1,5 @@
 """ File which holds definitions for CTC Module """
 
-from src.common_def import *
-
 class Train:
     """ Structure that holds data about a single train
         (id, command speed, authority, destination block)

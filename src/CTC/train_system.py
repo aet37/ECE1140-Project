@@ -258,19 +258,23 @@ class TrainSystem:
                 # If train has not made it out of the yard yet
                 if self.trains_arr[i].index_on_route == 0:
                     if self.trains_arr[i].route_blocks_arr[1] not in trains_on_green:
-                        if self.blocks_green_arr[self.trains_arr[i].route_blocks_arr[1] - 1].occupied:
+                        if self.blocks_green_arr[self.trains_arr[i].route_blocks_arr[1] - 1]\
+                        .occupied:
                             self.trains_arr[i].index_on_route += 1
                             trains_on_green.append(self.trains_arr[i].route_blocks_arr[1])
                         else:
                             continue
                 # If train has reached the yard
-                elif self.trains_arr[i].index_on_route == len(self.trains_arr[i].route_blocks_arr - 1):
+                elif self.trains_arr[i].index_on_route == len(self.trains_arr[i].route_blocks_arr\
+                - 1):
                     self.trains_arr.pop(i)
                     self.train_numbers.pop(i)
                     i -= 1
-                # If train is already on tracks; Advance train if block it says its on is not occupied
+                # If train is already on tracks; Advance train if block it says its on is
+                # not occupied
                 else:
-                    if not self.blocks_green_arr[self.trains_arr[i].route_blocks_arr[self.trains_arr[i].index_on_route] - 1].occupied:
+                    if not self.blocks_green_arr[self.trains_arr[i].route_blocks_arr\
+                    [self.trains_arr[i].index_on_route] - 1].occupied:
 
                         self.trains_arr[i].index_on_route += 1
 
@@ -285,9 +289,12 @@ class TrainSystem:
                             self.trains_arr[i].command_speed = 55
 
                         # Send upated command speed and authority to SW Track Controller
-                        signals.swtrack_update_authority.emit(self.trains_arr[i].train_id, self.trains_arr[i].authority)
-                        signals.swtrack_update_speed.emit(self.trains_arr[i].train_id, self.trains_arr[i].command_speed)
-                        trains_on_green.append(self.trains_arr[i].route_blocks_arr[self.trains_arr[i].index_on_route])
+                        signals.swtrack_update_authority.emit(self.trains_arr[i].train_id,\
+                            self.trains_arr[i].authority)
+                        signals.swtrack_update_speed.emit(self.trains_arr[i].train_id,\
+                            self.trains_arr[i].command_speed)
+                        trains_on_green.append(self.trains_arr[i].route_blocks_arr\
+                            [self.trains_arr[i].index_on_route])
                     else:
                         continue
 
@@ -296,19 +303,23 @@ class TrainSystem:
                 # If train has not made it out of the yard yet
                 if self.trains_arr[i].index_on_route == 0:
                     if self.trains_arr[i].route_blocks_arr[1] not in trains_on_red:
-                        if self.blocks_red_arr[self.trains_arr[i].route_blocks_arr[1] - 1].occupied:
+                        if self.blocks_red_arr[self.trains_arr[i].route_blocks_arr[1] - 1]\
+                        .occupied:
                             self.trains_arr[i].index_on_route += 1
                             trains_on_red.append(self.trains_arr[i].route_blocks_arr[1])
                         else:
                             continue
                 # If train has reached the yard
-                elif self.trains_arr[i].index_on_route == len(self.trains_arr[i].route_blocks_arr - 1):
+                elif self.trains_arr[i].index_on_route == len(self.trains_arr[i].route_blocks_arr\
+                - 1):
                     self.trains_arr.pop(i)
                     self.train_numbers.pop(i)
                     i -= 1
-                # If train is already on tracks; Advance train if block it says its on is not occupied
+                # If train is already on tracks; Advance train if block it says its on is
+                # not occupied
                 else:
-                    if not self.blocks_red_arr[self.trains_arr[i].route_blocks_arr[self.trains_arr[i].index_on_route] - 1].occupied:
+                    if not self.blocks_red_arr[self.trains_arr[i].route_blocks_arr\
+                    [self.trains_arr[i].index_on_route] - 1].occupied:
 
                         self.trains_arr[i].index_on_route += 1
 
@@ -323,9 +334,12 @@ class TrainSystem:
                             self.trains_arr[i].command_speed = 55
 
                         # Send upated command speed and authority to SW Track Controller
-                        signals.swtrack_update_authority.emit(self.trains_arr[i].train_id, self.trains_arr[i].authority)
-                        signals.swtrack_update_speed.emit(self.trains_arr[i].train_id, self.trains_arr[i].command_speed)
-                        trains_on_red.append(self.trains_arr[i].route_blocks_arr[self.trains_arr[i].index_on_route])    # append to list which trains are on
+                        signals.swtrack_update_authority.emit(self.trains_arr[i].train_id,\
+                            self.trains_arr[i].authority)
+                        signals.swtrack_update_speed.emit(self.trains_arr[i].train_id,\
+                            self.trains_arr[i].command_speed)
+                        trains_on_red.append(self.trains_arr[i].route_blocks_arr\
+                            [self.trains_arr[i].index_on_route])
                     else:
                         continue
 
