@@ -26,10 +26,7 @@ jobs:
       run: pip install -r requirements.txt
 
     - name: Run CTC tests
-      run: |
-        pushd tests/UnitTests/CTC
-        python *.py
-        popd
+      run: python tests/UnitTests/CTC/*.py
 
     - name: Run SWTrack tests
       run: |
