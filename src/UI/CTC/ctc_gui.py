@@ -4,9 +4,12 @@ import sys
 from functools import partial
 import pandas as pd
 
-from src.CTC.TrainSystem import *
+from src.CTC.train_system import ctc
+from src.common_def import Line
 from src.UI.window_manager import window_list
 from src.timekeeper import timekeeper
+from src.signals import signals
+from src.CTC.ctc_def import InterruptTrain
 
 # GLOBALS
 class CTCUi(QtWidgets.QMainWindow):
@@ -136,7 +139,6 @@ class CTCUi(QtWidgets.QMainWindow):
 				self.error_conf.setText('Faulty Excel File. Please Scrupulously look for error in file.')
 				return
 			
-
 		# If passed, add the trains to the time class
 		for i in range(len(to_add)):
 			timekeeper.ctc_trains_backlog.append(to_add[i])
@@ -342,9 +344,9 @@ class CTCUi(QtWidgets.QMainWindow):
 			self.d_speed_label.setText('Command Speed [to Track Controller]: 55 km/hr')
 			self.d_auth_label.setText('Authority [to Track Controller]: 3 Blocks')
 			if self.red_radio.isChecked():
-				ctc.DispatchTrain(int(self.d_block_label.text()), Line.LINE_RED)
+				ctc.dispatch_train(int(self.d_block_label.text()), Line.LINE_RED)
 			else:
-				ctc.DispatchTrain(int(self.d_block_label.text()), Line.LINE_GREEN)
+				ctc.dispatch_train(int(self.d_block_label.text()), Line.LINE_GREEN)
 		
 	#######################################################################################################################################
 	#######################################################################################################################################
@@ -432,8 +434,8 @@ class CTCUi(QtWidgets.QMainWindow):
 
 	def RefreshMapGreen(self):
 		# Get Track Occupancies
-		tr_oc = ctc.ReturnOccupancies(Line.LINE_GREEN)
-		tr_op = ctc.ReturnClosures(Line.LINE_GREEN)
+		tr_oc = ctc.return_occupancies(Line.LINE_GREEN)
+		tr_op = ctc.return_closures(Line.LINE_GREEN)
 
 		for i in range(len(tr_oc)):
 			if tr_oc[i] and tr_op[i]:
@@ -453,9 +455,9 @@ class CTCUi(QtWidgets.QMainWindow):
 					pass
 
 		# Get Switch Positions
-		sw_pos = ctc.ReturnSwitchPositions(Line.LINE_GREEN)
+		sw_pos = ctc.return_switch_positions(Line.LINE_GREEN)
 
-		wrtxt_arr = ctc.ReturnSwitchPositions(Line.LINE_GREEN)
+		wrtxt_arr = ctc.return_switch_positions(Line.LINE_GREEN)
 		for i in range(len(wrtxt_arr)):
 			wrtxt = wrtxt_arr[i]
 			try:
@@ -541,8 +543,8 @@ class CTCUi(QtWidgets.QMainWindow):
 
 	def RefreshMapRed(self):
 		# Get Track Occupancies
-		tr_oc = ctc.ReturnOccupancies(Line.LINE_RED)
-		tr_op = ctc.ReturnClosures(Line.LINE_RED)
+		tr_oc = ctc.return_occupancies(Line.LINE_RED)
+		tr_op = ctc.return_closures(Line.LINE_RED)
 
 		for i in range(len(tr_oc)):
 			if tr_oc[i] and tr_op[i]:
@@ -562,9 +564,9 @@ class CTCUi(QtWidgets.QMainWindow):
 					pass
 
 		# Get Switch Positions
-		sw_pos = ctc.ReturnSwitchPositions(Line.LINE_RED)
+		sw_pos = ctc.return_switch_positions(Line.LINE_RED)
 
-		wrtxt_arr = ctc.ReturnSwitchPositions(Line.LINE_RED)
+		wrtxt_arr = ctc.return_switch_positions(Line.LINE_RED)
 		for i in range(len(wrtxt_arr)):
 			wrtxt = wrtxt_arr[i]
 			try:
