@@ -40,5 +40,8 @@ jobs:
     - name: Run TrainModel-SWTrain Tests
       run: pytest tests/IntegrationTests/test_trainmodel_swtrain.py
 
+    - name: Run TrainModel TrackModel Tests
+      run: pytest tests/IntegrationTests/test_track_train_models.py
+      
     - name: Run Common tests
       run: pytest tests/IntegrationTests/test_common.py

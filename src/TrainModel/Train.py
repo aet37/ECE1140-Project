@@ -4,8 +4,8 @@
 # SYSTEM INCLUDES
 # (self, None)
 
-# C++ PROJECT INCLUDES
-# (self, None)
+# PYTHON PROJECT INCLUDES
+from src.common_def import *
 class Train:
 
     # The init method or constructor  
@@ -18,7 +18,7 @@ class Train:
         self.m_currentSpeed = 0.0 # THIS IS CALCULATED
         self.m_position = 0.0 # THIS IS CALCULATED
         self.m_authority = False
-        self.m_currentLine = 0 # Default green line
+        self.m_currentLine = Line.LINE_GREEN # Default green line
         self.m_power = 0.0
         # INTEGERS (self, Nonvital)
         self.m_tempControl = 0.0

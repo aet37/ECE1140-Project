@@ -16,6 +16,8 @@ from src.logger import get_logger
 
 import pyexcel
 import pyexcel_io
+from traceback import print_stack
+
 
 logger = get_logger(__name__)
 
@@ -55,6 +57,8 @@ class Track:
         self.blockList = []
     
     def getBlock(self, blockNumber):
+        #logger.critical("BlockNumber = " + str(blockNumber))
+        #print_stack()
         return self.blockList[blockNumber - 1]
 
     def addBlock(self, theBlock):
@@ -182,29 +186,30 @@ class SignalHandler:
         signals.trackmodel_dispatch_train.connect(self.dispatchTrain)
         signals.trackmodel_update_occupancy.connect(self.updateOccupancy)
 
-    def updateOccupancy(self, trainId, line, blockId, trainOrNot):
+    def updateOccupancy(self, trainId, line, currentBlock, trainOrNot):
         if (line == Line.LINE_GREEN):
             theTrack = getTrack("Green")
-            theBlock = theTrack.getBlock(blockId)
-            if (trainOrNot == 0):
+            #print("Current block = " + str(currentBlock))
+            theBlock = theTrack.getBlock(currentBlock)
+            if (trainOrNot):
+                #print("BLOCK " + str(currentBlock) +" OCCUPIED")
                 theBlock.updateOccupancy(trainId)
             else:
+                #print("BLOCK " + str(currentBlock) +" NOT OCCUPIED")
                 theBlock.updateOccupancy(-1)
         else:
             theTrack = getTrack("Red")
-            theBlock = theTrack.getBlock(blockId)
-            if (trainOrNot == 0):
+            theBlock = theTrack.getBlock(currentBlock)
+            if (trainOrNot):
                 theBlock.updateOccupancy(trainId)
             else:
                 theBlock.updateOccupancy(-1)
 
         # Tell swtrack the occupancy
-        signals.swtrack_update_occupancies.emit(blockId, line, trainOrNot)
+        signals.swtrack_update_occupancies.emit(trainId, line, currentBlock, trainOrNot)
 
     def dispatchTrain(self, trainId, destinationBlock, commandSpeed, authority, currentLine, switch_arr):
-        logger.critical("Received trackmodel_dispatch_train")
-        logger.critical(trackList)
-        logger.critical(currentLine)
+        logger.debug("Received trackmodel_dispatch_train")
         if (currentLine == Line.LINE_GREEN):
             theTrack = getTrack("Green")
             route = green_route_blocks
