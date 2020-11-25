@@ -7,17 +7,31 @@ sys.path.append(".")
 
 # Python PROJECT INCLUDES
 from src.TrainModel.Train import Train
+from src.TrainModel.Block import Block
+from src.TrainModel.BlockCatalogue import block_catalogue
 from src.signals import signals
 from src.logger import get_logger
+from src.common_def import Converters
 
 logger = get_logger(__name__)
-
 class TrainCatalogue:
+
+    
     # Call "m_trainlist.count()" for amount of trains
     # Call "m_trainlist.append()" to add a train
     # Call "m_trainlist[#]" to load a specific train
     def __init__ (self):
         self.m_trainList = []
+        self.m_blockList = []
+
+        # Acceleration Limit: 0.5 m/s^2     Deceleration Limit(service brake): 1.2 m/s^2    Deceleration Limit(emergency brake): 2.73 m/s^2
+        self.MAX_FORCE = 18551.9333
+        self.GRAVITY = 9.8
+        self.FRICTION_COEFFICIENT = 0.01
+        self.ACCELERATION_LIMIT = 0.5
+        self.DECELERATION_LIMIT_SERVICE = -1.2
+        self.DECELERATION_LIMIT_EMERGENCY = -2.73
+        self.VELOCITY_LIMIT = 19.4444
 
         # Receive dispatch train signal
         signals.train_model_dispatch_train.connect(self.train_model_dispatch_train)
@@ -35,6 +49,8 @@ class TrainCatalogue:
         signals.train_model_gui_receive_mode.connect(self.train_model_gui_receive_mode)
         # Receive service brake signal
         signals.train_model_gui_receive_service_brake.connect(self.train_model_gui_receive_service_brake)
+        # Receive Power Loop signal
+        signals.train_model_receive_power.connect(self.train_model_receive_power)
 
     # print(sys.path)
 
@@ -50,7 +66,7 @@ class TrainCatalogue:
 
         # Edit the train with the dispatched values
         newTrain.m_destinationBlock = destinationBlock
-        newTrain.m_commandSpeed = commandSpeed
+        newTrain.m_commandSpeed = commandSpeed * Converters.KmHr_to_MPH
         newTrain.m_authority = authority
         newTrain.m_currentLine = currentLine
 
@@ -61,7 +77,7 @@ class TrainCatalogue:
         signals.swtrain_dispatch_train.emit(commandSpeed, 0, authority)
 
         # Tell the gui something has changed
-        signals.train_model_something_has_been_changed.emit()
+        signals.train_model_dropdown_has_been_changed.emit()
         
     # @brief Toggles the train lights
     def train_model_receive_lights(self, trainId, cabinLights):
