@@ -76,6 +76,7 @@ def start(arguments):
                                  help='Auto uploads the red and green track')
     args = argument_parser.parse_args(arguments)
 
+    print("Starting time keeper")
     # Start the timekeeper
     timekeeper.start_time()
 

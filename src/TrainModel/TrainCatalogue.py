@@ -1,4 +1,4 @@
-    # Created by Kenneth Meier
+# Created by Kenneth Meier
 # Train implementation class
 
 # SYSTEM INCLUDES

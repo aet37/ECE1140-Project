@@ -95,6 +95,9 @@ class ControlSystem:
         """ Handler for swtrain_gui_set_kp_ki """
         self.p_controllers[train_id].kp = Kp
         self.p_controllers[train_id].ki = Ki
+        # Turn service brake off to begin moving
+        control_system.p_controllers[train_id].service_brake = False
+        signals.train_model_gui_receive_service_brake.emit(train_id, False)
 
     def swtrain_time_trigger(self):
         """ Calculates new power every sampling period """
