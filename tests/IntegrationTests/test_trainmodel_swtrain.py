@@ -9,6 +9,7 @@ from src.timekeeper import timekeeper
 import time
 from src.TrackModel.TrackModelDef import red_route_blocks, green_route_blocks
 
+
 def test_toggle_lights(start_app):
     """Testing toggling the lights"""
 

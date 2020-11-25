@@ -72,7 +72,7 @@ class TrainCatalogue:
         newTrain.m_authority = authority
         newTrain.m_currentLine = currentLine
         newTrain.m_route = route
-        logger.critical("route[0] = %f", route[len(route)-1])
+        logger.debug("route[0] = %f", route[len(route)-1])
 
         # Add the train to the array
         self.m_trainList.append(newTrain)
@@ -97,10 +97,10 @@ class TrainCatalogue:
         # Add the block to the catalogue
         if (track_id == 0):
             block_catalogue_green.m_blockList.append(newBlock)
-            logger.critical("Received a green block. There are now " + str(len(block_catalogue_green.m_blockList)))
+            logger.debug("Received a green block. There are now " + str(len(block_catalogue_green.m_blockList)))
         else:
             block_catalogue_red.m_blockList.append(newBlock)
-            logger.critical("Received a red block. There are now " + str(len(block_catalogue_red.m_blockList)))
+            logger.debug("Received a red block. There are now " + str(len(block_catalogue_red.m_blockList)))
         
     # @brief Toggles the train lights
     def train_model_receive_lights(self, trainId, cabinLights):
