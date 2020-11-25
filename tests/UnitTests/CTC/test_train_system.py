@@ -1,7 +1,10 @@
 """ UNIT Testing for CTC Train System File """
 
 import unittest
-from TrainSystem import ctc
+import sys
+
+sys.path.insert(1, '.')
+from src.CTC.train_system import ctc
 from src.common_def import Line
 
 class MyTestCase(unittest.TestCase):
@@ -64,7 +67,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(len(ctc.train_numbers) == 0, True)
 
         # Dispatch a Train
-        ctc.DispatchTrain(10, Line.LINE_GREEN)
+        ctc.dispatch_train(10, Line.LINE_GREEN)
 
         # Test that train was dispatched
         self.assertEqual(len(ctc.trains_arr) == 1, True)
@@ -91,7 +94,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(len(ctc.train_numbers) == 0, True)
 
         # Dispatch another train
-        ctc.DispatchTrain(13, Line.LINE_RED)
+        ctc.dispatch_train(13, Line.LINE_RED)
 
         # Test that train was dispatched
         self.assertEqual(len(ctc.trains_arr) == 1, True)

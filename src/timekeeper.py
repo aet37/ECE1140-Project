@@ -26,8 +26,6 @@ class Timekeeper:
                                             self.signal_timer_triggered)
         self.signal_timer.start()
 
-        #signals.swtrain_time_trigger.connect(lambda: print("Timer triggered"))
-
         # For CTC to store trains to be dispatched
         self.ctc_trains_backlog = []
 
