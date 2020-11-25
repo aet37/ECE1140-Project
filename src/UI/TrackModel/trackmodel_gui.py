@@ -178,11 +178,3 @@ class TrackModelUi(QtWidgets.QMainWindow):
             elif (failure == 3):
                 failure_mode_label.setText("Failure Mode:\n\n"+ "Track Circuit Failure")
 
-    def logout(self):
-        """Removes this window from the list"""
-        window_list.remove(self)
-
-if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-    window = TrackModelUi()
-    app.exec_()

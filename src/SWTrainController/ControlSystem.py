@@ -6,6 +6,8 @@
 
 from src.SWTrainController.Controller import Controller
 from src.signals import signals
+from serial.serialutil import SerialException
+from src.HWTrainController.HWTrainArduinoConnector import HWController
 from src.logger import get_logger
 
 logger = get_logger(__name__)
@@ -28,6 +30,10 @@ class ControlSystem:
         signals.swtrain_gui_press_service_brake.connect(self.swtrain_gui_press_service_brake)
         # Receive kp and ki signal
         signals.swtrain_gui_set_kp_ki.connect(self.swtrain_gui_set_kp_ki)
+        # Receive time trigger to calculate power
+        signals.swtrain_time_trigger.connect(self.swtrain_time_trigger)
+        # Receive current speed
+        signals.swtrain_update_current_speed.connect(self.swtrain_update_current_speed)
 
         ## RECEIVE NONVITAL SIGNALS ##
         # Receive lights signal
@@ -43,13 +49,23 @@ class ControlSystem:
 
     def create_new_controller(self, com_sp, curr_sp, auth):
         """ Method to create new controller instance """
-        # Create new controller
         # TRY TO CONNECT TO ARDUINO
-        # EXCEPT IF NOT CONNECTED
-        p_temp = Controller(com_sp, curr_sp, auth)
+        if len(self.p_controllers) == 0:
+            try:
+                # Try appending one of Tyler's objects into p_controllers
+                p_temp = HWController()
+                self.p_controllers.append(p_temp)
+            except SerialException:
+                # EXCEPT IF NOT CONNECTED
+                print("No arduino")
+                p_temp = Controller(com_sp, curr_sp, auth)
+                self.p_controllers.append(p_temp)
+        else:
+            # Create a new controller
+            p_temp = Controller(com_sp, curr_sp, auth)
 
-        # Add controller to vector of controllers (Keep everything singleton)
-        self.p_controllers.append(p_temp)
+            # Add controller to vector of controllers (Keep everything singleton)
+            self.p_controllers.append(p_temp)
 
     def get_amount_of_controllers(self):
         """ Returns amount of controllers in system """
@@ -58,8 +74,8 @@ class ControlSystem:
     ### SIGNAL DEFINITIONS ###
     def swtrain_dispatch_train(self, com_sp, curr_sp, auth):
         """ Handler for swtrain_dispatch_train signal """
+        self.create_new_controller(com_sp, curr_sp, auth)
         logger.critical("Received swtrain_dispatch_train")
-        control_system.create_new_controller(com_sp, curr_sp, auth)
 
     def swtrain_gui_switch_mode(self, train_id, override):
         """ Handler for swtrain_gui_switch_mode """
@@ -79,6 +95,22 @@ class ControlSystem:
         """ Handler for swtrain_gui_set_kp_ki """
         self.p_controllers[train_id].kp = Kp
         self.p_controllers[train_id].ki = Ki
+        # Turn service brake off to begin moving
+        control_system.p_controllers[train_id].service_brake = False
+        signals.train_model_gui_receive_service_brake.emit(train_id, False)
+
+    def swtrain_time_trigger(self):
+        """ Calculates new power every sampling period """
+        # Create loop to calculate power command of all active controllers
+        for train_id in range(0, len(self.p_controllers)):
+            self.p_controllers[train_id].calculate_power()
+            # Send train_id and power to train model
+            signals.train_model_receive_power.emit(train_id, self.p_controllers[train_id].power_command)
+
+    def swtrain_update_current_speed(self, train_id, curr_speed):
+        """ Updates current speed in train controller """
+        self.p_controllers[train_id].current_speed = curr_speed
+
 
     ## NonVital Signal Definitions ##
     def swtrain_gui_toggle_cabin_lights(self, train_id):

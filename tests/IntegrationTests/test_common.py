@@ -2,7 +2,7 @@
 
 import sys
 
-sys.path.insert(1, '.')
+sys.path.append(".")
 from src.TrainModel.TrainCatalogue import train_catalogue
 from src.SWTrainController.ControlSystem import control_system
 from src.CTC.TrainSystem import ctc
@@ -30,7 +30,7 @@ def test_dispatch_train(start_app):
     assert len(control_system.p_controllers) == 1
 
     # Assert received authority and command speed
-    assert train_catalogue.m_trainList[0].m_commandSpeed == 45.0
+    assert train_catalogue.m_trainList[0].m_commandSpeed == 27.961695
     assert train_catalogue.m_trainList[0].m_authority
 
     assert control_system.p_controllers[0].command_speed == 45.0

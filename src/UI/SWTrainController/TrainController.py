@@ -9,6 +9,7 @@ from src.signals import signals
 from src.UI.window_manager import window_list
 # Import singleton instance of control system
 from src.SWTrainController.ControlSystem import control_system
+from src.common_def import Converters
 
 from src.logger import get_logger
 
@@ -87,6 +88,12 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
         # Define Signal Connections #
         signals.swtrain_dispatch_train.connect(self.update_controller_list)
+        signals.train_model_receive_power.connect(self.update_gui)
+        signals.swtrain_update_current_speed.connect(self.update_gui)
+
+        # Update controllers if received before opening
+        for _ in range(0, len(control_system.p_controllers) ):
+            self.update_controller_list()
 
         # Define function so comboboxes change synchronously #
         self.TrainIDBox.currentIndexChanged.connect(self.update_dropdowns)
@@ -233,12 +240,13 @@ class SWTrainUi(QtWidgets.QMainWindow):
         self.announcements_status = control_system.p_controllers[int(self.current_train_id) - 1].announcements
         self.advertisements_status = control_system.p_controllers[int(self.current_train_id) - 1].advertisements
         self.curr_speed = control_system.p_controllers[int(self.current_train_id) - 1].current_speed
-        self.com_speed = control_system.p_controllers[int(self.current_train_id) - 1].command_speed
+        self.com_speed = control_system.p_controllers[int(self.current_train_id) - 1].command_speed * Converters.KmHr_to_MPH
         self.setpoint_speed = control_system.p_controllers[int(self.current_train_id) - 1].setpoint_speed
         self.service_brake_status = control_system.p_controllers[int(self.current_train_id) - 1].service_brake
         self.mode_status = control_system.p_controllers[int(self.current_train_id) - 1].mode
         self.kp_status = control_system.p_controllers[int(self.current_train_id) - 1].kp
         self.ki_status = control_system.p_controllers[int(self.current_train_id) - 1].ki
+        self.power_status = control_system.p_controllers[int(self.current_train_id) - 1].power_command
 
         # Change GUI to reflect current data
         # Update doors
@@ -266,13 +274,16 @@ class SWTrainUi(QtWidgets.QMainWindow):
             self.advertisements_button.setStyleSheet("background-color: green;")
 
         # Update current speed
-        self.current_speed_label.setText(str(self.curr_speed) + "MPH")
+        self.current_speed_label.setText("{:.2f} MPH".format(self.curr_speed))
 
         # Update command speed
-        self.command_speed_label.setText(str(self.com_speed) + "MPH")
+        self.command_speed_label.setText("{:.2f} MPH".format(self.com_speed))
 
         # Update setpoint speed
-        self.setpoint_speed_label.setText(str(self.setpoint_speed) + "MPH")
+        self.setpoint_speed_label.setText("{:.2f} MPH".format(self.setpoint_speed))
+
+        # Update power
+        self.power_command_label.setText("{:.2f} W".format(self.power_status))
 
         # Update service brake
         if self.service_brake_status == 1:
@@ -445,13 +456,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
         # Get setpoint speed
         setpoint_speed = self.findChild(QtWidgets.QLineEdit, "EnterSpeed").text()
-
-        # Check if train is in manual mode
-        if self.manual_mode.styleSheet() != "background-color: green;":
-            alert = Alert("Cannot input value!\nTrain must be in manual mode!")
-            alert.exec_()
-            return
-
+        setpoint_speed = setpoint_speed.split()[0]
         # Check if number was entered
         try:
             float(setpoint_speed)
@@ -467,11 +472,12 @@ class SWTrainUi(QtWidgets.QMainWindow):
             return
 
         # Check if speed entered is less than command speed
-        #com_sp = self.findChild(QtWidgets.QLabel, "command_speed_label").text()
-        #if int(setpoint_speed) > int(com_sp):
-        #    alert = Alert("Error! Entered speed must be lower than speed limit!")
-        #    alert.exec_()
-        #    return
+        com_sp = self.findChild(QtWidgets.QLabel, "command_speed_label").text()
+        com_sp = com_sp.split()[0]
+        if float(setpoint_speed) > float(com_sp):
+            alert = Alert("Error! Entered speed must be lower than speed limit!")
+            alert.exec_()
+            return
 
         # If all conditions pass, check for confirmation
         confirmation = Confirmation("Entered speed is valid!\nSet speed?")
