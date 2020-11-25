@@ -8,6 +8,11 @@ class Line(Enum):
     LINE_RED = 1
     LINE_UNSPEC = 2
 
+def pairwise(iterable):
+    """Function used to iterate a list two elements at a time"""
+    a = iter(iterable)
+    return zip(a, a)
+
 class Converters:
     """Enumerated type for converter"""
     KmHr_to_mps = 0.277778

@@ -103,5 +103,21 @@ class TrackController:
         """
         return self.get_tag_value("heater")
 
+    def get_light_status(self):
+        """Method to get the light status"""
+        return self.get_tag_value("signal")
+
+    def get_block_occupancy(self, block_id):
+        """Method to get the block occupancy"""
+        return self.get_tag_value("b{}O".format(block_id))
+
+    def get_block_status(self, block_id):
+        """Method to get a block's status"""
+        return self.get_tag_value("b{}S".format(block_id))
+
+    def get_railway_crossing(self, block_id):
+        """Method to get the status of a railway crossing on the given block"""
+        return self.get_tag_value("b{}RRX".format(block_id))
+
 if __name__ == "__main__":
     raise Exception("Not to be run as a module")
