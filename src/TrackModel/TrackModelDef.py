@@ -330,7 +330,10 @@ class SignalHandler:
 
                     newTrack.addBlock(theBlock)
 
-                    signals.train_model_receive_block.emit(trackInfo['tNumber'], blockNumber - 1, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection)
+                    if (blockNumber == 1):
+                        signals.train_model_receive_block.emit(trackInfo['tNumber'], 0, 0, 0, 10, blockSpeedLimit, blockDirection)        
+
+                    signals.train_model_receive_block.emit(trackInfo['tNumber'], blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection)
 
 
 
