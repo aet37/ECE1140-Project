@@ -45,7 +45,7 @@ def test_power_loop(start_app):
         assert round(control_system.p_controllers[0].current_speed, 2) < 9.32
         assert round(train_catalogue.m_trainList[0].m_currentSpeed, 2) < 9.32
 
-        if timekeeper.current_time_min > 10:
+        if timekeeper.current_time_min > 20:
             assert False
 
     # Check to make sure speed is maintained
