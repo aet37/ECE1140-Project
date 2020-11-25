@@ -191,7 +191,7 @@ class SignalHandler:
             else:
                 theBlock.updateOccupancy(-1)
         else:
-            theTrack = TrackModelDef.getTrack("Red")
+            theTrack = getTrack("Red")
             theBlock = theTrack.getBlock(blockId)
             if (trainOrNot == 0):
                 theBlock.updateOccupancy(trainId)
@@ -207,16 +207,18 @@ class SignalHandler:
         logger.critical(currentLine)
         if (currentLine == Line.LINE_GREEN):
             theTrack = getTrack("Green")
+            route = green_route_blocks
             for i in green_route_blocks:
                 theBlock = theTrack.getBlock(i)
                 signals.train_model_receive_block.emit(0, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection)
         else:
             theTrack = getTrack("Red")
+            route = red_route_blocks
             for i in red_route_blocks:
                 theBlock = theTrack.getBlock(i)
                 signals.train_model_receive_block.emit(1, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection)
 
-        signals.train_model_dispatch_train.emit(trainId, destinationBlock, commandSpeed, authority, currentLine)
+        signals.train_model_dispatch_train.emit(trainId, destinationBlock, commandSpeed, authority, currentLine, route)
 
     # Examples of fileInfo inputs below
     #('C:/Users/Evan/OneDrive/Documents/GitHub/ECE1140-Project/resources/Green Line.xlsx', 'All Files (*)')
@@ -334,7 +336,6 @@ class SignalHandler:
                         signals.train_model_receive_block.emit(trackInfo['tNumber'], 0, 0, 0, 10, blockSpeedLimit, blockDirection)        
 
                     signals.train_model_receive_block.emit(trackInfo['tNumber'], blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection)
-
 
 
                     #jsonString = json.dumps(blockInfo)

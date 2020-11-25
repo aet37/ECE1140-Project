@@ -19,4 +19,5 @@ class BlockCatalogue:
         # signals.TRAIN_MODEL_DISPATCH_TRAIN.connect(self.train_model_dispatch_train)
 
 
-block_catalogue = BlockCatalogue()
+block_catalogue_red = BlockCatalogue()
+block_catalogue_green = BlockCatalogue()
