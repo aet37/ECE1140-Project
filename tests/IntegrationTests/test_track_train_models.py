@@ -4,18 +4,16 @@ import sys
 sys.path.insert(1, '.')
 from src.signals import signals
 from src.TrainModel.TrainCatalogue import train_catalogue
-from src.SWTrainController.ControlSystem import control_system
 from src.timekeeper import timekeeper
-import time
 from src.TrackModel.TrackModelDef import *
 from src.TrainModel.TrainCatalogue import *
-from src.SWTrackController.track_system import track_system
 import polling
-from traceback import print_stack
 
-def test_occupancy(start_app):
+def test_occupancy(upload_tracks, start_timekeeper):
     """Testing the power loop"""
+    # Disconnect unimportant signals
     signals.swtrack_update_occupancies.disconnect()
+
     # Dispatch a train from the train model
     signals.swtrack_dispatch_train.emit(0, 38, 15, 0, Line.LINE_GREEN, [0, 0, 0, 1, 1, 1, 0, 1, 0, 0])
 
@@ -24,26 +22,6 @@ def test_occupancy(start_app):
 
     # Set time to ten times wall clock speed
     timekeeper.time_factor = 0.05
-
-    # # Wait until speed is reached
-    # while(True):
-    #     time.sleep(0.05)
-    #     signals.swtrain_time_trigger.emit()
-    #     if round(control_system.p_controllers[0].current_speed, 2) == 9.32:
-    #         break
-    #     assert round(control_system.p_controllers[0].current_speed, 2) < 9.32
-    #     assert round(train_catalogue.m_trainList[0].m_currentSpeed, 2) < 9.32
-
-    #     if timekeeper.current_time_min > 10:
-    #         assert False
-
-    # Check to make sure speed is maintained
-    # minutes = timekeeper.current_time_min
-    # while(True):
-    #     assert round(control_system.p_controllers[0].current_speed, 2) == 9.32
-    #     assert round(train_catalogue.m_trainList[0].m_currentSpeed, 2) == 9.32
-    #     if (timekeeper.current_time_min == (minutes + 5)):
-    #         break
 
     theTrack = getTrack("Green")
 
