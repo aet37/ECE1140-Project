@@ -25,24 +25,24 @@ def test_initialized_constructor():
     assert test_obj.current_speed == 4
     assert test_obj.authority == 1
 
-def test_calculate_power():
-    """ Test calculatePower """
-    # Create new controller
-    test_obj = Controller(40,0,1)
+# def test_calculate_power():
+#     """ Test calculatePower """
+#     # Create new controller
+#     test_obj = Controller(40,0,1)
 
-    # Set Kp and Ki
-    test_obj.kp = 3
-    test_obj.ki = 2
+#     # Set Kp and Ki
+#     test_obj.kp = 3
+#     test_obj.ki = 2
 
-    # Calculate power
-    test_obj.calculate_power()
-    assert test_obj.power_command == 124
+#     # Calculate power
+#     test_obj.calculate_power()
+#     assert test_obj.power_command == 124
 
-    # Input a new command speed and recalculate power
-    test_obj.current_speed = 10
-    assert test_obj.power_command == 124
-    test_obj.calculate_power()
-    assert test_obj.power_command == 101
+#     # Input a new command speed and recalculate power
+#     test_obj.current_speed = 10
+#     assert test_obj.power_command == 124
+#     test_obj.calculate_power()
+#     assert test_obj.power_command == 101
 
 def test_toggle_mode():
     """ Test changing mode """
