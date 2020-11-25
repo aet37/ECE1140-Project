@@ -213,6 +213,7 @@ class TrainSystem:
 
     def update_blocks(self, ln, block, occ):
         """ Function which updates occupancies from Track Controller """
+
         if ln == Line.LINE_GREEN:
             if (block < 1) or (block > 150):
                 raise Exception('TrainSystem : update_blocks received blocks out of\
