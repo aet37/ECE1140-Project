@@ -5,7 +5,7 @@ import sys
 sys.path.append(".")
 from src.TrainModel.TrainCatalogue import train_catalogue
 from src.SWTrainController.ControlSystem import control_system
-from src.CTC.TrainSystem import ctc
+from src.CTC.train_system import ctc
 from src.common_def import Line
 from src.TrackModel.TrackModelDef import SignalHandler
 
@@ -20,7 +20,7 @@ def test_dispatch_train(start_app):
     SignalHandler.readInData(fileInfoRed)
 
     # Send dispatch signal
-    ctc.DispatchTrain(38, Line.LINE_GREEN)
+    ctc.dispatch_train(38, Line.LINE_GREEN)
 
     # Assert train is made in CTC
     assert ctc.trains_arr[0].train_id == 1
