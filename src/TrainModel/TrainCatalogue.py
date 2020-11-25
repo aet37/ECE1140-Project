@@ -11,7 +11,7 @@ from src.TrainModel.Block import Block
 from src.TrainModel.BlockCatalogue import block_catalogue_red, block_catalogue_green
 from src.signals import signals
 from src.logger import get_logger
-from src.common_def import Converters
+from src.common_def import *
 
 logger = get_logger(__name__)
 class TrainCatalogue:
@@ -147,7 +147,7 @@ class TrainCatalogue:
         # LOG_TRAIN_MODEL("Number of green line blocks = %d", BlockCatalogue::GetInstance().GetNumberOfGreenBlocks());
         # LOG_TRAIN_MODEL("Number of trains = %d", TrainCatalogue::GetInstance().GetNumberOfTrains());
 
-        if (currentTrack == 0):
+        if (currentTrack == Line.LINE_GREEN):
             currentBlockSize = block_catalogue_green.m_blockList[currentBlock].m_sizeOfBlock
             speedLimitBlock = block_catalogue_green.m_blockList[currentBlock].m_speedLimit
         else:
@@ -234,37 +234,35 @@ class TrainCatalogue:
             # Move to the next block!
             currentPosition = currentPosition - currentBlockSize # Catch overflow into next block
             self.m_trainList[trainId].m_position = currentPosition # Update position
-            # self.m_trainList[trainId].m_route.pop(0) # Remove the block train is on to move to nect block
+            self.m_trainList[trainId].m_route.pop(0) # Remove the block train is on to move to nect block
 
             # LOG_TRAIN_MODEL("Current block is now %d", tempTrain->GetCurrentBlock())
 
-            # Send block exited to Evan (trainid, trackid, blockId, trainOrNot)
-            # Common::Request newRequest1(Common::RequestCode::TRACK_MODEL_UPDATE_OCCUPANCY)
-            # newRequest1.AppendData(std::to_string(trainId))
-            # newRequest1.AppendData(std::to_string(currentTrack))
-            # newRequest1.AppendData(std::to_string(currentBlock)) # This is now the old block
-            # newRequest1.AppendData(std::to_string(0))
-            # TrackModel::serviceQueue.Push(newRequest1)
-
+            # Send block exited to Evan (trainid, trackid, blockId, trainOrNot
             # Send to Evan
-            # signals.trackmodel_update_occupancy.emit(trainId, currentTrack, currentBlock, 0)
+            if (currentTrack == Line.LINE_GREEN):
+                logger.debug("currentTrack = {}".format(currentTrack))
+                signals.trackmodel_update_occupancy.emit(trainId, Line.LINE_GREEN, currentBlock, False)
+                logger.debug("FIRST currentPosition = %f", currentPosition)
+                logger.debug("FIRST currentBlock = %f", currentBlock)
+            else:
+                signals.trackmodel_update_occupancy.emit(trainId, Line.LINE_RED, currentBlock, False)
 
-            # Send block entered to Evan (trainid, trackid, blockId, trainOrNot)
-            # Common::Request newRequest2(Common::RequestCode::TRACK_MODEL_UPDATE_OCCUPANCY)
-            # newRequest2.AppendData(std::to_string(trainId))
-            # newRequest2.AppendData(std::to_string(currentTrack))
-            # newRequest2.AppendData(std::to_string(tempTrain->GetCurrentBlock()))
-            # newRequest2.AppendData(std::to_string(1))
-            # TrackModel::serviceQueue.Push(newRequest2)
-
+            # Send block entered to Evan (trainid, trackid, blockId, trainOrNot
             # Send to Evan
-            # signals.trackmodel_update_occupancy.emit(trainId, currentTrack, self.m_trainList[trainId].m_currentLine, 1)
+            if (currentTrack == Line.LINE_GREEN):
+                signals.trackmodel_update_occupancy.emit(trainId, Line.LINE_GREEN, self.m_trainList[trainId].m_route[0], True)
+                logger.debug("SECOND currentPosition = %f", currentPosition)
+                logger.debug("SECOND self.m_trainList[trainId].m_route[0] = %f", self.m_trainList[trainId].m_route[0])
+            else:
+                signals.trackmodel_update_occupancy.emit(trainId, Line.LINE_RED, self.m_trainList[trainId].m_route[0], True)
         else:
             # LOG_TRAIN_MODEL("Staying in the same block: currentPosition = %f, blockSize = %f", currentPosition, currentBlockSize)
             # Still in the same block
             self.m_trainList[trainId].m_position = currentPosition
 
         # Set all the parameters in the train object
+        
         self.m_trainList[trainId].m_power = powerStatus
         self.m_trainList[trainId].m_currentSpeed = velocityCalc * Converters.mps_to_MPH
 

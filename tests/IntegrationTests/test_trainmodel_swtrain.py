@@ -8,6 +8,7 @@ from src.SWTrainController.ControlSystem import control_system
 from src.timekeeper import timekeeper
 import time
 from src.TrackModel.TrackModelDef import red_route_blocks, green_route_blocks
+from src.SWTrackController.track_system import track_system
 
 
 def test_toggle_lights(start_app):
@@ -22,6 +23,9 @@ def test_toggle_lights(start_app):
 
 def test_power_loop(start_app):
     """Testing the power loop"""
+
+    signals.trackmodel_update_occupancy.disconnect()
+
     # Dispatch a train from the train model
     signals.train_model_dispatch_train.emit(0, 38, 15, 0, 0, green_route_blocks)
 
