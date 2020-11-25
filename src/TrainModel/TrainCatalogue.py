@@ -219,6 +219,9 @@ class TrainCatalogue:
             # newRequest1.AppendData(std::to_string(0))
             # TrackModel::serviceQueue.Push(newRequest1)
 
+            # Send to Evan
+            # signals.trackmodel_update_occupancy.emit(trainId, currentTrack, currentBlock, 0)
+
             # Send block entered to Evan (trainid, trackid, blockId, trainOrNot)
             # Common::Request newRequest2(Common::RequestCode::TRACK_MODEL_UPDATE_OCCUPANCY)
             # newRequest2.AppendData(std::to_string(trainId))
@@ -226,6 +229,9 @@ class TrainCatalogue:
             # newRequest2.AppendData(std::to_string(tempTrain->GetCurrentBlock()))
             # newRequest2.AppendData(std::to_string(1))
             # TrackModel::serviceQueue.Push(newRequest2)
+
+            # Send to Evan
+            # signals.trackmodel_update_occupancy.emit(trainId, currentTrack, self.m_trainList[trainId].m_currentLine, 1)
         else:
             # LOG_TRAIN_MODEL("Staying in the same block: currentPosition = %f, blockSize = %f", currentPosition, currentBlockSize)
             # Still in the same block
