@@ -17,6 +17,7 @@ def test_toggle_lights(start_app):
 
     assert control_system.p_controllers[0].lights
     assert train_catalogue.m_trainList[0].m_cabinLights
+
 def test_power_loop(start_app):
     """Testing the power loop"""
     # Dispatch a train from the train model
@@ -36,7 +37,10 @@ def test_power_loop(start_app):
             break
         assert round(control_system.p_controllers[0].current_speed, 2) < 9.32
         assert round(train_catalogue.m_trainList[0].m_currentSpeed, 2) < 9.32
-    
+
+        if timekeeper.current_time_min > 10:
+            assert False
+
     # Check to make sure speed is maintained
     minutes = timekeeper.current_time_min
     while(True):
