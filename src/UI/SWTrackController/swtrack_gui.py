@@ -194,6 +194,8 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             alert = Alert("Program downloaded successfully!")
             alert.exec_()
 
+        self.update_gui()
+
     @staticmethod
     def compile_program(file_name):
         """Method used to invoke the PLC language compiler on the given file

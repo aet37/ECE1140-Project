@@ -125,6 +125,11 @@ class HWTrackCtrlConnector(TrackController):
         :param str tag_name: Name of the tag
         :param bool value: Value to set to the tag to
         """
+        super().set_tag_value(tag_name, value)
         with self.comms_lock:
             self.send_message(" ".join(map(str, (Code.SET_TAG_VALUE.value, tag_name, int(value)))))
             logger.info(self.get_response())
+
+    def run_program(self):
+        """Nothing should be done for the hw controller"""
+        pass

@@ -1,6 +1,7 @@
 """Module containing the definition for a track controller object"""
 
 from src.SWTrackController.plc_components import Instruction, InstructionType
+from src.signals import signals
 from src.logger import get_logger
 
 logger = get_logger(__name__)
@@ -107,6 +108,7 @@ class TrackController:
         """
         try:
             self.tags[tag_name] = value
+            signals.swtrack_update_gui.emit()
         except KeyError:
             logger.debug("Tag named %s not found", tag_name)
 

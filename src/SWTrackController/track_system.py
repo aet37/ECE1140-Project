@@ -94,6 +94,12 @@ class TrackSystem:
         for track_controller in track_controllers:
             # TODO(nns): Possibly add safety architecture here
             track_controller.set_block_occupancy(block_id, occupied)
+            track_controller.run_program()
+
+            new_authority = track_controller.get_authority_of_block(block_id)
+            if (new_authority is not None) and (occupied):
+                # Send the updated authority to this train
+                signals.trackmodel_update_authority.emit(train_id, new_authority)
 
         # Forward this information to the CTC
         signals.update_occupancy.emit(line, block_id, occupied)
