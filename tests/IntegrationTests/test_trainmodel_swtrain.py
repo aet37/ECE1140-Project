@@ -1,14 +1,15 @@
 """Tests for interactions between the train model and sw train controller"""
 
+import polling
+import pytest
 import sys
 sys.path.insert(1, '.')
 from src.signals import signals
 from src.TrainModel.TrainCatalogue import train_catalogue
 from src.SWTrainController.ControlSystem import control_system
 from src.timekeeper import timekeeper
-import time
 from src.TrackModel.TrackModelDef import green_route_blocks
-from src.common_def import *
+from src.common_def import Line
 
 
 def test_toggle_lights():
@@ -35,22 +36,23 @@ def test_power_loop(upload_tracks, start_timekeeper):
     # Set time to ten times wall clock speed
     timekeeper.time_factor = 0.05
 
-    # Wait until speed is reached
-    while(True):
-        time.sleep(0.05)
-        signals.swtrain_time_trigger.emit()
-        if round(control_system.p_controllers[0].current_speed, 2) == 9.32:
-            break
-        assert round(control_system.p_controllers[0].current_speed, 2) < 9.32
-        assert round(train_catalogue.m_trainList[0].m_currentSpeed, 2) < 9.32
+    polling.poll(raise_speed, step=0.05, timeout=60)
 
-        if timekeeper.current_time_min > 20:
-            assert False
+    with pytest.raises(polling.PollingException):
+        polling.poll(maintain_speed, step=0.1, timeout=10)
 
-    # Check to make sure speed is maintained
-    minutes = timekeeper.current_time_min
-    while(True):
-        assert round(control_system.p_controllers[0].current_speed, 2) == 9.32
-        assert round(train_catalogue.m_trainList[0].m_currentSpeed, 2) == 9.32
-        if (timekeeper.current_time_min == (minutes + 5)):
-            break
+def raise_speed():
+    """Emits the time trigger signal and ensures speed doesn't break threshold"""
+    signals.swtrain_time_trigger.emit()
+
+    assert round(control_system.p_controllers[0].current_speed, 2) <= 9.32
+    assert round(train_catalogue.m_trainList[0].m_currentSpeed, 2) <= 9.32
+
+    return round(control_system.p_controllers[0].current_speed, 2) == 9.32
+
+def maintain_speed():
+    """Emits the time trigger signal and ensures speed still doesn't break threshold"""
+    signals.swtrain_time_trigger.emit()
+
+    assert round(control_system.p_controllers[0].current_speed, 2) == 9.32
+    assert round(train_catalogue.m_trainList[0].m_currentSpeed, 2) == 9.32
