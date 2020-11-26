@@ -141,8 +141,10 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
 
         # Get the correct track controller
         if 'Red' in self.track_controller_combo_box.currentText():
+            line = Line.LINE_RED
             track_controller = track_system.red_track_controllers[self.current_track_controller - 1]
         else:
+            line = Line.LINE_GREEN
             track_controller = track_system.green_track_controllers[self.current_track_controller - 1]
 
         # Track heater label
@@ -169,6 +171,7 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         railway_crossing = track_controller.get_railway_crossing(self.current_block)
         self.railway_crossing_label.setText(self.determine_text(railway_crossing, "DOWN", "UP"))
 
+        print(occupied)
         if occupied:
             # Authority
             authority = track_controller.get_authority_of_block(self.current_block)
@@ -178,7 +181,7 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             self.suggested_speed_label.setText("55 MPH")
 
             # Command Speed
-            speed_limit = track_system.get_speed_limit_of_block(self.current_block)
+            speed_limit = track_system.get_speed_limit_of_block(line ,self.current_block)
             if speed_limit < 55.0:
                 self.command_speed_label.setText("{} MPH".format(speed_limit))
             else:

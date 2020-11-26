@@ -98,7 +98,7 @@ class TrackController:
         try:
             return self.tags[tag_name]
         except KeyError:
-            return True
+            return None
 
     def set_tag_value(self, tag_name, value):
         """Sets a tag's value inside the plc
