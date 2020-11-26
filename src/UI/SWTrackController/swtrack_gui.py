@@ -65,6 +65,16 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button')
         logout_button.clicked.connect(self.logout)
 
+        self.track_heater_label = self.findChild(QtWidgets.QLabel, 'track_heater_label')
+        self.switch_position_label = self.findChild(QtWidgets.QLabel, 'switch_position_label')
+        self.light_status_label = self.findChild(QtWidgets.QLabel, 'light_status_label')
+        self.occupied_label = self.findChild(QtWidgets.QLabel, 'occupied_label')
+        self.block_status_label = self.findChild(QtWidgets.QLabel, 'block_status_label')
+        self.railway_crossing_label = self.findChild(QtWidgets.QLabel, 'railway_crossing_label')
+        self.authority_label = self.findChild(QtWidgets.QLabel, 'authority_label')
+        self.suggested_speed_label = self.findChild(QtWidgets.QLabel, 'suggested_speed_label')
+        self.command_speed_label = self.findChild(QtWidgets.QLabel, 'command_speed_label')
+
         # switch_position_button = self.findChild(QtWidgets.QPushButton, 'switch_position_button')
         # switch_position_button.setAttribute(Qt.WA_TranslucentBackground)
         # switch_position_button.clicked.connect(self.switch_position_button_clicked)
@@ -128,7 +138,6 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         track controller and block
         """
         logger.info("Updating track controller gui")
-        # TODO(ljk): Check if a tag is None then insert - in ui
 
         # Get the correct track controller
         if 'Red' in self.track_controller_combo_box.currentText():
@@ -138,42 +147,58 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
 
         # Track heater label
         track_heater_status = track_controller.get_track_heater_status()
-        track_heater_label = self.findChild(QtWidgets.QLabel, 'track_heater_label')
-        track_heater_label.setText("ON" if track_heater_status else "OFF")
+        self.track_heater_label.setText(self.determine_text(track_heater_status, "ON", "OFF"))
 
         # Switch Position
         switch_position = track_controller.get_switch_position()
-        switch_position_label = self.findChild(QtWidgets.QLabel, 'switch_position_label')
-        switch_position_label.setText("0" if switch_position else "1")
+        self.switch_position_label.setText(self.determine_text(switch_position, "0", "1"))
 
         # Light status
         light_status = track_controller.get_light_status()
-        light_status_label = self.findChild(QtWidgets.QLabel, 'light_status_label')
-        light_status_label.setText("GREEN" if light_status else "RED")
+        self.light_status_label.setText(self.determine_text(light_status, "GREEN", "RED"))
 
         # Occupied
         occupied = track_controller.get_block_occupancy(self.current_block)
-        occupied_label = self.findChild(QtWidgets.QLabel, 'occupied_label')
-        occupied_label.setText("YES" if occupied else "NO")
+        self.occupied_label.setText(self.determine_text(occupied, "YES", "NO"))
 
         # Block status
         block_status = track_controller.get_block_status(self.current_block)
-        block_status_label = self.findChild(QtWidgets.QLabel, 'block_status_label')
-        block_status_label.setText("OK" if block_status else "CLOSED")
+        self.block_status_label.setText(self.determine_text(block_status, "OK", "CLOSED"))
 
         # Railway crossing
         railway_crossing = track_controller.get_railway_crossing(self.current_block)
-        railway_crossing_label = self.findChild(QtWidgets.QLabel, 'railway_crossing_label')
-        railway_crossing_label.setText("DOWN" if railway_crossing else "UP")
+        self.railway_crossing_label.setText(self.determine_text(railway_crossing, "DOWN", "UP"))
 
-        # Authority
-        # authority = track_controller.get_authority_of_block(self.current_block)
+        if occupied:
+            # Authority
+            authority = track_controller.get_authority_of_block(self.current_block)
+            self.authority_label.setText("YES" if authority else "NO")
 
-        # Suggested Speed
-        # suggested_speed = track_controller.get_suggested_speed(self.current_block)
+            # Suggested Speed
+            self.suggested_speed_label.setText("55 MPH")
 
-        # Command Speed
-        # command_speed = track_controller.get_command_speed(self.current_block)
+            # Command Speed
+            speed_limit = track_system.get_speed_limit_of_block(self.current_block)
+            if speed_limit < 55.0:
+                self.command_speed_label.setText("{} MPH".format(speed_limit))
+            else:
+                self.command_speed_label.setText("55 MPH")
+        else:
+            self.authority_label.setText("-")
+            self.suggested_speed_label.setText("-")
+            self.command_speed_label.setText("-")
+
+    @staticmethod
+    def determine_text(tag_value, true_text, false_text):
+        """Given the tag value, returns what to display"""
+        if tag_value is None:
+            return "-"
+        elif tag_value:
+            return true_text
+        elif not tag_value:
+            return false_text
+        else:
+            assert False, "Unexpected tag value"
 
     def download_program(self):
         """Method called when the download program button is pressed"""
