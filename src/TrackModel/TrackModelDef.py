@@ -55,7 +55,7 @@ class Track:
         self.switchList = [] # switchList.append(Switch(blah, blah))
         self.stationList = []
         self.blockList = []
-    
+
     def getBlock(self, blockNumber):
         #logger.critical("BlockNumber = " + str(blockNumber))
         #print_stack()
@@ -66,7 +66,7 @@ class Track:
 
 class Block:
     def __init__(self, blockNumber, blockLength, blockGrade, blockSpeedLimit,
-    blockElevation, blockCumulativeElevation, blockDirection, blockUnderground, 
+    blockElevation, blockCumulativeElevation, blockDirection, blockUnderground,
     blockSection, blockRailwayCrossing):
         self.blockNumber = blockNumber
         self.blockLength = blockLength
@@ -85,13 +85,13 @@ class Block:
 
     def addStation(self, stationName, stationExitSide):
         self.blockStation = Station(stationName, stationExitSide)
-    
+
     def addSwitch(self, switchNumber, block1, block2):
         self.blockSwitch = Switch(switchNumber, block1, block2)
 
     def updateOccupancy(self, occupancy):
         self.blockOccupied = occupancy
-    
+
     def getStationName(self):
         if (self.blockStation == None):
             return "NA"
@@ -149,7 +149,7 @@ class Station:
 
     def updateTicketsSold(self, ticketsSold):
         self.ticketsSold = ticketsSold
-    
+
     def updatePassengersBoarded(self, passengersBoarded):
         self.passengersBoarded = passengersBoarded
 
@@ -185,6 +185,7 @@ class SignalHandler:
     def __init__(self):
         signals.trackmodel_dispatch_train.connect(self.dispatchTrain)
         signals.trackmodel_update_occupancy.connect(self.updateOccupancy)
+        signals.trackmodel_update_command_speed.connect(self.updateCommandSpeed)
 
     def updateOccupancy(self, trainId, line, currentBlock, trainOrNot):
         if (line == Line.LINE_GREEN):
@@ -335,7 +336,7 @@ class SignalHandler:
                     newTrack.addBlock(theBlock)
 
                     if (blockNumber == 1):
-                        signals.train_model_receive_block.emit(trackInfo['tNumber'], 0, 0, 0, 10, blockSpeedLimit, blockDirection)        
+                        signals.train_model_receive_block.emit(trackInfo['tNumber'], 0, 0, 0, 10, blockSpeedLimit, blockDirection)
 
                     signals.train_model_receive_block.emit(trackInfo['tNumber'], blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection)
 
@@ -349,6 +350,8 @@ class SignalHandler:
             else:
                 print('error')
 
+    def updateCommandSpeed(self, trainId, newSpeed):
+        signals.train_model_update_command_speed.emit(trainId, newSpeed)
 
 # "Green" or "Red"
 def getTrack(trackColor):
