@@ -22,6 +22,11 @@ class Converters:
     Tons_to_kg = 907.1850030836
     mps_to_KmHr = 3.6
 
+class TrackCircuit:
+    """Class to hold attributes of track circuit"""
+    command_speed = 0
+    authority = 0
+
 
 if __name__ == "__main__":
     raise Exception("Not to be run as a module")
