@@ -16,6 +16,8 @@ from src.logger import get_logger
 
 import pyexcel
 import pyexcel_io
+from traceback import print_stack
+
 
 logger = get_logger(__name__)
 
@@ -55,6 +57,8 @@ class Track:
         self.blockList = []
 
     def getBlock(self, blockNumber):
+        #logger.critical("BlockNumber = " + str(blockNumber))
+        #print_stack()
         return self.blockList[blockNumber - 1]
 
     def addBlock(self, theBlock):
@@ -182,41 +186,41 @@ class SignalHandler:
         signals.trackmodel_dispatch_train.connect(self.dispatchTrain)
         signals.trackmodel_update_occupancy.connect(self.updateOccupancy)
 
-    def updateOccupancy(self, trainId, line, blockId, trainOrNot):
+    def updateOccupancy(self, trainId, line, currentBlock, trainOrNot):
         if (line == Line.LINE_GREEN):
             theTrack = getTrack("Green")
-            theBlock = theTrack.getBlock(blockId)
-            if (trainOrNot == 0):
+            theBlock = theTrack.getBlock(currentBlock)
+            if (trainOrNot):
                 theBlock.updateOccupancy(trainId)
             else:
                 theBlock.updateOccupancy(-1)
         else:
-            theTrack = TrackModelDef.getTrack("Red")
-            theBlock = theTrack.getBlock(blockId)
-            if (trainOrNot == 0):
+            theTrack = getTrack("Red")
+            theBlock = theTrack.getBlock(currentBlock)
+            if (trainOrNot):
                 theBlock.updateOccupancy(trainId)
             else:
                 theBlock.updateOccupancy(-1)
 
         # Tell swtrack the occupancy
-        signals.swtrack_update_occupancies.emit(blockId, line, trainOrNot)
+        signals.swtrack_update_occupancies.emit(trainId, line, currentBlock, trainOrNot)
 
     def dispatchTrain(self, trainId, destinationBlock, commandSpeed, authority, currentLine, switch_arr):
-        logger.critical("Received trackmodel_dispatch_train")
-        logger.critical(trackList)
-        logger.critical(currentLine)
+        logger.debug("Received trackmodel_dispatch_train")
         if (currentLine == Line.LINE_GREEN):
             theTrack = getTrack("Green")
+            route = green_route_blocks
             for i in green_route_blocks:
                 theBlock = theTrack.getBlock(i)
                 signals.train_model_receive_block.emit(0, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection)
         else:
             theTrack = getTrack("Red")
+            route = red_route_blocks
             for i in red_route_blocks:
                 theBlock = theTrack.getBlock(i)
                 signals.train_model_receive_block.emit(1, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection)
 
-        signals.train_model_dispatch_train.emit(trainId, destinationBlock, commandSpeed, authority, currentLine)
+        signals.train_model_dispatch_train.emit(trainId, destinationBlock, commandSpeed, authority, currentLine, route)
 
     # Examples of fileInfo inputs below
     #('C:/Users/Evan/OneDrive/Documents/GitHub/ECE1140-Project/resources/Green Line.xlsx', 'All Files (*)')
@@ -334,7 +338,6 @@ class SignalHandler:
                         signals.train_model_receive_block.emit(trackInfo['tNumber'], 0, 0, 0, 10, blockSpeedLimit, blockDirection)
 
                     signals.train_model_receive_block.emit(trackInfo['tNumber'], blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection)
-
 
 
                     #jsonString = json.dumps(blockInfo)

@@ -58,9 +58,7 @@ def cleanup():
     """Cleanup resources from application"""
     logger.critical("Cleaning up resources")
     # Stop the timekeeper
-    timekeeper.running = False
-    timekeeper.resume_time()
-    timekeeper.timer_thread.join()
+    timekeeper.stop_time()
 
     # Stop any hardware connectors
     HWTrackCtrlConnector.run_timer = False

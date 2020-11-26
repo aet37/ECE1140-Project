@@ -1,5 +1,6 @@
 """Module containing the definition for a track controller object"""
 
+from src.SWTrackController.plc_components import Instruction, InstructionType
 from src.logger import get_logger
 
 logger = get_logger(__name__)
@@ -11,9 +12,47 @@ class TrackController:
         # Tags in the plc program
         self.tags = {}
 
+        self.program_name = ""
+        self.task_list = []
+
     def run_program(self):
-        """"""
-        pass
+        """Runs the plc program"""
+        for task in self.task_list:
+            for rung in task[0]:
+                rung_status = True
+
+                for instruction in rung:
+                    if rung_status:
+                        rung_status = self.evaluate_instruction(instruction)
+                    else:
+                        if instruction.type == InstructionType.OTE:
+                            self.tags[instruction.argument] = False
+
+    def evaluate_instruction(self, instruction):
+        """Evaluates the given instruction given the states of the tags
+
+        :param Instruction instruction: Instruction to be evaluated
+
+        :return: Result of the evaluation
+        :rtype: bool
+        """
+        result = False
+
+        if instruction.type == InstructionType.XIC:
+            result = self.tags[instruction.argument]
+        elif instruction.type == InstructionType.XIO:
+            result = not self.tags[instruction.argument]
+        elif (instruction.type == InstructionType.OTE) or \
+             (instruction.type == InstructionType.OTL):
+            self.tags[instruction.argument] = True
+            result = True
+        elif instruction.type == InstructionType.OTU:
+            self.tags[instruction.argument] = False
+            result = True
+        else:
+            assert False
+
+        return result
 
     def download_program(self, compiled_program):
         """Constructs the plc program given the compiled output
@@ -21,7 +60,30 @@ class TrackController:
         :param file compiled_program: File containing the compiler output
         """
         logger.debug("Downloading program in %s", compiled_program)
-        pass
+
+        for line in open(compiled_program, 'r'):
+            splits = line.split()
+
+            command = splits[0]
+
+            if command == 'START_DOWNLOAD':
+                self.program_name = splits[1]
+            elif command == 'CREATE_TAG':
+                self.tags.update({splits[1] : splits[2] == 'TRUE'})
+            elif command == 'CREATE_TASK':
+                # Assert that task is continuous???
+                self.task_list.append([])
+            elif command == 'CREATE_ROUTINE':
+                self.task_list[-1].append([])
+            elif command == 'CREATE_RUNG':
+                self.task_list[-1][-1].append([])
+            elif command == 'CREATE_INSTRUCTION':
+                instruction = Instruction(InstructionType[splits[1]], splits[2])
+                self.task_list[-1][-1][-1].append(instruction)
+            elif command == 'END_DOWNLOAD':
+                self.run_program()
+            else:
+                assert False, "Unknown command from the compiler"
 
     def get_tag_value(self, tag_name):
         """Gets a tag's value from inside the plc
@@ -58,17 +120,6 @@ class TrackController:
 
         # Run the program since tag values have been changed
         self.run_program()
-
-    def get_speed_limit_of_block(self, block_id):
-        """Gets the speed limit of the given block
-
-        :param int block_id: Id of the block in question
-
-        :return: Speed limit of the block in km/hr
-        :rtype: float
-        """
-        # TODO(nns): Pass back actual speed limit
-        return 45.0
 
     def get_authority_of_block(self, block_id):
         """Gets the authority tag for the given block

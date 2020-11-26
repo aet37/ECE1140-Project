@@ -24,7 +24,6 @@ class Timekeeper:
 
         self.signal_timer = threading.Timer(self.signal_period * self.time_factor,
                                             self.signal_timer_triggered)
-        self.signal_timer.start()
 
         # For CTC to store trains to be dispatched
         self.ctc_trains_backlog = []
@@ -78,6 +77,13 @@ class Timekeeper:
     def start_time(self):
         """Initially starts the thread"""
         self.timer_thread.start()
+        self.signal_timer.start()
+
+    def stop_time(self):
+        """Stops the timekeeper"""
+        self.running = False
+        self.resume_time()
+        self.timer_thread.join()
 
     def pause_time(self):
         """Acquires the run lock, so the timer can't run"""

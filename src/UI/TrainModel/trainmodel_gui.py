@@ -10,7 +10,7 @@ sys.path.append(".")
 from src.signals import signals
 from src.UI.window_manager import window_list
 from src.TrainModel.TrainCatalogue import train_catalogue
-from src.TrainModel.BlockCatalogue import block_catalogue
+from src.TrainModel.BlockCatalogue import block_catalogue_green, block_catalogue_red
 from src.UI.Common.common import Alert
 
 class Page(Enum):
@@ -335,8 +335,9 @@ class TrainModelUi(QtWidgets.QMainWindow):
 
     def logout(self):
         """Method invoked when the logout button is pressed"""
-        signals.train_model_dispatch_train.emit(self.testDispTrainCount, 0, 0, 0, 0)
-        self.testDispTrainCount += 1
+        # signals.train_model_dispatch_train.emit(self.testDispTrainCount, 0, 0, 0, 0)
+        # self.testDispTrainCount += 1
+        window_list.remove(self)
 
 
 if __name__ == "__main__":
