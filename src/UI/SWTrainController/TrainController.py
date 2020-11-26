@@ -313,7 +313,9 @@ class SWTrainUi(QtWidgets.QMainWindow):
     def toggle_lights(self):
         # If no controllers have been created, button does nothing
         if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
-             return
+            alert = Alert("Error: No trains have been dispatched!")
+            alert.exec_()
+            return
 
         # Tell train to toggle lights
         signals.swtrain_gui_toggle_cabin_lights.emit(int(self.current_train_id) - 1)
@@ -327,6 +329,8 @@ class SWTrainUi(QtWidgets.QMainWindow):
     def toggle_doors(self):
         # If no controllers have been created, button does nothing
         if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            alert = Alert("Error: No trains have been dispatched!")
+            alert.exec_()
             return
 
         # Tell train to toggle doors
@@ -341,6 +345,8 @@ class SWTrainUi(QtWidgets.QMainWindow):
     def toggle_announcements(self):
         # If no controllers have been created, button does nothing
         if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            alert = Alert("Error: No trains have been dispatched!")
+            alert.exec_()
             return
 
         # Tell train to toggle announcements
@@ -355,6 +361,8 @@ class SWTrainUi(QtWidgets.QMainWindow):
     def toggle_ads(self):
         # If no controllers have been created, button does nothing
         if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            alert = Alert("Error: No trains have been dispatched!")
+            alert.exec_()
             return
 
         # Tell train to toggle advertisements
@@ -369,6 +377,8 @@ class SWTrainUi(QtWidgets.QMainWindow):
     def set_sean_paul(self):
         # If no controllers have been created, button does nothing
         if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            alert = Alert("Error: No trains have been dispatched!")
+            alert.exec_()
             return
 
         temp = self.findChild(QtWidgets.QLineEdit, "InputTemp").text()
@@ -394,6 +404,8 @@ class SWTrainUi(QtWidgets.QMainWindow):
     def toggle_mode1(self):
         # If no controllers have been created, button does nothing
         if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            alert = Alert("Error: No trains have been dispatched!")
+            alert.exec_()
             return
 
         # If automatic mode is green, button does nothing
@@ -423,6 +435,8 @@ class SWTrainUi(QtWidgets.QMainWindow):
     def toggle_mode2(self):
         # If no controllers have been created, button does nothing
         if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            alert = Alert("Error: No trains have been dispatched!")
+            alert.exec_()
             return
 
         # If manual mode is green, button does nothing
@@ -452,6 +466,8 @@ class SWTrainUi(QtWidgets.QMainWindow):
     def set_setpoint(self):
         # If no controllers have been created, button does nothing
         if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            alert = Alert("Error: No trains have been dispatched!")
+            alert.exec_()
             return
 
         # Get setpoint speed
@@ -492,6 +508,8 @@ class SWTrainUi(QtWidgets.QMainWindow):
     def toggle_service_brake(self):
         # If no controllers have been created, button does nothing
         if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            alert = Alert("Error: No trains have been dispatched!")
+            alert.exec_()
             return
 
         # Check if authority is zero NEED METHOD TO AUTOMATICALLY TURN SERVICE BRAKE ON AUTOMATICALLY
@@ -526,6 +544,12 @@ class SWTrainUi(QtWidgets.QMainWindow):
         return
 
     def save_inputs(self):
+    # If no controllers have been created, button does nothing
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            alert = Alert("Error: No trains have been dispatched!")
+            alert.exec_()
+            return
+
         # Get Kp and Ki
         Kp = self.findChild(QtWidgets.QLineEdit, "InputKp").text()
         Ki = self.findChild(QtWidgets.QLineEdit, "InputKi").text()
