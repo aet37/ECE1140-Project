@@ -61,6 +61,7 @@ class TrackController:
         :param file compiled_program: File containing the compiler output
         """
         logger.debug("Downloading program in %s", compiled_program)
+        self.task_list.clear()
 
         for line in open(compiled_program, 'r'):
             splits = line.split()
