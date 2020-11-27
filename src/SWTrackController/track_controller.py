@@ -94,7 +94,6 @@ class TrackController:
         :return: Value of the tag
         :rtype: bool
         """
-        # TODO(nns): Remove this try catch once complete
         try:
             return self.tags[tag_name]
         except KeyError:

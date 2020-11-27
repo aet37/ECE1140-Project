@@ -79,6 +79,10 @@ class TrackSystem:
         else:
             signals.update_red_switches.emit(switch_positions)
 
+        # TODO (ljk): Remove this once plc programs are autouploaded!
+        if authority is None:
+            authority = True
+
         # Pass the dispatch train information to the Track Model
         signals.trackmodel_dispatch_train.emit(train_id, destination_block, command_speed, authority, line, route)
 
