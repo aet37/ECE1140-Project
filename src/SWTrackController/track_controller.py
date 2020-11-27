@@ -106,11 +106,12 @@ class TrackController:
         :param str tag_name: Name of the tag
         :param bool value: Value to set to the tag to
         """
-        try:
+        if tag_name not in self.tags:
+            logger.debug("Tag named %s not found", tag_name)
+        else:
+            print(self.tags)
             self.tags[tag_name] = value
             signals.swtrack_update_gui.emit()
-        except KeyError:
-            logger.debug("Tag named %s not found", tag_name)
 
     def set_block_occupancy(self, block_id, occupied):
         """Sets the block occupancy tag for the given block
@@ -121,6 +122,15 @@ class TrackController:
         self.set_tag_value('b{}O'.format(block_id), occupied)
 
         # Run the program since tag values have been changed
+        self.run_program()
+
+    def set_switch_position(self, value):
+        """Sets the switch position tag
+
+        :param bool value: Value to set tag to
+        """
+        self.set_tag_value('switch', value)
+
         self.run_program()
 
     def get_authority_of_block(self, block_id):
