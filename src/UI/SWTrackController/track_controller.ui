@@ -779,7 +779,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="suggested_speed_label_2">
+            <widget class="QLabel" name="suggested_speed_label">
              <property name="font">
               <font>
                <pointsize>11</pointsize>
