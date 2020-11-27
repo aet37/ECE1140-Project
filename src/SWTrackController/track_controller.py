@@ -109,7 +109,6 @@ class TrackController:
         if tag_name not in self.tags:
             logger.debug("Tag named %s not found", tag_name)
         else:
-            print(self.tags)
             self.tags[tag_name] = value
             signals.swtrack_update_gui.emit()
 
