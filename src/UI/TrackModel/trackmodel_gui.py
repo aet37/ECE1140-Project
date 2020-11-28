@@ -72,6 +72,9 @@ class TrackModelUi(QtWidgets.QMainWindow):
                 self.addTab("Green", 150)
             if (TrackModelDef.getTrack("Red") != None):
                 self.addTab("Red", 76)
+        
+        track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
+        track_heater_button.clicked.connect(self.update_track_heater)
 
     def getFileName(self):
         dialog = QtWidgets.QFileDialog(self)
@@ -187,14 +190,24 @@ class TrackModelUi(QtWidgets.QMainWindow):
             current_switch_label = self.findChild(QtWidgets.QLabel, 'current_switch_label')
             current_switch_label.setText("Switch flipped to:\n\n" + theBlock.getSwitchCurrentString())
 
+            # global trackHeaterButtonSet
+            # if (not trackHeaterButtonSet):
+            #     track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
+            #     track_heater_button.clicked.connect(self.update_track_heater)
+            #     trackHeaterButton = True
+
             track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
             trackHeater = theTrack.trackHeater
             if (trackHeater):
                 track_heater_button.setText("On")
                 track_heater_button.setStyleSheet("background-color : green")
+                if (not track_heater_button.isChecked()):
+                    track_heater_button.toggle()
             else:
                 track_heater_button.setText("Off")
                 track_heater_button.setStyleSheet("background-color : red")
+                if (track_heater_button.isChecked()):
+                    track_heater_button.toggle()
 
             failure_mode_label = self.findChild(QtWidgets.QLabel, 'failure_mode_label')
             failure = theBlock.failureMode
@@ -206,6 +219,30 @@ class TrackModelUi(QtWidgets.QMainWindow):
                 failure_mode_label.setText("Failure Mode:\n\n"+ "Broken Track")
             elif (failure == 3):
                 failure_mode_label.setText("Failure Mode:\n\n"+ "Track Circuit Failure")
+
+    def update_track_heater(self):
+        theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
+        theIndex = theTabWidget.currentIndex()
+        theLine = theTabWidget.tabText(theIndex)
+        track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
+        
+        if (theLine == "Green Line"):
+            theTrack = TrackModelDef.getTrack("Green")
+            theLine = Line.LINE_GREEN
+        else:
+            theTrack = TrackModelDef.getTrack("Red")
+
+        if (not track_heater_button.isChecked()):
+            track_heater_button.setText("Off")
+            track_heater_button.setStyleSheet("background-color : red")
+            theTrack.setTrackHeater(False)
+            signals.swtrack_set_track_heater.emit(theLine, False)
+        else:
+            track_heater_button.setText("On")
+            track_heater_button.setStyleSheet("background-color : green")
+            theTrack.setTrackHeater(True)
+            signals.swtrack_set_track_heater.emit(theLine, True)
+        
 
     def logout(self):
         """Removes this window from the list"""

@@ -64,6 +64,9 @@ class Track:
     def addBlock(self, theBlock):
         self.blockList.append(theBlock)
 
+    def setTrackHeater(self, heaterBool):
+        self.trackHeater = heaterBool
+
 class Block:
     def __init__(self, blockNumber, blockLength, blockGrade, blockSpeedLimit,
     blockElevation, blockCumulativeElevation, blockDirection, blockUnderground,
@@ -187,6 +190,9 @@ class SignalHandler:
         signals.trackmodel_update_occupancy.connect(self.updateOccupancy)
         signals.trackmodel_update_command_speed.connect(self.updateCommandSpeed)
         signals.trackmodel_update_authority.connect(self.updateAuthority)
+
+    def updateAuthority(self, trainId, newAuthority):
+        signals.train_model_update_authority.emit(trainId, newAuthority)
 
     def updateAuthority(self, trainId, newAuthority):
         signals.train_model_update_authority.emit(trainId, newAuthority)
