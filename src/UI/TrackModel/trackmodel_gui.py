@@ -33,17 +33,30 @@ class TrackModelUi(QtWidgets.QMainWindow):
         global combo2
         combo2 = QComboBox()
 
-        self.initUI()
-        #self.stacked_widget.currentChanged.connect(self.set_button_state)
-        #self.stacked_widget.setCurrentIndex(0)
+        global tabsAdded
+        tabsAdded = 0
 
-        self.update_timer = QTimer()
-        self.update_timer.timeout.connect(self.switch_block)
-        self.update_timer.start(500)
+
+        # if (tabsAdded > 0):
+        #     theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
+        #     if (TrackModelDef.getTrack("Green") != None):
+        #         print("GREEN CHANGED")
+        #         combo1.currentIndexChanged.connect(self.switch_block)
+        #     if (TrackModelDef.getTrack("Red") != None):
+        #         print("RED CHANGED")
+        #         combo2.currentIndexChanged.connect(self.switch_block)
+
+        self.initUI()
+
+        # theTabWidget.currentChanged.connect(self.set_button_state)
+
+        # self.update_timer = QTimer()
+        # self.update_timer.timeout.connect(self.switch_block)
+        # self.update_timer.start(500)
 
         self.show()
 
-        # signals.trackmodel_update_occupancy.connect(self.updateOccupancy)
+        #signals.somethingHasBeenChanged.connect(self.)
 
     def initUI(self):
         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
@@ -72,18 +85,25 @@ class TrackModelUi(QtWidgets.QMainWindow):
         self.addTab(line, totalBlocks)
     
     def addTab(self, line, totalBlocks):
+        global tabsAdded
         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
         if (line == "Green"):
             theTabWidget.addTab(combo1, line+" Line")
             theCombo = combo1
+            combo1.currentIndexChanged.connect(self.switch_block)
+            theTabWidget.currentChanged.connect(self.switch_block)
             trackNumber = 0
         else:
             theTabWidget.addTab(combo2, line+" Line")
             theCombo = combo2
+            combo2.currentIndexChanged.connect(self.switch_block)
+            theTabWidget.currentChanged.connect(self.switch_block)
             trackNumber = 1
 
         for x in range(totalBlocks):
             theCombo.addItem("Block "+str(x + 1))
+
+        tabsAdded = tabsAdded + 1
         self.show()
     
     # def check_current_block(self):
