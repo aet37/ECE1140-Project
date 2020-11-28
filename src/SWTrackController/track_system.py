@@ -121,8 +121,6 @@ class TrackSystem:
 
     def swtrack_set_track_heater(self, line, status):
         """Method connected to the swtrack_set_track_heater signal"""
-        logger.critical("Received swtrack_set_track_heater")
-
         # Get the correct list of track controllers based on the line
         track_controllers = self.green_track_controllers if line == Line.LINE_GREEN else self.red_track_controllers
 
