@@ -33,9 +33,6 @@ class TrackModelUi(QtWidgets.QMainWindow):
         global combo2
         combo2 = QComboBox()
 
-        # global trackHeaterButtonSet
-        # trackHeaterButtonSet = False
-
         global tabsAdded
         tabsAdded = 0
 
