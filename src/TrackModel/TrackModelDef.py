@@ -186,7 +186,11 @@ class SignalHandler:
         signals.trackmodel_dispatch_train.connect(self.dispatchTrain)
         signals.trackmodel_update_occupancy.connect(self.updateOccupancy)
         signals.trackmodel_update_command_speed.connect(self.updateCommandSpeed)
+        signals.trackmodel_update_authority.connect(self.updateAuthority)
 
+    def updateAuthority(self, trainId, newAuthority):
+        signals.train_model_update_authority.emit(trainId, newAuthority)
+        
     def updateOccupancy(self, trainId, line, currentBlock, trainOrNot):
         if (line == Line.LINE_GREEN):
             theTrack = getTrack("Green")

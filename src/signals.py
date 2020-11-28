@@ -56,6 +56,7 @@ class SignalsClass(QObject):
     train_model_something_has_been_changed = pyqtSignal() #  Used by gui to know that something has been changed FORMAT: ()
     train_model_dropdown_has_been_changed = pyqtSignal() #  Used by gui to know that something has been changed FORMAT: ()
     train_model_update_command_speed = pyqtSignal(int, float) # Used by the track model to update the command speed of a train (trainId, newSpeed)
+    train_model_update_authority = pyqtSignal(int, bool) # Used by the Track Model to update the authority of a train (trainId, newAuthority)
 
     # SWTrainController Signals
     swtrain_gui_toggle_cabin_lights = pyqtSignal(int) # TrainID
