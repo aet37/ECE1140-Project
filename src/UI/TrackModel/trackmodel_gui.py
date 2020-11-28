@@ -76,6 +76,8 @@ class TrackModelUi(QtWidgets.QMainWindow):
         track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
         track_heater_button.clicked.connect(self.update_track_heater)
 
+        broken_rail_failure_button = self.findChild(QtWidgets.QPushButton, 'broken_rail_failure_button')
+        broken_rail_failure_button.clicked.connect(self.update_broken_rail_failure)
     def getFileName(self):
         dialog = QtWidgets.QFileDialog(self)
         fileInfo = dialog.getOpenFileName(self)

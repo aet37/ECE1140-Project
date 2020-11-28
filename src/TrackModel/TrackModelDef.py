@@ -149,6 +149,7 @@ class Station:
         self.ticketsSold = 0
         self.passengersBoarded = 0
         self.passengersExited = 0
+        self.blockList = []
 
     def updateTicketsSold(self, ticketsSold):
         self.ticketsSold = ticketsSold
@@ -310,8 +311,6 @@ class SignalHandler:
 
                     blockInfo['Section'] = blockSection
 
-
-
                     if (records.column['Railway Crossing'][x] != ""):
                         blockInfo['Railway Crossing'] = "true"
                         blockRailwayCrossing = True
@@ -327,6 +326,18 @@ class SignalHandler:
                         stationName = records.column['Stations'][x]
                         stationExitSide = records.column['Exit Side'][x]
                         theBlock.addStation(stationName, stationExitSide)
+                        appended = False
+                        theTrack = getTrack(trackInfo['Track'])
+                        for y in len(theTrack.stationList):
+                            if (theTrack.stationList[y].stationName == stationName):
+                                theTrack.stationList[y].blockList.append(blockNumber)
+                                appended = True
+                        if (not appended):
+                            theTrack.stationList.append(Station(stationName, stationExitSide))
+                            theTrack.stationList[len(theTrack.stationList - 1)].blockList.append(blockNumber)
+
+
+                        theTrack.stationList.append(theBlock.s)
 
                     if (records.column['Switches'][x] != ""):
                         switchList = records.column['Switches'][x]
