@@ -1,6 +1,7 @@
 """Module containing the definition for a track controller object"""
 
 from src.SWTrackController.plc_components import Instruction, InstructionType
+from src.signals import signals
 from src.logger import get_logger
 
 logger = get_logger(__name__)
@@ -60,6 +61,7 @@ class TrackController:
         :param file compiled_program: File containing the compiler output
         """
         logger.debug("Downloading program in %s", compiled_program)
+        self.task_list.clear()
 
         for line in open(compiled_program, 'r'):
             splits = line.split()
@@ -93,11 +95,10 @@ class TrackController:
         :return: Value of the tag
         :rtype: bool
         """
-        # TODO(nns): Remove this try catch once complete
         try:
             return self.tags[tag_name]
         except KeyError:
-            return True
+            return None
 
     def set_tag_value(self, tag_name, value):
         """Sets a tag's value inside the plc
@@ -105,10 +106,11 @@ class TrackController:
         :param str tag_name: Name of the tag
         :param bool value: Value to set to the tag to
         """
-        try:
-            self.tags[tag_name] = value
-        except KeyError:
+        if tag_name not in self.tags:
             logger.debug("Tag named %s not found", tag_name)
+        else:
+            self.tags[tag_name] = value
+            signals.swtrack_update_gui.emit()
 
     def set_block_occupancy(self, block_id, occupied):
         """Sets the block occupancy tag for the given block
@@ -119,6 +121,15 @@ class TrackController:
         self.set_tag_value('b{}O'.format(block_id), occupied)
 
         # Run the program since tag values have been changed
+        self.run_program()
+
+    def set_switch_position(self, value):
+        """Sets the switch position tag
+
+        :param bool value: Value to set tag to
+        """
+        self.set_tag_value('switch', value)
+
         self.run_program()
 
     def get_authority_of_block(self, block_id):
