@@ -1,0 +1,67 @@
+TAG switch = FALSE
+TAG b29O = FALSE
+TAG b28O = FALSE
+TAG b27O = FALSE
+TAG b26O = FALSE
+TAG b25O = FALSE
+TAG b24O = FALSE
+TAG b23O = FALSE
+TAG b22O = FALSE
+TAG b21O = FALSE
+TAG b20O = FALSE
+TAG b19O = FALSE
+TAG b18O = FALSE
+TAG b17O = FALSE
+TAG b16O = FALSE
+TAG b15O = FALSE
+TAG b14O = FALSE
+TAG b29A = TRUE
+TAG b28A = TRUE
+TAG b27A = TRUE
+TAG b26A = TRUE
+TAG b25A = TRUE
+TAG b24A = TRUE
+TAG b23A = TRUE
+TAG b22A = TRUE
+TAG b21A = TRUE
+TAG b20A = TRUE
+TAG b19A = TRUE
+TAG b18A = TRUE
+TAG b17A = TRUE
+TAG b16A = TRUE
+TAG b15A = TRUE
+TAG b14A = TRUE
+TAG b150O = FALSE
+TAG b150A = TRUE
+TAG b1O = FALSE
+TAG b1A = TRUE
+
+TASK<PERIOD=1000> MainTask
+    ROUTINE Main
+        RUNG
+            XIO b29O
+            XIO b28O
+            XIO b27O
+            XIO b26O
+            XIO b25O
+            XIO b24O
+            XIO b23O
+            XIO b22O
+            XIO b21O
+            XIO b20O
+            XIO b19O
+            XIO b18O
+            XIO b17O
+            XIO b16O
+            XIO b15O
+            XIO b14O
+            XIO b1O
+            OTE b150A
+        ENDRUNG
+        RUNG
+            XIO b29O
+            OTE switch
+        ENDRUNG
+    ENDROUTINE
+ENDTASK
+

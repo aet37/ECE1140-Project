@@ -1,37 +1,66 @@
 TAG switch = FALSE
+# Section 0
+TAG b30O = FALSE
+TAG b31O = FALSE
+TAG b32O = FALSE
+TAG b33O = FALSE
+TAG b34O = FALSE
+TAG b35O = FALSE
+TAG b36O = FALSE
+TAG b37O = FALSE
+TAG b38O = FALSE
+TAG b39O = FALSE
+TAG b30A = TRUE
+TAG b31A = TRUE
+TAG b32A = TRUE
+TAG b33A = TRUE
+TAG b34A = TRUE
+TAG b35A = TRUE
+TAG b36A = TRUE
+TAG b37A = TRUE
+TAG b38A = TRUE
+TAG b39A = TRUE
 # Section 1
-TAG b63O = FALSE
-TAG b64O = FALSE
-TAG b65O = FALSE
-TAG b66O = FALSE
-TAG b67O = FALSE
-TAG b68O = FALSE
-TAG b69O = FALSE
-TAG b70O = FALSE
-TAG b63A = TRUE
-TAG b64A = TRUE
-TAG b65A = TRUE
-TAG b66A = TRUE
-TAG b67A = TRUE
-TAG b68A = TRUE
-TAG b69A = TRUE
-TAG b70A = TRUE
+TAG b40O = FALSE
+TAG b41O = FALSE
+TAG b42O = FALSE
+TAG b43O = FALSE
+TAG b44O = FALSE
+TAG b45O = FALSE
+TAG b46O = FALSE
+TAG b47O = FALSE
+TAG b48O = FALSE
+TAG b40A = TRUE
+TAG b41A = TRUE
+TAG b42A = TRUE
+TAG b43A = TRUE
+TAG b44A = TRUE
+TAG b45A = TRUE
+TAG b46A = TRUE
+TAG b47A = TRUE
+TAG b48A = TRUE
 # Section 2
-TAG b71O = FALSE
-TAG b72O = FALSE
-TAG b73O = FALSE
-TAG b74O = FALSE
-TAG b75O = FALSE
-TAG b76O = FALSE
-TAG b71A = TRUE
-TAG b72A = TRUE
-TAG b73A = TRUE
-TAG b74A = TRUE
-TAG b75A = TRUE
-TAG b76A = TRUE
+TAG b49O = FALSE
+TAG b50O = FALSE
+TAG b51O = FALSE
+TAG b52O = FALSE
+TAG b53O = FALSE
+TAG b54O = FALSE
+TAG b55O = FALSE
+TAG b56O = FALSE
+TAG b57O = FALSE
+TAG b49A = TRUE
+TAG b50A = TRUE
+TAG b51A = TRUE
+TAG b52A = TRUE
+TAG b53A = TRUE
+TAG b54A = TRUE
+TAG b55A = TRUE
+TAG b56A = TRUE
+TAG b57A = TRUE
 # Section 3
-TAG b77O = FALSE
-TAG b77A = TRUE
+TAG b29O = FALSE
+TAG b29A = TRUE
 # Section 4
 TAG b101O = FALSE
 TAG b102O = FALSE
@@ -142,32 +171,6 @@ TASK<PERIOD=1000> MainTask
     ROUTINE Main
         # Authority logic
         RUNG
-            XIO b71O
-            XIO b72O
-            XIO b73O
-            XIO b74O
-            XIO b75O
-            XIO b76O
-            OTE b63A
-            OTE b64A
-            OTE b65A
-            OTE b66A
-            OTE b67A
-            OTE b68A
-            OTE b69A
-            OTE b70A
-        ENDRUNG
-        RUNG
-            XIO b77O
-            # Extra checks here
-            OTE b71A
-            OTE b72A
-            OTE b73A
-            OTE b74A
-            OTE b75A
-            OTE b76A
-        ENDRUNG
-        RUNG
             XIO b111O
             XIO b112O
             XIO b113O
@@ -256,7 +259,61 @@ TASK<PERIOD=1000> MainTask
             OTE b140A
         ENDRUNG
         RUNG
-            XIC b77O
+            XIO b29O
+            OTE b141A
+            OTE b142A
+            OTE b143A
+            OTE b144A
+            OTE b145A
+            OTE b146A
+            OTE b147A
+            OTE b148A
+            OTE b149A
+            OTE b150A
+        ENDRUNG
+        RUNG
+            XIO b49O
+            XIO b50O
+            XIO b51O
+            XIO b52O
+            XIO b53O
+            XIO b54O
+            XIO b55O
+            XIO b56O
+            XIO b57O
+            OTE b40A
+            OTE b41A
+            OTE b42A
+            OTE b43A
+            OTE b44A
+            OTE b45A
+            OTE b46A
+            OTE b47A
+            OTE b48A
+        ENDRUNG
+        RUNG
+            XIO b40O
+            XIO b41O
+            XIO b42O
+            XIO b43O
+            XIO b44O
+            XIO b45O
+            XIO b46O
+            XIO b47O
+            XIO b48O
+            OTE b30A
+            OTE b31A
+            OTE b32A
+            OTE b33A
+            OTE b34A
+            OTE b35A
+            OTE b36A
+            OTE b37A
+            OTE b38A
+            OTE b39A
+        ENDRUNG
+        RUNG
+            XIO b29O
             OTE switch
         ENDRUNG
     ENDROUTINE
