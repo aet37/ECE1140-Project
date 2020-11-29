@@ -85,6 +85,8 @@ class SWTrainUi(QtWidgets.QMainWindow):
         signals.swtrain_dispatch_train.connect(self.update_controller_list)
         signals.train_model_receive_power.connect(self.update_gui)
         signals.swtrain_update_current_speed.connect(self.update_gui)
+        signals.swtrain_update_authority.connect(self.update_gui)
+        signals.swtrain_update_command_speed.connect(self.update_gui)
 
         # Update controllers if received before opening
         for _ in range(0, len(control_system.p_controllers) ):
@@ -245,6 +247,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         self.kp_status = control_system.p_controllers[int(self.current_train_id) - 1].kp
         self.ki_status = control_system.p_controllers[int(self.current_train_id) - 1].ki
         self.power_status = control_system.p_controllers[int(self.current_train_id) - 1].power_command
+        self.authority_status = control_system.p_controllers[int(self.current_train_id) - 1].authority
 
         # Change GUI to reflect current data
         # Update doors
@@ -282,6 +285,9 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
         # Update power
         self.power_command_label.setText("{:.2f} W".format(self.power_status))
+
+        # Update authority
+        self.authority_label.setText(str(self.authority_status))
 
         # Update service brake
         if self.service_brake_status == 1:
