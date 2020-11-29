@@ -1,4 +1,5 @@
 TAG switch = TRUE
+TAG heater = FALSE
 TAG b30O = FALSE
 TAG b31O = FALSE
 TAG b32O = FALSE
