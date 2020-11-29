@@ -246,7 +246,7 @@ class SignalHandler:
 
     # def updateAuthority(self, trainId, newAuthority):
     #     signals.train_model_update_authority.emit(trainId, newAuthority)
-        
+
     def updateOccupancy(self, trainId, line, currentBlock, trainOrNot):
         if (line == Line.LINE_GREEN):
             theTrack = getTrack("Green")
