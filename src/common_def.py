@@ -24,8 +24,22 @@ class Converters:
 
 class TrackCircuit:
     """Class to hold attributes of track circuit"""
-    command_speed = 0
-    authority = 0
+    def __init__(self):
+        self.command_speed = 0
+        self.authority = 0
+
+class Beacon:
+    """Class to hold attributes of beacon"""
+    def __init__(self):
+        self.station_name = ""
+        self.service_brake = True
+        self.DoorSide = None
+
+class DoorSide(Enum):
+    """Class to tell train model which door sides to open"""
+    SIDE_RIGHT = 0
+    SIDE_LEFT = 1
+    SIDE_BOTH = 2
 
 
 if __name__ == "__main__":

@@ -34,6 +34,10 @@ class ControlSystem:
         signals.swtrain_time_trigger.connect(self.swtrain_time_trigger)
         # Receive current speed
         signals.swtrain_update_current_speed.connect(self.swtrain_update_current_speed)
+        # Receive pull ebrake
+        signals.swtrain_gui_pull_ebrake.connect(self.swtrain_gui_pull_ebrake)
+        # Receive release ebrake
+        signals.swtrain_gui_release_ebrake.connect(self.swtrain_gui_release_ebrake)
 
         ## RECEIVE NONVITAL SIGNALS ##
         # Receive lights signal
@@ -96,7 +100,7 @@ class ControlSystem:
         self.p_controllers[train_id].kp = Kp
         self.p_controllers[train_id].ki = Ki
         # Turn service brake off to begin moving
-        control_system.p_controllers[train_id].service_brake = False
+        self.p_controllers[train_id].service_brake = False
         signals.train_model_gui_receive_service_brake.emit(train_id, False)
 
     def swtrain_time_trigger(self):
@@ -111,6 +115,20 @@ class ControlSystem:
         """ Updates current speed in train controller """
         self.p_controllers[train_id].current_speed = curr_speed
 
+    def swtrain_gui_pull_ebrake(self, train_id):
+        """ Pulls ebrake on train to stop as quickly as possible """
+        # Activate ebrake
+        self.p_controllers[train_id].activate_emergency_brake()
+        print("What about here")
+        # Send train_id and ebrake status to train model
+        signals.train_model_gui_receive_ebrake.emit(train_id, self.p_controllers[train_id].emergency_brake)
+
+    def swtrain_gui_release_ebrake(self, train_id):
+        """ Releases ebrake so train can begin moving again """
+        self.p_controllers[train_id].reset_emergency_brake()
+        print("Do you get here?")
+        # Send train_id and ebrake status to train model
+        signals.train_model_gui_receive_ebrake.emit(train_id, self.p_controllers[train_id].emergency_brake)
 
     ## NonVital Signal Definitions ##
     def swtrain_gui_toggle_cabin_lights(self, train_id):
