@@ -313,6 +313,8 @@ TASK<PERIOD=1000> MainTask
             OTE b39A
         ENDRUNG
         RUNG
+            XIO b29O
+            OTE switch
         ENDRUNG
     ENDROUTINE
 ENDTASK

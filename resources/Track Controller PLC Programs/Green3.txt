@@ -1,3 +1,4 @@
+TAG switch = FALSE
 TAG b76O = FALSE
 TAG b77O = FALSE
 TAG b78O = FALSE
@@ -32,6 +33,10 @@ TASK<PERIOD=1000> MainTask
             XIO b84O
             XIO b85O
             OTE b76A
+        ENDRUNG
+        RUNG
+            XIC b77O
+            OTE switch
         ENDRUNG
     ENDROUTINE
 ENDTASK

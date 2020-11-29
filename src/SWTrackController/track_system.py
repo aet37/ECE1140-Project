@@ -96,6 +96,7 @@ class TrackSystem:
         # Set the occupancy of the specified block. This operation will only be
         # successful for the track controllers that operate the block
         final_authority = True
+        switch_positions = []
         for i, track_controller in enumerate(track_controllers):
             # TODO(nns): Possibly add safety architecture here
             track_controller.set_block_occupancy(block_id, occupied)
@@ -108,6 +109,15 @@ class TrackSystem:
                     final_authority = False
                 logger.debug("New authority of {} found in track controller {} for train "
                              "{} and block {}".format(new_authority, i, train_id, block_id))
+
+            switch_position = track_controller.get_switch_position()
+            signals.trackmodel_update_switch_positions.emit(line, int(i / 2), switch_position)
+            switch_positions.append(switch_position)
+
+        if line == Line.LINE_GREEN:
+            signals.update_green_switches.emit(switch_positions[::2])
+        else:
+            signals.update_red_switches.emit(switch_positions[::2])
 
         # Emit the final updated authority to the train
         signals.trackmodel_update_authority.emit(train_id, final_authority)
