@@ -46,8 +46,8 @@ def raise_speed():
     """Emits the time trigger signal and ensures speed doesn't break threshold"""
     signals.swtrain_time_trigger.emit()
 
-    assert math.isclose(control_system.p_controllers[0].current_speed, 9.32, rel_tol=0.5)
-    assert math.isclose(train_catalogue.m_trainList[0].m_currentSpeed, 9.32, rel_tol=0.5)
+    assert round(control_system.p_controllers[0].current_speed, 2) <= 9.32 and not control_system.p_controllers[0].current_speed > 9.4
+    assert round(train_catalogue.m_trainList[0].m_currentSpeed, 2) <= 9.32 and not train_catalogue.m_trainList[0].m_currentSpeed > 9.4
 
     return round(control_system.p_controllers[0].current_speed, 2) == 9.32
 
@@ -57,4 +57,3 @@ def maintain_speed():
 
     assert math.isclose(control_system.p_controllers[0].current_speed, 9.32, rel_tol=0.5)
     assert math.isclose(train_catalogue.m_trainList[0].m_currentSpeed, 9.32, rel_tol=0.5)
-    
