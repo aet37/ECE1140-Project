@@ -31,10 +31,10 @@ TASK<PERIOD=2000> MainTask
             OTE b59A
         ENDRUNG
         RUNG
-            XIO b62A
-            XIO b61A
-            XIO b60A
-            XIO b59A
+            XIO b62O
+            XIO b61O
+            XIO b60O
+            XIO b59O
             OTE b0A
         ENDRUNG
         # Switch logic

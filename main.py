@@ -29,7 +29,7 @@ def auto_download_plc_programs():
     """Downloads plc programs to track controllers"""
     for i, track_controller in enumerate(track_system.green_track_controllers):
         # Only 0 and 1 are implemented
-        if i == 2:
+        if i == 6:
             break
 
         source_code = ''
