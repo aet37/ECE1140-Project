@@ -33,17 +33,30 @@ class TrackModelUi(QtWidgets.QMainWindow):
         global combo2
         combo2 = QComboBox()
 
-        self.initUI()
-        #self.stacked_widget.currentChanged.connect(self.set_button_state)
-        #self.stacked_widget.setCurrentIndex(0)
+        global tabsAdded
+        tabsAdded = 0
 
-        self.update_timer = QTimer()
-        self.update_timer.timeout.connect(self.switch_block)
-        self.update_timer.start(500)
+
+        # if (tabsAdded > 0):
+        #     theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
+        #     if (TrackModelDef.getTrack("Green") != None):
+        #         print("GREEN CHANGED")
+        #         combo1.currentIndexChanged.connect(self.switch_block)
+        #     if (TrackModelDef.getTrack("Red") != None):
+        #         print("RED CHANGED")
+        #         combo2.currentIndexChanged.connect(self.switch_block)
+
+        self.initUI()
+
+        # theTabWidget.currentChanged.connect(self.set_button_state)
+
+        # self.update_timer = QTimer()
+        # self.update_timer.timeout.connect(self.switch_block)
+        # self.update_timer.start(500)
 
         self.show()
 
-        # signals.trackmodel_update_occupancy.connect(self.updateOccupancy)
+        #signals.somethingHasBeenChanged.connect(self.)
 
     def initUI(self):
         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
@@ -59,6 +72,9 @@ class TrackModelUi(QtWidgets.QMainWindow):
                 self.addTab("Green", 150)
             if (TrackModelDef.getTrack("Red") != None):
                 self.addTab("Red", 76)
+        
+        track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
+        track_heater_button.clicked.connect(self.update_track_heater)
 
     def getFileName(self):
         dialog = QtWidgets.QFileDialog(self)
@@ -72,18 +88,25 @@ class TrackModelUi(QtWidgets.QMainWindow):
         self.addTab(line, totalBlocks)
     
     def addTab(self, line, totalBlocks):
+        global tabsAdded
         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
         if (line == "Green"):
             theTabWidget.addTab(combo1, line+" Line")
             theCombo = combo1
+            combo1.currentIndexChanged.connect(self.switch_block)
+            theTabWidget.currentChanged.connect(self.switch_block)
             trackNumber = 0
         else:
             theTabWidget.addTab(combo2, line+" Line")
             theCombo = combo2
+            combo2.currentIndexChanged.connect(self.switch_block)
+            theTabWidget.currentChanged.connect(self.switch_block)
             trackNumber = 1
 
         for x in range(totalBlocks):
             theCombo.addItem("Block "+str(x + 1))
+
+        tabsAdded = tabsAdded + 1
         self.show()
     
     # def check_current_block(self):
@@ -167,14 +190,24 @@ class TrackModelUi(QtWidgets.QMainWindow):
             current_switch_label = self.findChild(QtWidgets.QLabel, 'current_switch_label')
             current_switch_label.setText("Switch flipped to:\n\n" + theBlock.getSwitchCurrentString())
 
+            # global trackHeaterButtonSet
+            # if (not trackHeaterButtonSet):
+            #     track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
+            #     track_heater_button.clicked.connect(self.update_track_heater)
+            #     trackHeaterButton = True
+
             track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
             trackHeater = theTrack.trackHeater
             if (trackHeater):
                 track_heater_button.setText("On")
                 track_heater_button.setStyleSheet("background-color : green")
+                if (not track_heater_button.isChecked()):
+                    track_heater_button.toggle()
             else:
                 track_heater_button.setText("Off")
                 track_heater_button.setStyleSheet("background-color : red")
+                if (track_heater_button.isChecked()):
+                    track_heater_button.toggle()
 
             failure_mode_label = self.findChild(QtWidgets.QLabel, 'failure_mode_label')
             failure = theBlock.failureMode
@@ -187,6 +220,38 @@ class TrackModelUi(QtWidgets.QMainWindow):
             elif (failure == 3):
                 failure_mode_label.setText("Failure Mode:\n\n"+ "Track Circuit Failure")
 
+    def update_track_heater(self):
+        theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
+        theIndex = theTabWidget.currentIndex()
+        theLine = theTabWidget.tabText(theIndex)
+        track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
+        
+        if (theLine == "Green Line"):
+            theTrack = TrackModelDef.getTrack("Green")
+            theLine = Line.LINE_GREEN
+        else:
+            theTrack = TrackModelDef.getTrack("Red")
+
+        if (not track_heater_button.isChecked()):
+            track_heater_button.setText("Off")
+            track_heater_button.setStyleSheet("background-color : red")
+            theTrack.setTrackHeater(False)
+            signals.swtrack_set_track_heater.emit(theLine, False)
+        else:
+            track_heater_button.setText("On")
+            track_heater_button.setStyleSheet("background-color : green")
+            theTrack.setTrackHeater(True)
+            signals.swtrack_set_track_heater.emit(theLine, True)
+        
+
     def logout(self):
         """Removes this window from the list"""
         window_list.remove(self)
+
+    # def logout(self):
+    #     # This is executed when the button is pressed
+    #     if(sys.platform == 'darwin'):
+    #         os.system('python3 src/UI/login_gui.py &')
+    #     else:
+    #         os.system('start /B python src/UI/login_gui.py')
+    #     app.exit()  

@@ -79,21 +79,33 @@ class TrackSystem:
         else:
             signals.update_red_switches.emit(switch_positions)
 
+        # TODO (ljk): Remove this once plc programs are autouploaded!
+        if authority is None:
+            authority = True
+
         # Pass the dispatch train information to the Track Model
         signals.trackmodel_dispatch_train.emit(train_id, destination_block, command_speed, authority, line, route)
 
     def swtrack_update_occupancies(self, train_id, line, block_id, occupied):
         """Method connected to the swtrack_update_occupancies signal"""
-        logger.critical("Received swtrack_update_occupancies")
+        logger.debug("Received swtrack_update_occupancies")
 
         # Get the correct list of track controllers based on the line
         track_controllers = self.green_track_controllers if line == Line.LINE_GREEN else self.red_track_controllers
 
         # Set the occupancy of the specified block. This operation will only be
         # successful for the track controllers that operate the block
-        for track_controller in track_controllers:
+        for i, track_controller in enumerate(track_controllers):
             # TODO(nns): Possibly add safety architecture here
             track_controller.set_block_occupancy(block_id, occupied)
+            track_controller.run_program()
+
+            new_authority = track_controller.get_authority_of_block(block_id)
+            if (new_authority is not None) and (occupied):
+                # Send the updated authority to this train
+                signals.trackmodel_update_authority.emit(train_id, new_authority)
+                logger.debug("New authority of {} found in track controller {} for train "
+                             "{} and block {}".format(new_authority, i, train_id, block_id))
 
         # Forward this information to the CTC
         signals.update_occupancy.emit(line, block_id, occupied)
@@ -111,8 +123,6 @@ class TrackSystem:
 
     def swtrack_set_track_heater(self, line, status):
         """Method connected to the swtrack_set_track_heater signal"""
-        logger.critical("Received swtrack_set_track_heater")
-
         # Get the correct list of track controllers based on the line
         track_controllers = self.green_track_controllers if line == Line.LINE_GREEN else self.red_track_controllers
 

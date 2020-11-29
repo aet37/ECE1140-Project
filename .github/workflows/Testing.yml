@@ -45,6 +45,9 @@ jobs:
 
     - name: Run Passing Occupancy Test
       run: pytest tests/IntegrationTests/test_passing_occupancy.py
+
+    - name: Run Passing Authority Test
+      run: pytest tests/IntegrationTests/test_passing_authority.py
       
     - name: Run Common tests
       run: pytest tests/IntegrationTests/test_common.py
