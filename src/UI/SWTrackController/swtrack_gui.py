@@ -12,7 +12,7 @@ from src.SWTrackController.Compiler.parse import Parser
 from src.UI.Common.common import Alert, Confirmation
 from src.UI.window_manager import window_list
 from src.signals import signals
-from src.common_def import Line
+from src.common_def import Line, Converters
 from src.SWTrackController.track_system import track_system
 from src.logger import get_logger
 
@@ -127,7 +127,7 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
     def block_selected(self):
         """Method called when a different block is selected"""
         try:
-            self.current_block = self.block_combo_box.currentText().split('#')[1]
+            self.current_block = int(self.block_combo_box.currentText().split('#')[1])
         except IndexError:
             self.current_block = None
 
@@ -176,14 +176,15 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             self.authority_label.setText("YES" if authority else "NO")
 
             # Suggested Speed
-            self.suggested_speed_label.setText("55 MPH")
+            suggested_speed = 55.0 * Converters.KmHr_to_MPH
+            self.suggested_speed_label.setText("{:.2f} MPH".format(suggested_speed))
 
             # Command Speed
             speed_limit = track_system.get_speed_limit_of_block(line, self.current_block)
             if speed_limit < 55.0:
-                self.command_speed_label.setText("{} MPH".format(speed_limit))
+                self.command_speed_label.setText("{:.2f} MPH".format(speed_limit * Converters.KmHr_to_MPH))
             else:
-                self.command_speed_label.setText("55 MPH")
+                self.command_speed_label.setText("{:.2f} MPH".format(suggested_speed))
         else:
             self.authority_label.setText("-")
             self.suggested_speed_label.setText("-")

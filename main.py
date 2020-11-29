@@ -27,10 +27,8 @@ EXIT_SUCCESS = 0
 
 def auto_download_plc_programs():
     """Downloads plc programs to track controllers"""
+    logger.critical("Auto downloading plc programs")
     for i, track_controller in enumerate(track_system.green_track_controllers):
-        # Only 0 and 1 are implemented
-        if i == 6:
-            break
 
         source_code = ''
         for line in open('resources/Track Controller PLC Programs/Green{}.txt'.format(i)):
