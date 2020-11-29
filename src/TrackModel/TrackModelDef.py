@@ -181,7 +181,7 @@ class Switch:
         self.currentSwitch = self.block1
 
     def setSwitch(self, switch):
-        if (switch == False):
+        if (switch == 0):
             self.currentSwitch = self.block1
         else:
             self.currentSwitch = self.block2
@@ -193,7 +193,17 @@ class SignalHandler:
         signals.trackmodel_update_occupancy.connect(self.updateOccupancy)
         signals.trackmodel_update_command_speed.connect(self.updateCommandSpeed)
         signals.trackmodel_update_authority.connect(self.updateAuthority)
+        signals.trackmodel_update_switch_positions.connect(self.updateSwitchPositions)
 
+    def updateSwitchPositions(self, line, number, position):
+        if (line == Line.LINE_GREEN):
+            theLine = getTrack("Green")
+        else:
+            theLine = getTrack("Red")
+        theLine.getBlock(theLine.switchList[number]).blockSwitch.setSwitch(position)
+        
+    def updateTicketsSold(self, line):
+        pass
     def updateAuthority(self, trainId, newAuthority):
         signals.train_model_update_authority.emit(trainId, newAuthority)
 
@@ -351,7 +361,7 @@ class SignalHandler:
                         block1 = int(switchList[0])
                         block2 = int(switchList[1])
                         theBlock.addSwitch(switchNumber, block1, block2)
-
+                        theTrack.switchList.append(theBlock.blockNumber)
 
                     newTrack.addBlock(theBlock)
 
