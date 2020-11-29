@@ -23,7 +23,7 @@ logger = get_logger(__name__)
 
 greenSwitchNumber = 0
 redSwitchNumber = 0
-
+environmentalTemp = 70
 trackList = []
 
 red_route_blocks = [9, 8, 7, 6, 5, 4, 3, 2, 1, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 76, 75,
@@ -64,6 +64,9 @@ class Track:
     def addBlock(self, theBlock):
         self.blockList.append(theBlock)
 
+    def setTrackHeater(self, heaterBool):
+        self.trackHeater = heaterBool
+
 class Block:
     def __init__(self, blockNumber, blockLength, blockGrade, blockSpeedLimit,
     blockElevation, blockCumulativeElevation, blockDirection, blockUnderground,
@@ -81,7 +84,9 @@ class Block:
         self.blockStation = None
         self.blockSwitch = None
         self.blockOccupied = -1
-        self.failureMode = 0
+        self.brokenRailFailure = False
+        self.powerFailure = False
+        self.trackCircuitFailure = False
 
     def addStation(self, stationName, stationExitSide):
         self.blockStation = Station(stationName, stationExitSide)
@@ -146,6 +151,7 @@ class Station:
         self.ticketsSold = 0
         self.passengersBoarded = 0
         self.passengersExited = 0
+        self.blockList = []
 
     def updateTicketsSold(self, ticketsSold):
         self.ticketsSold = ticketsSold
@@ -187,6 +193,9 @@ class SignalHandler:
         signals.trackmodel_update_occupancy.connect(self.updateOccupancy)
         signals.trackmodel_update_command_speed.connect(self.updateCommandSpeed)
         signals.trackmodel_update_authority.connect(self.updateAuthority)
+
+    def updateAuthority(self, trainId, newAuthority):
+        signals.train_model_update_authority.emit(trainId, newAuthority)
 
     def updateAuthority(self, trainId, newAuthority):
         signals.train_model_update_authority.emit(trainId, newAuthority)
@@ -304,8 +313,6 @@ class SignalHandler:
 
                     blockInfo['Section'] = blockSection
 
-
-
                     if (records.column['Railway Crossing'][x] != ""):
                         blockInfo['Railway Crossing'] = "true"
                         blockRailwayCrossing = True
@@ -321,6 +328,15 @@ class SignalHandler:
                         stationName = records.column['Stations'][x]
                         stationExitSide = records.column['Exit Side'][x]
                         theBlock.addStation(stationName, stationExitSide)
+                        appended = False
+                        theTrack = getTrack(trackInfo['Track'])
+                        for y in theTrack.stationList:
+                            if (y.stationName == stationName):
+                                y.blockList.append(blockNumber)
+                                appended = True
+                        if (not appended):
+                            theTrack.stationList.append(Station(stationName, stationExitSide))
+                            theTrack.stationList[len(theTrack.stationList) - 1].blockList.append(blockNumber)
 
                     if (records.column['Switches'][x] != ""):
                         switchList = records.column['Switches'][x]
