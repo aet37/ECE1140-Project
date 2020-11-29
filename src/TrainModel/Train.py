@@ -17,6 +17,7 @@ class Train:
         self.m_commandSpeed = 0.0
         self.m_currentSpeed = 0.0 # THIS IS CALCULATED
         self.m_position = 0.0 # THIS IS CALCULATED
+        self.m_acceleration = 0.0 # THIS IS CALCULATED (ALWAYS IN m/s)
         self.m_authority = False
         self.m_currentLine = Line.LINE_GREEN # Default green line
         self.m_power = 0.0
@@ -24,7 +25,7 @@ class Train:
         self.m_tempControl = 0.0
 
         # BOOLEANS (self, Vital)
-        self.m_emergencyPassengeBrake = False
+        self.m_emergencyPassengerBrake = False
         self.m_serviceBrake = True
         self.m_brakeCommand = False
         # BOOLEANS (self, Nonvital)
