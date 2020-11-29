@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>786</width>
-    <height>804</height>
+    <height>789</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,7 +24,7 @@
     <property name="geometry">
      <rect>
       <x>290</x>
-      <y>195</y>
+      <y>185</y>
       <width>201</width>
       <height>21</height>
      </rect>
@@ -47,7 +47,7 @@
     <property name="geometry">
      <rect>
       <x>580</x>
-      <y>670</y>
+      <y>660</y>
       <width>190</width>
       <height>120</height>
      </rect>
@@ -74,7 +74,7 @@
     <property name="geometry">
      <rect>
       <x>340</x>
-      <y>230</y>
+      <y>220</y>
       <width>101</width>
       <height>60</height>
      </rect>
@@ -122,7 +122,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>310</y>
+      <y>300</y>
       <width>190</width>
       <height>120</height>
      </rect>
@@ -149,7 +149,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>670</y>
+      <y>660</y>
       <width>190</width>
       <height>120</height>
      </rect>
@@ -176,7 +176,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>550</y>
+      <y>540</y>
       <width>190</width>
       <height>120</height>
      </rect>
@@ -203,7 +203,7 @@
     <property name="geometry">
      <rect>
       <x>580</x>
-      <y>230</y>
+      <y>220</y>
       <width>190</width>
       <height>30</height>
      </rect>
@@ -230,7 +230,7 @@
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>670</y>
+      <y>660</y>
       <width>190</width>
       <height>120</height>
      </rect>
@@ -257,7 +257,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>430</y>
+      <y>420</y>
       <width>190</width>
       <height>120</height>
      </rect>
@@ -284,7 +284,7 @@
     <property name="geometry">
      <rect>
       <x>390</x>
-      <y>550</y>
+      <y>540</y>
       <width>190</width>
       <height>120</height>
      </rect>
@@ -311,7 +311,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>20</y>
+      <y>10</y>
       <width>130</width>
       <height>30</height>
      </rect>
@@ -338,7 +338,7 @@
     <property name="geometry">
      <rect>
       <x>390</x>
-      <y>430</y>
+      <y>420</y>
       <width>190</width>
       <height>120</height>
      </rect>
@@ -365,7 +365,7 @@
     <property name="geometry">
      <rect>
       <x>640</x>
-      <y>20</y>
+      <y>10</y>
       <width>130</width>
       <height>30</height>
      </rect>
@@ -410,7 +410,7 @@
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>310</y>
+      <y>300</y>
       <width>190</width>
       <height>120</height>
      </rect>
@@ -437,7 +437,7 @@
     <property name="geometry">
      <rect>
       <x>580</x>
-      <y>430</y>
+      <y>420</y>
       <width>190</width>
       <height>120</height>
      </rect>
@@ -464,7 +464,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>100</y>
+      <y>90</y>
       <width>211</width>
       <height>81</height>
      </rect>
@@ -502,7 +502,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
     <property name="geometry">
      <rect>
       <x>390</x>
-      <y>310</y>
+      <y>300</y>
       <width>190</width>
       <height>120</height>
      </rect>
@@ -529,7 +529,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>230</y>
+      <y>220</y>
       <width>190</width>
       <height>30</height>
      </rect>
@@ -556,7 +556,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
     <property name="geometry">
      <rect>
       <x>300</x>
-      <y>140</y>
+      <y>130</y>
       <width>180</width>
       <height>40</height>
      </rect>
@@ -583,7 +583,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
     <property name="geometry">
      <rect>
       <x>580</x>
-      <y>550</y>
+      <y>540</y>
       <width>190</width>
       <height>120</height>
      </rect>
@@ -610,7 +610,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>430</y>
+      <y>420</y>
       <width>190</width>
       <height>120</height>
      </rect>
@@ -637,7 +637,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
     <property name="geometry">
      <rect>
       <x>450</x>
-      <y>230</y>
+      <y>220</y>
       <width>101</width>
       <height>60</height>
      </rect>
@@ -685,7 +685,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
     <property name="geometry">
      <rect>
       <x>300</x>
-      <y>20</y>
+      <y>10</y>
       <width>180</width>
       <height>40</height>
      </rect>
@@ -712,7 +712,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
     <property name="geometry">
      <rect>
       <x>690</x>
-      <y>180</y>
+      <y>170</y>
       <width>71</width>
       <height>23</height>
      </rect>
@@ -739,7 +739,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
     <property name="geometry">
      <rect>
       <x>230</x>
-      <y>230</y>
+      <y>220</y>
       <width>101</width>
       <height>60</height>
      </rect>
@@ -787,7 +787,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>550</y>
+      <y>540</y>
       <width>190</width>
       <height>120</height>
      </rect>
@@ -814,7 +814,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
     <property name="geometry">
      <rect>
       <x>390</x>
-      <y>670</y>
+      <y>660</y>
       <width>190</width>
       <height>120</height>
      </rect>
@@ -841,7 +841,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
     <property name="geometry">
      <rect>
       <x>580</x>
-      <y>310</y>
+      <y>300</y>
       <width>190</width>
       <height>120</height>
      </rect>
@@ -868,7 +868,7 @@ QTabBar:: {background-color: rgb(255,255,255); }
     <property name="geometry">
      <rect>
       <x>670</x>
-      <y>110</y>
+      <y>100</y>
       <width>51</width>
       <height>51</height>
      </rect>
@@ -921,7 +921,7 @@ Temp</string>
     <property name="geometry">
      <rect>
       <x>530</x>
-      <y>100</y>
+      <y>90</y>
       <width>131</width>
       <height>71</height>
      </rect>
@@ -936,7 +936,7 @@ Temp</string>
     <property name="text">
      <string>Current
 Temperature:
-NA</string>
+70 °F</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -946,7 +946,7 @@ NA</string>
     <property name="geometry">
      <rect>
       <x>530</x>
-      <y>170</y>
+      <y>160</y>
       <width>131</width>
       <height>41</height>
      </rect>
@@ -969,7 +969,7 @@ NA</string>
     <property name="geometry">
      <rect>
       <x>730</x>
-      <y>110</y>
+      <y>100</y>
       <width>51</width>
       <height>51</height>
      </rect>
@@ -1012,7 +1012,7 @@ Temp</string>
      </size>
     </property>
     <property name="checkable">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
    </widget>
    <zorder>label_2</zorder>

@@ -2,7 +2,7 @@ import os
 import sys
 import PyQt5
 from PyQt5 import QtWidgets, uic
-from PyQt5.QtWidgets import QPushButton, QStackedWidget, QLabel, QComboBox
+from PyQt5.QtWidgets import QPushButton, QStackedWidget, QLabel, QComboBox, QMessageBox
 from PyQt5.QtCore import QTimer
 #from src.UI.server_functions import *
 #from src.UI.window_manager import window_list
@@ -71,6 +71,40 @@ class TrackModelUi(QtWidgets.QMainWindow):
         set_random_temp_button = self.findChild(QtWidgets.QPushButton, 'set_random_temp_button')
         set_random_temp_button.clicked.connect(self.set_random_temperature)
 
+        set_manual_temp_button = self.findChild(QtWidgets.QPushButton, 'set_manual_temp_button')
+        set_manual_temp_button.clicked.connect(self.set_manual_temperature)
+
+    def set_manual_temperature(self):
+        track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
+        current_temperature_label = self.findChild(QtWidgets.QLabel, 'current_temperature_label')
+        temp, bleh = QtWidgets.QInputDialog.getText(self, 'Input Dialog', 'Enter a temperature between -25 and 115:')
+        message = QMessageBox()
+        message.setIcon(QMessageBox.Critical)
+        message.setWindowTitle("Error")
+
+        try:
+            temp = int(temp)
+            if (temp <= 115 and temp >= -25):
+                tempString = "Current\nTemperature:\n" + str(temp) + " °F"
+                TrackModelDef.environmentalTemp = temp
+                current_temperature_label.setText(tempString)
+                if (temp <= 32):
+                    for x in TrackModelDef.trackList:
+                        if (x.lineName == "Green" and (not x.trackHeater)):
+                            signals.swtrack_set_track_heater.emit(Line.LINE_GREEN, True)
+                        elif (x.lineName == "Red" and (not x.trackHeater)):
+                            signals.swtrack_set_track_heater.emit(Line.LINE_RED, True)
+                        x.setTrackHeater(True)
+                    if (not track_heater_button.isChecked()):
+                        track_heater_button.toggle()
+                        self.update_track_heater()
+            else:
+                message.setText("Temperature outside of range!\nEnter a value between -25 and 115, inclusive")
+                message.exec_()
+        except ValueError:
+            message.setText("Invalid input: Not an integer")
+            message.exec_()
+
     def set_random_temperature(self):
         randomTemp = random.randrange(-10, 100, 1)
         tempString = "Current\nTemperature:\n" + str(randomTemp) + " °F"
@@ -82,10 +116,8 @@ class TrackModelUi(QtWidgets.QMainWindow):
         if (randomTemp <= 32):
             for x in TrackModelDef.trackList:
                 if (x.lineName == "Green" and (not x.trackHeater)):
-                    print("1")
                     signals.swtrack_set_track_heater.emit(Line.LINE_GREEN, True)
                 elif (x.lineName == "Red" and (not x.trackHeater)):
-                    print("2")
                     signals.swtrack_set_track_heater.emit(Line.LINE_RED, True)
                 x.setTrackHeater(True)
             if (not track_heater_button.isChecked()):
