@@ -1,0 +1,69 @@
+TAG heater = FALSE
+TAG switch = FALSE
+TAG signal = FALSE
+# Section 1
+TAG b62A = TRUE
+TAG b62O = FALSE
+# Section 2
+TAG b63A = TRUE
+TAG b64A = TRUE
+TAG b65A = TRUE
+TAG b66A = TRUE
+TAG b67A = TRUE
+TAG b68A = TRUE
+TAG b69A = TRUE
+TAG b70A = TRUE
+TAG b63O = FALSE
+TAG b64O = FALSE
+TAG b65O = FALSE
+TAG b66O = FALSE
+TAG b67O = FALSE
+TAG b68O = FALSE
+TAG b69O = FALSE
+TAG b70O = FALSE
+# Section 3
+TAG b71A = TRUE
+TAG b72A = TRUE
+TAG b73A = TRUE
+TAG b74A = TRUE
+TAG b75A = TRUE
+TAG b76A = TRUE
+TAG b71O = FALSE
+TAG b72O = FALSE
+TAG b73O = FALSE
+TAG b74O = FALSE
+TAG b75O = FALSE
+TAG b76O = FALSE
+
+TASK<PERIOD=1000> MainTask
+    ROUTINE Main
+        # Authority logic
+        RUNG
+            XIO b63O
+            XIO b64O
+            XIO b65O
+            XIO b66O
+            XIO b67O
+            XIO b68O
+            XIO b69O
+            XIO b70O
+            OTE b62A
+        ENDRUNG
+        RUNG
+            XIO b71O
+            XIO b72O
+            XIO b73O
+            XIO b74O
+            XIO b75O
+            XIO b76O
+            OTE b63A
+            OTE b64A
+            OTE b65A
+            OTE b66A
+            OTE b67A
+            OTE b68A
+            OTE b69A
+            OTE b70A
+        ENDRUNG
+    ENDROUTINE
+ENDTASK

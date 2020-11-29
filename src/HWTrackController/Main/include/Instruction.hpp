@@ -50,7 +50,7 @@ public:
      *      @retval true        - Instruction evaluated to true
      *      @retval false       - Instruction evaluated to false
     */
-    bool Evaluate();
+    bool Evaluate() const;
 
     /**
      * @brief Gets the instruction type
@@ -68,7 +68,7 @@ private:
     InstructionType m_type;
 
     /// Argument for the instruction (either tag or routine)
-    String m_argument;
+    const String m_argument;
 };
 
 #endif // INSTRUCTION_HPP

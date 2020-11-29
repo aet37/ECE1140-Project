@@ -6,7 +6,6 @@ import sys
 sys.path.append(".")
 
 from src.UI.window_manager import window_list
-from src.timekeeper import timekeeper
 from src.UI.timekeeper_gui import TimekeeperUi
 from src.UI.CTC.ctc_gui import CTCUi
 from src.UI.SWTrackController.swtrack_gui import SWTrackControllerUi
@@ -29,9 +28,6 @@ class LoginUi(QtWidgets.QMainWindow):
 
         self.show()
 
-    def stuff(self):
-        print(window_list.remove(self))
-
     def login_parse(self):
         """Checks the user's credentials and starts the specific module's ui if correct"""
         username = self.username_in.text()
@@ -53,6 +49,9 @@ class LoginUi(QtWidgets.QMainWindow):
             self.alert_login.setStyleSheet("color: red;")
             return
 
+        # Hide the warning message if the username and password are correct
+        self.alert_login.setStyleSheet("color: rgb(133, 158, 166);")
+
     # pylint: disable=invalid-name
     def keyPressEvent(self, event):
         """Handles a keypress event"""
@@ -60,8 +59,3 @@ class LoginUi(QtWidgets.QMainWindow):
             super().keyPressEvent(event)
         else:
             self.login_parse()
-
-    def closeEvent(self, event):
-        """Method to run when the login page is closed"""
-        # Close all the windows
-        window_list.clear()

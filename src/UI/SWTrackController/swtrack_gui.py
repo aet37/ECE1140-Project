@@ -11,14 +11,15 @@ from src.SWTrackController.Compiler.parse import Parser
 
 from src.UI.Common.common import Alert, Confirmation
 from src.UI.window_manager import window_list
-from src.HWTrackController.hw_track_controller_connector import HWTrackCtrlConnector
+from src.signals import signals
+from src.common_def import Line
+from src.SWTrackController.track_system import track_system
+from src.logger import get_logger
+
+logger = get_logger(__name__)
 
 class SWTrackControllerUi(QtWidgets.QMainWindow):
     """GUI for the track controller module"""
-
-    # The hardware will represent the first track controller
-    HWTRACK_CTRL_NUMBER = 1
-
     def __init__(self):
         super().__init__()
         uic.loadUi('src/UI/SWTrackController/track_controller.ui', self)
@@ -64,9 +65,18 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button')
         logout_button.clicked.connect(self.logout)
 
-        # switch_position_button = self.findChild(QtWidgets.QPushButton, 'switch_position_button')
-        # switch_position_button.setAttribute(Qt.WA_TranslucentBackground)
-        # switch_position_button.clicked.connect(self.switch_position_button_clicked)
+        self.track_heater_label = self.findChild(QtWidgets.QLabel, 'track_heater_label')
+        self.switch_position_label = self.findChild(QtWidgets.QLabel, 'switch_position_label')
+        self.light_status_label = self.findChild(QtWidgets.QLabel, 'light_status_label')
+        self.occupied_label = self.findChild(QtWidgets.QLabel, 'occupied_label')
+        self.block_status_label = self.findChild(QtWidgets.QLabel, 'block_status_label')
+        self.railway_crossing_label = self.findChild(QtWidgets.QLabel, 'railway_crossing_label')
+        self.authority_label = self.findChild(QtWidgets.QLabel, 'authority_label')
+        self.suggested_speed_label = self.findChild(QtWidgets.QLabel, 'suggested_speed_label')
+        self.command_speed_label = self.findChild(QtWidgets.QLabel, 'command_speed_label')
+
+        self.switch_position_frame = self.findChild(QtWidgets.QFrame, 'switch_position_frame')
+        self.switch_position_frame.mousePressEvent = self.switch_position_button_clicked
 
         download_program_button = self.findChild(QtWidgets.QPushButton, 'download_program_button')
         download_program_button.clicked.connect(self.download_program)
@@ -88,23 +98,31 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         self.block_combo_box.setCurrentIndex(0)
         self.block_selected()
 
+        # Connect to signals
+        signals.swtrack_update_gui.connect(self.update_gui)
+
         self.show()
 
     def track_controller_selected(self):
         """Method called when a different track controller is selected"""
-        self.current_track_controller = self.track_controller_combo_box.currentText().split('#')[1]
+        current_track_controller_id = int(self.track_controller_combo_box.currentText().split('#')[1])
 
         if 'Red' in self.track_controller_combo_box.currentText():
-            self.current_track_controller = str(int(self.current_track_controller) + len(self.green_line_controllers))
+            self.current_track_controller = track_system.red_track_controllers[current_track_controller_id - 1]
+        else:
+            self.current_track_controller = track_system.green_track_controllers[current_track_controller_id - 1]
 
         # Update the options in the block combo box
         self.block_combo_box.clear()
         if 'Red' in self.track_controller_combo_box.currentText():
-            for block in self.red_line_controllers[int(self.current_track_controller) - 1]:
+            for block in self.red_line_controllers[current_track_controller_id - 1]:
                 self.block_combo_box.addItem("Block #{}".format(block))
         else:
-            for block in self.green_line_controllers[int(self.current_track_controller) - len(self.green_line_controllers) - 1]:
+            for block in self.green_line_controllers[current_track_controller_id - 1]:
                 self.block_combo_box.addItem("Block #{}".format(block))
+
+        # Update gui since a new track controller was selected
+        self.update_gui()
 
     def block_selected(self):
         """Method called when a different block is selected"""
@@ -112,6 +130,76 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             self.current_block = self.block_combo_box.currentText().split('#')[1]
         except IndexError:
             self.current_block = None
+
+        # Update gui since a new block was selected
+        self.update_gui()
+
+    def update_gui(self):
+        """Updates the information in the gui using the currently selected
+        track controller and block
+        """
+        logger.info("Updating track controller gui")
+
+        # Get the correct track controller
+        if 'Red' in self.track_controller_combo_box.currentText():
+            line = Line.LINE_RED
+        else:
+            line = Line.LINE_GREEN
+
+        # Track heater label
+        track_heater_status = self.current_track_controller.get_track_heater_status()
+        self.track_heater_label.setText(self.determine_text(track_heater_status, "ON", "OFF"))
+
+        # Switch Position
+        switch_position = self.current_track_controller.get_switch_position()
+        self.switch_position_label.setText(self.determine_text(switch_position, "0", "1"))
+
+        # Light status
+        light_status = self.current_track_controller.get_light_status()
+        self.light_status_label.setText(self.determine_text(light_status, "GREEN", "RED"))
+
+        # Occupied
+        occupied = self.current_track_controller.get_block_occupancy(self.current_block)
+        self.occupied_label.setText(self.determine_text(occupied, "YES", "NO"))
+
+        # Block status
+        block_status = self.current_track_controller.get_block_status(self.current_block)
+        self.block_status_label.setText(self.determine_text(block_status, "OK", "CLOSED"))
+
+        # Railway crossing
+        railway_crossing = self.current_track_controller.get_railway_crossing(self.current_block)
+        self.railway_crossing_label.setText(self.determine_text(railway_crossing, "DOWN", "UP"))
+
+        if occupied:
+            # Authority
+            authority = self.current_track_controller.get_authority_of_block(self.current_block)
+            self.authority_label.setText("YES" if authority else "NO")
+
+            # Suggested Speed
+            self.suggested_speed_label.setText("55 MPH")
+
+            # Command Speed
+            speed_limit = track_system.get_speed_limit_of_block(line, self.current_block)
+            if speed_limit < 55.0:
+                self.command_speed_label.setText("{} MPH".format(speed_limit))
+            else:
+                self.command_speed_label.setText("55 MPH")
+        else:
+            self.authority_label.setText("-")
+            self.suggested_speed_label.setText("-")
+            self.command_speed_label.setText("-")
+
+    @staticmethod
+    def determine_text(tag_value, true_text, false_text):
+        """Given the tag value, returns what to display"""
+        if tag_value is None:
+            return "-"
+        elif tag_value:
+            return true_text
+        elif not tag_value:
+            return false_text
+        else:
+            assert False, "Unexpected tag value"
 
     def download_program(self):
         """Method called when the download program button is pressed"""
@@ -131,6 +219,8 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             self.send_compiled_program(output_file)
             alert = Alert("Program downloaded successfully!")
             alert.exec_()
+
+        self.update_gui()
 
     @staticmethod
     def compile_program(file_name):
@@ -161,25 +251,21 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             return None
 
     def send_compiled_program(self, output_file):
-        """Method used to read compiled program and send messages to the server
+        """Method used to download the compiled program to the currently selected
+        track controller instance
 
         :param str output_file: Name of the file containing the compiled program
         """
-        if int(self.current_track_controller) == SWTrackControllerUi.HWTRACK_CTRL_NUMBER:
-            connector = HWTrackCtrlConnector()
-            connector.download_program(output_file)
-        else:
-            for line in open(output_file, 'r'):
-                # TODO(nns): Download program to software module
-                pass
+        self.current_track_controller.download_program(output_file)
 
-    def switch_position_button_clicked(self):
+    def switch_position_button_clicked(self, event):
         """Method called when the switch position button is pressed"""
         confirmation = Confirmation("Are you sure you want to change the switch position?")
 
+        # TODO (ljk): Check for maintenance mode
         if confirmation.exec_():
-            pass
-            # TODO(ljk): Emit signal for this
+            current_switch_position = self.current_track_controller.get_switch_position()
+            self.current_track_controller.set_switch_position(not current_switch_position)
 
     def logout(self):
         """Method invoked when the logout button is pressed"""
