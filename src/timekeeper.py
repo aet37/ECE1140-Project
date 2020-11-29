@@ -72,6 +72,7 @@ class Timekeeper:
                         self.ctc_trains_backlog.remove(item)
 
         # Cancel the timer
+        self.signal_timer.join()
         self.signal_timer.cancel()
 
     def start_time(self):

@@ -20,14 +20,6 @@ class SWTrainUi(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # Define timers
-        # self.main_menu_timer = QTimer()
-        #self.controller_info_timer = QTimer()
-        #self.failure_info_timer = QTimer()
-        # self.main_menu_timer.timeout.connect(self.update_controller_list)
-        #self.controller_info_timer.timeout.connect(self.update_gui1)
-        #self.failure_info_timer.timeout.connect(self.update_gui2)
-
         # Define current train id
         self.current_train_id = "1"
         # Define amount of trains
@@ -76,6 +68,9 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
         # When service brake button is clicked, go to toggle_service_brake function
         self.service_brake.clicked.connect(self.toggle_service_brake)
+
+        # When emergency brake button is clicked, go to toggle_emergency_brake function
+        self.emergency_brake.clicked.connect(self.toggle_emergency_brake)
         ##########################################
 
         # Define buttons on Failures page ########
@@ -160,6 +155,9 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
         # Define service brake button
         self.service_brake = self.findChild(QtWidgets.QPushButton, 'ServiceBrake')
+
+        # Define emergency brake button
+        self.emergency_brake = self.findChild(QtWidgets.QPushButton, 'EmergencyBrake')
         ###################################
 
         # Define buttons on Information Page #
@@ -542,6 +540,35 @@ class SWTrainUi(QtWidgets.QMainWindow):
         #alert = Alert("Service brake cannot be activated until authority is 0!")
         #alert.exec_()
         return
+    
+    def toggle_emergency_brake(self):
+        # If no controllers have been created, button does nothing
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            alert = Alert("Error: No trains have been dispatched!")
+            alert.exec_()
+            return
+        
+        if self.emergency_brake.styleSheet() == "background-color: green;":
+                #Confirm use of emergency brake
+                confirmation = Confirmation("Turn emergency brake on?")
+                response = confirmation.exec_()
+                if response == True:
+                    self.emergency_brake.setStyleSheet("background-color: rgb(255, 51, 16);")
+                    # Send signal to notify status of emergency brake
+                    signals.swtrain_gui_pull_ebrake.emit(int(self.current_train_id) - 1)
+                else:
+                    return
+        else:
+            #Confirm turning off emergency brake
+            confirmation = Confirmation("Turn emergency brake off?")
+            response = confirmation.exec_()
+            if response == True:
+                self.emergency_brake.setStyleSheet("background-color: green;")
+                # Send signal to notify status of emergency brake
+                signals.swtrain_gui_release_ebrake.emit(int(self.current_train_id) - 1)
+            else:
+                return
+
 
     def save_inputs(self):
     # If no controllers have been created, button does nothing

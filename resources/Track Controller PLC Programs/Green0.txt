@@ -1,0 +1,61 @@
+TAG MyTag = FALSE
+TAG output2 = FALSE
+TAG output4 = FALSE
+TAG heater = FALSE
+TAG switch = FALSE
+TAG signal = FALSE
+TAG b0O = FALSE
+TAG b62O = FALSE
+TAG b61O = FALSE
+TAG b60O = FALSE
+TAG b59O = FALSE
+TAG b0S = FALSE
+TAG b62S = FALSE
+TAG b61S = FALSE
+TAG b60S = FALSE
+TAG b59S = FALSE
+TAG b0A = TRUE
+TAG b62A = TRUE
+TAG b61A = TRUE
+TAG b60A = TRUE
+TAG b59A = TRUE
+
+TASK<PERIOD=2000> MainTask
+    ROUTINE Main
+        # Authority logic
+        RUNG
+            XIO b0O
+            OTE b62A
+            OTE b61A
+            OTE b60A
+            OTE b59A
+        ENDRUNG
+        RUNG
+            XIO b62O
+            XIO b61O
+            XIO b60O
+            XIO b59O
+            OTE b0A
+        ENDRUNG
+        # Switch logic
+        RUNG
+            XIO b0O
+            XIC b62O
+            OTE switch
+        ENDRUNG
+        RUNG
+            XIC heater
+            OTE output4
+        ENDRUNG
+        # Debug toggle stuff
+        RUNG
+            XIO MyTag
+            XIO output2
+            OTE output2
+        ENDRUNG
+        RUNG
+            XIC output2
+            OTE MyTag
+        ENDRUNG
+    ENDROUTINE
+ENDTASK

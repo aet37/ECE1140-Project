@@ -70,6 +70,7 @@ class SignalsClass(QObject):
     swtrain_cause_failure = pyqtSignal(bool, bool, bool) # Failures
     swtrain_pull_passenger_ebrake = pyqtSignal(int) # TrainID
     swtrain_gui_pull_ebrake = pyqtSignal(int) # TrainID
+    swtrain_gui_release_ebrake = pyqtSignal(int) #TrainID
     swtrain_gui_set_setpoint_speed = pyqtSignal(int, float) # TrainID, Setpoint Speed
     swtrain_gui_press_service_brake = pyqtSignal(int) # TrainID
     swtrain_gui_toggle_damn_doors = pyqtSignal(int) # TrainID
