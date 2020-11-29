@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>778</width>
-    <height>797</height>
+    <width>786</width>
+    <height>804</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -114,6 +114,9 @@
       <height>20</height>
      </size>
     </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QLabel" name="elevation_label">
     <property name="geometry">
@@ -142,7 +145,7 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="track_heater_label">
+   <widget class="QLabel" name="beacon_label">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -163,7 +166,7 @@
      <enum>QFrame::Box</enum>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Track Heater:&lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Beacon:&lt;br/&gt;&lt;/p&gt;&lt;p&gt;NA&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -325,7 +328,7 @@
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(182, 215, 168);</string>
+     <string notr="true">background-color: rgb(181, 255, 183)</string>
     </property>
     <property name="text">
      <string>Add Track Layout</string>
@@ -674,6 +677,9 @@ QTabBar:: {background-color: rgb(255,255,255); }
       <height>20</height>
      </size>
     </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
@@ -705,17 +711,22 @@ QTabBar:: {background-color: rgb(255,255,255); }
    <widget class="QPushButton" name="track_heater_button">
     <property name="geometry">
      <rect>
-      <x>67</x>
-      <y>740</y>
-      <width>74</width>
+      <x>690</x>
+      <y>180</y>
+      <width>71</width>
       <height>23</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(234, 153, 153);</string>
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
-     <string>Off</string>
+     <string>NA</string>
     </property>
     <property name="checkable">
      <bool>true</bool>
@@ -767,6 +778,9 @@ QTabBar:: {background-color: rgb(255,255,255); }
       <width>20</width>
       <height>20</height>
      </size>
+    </property>
+    <property name="checkable">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="tickets_sold_label">
@@ -850,6 +864,189 @@ QTabBar:: {background-color: rgb(255,255,255); }
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
+   <widget class="QPushButton" name="set_random_temp_button">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>110</y>
+      <width>51</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>0</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>1347</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>Set
+Random
+Temp</string>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>20</width>
+      <height>20</height>
+     </size>
+    </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="current_temperature_label">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>100</y>
+      <width>131</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Current
+Temperature:
+NA</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>170</y>
+      <width>131</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Track Heater:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="set_manual_temp_button">
+    <property name="geometry">
+     <rect>
+      <x>730</x>
+      <y>110</y>
+      <width>51</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>0</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>1347</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>Set
+Manual
+Temp</string>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>20</width>
+      <height>20</height>
+     </size>
+    </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <zorder>label_2</zorder>
+   <zorder>failure_mode_label</zorder>
+   <zorder>track_circuit_failure_button</zorder>
+   <zorder>elevation_label</zorder>
+   <zorder>beacon_label</zorder>
+   <zorder>station_name_label</zorder>
+   <zorder>section_label</zorder>
+   <zorder>exit_side_label</zorder>
+   <zorder>cumulative_elevation_label</zorder>
+   <zorder>passengers_boarded_label</zorder>
+   <zorder>add_track_button</zorder>
+   <zorder>current_switch_label</zorder>
+   <zorder>logout_button</zorder>
+   <zorder>length_label</zorder>
+   <zorder>occupied_label</zorder>
+   <zorder>tabWidget_hello</zorder>
+   <zorder>grade_label</zorder>
+   <zorder>line_name_label</zorder>
+   <zorder>passengers_exited_label</zorder>
+   <zorder>switch_list_label</zorder>
+   <zorder>power_failure_button</zorder>
+   <zorder>label</zorder>
+   <zorder>track_heater_button</zorder>
+   <zorder>broken_rail_failure_button</zorder>
+   <zorder>tickets_sold_label</zorder>
+   <zorder>underground_label</zorder>
+   <zorder>speed_limit_label</zorder>
+   <zorder>current_temperature_label</zorder>
+   <zorder>label_4</zorder>
+   <zorder>block_number_label</zorder>
+   <zorder>set_manual_temp_button</zorder>
+   <zorder>set_random_temp_button</zorder>
   </widget>
  </widget>
  <resources/>
