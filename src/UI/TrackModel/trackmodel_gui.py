@@ -2,7 +2,7 @@ import os
 import sys
 import PyQt5
 from PyQt5 import QtWidgets, uic
-from PyQt5.QtWidgets import QPushButton, QStackedWidget, QLabel, QComboBox
+from PyQt5.QtWidgets import QPushButton, QStackedWidget, QLabel, QComboBox, QMessageBox
 from PyQt5.QtCore import QTimer
 #from src.UI.server_functions import *
 #from src.UI.window_manager import window_list
@@ -49,13 +49,13 @@ class TrackModelUi(QtWidgets.QMainWindow):
 
         logoutButton = self.findChild(QtWidgets.QPushButton, 'logout_button')
         logoutButton.clicked.connect(self.logout)
-        
+
         if (len(TrackModelDef.trackList) > 0):
             if (TrackModelDef.getTrack("Green") != None):
                 self.addTab("Green", 150)
             if (TrackModelDef.getTrack("Red") != None):
                 self.addTab("Red", 76)
-        
+
         track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
         track_heater_button.clicked.connect(self.update_track_heater)
 
@@ -67,9 +67,43 @@ class TrackModelUi(QtWidgets.QMainWindow):
 
         track_circuit_failure_button = self.findChild(QtWidgets.QPushButton, 'track_circuit_failure_button')
         track_circuit_failure_button.clicked.connect(self.update_track_circuit_failure)
-    
+
         set_random_temp_button = self.findChild(QtWidgets.QPushButton, 'set_random_temp_button')
         set_random_temp_button.clicked.connect(self.set_random_temperature)
+
+        set_manual_temp_button = self.findChild(QtWidgets.QPushButton, 'set_manual_temp_button')
+        set_manual_temp_button.clicked.connect(self.set_manual_temperature)
+
+    def set_manual_temperature(self):
+        track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
+        current_temperature_label = self.findChild(QtWidgets.QLabel, 'current_temperature_label')
+        temp, bleh = QtWidgets.QInputDialog.getText(self, 'Input Dialog', 'Enter a temperature between -25 and 115:')
+        message = QMessageBox()
+        message.setIcon(QMessageBox.Critical)
+        message.setWindowTitle("Error")
+
+        try:
+            temp = int(temp)
+            if (temp <= 115 and temp >= -25):
+                tempString = "Current\nTemperature:\n" + str(temp) + " °F"
+                TrackModelDef.environmentalTemp = temp
+                current_temperature_label.setText(tempString)
+                if (temp <= 32):
+                    for x in TrackModelDef.trackList:
+                        if (x.lineName == "Green" and (not x.trackHeater)):
+                            signals.swtrack_set_track_heater.emit(Line.LINE_GREEN, True)
+                        elif (x.lineName == "Red" and (not x.trackHeater)):
+                            signals.swtrack_set_track_heater.emit(Line.LINE_RED, True)
+                        x.setTrackHeater(True)
+                    if (not track_heater_button.isChecked()):
+                        track_heater_button.toggle()
+                        self.update_track_heater()
+            else:
+                message.setText("Temperature outside of range!\nEnter a value between -25 and 115, inclusive")
+                message.exec_()
+        except ValueError:
+            message.setText("Invalid input: Not an integer")
+            message.exec_()
 
     def set_random_temperature(self):
         randomTemp = random.randrange(-10, 100, 1)
@@ -82,10 +116,8 @@ class TrackModelUi(QtWidgets.QMainWindow):
         if (randomTemp <= 32):
             for x in TrackModelDef.trackList:
                 if (x.lineName == "Green" and (not x.trackHeater)):
-                    print("1")
                     signals.swtrack_set_track_heater.emit(Line.LINE_GREEN, True)
                 elif (x.lineName == "Red" and (not x.trackHeater)):
-                    print("2")
                     signals.swtrack_set_track_heater.emit(Line.LINE_RED, True)
                 x.setTrackHeater(True)
             if (not track_heater_button.isChecked()):
@@ -99,7 +131,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
         theLine = theTabWidget.tabText(theIndex)
         theLine = theLine.replace(" Line", "")
         theTrack = TrackModelDef.getTrack(theLine)
-        
+
         if (theLine == "Green"):
             currentComboBlock = str(combo1.currentText())
             line = Line.LINE_GREEN
@@ -125,7 +157,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
         theLine = theTabWidget.tabText(theIndex)
         theLine = theLine.replace(" Line", "")
         theTrack = TrackModelDef.getTrack(theLine)
-        
+
         if (theLine == "Green"):
             currentComboBlock = str(combo1.currentText())
             line = Line.LINE_GREEN
@@ -151,7 +183,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
         theLine = theTabWidget.tabText(theIndex)
         theLine = theLine.replace(" Line", "")
         theTrack = TrackModelDef.getTrack(theLine)
-        
+
         if (theLine == "Green"):
             currentComboBlock = str(combo1.currentText())
             line = Line.LINE_GREEN
@@ -179,10 +211,10 @@ class TrackModelUi(QtWidgets.QMainWindow):
         records.name_columns_by_row(0)
         line = records.column['Line'][1]
         totalBlocks = records.number_of_rows()
-        
+
         TrackModelDef.SignalHandler.readInData(fileInfo)
         self.addTab(line, totalBlocks)
-    
+
     def addTab(self, line, totalBlocks):
         global tabsAdded
         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
@@ -204,7 +236,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
 
         tabsAdded = tabsAdded + 1
         self.show()
-    
+
     # def check_current_block(self):
     #     theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
     #     if (theTabWidget.tabText(theTabWidget.currentIndex()) == "Green Line"):
@@ -337,7 +369,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
                 if (track_circuit_failure_button.isChecked()):
                     track_circuit_failure_button.toggle()
 
-            
+
             # failure_mode_label = self.findChild(QtWidgets.QLabel, 'failure_mode_label')
             # failure = theBlock.failureMode
             # if (failure == 0):
@@ -354,7 +386,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
         theIndex = theTabWidget.currentIndex()
         theLine = theTabWidget.tabText(theIndex)
         track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
-        
+
         if (theLine == "Green Line"):
             theTrack = TrackModelDef.getTrack("Green")
             theLine = Line.LINE_GREEN
@@ -373,7 +405,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
             if (not theTrack.trackHeater):
                 theTrack.setTrackHeater(True)
                 signals.swtrack_set_track_heater.emit(theLine, True)
-        
+
 
     def logout(self):
         """Removes this window from the list"""
@@ -385,4 +417,4 @@ class TrackModelUi(QtWidgets.QMainWindow):
     #         os.system('python3 src/UI/login_gui.py &')
     #     else:
     #         os.system('start /B python src/UI/login_gui.py')
-    #     app.exit()  
+    #     app.exit()
