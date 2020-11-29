@@ -95,6 +95,7 @@ class TrackSystem:
 
         # Set the occupancy of the specified block. This operation will only be
         # successful for the track controllers that operate the block
+        final_authority = True
         for i, track_controller in enumerate(track_controllers):
             # TODO(nns): Possibly add safety architecture here
             track_controller.set_block_occupancy(block_id, occupied)
@@ -102,10 +103,14 @@ class TrackSystem:
 
             new_authority = track_controller.get_authority_of_block(block_id)
             if (new_authority is not None) and (occupied):
-                # Send the updated authority to this train
-                signals.trackmodel_update_authority.emit(train_id, new_authority)
+                # It only takes one false authority to stop the train
+                if not new_authority:
+                    final_authority = False
                 logger.debug("New authority of {} found in track controller {} for train "
                              "{} and block {}".format(new_authority, i, train_id, block_id))
+
+        # Emit the final updated authority to the train
+        signals.trackmodel_update_authority.emit(train_id, final_authority)
 
         # Forward this information to the CTC
         signals.update_occupancy.emit(line, block_id, occupied)
