@@ -9,6 +9,7 @@ from PyQt5.QtCore import QTimer
 import json
 import pyexcel
 import pyexcel_io
+import random
 sys.path.append(".")
 from src.TrackModel import TrackModelDef
 from src.signals import *
@@ -36,27 +37,9 @@ class TrackModelUi(QtWidgets.QMainWindow):
         global tabsAdded
         tabsAdded = 0
 
-
-        # if (tabsAdded > 0):
-        #     theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
-        #     if (TrackModelDef.getTrack("Green") != None):
-        #         print("GREEN CHANGED")
-        #         combo1.currentIndexChanged.connect(self.switch_block)
-        #     if (TrackModelDef.getTrack("Red") != None):
-        #         print("RED CHANGED")
-        #         combo2.currentIndexChanged.connect(self.switch_block)
-
         self.initUI()
 
-        # theTabWidget.currentChanged.connect(self.set_button_state)
-
-        # self.update_timer = QTimer()
-        # self.update_timer.timeout.connect(self.switch_block)
-        # self.update_timer.start(500)
-
         self.show()
-
-        #signals.somethingHasBeenChanged.connect(self.)
 
     def initUI(self):
         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
@@ -75,6 +58,119 @@ class TrackModelUi(QtWidgets.QMainWindow):
         
         track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
         track_heater_button.clicked.connect(self.update_track_heater)
+
+        broken_rail_failure_button = self.findChild(QtWidgets.QPushButton, 'broken_rail_failure_button')
+        broken_rail_failure_button.clicked.connect(self.update_broken_rail_failure)
+
+        power_failure_button = self.findChild(QtWidgets.QPushButton, 'power_failure_button')
+        power_failure_button.clicked.connect(self.update_power_failure)
+
+        track_circuit_failure_button = self.findChild(QtWidgets.QPushButton, 'track_circuit_failure_button')
+        track_circuit_failure_button.clicked.connect(self.update_track_circuit_failure)
+    
+        set_random_temp_button = self.findChild(QtWidgets.QPushButton, 'set_random_temp_button')
+        set_random_temp_button.clicked.connect(self.set_random_temperature)
+
+    def set_random_temperature(self):
+        randomTemp = random.randrange(-10, 100, 1)
+        tempString = "Current\nTemperature:\n" + str(randomTemp) + " °F"
+        current_temperature_label = self.findChild(QtWidgets.QLabel, 'current_temperature_label')
+        current_temperature_label.setText(tempString)
+
+        TrackModelDef.environmentalTemperature = randomTemp
+        track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
+        if (randomTemp <= 32):
+            for x in TrackModelDef.trackList:
+                if (x.lineName == "Green" and (not x.trackHeater)):
+                    print("1")
+                    signals.swtrack_set_track_heater.emit(Line.LINE_GREEN, True)
+                elif (x.lineName == "Red" and (not x.trackHeater)):
+                    print("2")
+                    signals.swtrack_set_track_heater.emit(Line.LINE_RED, True)
+                x.setTrackHeater(True)
+            if (not track_heater_button.isChecked()):
+                track_heater_button.toggle()
+                self.update_track_heater()
+
+
+    def update_broken_rail_failure(self):
+        theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
+        theIndex = theTabWidget.currentIndex()
+        theLine = theTabWidget.tabText(theIndex)
+        theLine = theLine.replace(" Line", "")
+        theTrack = TrackModelDef.getTrack(theLine)
+        
+        if (theLine == "Green"):
+            currentComboBlock = str(combo1.currentText())
+            line = Line.LINE_GREEN
+        else:
+            currentComboBlock = str(combo2.currentText())
+            line = Line.LINE_RED
+
+        currentComboBlock = currentComboBlock[6:]
+
+        broken_rail_failure_button = self.findChild(QtWidgets.QPushButton, 'broken_rail_failure_button')
+        if (broken_rail_failure_button.isChecked()):
+            broken_rail_failure_button.setStyleSheet("background-color: red")
+            theTrack.getBlock(int(currentComboBlock)).brokenRailFailure = True
+            signals.swtrack_update_broken_rail_failure.emit(line, int(currentComboBlock), True)
+        else:
+            broken_rail_failure_button.setStyleSheet("background-color: rgb(181, 255, 183)")
+            theTrack.getBlock(int(currentComboBlock)).brokenRailFailure = False
+            signals.swtrack_update_broken_rail_failure.emit(line, int(currentComboBlock), False)
+
+    def update_power_failure(self):
+        theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
+        theIndex = theTabWidget.currentIndex()
+        theLine = theTabWidget.tabText(theIndex)
+        theLine = theLine.replace(" Line", "")
+        theTrack = TrackModelDef.getTrack(theLine)
+        
+        if (theLine == "Green"):
+            currentComboBlock = str(combo1.currentText())
+            line = Line.LINE_GREEN
+        else:
+            currentComboBlock = str(combo2.currentText())
+            line = Line.LINE_RED
+
+        currentComboBlock = currentComboBlock[6:]
+
+        power_failure_button = self.findChild(QtWidgets.QPushButton, 'power_failure_button')
+        if (power_failure_button.isChecked()):
+            power_failure_button.setStyleSheet("background-color: red")
+            theTrack.getBlock(int(currentComboBlock)).powerFailure = True
+            signals.swtrack_update_power_failure.emit(line, int(currentComboBlock), True)
+        else:
+            power_failure_button.setStyleSheet("background-color: rgb(181, 255, 183)")
+            theTrack.getBlock(int(currentComboBlock)).powerFailure = False
+            signals.swtrack_update_power_failure.emit(line, int(currentComboBlock), False)
+
+    def update_track_circuit_failure(self):
+        theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
+        theIndex = theTabWidget.currentIndex()
+        theLine = theTabWidget.tabText(theIndex)
+        theLine = theLine.replace(" Line", "")
+        theTrack = TrackModelDef.getTrack(theLine)
+        
+        if (theLine == "Green"):
+            currentComboBlock = str(combo1.currentText())
+            line = Line.LINE_GREEN
+        else:
+            currentComboBlock = str(combo2.currentText())
+            line = Line.LINE_RED
+
+        currentComboBlock = currentComboBlock[6:]
+
+        track_circuit_failure_button = self.findChild(QtWidgets.QPushButton, 'track_circuit_failure_button')
+        if (track_circuit_failure_button.isChecked()):
+            track_circuit_failure_button.setStyleSheet("background-color: red")
+            theTrack.getBlock(int(currentComboBlock)).trackCircuitFailure = True
+            signals.swtrack_update_track_circuit_failure.emit(line, int(currentComboBlock), True)
+        else:
+            track_circuit_failure_button.setStyleSheet("background-color: rgb(181, 255, 183)")
+            theTrack.getBlock(int(currentComboBlock)).trackCircuitFailure = False
+            signals.swtrack_update_track_circuit_failure.emit(line, int(currentComboBlock), False)
+
 
     def getFileName(self):
         dialog = QtWidgets.QFileDialog(self)
@@ -200,25 +296,58 @@ class TrackModelUi(QtWidgets.QMainWindow):
             trackHeater = theTrack.trackHeater
             if (trackHeater):
                 track_heater_button.setText("On")
-                track_heater_button.setStyleSheet("background-color : green")
+                # light green
+                track_heater_button.setStyleSheet("background-color: rgb(181, 255, 183)")
                 if (not track_heater_button.isChecked()):
                     track_heater_button.toggle()
             else:
                 track_heater_button.setText("Off")
-                track_heater_button.setStyleSheet("background-color : red")
+                # light red
+                track_heater_button.setStyleSheet("background-color: rgb(234, 153, 153)")
                 if (track_heater_button.isChecked()):
                     track_heater_button.toggle()
 
-            failure_mode_label = self.findChild(QtWidgets.QLabel, 'failure_mode_label')
-            failure = theBlock.failureMode
-            if (failure == 0):
-                failure_mode_label.setText("Failure Mode:\n\n"+ "No Failures")
-            elif (failure == 1):
-                failure_mode_label.setText("Failure Mode:\n\n"+ "Power Failure")
-            elif (failure == 2):
-                failure_mode_label.setText("Failure Mode:\n\n"+ "Broken Track")
-            elif (failure == 3):
-                failure_mode_label.setText("Failure Mode:\n\n"+ "Track Circuit Failure")
+            broken_rail_failure_button = self.findChild(QtWidgets.QPushButton, 'broken_rail_failure_button')
+            if (theBlock.brokenRailFailure):
+                broken_rail_failure_button.setStyleSheet("background-color: red")
+                if (not broken_rail_failure_button.isChecked()):
+                    broken_rail_failure_button.toggle()
+            else:
+                broken_rail_failure_button.setStyleSheet("background-color: rgb(181, 255, 183)")
+                if (broken_rail_failure_button.isChecked()):
+                    broken_rail_failure_button.toggle()
+
+            power_failure_button = self.findChild(QtWidgets.QPushButton, 'power_failure_button')
+            if (theBlock.brokenRailFailure):
+                power_failure_button.setStyleSheet("background-color: red")
+                if (not power_failure_button.isChecked()):
+                    power_failure_button.toggle()
+            else:
+                power_failure_button.setStyleSheet("background-color: rgb(181, 255, 183)")
+                if (power_failure_button.isChecked()):
+                    power_failure_button.toggle()
+
+            track_circuit_failure_button = self.findChild(QtWidgets.QPushButton, 'track_circuit_failure_button')
+            if (theBlock.brokenRailFailure):
+                track_circuit_failure_button.setStyleSheet("background-color: red")
+                if (not track_circuit_failure_button.isChecked()):
+                    track_circuit_failure_button.toggle()
+            else:
+                track_circuit_failure_button.setStyleSheet("background-color: rgb(181, 255, 183)")
+                if (track_circuit_failure_button.isChecked()):
+                    track_circuit_failure_button.toggle()
+
+            
+            # failure_mode_label = self.findChild(QtWidgets.QLabel, 'failure_mode_label')
+            # failure = theBlock.failureMode
+            # if (failure == 0):
+            #     failure_mode_label.setText("Failure Mode:\n\n"+ "No Failures")
+            # elif (failure == 1):
+            #     failure_mode_label.setText("Failure Mode:\n\n"+ "Power Failure")
+            # elif (failure == 2):
+            #     failure_mode_label.setText("Failure Mode:\n\n"+ "Broken Track")
+            # elif (failure == 3):
+            #     failure_mode_label.setText("Failure Mode:\n\n"+ "Track Circuit Failure")
 
     def update_track_heater(self):
         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
@@ -231,17 +360,19 @@ class TrackModelUi(QtWidgets.QMainWindow):
             theLine = Line.LINE_GREEN
         else:
             theTrack = TrackModelDef.getTrack("Red")
+            theLine = Line.LINE_RED
 
         if (not track_heater_button.isChecked()):
             track_heater_button.setText("Off")
-            track_heater_button.setStyleSheet("background-color : red")
+            track_heater_button.setStyleSheet("background-color: rgb(234, 153, 153)")
             theTrack.setTrackHeater(False)
             signals.swtrack_set_track_heater.emit(theLine, False)
         else:
             track_heater_button.setText("On")
-            track_heater_button.setStyleSheet("background-color : green")
-            theTrack.setTrackHeater(True)
-            signals.swtrack_set_track_heater.emit(theLine, True)
+            track_heater_button.setStyleSheet("background-color: rgb(181, 255, 183)")
+            if (not theTrack.trackHeater):
+                theTrack.setTrackHeater(True)
+                signals.swtrack_set_track_heater.emit(theLine, True)
         
 
     def logout(self):
