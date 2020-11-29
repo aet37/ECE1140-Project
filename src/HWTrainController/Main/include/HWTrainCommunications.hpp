@@ -43,6 +43,7 @@ enum class ResponseCode
     ERROR = 1,
 };
 
+int Menu(int);
 void CommsTask();
 
 }

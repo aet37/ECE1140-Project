@@ -58,6 +58,7 @@ static RequestCode ParseCode(const String& rMsg)
         case static_cast<int>(RequestCode::HWTRAIN_GUI_DISPLAY_POWER):
         case static_cast<int>(RequestCode::HWTRAIN_GUI_SET_KI):
         case static_cast<int>(RequestCode::HWTRAIN_BRAKE_FAILURE):
+        case static_cast<int>(RequestCode::HWTRAIN_GET_DATA):
 
 
             return static_cast<RequestCode>(code);
@@ -84,6 +85,165 @@ static void SendResponse(ResponseCode respCode, const char* pData = "")
     Serial.print(static_cast<int>(respCode), DEC);
     Serial.print(" ");
     Serial.println(pData);
+}
+
+int Menu(int menudata){
+    bool toggle;
+    String str;
+    while(1){
+        toggle = Devices::ButtonClick();
+        currentTime = millis();
+        if (currentTime - previousTime >= interval) {
+            previousTime = currentTime;        
+            menudata = Devices::JoystickRead(menudata);
+            if(menudata==15){
+                menudata=0;
+            } else if(menudata==-1){
+                menudata=14;
+            }
+            Serial.println(menudata);
+            if(menudata==0){ // EBrake
+                str="Select EBrake";
+                Devices::ClearLCD();
+                Devices::WriteLCD(str);
+                Serial.println(toggle);
+            }
+            if(menudata==1){ // Service Brake
+                str="Select Service Brake";
+                Devices::ClearLCD();
+                Devices::WriteLCD(str);
+                
+                if(toggle){
+                    break;
+                }
+            }
+            if(menudata==2){ // Passenger EBrake
+                str="Select Passenger EBrake";
+                Devices::ClearLCD();  
+                Devices::WriteLCD(str);
+                
+                if(toggle){
+                    break;
+                }
+            }
+            if(menudata==3){ // Doors
+                str="Select Doors";
+                Devices::ClearLCD();
+                Devices::WriteLCD(str);
+                
+                if(toggle){
+                    break;
+                }
+            }
+            if(menudata==4){ // Lights
+                str="Select Lights";
+                Devices::ClearLCD();
+                Devices::WriteLCD(str);
+                
+                if(toggle){
+                    break;
+                }
+            }
+            if(menudata==5){ // Ads
+                str="Select Ads";
+                Devices::ClearLCD();
+                Devices::WriteLCD(str);
+                
+                if(toggle){
+                    break;
+                }
+            }
+            if(menudata==6){ // Announce
+                str="Select Announcements";
+                Devices::ClearLCD();
+                Devices::WriteLCD(str);
+                
+                if(toggle){
+                    break;
+                }
+            }
+            if(menudata==7){ // Signal Failure
+                str="Select Signal Failure";
+                Devices::ClearLCD();
+                Devices::WriteLCD(str);
+                
+                if(toggle){
+                    break;
+                }
+            }
+            if(menudata==8){ // Engine Failure
+                str="Select Engine Failure";
+                Devices::ClearLCD();
+                Devices::WriteLCD(str);
+                
+                if(toggle){
+                    break;
+                }
+            }
+            if(menudata==9){ // Brake Failure
+                str="Select Brake Failure";
+                Devices::ClearLCD();
+                Devices::WriteLCD(str);
+                
+                if(toggle){
+                    break;
+                }
+            }
+            if(menudata==10){ // Temperature
+                str="Select Temperature";
+                Devices::ClearLCD();
+                Devices::WriteLCD(str);
+                
+                if(toggle){
+                    break;
+                }
+            }
+            if(menudata==11){ // Speed
+                str="Select Speed";
+                Devices::ClearLCD();
+                Devices::WriteLCD(str);
+                
+                if(toggle){
+                    break;
+                }
+            }
+            if(menudata==12){ // Kp
+                str="Select Kp";
+                Devices::ClearLCD();
+                Devices::WriteLCD(str);
+                
+                if(toggle){
+                    break;
+                }
+            }
+            if(menudata==13){ // Ki
+                str="Select Ki";
+                Devices::ClearLCD();
+                Devices::WriteLCD(str);
+                
+                if(toggle){
+                    break;
+                }
+            }
+            if(menudata==14){ // Power
+                str="Select Power";
+                Devices::ClearLCD();
+                Devices::WriteLCD(str);
+                
+                if(toggle){
+                    break;
+                }
+            }
+        }
+        Serial.print("While loop end\n");
+        if(toggle){
+            Serial.print("Welp it's zero\n");
+            return menudata;
+            break;
+        }
+    }
+    Serial.print("We out\n");
+    return menudata;
 }
 
 static void SetLights(const String& rData)
@@ -291,7 +451,7 @@ static void DisplayTemp(const String& rData)
     SendResponse(ResponseCode::SUCCESS);
     bool toggle = Devices::JoystickClick();
     temp = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
-    while(toggle)
+    while(!toggle)
     {
         currentTime = millis();
         Serial.println(temp);
@@ -308,167 +468,236 @@ static void DisplayTemp(const String& rData)
 
 // 
 
-static void DisplaySpeed(const String& rData)
-{
-    SendResponse(ResponseCode::SUCCESS);
-    bool toggle = Devices::JoystickClick();
-    speed = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
-    while(toggle)
-    {
-        currentTime = millis();
-        Serial.println(speed);
-        speed = Devices::JoystickRead(speed);
-        if (currentTime - previousTime >= interval) {
-            previousTime = currentTime;        
-            Devices::ClearLCD();
-            String str = String(speed);
-            Devices::WriteLCD(str);
-        }
-        toggle = Devices::JoystickClick();
-    }
-}
+// static void DisplaySpeed(const String& rData)
+// {
+//     SendResponse(ResponseCode::SUCCESS);
+//     bool toggle = Devices::JoystickClick();
+//     speed = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
+//     while(toggle)
+//     {
+//         currentTime = millis();
+//         Serial.println(speed);
+//         speed = Devices::JoystickRead(speed);
+//         if (currentTime - previousTime >= interval) {
+//             previousTime = currentTime;        
+//             Devices::ClearLCD();
+//             String str = String(speed);
+//             Devices::WriteLCD(str);
+//         }
+//         toggle = Devices::JoystickClick();
+//     }
+// }
 
-static void DisplayKi(const String& rData)
-{
-    SendResponse(ResponseCode::SUCCESS);
-    bool toggle = Devices::JoystickClick();
-    ki = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
-    while(toggle)
-    {
-        currentTime = millis();
-        Serial.println(ki);
-        ki = Devices::JoystickRead(ki);
-        if (currentTime - previousTime >= interval) {
-            previousTime = currentTime;        
-            Devices::ClearLCD();
-            String str = String(ki);
-            Devices::WriteLCD(str);
-        }
-        toggle = Devices::JoystickClick();
-    }
-}
+// static void DisplayKi(const String& rData)
+// {
+//     SendResponse(ResponseCode::SUCCESS);
+//     bool toggle = Devices::JoystickClick();
+//     ki = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
+//     while(!toggle)
+//     {
+//         currentTime = millis();
+//         Serial.println(ki);
+//         ki = Devices::JoystickRead(ki);
+//         if (currentTime - previousTime >= interval) {
+//             previousTime = currentTime;        
+//             Devices::ClearLCD();
+//             String str = String(ki);
+//             Devices::WriteLCD(str);
+//         }
+//         toggle = Devices::JoystickClick();
+//     }
+// }
 
-static void DisplayKp(const String& rData)
-{
-    SendResponse(ResponseCode::SUCCESS);
-    bool toggle = Devices::JoystickClick();
-    kp = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
-    while(toggle)
-    {
-        currentTime = millis();
-        Serial.println(kp);
-        kp = Devices::JoystickRead(kp);
-        if (currentTime - previousTime >= interval) {
-            previousTime = currentTime;        
-            Devices::ClearLCD();
-            String str = String(kp);
-            Devices::WriteLCD(str);
-        }
-        toggle = Devices::JoystickClick();
-    }
-}
+// static void DisplayKp(const String& rData)
+// {
+//     SendResponse(ResponseCode::SUCCESS);
+//     bool toggle = Devices::JoystickClick();
+//     kp = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
+//     while(!toggle)
+//     {
+//         currentTime = millis();
+//         Serial.println(kp);
+//         kp = Devices::JoystickRead(kp);
+//         if (currentTime - previousTime >= interval) {
+//             previousTime = currentTime;        
+//             Devices::ClearLCD();
+//             String str = String(kp);
+//             Devices::WriteLCD(str);
+//         }
+//         toggle = Devices::JoystickClick();
+//     }
+// }
 
-static void DisplayPower(const String& rData)
-{
-    SendResponse(ResponseCode::SUCCESS);
-    bool toggle = Devices::JoystickClick();
-    power = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
-    while(toggle)
-    {
-        currentTime = millis();
-        Serial.println(power);
-        power = Devices::JoystickRead(power);
-        if (currentTime - previousTime >= interval) {
-            previousTime = currentTime;        
-            Devices::ClearLCD();
-            String str = String(power);
-            Devices::WriteLCD(str);
-        }
-        toggle = Devices::JoystickClick();
-    }
-}
+// static void DisplayPower(const String& rData)
+// {
+//     SendResponse(ResponseCode::SUCCESS);
+//     bool toggle = Devices::JoystickClick();
+//     power = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
+//     while(!toggle)
+//     {
+//         currentTime = millis();
+//         Serial.println(power);
+//         power = Devices::JoystickRead(power);
+//         if (currentTime - previousTime >= interval) {
+//             previousTime = currentTime;        
+//             Devices::ClearLCD();
+//             String str = String(power);
+//             Devices::WriteLCD(str);
+//         }
+//         toggle = Devices::JoystickClick();
+//     }
+// }
 
 void CommsTask()
 {
+    Serial.print("Beginning");
+    int menudata = 0;
+    Serial.print("Before call");
+    int menuselect = Menu(menudata);
+    Serial.print("After call");
+                                // switch(menuselect)
     // Quickly return if nothing has been received
-    if (Serial.available() == 0)
-    {
-
-        return;
-    }
+    // if (Serial.available() == 0)
+    // {
+    //     return;
+    // }
 
     // Read the message and determine the request code
-    String msg = Serial.readStringUntil('\n');
-    RequestCode code = ParseCode(msg);
-    String data = ParseData(msg);
+    // String msg = Serial.readStringUntil('\n');
+    // RequestCode code = ParseCode(msg);
+    // String data = ParseData(msg);
+    
+                                // {
+                                //     case 0: // EBrake
+                                //         SetEBrake(data);
+                                //         GetEBrake(data);
+                                //         break;
+                                //     case 1: // Service Brake
+                                //         SetBrake(data);
+                                //         GetBrake(data);
+                                //         break;
+                                //     case 2: // Passenger EBrake
+                                //         SetPEBrake(data);
+                                //         GetPEBrake(data);
+                                //         break;
+                                //     case 3: // Doors
+                                //         SetDoors(data);
+                                //         GetDoors(data);
+                                //         break;
+                                //     case 4: // Lights
+                                //         SetLights(data);
+                                //         GetLights(data);
+                                //         break;
+                                //     case 5: // Ads
+                                //         SetAds(data);
+                                //         GetAds(data);
+                                //         break;
+                                //     case 6: // Announce
+                                //         SetAnnounce(data);
+                                //         GetAnnounce(data);
+                                //         break;
+                                //     case 7: // Signal Failure
+                                //         SetSignalFailure(data);
+                                //         GetSignalFailure(data);
+                                //         break;
+                                //     case 8: // Engine Failure
+                                //         SetEngineFailure(data);
+                                //         GetEngineFailure(data);
+                                //         break;
+                                //     case 9: // Brake Failure
+                                //         SetBrakeFailure(data);
+                                //         GetBrakeFailure(data);
+                                //         break;
+                                //     case 10: // Temperature
+                                //         DisplayTemp(data);
+                                //         break;
+                                //     case 11: // Speed
+                                //     // DisplaySpeed(data);
+                                //         break;
+                                //     case 12: // Kp
+                                //         //DisplayKp(data);
+                                //         break;
+                                //     case 13: // Ki
+                                //         //DisplayKi(data);
+                                //         break;
+                                //     case 14: // Power
+                                //         //DisplayPower(data);
+                                //         break;
+                                //     default: 
+                                //         break;
+                                //     // case 15: // Exit
+                                //     //     return 15;
+                                //     //     break;
 
-    switch (code)
-    {
-        case RequestCode::INVALID:
-            SendResponse(ResponseCode::ERROR);
-            break;
-        case RequestCode::CHECK:
-            SendResponse(ResponseCode::SUCCESS);
-            break;
-        case RequestCode::HWTRAIN_TOGGLE_CABIN_LIGHTS:
-            SetLights(data);
-            GetLights(data);
-            break;
-        case RequestCode::HWTRAIN_PRESS_SERVICE_BRAKE:
-            SetBrake(data);
-            GetBrake(data);
-            break;
-        case RequestCode::HWTRAIN_ANNOUNCE_STATIONS:
-            SetAnnounce(data);
-            GetAnnounce(data);
-            break;
-        case RequestCode::HWTRAIN_PULL_EBRAKE:
-            SetEBrake(data);
-            GetEBrake(data);
-            break;
-        case RequestCode::HWTRAIN_BRAKE_FAILURE:
-            SetBrakeFailure(data);
-            GetBrakeFailure(data);
-            break;
-        case RequestCode::HWTRAIN_ENGINE_FAILURE:
-            SetEngineFailure(data);
-            GetEngineFailure(data);
-            break;
-        case RequestCode::HWTRAIN_SIGNAL_FAILURE:
-            SetSignalFailure(data);
-            GetSignalFailure(data);
-            break;
-        case RequestCode::HWTRAIN_PULL_PASSENGER_EBRAKE:
-            SetPEBrake(data);
-            GetPEBrake(data);
-            break;
-        case RequestCode::HWTRAIN_TOGGLE_DAMN_DOORS:
-            SetDoors(data);
-            GetDoors(data);
-            break;
-        case RequestCode::HWTRAIN_DISPLAY_ADS:
-            SetAds(data);
-            GetAds(data);
-            break;
-        case RequestCode::HWTRAIN_SET_TEMPERATURE:
-            DisplayTemp(data);
-            break;
-        case RequestCode::HWTRAIN_UPDATE_CURRENT_SPEED:
-            DisplaySpeed(data);
-            break;
-        case RequestCode::HWTRAIN_GUI_DISPLAY_POWER:
-            DisplayPower(data);
-            break;
-        case RequestCode::HWTRAIN_GUI_SET_KP:
-            DisplayKp(data);
-            break;
-        case RequestCode::HWTRAIN_GUI_SET_KI:
-            DisplayKi(data);
-            break;
-        default:
-            // We expect ParseCode to take care of this case
-            assert(false);
-    }
+                                // }
+                            // }
+    // switch (code)
+    // {
+    //     case RequestCode::INVALID:
+    //         SendResponse(ResponseCode::ERROR);
+    //         break;
+    //     case RequestCode::CHECK:
+    //         SendResponse(ResponseCode::SUCCESS);
+    //         break;
+    //     case RequestCode::HWTRAIN_TOGGLE_CABIN_LIGHTS:
+    //         SetLights(data);
+    //         GetLights(data);
+    //         break;
+    //     case RequestCode::HWTRAIN_PRESS_SERVICE_BRAKE:
+    //         SetBrake(data);
+    //         GetBrake(data);
+    //         break;
+    //     case RequestCode::HWTRAIN_ANNOUNCE_STATIONS:
+    //         SetAnnounce(data);
+    //         GetAnnounce(data);
+    //         break;
+    //     case RequestCode::HWTRAIN_PULL_EBRAKE:
+    //         SetEBrake(data);
+    //         GetEBrake(data);
+    //         break;
+    //     case RequestCode::HWTRAIN_BRAKE_FAILURE:
+    //         SetBrakeFailure(data);
+    //         GetBrakeFailure(data);
+    //         break;
+    //     case RequestCode::HWTRAIN_ENGINE_FAILURE:
+    //         SetEngineFailure(data);
+    //         GetEngineFailure(data);
+    //         break;
+    //     case RequestCode::HWTRAIN_SIGNAL_FAILURE:
+    //         SetSignalFailure(data);
+    //         GetSignalFailure(data);
+    //         break;
+    //     case RequestCode::HWTRAIN_PULL_PASSENGER_EBRAKE:
+    //         SetPEBrake(data);
+    //         GetPEBrake(data);
+    //         break;
+    //     case RequestCode::HWTRAIN_TOGGLE_DAMN_DOORS:
+    //         SetDoors(data);
+    //         GetDoors(data);
+    //         break;
+    //     case RequestCode::HWTRAIN_DISPLAY_ADS:
+    //         SetAds(data);
+    //         GetAds(data);
+    //         break;
+    //     case RequestCode::HWTRAIN_SET_TEMPERATURE:
+    //         DisplayTemp(data);
+    //         break;
+        // case RequestCode::HWTRAIN_UPDATE_CURRENT_SPEED:
+        //     DisplaySpeed(data);
+        //     break;
+        // case RequestCode::HWTRAIN_GUI_DISPLAY_POWER:
+        //     DisplayPower(data);
+        //     break;
+        // case RequestCode::HWTRAIN_GUI_SET_KP:
+        //     DisplayKp(data);
+        //     break;
+        // case RequestCode::HWTRAIN_GUI_SET_KI:
+        //     DisplayKi(data);
+        //     break;
+        // default:
+        //     // We expect ParseCode to take care of this case
+        //     assert(false)
 }
+
 
 }

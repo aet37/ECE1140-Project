@@ -2,6 +2,7 @@
 #include "include/Devices/Devices.hpp"
 #include "include/Scheduler.hpp"
 
+
 void setup()
 {
   Serial.begin(9600);
@@ -10,7 +11,7 @@ void setup()
   Devices::InitializeJoystick();
   Devices::InitializeButton();
 
-
+ 
   // Initialize the LCD
   Devices::WriteCharLCD("WELCOME");
 }

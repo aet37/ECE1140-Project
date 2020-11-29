@@ -68,33 +68,43 @@ namespace Devices
         pinMode(SW, INPUT_PULLUP);
     }
 
-    double JoystickRead(double data)
+    int JoystickRead(int data)
     {
-        xPosition = analogRead(VRx);
-        yPosition = analogRead(VRy);
-        current = millis();
-        if(xPosition >= 562){
-            if (current - previous >= inter) {
-                previous = current;
-                data--;
+        while(1){
+            xPosition = analogRead(VRx);
+            yPosition = analogRead(VRy);
+            current = millis();
+            if(xPosition >= 562){
+                if (current - previous >= inter) {
+                    previous = current;
+                    data--;
+                    Serial.print("Data--\n");
+                }
                 return data;
-            }
-        } else if (xPosition <= 462){
-             if (current - previous >= inter) {
-                previous = current;
-                data++;
+            } else if (xPosition <= 462){
+                if (current - previous >= inter) {
+                    previous = current;
+                    data++;
+                    Serial.print("Data++\n");
+                }
                 return data;
             }
         }
+        // } else {
+        //     return data;
+        // }
+        
     }
     bool JoystickClick()
     {
         SW_state = digitalRead(SW);
         //Serial.println(SW_state);
-        if(SW_state == 1)
+        if(SW_state == LOW)
         {
+            Serial.print("Pushed");
             return true;
         } else {
+            Serial.print("Not pushed");
             return false;
         }
     }
@@ -103,12 +113,16 @@ namespace Devices
         pinMode(buttonPin, INPUT);
     }
 
-    void ButtonClick()
+    bool ButtonClick()
     {
         buttonState = digitalRead(buttonPin);
-        // if(buttonState == HIGH)
-        // {
-        //     JoystickRead(rData);
-        // }
+        if(buttonState == LOW)
+        {
+            Serial.print("Pushed");
+            return true;
+        } else {
+            Serial.print("Not pushed");
+            return false;
+        }
     }
 }
