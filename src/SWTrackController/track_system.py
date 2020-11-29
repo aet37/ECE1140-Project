@@ -147,7 +147,7 @@ class TrackSystem:
                 speed_limit = 40.0
             elif block_id in range(17, 21):
                 speed_limit = 60.0
-            elif (block_id in range(27, 100)) or \
+            elif (block_id in range(27, 63)) or \
                  (block_id in range(110, 117)):
                 speed_limit = 30.0
             elif block_id in range(86, 101):
