@@ -55,6 +55,10 @@ class TrainCatalogue:
         signals.train_model_receive_power.connect(self.train_model_receive_power)
         # Receive Blocks
         signals.train_model_receive_block.connect(self.train_model_receive_block)
+        # Receive Authority
+        signals.train_model_update_authority.connect(self.train_model_update_authority)
+        # Receive Command Speed
+        signals.train_model_update_command_speed.connect(self.train_model_update_command_speed)
 
     # print(sys.path)
 
@@ -114,6 +118,12 @@ class TrainCatalogue:
         self.m_trainList[trainId].m_authority = newAuthority
         signals.train_model_something_has_been_changed.emit()
         signals.swtrain_update_authority.emit(trainId, newAuthority)
+
+    # @brief Receives command speed
+    def train_model_update_command_speed(self, trainId, newCommandSpeed):
+        self.m_trainList[trainId].m_commandSpeed = newCommandSpeed
+        signals.train_model_something_has_been_changed.emit()
+        signals.swtrain_update_command_speed.emit(trainId, newCommandSpeed)
 
     # @brief Toggles the train doors
     def train_model_receive_doors(self, trainId, doors):
