@@ -1,7 +1,6 @@
 """ Holds CTC main class """
 
 import copy
-
 from src.CTC.ctc_def import Train, Track, Switch
 from src.common_def import Line
 from src.signals import signals
@@ -232,24 +231,34 @@ class TrainSystem:
 
     def update_g_switches(self, sw_arr):
         """ Function which updates occupancies on green route """
+
         if len(sw_arr) != 6:
             raise Exception('CTC Recived Erronious Green Switch Array')
         for i in range(len(sw_arr)):
-            self.switches_green_arr[i].occupied = sw_arr[i]
+            if sw_arr[i]:
+                self.switches_green_arr[i].pointing_to = self.switches_green_arr[i].greater_block
+            else:
+                self.switches_green_arr[i].pointing_to = self.switches_green_arr[i].less_block
 
     def update_r_switches(self, sw_arr):
         """ Function which updates occupancies on red route """
+
         if len(sw_arr) != 7:
             raise Exception('CTC Recived Erronious Red Switch Array')
         for i in range(len(sw_arr)):
-            self.switches_red_arr[i].occupied = sw_arr[i]
+            if sw_arr[i]:
+                self.switches_red_arr[i].pointing_to = self.switches_red_arr[i].greater_block
+            else:
+                self.switches_red_arr[i].pointing_to = self.switches_red_arr[i].less_block
 
     def update_throughput(self, thr):
         """ Function which updates throughput of system """
+
         self.throughput = thr
 
     def update_train_loc(self):
         """ Function which updates location of a train on the green line """
+
         trains_on_green = []    # Keep running list of blocks a train is on
         trains_on_red = []
 
@@ -266,8 +275,8 @@ class TrainSystem:
                         else:
                             continue
                 # If train has reached the yard
-                elif self.trains_arr[i].index_on_route == len(self.trains_arr[i].route_blocks_arr\
-                - 1):
+                elif self.trains_arr[i].index_on_route == (len(self.trains_arr[i].route_blocks_arr\
+                ) - 1):
                     self.trains_arr.pop(i)
                     self.train_numbers.pop(i)
                     i -= 1
@@ -311,8 +320,8 @@ class TrainSystem:
                         else:
                             continue
                 # If train has reached the yard
-                elif self.trains_arr[i].index_on_route == len(self.trains_arr[i].route_blocks_arr\
-                - 1):
+                elif self.trains_arr[i].index_on_route == (len(self.trains_arr[i].route_blocks_arr\
+                ) - 1):
                     self.trains_arr.pop(i)
                     self.train_numbers.pop(i)
                     i -= 1
