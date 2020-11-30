@@ -72,7 +72,6 @@ class Timekeeper:
 
                 # Dispatch train if needed
                 for item in self.ctc_trains_backlog:
-                    print(self.current_time_hour, self.current_time_min, item.hour, item.min)
                     if item.hour == self.current_time_hour and \
                     item.min == self.current_time_min:
 
