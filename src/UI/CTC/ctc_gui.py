@@ -432,7 +432,7 @@ class CTCUi(QtWidgets.QMainWindow):
             self.d_conf_label.setStyleSheet("color: green")
             self.d_conf_label.setText('Train Dispatched to Block ' + self.d_block_label.text()\
                 + ' Now')
-            self.d_speed_label.setText('Command Speed [to Track Controller]: 55 km/hr')
+            self.d_speed_label.setText('Command Speed [to Track Controller]: 70 km/hr')
             self.d_auth_label.setText('Authority [to Track Controller]: 3 Blocks')
             if self.red_radio.isChecked():
                 ctc.dispatch_train(int(self.d_block_label.text()), Line.LINE_RED)
