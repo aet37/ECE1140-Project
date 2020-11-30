@@ -80,6 +80,18 @@ class TrainCatalogue:
         # Let Collin know a train has been dispatched
         signals.swtrain_dispatch_train.emit(commandSpeed, 0, authority)
 
+        # Send to Evan
+        if (currentLine == Line.LINE_GREEN):
+            signals.trackmodel_update_occupancy.emit(trainId, Line.LINE_GREEN, 0, False)
+        else:
+            signals.trackmodel_update_occupancy.emit(trainId, Line.LINE_RED, 0, False)
+
+        # Send to Evan
+        if (currentLine == Line.LINE_GREEN):
+            signals.trackmodel_update_occupancy.emit(trainId, Line.LINE_GREEN, 62, True)
+        else:
+            signals.trackmodel_update_occupancy.emit(trainId, Line.LINE_RED, 9, True)
+
         # Tell the gui something has changed
         signals.train_model_dropdown_has_been_changed.emit()
 
