@@ -35,7 +35,7 @@ class SignalsClass(QObject):
 
     # Train Model Signals
     train_model_dispatch_train = pyqtSignal(int, int, float, int, Line, list) #  Used by the track model to signify that a new train has been dispatched FORMAT: (train_id, destination_block, command_speed, authority, Line, route)
-    train_model_receive_block = pyqtSignal(int, int, float, float, float, float, int) #  Used by the track model to send a block's information FORMAT: (track_id, block_id, elevation, slope, sizeOfBlock, speedLimit, travelDirection)
+    train_model_receive_block = pyqtSignal(int, int, float, float, float, float, int, bool) #  Used by the track model to send a block's information FORMAT: (track_id, block_id, elevation, slope, sizeOfBlock, speedLimit, travelDirection, station)
     # train_model_gui_1_gather_data = 161 #  Used periodically by the gui to update page 1 the user interface
     # train_model_gui_2_gather_data = 162 #  Used periodically by the gui to update page 2 the user interface
     # train_model_gui_3_gather_data = 163 #  Used periodically by the gui to update page 3 the user interface

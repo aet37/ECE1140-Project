@@ -2,7 +2,9 @@
 # Train implementation class
 
 # SYSTEM INCLUDES
+from random import Random
 import sys
+import random
 sys.path.append(".")
 
 # Python PROJECT INCLUDES
@@ -55,6 +57,8 @@ class TrainCatalogue:
         signals.train_model_receive_power.connect(self.train_model_receive_power)
         # Receive Blocks
         signals.train_model_receive_block.connect(self.train_model_receive_block)
+        # Receive Pass Count
+        signals.train_model_update_passengers.connect(self.train_model_update_passengers)
 
     # print(sys.path)
 
@@ -98,7 +102,7 @@ class TrainCatalogue:
         signals.train_model_dropdown_has_been_changed.emit()
 
     # @brief Receives block information
-    def train_model_receive_block(self, track_id, block_id, elevation, slope, sizeOfBlock, speedLimit, travelDirection):
+    def train_model_receive_block(self, track_id, block_id, elevation, slope, sizeOfBlock, speedLimit, travelDirection, station):
         newBlock = Block(block_id)
         # Parse stuff from Evan (trackId, blockId, elevation, grade, length, speedLimit, travelDirection)
 
@@ -107,6 +111,7 @@ class TrainCatalogue:
         newBlock.m_sizeOfBlock = sizeOfBlock
         newBlock.m_speedLimit = speedLimit
         newBlock.m_travelDirection = travelDirection
+        newBlock.m_station = station
 
         # Add the block to the catalogue
         if (track_id == 0):
@@ -158,6 +163,10 @@ class TrainCatalogue:
     
     def train_model_gui_receive_ebrake(self, trainId, emergency_brake):
         self.m_trainList[trainId].m_emergencyPassengerBrake = emergency_brake
+        signals.train_model_something_has_been_changed.emit()
+
+    def train_model_update_passengers(self, trainId, newPassCount):
+        self.m_trainList[trainId].m_trainPassCount = newPassCount
         signals.train_model_something_has_been_changed.emit()
 
     def train_model_receive_power(self, trainId, powerStatus):
@@ -280,6 +289,12 @@ class TrainCatalogue:
                 logger.debug("SECOND self.m_trainList[trainId].m_route[0] = %f", self.m_trainList[trainId].m_route[0])
             else:
                 signals.trackmodel_update_occupancy.emit(trainId, Line.LINE_RED, self.m_trainList[trainId].m_route[0], True)
+
+            if block_catalogue_red.m_blockList[self.m_trainList[trainId].m_route[0]].m_station == False:
+                removedPass = random.randrange(0, self.m_trainList[trainId].m_trainPassCount, 1)
+                self.m_trainList[trainId].m_trainPassCount -= removedPass
+                avalibleSpace = 222 - self.m_trainList[trainId].m_trainPassCount
+                signals.trackmodel_update_passengers_exited.emit(self.m_trainList[trainId].m_currentLine, self.m_trainList[trainId].m_route[0], removedPass, avalibleSpace)
         else:
             # LOG_TRAIN_MODEL("Staying in the same block: currentPosition = %f, blockSize = %f", currentPosition, currentBlockSize)
             # Still in the same block
