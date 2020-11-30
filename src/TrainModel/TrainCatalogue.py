@@ -57,6 +57,10 @@ class TrainCatalogue:
         signals.train_model_receive_power.connect(self.train_model_receive_power)
         # Receive Blocks
         signals.train_model_receive_block.connect(self.train_model_receive_block)
+        # Receive Authority
+        signals.train_model_update_authority.connect(self.train_model_update_authority)
+        # Receive Command Speed
+        signals.train_model_update_command_speed.connect(self.train_model_update_command_speed)
         # Receive Pass Count
         signals.train_model_update_passengers.connect(self.train_model_update_passengers)
 
@@ -87,10 +91,10 @@ class TrainCatalogue:
         signals.swtrain_dispatch_train.emit(commandSpeed, 0, authority)
 
         # Send to Evan
-        # if (currentLine == Line.LINE_GREEN):
-        #     signals.trackmodel_update_occupancy.emit(trainId-1, Line.LINE_GREEN, 0, False)
-        # else:
-        #     signals.trackmodel_update_occupancy.emit(trainId-1, Line.LINE_RED, 0, False)
+        if (currentLine == Line.LINE_GREEN):
+            signals.trackmodel_update_occupancy.emit(trainId-1, Line.LINE_GREEN, 0, True)
+        else:
+            signals.trackmodel_update_occupancy.emit(trainId-1, Line.LINE_RED, 0, True)
 
         # Send to Evan
         # if (currentLine == Line.LINE_GREEN):
@@ -131,6 +135,12 @@ class TrainCatalogue:
         self.m_trainList[trainId].m_authority = newAuthority
         signals.train_model_something_has_been_changed.emit()
         signals.swtrain_update_authority.emit(trainId, newAuthority)
+
+    # @brief Receives command speed
+    def train_model_update_command_speed(self, trainId, newCommandSpeed):
+        self.m_trainList[trainId].m_commandSpeed = newCommandSpeed
+        signals.train_model_something_has_been_changed.emit()
+        signals.swtrain_update_command_speed.emit(trainId, newCommandSpeed)
 
     # @brief Toggles the train doors
     def train_model_receive_doors(self, trainId, doors):

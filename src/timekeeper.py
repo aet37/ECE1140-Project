@@ -19,7 +19,7 @@ class Timekeeper:
         self.time_factor = 1
         self.current_time_sec = 0
         self.current_time_min = 0
-        self.current_time_hour = 24
+        self.current_time_hour = 0
         self.current_day = 0
         self.run_lock = threading.Lock()
         self.running = True
@@ -62,8 +62,8 @@ class Timekeeper:
                    (self.current_time_sec == 0):
                     self.current_day = (self.current_day + 1) % 6
 
-                if self.current_time_hour == 25:
-                    self.current_time_hour = 1
+                if self.current_time_hour == 24:
+                    self.current_time_hour = 0
 
                 signals.timer_expired.emit(self.current_day,
                                            self.current_time_hour,
@@ -78,7 +78,7 @@ class Timekeeper:
                         # Check that dispatch to blocks are clear
                         allowed = True
                         if item.line_on == Line.LINE_GREEN:
-                            if ctc.blocks_red_arr[61].occupied:
+                            if ctc.blocks_green_arr[61].occupied or ctc.blocks_green_arr[60].occupied:
                                 logger.critical('CTC : Scheduled Train Delayed ... 1min')
 
                                 item.min += 1
