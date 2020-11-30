@@ -110,7 +110,7 @@ class TrainSystem:
 
         # Give Train Speed and Authority (blocks, km/hr)
         temp_train.authority = 3
-        temp_train.command_speed = 55
+        temp_train.command_speed = 70
 
         # Add blocks to train object
         if line == Line.LINE_GREEN:
@@ -293,10 +293,10 @@ class TrainSystem:
                         else:
                             self.trains_arr[i].authority -= 1
 
-                        if self.trains_arr[i].command_speed == 55:
-                            self.trains_arr[i].command_speed = 54
+                        if self.trains_arr[i].command_speed == 70:
+                            self.trains_arr[i].command_speed = 71
                         else:
-                            self.trains_arr[i].command_speed = 55
+                            self.trains_arr[i].command_speed = 70
 
                         # Send upated command speed and authority to SW Track Controller
                         signals.swtrack_update_authority.emit(self.trains_arr[i].train_id,\
@@ -338,10 +338,10 @@ class TrainSystem:
                         else:
                             self.trains_arr[i].authority -= 1
 
-                        if self.trains_arr[i].command_speed == 55:
-                            self.trains_arr[i].command_speed = 54
+                        if self.trains_arr[i].command_speed == 70:
+                            self.trains_arr[i].command_speed = 71
                         else:
-                            self.trains_arr[i].command_speed = 55
+                            self.trains_arr[i].command_speed = 70
 
                         # Send upated command speed and authority to SW Track Controller
                         signals.swtrack_update_authority.emit(self.trains_arr[i].train_id,\
