@@ -189,7 +189,7 @@ class Switch:
         self.currentSwitch = self.block1
 
     def setSwitch(self, switch):
-        if (switch == 0):
+        if (switch):
             self.currentSwitch = self.block1
         else:
             self.currentSwitch = self.block2
@@ -238,6 +238,7 @@ class SignalHandler:
         else:
             theLine = getTrack("Red")
         theLine.getBlock(theLine.switchList[number]).blockSwitch.setSwitch(position)
+        signals.trackmodel_update_gui.emit()
 
     def updateTicketsSold(self):
         totalTickets = 0
@@ -293,6 +294,7 @@ class SignalHandler:
 
         # Tell swtrack the occupancy
         signals.swtrack_update_occupancies.emit(trainId, line, currentBlock, trainOrNot)
+        signals.trackmodel_update_gui.emit()
 
     def dispatchTrain(self, trainId, destinationBlock, commandSpeed, authority, currentLine, switch_arr):
         logger.debug("Received trackmodel_dispatch_train")
