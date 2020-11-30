@@ -76,6 +76,46 @@ class TrackModelUi(QtWidgets.QMainWindow):
 
         signals.trackmodel_update_gui.connect(self.switch_block) # TODO: might need to make sure there is a track before trying to update 
 
+        change_block_length_button = self.findChild(QtWidgets.QPushButton, 'change_block_length_button')
+        change_block_length_button.clicked.connect(self.changeBlockLength)
+
+    def changeBlockLength(self):
+        length, bleh = QtWidgets.QInputDialog.getText(self, 'Input Dialog', 'Enter a block length between 10 and 1000:')
+        message = QMessageBox()
+        
+        length_label = self.findChild(QtWidgets.QLabel, 'length_label')
+        try:
+            length = int(length)
+            if (length <= 1000 and length >= 10):
+                length_label.setText("Block Length:\n\n"+ str()+ " m")
+            else:
+                message.setText("Temperature outside of range!\nEnter a value between 10 and 1000, inclusive")
+                message.exec_()
+        except ValueError:
+            message.setText("Invalid input: Not an integer")
+            message.exec_()
+
+
+        theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
+        theIndex = theTabWidget.currentIndex()
+        theLine = theTabWidget.tabText(theIndex)
+        theLine = theLine.replace(" Line", "")
+        theTrack = TrackModelDef.getTrack(theLine)
+
+        if (theLine == "Green"):
+            currentComboBlock = str(combo1.currentText())
+            line = Line.LINE_GREEN
+        else:
+            currentComboBlock = str(combo2.currentText())
+            line = Line.LINE_RED
+
+        currentComboBlock = int(currentComboBlock[6:])
+
+        theBlock = theTrack.getBlock(currentComboBlock)
+        theBlock.blockLength = length
+        signals.trackmodel_update_gui.emit()
+
+
     def set_manual_temperature(self):
         track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
         current_temperature_label = self.findChild(QtWidgets.QLabel, 'current_temperature_label')
@@ -372,7 +412,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
                     track_circuit_failure_button.toggle()
 
 
-            railway_crossing_label = self.findChild(QtWidgets.QLabel, 'failure_mode_label')
+            railway_crossing_label = self.findChild(QtWidgets.QLabel, 'railway_crossing_label')
             if (theBlock.blockRailwayCrossing):
                 railway_crossing_label.setText("Railway Crossing:\n\nYes")
             else:
