@@ -74,6 +74,8 @@ class TrackModelUi(QtWidgets.QMainWindow):
         set_manual_temp_button = self.findChild(QtWidgets.QPushButton, 'set_manual_temp_button')
         set_manual_temp_button.clicked.connect(self.set_manual_temperature)
 
+        signals.trackmodel_update_gui.connect(self.switch_block) # TODO: might need to make sure there is a track before trying to update 
+
     def set_manual_temperature(self):
         track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
         current_temperature_label = self.findChild(QtWidgets.QLabel, 'current_temperature_label')
@@ -123,7 +125,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
             if (not track_heater_button.isChecked()):
                 track_heater_button.toggle()
                 self.update_track_heater()
-
+        signals.trackmodel_update_tickets_sold.emit()
 
     def update_broken_rail_failure(self):
         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
@@ -370,16 +372,11 @@ class TrackModelUi(QtWidgets.QMainWindow):
                     track_circuit_failure_button.toggle()
 
 
-            # failure_mode_label = self.findChild(QtWidgets.QLabel, 'failure_mode_label')
-            # failure = theBlock.failureMode
-            # if (failure == 0):
-            #     failure_mode_label.setText("Failure Mode:\n\n"+ "No Failures")
-            # elif (failure == 1):
-            #     failure_mode_label.setText("Failure Mode:\n\n"+ "Power Failure")
-            # elif (failure == 2):
-            #     failure_mode_label.setText("Failure Mode:\n\n"+ "Broken Track")
-            # elif (failure == 3):
-            #     failure_mode_label.setText("Failure Mode:\n\n"+ "Track Circuit Failure")
+            railway_crossing_label = self.findChild(QtWidgets.QLabel, 'failure_mode_label')
+            if (theBlock.blockRailwayCrossing):
+                railway_crossing_label.setText("Railway Crossing:\n\nYes")
+            else:
+                railway_crossing_label.setText("Railway Crossing:\n\nNo")
 
     def update_track_heater(self):
         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')

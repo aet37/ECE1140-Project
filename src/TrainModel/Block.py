@@ -19,3 +19,4 @@ class Block:
         self.m_decelerationLimit = 0
         self.m_speedLimit = 0
         self.m_travelDirection = 0
+        self.m_station = False

@@ -1,4 +1,5 @@
 TAG switch = FALSE
+TAG heater = FALSE
 # Section 1
 TAG b63O = FALSE
 TAG b64O = FALSE
@@ -254,6 +255,10 @@ TASK<PERIOD=1000> MainTask
             OTE b138A
             OTE b139A
             OTE b140A
+        ENDRUNG
+        RUNG
+            XIC b77O
+            OTE switch
         ENDRUNG
     ENDROUTINE
 ENDTASK
