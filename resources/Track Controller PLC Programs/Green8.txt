@@ -35,6 +35,7 @@ TAG b15A = TRUE
 TAG b14A = TRUE
 TAG b13A = TRUE
 TAG b12A = TRUE
+TAG b11A = TRUE
 
 TASK<PERIOD=1000> MainTask
     ROUTINE Main
@@ -57,6 +58,7 @@ TASK<PERIOD=1000> MainTask
             XIO b14O
             XIO b13O
             OTE b12A
+            OTE b11A
         ENDRUNG
         RUNG
             XIO b13O

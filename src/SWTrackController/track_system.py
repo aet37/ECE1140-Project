@@ -124,7 +124,6 @@ class TrackSystem:
                     # It only takes one false authority to stop the train
                     if not new_authority:
                         final_authorities[i] = False
-                        print(track_controller.tags)
                     logger.debug("New authority of {} found in track controller {} for train "
                                  "{} and block {}".format(new_authority, i, train_id, block))
 
