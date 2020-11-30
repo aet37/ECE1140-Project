@@ -68,7 +68,7 @@ class Track:
 
     def setTrackHeater(self, heaterBool):
         self.trackHeater = heaterBool
-    
+
     def getStationBlocks(self, stationName):
         for x in self.stationList:
             if (x.stationName == stationName):
@@ -211,17 +211,17 @@ class SignalHandler:
             theTrack = getTrack("Green")
         else:
             theTrack = getTrack("Red")
-        
+
         theBlock = theTrack.getBlock(blockNumber)
         theStation = theBlock.blockStation
-    
+
         blockList = theTrack.getStationBlocks(theStation.stationName)
 
         for x in blockList:
             theTrack.getBlock(x).blockStation.passengersExited += passengersExited
 
         passengersLeftToBoard = theStation.ticketsSold - theStation.passengersBoarded
-        
+
         if (passengersLeftToBoard > spaceOnTrain):
             for y in blockList:
                 theTrack.getBlock(y).blockStation.passengersBoarded += spaceOnTrain
@@ -239,6 +239,7 @@ class SignalHandler:
         else:
             theLine = getTrack("Red")
         theLine.getBlock(theLine.switchList[number]).blockSwitch.setSwitch(position)
+        signals.trackmodel_update_gui.emit()
 
     def updateTicketsSold(self):
         totalTickets = 0
@@ -282,7 +283,7 @@ class SignalHandler:
                 assert False
         else:
             trainId = self.trainCount
-        
+
         signals.train_model_update_authority.emit(trainId, newAuthority)
 
     # def updateAuthority(self, trainId, newAuthority):

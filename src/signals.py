@@ -88,7 +88,7 @@ class SignalsClass(QObject):
     trackmodel_dispatch_train = pyqtSignal(int, int, float, bool, Line, list) # Used by SWTrack Controller to send dispatch Train (train_id, command_speed, authority, Line, switches_arr(boolean))
     trackmodel_update_occupancy = pyqtSignal(int, Line, int, bool) # Used by train model to give track model info about a train's status on a particular block (trainId, Line, blockId, trainOrNot)
     trackmodel_update_command_speed = pyqtSignal(int, float) # Used by the track controller to update the command speed of a train (trainId, newSpeed)
-    trackmodel_update_switch_positions = pyqtSignal(Line, int, int) # Used by the track controller to update a switch positions (Line, switchNumberFromYard, switchPosition)
+    trackmodel_update_switch_positions = pyqtSignal(Line, int, bool) # Used by the track controller to update a switch positions (Line, switchNumberFromYard, switchPosition)
     trackmodel_update_authority = pyqtSignal(Line, int, bool) # Used by the track controller to update the authority of a train (trainId, newAuthority)
     trackmodel_update_gui = pyqtSignal() # used by the track model to tell me to update my gui
     trackmodel_update_passengers_exited = pyqtSignal(Line, int, int, int, int, int) # used by train model to communicate how many passengers left the train (Line, trainId, blockNumberOfStation, passengersExited, spaceAvailable, totalSeats)
