@@ -68,6 +68,12 @@ class Track:
 
     def setTrackHeater(self, heaterBool):
         self.trackHeater = heaterBool
+    
+    def getStationBlocks(self, stationName):
+        for x in stationList:
+            if (x.stationName == stationName):
+                return x.blockList
+        return 0
 
 class Block:
     def __init__(self, blockNumber, blockLength, blockGrade, blockSpeedLimit,
@@ -199,12 +205,30 @@ class SignalHandler:
         signals.trackmodel_update_tickets_sold.connect(self.updateTicketsSold)
         signals.trackmodel_update_passengers_exited.connect(self.updatePassengersExited)
 
-    def updatePassengersExited(self, line, blockNumber, passengersExited, spaceOnTrain):
+    def updatePassengersExited(self, line, trainId, blockNumber, passengersExited, spaceOnTrain, totalSeats): # send kenny total passengers
         if (line == Line.LINE_GREEN):
             theTrack = getTrack("Green")
         else:
             theTrack = getTrack("Red")
-        pass
+        
+        theBlock = theTrack.getBlock(blockNumber)
+        theStation = theBlock.blockStation
+    
+        blockList = theTrack.getStationBlocks(theStation.stationName)
+
+        for x in blockList:
+            theTrack.getBlock(x).blockStation.passengersExited += passengersExited
+
+        passengersLeftToBoard = theStation.ticketsSold - theStation.passengersBoarded
+        
+        if (passengersLeftToBoard > spaceOnTrain):
+            for y in blockList:
+                theTrack.getBlock(y).blockStation.passengersBoarded += spaceOnTrain
+            signals.train_model_update_passengers.emit(trainId, totalSeats)
+        else:
+            for z in blockList:
+                theTrack.getBlock(z).blockStation.passengersBoarded += passengersLeftToBoard
+            signals.train_model_update_passengers.emit(trainId, totalSeats - (spaceOnTrain - passengersLeftToBoard))
 
     def updateSwitchPositions(self, line, number, position):
         if (line == Line.LINE_GREEN):
