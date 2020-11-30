@@ -1,6 +1,6 @@
 TAG switch = FALSE
 TAG heater = FALSE
-TAG mmode = FALSE
+TAG mmode = TRUE
 # Section 1
 TAG b85O = FALSE
 TAG b85A = TRUE
@@ -95,20 +95,8 @@ TASK<PERIOD=2000> MainTask
             OTE b100A
         ENDRUNG
         RUNG
-            XIO b85O
-            OTE switch
-        ENDRUNG
-        RUNG
-            XIO switch
-            OTE out25p
-        ENDRUNG
-        RUNG
             XIC heater
             OTE out27p
-        ENDRUNG
-        RUNG
-            XIC mmode
-            OTE out29p
         ENDRUNG
         # Station 1 signal
         RUNG
@@ -151,6 +139,29 @@ TASK<PERIOD=2000> MainTask
             XIO b86O
             XIO b100O
             OTE out2p
+        ENDRUNG
+    ENDROUTINE
+ENDTASK
+
+TASK<PERIOD=1800> SwitchTask
+    ROUTINE Main
+        RUNG
+            XIO mmode
+            XIO b85O
+            OTL switch
+        ENDRUNG
+        RUNG
+            XIO mmode
+            XIC b85O
+            OTU switch
+        ENDRUNG
+        RUNG
+            XIC mmode
+            OTE out29p
+        ENDRUNG
+        RUNG
+            XIC switch
+            OTE out25p
         ENDRUNG
     ENDROUTINE
 ENDTASK
