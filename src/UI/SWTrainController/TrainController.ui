@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QComboBox" name="TrainIDBox">
@@ -1559,6 +1559,19 @@ p, li { white-space: pre-wrap; }
       </property>
       <property name="text">
        <string>&lt;-Menu</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="UseDefaults">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>370</y>
+        <width>261</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Use Default Values</string>
       </property>
      </widget>
     </widget>

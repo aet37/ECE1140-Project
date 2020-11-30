@@ -79,6 +79,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
         # Define buttons on Engineer page #
         self.save_kp_ki.clicked.connect(self.save_inputs)
+        self.use_default_kp_ki.clicked.connect(self.use_defaults)
         ###################################
 
         # Define Signal Connections #
@@ -171,6 +172,9 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
         # Define button to input Kp and Ki
         self.save_kp_ki = self.findChild(QtWidgets.QPushButton, 'SaveInputs')
+
+        # Define button to input Default Kp and Ki values
+        self.use_default_kp_ki = self.findChild(QtWidgets.QPushButton, 'UseDefaults')
         ##################################
 
     def update_current_train_id(self):
@@ -434,6 +438,9 @@ class SWTrainUi(QtWidgets.QMainWindow):
                 self.automatic_mode.setStyleSheet("background-color: green;")
                 self.manual_mode.setStyleSheet("background-color: rgb(255, 51, 16);")
 
+        # Clear override code text boxes
+        self.OverrideCode.clear()
+
         signals.swtrain_gui_switch_mode.emit(int(self.current_train_id) - 1, override)
 
     def toggle_mode2(self):
@@ -464,6 +471,9 @@ class SWTrainUi(QtWidgets.QMainWindow):
                 # Toggle color of mode boxes
                 self.automatic_mode.setStyleSheet("background-color: rgb(255, 51, 16);")
                 self.manual_mode.setStyleSheet("background-color: green;")
+
+        # Clear override code text boxes
+        self.OverrideCode.clear()
 
         signals.swtrain_gui_switch_mode.emit(int(self.current_train_id) - 1, override)
 
@@ -507,6 +517,8 @@ class SWTrainUi(QtWidgets.QMainWindow):
         else:
             signals.swtrain_gui_set_setpoint_speed.emit(int(self.current_train_id) - 1, float(setpoint_speed))
 
+        # Clear setpoint speed text box
+        self.EnterSpeed.clear()
         self.update_gui()
 
     def toggle_service_brake(self):
@@ -577,7 +589,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
 
     def save_inputs(self):
-    # If no controllers have been created, button does nothing
+        # If no controllers have been created, button does nothing
         if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
             alert = Alert("Error: No trains have been dispatched!")
             alert.exec_()
@@ -620,6 +632,27 @@ class SWTrainUi(QtWidgets.QMainWindow):
             return
 
         signals.swtrain_gui_set_kp_ki.emit(int(self.current_train_id) - 1, float(Kp), float(Ki))
+
+        # Clear Kp and Ki text boxes
+        self.InputKp.clear()
+        self.InputKi.clear()
+
+        self.update_gui()
+
+    def use_defaults(self):
+        # If no controllers have been created, button does nothing
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            alert = Alert("Error: No trains have been dispatched!")
+            alert.exec_()
+            return
+
+        # Ask for confirmation to ensure values are as desired
+        confirmation = Confirmation("Do you want to use the defualt values?")
+        response = confirmation.exec_()
+        if response == False:
+            return
+
+        signals.swtrain_gui_set_kp_ki.emit(int(self.current_train_id) - 1, float(35000), float(1000))
         self.update_gui()
 
     def logout(self):
