@@ -19,7 +19,7 @@ class Timekeeper:
         self.time_factor = 1
         self.current_time_sec = 0
         self.current_time_min = 0
-        self.current_time_hour = 24
+        self.current_time_hour = 0
         self.current_day = 0
         self.run_lock = threading.Lock()
         self.running = True
@@ -62,8 +62,8 @@ class Timekeeper:
                    (self.current_time_sec == 0):
                     self.current_day = (self.current_day + 1) % 6
 
-                if self.current_time_hour == 25:
-                    self.current_time_hour = 1
+                if self.current_time_hour == 24:
+                    self.current_time_hour = 0
 
                 signals.timer_expired.emit(self.current_day,
                                            self.current_time_hour,
@@ -72,6 +72,7 @@ class Timekeeper:
 
                 # Dispatch train if needed
                 for item in self.ctc_trains_backlog:
+                    print(self.current_time_hour, self.current_time_min, item.hour, item.min)
                     if item.hour == self.current_time_hour and \
                     item.min == self.current_time_min:
 
@@ -144,7 +145,7 @@ class Timekeeper:
                 # Send signal to Track Model if time is right
                 if (self.current_time_sec == 5) and \
                    (self.current_time_min == 0) and \
-                   (self.current_time_hour == 24):
+                   (self.current_time_hour == 0):
                     signals.trackmodel_update_tickets_sold.emit()
 
         # Cancel the timer
