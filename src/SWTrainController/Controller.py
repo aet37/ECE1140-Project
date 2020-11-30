@@ -48,7 +48,7 @@ class Controller:
         self.doors = 0
         self.announcements = 0
         self.lights = 0
-        self.temperature = 0
+        self.temperature = 70
         self.advertisements = 0
 
         # Failure cases

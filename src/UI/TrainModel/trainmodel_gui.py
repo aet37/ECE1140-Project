@@ -224,7 +224,7 @@ class TrainModelUi(QtWidgets.QMainWindow):
             self.findChild(QtWidgets.QLabel, 'disp_service_brake').setText("off")
             self.findChild(QtWidgets.QLabel, 'disp_service_brake').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
         
-        if str(train_catalogue.m_trainList[self.current_train_id - 1].m_emergencyPassengeBrake) == "True":
+        if str(train_catalogue.m_trainList[self.current_train_id - 1].m_emergencyPassengerBrake) == "True":
             self.findChild(QtWidgets.QLabel, 'disp_emergency_passenger_brake').setText("on")
             self.findChild(QtWidgets.QLabel, 'disp_emergency_passenger_brake').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
         else:
