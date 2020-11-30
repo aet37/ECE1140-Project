@@ -103,8 +103,11 @@ class Controller:
             self.ek = 0
         else:
             self.power_command = (self.kp * self.ek) + (self.ki * self.uk)
+            # Cut off power at appropriate limits
             if(self.power_command > 120000):
                 self.power_command = 120000
+            elif(self.power_command < -120000):
+                self.power_command = -120000
 
         # Set past values of uk and ek
         self.uk1 = self.uk
