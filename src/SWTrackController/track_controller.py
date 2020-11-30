@@ -181,5 +181,15 @@ class TrackController:
         """Method to get the status of a railway crossing on the given block"""
         return self.get_tag_value("b{}RRX".format(block_id))
 
+    def set_maintenance_mode(self, block_id, value):
+        """Puts the block into or out of maintanence mode"""
+        self.set_block_occupancy(block_id, value)
+
+        self.set_tag_value("mmode", value)
+
+    def get_maintenance_mode(self):
+        """Gets whether this block is in maintanence mode"""
+        return self.get_tag_value("mmode")
+
 if __name__ == "__main__":
     raise Exception("Not to be run as a module")
