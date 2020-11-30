@@ -95,12 +95,22 @@ class Block:
         self.brokenRailFailure = False
         self.powerFailure = False
         self.trackCircuitFailure = False
+        self.blockBeacon = None
+        self.beaconDirection = -1
 
     def addStation(self, stationName, stationExitSide):
         self.blockStation = Station(stationName, stationExitSide)
 
     def addSwitch(self, switchNumber, block1, block2):
         self.blockSwitch = Switch(switchNumber, block1, block2)
+    
+    def addBeacon(self, stationName, serviceBrakeBool, exitSide, beaconDirection):
+        theBeacon = Beacon()
+        theBeacon.station_name = stationName
+        theBeacon.service_brake = serviceBrakeBool
+        theBeacon.DoorSide = exitSide
+        self.blockBeacon = theBeacon
+        self.beaconDirection = beaconDirection
 
     def updateOccupancy(self, occupancy):
         self.blockOccupied = occupancy
@@ -449,8 +459,30 @@ class SignalHandler:
                         theBlock.addSwitch(switchNumber, block1, block2)
                         theTrack.switchList.append(theBlock.blockNumber)
 
+                    if (records.column['Beacon'][x] != ""):
+                        if (int(records.column['Beacon'][x]) == 0):
+                            theBeacon = records.column['B0'][x]
+                            beaconNum = 0
+                        else:
+                            theBeacon = records.column['B1'][x]
+                            beaconNum = 1
+                        beaconList = theBeacon.split(',')
+                        if (beaconList[1] == "TRUE"):
+                            theBool = True
+                        else:
+                            theBool = False
+                        if (beaconList[2] == "RIGHT"):
+                            exitWay = DoorSide.SIDE_RIGHT
+                        elif (beaconList[2] == "LEFT"):
+                            exitWay = DoorSide.SIDE_LEFT
+                        else:
+                            exitWay = DoorSide.SIDE_BOTH
+
+                        theBlock.addBeacon(beaconList[0], theBool, exitWay, beaconNum)
+
                     newTrack.addBlock(theBlock)
 
+                    # add beacon to this
                     if (blockNumber == 1):
                         signals.train_model_receive_block.emit(trackInfo['tNumber'], 0, 0, 0, 10, blockSpeedLimit, blockDirection, stationBool)
 
