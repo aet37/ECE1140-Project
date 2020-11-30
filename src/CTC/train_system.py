@@ -1,7 +1,6 @@
 """ Holds CTC main class """
 
 import copy
-
 from src.CTC.ctc_def import Train, Track, Switch
 from src.common_def import Line
 from src.signals import signals
