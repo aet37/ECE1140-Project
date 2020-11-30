@@ -267,7 +267,19 @@ class SignalHandler:
         signals.trackmodel_update_gui.emit()
 
 
-    def updateAuthority(self, trainId, newAuthority):
+    def updateAuthority(self, line, blockNumber, newAuthority):
+        if (line == Line.LINE_GREEN):
+            theLine = getTrack("Green")
+        else:
+            theLine = getTrack("Red")
+        
+        theBlock = theLine.getBlock(blockNumber)
+
+        trainId = theBlock.blockOccupied
+
+        if (trainId == -1):
+            assert False
+        
         signals.train_model_update_authority.emit(trainId, newAuthority)
 
     # def updateAuthority(self, trainId, newAuthority):
