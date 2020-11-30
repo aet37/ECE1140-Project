@@ -5,15 +5,15 @@ from src.common_def import Line
 from src.TrackModel.TrackModelDef import green_route_blocks, red_route_blocks
 from src.CTC.train_system import ctc
 
-def verify_authority(train_id, new_authority):
+def verify_authority(line, block_id, new_authority):
     """Verifies that the authority remains true"""
-    assert train_id == 0
     assert new_authority
 
 def test_passing_authority_green(upload_tracks, download_programs):
     """Testing passing authority. It should always be true because only 1 train is being dispatched"""
     # Disconnect signals going to and from track controller
     signals.train_model_dispatch_train.disconnect()
+    signals.train_model_update_command_speed.disconnect()
     signals.trackmodel_update_authority.disconnect()
     signals.update_occupancy.disconnect()
 
@@ -23,6 +23,7 @@ def test_passing_authority_green(upload_tracks, download_programs):
     # Dispatch a train
     ctc.dispatch_train(38, Line.LINE_GREEN)
 
+    signals.trackmodel_update_occupancy.emit(0, Line.LINE_GREEN, green_route_blocks[0], True)
     for previous_block, current_block in zip(green_route_blocks, green_route_blocks[1:]):
         # Simulate the train changing blocks
         signals.trackmodel_update_occupancy.emit(0, Line.LINE_GREEN, previous_block, False)
