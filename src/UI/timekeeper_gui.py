@@ -56,7 +56,7 @@ class TimekeeperUi(QtWidgets.QMainWindow):
         days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
         period = 'am'
-        if hours in range(12, 23):
+        if hours in range(12, 24):
             period = 'pm'
 
         if hours == 0:
