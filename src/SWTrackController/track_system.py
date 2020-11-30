@@ -111,8 +111,7 @@ class TrackSystem:
         # Update command speed now since speed limit may have changed
         if occupied:
             speed_limit = self.get_speed_limit_of_block(line, block_id)
-            print("suggested_speeds: " + str(self.suggested_speeds))
-            print("train_id: " + str(train_id))
+            
             if self.suggested_speeds[train_id] > speed_limit:
                 command_speed = speed_limit
             else:
