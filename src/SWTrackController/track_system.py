@@ -112,9 +112,9 @@ class TrackSystem:
 
             switch_position = track_controller.get_switch_position()
             signals.trackmodel_update_switch_positions.emit(line,
-                                                            self.convert_switch_position_ordering(int(i / 2)),
+                                                            self.convert_switch_position_ordering(line, int(i / 2)),
                                                             switch_position)
-            switch_positions[self.convert_switch_position_ordering(int(i / 2))] = switch_position
+            switch_positions[self.convert_switch_position_ordering(line, int(i / 2))] = switch_position
 
         if line == Line.LINE_GREEN:
             signals.update_green_switches.emit(switch_positions)
@@ -194,21 +194,26 @@ class TrackSystem:
         return speed_limit
 
     @staticmethod
-    def convert_switch_position_ordering(original_index):
+    def convert_switch_position_ordering(line, original_index):
         """Converts the index of a switch from the track controller's ordering to everyone else's"""
         new_index = None
-        if original_index == 0:
-            new_index = 3
-        elif original_index == 1:
-            new_index = 4
-        elif original_index == 2:
-            new_index = 5
-        elif original_index == 3:
-            new_index = 1
-        elif original_index == 4:
-            new_index = 0
-        elif original_index == 5:
-            new_index = 2
+
+        if line == Line.LINE_GREEN:
+            if original_index == 0:
+                new_index = 3
+            elif original_index == 1:
+                new_index = 4
+            elif original_index == 2:
+                new_index = 5
+            elif original_index == 3:
+                new_index = 1
+            elif original_index == 4:
+                new_index = 0
+            elif original_index == 5:
+                new_index = 2
+        else:
+            new_index = original_index
+
         assert new_index != None
         return new_index
 
