@@ -78,7 +78,7 @@ class Timekeeper:
                         # Check that dispatch to blocks are clear
                         allowed = True
                         if item.line_on == Line.LINE_GREEN:
-                            if ctc.blocks_red_arr[61].occupied:
+                            if ctc.blocks_green_arr[61].occupied or ctc.blocks_green_arr[60].occupied:
                                 logger.critical('CTC : Scheduled Train Delayed ... 1min')
 
                                 item.min += 1

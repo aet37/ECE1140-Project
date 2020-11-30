@@ -301,9 +301,9 @@ class CTCUi(QtWidgets.QMainWindow):
 
         # Green Line
         elif len(self.d_time_label.text()) == 0:
-            if ctc.blocks_red_arr[61].occupied:
+            if ctc.blocks_green_arr[61].occupied or ctc.blocks_green_arr[60].occupied:
                 self.d_conf_label.setStyleSheet("color: red")
-                self.d_conf_label.setText('Wait until train leaves block 62')
+                self.d_conf_label.setText('Wait until train leaves block 62 or 61')
                 self.d_speed_label.setText('')
                 self.d_auth_label.setText('')
                 return
