@@ -17,6 +17,7 @@ class TrackSystem:
     def __init__(self):
         self.green_track_controllers = []
         self.red_track_controllers = []
+        self.occupied_blocks = []
         self.suggested_speeds = []
 
         # Create the track controllers on the green line
@@ -93,36 +94,46 @@ class TrackSystem:
         # Get the correct list of track controllers based on the line
         track_controllers = self.green_track_controllers if line == Line.LINE_GREEN else self.red_track_controllers
 
+        # Update the occupied block list
+        if occupied:
+            self.occupied_blocks.append(block_id)
+        else:
+            self.occupied_blocks.remove(block_id)
+
         # Set the occupancy of the specified block. This operation will only be
         # successful for the track controllers that operate the block
-        final_authority = True
+        final_authorities = [True for _ in range(len(self.occupied_blocks))]
         switch_positions = [False for _ in range(int(len(track_controllers) / 2))]
         for i, track_controller in enumerate(track_controllers):
             # TODO(nns): Possibly add safety architecture here
             track_controller.set_block_occupancy(block_id, occupied)
             track_controller.run_program()
 
-            new_authority = track_controller.get_authority_of_block(block_id)
-            if (new_authority is not None) and (occupied):
-                # It only takes one false authority to stop the train
-                if not new_authority:
-                    final_authority = False
-                logger.debug("New authority of {} found in track controller {} for train "
-                             "{} and block {}".format(new_authority, i, train_id, block_id))
-
+            # Update switch positions
             switch_position = track_controller.get_switch_position()
             signals.trackmodel_update_switch_positions.emit(line,
                                                             self.convert_switch_position_ordering(line, int(i / 2)),
                                                             switch_position)
             switch_positions[self.convert_switch_position_ordering(line, int(i / 2))] = switch_position
 
+            # Go through occupied blocks and update their authorities
+            for i, block in enumerate(self.occupied_blocks):
+                new_authority = track_controller.get_authority_of_block(block)
+                if new_authority is not None:
+                    # It only takes one false authority to stop the train
+                    if not new_authority:
+                        final_authorities[i] = False
+                    logger.debug("New authority of {} found in track controller {} for train "
+                                 "{} and block {}".format(new_authority, i, train_id, block_id))
+
         if line == Line.LINE_GREEN:
             signals.update_green_switches.emit(switch_positions)
         else:
             signals.update_red_switches.emit(switch_positions)
 
-        # Emit the final updated authority to the train
-        signals.trackmodel_update_authority.emit(train_id, final_authority)
+        # Emit the final updated authorities for the occupied blocks
+        for final_authority, block_id in zip(final_authorities, self.occupied_blocks):
+            signals.trackmodel_update_authority.emit(line, block_id, final_authority)
 
         # Forward this information to the CTC
         signals.update_occupancy.emit(line, block_id, occupied)
