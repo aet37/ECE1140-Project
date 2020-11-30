@@ -43,9 +43,9 @@ void Clear()
     tags.Clear();
 }
 
-String GetAllTagValues()
+String GetAllTagValues(uint32_t division)
 {
-    return tags.GetAllKeysAndValues();
+    return tags.GetAllKeysAndValues(division);
 }
 
 static void ReadInputs()
@@ -68,17 +68,17 @@ void IoTask(void* pSomething)
     ReadInputs();
 
     bool tagValue = false;
-    if (GetTagValue("out25", tagValue))
+    if (GetTagValue("out25p", tagValue))
     {
         digitalWrite(PIN25, tagValue);
     }
 
-    if (GetTagValue("out27", tagValue))
+    if (GetTagValue("out27p", tagValue))
     {
         digitalWrite(PIN27, tagValue);
     }
 
-    if (GetTagValue("out29", tagValue))
+    if (GetTagValue("out29p", tagValue))
     {
         digitalWrite(PIN29, tagValue);
     }

@@ -5,7 +5,7 @@
 #define TAG_DATABASE_HPP
 
 // SYSTEM INCLUDES
-// (None)
+#include <stdint.h>
 
 // C++ PROJECT INCLUDES
 // (None)
@@ -54,7 +54,7 @@ void Clear();
 /**
  * @brief Gets all the tag's and their values
 */
-String GetAllTagValues();
+String GetAllTagValues(uint32_t division);
 
 /**
  * @brief Task to handle input and outputs

@@ -1,6 +1,6 @@
 TAG switch = FALSE
 TAG heater = FALSE
-#TAG mmode = FALSE
+TAG mmode = FALSE
 # Section 1
 TAG b85O = FALSE
 TAG b85A = TRUE
@@ -31,7 +31,7 @@ TAG b97O = FALSE
 TAG b98O = FALSE
 TAG b99O = FALSE
 TAG b100O = FALSE
-TAG b95A = TRUE
+TAG b = TRUE
 TAG b96A = TRUE
 TAG b97A = TRUE
 TAG b98A = TRUE
@@ -39,9 +39,9 @@ TAG b99A = TRUE
 TAG b100A = TRUE
 
 # Outputs for arduino
-TAG out25 = FALSE
-TAG out27 = FALSE
-TAG out29 = FALSE
+TAG out25p = FALSE
+TAG out27p = FALSE
+TAG out29p = FALSE
 
 TASK<PERIOD=2000> MainTask
     ROUTINE Main
@@ -78,7 +78,7 @@ TASK<PERIOD=2000> MainTask
         ENDRUNG
         RUNG
             XIO b85O
-            OTE b95A
+            OTE b
             OTE b96A
             OTE b97A
             OTE b98A
@@ -89,17 +89,17 @@ TASK<PERIOD=2000> MainTask
             XIO b85O
             OTE switch
         ENDRUNG
-        #RUNG
-        #    XIC switch
-        #    OTE out25
-        #ENDRUNG
+        RUNG
+            XIO switch
+            OTE out25p
+        ENDRUNG
         RUNG
             XIC heater
-            OTE out27
+            OTE out27p
         ENDRUNG
-        #RUNG
-        #    XIC mmode
-        #    OTE out29
-        #ENDRUNG
+        RUNG
+            XIC mmode
+            OTE out29p
+        ENDRUNG
     ENDROUTINE
 ENDTASK
