@@ -205,7 +205,8 @@ class SignalHandler:
         signals.trackmodel_update_tickets_sold.connect(self.updateTicketsSold)
         signals.trackmodel_update_passengers_exited.connect(self.updatePassengersExited)
 
-    def updatePassengersExited(self, line, trainId, blockNumber, passengersExited, spaceOnTrain, totalSeats): # send kenny total passengers
+    def updatePassengersExited(self, line, trainId, blockNumber, passengersExited, spaceOnTrain, totalSeats):
+        print("Made it to update passengers exited")
         if (line == Line.LINE_GREEN):
             theTrack = getTrack("Green")
         else:
@@ -224,11 +225,13 @@ class SignalHandler:
         if (passengersLeftToBoard > spaceOnTrain):
             for y in blockList:
                 theTrack.getBlock(y).blockStation.passengersBoarded += spaceOnTrain
-            signals.train_model_update_passengers.emit(trainId, totalSeats)
+            totalPassengers = totalSeats
+            signals.train_model_update_passengers.emit(trainId, totalPassengers)
         else:
             for z in blockList:
                 theTrack.getBlock(z).blockStation.passengersBoarded += passengersLeftToBoard
-            signals.train_model_update_passengers.emit(trainId, totalSeats - (spaceOnTrain - passengersLeftToBoard))
+            totalPassengers = totalSeats - (spaceOnTrain - passengersLeftToBoard)
+            signals.train_model_update_passengers.emit(trainId, totalPassengers)
 
     def updateSwitchPositions(self, line, number, position):
         if (line == Line.LINE_GREEN):
@@ -299,13 +302,13 @@ class SignalHandler:
             route = green_route_blocks
             for i in green_route_blocks:
                 theBlock = theTrack.getBlock(i)
-                signals.train_model_receive_block.emit(0, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection)
+                signals.train_model_receive_block.emit(0, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None)
         else:
             theTrack = getTrack("Red")
             route = red_route_blocks
             for i in red_route_blocks:
                 theBlock = theTrack.getBlock(i)
-                signals.train_model_receive_block.emit(1, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection)
+                signals.train_model_receive_block.emit(1, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None)
 
         signals.train_model_dispatch_train.emit(trainId, destinationBlock, commandSpeed, authority, currentLine, route)
 
@@ -432,7 +435,7 @@ class SignalHandler:
                     newTrack.addBlock(theBlock)
 
                     if (blockNumber == 1):
-                        signals.train_model_receive_block.emit(trackInfo['tNumber'], 0, 0, 0, 10, blockSpeedLimit, blockDirection)
+                        signals.train_model_receive_block.emit(trackInfo['tNumber'], 0, 0, 0, 10, blockSpeedLimit, blockDirection, stationBool)
 
                     signals.train_model_receive_block.emit(trackInfo['tNumber'], blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection, stationBool)
 

@@ -294,7 +294,7 @@ class TrainCatalogue:
                 removedPass = random.randrange(0, self.m_trainList[trainId].m_trainPassCount, 1)
                 self.m_trainList[trainId].m_trainPassCount -= removedPass
                 avalibleSpace = 222 - self.m_trainList[trainId].m_trainPassCount
-                signals.trackmodel_update_passengers_exited.emit(self.m_trainList[trainId].m_currentLine, self.m_trainList[trainId].m_route[0], removedPass, avalibleSpace)
+                signals.trackmodel_update_passengers_exited.emit(self.m_trainList[trainId].m_currentLine, trainId, self.m_trainList[trainId].m_route[0], removedPass, avalibleSpace, 222)
         else:
             # LOG_TRAIN_MODEL("Staying in the same block: currentPosition = %f, blockSize = %f", currentPosition, currentBlockSize)
             # Still in the same block
