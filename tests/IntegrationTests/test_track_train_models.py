@@ -9,7 +9,7 @@ from src.TrackModel.TrackModelDef import *
 from src.TrainModel.TrainCatalogue import *
 import polling
 
-def test_occupancy(upload_tracks, start_timekeeper):
+def test_occupancy(upload_tracks, download_programs, start_timekeeper):
     """Testing the power loop"""
     # Disconnect unimportant signals
     signals.swtrack_update_occupancies.disconnect()
