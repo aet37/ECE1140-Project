@@ -253,16 +253,17 @@ class SignalHandler:
         else:
             theTrack =  getTrack("Red")
 
-        theBlock = theTrack.getBlock(currentBlock)
-        if (trainOrNot):
-            theBlock.updateOccupancy(trainId)
-            # if (theBlock.blockStation != None):
-            #     for x in theTrack.stationList:
-            #         if (x.stationName == theBlock.blockStation.stationName):
-            #             for y in x.blockList:
-            #                 theTrack.getBlock(y).blockStation.
-        else:
-            theBlock.updateOccupancy(-1)
+        if (currentBlock != 0):
+            theBlock = theTrack.getBlock(currentBlock)
+            if (trainOrNot):
+                theBlock.updateOccupancy(trainId)
+                # if (theBlock.blockStation != None):
+                #     for x in theTrack.stationList:
+                #         if (x.stationName == theBlock.blockStation.stationName):
+                #             for y in x.blockList:
+                #                 theTrack.getBlock(y).blockStation.
+            else:
+                theBlock.updateOccupancy(-1)
 
         # Tell swtrack the occupancy
         signals.swtrack_update_occupancies.emit(trainId, line, currentBlock, trainOrNot)

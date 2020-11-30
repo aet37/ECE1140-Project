@@ -372,16 +372,11 @@ class TrackModelUi(QtWidgets.QMainWindow):
                     track_circuit_failure_button.toggle()
 
 
-            # failure_mode_label = self.findChild(QtWidgets.QLabel, 'failure_mode_label')
-            # failure = theBlock.failureMode
-            # if (failure == 0):
-            #     failure_mode_label.setText("Failure Mode:\n\n"+ "No Failures")
-            # elif (failure == 1):
-            #     failure_mode_label.setText("Failure Mode:\n\n"+ "Power Failure")
-            # elif (failure == 2):
-            #     failure_mode_label.setText("Failure Mode:\n\n"+ "Broken Track")
-            # elif (failure == 3):
-            #     failure_mode_label.setText("Failure Mode:\n\n"+ "Track Circuit Failure")
+            railway_crossing_label = self.findChild(QtWidgets.QLabel, 'failure_mode_label')
+            if (theBlock.blockRailwayCrossing):
+                railway_crossing_label.setText("Railway Crossing:\n\nYes")
+            else:
+                railway_crossing_label.setText("Railway Crossing:\n\nNo")
 
     def update_track_heater(self):
         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
