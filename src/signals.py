@@ -29,6 +29,9 @@ class SignalsClass(QObject):
     swtrack_update_occupancies = pyqtSignal(int, Line, int, bool) # Used by Track Model to update occupancies (trainId, Line, blockNumber, occupancy) occupancy = 0  for empty, 1 for occupied
     swtrack_set_track_heater = pyqtSignal(Line, bool) # Used by the Track Model to turn the heater on/off on a track
     swtrack_update_gui = pyqtSignal() # Used by the swtrack to let that gui know that it needs to update
+    swtrack_update_broken_rail_failure = pyqtSignal(Line, int, bool) # Used by the Track Model to notify swtrack controller of a broken rail failure
+    swtrack_update_power_failure = pyqtSignal(Line, int, bool) # Used by the Track Model to notify swtrack controller of a power failure
+    swtrack_update_track_circuit_failure = pyqtSignal(Line, int, bool) # Used by the Track Model to notify swtrack controller of a track circuit failure
 
     # Train Model Signals
     train_model_dispatch_train = pyqtSignal(int, int, float, int, Line, list) #  Used by the track model to signify that a new train has been dispatched FORMAT: (train_id, destination_block, command_speed, authority, Line, route)
@@ -67,6 +70,7 @@ class SignalsClass(QObject):
     swtrain_cause_failure = pyqtSignal(bool, bool, bool) # Failures
     swtrain_pull_passenger_ebrake = pyqtSignal(int) # TrainID
     swtrain_gui_pull_ebrake = pyqtSignal(int) # TrainID
+    swtrain_gui_release_ebrake = pyqtSignal(int) #TrainID
     swtrain_gui_set_setpoint_speed = pyqtSignal(int, float) # TrainID, Setpoint Speed
     swtrain_gui_press_service_brake = pyqtSignal(int) # TrainID
     swtrain_gui_toggle_damn_doors = pyqtSignal(int) # TrainID
@@ -85,6 +89,8 @@ class SignalsClass(QObject):
     trackmodel_update_command_speed = pyqtSignal(int, float) # Used by the track controller to update the command speed of a train (trainId, newSpeed)
     trackmodel_update_switch_positions = pyqtSignal(Line, int, int) # Used by the track controller to update a switch positions (Line, switchNumberFromYard, switchPosition)
     trackmodel_update_authority = pyqtSignal(int, bool) # Used by the track controller to update the authority of a train (trainId, newAuthority)
-
+    trackmodel_update_gui = pyqtSignal() # used by the track model to tell me to update my gui
+    trackmodel_update_passengers_exited = pyqtSignal(Line, int, int, int) # used by train model to communicate how many passengers left the train (Line, blockNumberOfStation, passengersExited, spaceAvailable)
+    trackmodel_update_tickets_sold = pyqtSignal() # used to tell Track model to generate new tickets
 # Single instance to be used by other modules
 signals = SignalsClass()

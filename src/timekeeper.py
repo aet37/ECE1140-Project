@@ -17,7 +17,7 @@ class Timekeeper:
         self.time_factor = 1
         self.current_time_sec = 0
         self.current_time_min = 0
-        self.current_time_hour = 1
+        self.current_time_hour = 0
         self.current_day = 0
         self.run_lock = threading.Lock()
         self.running = True
@@ -55,7 +55,7 @@ class Timekeeper:
                     self.current_time_hour += 1
 
                 if self.current_time_hour == 24:
-                    self.current_time_hour = 1
+                    self.current_time_hour = 0
                     self.current_day = (self.current_day + 1) % 6
 
                 signals.timer_expired.emit(self.current_day,
@@ -70,8 +70,11 @@ class Timekeeper:
                         signals.dispatch_scheduled_train.emit(item.destination_block, item.line_on)
                         # Remove the train from backlog if dispatched
                         self.ctc_trains_backlog.remove(item)
-
+                if (self.current_time_sec == 5 and self.current_time_min == 0 and self.current_time_hour == 0):
+                    signals.trackmodel_update_tickets_sold.emit()
+                    
         # Cancel the timer
+        self.signal_timer.join()
         self.signal_timer.cancel()
 
     def start_time(self):

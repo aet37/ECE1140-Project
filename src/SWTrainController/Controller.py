@@ -79,13 +79,10 @@ class Controller:
 
         # Find Verror depending on mode
         velocity_error = 0
-        if self.service_brake == False:
-            if self.mode == 0: # Automatic Mode
-                velocity_error = self.convert_command_speed - self.convert_current_speed
-            else: # Manual Mode
-                velocity_error = self.convert_setpoint_speed - self.convert_current_speed
-        else:
-            velocity_error = 0 - self.convert_current_speed
+        if self.mode == 0: # Automatic Mode
+            velocity_error = self.convert_command_speed - self.convert_current_speed
+        else: # Manual Mode
+            velocity_error = self.convert_setpoint_speed - self.convert_current_speed
 
         # Set ek as the kth sample of velocity error
         self.ek = velocity_error
@@ -100,10 +97,14 @@ class Controller:
         # Find power command
         #if self.service_brake:
         #    self.power_command = 0
-        if(self.power_command > 120000):
-            self.power_command = 120000
+        if self.service_brake == True or self.emergency_brake == True:
+            self.power_command = 0
+            self.uk = 0
+            self.ek = 0
         else:
             self.power_command = (self.kp * self.ek) + (self.ki * self.uk)
+            if(self.power_command > 120000):
+                self.power_command = 120000
 
         # Set past values of uk and ek
         self.uk1 = self.uk

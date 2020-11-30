@@ -15,11 +15,32 @@ from src.UI.window_manager import window_list
 from src.timekeeper import timekeeper
 from src.TrackModel.TrackModelDef import SignalHandler
 from src.HWTrackController.hw_track_controller_connector import HWTrackCtrlConnector
+from src.SWTrackController.track_system import track_system
+from src.SWTrackController.Compiler.lexer import Lexer
+from src.SWTrackController.Compiler.emitter import Emitter
+from src.SWTrackController.Compiler.parse import Parser
 from src.logger import get_logger
 
 logger = get_logger(__name__)
 
 EXIT_SUCCESS = 0
+
+def auto_download_plc_programs():
+    """Downloads plc programs to track controllers"""
+    logger.critical("Auto downloading plc programs")
+    for i, track_controller in enumerate(track_system.green_track_controllers):
+
+        source_code = ''
+        for line in open('resources/Track Controller PLC Programs/Green{}.txt'.format(i)):
+            source_code += line
+
+        output_file = 'CompiledOutput.txt'
+        lex = Lexer(source_code)
+        emitter = Emitter(output_file)
+        par = Parser(lex, emitter)
+        par.program("Green{}".format(i))
+
+        track_controller.download_program(output_file)
 
 def auto_upload_tracks():
     """Uploads the red and green track"""
@@ -77,6 +98,8 @@ def start(arguments):
                                  help='Opens one additional gui')
     argument_parser.add_argument('--auto_upload', '-u', action='store_true',
                                  help='Auto uploads the red and green track')
+    argument_parser.add_argument('--auto_download', '-d', action='store_true',
+                                 help='Auto downloads plc programs to track controllers')
     args = argument_parser.parse_args(arguments)
 
     # Start the timekeeper
@@ -85,6 +108,10 @@ def start(arguments):
     # Upload the tracks automatically if selected
     if args.auto_upload:
         auto_upload_tracks()
+
+    # Download plc programs to controllers if selected
+    if args.auto_download:
+        auto_download_plc_programs()
 
     # If we are testing, pass control back to test script
     if args.testing:

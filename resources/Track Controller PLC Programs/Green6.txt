@@ -1,0 +1,321 @@
+TAG switch = FALSE
+TAG heater = FALSE
+# Section 0
+TAG b30O = FALSE
+TAG b31O = FALSE
+TAG b32O = FALSE
+TAG b33O = FALSE
+TAG b34O = FALSE
+TAG b35O = FALSE
+TAG b36O = FALSE
+TAG b37O = FALSE
+TAG b38O = FALSE
+TAG b39O = FALSE
+TAG b30A = TRUE
+TAG b31A = TRUE
+TAG b32A = TRUE
+TAG b33A = TRUE
+TAG b34A = TRUE
+TAG b35A = TRUE
+TAG b36A = TRUE
+TAG b37A = TRUE
+TAG b38A = TRUE
+TAG b39A = TRUE
+# Section 1
+TAG b40O = FALSE
+TAG b41O = FALSE
+TAG b42O = FALSE
+TAG b43O = FALSE
+TAG b44O = FALSE
+TAG b45O = FALSE
+TAG b46O = FALSE
+TAG b47O = FALSE
+TAG b48O = FALSE
+TAG b40A = TRUE
+TAG b41A = TRUE
+TAG b42A = TRUE
+TAG b43A = TRUE
+TAG b44A = TRUE
+TAG b45A = TRUE
+TAG b46A = TRUE
+TAG b47A = TRUE
+TAG b48A = TRUE
+# Section 2
+TAG b49O = FALSE
+TAG b50O = FALSE
+TAG b51O = FALSE
+TAG b52O = FALSE
+TAG b53O = FALSE
+TAG b54O = FALSE
+TAG b55O = FALSE
+TAG b56O = FALSE
+TAG b57O = FALSE
+TAG b49A = TRUE
+TAG b50A = TRUE
+TAG b51A = TRUE
+TAG b52A = TRUE
+TAG b53A = TRUE
+TAG b54A = TRUE
+TAG b55A = TRUE
+TAG b56A = TRUE
+TAG b57A = TRUE
+# Section 3
+TAG b29O = FALSE
+TAG b29A = TRUE
+# Section 4
+TAG b101O = FALSE
+TAG b102O = FALSE
+TAG b103O = FALSE
+TAG b104O = FALSE
+TAG b105O = FALSE
+TAG b106O = FALSE
+TAG b107O = FALSE
+TAG b108O = FALSE
+TAG b109O = FALSE
+TAG b110O = FALSE
+TAG b101A = TRUE
+TAG b102A = TRUE
+TAG b103A = TRUE
+TAG b104A = TRUE
+TAG b105A = TRUE
+TAG b106A = TRUE
+TAG b107A = TRUE
+TAG b108A = TRUE
+TAG b109A = TRUE
+TAG b110A = TRUE
+# Section 5
+TAG b111O = FALSE
+TAG b112O = FALSE
+TAG b113O = FALSE
+TAG b114O = FALSE
+TAG b115O = FALSE
+TAG b116O = FALSE
+TAG b117O = FALSE
+TAG b118O = FALSE
+TAG b119O = FALSE
+TAG b120O = FALSE
+TAG b111A = TRUE
+TAG b112A = TRUE
+TAG b113A = TRUE
+TAG b114A = TRUE
+TAG b115A = TRUE
+TAG b116A = TRUE
+TAG b117A = TRUE
+TAG b118A = TRUE
+TAG b119A = TRUE
+TAG b120A = TRUE
+# Section 6
+TAG b121O = FALSE
+TAG b122O = FALSE
+TAG b123O = FALSE
+TAG b124O = FALSE
+TAG b125O = FALSE
+TAG b126O = FALSE
+TAG b127O = FALSE
+TAG b128O = FALSE
+TAG b129O = FALSE
+TAG b130O = FALSE
+TAG b121A = TRUE
+TAG b122A = TRUE
+TAG b123A = TRUE
+TAG b124A = TRUE
+TAG b125A = TRUE
+TAG b126A = TRUE
+TAG b127A = TRUE
+TAG b128A = TRUE
+TAG b129A = TRUE
+TAG b130A = TRUE
+# Section 7
+TAG b131O = FALSE
+TAG b132O = FALSE
+TAG b133O = FALSE
+TAG b134O = FALSE
+TAG b135O = FALSE
+TAG b136O = FALSE
+TAG b137O = FALSE
+TAG b138O = FALSE
+TAG b139O = FALSE
+TAG b140O = FALSE
+TAG b131A = TRUE
+TAG b132A = TRUE
+TAG b133A = TRUE
+TAG b134A = TRUE
+TAG b135A = TRUE
+TAG b136A = TRUE
+TAG b137A = TRUE
+TAG b138A = TRUE
+TAG b139A = TRUE
+TAG b140A = TRUE
+# Section 8
+TAG b141O = FALSE
+TAG b142O = FALSE
+TAG b143O = FALSE
+TAG b144O = FALSE
+TAG b145O = FALSE
+TAG b146O = FALSE
+TAG b147O = FALSE
+TAG b148O = FALSE
+TAG b149O = FALSE
+TAG b150O = FALSE
+TAG b141A = TRUE
+TAG b142A = TRUE
+TAG b143A = TRUE
+TAG b144A = TRUE
+TAG b145A = TRUE
+TAG b146A = TRUE
+TAG b147A = TRUE
+TAG b148A = TRUE
+TAG b149A = TRUE
+TAG b150A = TRUE
+
+TASK<PERIOD=1000> MainTask
+    ROUTINE Main
+        # Authority logic
+        RUNG
+            XIO b111O
+            XIO b112O
+            XIO b113O
+            XIO b114O
+            XIO b115O
+            XIO b116O
+            XIO b117O
+            XIO b118O
+            XIO b119O
+            XIO b120O
+            OTE b101A
+            OTE b102A
+            OTE b103A
+            OTE b104A
+            OTE b105A
+            OTE b106A
+            OTE b107A
+            OTE b108A
+            OTE b109A
+            OTE b110A
+        ENDRUNG
+        RUNG
+            XIO b121O
+            XIO b122O
+            XIO b123O
+            XIO b124O
+            XIO b125O
+            XIO b126O
+            XIO b127O
+            XIO b128O
+            XIO b129O
+            XIO b130O
+            OTE b111A
+            OTE b112A
+            OTE b113A
+            OTE b114A
+            OTE b115A
+            OTE b116A
+            OTE b117A
+            OTE b118A
+            OTE b119A
+            OTE b120A
+        ENDRUNG
+        RUNG
+            XIO b131O
+            XIO b132O
+            XIO b133O
+            XIO b134O
+            XIO b135O
+            XIO b136O
+            XIO b137O
+            XIO b138O
+            XIO b139O
+            XIO b140O
+            OTE b121A
+            OTE b122A
+            OTE b123A
+            OTE b124A
+            OTE b125A
+            OTE b126A
+            OTE b127A
+            OTE b128A
+            OTE b129A
+            OTE b130A
+        ENDRUNG
+        RUNG
+            XIO b141O
+            XIO b142O
+            XIO b143O
+            XIO b144O
+            XIO b145O
+            XIO b146O
+            XIO b147O
+            XIO b148O
+            XIO b149O
+            XIO b150O
+            OTE b131A
+            OTE b132A
+            OTE b133A
+            OTE b134A
+            OTE b135A
+            OTE b136A
+            OTE b137A
+            OTE b138A
+            OTE b139A
+            OTE b140A
+        ENDRUNG
+        RUNG
+            XIO b29O
+            OTE b141A
+            OTE b142A
+            OTE b143A
+            OTE b144A
+            OTE b145A
+            OTE b146A
+            OTE b147A
+            OTE b148A
+            OTE b149A
+            OTE b150A
+        ENDRUNG
+        RUNG
+            XIO b49O
+            XIO b50O
+            XIO b51O
+            XIO b52O
+            XIO b53O
+            XIO b54O
+            XIO b55O
+            XIO b56O
+            XIO b57O
+            OTE b40A
+            OTE b41A
+            OTE b42A
+            OTE b43A
+            OTE b44A
+            OTE b45A
+            OTE b46A
+            OTE b47A
+            OTE b48A
+        ENDRUNG
+        RUNG
+            XIO b40O
+            XIO b41O
+            XIO b42O
+            XIO b43O
+            XIO b44O
+            XIO b45O
+            XIO b46O
+            XIO b47O
+            XIO b48O
+            OTE b30A
+            OTE b31A
+            OTE b32A
+            OTE b33A
+            OTE b34A
+            OTE b35A
+            OTE b36A
+            OTE b37A
+            OTE b38A
+            OTE b39A
+        ENDRUNG
+        RUNG
+            XIO b29O
+            OTE switch
+        ENDRUNG
+    ENDROUTINE
+ENDTASK

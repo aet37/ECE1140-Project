@@ -1,0 +1,121 @@
+TAG switch = TRUE
+TAG heater = FALSE
+TAG b30O = FALSE
+TAG b31O = FALSE
+TAG b32O = FALSE
+TAG b30A = TRUE
+TAG b31A = TRUE
+TAG b32A = TRUE
+# Section 2
+TAG b33O = FALSE
+TAG b34O = FALSE
+TAG b35O = FALSE
+TAG b36O = FALSE
+TAG b37O = FALSE
+TAG b38O = FALSE
+TAG b39O = FALSE
+TAG b40O = FALSE
+TAG b41O = FALSE
+TAG b33A = TRUE
+TAG b34A = TRUE
+TAG b35A = TRUE
+TAG b36A = TRUE
+TAG b37A = TRUE
+TAG b38A = TRUE
+TAG b39A = TRUE
+TAG b40A = TRUE
+TAG b41A = TRUE
+# Section 3
+TAG b42O = FALSE
+TAG b43O = FALSE
+TAG b44O = FALSE
+TAG b45O = FALSE
+TAG b46O = FALSE
+TAG b47O = FALSE
+TAG b48O = FALSE
+TAG b49O = FALSE
+TAG b50O = FALSE
+TAG b42A = TRUE
+TAG b43A = TRUE
+TAG b44A = TRUE
+TAG b45A = TRUE
+TAG b46A = TRUE
+TAG b47A = TRUE
+TAG b48A = TRUE
+TAG b49A = TRUE
+TAG b50A = TRUE
+# Section 4
+TAG b51O = FALSE
+TAG b52O = FALSE
+TAG b53O = FALSE
+TAG b54O = FALSE
+TAG b55O = FALSE
+TAG b56O = FALSE
+TAG b57O = FALSE
+TAG b58O = FALSE
+TAG b51A = TRUE
+TAG b52A = TRUE
+TAG b53A = TRUE
+TAG b54A = TRUE
+TAG b55A = TRUE
+TAG b56A = TRUE
+TAG b57A = TRUE
+TAG b58A = TRUE
+
+TASK<PERIOD=1000> MainTask
+    ROUTINE Main
+        RUNG
+            XIO b51O
+            XIO b52O
+            XIO b53O
+            XIO b54O
+            XIO b55O
+            XIO b56O
+            XIO b57O
+            XIO b58O
+            OTE b42A
+            OTE b43A
+            OTE b44A
+            OTE b45A
+            OTE b46A
+            OTE b47A
+            OTE b48A
+            OTE b49A
+            OTE b50A
+        ENDRUNG
+        RUNG
+            XIO b42O
+            XIO b43O
+            XIO b44O
+            XIO b45O
+            XIO b46O
+            XIO b47O
+            XIO b48O
+            XIO b49O
+            XIO b50O
+            OTE b33A
+            OTE b34A
+            OTE b35A
+            OTE b36A
+            OTE b37A
+            OTE b38A
+            OTE b39A
+            OTE b40A
+            OTE b41A
+        ENDRUNG
+        RUNG
+            XIO b33O
+            XIO b34O
+            XIO b35O
+            XIO b36O
+            XIO b37O
+            XIO b38O
+            XIO b39O
+            XIO b40O
+            XIO b41O
+            OTE b30A
+            OTE b31A
+            OTE b32A
+        ENDRUNG
+    ENDROUTINE
+ENDTASK

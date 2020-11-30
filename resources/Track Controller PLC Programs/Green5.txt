@@ -1,0 +1,87 @@
+TAG switch = FALSE
+TAG heater = FALSE
+# Section 1
+TAG b85O = FALSE
+TAG b85A = TRUE
+# Section 2
+TAG b86O = FALSE
+TAG b87O = FALSE
+TAG b88O = FALSE
+TAG b86A = TRUE
+TAG b87A = TRUE
+TAG b88A = TRUE
+# Section 3
+TAG b89O = FALSE
+TAG b90O = FALSE
+TAG b91O = FALSE
+TAG b92O = FALSE
+TAG b93O = FALSE
+TAG b94O = FALSE
+TAG b89A = TRUE
+TAG b90A = TRUE
+TAG b91A = TRUE
+TAG b92A = TRUE
+TAG b93A = TRUE
+TAG b94A = TRUE
+# Section 4
+TAG b95O = FALSE
+TAG b96O = FALSE
+TAG b97O = FALSE
+TAG b98O = FALSE
+TAG b99O = FALSE
+TAG b100O = FALSE
+TAG b95A = TRUE
+TAG b96A = TRUE
+TAG b97A = TRUE
+TAG b98A = TRUE
+TAG b99A = TRUE
+TAG b100A = TRUE
+
+TASK<PERIOD=1000> MainTask
+    ROUTINE Main
+        RUNG
+            XIO b86O
+            XIO b87O
+            XIO b88O
+            OTE b85A
+        ENDRUNG
+        RUNG
+            XIO b89O
+            XIO b90O
+            XIO b91O
+            XIO b92O
+            XIO b93O
+            XIO b94O
+            OTE b86A
+            OTE b87A
+            OTE b88A
+        ENDRUNG
+        RUNG
+            XIO b95O
+            XIO b96O
+            XIO b97O
+            XIO b98O
+            XIO b99O
+            XIO b100O
+            OTE b89A
+            OTE b90A
+            OTE b91A
+            OTE b92A
+            OTE b93A
+            OTE b94A
+        ENDRUNG
+        RUNG
+            XIO b85O
+            OTE b95A
+            OTE b96A
+            OTE b97A
+            OTE b98A
+            OTE b99A
+            OTE b100A
+        ENDRUNG
+        RUNG
+            XIO b85O
+            OTE switch
+        ENDRUNG
+    ENDROUTINE
+ENDTASK
