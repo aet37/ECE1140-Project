@@ -13,6 +13,11 @@
 // FORWARD REFERENCES
 class String;
 
+#define PIN23 23
+#define PIN25 25
+#define PIN27 27
+#define PIN29 29
+
 namespace TagDatabase
 {
 

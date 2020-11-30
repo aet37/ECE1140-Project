@@ -9,8 +9,6 @@
 #include "../include/TagDatabase.hpp" // Header for functions
 #include "../include/HashMap.hpp" // For HashMap
 
-#define PIN23 23
-
 namespace TagDatabase
 {
 
@@ -70,19 +68,19 @@ void IoTask(void* pSomething)
     ReadInputs();
 
     bool tagValue = false;
-    if (GetTagValue("output2", tagValue))
+    if (GetTagValue("out25", tagValue))
     {
-        digitalWrite(PIN2, tagValue);
+        digitalWrite(PIN25, tagValue);
     }
 
-    if (GetTagValue("switch", tagValue))
+    if (GetTagValue("out27", tagValue))
     {
-        digitalWrite(PIN3, tagValue);
+        digitalWrite(PIN27, tagValue);
     }
 
-    if (GetTagValue("output4", tagValue))
+    if (GetTagValue("out29", tagValue))
     {
-        digitalWrite(PIN4, tagValue);
+        digitalWrite(PIN29, tagValue);
     }
 }
 

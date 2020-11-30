@@ -34,7 +34,7 @@ public:
      *
      * @param[in] size Initial size of the hashmap
     */
-    explicit HashMap(uint32_t size = 11) :
+    explicit HashMap(uint32_t size = 43) :
         m_pKeys(new String[size]),
         m_pValues(new T[size]),
         m_numElements(0),

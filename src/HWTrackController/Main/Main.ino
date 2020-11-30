@@ -17,6 +17,7 @@
 static uint64_t currentTime;
 
 #define PIN23 23
+#define PIN13 13
 
 void setup()
 {
@@ -31,6 +32,9 @@ void setup()
     pinMode(PIN2, OUTPUT);
     pinMode(PIN3, OUTPUT);
     pinMode(PIN4, OUTPUT);
+    pinMode(PIN25, OUTPUT);
+    pinMode(PIN27, OUTPUT);
+    pinMode(PIN29, OUTPUT);
     pinMode(PIN23, INPUT);
 
     // Initialize the user program
