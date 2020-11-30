@@ -1,0 +1,8 @@
+TAG switch = FALSE
+
+TASK<PERIOD=1000> MainTask
+    ROUTINE Main
+        RUNG
+        ENDRUNG
+    ENDROUTINE
+ENDTASK
