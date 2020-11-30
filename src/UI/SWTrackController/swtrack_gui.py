@@ -176,12 +176,12 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             self.authority_label.setText("YES" if authority else "NO")
 
             # Suggested Speed
-            suggested_speed = 55.0 * Converters.KmHr_to_MPH
+            suggested_speed = 70.0 * Converters.KmHr_to_MPH
             self.suggested_speed_label.setText("{:.2f} MPH".format(suggested_speed))
 
             # Command Speed
             speed_limit = track_system.get_speed_limit_of_block(line, self.current_block)
-            if speed_limit < 55.0:
+            if speed_limit < 70.0:
                 self.command_speed_label.setText("{:.2f} MPH".format(speed_limit * Converters.KmHr_to_MPH))
             else:
                 self.command_speed_label.setText("{:.2f} MPH".format(suggested_speed))

@@ -9,8 +9,6 @@
 #include "../include/TagDatabase.hpp" // Header for functions
 #include "../include/HashMap.hpp" // For HashMap
 
-#define PIN23 23
-
 namespace TagDatabase
 {
 
@@ -45,9 +43,9 @@ void Clear()
     tags.Clear();
 }
 
-String GetAllTagValues()
+String GetAllTagValues(uint32_t division)
 {
-    return tags.GetAllKeysAndValues();
+    return tags.GetAllKeysAndValues(division);
 }
 
 static void ReadInputs()
@@ -70,19 +68,67 @@ void IoTask(void* pSomething)
     ReadInputs();
 
     bool tagValue = false;
-    if (GetTagValue("output2", tagValue))
+    if (GetTagValue("out25p", tagValue))
+    {
+        digitalWrite(PIN25, tagValue);
+    }
+
+    if (GetTagValue("out27p", tagValue))
+    {
+        digitalWrite(PIN27, tagValue);
+    }
+
+    if (GetTagValue("out29p", tagValue))
+    {
+        digitalWrite(PIN29, tagValue);
+    }
+
+    // Switch signal
+    if (GetTagValue("out2p", tagValue))
     {
         digitalWrite(PIN2, tagValue);
     }
 
-    if (GetTagValue("switch", tagValue))
+    if (GetTagValue("out3p", tagValue))
     {
         digitalWrite(PIN3, tagValue);
     }
 
-    if (GetTagValue("output4", tagValue))
+    if (GetTagValue("out4p", tagValue))
     {
         digitalWrite(PIN4, tagValue);
+    }
+
+    // Station #2 signal
+    if (GetTagValue("out5p", tagValue))
+    {
+        digitalWrite(PIN5, tagValue);
+    }
+
+    if (GetTagValue("out6p", tagValue))
+    {
+        digitalWrite(PIN6, tagValue);
+    }
+
+    if (GetTagValue("out7p", tagValue))
+    {
+        digitalWrite(PIN7, tagValue);
+    }
+
+    // Station #1 signal
+    if (GetTagValue("out8p", tagValue))
+    {
+        digitalWrite(PIN8, tagValue);
+    }
+
+    if (GetTagValue("out9p", tagValue))
+    {
+        digitalWrite(PIN9, tagValue);
+    }
+
+    if (GetTagValue("out10p", tagValue))
+    {
+        digitalWrite(PIN10, tagValue);
     }
 }
 

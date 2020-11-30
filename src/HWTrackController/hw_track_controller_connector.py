@@ -29,7 +29,7 @@ class Code(Enum):
     GET_TAG_VALUE = 104 # Used by the gui to get a tag's value
     GET_ALL_TAG_VALUES = 105 # Used by the gui to get all tag values
 
-TIMER_PERIOD = 3.75
+TIMER_PERIOD = 1.6
 
 class HWTrackCtrlConnector(TrackController):
     """Class responsible for communicating with the hw track controller"""
@@ -54,11 +54,13 @@ class HWTrackCtrlConnector(TrackController):
 
         # Ignore the response code
         for key, value in pairwise(splits[1:]):
-            if (key == "switch") and key in self.tags:
-                if self.tags[key] != bool(int(value)):
-                    signals.swtrack_update_gui.emit()
+            # Weird thing with b95A lol
+            if (key == 'b'):
+                key = 'b95A'
 
             self.tags.update({key : bool(int(value))})
+
+        signals.swtrack_update_gui.emit()
 
         if HWTrackCtrlConnector.run_timer:
             self.timer = threading.Timer(TIMER_PERIOD, self.get_all_tag_values)
@@ -125,10 +127,15 @@ class HWTrackCtrlConnector(TrackController):
         :param str tag_name: Name of the tag
         :param bool value: Value to set to the tag to
         """
-        super().set_tag_value(tag_name, value)
-        with self.comms_lock:
-            self.send_message(" ".join(map(str, (Code.SET_TAG_VALUE.value, tag_name, int(value)))))
-            logger.info(self.get_response())
+        def communicate(self):
+            """Private function for a thread to communicate with the arduino"""
+            with self.comms_lock:
+                self.send_message(" ".join(map(str, (Code.SET_TAG_VALUE.value, tag_name, int(value)))))
+                logger.info(self.get_response())
+                super().set_tag_value(tag_name, value)
+
+        temp_thread = threading.Thread(target=communicate, args=(self,), daemon=True)
+        temp_thread.start()
 
     def run_program(self):
         """Nothing should be done for the hw controller"""
