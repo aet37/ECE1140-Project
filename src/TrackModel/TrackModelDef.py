@@ -292,7 +292,8 @@ class SignalHandler:
             if (currentBlock == 1 or currentBlock == 9 or currentBlock == 15 or currentBlock == 21 or currentBlock == 30 or 
             currentBlock == 38 or currentBlock == 47 or currentBlock == 56 or currentBlock == 64 or currentBlock == 72 or 
             currentBlock == 76 or currentBlock == 87 or currentBlock == 95 or currentBlock == 104 or currentBlock == 113 or
-            currentBlock == 122 or currentBlock == 131 or currentBlock == 140 or currentBlock == or currentBlock == or currentBlock ==)
+            currentBlock == 122 or currentBlock == 131 or currentBlock == 140):
+                pass
         else:
             theTrack =  getTrack("Red")
 
