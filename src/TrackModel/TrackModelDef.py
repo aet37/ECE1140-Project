@@ -374,6 +374,7 @@ class SignalHandler:
                     blockSection, blockRailwayCrossing)
 
                     if (records.column['Stations'][x] != ""):
+                        stationBool = True
                         stationName = records.column['Stations'][x]
                         stationExitSide = records.column['Exit Side'][x]
                         theBlock.addStation(stationName, stationExitSide)
@@ -386,6 +387,8 @@ class SignalHandler:
                         if (not appended):
                             theTrack.stationList.append(Station(stationName, stationExitSide))
                             theTrack.stationList[len(theTrack.stationList) - 1].blockList.append(blockNumber)
+                    else:
+                        stationBool = False
 
                     if (records.column['Switches'][x] != ""):
                         switchList = records.column['Switches'][x]
@@ -407,7 +410,7 @@ class SignalHandler:
                     if (blockNumber == 1):
                         signals.train_model_receive_block.emit(trackInfo['tNumber'], 0, 0, 0, 10, blockSpeedLimit, blockDirection)
 
-                    signals.train_model_receive_block.emit(trackInfo['tNumber'], blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection)
+                    signals.train_model_receive_block.emit(trackInfo['tNumber'], blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection, stationBool)
 
 
                     #jsonString = json.dumps(blockInfo)
