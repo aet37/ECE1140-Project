@@ -462,8 +462,8 @@ class CTCUi(QtWidgets.QMainWindow):
             eval('self.GB%s.clicked.connect(partial(self.toggle_blocks_green, %d))' % (str(i), i))
         # Find the Switches
         for i in range(1, 7):
-            exec('self.S%s = self.findChild(QtWidgets.QPushButton, \'SW%s\')' % (str(i), str(i)))
-            eval('self.S%s.clicked.connect(partial(self.toggle_switch_green, %d))' % (str(i), i))
+            exec('self.SG%s = self.findChild(QtWidgets.QPushButton, \'SW%s\')' % (str(i), str(i)))
+            eval('self.SG%s.clicked.connect(partial(self.toggle_switch_green, %d))' % (str(i), i))
 
     def refresh_map_green(self):
         """ Refreshes the green map """
@@ -498,7 +498,7 @@ class CTCUi(QtWidgets.QMainWindow):
         for i in range(len(wrtxt_arr)):
             wrtxt = wrtxt_arr[i]
             try:
-                eval('self.SW%s.setText(\'%s\')' % (str(i + 1), wrtxt))
+                eval('self.SG%s.setText(\'%s\')' % (str(i + 1), wrtxt))
             except:
                 pass
 
