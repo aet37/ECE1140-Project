@@ -9,7 +9,7 @@ from src.CTC.train_system import ctc
 from src.common_def import Line
 from src.TrackModel.TrackModelDef import SignalHandler
 
-def test_dispatch_train(upload_tracks):
+def test_dispatch_train(upload_tracks, download_programs):
     """Tests dispatching a train and ensures all modules react accordingly"""
     # Upload track
     fileInfoGreen = ['resources/Green Line.xlsx', 'All Files (*)']
