@@ -50,6 +50,7 @@ class TrackSystem:
 
         # Set occupancy of first block
         track_controllers[0].set_block_occupancy(0, True)
+        self.occupied_blocks.append(0)
 
         # Save the suggested speed for this train to compare to in the future
         self.suggested_speeds.append(suggested_speed)
@@ -136,7 +137,8 @@ class TrackSystem:
             signals.trackmodel_update_authority.emit(line, block_id, final_authority)
 
         # Forward this information to the CTC
-        signals.update_occupancy.emit(line, block_id, occupied)
+        if block_id != 0:
+            signals.update_occupancy.emit(line, block_id, occupied)
 
         # Update command speed now since speed limit may have changed
         if occupied:

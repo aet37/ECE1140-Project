@@ -276,7 +276,7 @@ class TrainSystem:
                         else:
                             continue
                 # If train has reached the yard
-                elif self.trains_arr[i].index_on_route == len(self.trains_arr[i].route_blocks_arr\
+                elif self.trains_arr[i].index_on_route == (len(self.trains_arr[i].route_blocks_arr)\
                 - 1):
                     self.trains_arr.pop(i)
                     self.train_numbers.pop(i)
