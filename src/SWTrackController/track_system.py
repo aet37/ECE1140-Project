@@ -20,17 +20,18 @@ class TrackSystem:
         self.occupied_blocks = []
         self.suggested_speeds = []
 
-        # Create the track controllers on the green line
-        # Try and create a hw controller for the first one
-        try:
-            self.green_track_controllers.append(HWTrackCtrlConnector())
-            logger.info("Created a HW track controller instance")
-        except SerialException:
-            logger.info("No HW track controller found")
-            self.green_track_controllers.append(TrackController())
-
-        for _ in range(1, NUMBER_OF_GREEN_CONTROLLERS):
-            self.green_track_controllers.append(TrackController())
+        for i in range(0, NUMBER_OF_GREEN_CONTROLLERS):
+            if i == 5:
+                # Create the track controllers on the green line
+                # Try and create a hw controller for the first one
+                try:
+                    self.green_track_controllers.append(HWTrackCtrlConnector())
+                    logger.info("Created a HW track controller instance")
+                except SerialException:
+                    logger.info("No HW track controller found")
+                    self.green_track_controllers.append(TrackController())
+            else:
+                self.green_track_controllers.append(TrackController())
 
         # Create the track controllers on the red line
         for _ in range(0, NUMBER_OF_RED_CONTROLLERS):

@@ -36,7 +36,12 @@ TASK<PERIOD=1000> MainTask
             XIO b10O
             XIO b11O
             XIO b12O
-            OTE b13A
+            OTE b1A
+            OTE b2A
+            OTE b3A
+            OTE b4A
+            OTE b5A
+            OTE b6A
         ENDRUNG
         RUNG
             XIO b1O
@@ -45,21 +50,16 @@ TASK<PERIOD=1000> MainTask
             XIO b4O
             XIO b5O
             XIO b6O
+            OTE b13A
+        ENDRUNG
+        RUNG
+            XIO b13O 
             OTE b7A
             OTE b8A
             OTE b9A
             OTE b10A
             OTE b11A
             OTE b12A
-        ENDRUNG
-        RUNG
-            XIO b13O 
-            OTE b1A
-            OTE b2A
-            OTE b3A
-            OTE b4A
-            OTE b5A
-            OTE b6A
         ENDRUNG
         RUNG
             XIO b13O
