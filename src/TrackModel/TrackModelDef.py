@@ -70,7 +70,7 @@ class Track:
         self.trackHeater = heaterBool
     
     def getStationBlocks(self, stationName):
-        for x in stationList:
+        for x in self.stationList:
             if (x.stationName == stationName):
                 return x.blockList
         return 0
@@ -206,7 +206,6 @@ class SignalHandler:
         signals.trackmodel_update_passengers_exited.connect(self.updatePassengersExited)
 
     def updatePassengersExited(self, line, trainId, blockNumber, passengersExited, spaceOnTrain, totalSeats):
-        print("Made it to update passengers exited")
         if (line == Line.LINE_GREEN):
             theTrack = getTrack("Green")
         else:
