@@ -89,6 +89,8 @@ class SignalsClass(QObject):
     trackmodel_update_command_speed = pyqtSignal(int, float) # Used by the track controller to update the command speed of a train (trainId, newSpeed)
     trackmodel_update_switch_positions = pyqtSignal(Line, int, int) # Used by the track controller to update a switch positions (Line, switchNumberFromYard, switchPosition)
     trackmodel_update_authority = pyqtSignal(int, bool) # Used by the track controller to update the authority of a train (trainId, newAuthority)
-
+    trackmodel_update_gui = pyqtSignal() # used by the track model to tell me to update my gui
+    trackmodel_update_passengers_exited = pyqtSignal(Line, int, int, int) # used by train model to communicate how many passengers left the train (Line, blockNumberOfStation, passengersExited, spaceAvailable)
+    trackmodel_update_tickets_sold = pyqtSignal() # used to tell Track model to generate new tickets
 # Single instance to be used by other modules
 signals = SignalsClass()

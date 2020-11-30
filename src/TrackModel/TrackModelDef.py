@@ -13,10 +13,12 @@ sys.path.append(".")
 from src.signals import signals
 from src.logger import get_logger
 #from src.UI.TrackModel import trackmodel_gui
-
+import random
 import pyexcel
 import pyexcel_io
 from traceback import print_stack
+from src.timekeeper import timekeeper
+
 
 
 logger = get_logger(__name__)
@@ -194,6 +196,15 @@ class SignalHandler:
         signals.trackmodel_update_command_speed.connect(self.updateCommandSpeed)
         signals.trackmodel_update_authority.connect(self.updateAuthority)
         signals.trackmodel_update_switch_positions.connect(self.updateSwitchPositions)
+        signals.trackmodel_update_tickets_sold.connect(self.updateTicketsSold)
+        signals.trackmodel_update_passengers_exited.connect(self.updatePassengersExited)
+
+    def updatePassengersExited(self, line, blockNumber, passengersExited, spaceOnTrain):
+        if (line == Line.LINE_GREEN):
+            theTrack = getTrack("Green")
+        else:
+            theTrack = getTrack("Red")
+        pass
 
     def updateSwitchPositions(self, line, number, position):
         if (line == Line.LINE_GREEN):
@@ -201,30 +212,57 @@ class SignalHandler:
         else:
             theLine = getTrack("Red")
         theLine.getBlock(theLine.switchList[number]).blockSwitch.setSwitch(position)
-        
-    def updateTicketsSold(self, line):
-        pass
-    def updateAuthority(self, trainId, newAuthority):
-        signals.train_model_update_authority.emit(trainId, newAuthority)
+
+    def updateTicketsSold(self):
+        totalTickets = 0
+        if (getTrack("Green") != None):
+            theLine = getTrack("Green")
+            for x in theLine.stationList:
+                x.ticketsSold = random.randrange(30, 200, 1)
+                totalTickets = totalTickets + x.ticketsSold
+                for y in x.blockList:
+                    theLine.getBlock(y).blockStation.ticketsSold = x.ticketsSold
+                    theLine.getBlock(y).blockStation.passengersBoarded = 0
+                    theLine.getBlock(y).blockStation.passengersExited = 0
+
+        if (getTrack("Red") != None):
+            theLine = getTrack("Red")
+            for x in theLine.stationList:
+                x.ticketsSold = random.randrange(30, 200, 1)
+                totalTickets = totalTickets + x.ticketsSold
+                x.passengersBoarded = 0
+                x.passengersExited = 0
+                for y in x.blockList:
+                    theLine.getBlock(y).blockStation.ticketsSold = x.ticketsSold
+                    theLine.getBlock(y).blockStation.passengersBoarded = 0
+                    theLine.getBlock(y).blockStation.passengersExited = 0
+
+        signals.update_throughput.emit(totalTickets)
+        signals.trackmodel_update_gui.emit()
+
 
     def updateAuthority(self, trainId, newAuthority):
         signals.train_model_update_authority.emit(trainId, newAuthority)
-        
+
+    # def updateAuthority(self, trainId, newAuthority):
+    #     signals.train_model_update_authority.emit(trainId, newAuthority)
+
     def updateOccupancy(self, trainId, line, currentBlock, trainOrNot):
         if (line == Line.LINE_GREEN):
             theTrack = getTrack("Green")
-            theBlock = theTrack.getBlock(currentBlock)
-            if (trainOrNot):
-                theBlock.updateOccupancy(trainId)
-            else:
-                theBlock.updateOccupancy(-1)
         else:
-            theTrack = getTrack("Red")
-            theBlock = theTrack.getBlock(currentBlock)
-            if (trainOrNot):
-                theBlock.updateOccupancy(trainId)
-            else:
-                theBlock.updateOccupancy(-1)
+            theTrack =  getTrack("Red")
+
+        theBlock = theTrack.getBlock(currentBlock)
+        if (trainOrNot):
+            theBlock.updateOccupancy(trainId)
+            # if (theBlock.blockStation != None):
+            #     for x in theTrack.stationList:
+            #         if (x.stationName == theBlock.blockStation.stationName):
+            #             for y in x.blockList:
+            #                 theTrack.getBlock(y).blockStation.
+        else:
+            theBlock.updateOccupancy(-1)
 
         # Tell swtrack the occupancy
         signals.swtrack_update_occupancies.emit(trainId, line, currentBlock, trainOrNot)

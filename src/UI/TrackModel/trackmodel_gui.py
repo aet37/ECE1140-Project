@@ -74,6 +74,8 @@ class TrackModelUi(QtWidgets.QMainWindow):
         set_manual_temp_button = self.findChild(QtWidgets.QPushButton, 'set_manual_temp_button')
         set_manual_temp_button.clicked.connect(self.set_manual_temperature)
 
+        signals.trackmodel_update_gui.connect(self.switch_block) # TODO: might need to make sure there is a track before trying to update 
+
     def set_manual_temperature(self):
         track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
         current_temperature_label = self.findChild(QtWidgets.QLabel, 'current_temperature_label')
@@ -123,7 +125,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
             if (not track_heater_button.isChecked()):
                 track_heater_button.toggle()
                 self.update_track_heater()
-
+        signals.trackmodel_update_tickets_sold.emit()
 
     def update_broken_rail_failure(self):
         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
