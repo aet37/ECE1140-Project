@@ -302,6 +302,7 @@ class SignalHandler:
             route = green_route_blocks
             for i in green_route_blocks:
                 theBlock = theTrack.getBlock(i)
+                #print("Trackmodel block: " + str(theBlock.blockNumber) + " station: " + str(theBlock.blockStation != None))
                 signals.train_model_receive_block.emit(0, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None)
         else:
             theTrack = getTrack("Red")

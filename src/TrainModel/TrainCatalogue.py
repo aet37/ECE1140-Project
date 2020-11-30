@@ -103,6 +103,7 @@ class TrainCatalogue:
 
     # @brief Receives block information
     def train_model_receive_block(self, track_id, block_id, elevation, slope, sizeOfBlock, speedLimit, travelDirection, station):
+        print("Trainmodel station: "+ str(station))
         newBlock = Block(block_id)
         # Parse stuff from Evan (trackId, blockId, elevation, grade, length, speedLimit, travelDirection)
 
@@ -290,7 +291,10 @@ class TrainCatalogue:
             else:
                 signals.trackmodel_update_occupancy.emit(trainId, Line.LINE_RED, self.m_trainList[trainId].m_route[0], True)
 
-            if block_catalogue_red.m_blockList[self.m_trainList[trainId].m_route[0]].m_station == False:
+            print(self.m_trainList[trainId].m_route[0])
+            print(block_catalogue_red.m_blockList[self.m_trainList[trainId].m_route[0]].m_station)
+            if (block_catalogue_red.m_blockList[self.m_trainList[trainId].m_route[0]].m_station):
+                print("Made it!")
                 removedPass = random.randrange(0, self.m_trainList[trainId].m_trainPassCount, 1)
                 self.m_trainList[trainId].m_trainPassCount -= removedPass
                 avalibleSpace = 222 - self.m_trainList[trainId].m_trainPassCount
