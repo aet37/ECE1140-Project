@@ -5,6 +5,8 @@ import time
 
 from src.signals import signals
 from src.logger import get_logger
+from src.CTC.train_system import ctc
+from src.common_def import Line
 
 logger = get_logger(__name__)
 
@@ -17,7 +19,7 @@ class Timekeeper:
         self.time_factor = 1
         self.current_time_sec = 0
         self.current_time_min = 0
-        self.current_time_hour = 0
+        self.current_time_hour = 24
         self.current_day = 0
         self.run_lock = threading.Lock()
         self.running = True
@@ -55,9 +57,13 @@ class Timekeeper:
                     self.current_time_min = 0
                     self.current_time_hour += 1
 
-                if self.current_time_hour == 24:
-                    self.current_time_hour = 0
+                if (self.current_time_hour == 24) and \
+                   (self.current_time_min == 0) and \
+                   (self.current_time_sec == 0):
                     self.current_day = (self.current_day + 1) % 6
+
+                if self.current_time_hour == 25:
+                    self.current_time_hour = 1
 
                 signals.timer_expired.emit(self.current_day,
                                            self.current_time_hour,
@@ -66,12 +72,79 @@ class Timekeeper:
 
                 # Dispatch train if needed
                 for item in self.ctc_trains_backlog:
-                    if (item.hour == self.current_time_hour) and \
-                       (item.min == self.current_time_min):
+                    if item.hour == self.current_time_hour and \
+                    item.min == self.current_time_min:
+
+                        # Check that dispatch to blocks are clear
+                        allowed = True
+                        if item.line_on == Line.LINE_GREEN:
+                            if ctc.blocks_red_arr[61].occupied:
+                                logger.critical('CTC : Scheduled Train Delayed ... 1min')
+
+                                item.min += 1
+                                if item.min == 60:
+                                    item.min = 0
+                                    item.hour += 1
+                                if item.hour == 24:
+                                    item.hour = 0
+
+                                allowed = False
+                            else:
+                                for i in range(len(ctc.trains_arr)):
+                                    if ctc.trains_arr[i].line_on == Line.LINE_GREEN and\
+                                    ctc.trains_arr[i].index_on_route == 0:
+                                        logger.critical('CTC : Scheduled Train Delayed ... 1min')
+
+                                        item.min += 1
+                                        if item.min == 60:
+                                            item.min = 0
+                                            item.hour += 1
+                                        if item.hour == 24:
+                                            item.hour = 0
+
+                                        allowed = False
+                                        break
+
+                        # For Red Line
+                        else:
+                            if ctc.blocks_red_arr[8].occupied:
+                                logger.critical('CTC : Scheduled Train Delayed ... 1min')
+
+                                item.min += 1
+                                if item.min == 60:
+                                    item.min = 0
+                                    item.hour += 1
+                                if item.hour == 24:
+                                    item.hour = 0
+
+                                allowed = False
+                            else:
+                                for i in range(len(ctc.trains_arr)):
+                                    if ctc.trains_arr[i].line_on == Line.LINE_RED and\
+                                    ctc.trains_arr[i].index_on_route == 0:
+                                        logger.critical('CTC : Scheduled Train Delayed ... 1min')
+
+                                        item.min += 1
+                                        if item.min == 60:
+                                            item.min = 0
+                                            item.hour += 1
+                                        if item.hour == 24:
+                                            item.hour = 0
+
+                                        allowed = False
+                                        break
+
+                        if not allowed:
+                            continue
+
                         signals.dispatch_scheduled_train.emit(item.destination_block, item.line_on)
                         # Remove the train from backlog if dispatched
                         self.ctc_trains_backlog.remove(item)
-                if (self.current_time_sec == 5 and self.current_time_min == 0 and self.current_time_hour == 0):
+
+                # Send signal to Track Model if time is right
+                if (self.current_time_sec == 5) and \
+                   (self.current_time_min == 0) and \
+                   (self.current_time_hour == 0):
                     signals.trackmodel_update_tickets_sold.emit()
 
         # Cancel the timer
