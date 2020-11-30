@@ -59,7 +59,9 @@ class TimekeeperUi(QtWidgets.QMainWindow):
         if hours in range(12, 24):
             period = 'pm'
 
-        if hours > 12:
+        if hours == 0:
+        	hours = 12
+        elif hours > 12:
             hours -= 12
 
         time_text = "{} {:02}:{:02}:{:02} {}".format(days[day], hours, mins, secs, period)

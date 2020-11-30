@@ -1,0 +1,51 @@
+TAG heater = FALSE
+TAG switch = TRUE
+# Section 1
+TAG b28O = FALSE
+TAG b29O = FALSE
+TAG b30O = FALSE
+TAG b31O = FALSE
+TAG b32O = FALSE
+TAG b33O = FALSE
+TAG b28A = TRUE
+TAG b29A = TRUE
+TAG b30A = TRUE
+TAG b31A = TRUE
+TAG b32A = TRUE
+TAG b33A = TRUE
+# Section 2
+TAG b72O = FALSE
+TAG b73O = FALSE
+TAG b74O = FALSE
+TAG b75O = FALSE
+TAG b76O = FALSE
+TAG b72A = TRUE
+TAG b73A = TRUE
+TAG b74A = TRUE
+TAG b75A = TRUE
+TAG b76A = TRUE
+
+TASK<PERIOD=1000> MainTask
+    ROUTINE
+        RUNG
+            XIO b75O
+            XIO b74O
+            XIO b73O
+            OTE b76A
+        ENDRUNG
+        RUNG
+            XIO b72O
+            OTE b73A
+            OTE b74A
+            OTE b75A
+        ENDRUNG
+        RUNG
+            XIO b33O
+            OTE b76A
+        RUNG
+            XIO b33O
+            OTE switch
+        ENDRUNG
+
+
+

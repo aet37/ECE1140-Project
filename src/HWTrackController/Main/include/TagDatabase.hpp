@@ -5,13 +5,21 @@
 #define TAG_DATABASE_HPP
 
 // SYSTEM INCLUDES
-// (None)
+#include <stdint.h>
 
 // C++ PROJECT INCLUDES
 // (None)
 
 // FORWARD REFERENCES
 class String;
+
+#define PIN8 8
+#define PIN9 9
+#define PIN10 10
+#define PIN23 23
+#define PIN25 25
+#define PIN27 27
+#define PIN29 29
 
 namespace TagDatabase
 {
@@ -49,7 +57,7 @@ void Clear();
 /**
  * @brief Gets all the tag's and their values
 */
-String GetAllTagValues();
+String GetAllTagValues(uint32_t division);
 
 /**
  * @brief Task to handle input and outputs

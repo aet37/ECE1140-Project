@@ -1,69 +1,73 @@
-TAG switch = FALSE
 TAG heater = FALSE
+TAG switch = FALSE
+# Section 1
 TAG b1O = FALSE
 TAG b2O = FALSE
 TAG b3O = FALSE
-TAG b4O = FALSE
-TAG b5O = FALSE
-TAG b6O = FALSE
-TAG b7O = FALSE
-TAG b8O = FALSE
-TAG b9O = FALSE
-TAG b10O = FALSE
-TAG b11O = FALSE
-TAG b12O = FALSE
-TAG b13O = FALSE
 TAG b1A = TRUE
 TAG b2A = TRUE
 TAG b3A = TRUE
+# Section 2
+TAG b4O = TRUE
+TAG b5O = TRUE
+TAG b6O = TRUE
 TAG b4A = TRUE
 TAG b5A = TRUE
 TAG b6A = TRUE
+#Section 3
+TAG b7O = TRUE
+TAG b8O = TRUE
+TAG b9O = TRUE
 TAG b7A = TRUE
 TAG b8A = TRUE
 TAG b9A = TRUE
-TAG b10A = TRUE
-TAG b11A = TRUE
-TAG b12A = TRUE
-TAG b13A = TRUE
 
 TASK<PERIOD=1000> MainTask
     ROUTINE Main
         RUNG
-            XIO b7O
-            XIO b8O
-            XIO b9O
-            XIO b10O
-            XIO b11O
-            XIO b12O
+            XIO b4O
+            XIO b5O
+            XIO b6O
             OTE b1A
             OTE b2A
             OTE b3A
+        ENDRUNG
+        RUNG
+            XIO b7O
+            XIO b8O
+            XIO b9O
             OTE b4A
             OTE b5A
             OTE b6A
         ENDRUNG
         RUNG
-            XIO b1O
-            XIO b2O
-            XIO b3O
             XIO b4O
             XIO b5O
             XIO b6O
-            OTE b13A
-        ENDRUNG
-        RUNG
-            XIO b13O 
             OTE b7A
             OTE b8A
             OTE b9A
-            OTE b10A
-            OTE b11A
-            OTE b12A
         ENDRUNG
         RUNG
-            XIO b13O
+            XIO b1O
+            XIO b2O
+            XIO b3O
+            OTE b4A
+            OTE b5A
+            OTE b6A
+        ENDRUNG
+        RUNG 
+            XIO b9O
+            OTE b7A
+            OTE b8A
+            OTE b9A
+        RUNG
+            XIO b9O
             OTE switch
         ENDRUNG
     ENDROUTINE
 ENDTASK
+
+ 
+
+

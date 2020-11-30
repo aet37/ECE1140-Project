@@ -19,6 +19,8 @@
 #include <Arduino.h>
 #endif
 
+#define NUM_OF_DIVISIONS 4
+
 /**
  * @class HashMap
  *
@@ -34,7 +36,7 @@ public:
      *
      * @param[in] size Initial size of the hashmap
     */
-    explicit HashMap(uint32_t size = 11) :
+    explicit HashMap(uint32_t size = 43) :
         m_pKeys(new String[size]),
         m_pValues(new T[size]),
         m_numElements(0),
@@ -199,11 +201,19 @@ public:
      * @brief Gets all the keys and values in a list
      * separated by spaces
     */
-    String GetAllKeysAndValues() const
+    String GetAllKeysAndValues(uint32_t division) const
     {
         String ret = "";
 
-        for (uint32_t i = 0; i < m_size; i++)
+        uint32_t startIndex = division * (m_size / NUM_OF_DIVISIONS);
+        uint32_t endIndex = (division + 1) * (m_size / NUM_OF_DIVISIONS);
+
+        if (division == (NUM_OF_DIVISIONS - 1))
+        {
+            endIndex = m_size;
+        }
+
+        for (uint32_t i = startIndex; i < endIndex; i++)
         {
             if (m_pKeys[i] != "")
             {

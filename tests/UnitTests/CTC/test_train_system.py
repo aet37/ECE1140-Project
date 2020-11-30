@@ -81,7 +81,7 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(ctc.trains_arr[0].line_on == Line.LINE_GREEN, True)
         self.assertEqual(ctc.trains_arr[0].destination_block == 10, True)
-        self.assertEqual(ctc.trains_arr[0].command_speed == 55, True)
+        self.assertEqual(ctc.trains_arr[0].command_speed == 70, True)
         self.assertEqual(ctc.trains_arr[0].authority == 3, True)
         self.assertEqual(ctc.trains_arr[0].index_on_route == 0, True)
 
@@ -107,7 +107,7 @@ class MyTestCase(unittest.TestCase):
         # Check that train is on green line and information is right
         self.assertEqual(ctc.trains_arr[0].line_on == Line.LINE_RED, True)
         self.assertEqual(ctc.trains_arr[0].destination_block == 13, True)
-        self.assertEqual(ctc.trains_arr[0].command_speed == 55, True)
+        self.assertEqual(ctc.trains_arr[0].command_speed == 70, True)
         self.assertEqual(ctc.trains_arr[0].authority == 3, True)
         self.assertEqual(ctc.trains_arr[0].index_on_route == 0, True)
 

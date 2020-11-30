@@ -38,6 +38,10 @@ class ControlSystem:
         signals.swtrain_gui_pull_ebrake.connect(self.swtrain_gui_pull_ebrake)
         # Receive release ebrake
         signals.swtrain_gui_release_ebrake.connect(self.swtrain_gui_release_ebrake)
+        # Receive new authority
+        signals.swtrain_update_authority.connect(self.swtrain_update_authority)
+        # Receive new command speed
+        signals.swtrain_update_command_speed.connect(self.swtrain_update_command_speed)
 
         ## RECEIVE NONVITAL SIGNALS ##
         # Receive lights signal
@@ -129,6 +133,28 @@ class ControlSystem:
         print("Do you get here?")
         # Send train_id and ebrake status to train model
         signals.train_model_gui_receive_ebrake.emit(train_id, self.p_controllers[train_id].emergency_brake)
+
+    def swtrain_update_authority(self, train_id, auth):
+        """Update authority in train controller"""
+        self.p_controllers[train_id].authority = auth
+        if self.p_controllers[train_id].authority:
+            # If service brake is already on or train is dispatching do not turn it off
+            if (self.p_controllers[train_id].current_speed != 0 and self.p_controllers[train_id].service_brake == True) or \
+                (self.p_controllers[train_id].kp == 0 or self.p_controllers[train_id].ki == 0):
+                pass
+            else:
+                self.p_controllers[train_id].service_brake = False
+                signals.train_model_gui_receive_service_brake.emit(train_id, self.p_controllers[train_id].service_brake)
+        else:
+            self.p_controllers[train_id].service_brake = True
+            signals.train_model_gui_receive_service_brake.emit(train_id, self.p_controllers[train_id].service_brake)
+
+        print("Service brake: " + str(self.p_controllers[train_id].service_brake))
+
+    def swtrain_update_command_speed(self, train_id, command_speed):
+        """Update command speed in train controller"""
+        self.p_controllers[train_id].command_speed = command_speed
+        print("Command speed: " + str(command_speed))
 
     ## NonVital Signal Definitions ##
     def swtrain_gui_toggle_cabin_lights(self, train_id):
