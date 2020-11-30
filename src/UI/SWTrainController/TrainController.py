@@ -116,8 +116,8 @@ class SWTrainUi(QtWidgets.QMainWindow):
         self.logout_button4.clicked.connect(self.logout)
         ###########################
 
-        for _ in range(0, len(control_system.p_controllers)):
-            self.update_controller_list()
+        #for _ in range(0, len(control_system.p_controllers)):
+        #    self.update_controller_list()
 
         self.show()
 
