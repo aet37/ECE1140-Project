@@ -39,6 +39,15 @@ TAG b99A = TRUE
 TAG b100A = TRUE
 
 # Outputs for arduino
+TAG out2p = FALSE
+TAG out3p = FALSE
+TAG out4p = FALSE
+TAG out5p = FALSE
+TAG out6p = FALSE
+TAG out7p = FALSE
+TAG out8p = FALSE
+TAG out9p = FALSE
+TAG out10p = FALSE
 TAG out25p = FALSE
 TAG out27p = FALSE
 TAG out29p = FALSE
@@ -100,6 +109,48 @@ TASK<PERIOD=2000> MainTask
         RUNG
             XIC mmode
             OTE out29p
+        ENDRUNG
+        # Station 1 signal
+        RUNG
+            XIC b87O
+            OTE out9p
+        ENDRUNG
+        RUNG
+            XIC b88O
+            OTE out10p
+        ENDRUNG
+        RUNG
+            XIO b88O
+            XIO b87O
+            OTE out8p
+        ENDRUNG
+        # Station 2 signal
+        RUNG
+            XIC b95O
+            OTE out6p
+        ENDRUNG
+        RUNG
+            XIC b96O
+            OTE out7p
+        ENDRUNG
+        RUNG
+            XIO b96O
+            XIO b95O
+            OTE out5p
+        ENDRUNG
+        # Switch signal
+        RUNG
+            XIC b86O
+            OTE out3p
+        ENDRUNG
+        RUNG
+            XIC b100O
+            OTE out3p
+        ENDRUNG
+        RUNG
+            XIO b86O
+            XIO b100O
+            OTE out2p
         ENDRUNG
     ENDROUTINE
 ENDTASK

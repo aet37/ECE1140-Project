@@ -13,6 +13,9 @@
 // FORWARD REFERENCES
 class String;
 
+#define PIN8 8
+#define PIN9 9
+#define PIN10 10
 #define PIN23 23
 #define PIN25 25
 #define PIN27 27

@@ -127,14 +127,14 @@ class HWTrackCtrlConnector(TrackController):
         :param str tag_name: Name of the tag
         :param bool value: Value to set to the tag to
         """
-        def communicate():
+        def communicate(self):
             """Private function for a thread to communicate with the arduino"""
             with self.comms_lock:
                 self.send_message(" ".join(map(str, (Code.SET_TAG_VALUE.value, tag_name, int(value)))))
                 logger.info(self.get_response())
                 super().set_tag_value(tag_name, value)
 
-        temp_thread = threading.Thread(target=communicate, daemon=True)
+        temp_thread = threading.Thread(target=communicate, args=(self,), daemon=True)
         temp_thread.start()
 
     def run_program(self):

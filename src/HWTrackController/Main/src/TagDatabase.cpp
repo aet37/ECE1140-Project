@@ -82,6 +82,54 @@ void IoTask(void* pSomething)
     {
         digitalWrite(PIN29, tagValue);
     }
+
+    // Switch signal
+    if (GetTagValue("out2p", tagValue))
+    {
+        digitalWrite(PIN2, tagValue);
+    }
+
+    if (GetTagValue("out3p", tagValue))
+    {
+        digitalWrite(PIN3, tagValue);
+    }
+
+    if (GetTagValue("out4p", tagValue))
+    {
+        digitalWrite(PIN4, tagValue);
+    }
+
+    // Station #2 signal
+    if (GetTagValue("out5p", tagValue))
+    {
+        digitalWrite(PIN5, tagValue);
+    }
+
+    if (GetTagValue("out6p", tagValue))
+    {
+        digitalWrite(PIN6, tagValue);
+    }
+
+    if (GetTagValue("out7p", tagValue))
+    {
+        digitalWrite(PIN7, tagValue);
+    }
+
+    // Station #1 signal
+    if (GetTagValue("out8p", tagValue))
+    {
+        digitalWrite(PIN8, tagValue);
+    }
+
+    if (GetTagValue("out9p", tagValue))
+    {
+        digitalWrite(PIN9, tagValue);
+    }
+
+    if (GetTagValue("out10p", tagValue))
+    {
+        digitalWrite(PIN10, tagValue);
+    }
 }
 
 } // namespace TagDatabase

@@ -32,6 +32,12 @@ void setup()
     pinMode(PIN2, OUTPUT);
     pinMode(PIN3, OUTPUT);
     pinMode(PIN4, OUTPUT);
+    pinMode(PIN5, OUTPUT);
+    pinMode(PIN6, OUTPUT);
+    pinMode(PIN7, OUTPUT);
+    pinMode(PIN8, OUTPUT);
+    pinMode(PIN9, OUTPUT);
+    pinMode(PIN10, OUTPUT);
     pinMode(PIN25, OUTPUT);
     pinMode(PIN27, OUTPUT);
     pinMode(PIN29, OUTPUT);
