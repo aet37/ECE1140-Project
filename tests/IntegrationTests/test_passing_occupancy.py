@@ -9,9 +9,13 @@ def test_passing_occupancy(upload_tracks):
     """Testing passing occupancy"""
     # Disconnect signals going to train model
     signals.train_model_dispatch_train.disconnect()
+    signals.train_model_update_authority.disconnect()
+    signals.train_model_update_command_speed.disconnect()
 
     # Dispatch a train
     ctc.dispatch_train(38, Line.LINE_GREEN)
+
+    signals.trackmodel_update_occupancy.emit(0, Line.LINE_GREEN, green_route_blocks[0], True)
 
     for previous_block, current_block in zip(green_route_blocks, green_route_blocks[1:]):
         # Simulate the train changing blocks
