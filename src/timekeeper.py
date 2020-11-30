@@ -70,8 +70,7 @@ class Timekeeper:
                         signals.dispatch_scheduled_train.emit(item.destination_block, item.line_on)
                         # Remove the train from backlog if dispatched
                         self.ctc_trains_backlog.remove(item)
-                
-                if (current_time_sec == 0 and current_time_min == 0 and current_time_hour == 0):
+                if (self.current_time_sec == 5 and self.current_time_min == 0 and self.current_time_hour == 0):
                     signals.trackmodel_update_tickets_sold.emit()
                     
         # Cancel the timer
