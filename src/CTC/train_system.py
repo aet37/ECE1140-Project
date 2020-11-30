@@ -268,6 +268,7 @@ class TrainSystem:
 
                 # If train has not made it out of the yard yet
                 if self.trains_arr[i].index_on_route == 0:
+                    print("Index on route: " + str(self.trains_arr[i].index_on_route))
                     if self.trains_arr[i].route_blocks_arr[1] not in trains_on_green:
                         if self.blocks_green_arr[self.trains_arr[i].route_blocks_arr[1] - 1]\
                         .occupied:
