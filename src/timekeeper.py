@@ -21,6 +21,7 @@ class Timekeeper:
         self.current_day = 0
         self.run_lock = threading.Lock()
         self.running = True
+        self.paused = False
 
         self.signal_timer = threading.Timer(self.signal_period * self.time_factor,
                                             self.signal_timer_triggered)
@@ -72,7 +73,7 @@ class Timekeeper:
                         self.ctc_trains_backlog.remove(item)
                 if (self.current_time_sec == 5 and self.current_time_min == 0 and self.current_time_hour == 0):
                     signals.trackmodel_update_tickets_sold.emit()
-                    
+
         # Cancel the timer
         self.signal_timer.join()
         self.signal_timer.cancel()
@@ -92,10 +93,14 @@ class Timekeeper:
         """Acquires the run lock, so the timer can't run"""
         if not self.run_lock.locked():
             self.run_lock.acquire()
+            self.paused = True
+            print('paused = ', self.paused)
 
     def resume_time(self):
         """Releases the run lock, so the timer can continue"""
         if self.run_lock.locked():
             self.run_lock.release()
+            self.paused = False
+            print('paused = ', self.paused)
 
 timekeeper = Timekeeper()
