@@ -54,10 +54,10 @@ class CTCUi(QtWidgets.QMainWindow):
         self.tplabel = self.findChild(QtWidgets.QLabel, 'ThroughputValue') # Find the label
         self.show_throughput()
 
-        # Automatically refresh Map after 10s
+        # Automatically refresh throughput after 5s
         TIME_TIMR = QtCore.QTimer(self)
         TIME_TIMR.timeout.connect(self.show_throughput)
-        TIME_TIMR.start(10000)
+        TIME_TIMR.start(5000)
 
 
         self.show()
@@ -67,6 +67,7 @@ class CTCUi(QtWidgets.QMainWindow):
 
         try:
             self.tplabel.setText(str(ctc.throughput))
+            self.mode_text.setText('')
         except:
             pass
 
@@ -722,10 +723,10 @@ class CTCUi(QtWidgets.QMainWindow):
         self.tplabel = self.findChild(QtWidgets.QLabel, 'ThroughputValue') # Find the label
         self.show_throughput()
 
-        # Automatically refresh Map after 10s
+        # Automatically refresh trhoughput after 5s
         TIME_TIMR = QtCore.QTimer(self)
         TIME_TIMR.timeout.connect(self.show_throughput)
-        TIME_TIMR.start(10000)
+        TIME_TIMR.start(5000)
 
 
     ###############################################################################################
@@ -737,6 +738,12 @@ class CTCUi(QtWidgets.QMainWindow):
         """ Toggles automatic mode """
 
         self.mode_text.setText('')
+
+        if timekeeper.paused:
+            self.mode_text.setText('Error: Simulation Paused')
+            self.auto.setChecked(self.auto_mode)
+            return
+
         if self.auto.isChecked():
             self.auto_mode = True
         else:
