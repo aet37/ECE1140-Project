@@ -24,13 +24,6 @@ TASK<PERIOD=2000> MainTask
     ROUTINE Main
         # Authority logic
         RUNG
-            XIO b0O
-            OTE b62A
-            OTE b61A
-            OTE b60A
-            OTE b59A
-        ENDRUNG
-        RUNG
             XIO b62O
             XIO b61O
             XIO b60O

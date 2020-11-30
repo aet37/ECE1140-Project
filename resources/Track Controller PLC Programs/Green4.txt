@@ -17,14 +17,24 @@ TAG b82A = TRUE
 TAG b83A = TRUE
 TAG b84A = TRUE
 TAG b85A = TRUE
-
+TAG b100A = TRUE
 
 TASK<PERIOD=1000> MainTask
     ROUTINE Main
+        RUNG
+            XIO b78O
+            XIO b79O
+            XIO b80O
+            XIO b81O
+            XIO b82O
+            XIO b83O
+            XIO b84O
+            XIO b85O
+            OTE b100A
+        ENDRUNG
         RUNG
             XIO b85O
             OTE switch
         ENDRUNG
     ENDROUTINE
 ENDTASK
-

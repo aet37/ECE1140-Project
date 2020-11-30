@@ -9,7 +9,7 @@ from src.CTC.train_system import ctc
 from src.common_def import Line
 from src.TrackModel.TrackModelDef import SignalHandler
 
-def test_dispatch_train(upload_tracks):
+def test_dispatch_train(upload_tracks, download_programs):
     """Tests dispatching a train and ensures all modules react accordingly"""
     # Upload track
     fileInfoGreen = ['resources/Green Line.xlsx', 'All Files (*)']
@@ -29,7 +29,7 @@ def test_dispatch_train(upload_tracks):
     assert len(control_system.p_controllers) == 1
 
     # Assert received authority and command speed
-    assert train_catalogue.m_trainList[0].m_commandSpeed == 24.85484
+    assert train_catalogue.m_trainList[0].m_commandSpeed == 40.0
     assert train_catalogue.m_trainList[0].m_authority
 
     assert control_system.p_controllers[0].command_speed == 40.0
