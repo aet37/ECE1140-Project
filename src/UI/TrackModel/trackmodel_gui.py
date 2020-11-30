@@ -349,7 +349,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
             if (occupancy == -1):
                 occupied_label.setText("Occupied by:\n\nNone")
             else:
-                occupied_label.setText("Occupied by:\n\n"+ str(occupancy))
+                occupied_label.setText("Occupied by:\n\nTrain "+ str(occupancy))
 
             switch_list_label = self.findChild(QtWidgets.QLabel, 'switch_list_label')
             switch_list_label.setText("Switches possible:\n\n" + theBlock.getSwitchBlocksString())
