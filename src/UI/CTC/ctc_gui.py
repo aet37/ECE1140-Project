@@ -405,7 +405,7 @@ class CTCUi(QtWidgets.QMainWindow):
                 self.d_conf_label.setStyleSheet("color: green")
                 self.d_conf_label.setText('Train Dispatched to Block ' + self.d_block_label.text()\
                     + ' at ' + self.d_time_label.text())
-                self.d_speed_label.setText('Command Speed [to Track Controller]: 55 km/hr')
+                self.d_speed_label.setText('Command Speed [to Track Controller]: 70 km/hr')
                 self.d_auth_label.setText('Authority [to Track Controller]: 3 Blocks')
 
                 ##### Send to Timekeeper class #####
