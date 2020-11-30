@@ -68,6 +68,12 @@ class Track:
 
     def setTrackHeater(self, heaterBool):
         self.trackHeater = heaterBool
+    
+    def getStationBlocks(self, stationName):
+        for x in self.stationList:
+            if (x.stationName == stationName):
+                return x.blockList
+        return 0
 
 class Block:
     def __init__(self, blockNumber, blockLength, blockGrade, blockSpeedLimit,
@@ -199,12 +205,32 @@ class SignalHandler:
         signals.trackmodel_update_tickets_sold.connect(self.updateTicketsSold)
         signals.trackmodel_update_passengers_exited.connect(self.updatePassengersExited)
 
-    def updatePassengersExited(self, line, blockNumber, passengersExited, spaceOnTrain):
+    def updatePassengersExited(self, line, trainId, blockNumber, passengersExited, spaceOnTrain, totalSeats):
         if (line == Line.LINE_GREEN):
             theTrack = getTrack("Green")
         else:
             theTrack = getTrack("Red")
-        pass
+        
+        theBlock = theTrack.getBlock(blockNumber)
+        theStation = theBlock.blockStation
+    
+        blockList = theTrack.getStationBlocks(theStation.stationName)
+
+        for x in blockList:
+            theTrack.getBlock(x).blockStation.passengersExited += passengersExited
+
+        passengersLeftToBoard = theStation.ticketsSold - theStation.passengersBoarded
+        
+        if (passengersLeftToBoard > spaceOnTrain):
+            for y in blockList:
+                theTrack.getBlock(y).blockStation.passengersBoarded += spaceOnTrain
+            totalPassengers = totalSeats
+            signals.train_model_update_passengers.emit(trainId, totalPassengers)
+        else:
+            for z in blockList:
+                theTrack.getBlock(z).blockStation.passengersBoarded += passengersLeftToBoard
+            totalPassengers = totalSeats - (spaceOnTrain - passengersLeftToBoard)
+            signals.train_model_update_passengers.emit(trainId, totalPassengers)
 
     def updateSwitchPositions(self, line, number, position):
         if (line == Line.LINE_GREEN):
@@ -275,13 +301,14 @@ class SignalHandler:
             route = green_route_blocks
             for i in green_route_blocks:
                 theBlock = theTrack.getBlock(i)
-                signals.train_model_receive_block.emit(0, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection)
+                #print("Trackmodel block: " + str(theBlock.blockNumber) + " station: " + str(theBlock.blockStation != None))
+                signals.train_model_receive_block.emit(0, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None)
         else:
             theTrack = getTrack("Red")
             route = red_route_blocks
             for i in red_route_blocks:
                 theBlock = theTrack.getBlock(i)
-                signals.train_model_receive_block.emit(1, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection)
+                signals.train_model_receive_block.emit(1, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None)
 
         signals.train_model_dispatch_train.emit(trainId, destinationBlock, commandSpeed, authority, currentLine, route)
 
@@ -374,6 +401,7 @@ class SignalHandler:
                     blockSection, blockRailwayCrossing)
 
                     if (records.column['Stations'][x] != ""):
+                        stationBool = True
                         stationName = records.column['Stations'][x]
                         stationExitSide = records.column['Exit Side'][x]
                         theBlock.addStation(stationName, stationExitSide)
@@ -386,6 +414,8 @@ class SignalHandler:
                         if (not appended):
                             theTrack.stationList.append(Station(stationName, stationExitSide))
                             theTrack.stationList[len(theTrack.stationList) - 1].blockList.append(blockNumber)
+                    else:
+                        stationBool = False
 
                     if (records.column['Switches'][x] != ""):
                         switchList = records.column['Switches'][x]
@@ -405,9 +435,9 @@ class SignalHandler:
                     newTrack.addBlock(theBlock)
 
                     if (blockNumber == 1):
-                        signals.train_model_receive_block.emit(trackInfo['tNumber'], 0, 0, 0, 10, blockSpeedLimit, blockDirection)
+                        signals.train_model_receive_block.emit(trackInfo['tNumber'], 0, 0, 0, 10, blockSpeedLimit, blockDirection, stationBool)
 
-                    signals.train_model_receive_block.emit(trackInfo['tNumber'], blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection)
+                    signals.train_model_receive_block.emit(trackInfo['tNumber'], blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection, stationBool)
 
 
                     #jsonString = json.dumps(blockInfo)

@@ -96,7 +96,7 @@ class TrackSystem:
         # Set the occupancy of the specified block. This operation will only be
         # successful for the track controllers that operate the block
         final_authority = True
-        switch_positions = []
+        switch_positions = [False for _ in range(int(len(track_controllers) / 2))]
         for i, track_controller in enumerate(track_controllers):
             # TODO(nns): Possibly add safety architecture here
             track_controller.set_block_occupancy(block_id, occupied)
@@ -111,13 +111,15 @@ class TrackSystem:
                              "{} and block {}".format(new_authority, i, train_id, block_id))
 
             switch_position = track_controller.get_switch_position()
-            signals.trackmodel_update_switch_positions.emit(line, int(i / 2), switch_position)
-            switch_positions.append(switch_position)
+            signals.trackmodel_update_switch_positions.emit(line,
+                                                            self.convert_switch_position_ordering(line, int(i / 2)),
+                                                            switch_position)
+            switch_positions[self.convert_switch_position_ordering(line, int(i / 2))] = switch_position
 
         if line == Line.LINE_GREEN:
-            signals.update_green_switches.emit(switch_positions[::2])
+            signals.update_green_switches.emit(switch_positions)
         else:
-            signals.update_red_switches.emit(switch_positions[::2])
+            signals.update_red_switches.emit(switch_positions)
 
         # Emit the final updated authority to the train
         signals.trackmodel_update_authority.emit(train_id, final_authority)
@@ -128,7 +130,7 @@ class TrackSystem:
         # Update command speed now since speed limit may have changed
         if occupied:
             speed_limit = self.get_speed_limit_of_block(line, block_id)
-
+            
             if self.suggested_speeds[train_id] > speed_limit:
                 command_speed = speed_limit
             else:
@@ -190,5 +192,29 @@ class TrackSystem:
                 speed_limit = 70.0
 
         return speed_limit
+
+    @staticmethod
+    def convert_switch_position_ordering(line, original_index):
+        """Converts the index of a switch from the track controller's ordering to everyone else's"""
+        new_index = None
+
+        if line == Line.LINE_GREEN:
+            if original_index == 0:
+                new_index = 3
+            elif original_index == 1:
+                new_index = 4
+            elif original_index == 2:
+                new_index = 5
+            elif original_index == 3:
+                new_index = 1
+            elif original_index == 4:
+                new_index = 0
+            elif original_index == 5:
+                new_index = 2
+        else:
+            new_index = original_index
+
+        assert new_index != None
+        return new_index
 
 track_system = TrackSystem()

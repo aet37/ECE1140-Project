@@ -273,6 +273,12 @@ class CTCUi(QtWidgets.QMainWindow):
     def dispatch_train(self):
         """ Dispatches a train once user clicks button """
 
+        # If simulation paused, dont let dispatch
+        if timekeeper.paused:
+            self.d_conf_label.setStyleSheet("color: red")
+            self.d_conf_label.setText('Error: simulation paused')
+            return
+
         # Error Check block value
         try:
             int(self.d_block_label.text())
@@ -462,8 +468,8 @@ class CTCUi(QtWidgets.QMainWindow):
             eval('self.GB%s.clicked.connect(partial(self.toggle_blocks_green, %d))' % (str(i), i))
         # Find the Switches
         for i in range(1, 7):
-            exec('self.S%s = self.findChild(QtWidgets.QPushButton, \'SW%s\')' % (str(i), str(i)))
-            eval('self.S%s.clicked.connect(partial(self.toggle_switch_green, %d))' % (str(i), i))
+            exec('self.SG%s = self.findChild(QtWidgets.QPushButton, \'SW%s\')' % (str(i), str(i)))
+            eval('self.SG%s.clicked.connect(partial(self.toggle_switch_green, %d))' % (str(i), i))
 
     def refresh_map_green(self):
         """ Refreshes the green map """
@@ -498,7 +504,7 @@ class CTCUi(QtWidgets.QMainWindow):
         for i in range(len(wrtxt_arr)):
             wrtxt = wrtxt_arr[i]
             try:
-                eval('self.SW%s.setText(\'%s\')' % (str(i + 1), wrtxt))
+                eval('self.SG%s.setText(\'%s\')' % (str(i + 1), wrtxt))
             except:
                 pass
 
@@ -510,6 +516,11 @@ class CTCUi(QtWidgets.QMainWindow):
 
     def toggle_blocks_green(self, b_num):
         """ Toggle switch block for maintence mode or not """
+
+        # If simulation is paused, do nothing
+        if timekeeper.paused:
+            self.maint_mode_green.setText('Error: Simulation PAUSED')
+            return
 
         # Close the block if it is open
         if ctc.blocks_green_arr[b_num - 1].open:
@@ -530,6 +541,11 @@ class CTCUi(QtWidgets.QMainWindow):
 
     def toggle_switch_green(self, s_num):
         """ Toggle switch if block is in maintence mode """
+
+        # If simulation is paused, do nothing
+        if timekeeper.paused:
+            self.maint_mode_green.setText('Error: Simulation PAUSED')
+            return
 
         if self.num_blocks_closed_green > 0:
             if ctc.switches_green_arr[s_num - 1].pointing_to == ctc.switches_green_arr\
@@ -630,6 +646,11 @@ class CTCUi(QtWidgets.QMainWindow):
     def toggle_block_red(self, b_num):
         """ Toggle switch block for maintence mode or not on red line """
 
+        # If simulation is paused, do nothing
+        if timekeeper.paused:
+            self.maint_mode_red.setText('Error: Simulation PAUSED')
+            return
+
         # Close the block if it is open
         if ctc.blocks_red_arr[b_num - 1].open:
             self.num_blocks_closed_red += 1
@@ -649,6 +670,11 @@ class CTCUi(QtWidgets.QMainWindow):
 
     def toggle_switch_red(self, s_num):
         """ Toggle switch if block is in maintence mode on red line"""
+
+        # If simulation is paused, do nothing
+        if timekeeper.paused:
+            self.maint_mode_red.setText('Error: Simulation PAUSED')
+            return
 
         if self.num_blocks_closed_red > 0:
             if ctc.switches_red_arr[s_num - 1].pointing_to == ctc.switches_red_arr[s_num - 1]\
