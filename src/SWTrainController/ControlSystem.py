@@ -139,7 +139,9 @@ class ControlSystem:
         self.p_controllers[train_id].authority = auth
         if self.p_controllers[train_id].authority:
             # If service brake is already on do not turn it off
-            if not self.p_controllers[train_id].service_brake:
+            if self.p_controllers[train_id].current_speed != 0 and self.p_controllers[train_id].service_brake == True:
+                pass
+            else:
                 self.p_controllers[train_id].service_brake = False
                 signals.train_model_gui_receive_service_brake.emit(train_id, self.p_controllers[train_id].service_brake)
         else:

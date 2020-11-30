@@ -50,7 +50,6 @@ class TrackSystem:
 
         # Set occupancy of first block
         track_controllers[0].set_block_occupancy(0, True)
-        self.occupied_blocks.append(0)
 
         # Save the suggested speed for this train to compare to in the future
         self.suggested_speeds.append(suggested_speed)
@@ -124,8 +123,9 @@ class TrackSystem:
                     # It only takes one false authority to stop the train
                     if not new_authority:
                         final_authorities[i] = False
+                        print(track_controller.tags)
                     logger.debug("New authority of {} found in track controller {} for train "
-                                 "{} and block {}".format(new_authority, i, train_id, block_id))
+                                 "{} and block {}".format(new_authority, i, train_id, block))
 
         if line == Line.LINE_GREEN:
             signals.update_green_switches.emit(switch_positions)
@@ -133,8 +133,8 @@ class TrackSystem:
             signals.update_red_switches.emit(switch_positions)
 
         # Emit the final updated authorities for the occupied blocks
-        for final_authority, block_id in zip(final_authorities, self.occupied_blocks):
-            signals.trackmodel_update_authority.emit(line, block_id, final_authority)
+        for final_authority, block in zip(final_authorities, self.occupied_blocks):
+            signals.trackmodel_update_authority.emit(line, block, final_authority)
 
         # Forward this information to the CTC
         if block_id != 0:
