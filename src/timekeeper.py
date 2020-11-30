@@ -94,13 +94,11 @@ class Timekeeper:
         if not self.run_lock.locked():
             self.run_lock.acquire()
             self.paused = True
-            print('paused = ', self.paused)
 
     def resume_time(self):
         """Releases the run lock, so the timer can continue"""
         if self.run_lock.locked():
             self.run_lock.release()
             self.paused = False
-            print('paused = ', self.paused)
 
 timekeeper = Timekeeper()
