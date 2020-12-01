@@ -160,6 +160,9 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
 
         # Occupied
         occupied = self.current_track_controller.get_block_occupancy(self.current_block)
+        mmode = self.current_track_controller.get_maintenance_mode()
+        if mmode and occupied is not None:
+            occupied = False
         self.occupied_label.setText(self.determine_text(occupied, "YES", "NO"))
 
         # Block status
@@ -261,12 +264,21 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
 
     def switch_position_button_clicked(self, event):
         """Method called when the switch position button is pressed"""
-        confirmation = Confirmation("Are you sure you want to change the switch position?")
+        confirmation = Confirmation("Warning! Flipping the switch will place the block into maintanence mode."
+                                    "Would you like to proceed?")
 
         # TODO (ljk): Check for maintenance mode
         if confirmation.exec_():
-            current_switch_position = self.current_track_controller.get_switch_position()
-            self.current_track_controller.set_switch_position(not current_switch_position)
+            if self.current_track_controller.get_maintenance_mode():
+                current_switch_position = self.current_track_controller.get_switch_position()
+                self.current_track_controller.set_switch_position(not current_switch_position)
+
+                self.current_track_controller.set_maintenance_mode(self.current_block, False)
+            else:
+                self.current_track_controller.set_maintenance_mode(self.current_block, True)
+
+                current_switch_position = self.current_track_controller.get_switch_position()
+                self.current_track_controller.set_switch_position(not current_switch_position)
 
     def logout(self):
         """Method invoked when the logout button is pressed"""
