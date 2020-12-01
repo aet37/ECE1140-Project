@@ -26,12 +26,14 @@ class SignalsClass(QObject):
     swtrack_update_speed = pyqtSignal(int, int)	# Used by CTC to update suggested speed of train (train_id, new_speed)
     swtrack_set_switch_position = pyqtSignal(Line, int, bool)	# Used by CTC to set a switch position in maint mode (sw_number, position)
     swtrack_set_block_status = pyqtSignal(Line, int, bool)	# Used by CTC to open/close (true/false) a block for mainenence (block_num, status)
+
     swtrack_update_occupancies = pyqtSignal(int, Line, int, bool) # Used by Track Model to update occupancies (trainId, Line, blockNumber, occupancy) occupancy = 0  for empty, 1 for occupied
     swtrack_set_track_heater = pyqtSignal(Line, bool) # Used by the Track Model to turn the heater on/off on a track
     swtrack_update_gui = pyqtSignal() # Used by the swtrack to let that gui know that it needs to update
     swtrack_update_broken_rail_failure = pyqtSignal(Line, int, bool) # Used by the Track Model to notify swtrack controller of a broken rail failure
     swtrack_update_power_failure = pyqtSignal(Line, int, bool) # Used by the Track Model to notify swtrack controller of a power failure
     swtrack_update_track_circuit_failure = pyqtSignal(Line, int, bool) # Used by the Track Model to notify swtrack controller of a track circuit failure
+
 
     # Train Model Signals
     train_model_dispatch_train = pyqtSignal(int, int, float, int, Line, list) #  Used by the track model to signify that a new train has been dispatched FORMAT: (train_id, destination_block, command_speed, authority, Line, route)

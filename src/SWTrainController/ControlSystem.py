@@ -138,8 +138,9 @@ class ControlSystem:
         """Update authority in train controller"""
         self.p_controllers[train_id].authority = auth
         if self.p_controllers[train_id].authority:
-            # If service brake is already on do not turn it off
-            if self.p_controllers[train_id].current_speed != 0 and self.p_controllers[train_id].service_brake == True:
+            # If service brake is already on or train is dispatching do not turn it off
+            if (self.p_controllers[train_id].current_speed != 0 and self.p_controllers[train_id].service_brake == True) or \
+                (self.p_controllers[train_id].kp == 0 or self.p_controllers[train_id].ki == 0):
                 pass
             else:
                 self.p_controllers[train_id].service_brake = False
@@ -147,6 +148,8 @@ class ControlSystem:
         else:
             self.p_controllers[train_id].service_brake = True
             signals.train_model_gui_receive_service_brake.emit(train_id, self.p_controllers[train_id].service_brake)
+
+        print("Service brake: " + str(self.p_controllers[train_id].service_brake))
 
     def swtrain_update_command_speed(self, train_id, command_speed):
         """Update command speed in train controller"""

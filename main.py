@@ -45,14 +45,14 @@ def auto_download_plc_programs():
 
     for i, track_controller in enumerate(track_system.red_track_controllers):
         source_code = ''
-        for line in open('resources/Track Controller PLC Programs/Red{}.txt'.format(i)):
+        for line in open('resources/Track Controller PLC Programs/Red{}.txt'.format(i + 12)):
             source_code += line
 
         output_file = 'CompiledOutput.txt'
         lex = Lexer(source_code)
         emitter = Emitter(output_file)
         par = Parser(lex, emitter)
-        par.program("Red{}".format(i))
+        par.program("Red{}".format(i + 12))
 
         track_controller.download_program(output_file)
 
