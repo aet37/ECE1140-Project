@@ -307,9 +307,6 @@ class SignalHandler:
     def updateOccupancy(self, trainId, line, currentBlock, trainOrNot, travelDirection):
         if (line == Line.LINE_GREEN):
             theTrack = getTrack("Green")
-            print("TRACKMODEL UPDATE OCCUPANCY")
-            print("travelDIreciton = "+str(travelDirection))
-            print("currentblock = "+str(currentBlock))
             if (travelDirection == 0):
                 if (currentBlock == 100 or currentBlock == 12):
                     signals.train_model_update_direction.emit(trainId, 1)
@@ -497,10 +494,28 @@ class SignalHandler:
                         if (int(records.column['Beacon'][x]) == 0):
                             theBeacon = records.column['B0'][x]
                             beaconNum = 0
-                        else:
+                        elif (int(records.column['Beacon'][x] == 1)):
                             theBeacon = records.column['B1'][x]
                             beaconNum = 1
+                        else:
+                            theBeacon = records.column['B0'][x]
+                            theBeacon2 = records.column['B1'][x]
+                            beaconNum = 2
+
                         beaconList = theBeacon.split(',')
+                        if (beaconNum == 2):
+                            beaconList2 = theBeacon2.split(',')
+                            if (beaconList2[1] == "TRUE"):
+                                theBool2 = True
+                            else:
+                                theBool2 = False
+                            if (beaconList2[2] == "RIGHT"):
+                                exitWay2 = DoorSide.SIDE_RIGHT
+                            elif (beaconList2[2] == "LEFT"):
+                                exitWay2 = DoorSide.SIDE_LEFT
+                            else:
+                                exitWay2 = DoorSide.SIDE_BOTH
+
                         if (beaconList[1] == "TRUE"):
                             theBool = True
                         else:
@@ -515,8 +530,13 @@ class SignalHandler:
                         theBlock.addBeacon(beaconList[0], theBool, exitWay, beaconNum)
                         if (beaconNum == 0):
                             theBeacon1 = theBlock.blockBeacon
-                        else:
+                        elif (beaconNum == 1):
                             theBeacon2 = theBlock.blockBeacon
+                        else:
+                            theBeacon1 = theBlock.blockBeacon
+                            theBeacon2.station_name = beaconList2[0]
+                            theBeacon2.service_brake = TRUE
+                            theBeacon2.DoorSide = exitWay2
 
                     newTrack.addBlock(theBlock)
 
