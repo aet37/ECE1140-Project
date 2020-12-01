@@ -169,7 +169,7 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
 
         # Block status
         block_status = self.current_track_controller.get_block_status(self.current_block)
-        self.block_status_label.setText(self.determine_text(block_status, "OK", "CLOSED"))
+        self.block_status_label.setText(self.determine_text(block_status, "CLOSED", "OPEN"))
 
         # Railway crossing
         railway_crossing = self.current_track_controller.get_railway_crossing(self.current_block)

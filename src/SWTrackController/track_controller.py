@@ -177,7 +177,7 @@ class TrackController:
 
     def get_block_status(self, block_id):
         """Method to get a block's status"""
-        return self.get_tag_value("b{}S".format(block_id))
+        return self.get_tag_value("broken".format(block_id))
 
     def get_railway_crossing(self, block_id):
         """Method to get the status of a railway crossing on the given block"""
