@@ -42,12 +42,14 @@ class TrackSystem:
         signals.swtrack_update_occupancies.connect(self.swtrack_update_occupancies)
         signals.swtrack_set_track_heater.connect(self.swtrack_set_track_heater)
 
-    def swtrack_dispatch_train(self, train_id, destination_block, suggested_speed, suggested_authority, line, route):
+    def swtrack_dispatch_train(self, train_id, destination_block, suggested_speed,
+                               suggested_authority, line, route):
         """Method connected to the swtrack_dispatch_train signal"""
         logger.critical("Received swtrack_dispatch_train")
 
         # Get the correct list of track controllers based on the line
-        track_controllers = self.green_track_controllers if line == Line.LINE_GREEN else self.red_track_controllers
+        track_controllers = self.green_track_controllers if line == Line.LINE_GREEN \
+                                                         else self.red_track_controllers
 
         # Set occupancy of first block
         track_controllers[0].set_block_occupancy(0, True)
@@ -86,14 +88,17 @@ class TrackSystem:
             authority = True
 
         # Pass the dispatch train information to the Track Model
-        signals.trackmodel_dispatch_train.emit(train_id, destination_block, command_speed, authority, line, route)
+        signals.trackmodel_dispatch_train.emit(train_id, destination_block, command_speed,
+                                               authority, line, route)
 
+    # pylint: disable=too-many-branches
     def swtrack_update_occupancies(self, train_id, line, block_id, occupied):
         """Method connected to the swtrack_update_occupancies signal"""
         logger.debug("Received swtrack_update_occupancies")
 
         # Get the correct list of track controllers based on the line
-        track_controllers = self.green_track_controllers if line == Line.LINE_GREEN else self.red_track_controllers
+        track_controllers = self.green_track_controllers if line == Line.LINE_GREEN \
+                                                         else self.red_track_controllers
 
         # Update the occupied block list
         if occupied:
@@ -112,18 +117,20 @@ class TrackSystem:
 
             # Update switch positions
             switch_position = track_controller.get_switch_position()
-            signals.trackmodel_update_switch_positions.emit(line,
-                                                            self.convert_switch_position_ordering(line, int(i / 2)),
-                                                            switch_position)
+            signals.trackmodel_update_switch_positions.emit(
+                line,
+                self.convert_switch_position_ordering(line, int(i / 2)),
+                switch_position
+            )
             switch_positions[self.convert_switch_position_ordering(line, int(i / 2))] = switch_position
 
             # Go through occupied blocks and update their authorities
-            for i, block in enumerate(self.occupied_blocks):
+            for j, block in enumerate(self.occupied_blocks):
                 new_authority = track_controller.get_authority_of_block(block)
                 if new_authority is not None:
                     # It only takes one false authority to stop the train
                     if not new_authority:
-                        final_authorities[i] = False
+                        final_authorities[j] = False
                     logger.debug("New authority of {} found in track controller {} for train "
                                  "{} and block {}".format(new_authority, i, train_id, block))
 
@@ -143,7 +150,7 @@ class TrackSystem:
         # Update command speed now since speed limit may have changed
         if occupied:
             speed_limit = self.get_speed_limit_of_block(line, block_id)
-            
+
             if self.suggested_speeds[train_id] > speed_limit:
                 command_speed = speed_limit
             else:
@@ -154,7 +161,8 @@ class TrackSystem:
     def swtrack_set_track_heater(self, line, status):
         """Method connected to the swtrack_set_track_heater signal"""
         # Get the correct list of track controllers based on the line
-        track_controllers = self.green_track_controllers if line == Line.LINE_GREEN else self.red_track_controllers
+        track_controllers = self.green_track_controllers if line == Line.LINE_GREEN \
+                                                         else self.red_track_controllers
 
         # Turn all the heaters on/off
         for track_controller in track_controllers:
@@ -205,6 +213,7 @@ class TrackSystem:
                 speed_limit = 70.0
 
         return speed_limit
+    # pylint: enable=too-many-branches
 
     @staticmethod
     def convert_switch_position_ordering(line, original_index):
@@ -227,7 +236,7 @@ class TrackSystem:
         else:
             new_index = original_index
 
-        assert new_index != None
+        assert new_index is not None
         return new_index
 
 track_system = TrackSystem()

@@ -61,7 +61,7 @@ class HWTrackCtrlConnector(TrackController):
         # Ignore the response code
         for key, value in pairwise(splits[1:]):
             # Weird thing with b95A lol
-            if (key == 'b'):
+            if key == 'b':
                 key = 'b95A'
 
             self.tags.update({key : bool(int(value))})
@@ -150,7 +150,8 @@ class HWTrackCtrlConnector(TrackController):
         def communicate(self):
             """Private function for a thread to communicate with the arduino"""
             with self.comms_lock:
-                self.send_message(" ".join(map(str, (Code.SET_TAG_VALUE.value, tag_name, int(value)))))
+                self.send_message(" ".join(map(str, (Code.SET_TAG_VALUE.value, tag_name,
+                                                     int(value)))))
                 logger.info(self.get_response())
                 super().set_tag_value(tag_name, value)
 
@@ -159,4 +160,3 @@ class HWTrackCtrlConnector(TrackController):
 
     def run_program(self):
         """Nothing should be done for the hw controller"""
-        pass
