@@ -197,6 +197,11 @@ class TrainCatalogue:
         signals.train_model_something_has_been_changed.emit()
 
     def train_model_receive_power(self, trainId, powerStatus):
+        try:
+            tryTemp = self.m_trainList[trainId].m_route[0]
+        except:
+            pass
+            return
         currentTrack = self.m_trainList[trainId].m_currentLine
         currentBlock = self.m_trainList[trainId].m_route[0]
         # LOG_TRAIN_MODEL("currentTrack = %d", currentTrack);
@@ -297,6 +302,12 @@ class TrainCatalogue:
             self.m_trainList[trainId].m_route.pop(0) # Remove the block train is on to move to nect block
 
             # LOG_TRAIN_MODEL("Current block is now %d", tempTrain->GetCurrentBlock())
+            try:
+                tryTemp = self.m_trainList[trainId].m_route[0]
+            except:
+                # Send to Collin
+                signals.swtrain_update_current_speed.emit(trainId, 0)
+                return
 
             # Send block exited to Evan (trainid, trackid, blockId, trainOrNot
             # Send to Evan
@@ -307,11 +318,6 @@ class TrainCatalogue:
                 logger.debug("FIRST currentBlock = %f", currentBlock)
             else:
                 signals.trackmodel_update_occupancy.emit(trainId, Line.LINE_RED, currentBlock, False, self.m_trainList[trainId].m_trainDirection)
-
-            try:
-                tryTemp = block_catalogue_green.m_blockList[self.m_trainList[trainId].m_route[0]].beacon1.service_brake
-            except:
-                pass
 
             if (currentTrack == Line.LINE_GREEN):
                 if self.m_trainList[trainId].m_trainDirection == 0:
