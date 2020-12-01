@@ -51,6 +51,9 @@ jobs:
 
     - name: Run Track heater test
       run: pytest tests/IntegrationTests/test_track_heater.py
+
+    - name: Run broken rail test
+      run: pytest tests/IntegrationTests/test_broken_rail.py
       
     - name: Run Common tests
       run: pytest tests/IntegrationTests/test_common.py
