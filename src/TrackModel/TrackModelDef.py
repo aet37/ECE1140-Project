@@ -307,6 +307,9 @@ class SignalHandler:
     def updateOccupancy(self, trainId, line, currentBlock, trainOrNot, travelDirection):
         if (line == Line.LINE_GREEN):
             theTrack = getTrack("Green")
+            print("TRACKMODEL UPDATE OCCUPANCY")
+            print("travelDIreciton = "+str(travelDirection))
+            print("currentblock = "+str(currentBlock))
             if (travelDirection == 0):
                 if (currentBlock == 100 or currentBlock == 12):
                     signals.train_model_update_direction.emit(trainId, 1)
@@ -316,6 +319,12 @@ class SignalHandler:
 
         else:
             theTrack =  getTrack("Red")
+            # if (travelDirection == 0):
+            #     if (currentBlock == ):
+            #         signals.train_model_update_direction.emit(trainId, 1)
+            # else:
+            #     if (currentBlock == 77 or currentBlock == 29):
+            #         signals.train_model_update_direction.emit(trainId, 0)
 
         if (currentBlock != 0):
             theBlock = theTrack.getBlock(currentBlock)
