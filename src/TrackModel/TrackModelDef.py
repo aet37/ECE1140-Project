@@ -110,11 +110,12 @@ class Block:
     def addSwitch(self, switchNumber, block1, block2):
         self.blockSwitch = Switch(switchNumber, block1, block2)
     
-    def addBeacon(self, stationName, serviceBrakeBool, exitSide, beaconDirection):
+    def addBeacon(self, stationName, serviceBrakeBool, exitSide, beaconDirection, lastStation):
         theBeacon = Beacon()
         theBeacon.station_name = stationName
         theBeacon.service_brake = serviceBrakeBool
         theBeacon.DoorSide = exitSide
+        theBeacon.lastStation = lastStation
         self.blockBeacon = theBeacon
         self.beaconDirection = beaconDirection
 
@@ -489,22 +490,25 @@ class SignalHandler:
                         theTrack.switchList.append(theBlock.blockNumber)
 
                     theBeacon1 = Beacon()
-                    theBeacon22 = Beacon()
+                    theBeacon2 = Beacon()
                     if (records.column['Beacon'][x] != ""):
                         if (int(records.column['Beacon'][x]) == 0):
-                            theBeacon = records.column['B0'][x]
+                            print("sup")
+                            theBeaconString = records.column['B0'][x]
                             beaconNum = 0
                         elif (int(records.column['Beacon'][x] == 1)):
-                            theBeacon = records.column['B1'][x]
+                            print("hrllo")
+                            theBeaconString = records.column['B1'][x]
                             beaconNum = 1
                         else:
-                            theBeacon = records.column['B0'][x]
-                            theBeacon2 = records.column['B1'][x]
+                            print("hi")
+                            theBeaconString = records.column['B0'][x]
+                            theBeacon2String = records.column['B1'][x]
                             beaconNum = 2
 
-                        beaconList = theBeacon.split(',')
+                        beaconList = theBeaconString.split(',')
                         if (beaconNum == 2):
-                            beaconList2 = theBeacon2.split(',')
+                            beaconList2 = theBeacon2String.split(',')
                             if (beaconList2[1] == "TRUE"):
                                 theBool2 = True
                             else:
@@ -515,7 +519,11 @@ class SignalHandler:
                                 exitWay2 = DoorSide.SIDE_LEFT
                             else:
                                 exitWay2 = DoorSide.SIDE_BOTH
-
+                            if (beaconList2[3] == "FALSE"):
+                                lastStation2 = False
+                            else:
+                                lastStation2 = True
+                        print(str(beaconList))
                         if (beaconList[1] == "TRUE"):
                             theBool = True
                         else:
@@ -526,26 +534,31 @@ class SignalHandler:
                             exitWay = DoorSide.SIDE_LEFT
                         else:
                             exitWay = DoorSide.SIDE_BOTH
+                        if (beaconList[3] == "FALSE"):
+                            lastStation = False
+                        else:
+                            lastStation = True
 
-                        theBlock.addBeacon(beaconList[0], theBool, exitWay, beaconNum)
+                        theBlock.addBeacon(beaconList[0], theBool, exitWay, beaconNum, lastStation)
                         if (beaconNum == 0):
                             theBeacon1 = theBlock.blockBeacon
                         elif (beaconNum == 1):
-                            theBeacon22 = theBlock.blockBeacon
+                            theBeacon2 = theBlock.blockBeacon
                         else:
                             theBeacon1 = theBlock.blockBeacon
-                            theBeacon22 = Beacon()
-                            theBeacon22.station_name = beaconList2[0]
-                            theBeacon22.service_brake = True
-                            theBeacon22.DoorSide = exitWay2
+                            theBeacon2 = Beacon()
+                            theBeacon2.station_name = beaconList2[0]
+                            theBeacon2.service_brake = True
+                            theBeacon2.DoorSide = exitWay2
+                            theBeacon2.lastStation = lastStation2
 
                     newTrack.addBlock(theBlock)
 
                     # add beacon to this
                     if (blockNumber == 1):
-                        signals.train_model_receive_block.emit(trackInfo['tNumber'], 0, 0, 0, 10, blockSpeedLimit, blockDirection, stationBool, theBeacon1, theBeacon22)
+                        signals.train_model_receive_block.emit(trackInfo['tNumber'], 0, 0, 0, 10, blockSpeedLimit, blockDirection, stationBool, theBeacon1, theBeacon2)
 
-                    signals.train_model_receive_block.emit(trackInfo['tNumber'], blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection, stationBool, theBeacon1, theBeacon22)
+                    signals.train_model_receive_block.emit(trackInfo['tNumber'], blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection, stationBool, theBeacon1, theBeacon2)
 
 
                     #jsonString = json.dumps(blockInfo)

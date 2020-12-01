@@ -34,6 +34,7 @@ class Beacon:
         self.station_name = ""
         self.service_brake = False
         self.DoorSide = None
+        self.lastStation = False
 
 class DoorSide(Enum):
     """Class to tell train model which door sides to open"""

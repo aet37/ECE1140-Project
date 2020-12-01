@@ -361,7 +361,8 @@ class TrackModelUi(QtWidgets.QMainWindow):
             if (theBlock.blockBeacon == None):
                 beacon_label.setText("Beacon:\n\nNone")
             else:
-                beacon_label.setText("Beacon:\n"+ theBlock.blockBeacon.station_name+ "/\n" +str(theBlock.blockBeacon.service_brake) + "/\n" + str(theBlock.blockBeacon.DoorSide))
+                beacon_label.setText("Beacon:\n"+ theBlock.blockBeacon.station_name+ "/\n" +str(theBlock.blockBeacon.service_brake) +
+                 "/\n" + str(theBlock.blockBeacon.DoorSide) + "/\n" + str(theBlock.blockBeacon.lastStation))
 
             # global trackHeaterButtonSet
             # if (not trackHeaterButtonSet):
