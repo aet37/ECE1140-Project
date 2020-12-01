@@ -74,6 +74,45 @@ class TrackModelUi(QtWidgets.QMainWindow):
         set_manual_temp_button = self.findChild(QtWidgets.QPushButton, 'set_manual_temp_button')
         set_manual_temp_button.clicked.connect(self.set_manual_temperature)
 
+        signals.trackmodel_update_gui.connect(self.switch_block) # TODO: might need to make sure there is a track before trying to update 
+        
+        change_block_length_button = self.findChild(QtWidgets.QPushButton, 'change_block_length_button')
+        change_block_length_button.clicked.connect(self.changeBlockLength)
+
+    def changeBlockLength(self):
+        length, bleh = QtWidgets.QInputDialog.getText(self, 'Input Dialog', 'Enter a block length between 10 and 1000:')
+        message = QMessageBox()
+        
+        length_label = self.findChild(QtWidgets.QLabel, 'length_label')
+        try:
+            length = int(length)
+            if (length <= 1000 and length >= 10):
+                length_label.setText("Block Length:\n\n"+ str()+ " m")
+                theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
+                theIndex = theTabWidget.currentIndex()
+                theLine = theTabWidget.tabText(theIndex)
+                theLine = theLine.replace(" Line", "")
+                theTrack = TrackModelDef.getTrack(theLine)
+
+                if (theLine == "Green"):
+                    currentComboBlock = str(combo1.currentText())
+                    line = Line.LINE_GREEN
+                else:
+                    currentComboBlock = str(combo2.currentText())
+                    line = Line.LINE_RED
+
+                currentComboBlock = int(currentComboBlock[6:])
+
+                theBlock = theTrack.getBlock(currentComboBlock)
+                theBlock.blockLength = length
+                signals.trackmodel_update_gui.emit()
+            else:
+                message.setText("Temperature outside of range!\nEnter a value between 10 and 1000, inclusive")
+                message.exec_()
+        except ValueError:
+            message.setText("Invalid input: Not an integer")
+            message.exec_()
+
     def set_manual_temperature(self):
         track_heater_button = self.findChild(QtWidgets.QPushButton, 'track_heater_button')
         current_temperature_label = self.findChild(QtWidgets.QLabel, 'current_temperature_label')
@@ -123,7 +162,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
             if (not track_heater_button.isChecked()):
                 track_heater_button.toggle()
                 self.update_track_heater()
-
+        signals.trackmodel_update_tickets_sold.emit()
 
     def update_broken_rail_failure(self):
         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
@@ -310,13 +349,19 @@ class TrackModelUi(QtWidgets.QMainWindow):
             if (occupancy == -1):
                 occupied_label.setText("Occupied by:\n\nNone")
             else:
-                occupied_label.setText("Occupied by:\n\n"+ str(occupancy))
+                occupied_label.setText("Occupied by:\n\nTrain "+ str(occupancy))
 
             switch_list_label = self.findChild(QtWidgets.QLabel, 'switch_list_label')
             switch_list_label.setText("Switches possible:\n\n" + theBlock.getSwitchBlocksString())
 
             current_switch_label = self.findChild(QtWidgets.QLabel, 'current_switch_label')
             current_switch_label.setText("Switch flipped to:\n\n" + theBlock.getSwitchCurrentString())
+
+            beacon_label = self.findChild(QtWidgets.QLabel, 'beacon_label')
+            if (theBlock.blockBeacon == None):
+                beacon_label.setText("Beacon:\n\nNone")
+            else:
+                beacon_label.setText("Beacon:\n"+ theBlock.blockBeacon.station_name+ "/\n" +str(theBlock.blockBeacon.service_brake) + "/\n" + str(theBlock.blockBeacon.DoorSide))
 
             # global trackHeaterButtonSet
             # if (not trackHeaterButtonSet):
@@ -370,16 +415,11 @@ class TrackModelUi(QtWidgets.QMainWindow):
                     track_circuit_failure_button.toggle()
 
 
-            # failure_mode_label = self.findChild(QtWidgets.QLabel, 'failure_mode_label')
-            # failure = theBlock.failureMode
-            # if (failure == 0):
-            #     failure_mode_label.setText("Failure Mode:\n\n"+ "No Failures")
-            # elif (failure == 1):
-            #     failure_mode_label.setText("Failure Mode:\n\n"+ "Power Failure")
-            # elif (failure == 2):
-            #     failure_mode_label.setText("Failure Mode:\n\n"+ "Broken Track")
-            # elif (failure == 3):
-            #     failure_mode_label.setText("Failure Mode:\n\n"+ "Track Circuit Failure")
+            railway_crossing_label = self.findChild(QtWidgets.QLabel, 'railway_crossing_label')
+            if (theBlock.blockRailwayCrossing):
+                railway_crossing_label.setText("Railway Crossing:\n\nYes")
+            else:
+                railway_crossing_label.setText("Railway Crossing:\n\nNo")
 
     def update_track_heater(self):
         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')

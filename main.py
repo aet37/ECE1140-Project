@@ -32,17 +32,31 @@ def auto_download_plc_programs():
     logger.critical("Auto downloading plc programs")
     for i, track_controller in enumerate(track_system.green_track_controllers):
 
-        source_code = ''
-        for line in open('resources/Track Controller PLC Programs/Green{}.txt'.format(i)):
-            source_code += line
+        if type(track_controller) != HWTrackCtrlConnector:
+            source_code = ''
+            for line in open('resources/Track Controller PLC Programs/Green{}.txt'.format(i)):
+                source_code += line
 
-        output_file = 'CompiledOutput.txt'
-        lex = Lexer(source_code)
-        emitter = Emitter(output_file)
-        par = Parser(lex, emitter)
-        par.program("Green{}".format(i))
+            output_file = 'CompiledOutput.txt'
+            lex = Lexer(source_code)
+            emitter = Emitter(output_file)
+            par = Parser(lex, emitter)
+            par.program("Green{}".format(i))
 
-        track_controller.download_program(output_file)
+            track_controller.download_program(output_file)
+
+    # for i, track_controller in enumerate(track_system.red_track_controllers):
+    #     source_code = ''
+    #     for line in open('resources/Track Controller PLC Programs/Red{}.txt'.format(i + 12)):
+    #         source_code += line
+
+    #     output_file = 'CompiledOutput.txt'
+    #     lex = Lexer(source_code)
+    #     emitter = Emitter(output_file)
+    #     par = Parser(lex, emitter)
+    #     par.program("Red{}".format(i + 12))
+
+    #     track_controller.download_program(output_file)
 
 def auto_upload_tracks():
     """Uploads the red and green track"""

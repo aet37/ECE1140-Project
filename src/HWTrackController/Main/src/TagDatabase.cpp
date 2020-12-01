@@ -8,8 +8,7 @@
 // C++ PROJECT INCLUDE
 #include "../include/TagDatabase.hpp" // Header for functions
 #include "../include/HashMap.hpp" // For HashMap
-
-#define PIN23 23
+#include "../include/Lcd/LcdApi.hpp"
 
 namespace TagDatabase
 {
@@ -45,9 +44,9 @@ void Clear()
     tags.Clear();
 }
 
-String GetAllTagValues()
+String GetAllTagValues(uint32_t division)
 {
-    return tags.GetAllKeysAndValues();
+    return tags.GetAllKeysAndValues(division);
 }
 
 static void ReadInputs()
@@ -55,7 +54,8 @@ static void ReadInputs()
     static bool flipped = false;
     if (!digitalRead(PIN23) && !flipped)
     {
-        SetTag("switch", !digitalRead(PIN3));
+        SetTag("switch", !digitalRead(PIN25));
+        digitalWrite(PIN25, !digitalRead(PIN25));
         flipped = true;
     }
     else if (digitalRead(PIN23))
@@ -70,19 +70,72 @@ void IoTask(void* pSomething)
     ReadInputs();
 
     bool tagValue = false;
-    if (GetTagValue("output2", tagValue))
+    if (GetTagValue("out25p", tagValue))
+    {
+        digitalWrite(PIN25, tagValue);
+    }
+
+    if (GetTagValue("out27p", tagValue))
+    {
+        digitalWrite(PIN27, tagValue);
+    }
+
+    if (GetTagValue("out29p", tagValue))
+    {
+        digitalWrite(PIN29, tagValue);
+    }
+
+    if (GetTagValue("out31p", tagValue))
+    {
+        digitalWrite(PIN31, tagValue);
+    }
+
+    // Switch signal
+    if (GetTagValue("out2p", tagValue))
     {
         digitalWrite(PIN2, tagValue);
     }
 
-    if (GetTagValue("switch", tagValue))
+    if (GetTagValue("out3p", tagValue))
     {
         digitalWrite(PIN3, tagValue);
     }
 
-    if (GetTagValue("output4", tagValue))
+    if (GetTagValue("out4p", tagValue))
     {
         digitalWrite(PIN4, tagValue);
+    }
+
+    // Station #2 signal
+    if (GetTagValue("out5p", tagValue))
+    {
+        digitalWrite(PIN5, tagValue);
+    }
+
+    if (GetTagValue("out6p", tagValue))
+    {
+        digitalWrite(PIN6, tagValue);
+    }
+
+    if (GetTagValue("out7p", tagValue))
+    {
+        digitalWrite(PIN7, tagValue);
+    }
+
+    // Station #1 signal
+    if (GetTagValue("out8p", tagValue))
+    {
+        digitalWrite(PIN8, tagValue);
+    }
+
+    if (GetTagValue("out9p", tagValue))
+    {
+        digitalWrite(PIN9, tagValue);
+    }
+
+    if (GetTagValue("out10p", tagValue))
+    {
+        digitalWrite(PIN10, tagValue);
     }
 }
 

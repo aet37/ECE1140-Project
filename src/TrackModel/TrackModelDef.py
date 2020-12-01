@@ -13,10 +13,12 @@ sys.path.append(".")
 from src.signals import signals
 from src.logger import get_logger
 #from src.UI.TrackModel import trackmodel_gui
-
+import random
 import pyexcel
 import pyexcel_io
 from traceback import print_stack
+from src.timekeeper import timekeeper
+
 
 
 logger = get_logger(__name__)
@@ -26,12 +28,12 @@ redSwitchNumber = 0
 environmentalTemp = 70
 trackList = []
 
-red_route_blocks = [9, 8, 7, 6, 5, 4, 3, 2, 1, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 76, 75,
+red_route_blocks = [0, 9, 8, 7, 6, 5, 4, 3, 2, 1, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 76, 75,
 		                         74, 73, 72, 33, 34, 35, 36, 37, 38, 71, 70, 69, 68, 67, 44, 45, 46, 47, 48, 49, 50, 51,
 		                         52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 52, 51, 50, 49, 48, 47, 46,
 		                         45, 44, 43, 42, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24,
-		                         23, 22, 21, 20, 19, 18, 17, 16, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-green_route_blocks = [62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81,
+		                         23, 22, 21, 20, 19, 18, 17, 16, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+green_route_blocks = [0, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81,
 		                           82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 85, 84,
 		                           83, 82, 81, 80, 79, 78, 77, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
 		                           112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128,
@@ -39,7 +41,7 @@ green_route_blocks = [62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76
 		                           146, 147, 148, 149, 150, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15,
 		                           14, 13, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
 		                           22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42,
-		                           43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58]
+		                           43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 0]
 
 """
 	@struct Track
@@ -67,6 +69,12 @@ class Track:
     def setTrackHeater(self, heaterBool):
         self.trackHeater = heaterBool
 
+    def getStationBlocks(self, stationName):
+        for x in self.stationList:
+            if (x.stationName == stationName):
+                return x.blockList
+        return 0
+
 class Block:
     def __init__(self, blockNumber, blockLength, blockGrade, blockSpeedLimit,
     blockElevation, blockCumulativeElevation, blockDirection, blockUnderground,
@@ -87,12 +95,22 @@ class Block:
         self.brokenRailFailure = False
         self.powerFailure = False
         self.trackCircuitFailure = False
+        self.blockBeacon = None
+        self.beaconDirection = -1
 
     def addStation(self, stationName, stationExitSide):
         self.blockStation = Station(stationName, stationExitSide)
 
     def addSwitch(self, switchNumber, block1, block2):
         self.blockSwitch = Switch(switchNumber, block1, block2)
+    
+    def addBeacon(self, stationName, serviceBrakeBool, exitSide, beaconDirection):
+        theBeacon = Beacon()
+        theBeacon.station_name = stationName
+        theBeacon.service_brake = serviceBrakeBool
+        theBeacon.DoorSide = exitSide
+        self.blockBeacon = theBeacon
+        self.beaconDirection = beaconDirection
 
     def updateOccupancy(self, occupancy):
         self.blockOccupied = occupancy
@@ -181,7 +199,7 @@ class Switch:
         self.currentSwitch = self.block1
 
     def setSwitch(self, switch):
-        if (switch == False):
+        if (switch == 0):
             self.currentSwitch = self.block1
         else:
             self.currentSwitch = self.block2
@@ -189,30 +207,113 @@ class Switch:
 class SignalHandler:
     """"""
     def __init__(self):
+        self.trainCount = -1
         signals.trackmodel_dispatch_train.connect(self.dispatchTrain)
         signals.trackmodel_update_occupancy.connect(self.updateOccupancy)
         signals.trackmodel_update_command_speed.connect(self.updateCommandSpeed)
         signals.trackmodel_update_authority.connect(self.updateAuthority)
+        signals.trackmodel_update_switch_positions.connect(self.updateSwitchPositions)
+        signals.trackmodel_update_tickets_sold.connect(self.updateTicketsSold)
+        signals.trackmodel_update_passengers_exited.connect(self.updatePassengersExited)
 
-    def updateAuthority(self, trainId, newAuthority):
+    def updatePassengersExited(self, line, trainId, blockNumber, passengersExited, spaceOnTrain, totalSeats):
+        if (line == Line.LINE_GREEN):
+            theTrack = getTrack("Green")
+        else:
+            theTrack = getTrack("Red")
+
+        theBlock = theTrack.getBlock(blockNumber)
+        theStation = theBlock.blockStation
+
+        blockList = theTrack.getStationBlocks(theStation.stationName)
+
+        for x in blockList:
+            theTrack.getBlock(x).blockStation.passengersExited += passengersExited
+
+        passengersLeftToBoard = theStation.ticketsSold - theStation.passengersBoarded
+
+        if (passengersLeftToBoard > spaceOnTrain):
+            for y in blockList:
+                theTrack.getBlock(y).blockStation.passengersBoarded += spaceOnTrain
+            totalPassengers = totalSeats
+            signals.train_model_update_passengers.emit(trainId, totalPassengers)
+        else:
+            for z in blockList:
+                theTrack.getBlock(z).blockStation.passengersBoarded += passengersLeftToBoard
+            totalPassengers = totalSeats - (spaceOnTrain - passengersLeftToBoard)
+            signals.train_model_update_passengers.emit(trainId, totalPassengers)
+
+    def updateSwitchPositions(self, line, number, position):
+        if (line == Line.LINE_GREEN):
+            theLine = getTrack("Green")
+        else:
+            theLine = getTrack("Red")
+        theLine.getBlock(theLine.switchList[number]).blockSwitch.setSwitch(position)
+        signals.trackmodel_update_gui.emit()
+
+    def updateTicketsSold(self):
+        totalTickets = 0
+        if (getTrack("Green") != None):
+            theLine = getTrack("Green")
+            for x in theLine.stationList:
+                x.ticketsSold = random.randrange(30, 200, 1)
+                totalTickets = totalTickets + x.ticketsSold
+                for y in x.blockList:
+                    theLine.getBlock(y).blockStation.ticketsSold = x.ticketsSold
+                    theLine.getBlock(y).blockStation.passengersBoarded = 0
+                    theLine.getBlock(y).blockStation.passengersExited = 0
+
+        if (getTrack("Red") != None):
+            theLine = getTrack("Red")
+            for x in theLine.stationList:
+                x.ticketsSold = random.randrange(30, 200, 1)
+                totalTickets = totalTickets + x.ticketsSold
+                x.passengersBoarded = 0
+                x.passengersExited = 0
+                for y in x.blockList:
+                    theLine.getBlock(y).blockStation.ticketsSold = x.ticketsSold
+                    theLine.getBlock(y).blockStation.passengersBoarded = 0
+                    theLine.getBlock(y).blockStation.passengersExited = 0
+
+        signals.update_throughput.emit(totalTickets)
+        signals.trackmodel_update_gui.emit()
+
+
+    def updateAuthority(self, line, blockNumber, newAuthority):
+        if (line == Line.LINE_GREEN):
+            theLine = getTrack("Green")
+        else:
+            theLine = getTrack("Red")
+
+        if blockNumber != 0:
+            theBlock = theLine.getBlock(blockNumber)
+            trainId = theBlock.blockOccupied
+
+            if (trainId == -1):
+                assert False
+        else:
+            trainId = self.trainCount
+
         signals.train_model_update_authority.emit(trainId, newAuthority)
 
-    def updateAuthority(self, trainId, newAuthority):
-        signals.train_model_update_authority.emit(trainId, newAuthority)
-        
+    # def updateAuthority(self, trainId, newAuthority):
+    #     signals.train_model_update_authority.emit(trainId, newAuthority)
+
     def updateOccupancy(self, trainId, line, currentBlock, trainOrNot):
         if (line == Line.LINE_GREEN):
             theTrack = getTrack("Green")
-            theBlock = theTrack.getBlock(currentBlock)
-            if (trainOrNot):
-                theBlock.updateOccupancy(trainId)
-            else:
-                theBlock.updateOccupancy(-1)
         else:
-            theTrack = getTrack("Red")
+            theTrack =  getTrack("Red")
+
+        if (currentBlock != 0):
             theBlock = theTrack.getBlock(currentBlock)
             if (trainOrNot):
                 theBlock.updateOccupancy(trainId)
+                # if (theBlock.blockStation != None):
+                #     for x in theTrack.stationList:
+                #         if (x.stationName == theBlock.blockStation.stationName):
+                #             for y in x.blockList:
+                #                 theTrack.getBlock(y).blockStation.
             else:
                 theBlock.updateOccupancy(-1)
 
@@ -221,18 +322,20 @@ class SignalHandler:
 
     def dispatchTrain(self, trainId, destinationBlock, commandSpeed, authority, currentLine, switch_arr):
         logger.debug("Received trackmodel_dispatch_train")
+        self.trainCount += 1
         if (currentLine == Line.LINE_GREEN):
             theTrack = getTrack("Green")
             route = green_route_blocks
             for i in green_route_blocks:
                 theBlock = theTrack.getBlock(i)
-                signals.train_model_receive_block.emit(0, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection)
+                #print("Trackmodel block: " + str(theBlock.blockNumber) + " station: " + str(theBlock.blockStation != None))
+                signals.train_model_receive_block.emit(0, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None)
         else:
             theTrack = getTrack("Red")
             route = red_route_blocks
             for i in red_route_blocks:
                 theBlock = theTrack.getBlock(i)
-                signals.train_model_receive_block.emit(1, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection)
+                signals.train_model_receive_block.emit(1, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None)
 
         signals.train_model_dispatch_train.emit(trainId, destinationBlock, commandSpeed, authority, currentLine, route)
 
@@ -325,6 +428,7 @@ class SignalHandler:
                     blockSection, blockRailwayCrossing)
 
                     if (records.column['Stations'][x] != ""):
+                        stationBool = True
                         stationName = records.column['Stations'][x]
                         stationExitSide = records.column['Exit Side'][x]
                         theBlock.addStation(stationName, stationExitSide)
@@ -337,6 +441,8 @@ class SignalHandler:
                         if (not appended):
                             theTrack.stationList.append(Station(stationName, stationExitSide))
                             theTrack.stationList[len(theTrack.stationList) - 1].blockList.append(blockNumber)
+                    else:
+                        stationBool = False
 
                     if (records.column['Switches'][x] != ""):
                         switchList = records.column['Switches'][x]
@@ -351,14 +457,36 @@ class SignalHandler:
                         block1 = int(switchList[0])
                         block2 = int(switchList[1])
                         theBlock.addSwitch(switchNumber, block1, block2)
+                        theTrack.switchList.append(theBlock.blockNumber)
 
+                    if (records.column['Beacon'][x] != ""):
+                        if (int(records.column['Beacon'][x]) == 0):
+                            theBeacon = records.column['B0'][x]
+                            beaconNum = 0
+                        else:
+                            theBeacon = records.column['B1'][x]
+                            beaconNum = 1
+                        beaconList = theBeacon.split(',')
+                        if (beaconList[1] == "TRUE"):
+                            theBool = True
+                        else:
+                            theBool = False
+                        if (beaconList[2] == "RIGHT"):
+                            exitWay = DoorSide.SIDE_RIGHT
+                        elif (beaconList[2] == "LEFT"):
+                            exitWay = DoorSide.SIDE_LEFT
+                        else:
+                            exitWay = DoorSide.SIDE_BOTH
+
+                        theBlock.addBeacon(beaconList[0], theBool, exitWay, beaconNum)
 
                     newTrack.addBlock(theBlock)
 
+                    # add beacon to this
                     if (blockNumber == 1):
-                        signals.train_model_receive_block.emit(trackInfo['tNumber'], 0, 0, 0, 10, blockSpeedLimit, blockDirection)
+                        signals.train_model_receive_block.emit(trackInfo['tNumber'], 0, 0, 0, 10, blockSpeedLimit, blockDirection, stationBool)
 
-                    signals.train_model_receive_block.emit(trackInfo['tNumber'], blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection)
+                    signals.train_model_receive_block.emit(trackInfo['tNumber'], blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection, stationBool)
 
 
                     #jsonString = json.dumps(blockInfo)

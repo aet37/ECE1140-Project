@@ -1,0 +1,132 @@
+TAG heater = FALSE
+TAG switch = FALSE 
+# Section 1
+TAG b1O = FALSE
+TAG b2O = FALSE
+TAG b3O = FALSE
+TAG b1A = TRUE
+TAG b2A = TRUE
+TAG b3A = TRUE
+# Section 2
+TAG b4O = FALSE
+TAG b5O = FALSE
+TAG b6O = FALSE
+TAG b4A = TRUE
+TAG b5A = TRUE
+TAG b6A = TRUE
+#Section 3
+TAG b7O = FALSE
+TAG b8O = FALSE
+TAG b9O = FALSE
+TAG b7A = TRUE
+TAG b8A = TRUE
+TAG b9A = TRUE
+# Section 4
+TAG b10O = FALSE
+TAG b11O = FALSE
+TAG b12O = FALSE
+TAG b10A = TRUE
+TAG b11A = TRUE
+TAG b12A = TRUE
+# Section 5
+TAG b13O = FALSE
+TAG b14O = FALSE
+TAG b15O = FALSE
+TAG b13A = TRUE
+TAG b14A = TRUE
+TAG b15A = TRUE
+# Section 6
+TAG b16O = FALSE
+TAG b16A = TRUE
+
+TASK<PERIOD=1000> MainTask
+    ROUTINE Main 
+        RUNG
+            XIO b4O
+            XIO b5O
+            XIO b6O
+            OTE b1A
+            OTE b2A
+            OTE b3A
+        ENDRUNG
+        RUNG
+            XIO b7O
+            XIO b8O
+            XIO b9O
+            OTE b4A
+            OTE b5A
+            OTE b6A
+        ENDRUNG
+        RUNG
+            XIO b10O
+            XIO b110
+            XIO b120
+            OTE b7A
+            OTE b8A
+            OTE b9A
+        ENDRUNG
+        RUNG
+            XIO b13O
+            XIO b14O
+            XIO b15O
+            OTE b10A
+            OTE b11A
+            OTE b12A
+        ENDRUNG
+        RUNG 
+            XIO b16O
+            OTE b1A
+            OTE b2A
+            OTE b3A
+        ENDRUNG
+        RUNG
+            XIO b10O
+            XIO b11O
+            XIO b12O 
+            OTE b13A
+            OTE b14A
+            OTE b15A
+        ENDRUNG
+        RUNG
+            XIO b7O
+            XIO b8O
+            XIO b9O 
+            OTE b10A
+            OTE b11A
+            OTE b12A
+        ENDRUNG
+        RUNG
+            XIO b6O
+            XIO b5O
+            XIO b4O
+            OTE b7A
+            OTE b8A
+            OTE b9A
+        ENDRUNG
+        RUNG
+            XIO b3O
+            XIO b2O
+            XIO b1O 
+            OTE b6A
+            OTE b5A
+            OTE b4A
+        ENDRUNG
+        RUNG 
+            XIO b16O
+            OTE b12A
+            OTE b13A
+            OTE b14A
+        ENDRUNG
+        RUNG 
+            XIC b15O
+            OTE switch
+    ENDROUTINE
+ENDTASK
+
+
+
+
+
+           
+
+    

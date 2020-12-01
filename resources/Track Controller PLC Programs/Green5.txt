@@ -1,4 +1,6 @@
+TAG switch = FALSE
 TAG heater = FALSE
+TAG broken = FALSE
 # Section 1
 TAG b85O = FALSE
 TAG b85A = TRUE
@@ -79,8 +81,27 @@ TASK<PERIOD=1000> MainTask
             OTE b100A
         ENDRUNG
         RUNG
+            XIO b85O
+            OTE switch
         ENDRUNG
         RUNG
+            XIC broken
+            OTU b85A
+            OTU b86A
+            OTU b87A
+            OTU b88A
+            OTU b89A
+            OTU b90A
+            OTU b91A
+            OTU b92A
+            OTU b93A
+            OTU b94A
+            OTU b95A
+            OTU b96A
+            OTU b97A
+            OTU b98A
+            OTU b99A
+            OTU b100A
         ENDRUNG
     ENDROUTINE
 ENDTASK

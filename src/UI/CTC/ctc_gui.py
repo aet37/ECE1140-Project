@@ -54,10 +54,10 @@ class CTCUi(QtWidgets.QMainWindow):
         self.tplabel = self.findChild(QtWidgets.QLabel, 'ThroughputValue') # Find the label
         self.show_throughput()
 
-        # Automatically refresh Map after 10s
+        # Automatically refresh throughput after 5s
         TIME_TIMR = QtCore.QTimer(self)
         TIME_TIMR.timeout.connect(self.show_throughput)
-        TIME_TIMR.start(10000)
+        TIME_TIMR.start(5000)
 
 
         self.show()
@@ -67,6 +67,7 @@ class CTCUi(QtWidgets.QMainWindow):
 
         try:
             self.tplabel.setText(str(ctc.throughput))
+            self.mode_text.setText('')
         except:
             pass
 
@@ -273,38 +274,92 @@ class CTCUi(QtWidgets.QMainWindow):
     def dispatch_train(self):
         """ Dispatches a train once user clicks button """
 
+        # If simulation paused, dont let dispatch
+        if timekeeper.paused:
+            self.d_conf_label.setStyleSheet("color: red")
+            self.d_conf_label.setText('Error: simulation paused')
+            self.d_speed_label.setText('')
+            self.d_auth_label.setText('')
+            return
+
+        # Red line
+        if self.red_radio.isChecked() and len(self.d_time_label.text()) == 0:
+            if ctc.blocks_red_arr[8].occupied:
+                self.d_conf_label.setStyleSheet("color: red")
+                self.d_conf_label.setText('Wait until train leaves block 9')
+                self.d_speed_label.setText('')
+                self.d_auth_label.setText('')
+                return
+            for i in range(len(ctc.trains_arr)):
+                if ctc.trains_arr[i].line_on == Line.LINE_RED and\
+                ctc.trains_arr[i].index_on_route == 0:
+                    self.d_conf_label.setStyleSheet("color: red")
+                    self.d_conf_label.setText('Wait until Previous train leaves Yard')
+                    self.d_speed_label.setText('')
+                    self.d_auth_label.setText('')
+                    return
+
+        # Green Line
+        elif len(self.d_time_label.text()) == 0:
+            if ctc.blocks_green_arr[61].occupied or ctc.blocks_green_arr[60].occupied:
+                self.d_conf_label.setStyleSheet("color: red")
+                self.d_conf_label.setText('Wait until train leaves block 62 or 61')
+                self.d_speed_label.setText('')
+                self.d_auth_label.setText('')
+                return
+            for i in range(len(ctc.trains_arr)):
+                if ctc.trains_arr[i].line_on == Line.LINE_GREEN and\
+                ctc.trains_arr[i].index_on_route == 0:
+                    self.d_conf_label.setStyleSheet("color: red")
+                    self.d_conf_label.setText('Wait until Previous train leaves Yard')
+                    self.d_speed_label.setText('')
+                    self.d_auth_label.setText('')
+                    return
+
         # Error Check block value
         try:
             int(self.d_block_label.text())
         except:
             self.d_conf_label.setStyleSheet("color: red")
             self.d_conf_label.setText('Error: Invalid Block Entered')
+            self.d_speed_label.setText('')
+            self.d_auth_label.setText('')
             return
 
         # Make sure user specified a line
         if not self.green_radio.isChecked() and not self.red_radio.isChecked():
             self.d_conf_label.setStyleSheet("color: red")
             self.d_conf_label.setText('Error: Please Select a Line')
+            self.d_speed_label.setText('')
+            self.d_auth_label.setText('')
             return
 
         # Error Check for block value
         if int(self.d_block_label.text()) <= 0 or len(self.d_block_label.text()) == 0:
             self.d_conf_label.setStyleSheet("color: red")
             self.d_conf_label.setText('Error: Invalid Block Entered')
+            self.d_speed_label.setText('')
+            self.d_auth_label.setText('')
             return
         elif self.red_radio.isChecked() and int(self.d_block_label.text()) > 76:
             self.d_conf_label.setStyleSheet("color: red")
             self.d_conf_label.setText('Error: Invalid Block Entered For Red Line')
+            self.d_speed_label.setText('')
+            self.d_auth_label.setText('')
             return
         elif self.red_radio.isChecked() == False and int(self.d_block_label.text()) > 155:
             self.d_conf_label.setStyleSheet("color: red")
             self.d_conf_label.setText('Error: Invalid Block Entered For Green Line')
+            self.d_speed_label.setText('')
+            self.d_auth_label.setText('')
             return
 
         # Error Check for time value
         if len(self.d_time_label.text()) != 6 and len(self.d_time_label.text()) != 0:
             self.d_conf_label.setStyleSheet("color: red")
             self.d_conf_label.setText('Error: Invalid Time Entered 3')
+            self.d_speed_label.setText('')
+            self.d_auth_label.setText('')
             return
         elif len(self.d_time_label.text()) == 6:
 
@@ -314,32 +369,43 @@ class CTCUi(QtWidgets.QMainWindow):
             except:
                 self.d_conf_label.setStyleSheet("color: red")
                 self.d_conf_label.setText('Error: Invalid Time Entered 1')
+                self.d_speed_label.setText('')
+                self.d_auth_label.setText('')
                 return
             try:
                 int(self.d_time_label.text()[3] + self.d_time_label.text()[4])
             except:
                 self.d_conf_label.setStyleSheet("color: red")
                 self.d_conf_label.setText('Error: Invalid Time Entered 2')
+                self.d_speed_label.setText('')
+                self.d_auth_label.setText('')
                 return
 
             if int(self.d_time_label.text()[0] + self.d_time_label.text()[1]) not in range(1, 13):
                 self.d_conf_label.setStyleSheet("color: red")
                 self.d_conf_label.setText('Error: Invalid Time Entered 4')
+                self.d_speed_label.setText('')
+                self.d_auth_label.setText('')
                 return
             elif int(self.d_time_label.text()[3] + self.d_time_label.text()[4]) not in range(60):
                 self.d_conf_label.setStyleSheet("color: red")
                 self.d_conf_label.setText('Error: Invalid Time Entered 5')
+                self.d_speed_label.setText('')
+                self.d_auth_label.setText('')
                 return
             elif self.d_time_label.text()[5] not in ['a', 'p']:
                 self.d_conf_label.setStyleSheet("color: red")
                 self.d_conf_label.setText('Error: Invalid Time of Day  Entered (a/p)')
+                self.d_speed_label.setText('')
+                self.d_auth_label.setText('')
+                return
 
             # Print confirmation to screen and take actions if information valid
             else:
                 self.d_conf_label.setStyleSheet("color: green")
                 self.d_conf_label.setText('Train Dispatched to Block ' + self.d_block_label.text()\
                     + ' at ' + self.d_time_label.text())
-                self.d_speed_label.setText('Command Speed [to Track Controller]: 55 km/hr')
+                self.d_speed_label.setText('Command Speed [to Track Controller]: 43 MPH')
                 self.d_auth_label.setText('Authority [to Track Controller]: 3 Blocks')
 
                 ##### Send to Timekeeper class #####
@@ -366,7 +432,7 @@ class CTCUi(QtWidgets.QMainWindow):
             self.d_conf_label.setStyleSheet("color: green")
             self.d_conf_label.setText('Train Dispatched to Block ' + self.d_block_label.text()\
                 + ' Now')
-            self.d_speed_label.setText('Command Speed [to Track Controller]: 55 km/hr')
+            self.d_speed_label.setText('Command Speed [to Track Controller]: 43 MPH')
             self.d_auth_label.setText('Authority [to Track Controller]: 3 Blocks')
             if self.red_radio.isChecked():
                 ctc.dispatch_train(int(self.d_block_label.text()), Line.LINE_RED)
@@ -395,10 +461,10 @@ class CTCUi(QtWidgets.QMainWindow):
 
         self.refresh_train_info()
 
-        # Automatically refresh Map after 5s
+        # Automatically refresh Map after 0.7s
         TIME_TIMR = QtCore.QTimer(self)
         TIME_TIMR.timeout.connect(self.refresh_train_info)
-        TIME_TIMR.start(5000)
+        TIME_TIMR.start(700)
 
     def refresh_train_info(self):
         """ Refreshes the infomration on the train window page """
@@ -425,7 +491,7 @@ class CTCUi(QtWidgets.QMainWindow):
             except:
                 pass
         try:
-            self.speed.setText(str(ctc.trains_arr[train_ind].command_speed))
+            self.speed.setText(str(ctc.trains_arr[train_ind].command_speed / 1.609))
             self.authority.setText(str(ctc.trains_arr[train_ind].authority))
         except:
             pass
@@ -462,8 +528,8 @@ class CTCUi(QtWidgets.QMainWindow):
             eval('self.GB%s.clicked.connect(partial(self.toggle_blocks_green, %d))' % (str(i), i))
         # Find the Switches
         for i in range(1, 7):
-            exec('self.S%s = self.findChild(QtWidgets.QPushButton, \'SW%s\')' % (str(i), str(i)))
-            eval('self.S%s.clicked.connect(partial(self.toggle_switch_green, %d))' % (str(i), i))
+            exec('self.SG%s = self.findChild(QtWidgets.QPushButton, \'SW%s\')' % (str(i), str(i)))
+            eval('self.SG%s.clicked.connect(partial(self.toggle_switch_green, %d))' % (str(i), i))
 
     def refresh_map_green(self):
         """ Refreshes the green map """
@@ -498,7 +564,7 @@ class CTCUi(QtWidgets.QMainWindow):
         for i in range(len(wrtxt_arr)):
             wrtxt = wrtxt_arr[i]
             try:
-                eval('self.SW%s.setText(\'%s\')' % (str(i + 1), wrtxt))
+                eval('self.SG%s.setText(\'%s\')' % (str(i + 1), wrtxt))
             except:
                 pass
 
@@ -510,6 +576,11 @@ class CTCUi(QtWidgets.QMainWindow):
 
     def toggle_blocks_green(self, b_num):
         """ Toggle switch block for maintence mode or not """
+
+        # If simulation is paused, do nothing
+        if timekeeper.paused:
+            self.maint_mode_green.setText('Error: Simulation PAUSED')
+            return
 
         # Close the block if it is open
         if ctc.blocks_green_arr[b_num - 1].open:
@@ -530,6 +601,11 @@ class CTCUi(QtWidgets.QMainWindow):
 
     def toggle_switch_green(self, s_num):
         """ Toggle switch if block is in maintence mode """
+
+        # If simulation is paused, do nothing
+        if timekeeper.paused:
+            self.maint_mode_green.setText('Error: Simulation PAUSED')
+            return
 
         if self.num_blocks_closed_green > 0:
             if ctc.switches_green_arr[s_num - 1].pointing_to == ctc.switches_green_arr\
@@ -630,6 +706,11 @@ class CTCUi(QtWidgets.QMainWindow):
     def toggle_block_red(self, b_num):
         """ Toggle switch block for maintence mode or not on red line """
 
+        # If simulation is paused, do nothing
+        if timekeeper.paused:
+            self.maint_mode_red.setText('Error: Simulation PAUSED')
+            return
+
         # Close the block if it is open
         if ctc.blocks_red_arr[b_num - 1].open:
             self.num_blocks_closed_red += 1
@@ -649,6 +730,11 @@ class CTCUi(QtWidgets.QMainWindow):
 
     def toggle_switch_red(self, s_num):
         """ Toggle switch if block is in maintence mode on red line"""
+
+        # If simulation is paused, do nothing
+        if timekeeper.paused:
+            self.maint_mode_red.setText('Error: Simulation PAUSED')
+            return
 
         if self.num_blocks_closed_red > 0:
             if ctc.switches_red_arr[s_num - 1].pointing_to == ctc.switches_red_arr[s_num - 1]\
@@ -696,10 +782,10 @@ class CTCUi(QtWidgets.QMainWindow):
         self.tplabel = self.findChild(QtWidgets.QLabel, 'ThroughputValue') # Find the label
         self.show_throughput()
 
-        # Automatically refresh Map after 10s
+        # Automatically refresh trhoughput after 5s
         TIME_TIMR = QtCore.QTimer(self)
         TIME_TIMR.timeout.connect(self.show_throughput)
-        TIME_TIMR.start(10000)
+        TIME_TIMR.start(5000)
 
 
     ###############################################################################################
@@ -711,6 +797,12 @@ class CTCUi(QtWidgets.QMainWindow):
         """ Toggles automatic mode """
 
         self.mode_text.setText('')
+
+        if timekeeper.paused:
+            self.mode_text.setText('Error: Simulation Paused')
+            self.auto.setChecked(self.auto_mode)
+            return
+
         if self.auto.isChecked():
             self.auto_mode = True
         else:

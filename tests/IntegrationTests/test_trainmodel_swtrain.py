@@ -13,8 +13,9 @@ from src.TrackModel.TrackModelDef import green_route_blocks
 from src.common_def import Line
 
 
-def test_toggle_lights():
+def test_toggle_lights(upload_tracks):
     """Testing toggling the lights"""
+    signals.trackmodel_update_occupancy.disconnect()
 
     signals.train_model_dispatch_train.emit(0, 38, 15, 0, Line.LINE_GREEN, green_route_blocks)
 
@@ -26,7 +27,7 @@ def test_toggle_lights():
 def test_power_loop(upload_tracks, start_timekeeper):
     """Testing the power loop"""
     # Disconnect unimportant signals
-    signals.trackmodel_update_occupancy.disconnect()
+    #signals.trackmodel_update_occupancy.disconnect()
 
     # Dispatch a train from the train model
     signals.train_model_dispatch_train.emit(0, 38, 15, 0, Line.LINE_GREEN, green_route_blocks)

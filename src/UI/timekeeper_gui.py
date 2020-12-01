@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QButtonGroup
 from src.signals import signals
 from src.timekeeper import timekeeper
 
-PERIODS = [1, 0.5, 0.2, 0.1, 0.05, 0.01]
+PERIODS = [1, 0.5, 0.2, 0.1, 0.05, 0.02]
 
 class TimekeeperUi(QtWidgets.QMainWindow):
     """User interface for the timekeeper"""
@@ -59,7 +59,9 @@ class TimekeeperUi(QtWidgets.QMainWindow):
         if hours in range(12, 24):
             period = 'pm'
 
-        if hours > 12:
+        if hours == 0:
+        	hours = 12
+        elif hours > 12:
             hours -= 12
 
         time_text = "{} {:02}:{:02}:{:02} {}".format(days[day], hours, mins, secs, period)

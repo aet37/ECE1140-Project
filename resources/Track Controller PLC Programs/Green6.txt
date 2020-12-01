@@ -1,4 +1,6 @@
 TAG switch = FALSE
+TAG heater = FALSE
+TAG broken = FALSE
 # Section 0
 TAG b30O = FALSE
 TAG b31O = FALSE
@@ -313,6 +315,80 @@ TASK<PERIOD=1000> MainTask
             OTE b39A
         ENDRUNG
         RUNG
+            XIO b29O
+            OTE switch
+        ENDRUNG
+        RUNG
+            XIC broken
+            OTU b30A
+            OTU b31A
+            OTU b32A
+            OTU b33A
+            OTU b34A
+            OTU b35A
+            OTU b36A
+            OTU b37A
+            OTU b38A
+            OTU b39A
+            OTU b40A
+            OTU b41A
+            OTU b42A
+            OTU b43A
+            OTU b44A
+            OTU b45A
+            OTU b46A
+            OTU b47A
+            OTU b48A
+            OTU b101A
+            OTU b102A
+            OTU b103A
+            OTU b104A
+            OTU b105A
+            OTU b106A
+            OTU b107A
+            OTU b108A
+            OTU b109A
+            OTU b110A
+            OTU b111A
+            OTU b112A
+            OTU b113A
+            OTU b114A
+            OTU b115A
+            OTU b116A
+            OTU b117A
+            OTU b118A
+            OTU b119A
+            OTU b120A
+            OTU b121A
+            OTU b122A
+            OTU b123A
+            OTU b124A
+            OTU b125A
+            OTU b126A
+            OTU b127A
+            OTU b128A
+            OTU b129A
+            OTU b130A
+            OTU b131A
+            OTU b132A
+            OTU b133A
+            OTU b134A
+            OTU b135A
+            OTU b136A
+            OTU b137A
+            OTU b138A
+            OTU b139A
+            OTU b140A
+            OTU b141A
+            OTU b142A
+            OTU b143A
+            OTU b144A
+            OTU b145A
+            OTU b146A
+            OTU b147A
+            OTU b148A
+            OTU b149A
+            OTU b150A
         ENDRUNG
     ENDROUTINE
 ENDTASK

@@ -550,6 +550,8 @@ static void DisplayPower(const String& rData)
 }
 
 String get_data(){
+    
+    // Just get lights working first
     // Write a function that gets the data and puts it in a string.
     // How to pull data from arduino to python. Pull data from arduino into formatted string that can be parsed through to find variables. "lights 1 doors 0"
     // Check to see if data was different than before, if it is then tell kenny that something has been changed

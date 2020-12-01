@@ -1,4 +1,5 @@
 TAG MyTag = FALSE
+TAG broken = FALSE
 TAG output2 = FALSE
 TAG output4 = FALSE
 TAG heater = FALSE
@@ -24,13 +25,6 @@ TASK<PERIOD=2000> MainTask
     ROUTINE Main
         # Authority logic
         RUNG
-            XIO b0O
-            OTE b62A
-            OTE b61A
-            OTE b60A
-            OTE b59A
-        ENDRUNG
-        RUNG
             XIO b62O
             XIO b61O
             XIO b60O
@@ -39,8 +33,7 @@ TASK<PERIOD=2000> MainTask
         ENDRUNG
         # Switch logic
         RUNG
-            XIO b0O
-            XIC b62O
+            XIC b0O
             OTE switch
         ENDRUNG
         RUNG
@@ -56,6 +49,10 @@ TASK<PERIOD=2000> MainTask
         RUNG
             XIC output2
             OTE MyTag
+        ENDRUNG
+        RUNG
+            XIC broken
+            OTU b0A
         ENDRUNG
     ENDROUTINE
 ENDTASK

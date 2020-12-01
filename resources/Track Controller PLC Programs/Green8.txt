@@ -1,3 +1,6 @@
+TAG switch = FALSE
+TAG heater = FALSE
+TAG broken = FALSE
 TAG b29O = FALSE
 TAG b28O = FALSE
 TAG b27O = FALSE
@@ -14,6 +17,7 @@ TAG b17O = FALSE
 TAG b16O = FALSE
 TAG b15O = FALSE
 TAG b14O = FALSE
+TAG b13O = FALSE
 TAG b29A = TRUE
 TAG b28A = TRUE
 TAG b27A = TRUE
@@ -30,10 +34,78 @@ TAG b17A = TRUE
 TAG b16A = TRUE
 TAG b15A = TRUE
 TAG b14A = TRUE
+TAG b13A = TRUE
+TAG b12A = TRUE
+TAG b11A = TRUE
 
 TASK<PERIOD=1000> MainTask
     ROUTINE Main
         RUNG
+            XIO b29O
+            XIO b28O
+            XIO b27O
+            XIO b26O
+            XIO b25O
+            XIO b24O
+            XIO b23O
+            XIO b22O
+            XIO b21O
+            XIO b20O
+            XIO b19O
+            XIO b18O
+            XIO b17O
+            XIO b16O
+            XIO b15O
+            XIO b14O
+            XIO b13O
+            OTE b12A
+            OTE b11A
+        ENDRUNG
+        RUNG
+            XIO b13O
+            OTE switch
+        ENDRUNG
+        RUNG
+            XIO broken
+            OTL b29A
+            OTL b28A
+            OTL b27A
+            OTL b26A
+            OTL b25A
+            OTL b24A
+            OTL b23A
+            OTL b22A
+            OTL b21A
+            OTL b20A
+            OTL b19A
+            OTL b18A
+            OTL b17A
+            OTL b16A
+            OTL b15A
+            OTL b14A
+            OTL b13A
+        ENDRUNG
+        RUNG
+            XIC broken
+            OTU b29A
+            OTU b28A
+            OTU b27A
+            OTU b26A
+            OTU b25A
+            OTU b24A
+            OTU b23A
+            OTU b22A
+            OTU b21A
+            OTU b20A
+            OTU b19A
+            OTU b18A
+            OTU b17A
+            OTU b16A
+            OTU b15A
+            OTU b14A
+            OTU b13A
+            OTU b12A
+            OTU b11A
         ENDRUNG
     ENDROUTINE
 ENDTASK

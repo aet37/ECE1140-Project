@@ -17,6 +17,7 @@
 #include "../include/Scheduler.hpp" // For Scheduler
 #include "../include/Lcd/LcdApi.hpp" // For LcdApi
 #include "../include/ArduinoLogger.hpp" // For LOG macros
+#include "../include/HashMap.hpp"
 
 namespace Communications
 {
@@ -356,8 +357,10 @@ static void SetTagValue(const String& rData)
 */
 static void GetAllTagValues()
 {
-    String allTags = TagDatabase::GetAllTagValues();
+    static uint32_t division = 0;
+    String allTags = TagDatabase::GetAllTagValues(division);
 
+    division = (division + 1) % NUM_OF_DIVISIONS;
     SendResponse(ResponseCode::SUCCESS, allTags.c_str());
 }
 
