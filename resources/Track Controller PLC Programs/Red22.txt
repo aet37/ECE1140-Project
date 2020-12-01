@@ -28,7 +28,7 @@ TAG b71O = FALSE
 TAG b71A = TRUE
 
 TASK<PERIOD=1000> MainTask
-    ROUTINE
+    ROUTINE Main
         RUNG
             XIO b39O
             OTE b40A

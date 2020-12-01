@@ -13,7 +13,7 @@ TAG b36A = TRUE
 TAG b37A = TRUE
 
 TASK<PERIOD=1000> MainTask
-    ROUTINE
+    ROUTINE Main
         RUNG
             XIO b37O
             XIO b36O
