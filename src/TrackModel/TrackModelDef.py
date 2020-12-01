@@ -536,7 +536,7 @@ class SignalHandler:
                             theBeacon1 = theBlock.blockBeacon
                             theBeacon22 = Beacon()
                             theBeacon22.station_name = beaconList2[0]
-                            theBeacon22.service_brake = TRUE
+                            theBeacon22.service_brake = True
                             theBeacon22.DoorSide = exitWay2
 
                     newTrack.addBlock(theBlock)
