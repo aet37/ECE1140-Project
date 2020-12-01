@@ -65,6 +65,8 @@ class TrainCatalogue:
         signals.train_model_update_passengers.connect(self.train_model_update_passengers)
         # Receive Direction
         signals.train_model_update_direction.connect(self.train_model_update_direction)
+        # Receive Beacon Info
+        signals.train_model_receive_beacon_info.connect(self.train_model_receive_beacon_info)
 
     # print(sys.path)
 
@@ -94,15 +96,15 @@ class TrainCatalogue:
 
         # Send to Evan
         if (currentLine == Line.LINE_GREEN):
-            signals.trackmodel_update_occupancy.emit(trainId-1, Line.LINE_GREEN, 0, True)
+            signals.trackmodel_update_occupancy.emit(trainId-1, Line.LINE_GREEN, 0, True, 0)
         else:
-            signals.trackmodel_update_occupancy.emit(trainId-1, Line.LINE_RED, 0, True)
+            signals.trackmodel_update_occupancy.emit(trainId-1, Line.LINE_RED, 0, True, 0)
 
         # Send to Evan
         # if (currentLine == Line.LINE_GREEN):
-        #     signals.trackmodel_update_occupancy.emit(trainId-1, Line.LINE_GREEN, 62, True)
+        #     signals.trackmodel_update_occupancy.emit(trainId-1, Line.LINE_GREEN, 62, True, 0)
         # else:
-        #     signals.trackmodel_update_occupancy.emit(trainId-1, Line.LINE_RED, 9, True)
+        #     signals.trackmodel_update_occupancy.emit(trainId-1, Line.LINE_RED, 9, True, 0)
 
         # Tell the gui something has changed
         signals.train_model_dropdown_has_been_changed.emit()
@@ -159,6 +161,13 @@ class TrainCatalogue:
     # @brief Receives Direction
     def train_model_update_direction(self, trainId, newDirection):
         self.m_trainList[trainId].m_trainDirection = newDirection
+        print(newDirection)
+
+    # @brief Receives Beacon Info
+    def train_model_receive_beacon_info(self, trainId, stationName, doorSide):
+        self.m_trainList[trainId].m_stationName = stationName
+        self.m_trainList[trainId].m_doorSide = doorSide
+        print(stationName)
 
     # @brief Toggles the advertisements
     def train_model_gui_receive_ads(self, trainId, ads):
@@ -293,16 +302,40 @@ class TrainCatalogue:
             # Send to Evan
             if (currentTrack == Line.LINE_GREEN):
                 logger.debug("currentTrack = {}".format(currentTrack))
-                signals.trackmodel_update_occupancy.emit(trainId, Line.LINE_GREEN, currentBlock, False)
+                signals.trackmodel_update_occupancy.emit(trainId, Line.LINE_GREEN, currentBlock, False, self.m_trainList[trainId].m_trainDirection)
                 logger.debug("FIRST currentPosition = %f", currentPosition)
                 logger.debug("FIRST currentBlock = %f", currentBlock)
             else:
-                signals.trackmodel_update_occupancy.emit(trainId, Line.LINE_RED, currentBlock, False)
+                signals.trackmodel_update_occupancy.emit(trainId, Line.LINE_RED, currentBlock, False, self.m_trainList[trainId].m_trainDirection)
+
+            try:
+                tryTemp = block_catalogue_green.m_blockList[self.m_trainList[trainId].m_route[0]].beacon1.service_brake
+            except:
+                pass
+
+            if (currentTrack == Line.LINE_GREEN):
+                if self.m_trainList[trainId].m_trainDirection == 0:
+                    if block_catalogue_green.m_blockList[self.m_trainList[trainId].m_route[0]].beacon1.service_brake == True:
+                        print("Hello1")
+                        signals.swtrain_receive_beacon.emit(trainId, block_catalogue_green.m_blockList[self.m_trainList[trainId].m_route[0]].beacon1)
+                else:
+                    if block_catalogue_green.m_blockList[self.m_trainList[trainId].m_route[0]].beacon2.service_brake == True:
+                        print("Hello2")
+                        signals.swtrain_receive_beacon.emit(trainId, block_catalogue_green.m_blockList[self.m_trainList[trainId].m_route[0]].beacon2)
+            else:
+                if self.m_trainList[trainId].m_trainDirection == 0:
+                    if block_catalogue_red.m_blockList[self.m_trainList[trainId].m_route[0]].beacon1.service_brake == True:
+                        print("Hello3")
+                        signals.swtrain_receive_beacon.emit(trainId, block_catalogue_red.m_blockList[self.m_trainList[trainId].m_route[0]].beacon1)
+                else:
+                    if block_catalogue_red.m_blockList[self.m_trainList[trainId].m_route[0]].beacon2.service_brake == True:
+                        print("Hello4")
+                        signals.swtrain_receive_beacon.emit(trainId, block_catalogue_red.m_blockList[self.m_trainList[trainId].m_route[0]].beacon2)
 
             # Send block entered to Evan (trainid, trackid, blockId, trainOrNot
             # Send to Evan
             if (currentTrack == Line.LINE_GREEN):
-                signals.trackmodel_update_occupancy.emit(trainId, Line.LINE_GREEN, self.m_trainList[trainId].m_route[0], True)
+                signals.trackmodel_update_occupancy.emit(trainId, Line.LINE_GREEN, self.m_trainList[trainId].m_route[0], True, self.m_trainList[trainId].m_trainDirection)
                 logger.debug("SECOND currentPosition = %f", currentPosition)
                 logger.debug("SECOND self.m_trainList[trainId].m_route[0] = %f", self.m_trainList[trainId].m_route[0])
                 if (block_catalogue_green.m_blockList[self.m_trainList[trainId].m_route[0]].m_station):
@@ -314,7 +347,7 @@ class TrainCatalogue:
                     avalibleSpace = 222 - self.m_trainList[trainId].m_trainPassCount
                     signals.trackmodel_update_passengers_exited.emit(self.m_trainList[trainId].m_currentLine, trainId, self.m_trainList[trainId].m_route[0], removedPass, avalibleSpace, 222)
             else:
-                signals.trackmodel_update_occupancy.emit(trainId, Line.LINE_RED, self.m_trainList[trainId].m_route[0], True)
+                signals.trackmodel_update_occupancy.emit(trainId, Line.LINE_RED, self.m_trainList[trainId].m_route[0], True), self.m_trainList[trainId].m_trainDirection
                 if (block_catalogue_red.m_blockList[self.m_trainList[trainId].m_route[0]].m_station):
                     if (self.m_trainList[trainId].m_trainPassCount != 0):
                         removedPass = random.randrange(0, self.m_trainList[trainId].m_trainPassCount, 1)

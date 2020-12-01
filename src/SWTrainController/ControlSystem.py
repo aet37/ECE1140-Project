@@ -10,10 +10,10 @@ from src.signals import signals
 from serial.serialutil import SerialException
 from src.HWTrainController.HWTrainArduinoConnector import HWController
 from src.logger import get_logger
-from common_def import Beacon
+from src.common_def import Beacon
 import threading
 
-from timekeeper import timekeeper
+from src.timekeeper import timekeeper
 
 logger = get_logger(__name__)
 
@@ -179,16 +179,18 @@ class ControlSystem:
         # Wait for train to come to a stop
         while(self.p_controllers[train_id].current_speed != 0):
             pass
+            time.sleep(1)
         # Once train is at stop, toggle nonvitals
         self.swtrain_gui_toggle_cabin_lights(train_id)
         self.swtrain_gui_toggle_damn_doors(train_id)
         self.swtrain_gui_announce_stations(train_id)
         # Wait one minute at stop
+        print("thats the minute")
         current_minute = timekeeper.current_time_min
         while(current_minute == timekeeper.current_time_min):
             assert self.p_controllers[train_id].current_speed == 0
             time.sleep(1)
-
+        
         # After a minute, toggle nonvitals again and begin moving
         self.swtrain_gui_toggle_cabin_lights(train_id)
         self.swtrain_gui_toggle_damn_doors(train_id)

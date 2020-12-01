@@ -20,5 +20,5 @@ class Block:
         self.m_speedLimit = 0
         self.m_travelDirection = 0
         self.m_station = False
-        self.beacon1 = None
-        self.beacon2 = None
+        self.beacon1 = Beacon()
+        self.beacon2 = Beacon()

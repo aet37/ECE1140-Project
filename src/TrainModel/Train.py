@@ -25,6 +25,9 @@ class Train:
         # INTEGERS (self, Nonvital)
         self.m_tempControl = 0.0
 
+        # STRING
+        self.m_stationName = ""
+
         # BOOLEANS (self, Vital)
         self.m_emergencyPassengerBrake = False
         self.m_serviceBrake = True
@@ -35,6 +38,7 @@ class Train:
         self.m_advertisements = False
         self.m_announcements = False
         self.m_doors = False
+        self.m_doorSide = DoorSide.SIDE_RIGHT
 
         # Parameter Inputs
         self.m_trainLength = 32.2 # Meters
