@@ -334,13 +334,26 @@ class SignalHandler:
             for i in green_route_blocks:
                 theBlock = theTrack.getBlock(i)
                 #print("Trackmodel block: " + str(theBlock.blockNumber) + " station: " + str(theBlock.blockStation != None))
-                signals.train_model_receive_block.emit(0, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None)
+                theBeacon1 = Beacon()
+                theBeacon2 = Beacon()
+                if (theBlock.blockBeacon.beaconDirection == 0):
+                    theBeacon1 = theBlock.blockBeacon
+                else:
+                    theBeacon2 = theBlock.blockBeacon
+
+                signals.train_model_receive_block.emit(0, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None, theBeacon1, theBeacon2)
         else:
             theTrack = getTrack("Red")
             route = red_route_blocks
             for i in red_route_blocks:
                 theBlock = theTrack.getBlock(i)
-                signals.train_model_receive_block.emit(1, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None)
+                theBeacon1 = Beacon()
+                theBeacon2 = Beacon()
+                if (theBlock.blockBeacon.beaconDirection == 0):
+                    theBeacon1 = theBlock.blockBeacon
+                else:
+                    theBeacon2 = theBlock.blockBeacon
+                signals.train_model_receive_block.emit(1, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None, theBeacon1, theBeacon2)
 
         signals.train_model_dispatch_train.emit(trainId, destinationBlock, commandSpeed, authority, currentLine, route)
 
