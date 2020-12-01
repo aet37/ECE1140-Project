@@ -1,6 +1,7 @@
 TAG heater = FALSE
 TAG switch = FALSE
 TAG signal = FALSE
+TAG broken = FALSE
 TAG b0O = FALSE
 # Section 1
 TAG b62A = TRUE
@@ -72,6 +73,9 @@ TASK<PERIOD=1000> MainTask
         RUNG
             XIC b0O
             OTE switch
+        ENDRUNG
+        RUNG
+            XIC broken
         ENDRUNG
     ENDROUTINE
 ENDTASK
