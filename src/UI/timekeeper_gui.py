@@ -37,7 +37,7 @@ class TimekeeperUi(QtWidgets.QMainWindow):
                                                    'one_hundred_times_button'))
 
         # Set the correct button according to the time factor
-        self.button_group.button(PERIODS.index(timekeeper.timer_period_in_sec)*-1 - 2) \
+        self.button_group.button(PERIODS.index(timekeeper.time_factor)*-1 - 2) \
                                  .setChecked(True)
 
         self.button_group.buttonClicked.connect(self.update_speed)
@@ -73,4 +73,4 @@ class TimekeeperUi(QtWidgets.QMainWindow):
         Note: Button ids start at -2 and go down for some god awful reason
         """
         # We don't need the lock here because this variable is only being used for the sleep time
-        timekeeper.timer_period_in_sec = PERIODS[abs(self.button_group.checkedId()) - 2]
+        timekeeper.time_factor = PERIODS[abs(self.button_group.checkedId()) - 2]

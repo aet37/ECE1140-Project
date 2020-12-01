@@ -8,6 +8,9 @@ import sys
 import logging
 import polling
 import serial
+from src.signals import signals
+import threading
+from src.common_def import pairwise
 from src.SWTrainController.Controller import Controller
 
 logger = logging.getLogger(__name__)
@@ -34,7 +37,7 @@ class Codes(Enum):
     HWTRAIN_ANNOUNCE_STATIONS = 230
     HWTRAIN_DISPLAY_ADS = 231
     HWTRAIN_DISPATCH_TRAIN = 235
-    HWTRAIN_UPDATE_CUIRRENT_SPEED = 236
+    HWTRAIN_UPDATE_CURRENT_SPEED = 236
     HWTRAIN_UPDATE_COMMAND_SPEED = 237
     HWTRAIN_UPDATE_AUTHORITY = 238
     HWTRAIN_SIGNAL_FAILURE = 239
@@ -46,12 +49,37 @@ class Codes(Enum):
     HWTRAIN_GUI_DISPLAY_POWER = 245
     HWTRAIN_GUI_SET_KI = 246
     HWTRAIN_BRAKE_FAILURE = 247
+    HWTRAIN_GET_DATA = 248
+
+TIMER_PERIOD = 2
 
 class HWController(Controller):
+
+    run_timer = True
+
+    def get_data(self):
+        self.send_message("{}".format(Codes.HWTRAIN_GET_DATA.value))
+        tag_values = str(self.get_response()).rstrip('\'')
+        splits = tag_values.split(" ")
+
+        for key, value in pairwise(splits[1:]):
+            if (key == "lights"):
+                if self.lights != bool(int(value)):
+                    self.lights=bool(int(value))
+                    signals.train_model_gui_receive_lights.emit(1, self.lights)
+            # make other if statements here for other variables.
+            # get non-vitals working first
+            # need someway to tell if the power and speed change to display on arduino
+
+        if HWController.run_timer:
+            self.timer = threading.Timer(TIMER_PERIOD, self.get_data)
+            self.timer.start()
+
     def __init__(self):
-        try:
-            self.arduino = serial.Serial(SERIAL_PORT, RATE, timeout=5)
-            sleep(2)
+        self.arduino = serial.Serial(SERIAL_PORT, RATE, timeout=5)
+        sleep(2)
+        self.timer = threading.Timer(TIMER_PERIOD, self.get_data)
+        self.timer.start()
     def send_message(self, msg):
         """Writes the given message to the serial port
 
@@ -62,7 +90,6 @@ class HWController(Controller):
 
     def get_response(self):
         """Gets the response from the controller.
-
         :return: Response of the controller to the previous request
         :rtype: bytes
         """

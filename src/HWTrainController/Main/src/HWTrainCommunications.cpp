@@ -4,17 +4,19 @@
 #include "../include/HWTrainCommunications.hpp"
 #include "../include/Devices/Devices.hpp"
 
+// Get stuff to show up on Kenny's GUI
+
 namespace HWTrainCommunications
 {
-static bool lights;
-static bool brake;
-static bool ebrake;
-static bool doors;
-static bool announce;
-static bool pebrake;
-static bool sigfail, engfail, brakefail;
-static bool ads;
-static double temp, speed, kp, ki, power;
+static bool lights=0;
+static bool brake=1; // On until kp and ki are set
+static bool ebrake=0;
+static bool doors=0;
+static bool announce=0;
+static bool pebrake=0;
+static bool sigfail=0, engfail=0, brakefail=0;
+static bool ads=0;
+static double temp=70, speed=0, kp=0, ki=0, power=0; // power is calculated later
 unsigned long currentTime, previousTime = 0;
 const long interval = 1000;
 // Determines the request code
@@ -237,7 +239,6 @@ int Menu(int menudata){
         }
         Serial.print("While loop end\n");
         if(toggle){
-            Serial.print("Welp it's zero\n");
             return menudata;
             break;
         }
@@ -466,238 +467,179 @@ static void DisplayTemp(const String& rData)
     }
 }
 
-// 
 
-// static void DisplaySpeed(const String& rData)
-// {
-//     SendResponse(ResponseCode::SUCCESS);
-//     bool toggle = Devices::JoystickClick();
-//     speed = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
-//     while(toggle)
-//     {
-//         currentTime = millis();
-//         Serial.println(speed);
-//         speed = Devices::JoystickRead(speed);
-//         if (currentTime - previousTime >= interval) {
-//             previousTime = currentTime;        
-//             Devices::ClearLCD();
-//             String str = String(speed);
-//             Devices::WriteLCD(str);
-//         }
-//         toggle = Devices::JoystickClick();
-//     }
-// }
 
-// static void DisplayKi(const String& rData)
-// {
-//     SendResponse(ResponseCode::SUCCESS);
-//     bool toggle = Devices::JoystickClick();
-//     ki = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
-//     while(!toggle)
-//     {
-//         currentTime = millis();
-//         Serial.println(ki);
-//         ki = Devices::JoystickRead(ki);
-//         if (currentTime - previousTime >= interval) {
-//             previousTime = currentTime;        
-//             Devices::ClearLCD();
-//             String str = String(ki);
-//             Devices::WriteLCD(str);
-//         }
-//         toggle = Devices::JoystickClick();
-//     }
-// }
+static void DisplaySpeed(const String& rData)
+{
+    SendResponse(ResponseCode::SUCCESS);
+    bool toggle = Devices::JoystickClick();
+    speed = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
+    while(toggle)
+    {
+        currentTime = millis();
+        Serial.println(speed);
+        speed = Devices::JoystickRead(speed);
+        if (currentTime - previousTime >= interval) {
+            previousTime = currentTime;        
+            Devices::ClearLCD();
+            String str = String(speed);
+            Devices::WriteLCD(str);
+        }
+        toggle = Devices::JoystickClick();
+    }
+}
 
-// static void DisplayKp(const String& rData)
-// {
-//     SendResponse(ResponseCode::SUCCESS);
-//     bool toggle = Devices::JoystickClick();
-//     kp = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
-//     while(!toggle)
-//     {
-//         currentTime = millis();
-//         Serial.println(kp);
-//         kp = Devices::JoystickRead(kp);
-//         if (currentTime - previousTime >= interval) {
-//             previousTime = currentTime;        
-//             Devices::ClearLCD();
-//             String str = String(kp);
-//             Devices::WriteLCD(str);
-//         }
-//         toggle = Devices::JoystickClick();
-//     }
-// }
+static void DisplayKi(const String& rData)
+{
+    SendResponse(ResponseCode::SUCCESS);
+    bool toggle = Devices::JoystickClick();
+    ki = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
+    while(!toggle)
+    {
+        currentTime = millis();
+        Serial.println(ki);
+        ki = Devices::JoystickRead(ki);
+        if (currentTime - previousTime >= interval) {
+            previousTime = currentTime;        
+            Devices::ClearLCD();
+            String str = String(ki);
+            Devices::WriteLCD(str);
+        }
+        toggle = Devices::JoystickClick();
+    }
+}
 
-// static void DisplayPower(const String& rData)
-// {
-//     SendResponse(ResponseCode::SUCCESS);
-//     bool toggle = Devices::JoystickClick();
-//     power = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
-//     while(!toggle)
-//     {
-//         currentTime = millis();
-//         Serial.println(power);
-//         power = Devices::JoystickRead(power);
-//         if (currentTime - previousTime >= interval) {
-//             previousTime = currentTime;        
-//             Devices::ClearLCD();
-//             String str = String(power);
-//             Devices::WriteLCD(str);
-//         }
-//         toggle = Devices::JoystickClick();
-//     }
-// }
+static void DisplayKp(const String& rData)
+{
+    SendResponse(ResponseCode::SUCCESS);
+    bool toggle = Devices::JoystickClick();
+    kp = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
+    while(!toggle)
+    {
+        currentTime = millis();
+        Serial.println(kp);
+        kp = Devices::JoystickRead(kp);
+        if (currentTime - previousTime >= interval) {
+            previousTime = currentTime;        
+            Devices::ClearLCD();
+            String str = String(kp);
+            Devices::WriteLCD(str);
+        }
+        toggle = Devices::JoystickClick();
+    }
+}
+
+static void DisplayPower(const String& rData)
+{
+    SendResponse(ResponseCode::SUCCESS);
+    bool toggle = Devices::JoystickClick();
+    power = atof(rData.substring(rData.indexOf(" ")+1, rData.length()).c_str());
+    while(!toggle)
+    {
+        currentTime = millis();
+        Serial.println(power);
+        power = Devices::JoystickRead(power);
+        if (currentTime - previousTime >= interval) {
+            previousTime = currentTime;        
+            Devices::ClearLCD();
+            String str = String(power);
+            Devices::WriteLCD(str);
+        }
+        toggle = Devices::JoystickClick();
+    }
+}
+
+String get_data(){
+    // Write a function that gets the data and puts it in a string.
+    // How to pull data from arduino to python. Pull data from arduino into formatted string that can be parsed through to find variables. "lights 1 doors 0"
+    // Check to see if data was different than before, if it is then tell kenny that something has been changed
+}
 
 void CommsTask()
 {
     Serial.print("Beginning");
-    int menudata = 0;
     Serial.print("Before call");
-    int menuselect = Menu(menudata);
+    int menuselect = Menu(0);
     Serial.print("After call");
-                                // switch(menuselect)
-    // Quickly return if nothing has been received
-    // if (Serial.available() == 0)
-    // {
-    //     return;
-    // }
 
     // Read the message and determine the request code
-    // String msg = Serial.readStringUntil('\n');
-    // RequestCode code = ParseCode(msg);
-    // String data = ParseData(msg);
-    
-                                // {
-                                //     case 0: // EBrake
-                                //         SetEBrake(data);
-                                //         GetEBrake(data);
-                                //         break;
-                                //     case 1: // Service Brake
-                                //         SetBrake(data);
-                                //         GetBrake(data);
-                                //         break;
-                                //     case 2: // Passenger EBrake
-                                //         SetPEBrake(data);
-                                //         GetPEBrake(data);
-                                //         break;
-                                //     case 3: // Doors
-                                //         SetDoors(data);
-                                //         GetDoors(data);
-                                //         break;
-                                //     case 4: // Lights
-                                //         SetLights(data);
-                                //         GetLights(data);
-                                //         break;
-                                //     case 5: // Ads
-                                //         SetAds(data);
-                                //         GetAds(data);
-                                //         break;
-                                //     case 6: // Announce
-                                //         SetAnnounce(data);
-                                //         GetAnnounce(data);
-                                //         break;
-                                //     case 7: // Signal Failure
-                                //         SetSignalFailure(data);
-                                //         GetSignalFailure(data);
-                                //         break;
-                                //     case 8: // Engine Failure
-                                //         SetEngineFailure(data);
-                                //         GetEngineFailure(data);
-                                //         break;
-                                //     case 9: // Brake Failure
-                                //         SetBrakeFailure(data);
-                                //         GetBrakeFailure(data);
-                                //         break;
-                                //     case 10: // Temperature
-                                //         DisplayTemp(data);
-                                //         break;
-                                //     case 11: // Speed
-                                //     // DisplaySpeed(data);
-                                //         break;
-                                //     case 12: // Kp
-                                //         //DisplayKp(data);
-                                //         break;
-                                //     case 13: // Ki
-                                //         //DisplayKi(data);
-                                //         break;
-                                //     case 14: // Power
-                                //         //DisplayPower(data);
-                                //         break;
-                                //     default: 
-                                //         break;
-                                //     // case 15: // Exit
-                                //     //     return 15;
-                                //     //     break;
+    String msg = Serial.readStringUntil('\n');
+    RequestCode code = ParseCode(msg);
+    SendResponse(ResponseCode::SUCCESS, // Send data in a string. Ex: lights 1 doors 0 ads 1 etc.)
+    switch(menuselect)
+    {
+        case 0: // EBrake
+            SetEBrake();
+            GetEBrake();
+            break;
+        case 1: // Service Brake
+            SetBrake();
+            GetBrake();
+            break;
+        case 2: // Passenger EBrake
+            SetPEBrake();
+            GetPEBrake();
+            break;
+        case 3: // Doors
+            SetDoors();
+            GetDoors();
+            break;
+        case 4: // Lights
+            SetLights();
+            GetLights();
+            break;
+        case 5: // Ads
+            SetAds();
+            GetAds();
+            break;
+        case 6: // Announce
+            SetAnnounce();
+            GetAnnounce();
+            break;
+        case 7: // Signal Failure
+            SetSignalFailure();
+            GetSignalFailure();
+            break;
+        case 8: // Engine Failure
+            SetEngineFailure();
+            GetEngineFailure();
+            break;
+        case 9: // Brake Failure
+            SetBrakeFailure();
+            GetBrakeFailure();
+            break;
+        case 10: // Temperature
+            DisplayTemp();
+            break;
+        case 11: // Speed
+            DisplaySpeed();
+            break;
+        case 12: // Kp
+            DisplayKp();
+            break;
+        case 13: // Ki
+            DisplayKi();
+            break;
+        case 14: // Power
+            DisplayPower();
+            break;
+        default: 
+            break;
 
-                                // }
-                            // }
-    // switch (code)
-    // {
-    //     case RequestCode::INVALID:
-    //         SendResponse(ResponseCode::ERROR);
-    //         break;
-    //     case RequestCode::CHECK:
-    //         SendResponse(ResponseCode::SUCCESS);
-    //         break;
-    //     case RequestCode::HWTRAIN_TOGGLE_CABIN_LIGHTS:
-    //         SetLights(data);
-    //         GetLights(data);
-    //         break;
-    //     case RequestCode::HWTRAIN_PRESS_SERVICE_BRAKE:
-    //         SetBrake(data);
-    //         GetBrake(data);
-    //         break;
-    //     case RequestCode::HWTRAIN_ANNOUNCE_STATIONS:
-    //         SetAnnounce(data);
-    //         GetAnnounce(data);
-    //         break;
-    //     case RequestCode::HWTRAIN_PULL_EBRAKE:
-    //         SetEBrake(data);
-    //         GetEBrake(data);
-    //         break;
-    //     case RequestCode::HWTRAIN_BRAKE_FAILURE:
-    //         SetBrakeFailure(data);
-    //         GetBrakeFailure(data);
-    //         break;
-    //     case RequestCode::HWTRAIN_ENGINE_FAILURE:
-    //         SetEngineFailure(data);
-    //         GetEngineFailure(data);
-    //         break;
-    //     case RequestCode::HWTRAIN_SIGNAL_FAILURE:
-    //         SetSignalFailure(data);
-    //         GetSignalFailure(data);
-    //         break;
-    //     case RequestCode::HWTRAIN_PULL_PASSENGER_EBRAKE:
-    //         SetPEBrake(data);
-    //         GetPEBrake(data);
-    //         break;
-    //     case RequestCode::HWTRAIN_TOGGLE_DAMN_DOORS:
-    //         SetDoors(data);
-    //         GetDoors(data);
-    //         break;
-    //     case RequestCode::HWTRAIN_DISPLAY_ADS:
-    //         SetAds(data);
-    //         GetAds(data);
-    //         break;
-    //     case RequestCode::HWTRAIN_SET_TEMPERATURE:
-    //         DisplayTemp(data);
-    //         break;
-        // case RequestCode::HWTRAIN_UPDATE_CURRENT_SPEED:
-        //     DisplaySpeed(data);
-        //     break;
-        // case RequestCode::HWTRAIN_GUI_DISPLAY_POWER:
-        //     DisplayPower(data);
-        //     break;
-        // case RequestCode::HWTRAIN_GUI_SET_KP:
-        //     DisplayKp(data);
-        //     break;
-        // case RequestCode::HWTRAIN_GUI_SET_KI:
-        //     DisplayKi(data);
-        //     break;
-        // default:
-        //     // We expect ParseCode to take care of this case
-        //     assert(false)
+    }
+
+    // Quickly return if nothing has been received
+    if (Serial.available() == 0)
+    {
+        return;
+    }
+
+    // parse whatever's on serial port using parse data
+    // if it's get all data request (via the code variable), then send all data back
+    // I already have the power loop as child class
+    if(code==RequestCode::HWTRAIN_GET_DATA){
+        string stri = get_data(); // used to send data over to the python code
+    }
 }
-
 
 }

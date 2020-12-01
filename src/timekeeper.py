@@ -13,7 +13,8 @@ class Timekeeper:
     """Class responsible for keeping the system time"""
     def __init__(self):
         self.timer_thread = threading.Thread(target=self.timer_function)
-        self.timer_period_in_sec = 1
+        self.signal_period = 0.2
+        self.time_factor = 1
         self.current_time_sec = 0
         self.current_time_min = 0
         self.current_time_hour = 1
@@ -21,14 +22,27 @@ class Timekeeper:
         self.run_lock = threading.Lock()
         self.running = True
 
+        self.signal_timer = threading.Timer(self.signal_period * self.time_factor,
+                                            self.signal_timer_triggered)
+
         # For CTC to store trains to be dispatched
         self.ctc_trains_backlog = []
+
+    def signal_timer_triggered(self):
+        """Method called when the signal timer thread ends"""
+        signals.swtrain_time_trigger.emit()
+
+        self.signal_timer = threading.Timer(self.signal_period * self.time_factor,
+                                            self.signal_timer_triggered)
+
+        with self.run_lock:
+            self.signal_timer.start()
 
     def timer_function(self):
         """Thread function for monitoring time and emitting signals"""
         logger.critical("Timekeeper starting...")
         while self.running:
-            time.sleep(self.timer_period_in_sec)
+            time.sleep(self.time_factor)
 
             with self.run_lock:
                 self.current_time_sec += 1
@@ -57,9 +71,20 @@ class Timekeeper:
                         # Remove the train from backlog if dispatched
                         self.ctc_trains_backlog.remove(item)
 
+        # Cancel the timer
+        self.signal_timer.join()
+        self.signal_timer.cancel()
+
     def start_time(self):
         """Initially starts the thread"""
         self.timer_thread.start()
+        self.signal_timer.start()
+
+    def stop_time(self):
+        """Stops the timekeeper"""
+        self.running = False
+        self.resume_time()
+        self.timer_thread.join()
 
     def pause_time(self):
         """Acquires the run lock, so the timer can't run"""

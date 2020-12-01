@@ -1,12 +1,13 @@
 """Module containing classes to communicate with the hw track controller"""
 
-from time import sleep
 import threading
 from enum import Enum
 import serial
-from serial.serialutil import SerialException
 
+from src.common_def import pairwise
+from src.SWTrackController.track_controller import TrackController
 from src.UI.Common.common import DownloadInProgress
+from src.signals import signals
 from src.logger import get_logger
 
 logger = get_logger(__name__)
@@ -28,16 +29,40 @@ class Code(Enum):
     GET_TAG_VALUE = 104 # Used by the gui to get a tag's value
     GET_ALL_TAG_VALUES = 105 # Used by the gui to get all tag values
 
-class HWTrackCtrlConnector:
+TIMER_PERIOD = 3.75
+
+class HWTrackCtrlConnector(TrackController):
     """Class responsible for communicating with the hw track controller"""
+
+    run_timer = True
+
     def __init__(self):
-        try:
-            self.arduino = serial.Serial(SERIAL_PORT, RATE, timeout=5)
-            sleep(2)
-        except SerialException:
-            print("No arduino")
+        super().__init__()
+        self.arduino = serial.Serial(SERIAL_PORT, RATE, timeout=5)
 
         self.comms_lock = threading.Lock()
+
+        self.timer = threading.Timer(TIMER_PERIOD, self.get_all_tag_values)
+        self.timer.start()
+
+    def get_all_tag_values(self):
+        """Periodic function to update tags in this object"""
+        with self.comms_lock:
+            self.send_message("{}".format(Code.GET_ALL_TAG_VALUES.value))
+            tag_values = str(self.get_response()).rstrip('\'')
+        splits = tag_values.split(" ")
+
+        # Ignore the response code
+        for key, value in pairwise(splits[1:]):
+            if (key == "switch") and key in self.tags:
+                if self.tags[key] != bool(int(value)):
+                    signals.swtrack_update_gui.emit()
+
+            self.tags.update({key : bool(int(value))})
+
+        if HWTrackCtrlConnector.run_timer:
+            self.timer = threading.Timer(TIMER_PERIOD, self.get_all_tag_values)
+            self.timer.start()
 
     def send_message(self, msg):
         """Writes the given message to the serial port
@@ -45,7 +70,7 @@ class HWTrackCtrlConnector:
         :param str msg: Message to send
         """
         bytes_written = self.arduino.write(bytes(str(msg), 'utf-8'))
-        logger.info("%d bytes written to the controller", bytes_written)
+        logger.info("%s written to the controller", str(msg))
 
     def get_response(self):
         """Gets the response from the controller.
@@ -64,6 +89,7 @@ class HWTrackCtrlConnector:
 
         :param file compiled_program: Path to the compiled PLC program
         """
+        logger.debug("Downloading program %s", compiled_program)
         progress = DownloadInProgress()
 
         def _download_program():
@@ -92,3 +118,18 @@ class HWTrackCtrlConnector:
         download_thread.start()
 
         progress.exec()
+
+    def set_tag_value(self, tag_name, value):
+        """Sets a tag's value inside the plc
+
+        :param str tag_name: Name of the tag
+        :param bool value: Value to set to the tag to
+        """
+        super().set_tag_value(tag_name, value)
+        with self.comms_lock:
+            self.send_message(" ".join(map(str, (Code.SET_TAG_VALUE.value, tag_name, int(value)))))
+            logger.info(self.get_response())
+
+    def run_program(self):
+        """Nothing should be done for the hw controller"""
+        pass
