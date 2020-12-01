@@ -8,6 +8,7 @@ from src.common_def import pairwise
 from src.SWTrackController.track_controller import TrackController
 from src.UI.Common.common import DownloadInProgress
 from src.signals import signals
+from src.common_def import Line
 from src.logger import get_logger
 
 logger = get_logger(__name__)
@@ -67,6 +68,7 @@ class HWTrackCtrlConnector(TrackController):
             self.tags.update({key : bool(int(value))})
 
         try:
+            signals.swtrack_force_authority_reevaluation.emit(Line.LINE_GREEN)
             signals.swtrack_update_gui.emit()
         except RuntimeError:
             pass
@@ -147,6 +149,7 @@ class HWTrackCtrlConnector(TrackController):
         :param str tag_name: Name of the tag
         :param bool value: Value to set to the tag to
         """
+        super().set_tag_value(tag_name, value)
         def communicate(self):
             """Private function for a thread to communicate with the arduino"""
             with self.comms_lock:

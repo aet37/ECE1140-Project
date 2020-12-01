@@ -1,6 +1,7 @@
 TAG switch = FALSE
 TAG heater = FALSE
 TAG mmode = FALSE
+TAG broken = FALSE
 # Section 1
 TAG b85O = FALSE
 TAG b85A = TRUE
@@ -51,6 +52,7 @@ TAG out10p = FALSE
 TAG out25p = FALSE
 TAG out27p = FALSE
 TAG out29p = FALSE
+TAG out31p = FALSE
 
 TASK<PERIOD=2000> MainTask
     ROUTINE Main
@@ -58,6 +60,7 @@ TASK<PERIOD=2000> MainTask
             XIO b86O
             XIO b87O
             XIO b88O
+            XIO broken
             OTE b85A
         ENDRUNG
         RUNG
@@ -67,6 +70,7 @@ TASK<PERIOD=2000> MainTask
             XIO b92O
             XIO b93O
             XIO b94O
+            XIO broken
             OTE b86A
             OTE b87A
             OTE b88A
@@ -78,6 +82,7 @@ TASK<PERIOD=2000> MainTask
             XIO b98O
             XIO b99O
             XIO b100O
+            XIO broken
             OTE b89A
             OTE b90A
             OTE b91A
@@ -87,6 +92,7 @@ TASK<PERIOD=2000> MainTask
         ENDRUNG
         RUNG
             XIO b85O
+            XIO broken
             OTE b
             OTE b96A
             OTE b97A
@@ -97,6 +103,10 @@ TASK<PERIOD=2000> MainTask
         RUNG
             XIC heater
             OTE out27p
+        ENDRUNG
+        RUNG
+            XIC broken
+            OTE out31p
         ENDRUNG
         # Station 1 signal
         RUNG
@@ -128,16 +138,22 @@ TASK<PERIOD=2000> MainTask
         ENDRUNG
         # Switch signal
         RUNG
+            XIC b85O
+            OTL out3p
+        ENDRUNG
+        RUNG
             XIC b86O
-            OTE out3p
+            OTL out3p
         ENDRUNG
         RUNG
             XIC b100O
-            OTE out3p
+            OTL out3p
         ENDRUNG
         RUNG
+            XIO b85O
             XIO b86O
             XIO b100O
+            OTU out3p
             OTE out2p
         ENDRUNG
     ENDROUTINE

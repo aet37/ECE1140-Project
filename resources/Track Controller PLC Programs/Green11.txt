@@ -1,5 +1,6 @@
 TAG switch = TRUE
 TAG heater = FALSE
+TAG broken = FALSE
 TAG b58O = FALSE
 TAG b59O = FALSE
 TAG b60O = FALSE
@@ -11,5 +12,12 @@ TAG b61A = TRUE
 
 TASK<PERIOD=1000> MainTask
     ROUTINE Main
+        RUNG
+            XIO broken
+            OTE b58A
+            OTE b59A
+            OTE b60A
+            OTE b61A
+        ENDRUNG
     ENDROUTINE
 ENDTASK
