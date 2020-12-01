@@ -33,7 +33,11 @@ class Timekeeper:
 
     def signal_timer_triggered(self):
         """Method called when the signal timer thread ends"""
-        signals.swtrain_time_trigger.emit()
+        try:
+            signals.swtrain_time_trigger.emit()
+        except Exception:
+            logger.info("Ignoring exception because app must have been closed")
+            pass
 
         self.signal_timer = threading.Timer(self.signal_period * self.time_factor,
                                             self.signal_timer_triggered)
