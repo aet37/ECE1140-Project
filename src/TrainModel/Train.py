@@ -21,6 +21,7 @@ class Train:
         self.m_authority = False
         self.m_currentLine = Line.LINE_GREEN # Default green line
         self.m_power = 0.0
+        self.m_trainDirection = 0
         # INTEGERS (self, Nonvital)
         self.m_tempControl = 0.0
 

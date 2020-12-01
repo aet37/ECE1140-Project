@@ -63,6 +63,8 @@ class TrainCatalogue:
         signals.train_model_update_command_speed.connect(self.train_model_update_command_speed)
         # Receive Pass Count
         signals.train_model_update_passengers.connect(self.train_model_update_passengers)
+        # Receive Direction
+        signals.train_model_update_direction.connect(self.train_model_update_direction)
 
     # print(sys.path)
 
@@ -106,7 +108,7 @@ class TrainCatalogue:
         signals.train_model_dropdown_has_been_changed.emit()
 
     # @brief Receives block information
-    def train_model_receive_block(self, track_id, block_id, elevation, slope, sizeOfBlock, speedLimit, travelDirection, station):
+    def train_model_receive_block(self, track_id, block_id, elevation, slope, sizeOfBlock, speedLimit, travelDirection, station, newBeacon1, newBeacon2):
         newBlock = Block(block_id)
         # Parse stuff from Evan (trackId, blockId, elevation, grade, length, speedLimit, travelDirection)
 
@@ -116,6 +118,8 @@ class TrainCatalogue:
         newBlock.m_speedLimit = speedLimit
         newBlock.m_travelDirection = travelDirection
         newBlock.m_station = station
+        newBlock.beacon1 = newBeacon1
+        newBlock.beacon2 = newBeacon2
 
         # Add the block to the catalogue
         if (track_id == 0):
@@ -151,6 +155,10 @@ class TrainCatalogue:
     def train_model_gui_receive_announce_stations(self, trainId, announcements):
         self.m_trainList[trainId].m_announcements = announcements
         signals.train_model_something_has_been_changed.emit()
+
+    # @brief Receives Direction
+    def train_model_update_direction(self, trainId, newDirection):
+        self.m_trainList[trainId].m_trainDirection = newDirection
 
     # @brief Toggles the advertisements
     def train_model_gui_receive_ads(self, trainId, ads):
