@@ -243,11 +243,13 @@ class SignalHandler:
                 theTrack.getBlock(y).blockStation.passengersBoarded += spaceOnTrain
             totalPassengers = totalSeats
             signals.train_model_update_passengers.emit(trainId, totalPassengers)
+            signals.trackmodel_update_gui.emit()
         else:
             for z in blockList:
                 theTrack.getBlock(z).blockStation.passengersBoarded += passengersLeftToBoard
             totalPassengers = totalSeats - (spaceOnTrain - passengersLeftToBoard)
             signals.train_model_update_passengers.emit(trainId, totalPassengers)
+            signals.trackmodel_update_gui.emit()
 
     def updateSwitchPositions(self, line, number, position):
         if (line == Line.LINE_GREEN):
@@ -493,15 +495,12 @@ class SignalHandler:
                     theBeacon2 = Beacon()
                     if (records.column['Beacon'][x] != ""):
                         if (int(records.column['Beacon'][x]) == 0):
-                            print("sup")
                             theBeaconString = records.column['B0'][x]
                             beaconNum = 0
                         elif (int(records.column['Beacon'][x] == 1)):
-                            print("hrllo")
                             theBeaconString = records.column['B1'][x]
                             beaconNum = 1
                         else:
-                            print("hi")
                             theBeaconString = records.column['B0'][x]
                             theBeacon2String = records.column['B1'][x]
                             beaconNum = 2
@@ -523,7 +522,6 @@ class SignalHandler:
                                 lastStation2 = False
                             else:
                                 lastStation2 = True
-                        print(str(beaconList))
                         if (beaconList[1] == "TRUE"):
                             theBool = True
                         else:
