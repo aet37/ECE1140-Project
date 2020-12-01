@@ -224,7 +224,7 @@ class TrainSystem:
                 raise Exception('TrainSystem : update_blocks received blocks out of\
                                  range for Red Line')
             else:
-                self.blocks_green_arr[block - 1].occupied = occ
+                self.blocks_red_arr[block - 1].occupied = occ
 
         # Update the location of the train with every block moved
         self.update_train_loc()
