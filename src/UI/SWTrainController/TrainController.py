@@ -525,6 +525,14 @@ class SWTrainUi(QtWidgets.QMainWindow):
             alert.exec_()
             return
 
+        # If no kp and ki have been set, service brake cannot be removed
+        kp = self.findChild(QtWidgets.QLabel, 'KpLabel').text()
+        kp = kp.split()[0]
+        if float(kp) == 0.0:
+            alert = Alert("Error: Must set Kp and Ki in order to remove service brake!")
+            alert.exec_()
+            return
+
         # Check if authority is zero NEED METHOD TO AUTOMATICALLY TURN SERVICE BRAKE ON AUTOMATICALLY
         #if control_system.p_controllers[int(self.current_train_id) - 1].authority == 0:
             #self.service_brake.setStyleSheet("background-color: rgb(255, 51, 16);")

@@ -86,6 +86,8 @@ class SignalsClass(QObject):
     swtrain_gui_set_kp_ki = pyqtSignal(int, float, float) # TrainID, setKp, setKi
     swtrain_gui_switch_mode = pyqtSignal(int, str) # TrainID, override code
     swtrain_time_trigger = pyqtSignal()
+    swtrain_receive_beacon = pyqtSignal(int, Beacon) # TrainID, beacon
+    swtrain_send_beacon_info = pyqtSignal(int, str, DoorSide) # TrainID, Station Name, DoorSide
 
     # Track Model Signals
     trackmodel_dispatch_train = pyqtSignal(int, int, float, bool, Line, list) # Used by SWTrack Controller to send dispatch Train (train_id, command_speed, authority, Line, switches_arr(boolean))

@@ -4,11 +4,16 @@
     Date: 10.7.20
 """
 
+import time
 from src.SWTrainController.Controller import Controller
 from src.signals import signals
 from serial.serialutil import SerialException
 from src.HWTrainController.HWTrainArduinoConnector import HWController
 from src.logger import get_logger
+from common_def import Beacon
+import threading
+
+from timekeeper import timekeeper
 
 logger = get_logger(__name__)
 
@@ -42,6 +47,8 @@ class ControlSystem:
         signals.swtrain_update_authority.connect(self.swtrain_update_authority)
         # Receive new command speed
         signals.swtrain_update_command_speed.connect(self.swtrain_update_command_speed)
+        # Receive beacon
+        signals.swtrain_receive_beacon.connect(self.swtrain_receive_beacon)
 
         ## RECEIVE NONVITAL SIGNALS ##
         # Receive lights signal
@@ -155,6 +162,38 @@ class ControlSystem:
         """Update command speed in train controller"""
         self.p_controllers[train_id].command_speed = command_speed
         print("Command speed: " + str(command_speed))
+
+    def swtrain_receive_beacon(self, train_id, beacon):
+        """Receive beacon from train model"""
+        # Turn service brake on and notify train model
+        self.p_controllers[train_id].service_brake = beacon.service_brake
+        signals.train_model_gui_receive_service_brake.emit(train_id, self.p_controllers[train_id].service_brake)
+        # Send train model rest of beacon info
+        signals.swtrain_send_beacon_info.emit(train_id, beacon.station_name, beacon.DoorSide)
+        # Begin train stopping process
+        beacon_thread = threading.Thread(target = self.swtrain_stop, args=(train_id,), daemon=True)
+        beacon_thread.start()
+
+    def swtrain_stop(self, train_id):
+        """Function to ensure trains stop properly"""
+        # Wait for train to come to a stop
+        while(self.p_controllers[train_id].current_speed != 0):
+            pass
+        # Once train is at stop, toggle nonvitals
+        self.swtrain_gui_toggle_cabin_lights(train_id)
+        self.swtrain_gui_toggle_damn_doors(train_id)
+        self.swtrain_gui_announce_stations(train_id)
+        # Wait one minute at stop
+        current_minute = timekeeper.current_time_min
+        while(current_minute == timekeeper.current_time_min):
+            assert self.p_controllers[train_id].current_speed == 0
+            time.sleep(1)
+
+        # After a minute, toggle nonvitals again and begin moving
+        self.swtrain_gui_toggle_cabin_lights(train_id)
+        self.swtrain_gui_toggle_damn_doors(train_id)
+        self.swtrain_gui_announce_stations(train_id)
+        self.swtrain_gui_press_service_brake(train_id)
 
     ## NonVital Signal Definitions ##
     def swtrain_gui_toggle_cabin_lights(self, train_id):
