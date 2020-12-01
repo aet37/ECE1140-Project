@@ -87,6 +87,8 @@ class TrackController:
             else:
                 assert False, "Unknown command from the compiler"
 
+        return True
+
     def get_tag_value(self, tag_name):
         """Gets a tag's value from inside the plc
 

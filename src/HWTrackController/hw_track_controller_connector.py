@@ -35,6 +35,7 @@ class HWTrackCtrlConnector(TrackController):
     """Class responsible for communicating with the hw track controller"""
 
     run_timer = True
+    download_aborted = False
 
     def __init__(self):
         super().__init__()
@@ -44,6 +45,11 @@ class HWTrackCtrlConnector(TrackController):
 
         self.timer = threading.Timer(TIMER_PERIOD, self.get_all_tag_values)
         self.timer.start()
+
+    @staticmethod
+    def abort_button_clicked():
+        """Flips the download aborted flag to true"""
+        HWTrackCtrlConnector.download_aborted = True
 
     def get_all_tag_values(self):
         """Periodic function to update tags in this object"""
@@ -55,7 +61,7 @@ class HWTrackCtrlConnector(TrackController):
         # Ignore the response code
         for key, value in pairwise(splits[1:]):
             # Weird thing with b95A lol
-            if (key == 'b'):
+            if key == 'b':
                 key = 'b95A'
 
             self.tags.update({key : bool(int(value))})
@@ -96,6 +102,8 @@ class HWTrackCtrlConnector(TrackController):
         """
         logger.debug("Downloading program %s", compiled_program)
         progress = DownloadInProgress()
+        HWTrackCtrlConnector.download_aborted = False
+        progress.abort_clicked.connect(self.abort_button_clicked)
 
         def _download_program():
             commands = []
@@ -112,6 +120,13 @@ class HWTrackCtrlConnector(TrackController):
 
             with self.comms_lock:
                 for i, command in enumerate(commands):
+                    if HWTrackCtrlConnector.download_aborted:
+                        logger.critical("Download aborted")
+                        self.send_message("{} Blank Project".format(Code.START_DOWNLOAD.value))
+                        logger.info(self.get_response())
+                        self.send_message("{}".format(Code.END_DOWNLOAD.value))
+                        logger.info(self.get_response())
+                        return
                     self.send_message(command)
                     # No need for sleep here because of the get response
                     logger.info(self.get_response())
@@ -124,6 +139,8 @@ class HWTrackCtrlConnector(TrackController):
 
         progress.exec()
 
+        return not HWTrackCtrlConnector.download_aborted
+
     def set_tag_value(self, tag_name, value):
         """Sets a tag's value inside the plc
 
@@ -133,7 +150,8 @@ class HWTrackCtrlConnector(TrackController):
         def communicate(self):
             """Private function for a thread to communicate with the arduino"""
             with self.comms_lock:
-                self.send_message(" ".join(map(str, (Code.SET_TAG_VALUE.value, tag_name, int(value)))))
+                self.send_message(" ".join(map(str, (Code.SET_TAG_VALUE.value, tag_name,
+                                                     int(value)))))
                 logger.info(self.get_response())
                 super().set_tag_value(tag_name, value)
 
@@ -142,4 +160,3 @@ class HWTrackCtrlConnector(TrackController):
 
     def run_program(self):
         """Nothing should be done for the hw controller"""
-        pass

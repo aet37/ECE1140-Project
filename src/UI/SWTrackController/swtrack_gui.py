@@ -222,8 +222,11 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         output_file = self.compile_program(file_name[0])
 
         if output_file is not None:
-            self.send_compiled_program(output_file)
-            alert = Alert("Program downloaded successfully!")
+            result = self.send_compiled_program(output_file)
+            if result:
+                alert = Alert("Program downloaded successfully!")
+            else:
+                alert = Alert("Program download aborted")
             alert.exec_()
 
         self.update_gui()
