@@ -336,10 +336,11 @@ class SignalHandler:
                 #print("Trackmodel block: " + str(theBlock.blockNumber) + " station: " + str(theBlock.blockStation != None))
                 theBeacon1 = Beacon()
                 theBeacon2 = Beacon()
-                if (theBlock.blockBeacon.beaconDirection == 0):
-                    theBeacon1 = theBlock.blockBeacon
-                else:
-                    theBeacon2 = theBlock.blockBeacon
+                if (theBlock.blockBeacon != None):
+                    if (theBlock.blockBeacon.beaconDirection == 0):
+                        theBeacon1 = theBlock.blockBeacon
+                    else:
+                        theBeacon2 = theBlock.blockBeacon
 
                 signals.train_model_receive_block.emit(0, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None, theBeacon1, theBeacon2)
         else:
@@ -349,10 +350,11 @@ class SignalHandler:
                 theBlock = theTrack.getBlock(i)
                 theBeacon1 = Beacon()
                 theBeacon2 = Beacon()
-                if (theBlock.blockBeacon.beaconDirection == 0):
-                    theBeacon1 = theBlock.blockBeacon
-                else:
-                    theBeacon2 = theBlock.blockBeacon
+                if (theBlock.blockBeacon != None):
+                    if (theBlock.blockBeacon.beaconDirection == 0):
+                        theBeacon1 = theBlock.blockBeacon
+                    else:
+                        theBeacon2 = theBlock.blockBeacon
                 signals.train_model_receive_block.emit(1, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None, theBeacon1, theBeacon2)
 
         signals.train_model_dispatch_train.emit(trainId, destinationBlock, commandSpeed, authority, currentLine, route)
