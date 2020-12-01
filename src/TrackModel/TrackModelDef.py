@@ -531,12 +531,13 @@ class SignalHandler:
                         if (beaconNum == 0):
                             theBeacon1 = theBlock.blockBeacon
                         elif (beaconNum == 1):
-                            theBeacon2 = theBlock.blockBeacon
+                            theBeacon22 = theBlock.blockBeacon
                         else:
                             theBeacon1 = theBlock.blockBeacon
-                            theBeacon2.station_name = beaconList2[0]
-                            theBeacon2.service_brake = TRUE
-                            theBeacon2.DoorSide = exitWay2
+                            theBeacon22 = Beacon()
+                            theBeacon22.station_name = beaconList2[0]
+                            theBeacon22.service_brake = TRUE
+                            theBeacon22.DoorSide = exitWay2
 
                     newTrack.addBlock(theBlock)
 
