@@ -489,7 +489,7 @@ class SignalHandler:
                         theTrack.switchList.append(theBlock.blockNumber)
 
                     theBeacon1 = Beacon()
-                    theBeacon2 = Beacon()
+                    theBeacon22 = Beacon()
                     if (records.column['Beacon'][x] != ""):
                         if (int(records.column['Beacon'][x]) == 0):
                             theBeacon = records.column['B0'][x]
@@ -543,9 +543,9 @@ class SignalHandler:
 
                     # add beacon to this
                     if (blockNumber == 1):
-                        signals.train_model_receive_block.emit(trackInfo['tNumber'], 0, 0, 0, 10, blockSpeedLimit, blockDirection, stationBool, theBeacon1, theBeacon2)
+                        signals.train_model_receive_block.emit(trackInfo['tNumber'], 0, 0, 0, 10, blockSpeedLimit, blockDirection, stationBool, theBeacon1, theBeacon22)
 
-                    signals.train_model_receive_block.emit(trackInfo['tNumber'], blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection, stationBool, theBeacon1, theBeacon2)
+                    signals.train_model_receive_block.emit(trackInfo['tNumber'], blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection, stationBool, theBeacon1, theBeacon22)
 
 
                     #jsonString = json.dumps(blockInfo)
