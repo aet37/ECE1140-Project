@@ -36,7 +36,7 @@ background-color: rgb(33, 255, 128)</string>
      <rect>
       <x>90</x>
       <y>650</y>
-      <width>101</width>
+      <width>121</width>
       <height>21</height>
      </rect>
     </property>
@@ -247,7 +247,7 @@ background-color: rgb(33, 255, 128)</string>
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>180</x>
+      <x>210</x>
       <y>650</y>
       <width>71</width>
       <height>21</height>
@@ -281,9 +281,9 @@ background-color: rgb(33, 255, 128)</string>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>290</x>
       <y>650</y>
-      <width>111</width>
+      <width>141</width>
       <height>21</height>
      </rect>
     </property>
@@ -6926,9 +6926,9 @@ color: rgb(255, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>130</x>
-      <y>620</y>
+      <y>610</y>
       <width>171</width>
-      <height>21</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
@@ -6939,9 +6939,9 @@ color: rgb(255, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>300</x>
-      <y>620</y>
-      <width>201</width>
-      <height>16</height>
+      <y>615</y>
+      <width>241</width>
+      <height>21</height>
      </rect>
     </property>
     <property name="styleSheet">

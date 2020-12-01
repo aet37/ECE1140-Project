@@ -23,5 +23,5 @@ def test_passing_occupancy(upload_tracks, download_programs):
         signals.trackmodel_update_occupancy.emit(0, Line.LINE_GREEN, current_block, True)
 
         # Verify it got to the ctc
-        assert current_block in track_system.occupied_blocks
-        assert previous_block not in track_system.occupied_blocks
+        assert current_block in track_system.green_occupied_blocks
+        assert previous_block not in track_system.green_occupied_blocks
