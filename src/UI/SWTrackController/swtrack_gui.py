@@ -156,10 +156,6 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         (false_position, true_position) = self.get_translated_switch_positions(line, track_controller_id)
         self.switch_position_label.setText(self.determine_text(switch_position, false_position, true_position))
 
-        # Light status
-        light_status = self.current_track_controller.get_light_status()
-        self.light_status_label.setText(self.determine_text(light_status, "GREEN", "RED"))
-
         # Occupied
         occupied = self.current_track_controller.get_block_occupancy(self.current_block)
         mmode = self.current_track_controller.get_maintenance_mode()
@@ -180,6 +176,9 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             authority = self.current_track_controller.get_authority_of_block(self.current_block)
             self.authority_label.setText("YES" if authority else "NO")
 
+            # Light status
+            self.light_status_label.setText(self.determine_text(authority, "GREEN", "RED"))
+
             # Suggested Speed
             suggested_speed = 70.0 * Converters.KmHr_to_MPH
             self.suggested_speed_label.setText("{:.2f} MPH".format(suggested_speed))
@@ -194,6 +193,7 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
             self.authority_label.setText("-")
             self.suggested_speed_label.setText("-")
             self.command_speed_label.setText("-")
+            self.light_status_label.setText("GREEN")
 
     @staticmethod
     def determine_text(tag_value, true_text, false_text):
@@ -265,7 +265,7 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
 
         :param str output_file: Name of the file containing the compiled program
         """
-        self.current_track_controller.download_program(output_file)
+        return self.current_track_controller.download_program(output_file)
 
     def switch_position_button_clicked(self, event):
         """Method called when the switch position button is pressed"""
