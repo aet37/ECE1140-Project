@@ -464,8 +464,8 @@ class SignalHandler:
                         theBlock.addSwitch(switchNumber, block1, block2)
                         theTrack.switchList.append(theBlock.blockNumber)
 
-                    theBeacon1 = None
-                    theBeacon2 = None
+                    theBeacon1 = Beacon()
+                    theBeacon2 = Beacon()
                     if (records.column['Beacon'][x] != ""):
                         if (int(records.column['Beacon'][x]) == 0):
                             theBeacon = records.column['B0'][x]
