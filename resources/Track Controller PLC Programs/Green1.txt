@@ -10,14 +10,15 @@ TAG b63A = TRUE
 TAG b64A = TRUE
 TAG b65A = TRUE
 TAG b66A = TRUE
-TAG b67A = TRUE
-TAG b68A = TRUE
-TAG b69A = TRUE
-TAG b70A = TRUE
 TAG b63O = FALSE
 TAG b64O = FALSE
 TAG b65O = FALSE
 TAG b66O = FALSE
+#
+TAG b67A = TRUE
+TAG b68A = TRUE
+TAG b69A = TRUE
+TAG b70A = TRUE
 TAG b67O = FALSE
 TAG b68O = FALSE
 TAG b69O = FALSE
@@ -44,11 +45,17 @@ TASK<PERIOD=1000> MainTask
             XIO b64O
             XIO b65O
             XIO b66O
+            OTE b62A
+        ENDRUNG
+        RUNG
             XIO b67O
             XIO b68O
             XIO b69O
             XIO b70O
-            OTE b62A
+            OTE b63A
+            OTE b64A
+            OTE b65A
+            OTE b66A
         ENDRUNG
         RUNG
             XIO b71O
@@ -57,17 +64,13 @@ TASK<PERIOD=1000> MainTask
             XIO b74O
             XIO b75O
             XIO b76O
-            OTE b63A
-            OTE b64A
-            OTE b65A
-            OTE b66A
             OTE b67A
             OTE b68A
             OTE b69A
             OTE b70A
         ENDRUNG
         RUNG
-            XIO b0O
+            XIC b0O
             OTE switch
         ENDRUNG
     ENDROUTINE
