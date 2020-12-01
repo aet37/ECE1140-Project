@@ -304,9 +304,16 @@ class SignalHandler:
     # def updateAuthority(self, trainId, newAuthority):
     #     signals.train_model_update_authority.emit(trainId, newAuthority)
 
-    def updateOccupancy(self, trainId, line, currentBlock, trainOrNot):
+    def updateOccupancy(self, trainId, line, currentBlock, trainOrNot, travelDirection):
         if (line == Line.LINE_GREEN):
             theTrack = getTrack("Green")
+            if (travelDirection == 0):
+                if (currentBlock == 100 or currentBlock == 12):
+                    signals.train_model_update_direction.emit(trainId, 1)
+            else:
+                if (currentBlock == 77 or currentBlock == 29):
+                    signals.train_model_update_direction.emit(trainId, 0)
+
         else:
             theTrack =  getTrack("Red")
 
@@ -314,13 +321,9 @@ class SignalHandler:
             theBlock = theTrack.getBlock(currentBlock)
             if (trainOrNot):
                 theBlock.updateOccupancy(trainId)
-                # if (theBlock.blockStation != None):
-                #     for x in theTrack.stationList:
-                #         if (x.stationName == theBlock.blockStation.stationName):
-                #             for y in x.blockList:
-                #                 theTrack.getBlock(y).blockStation.
             else:
                 theBlock.updateOccupancy(-1)
+
 
         # Tell swtrack the occupancy
         signals.swtrack_update_occupancies.emit(trainId, line, currentBlock, trainOrNot)
