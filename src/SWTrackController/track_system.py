@@ -41,6 +41,7 @@ class TrackSystem:
         signals.swtrack_dispatch_train.connect(self.swtrack_dispatch_train)
         signals.swtrack_update_occupancies.connect(self.swtrack_update_occupancies)
         signals.swtrack_set_track_heater.connect(self.swtrack_set_track_heater)
+        signals.swtrack_update_broken_rail_failure.connect(self.swtrack_update_broken_rail_failure)
 
     def swtrack_dispatch_train(self, train_id, destination_block, suggested_speed,
                                suggested_authority, line, route):
@@ -113,7 +114,6 @@ class TrackSystem:
         for i, track_controller in enumerate(track_controllers):
             # TODO(nns): Possibly add safety architecture here
             track_controller.set_block_occupancy(block_id, occupied)
-            track_controller.run_program()
 
             # Update switch positions
             switch_position = track_controller.get_switch_position()
@@ -167,6 +167,35 @@ class TrackSystem:
         # Turn all the heaters on/off
         for track_controller in track_controllers:
             track_controller.set_track_heater(status)
+
+    def swtrack_update_broken_rail_failure(self, line, block_id, status):
+        """Simulates a broken or fixed rail
+
+        :param Line line: Line on which the block is
+        :param int block_id: Block that will be broken
+        :param bool status: Whether the track is being broken or fixed
+        """
+        # Get the correct list of track controllers based on the line
+        track_controllers = self.green_track_controllers if line == Line.LINE_GREEN \
+                                                         else self.red_track_controllers
+
+        final_authorities = [True for _ in range(len(self.occupied_blocks))]
+        for track_controller in track_controllers:
+            if track_controller.get_authority_of_block(block_id) is not None:
+                # This track controller has authority of this block
+                track_controller.set_broken_rail(status)
+
+            # Go through occupied blocks and update their authorities
+            for j, block in enumerate(self.occupied_blocks):
+                new_authority = track_controller.get_authority_of_block(block)
+                if new_authority is not None:
+                    # It only takes one false authority to stop the train
+                    if not new_authority:
+                        final_authorities[j] = False
+
+        # Emit the final updated authorities for the occupied blocks
+        for final_authority, block in zip(final_authorities, self.occupied_blocks):
+            signals.trackmodel_update_authority.emit(line, block, final_authority)
 
     @staticmethod
     def get_speed_limit_of_block(line, block_id):

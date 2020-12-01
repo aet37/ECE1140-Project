@@ -193,5 +193,11 @@ class TrackController:
         """Gets whether this block is in maintanence mode"""
         return self.get_tag_value("mmode")
 
+    def set_broken_rail(self, value):
+        """Sets the tag to signify a rail is broken"""
+        self.set_tag_value("broken", value)
+
+        self.run_program()
+
 if __name__ == "__main__":
     raise Exception("Not to be run as a module")
