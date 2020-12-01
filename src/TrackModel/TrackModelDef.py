@@ -337,7 +337,7 @@ class SignalHandler:
                 theBeacon1 = Beacon()
                 theBeacon2 = Beacon()
                 if (theBlock.blockBeacon != None):
-                    if (theBlock.blockBeacon.beaconDirection == 0):
+                    if (theBlock.beaconDirection == 0):
                         theBeacon1 = theBlock.blockBeacon
                     else:
                         theBeacon2 = theBlock.blockBeacon
@@ -351,7 +351,7 @@ class SignalHandler:
                 theBeacon1 = Beacon()
                 theBeacon2 = Beacon()
                 if (theBlock.blockBeacon != None):
-                    if (theBlock.blockBeacon.beaconDirection == 0):
+                    if (theBlock.beaconDirection == 0):
                         theBeacon1 = theBlock.blockBeacon
                     else:
                         theBeacon2 = theBlock.blockBeacon
