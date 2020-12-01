@@ -67,7 +67,7 @@ TASK<PERIOD=1000> MainTask
             OTE b70A
         ENDRUNG
         RUNG
-            XIO b0O
+            XIC b0O
             OTE switch
         ENDRUNG
     ENDROUTINE

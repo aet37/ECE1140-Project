@@ -32,7 +32,7 @@ TASK<PERIOD=2000> MainTask
         ENDRUNG
         # Switch logic
         RUNG
-            XIO b0O
+            XIC b0O
             OTE switch
         ENDRUNG
         RUNG
