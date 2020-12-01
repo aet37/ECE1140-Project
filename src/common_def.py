@@ -32,7 +32,7 @@ class Beacon:
     """Class to hold attributes of beacon"""
     def __init__(self):
         self.station_name = ""
-        self.service_brake = True
+        self.service_brake = False
         self.DoorSide = None
 
 class DoorSide(Enum):
