@@ -64,16 +64,13 @@ class SignalsClass(QObject):
     train_model_update_command_speed = pyqtSignal(int, float) # Used by the track model to update the command speed of a train (trainId, newSpeed)
     train_model_update_authority = pyqtSignal(int, bool) # Used by the Track Model to update the authority of a train (trainId, newAuthority)
     train_model_update_passengers = pyqtSignal(int, int) # Used by the Track Model to update the passenger count of a train (trainId, newPassCount)
-<<<<<<< HEAD
     train_model_receive_track_circuit = pyqtSignal(Line, int, TrackCircuit) # Used by the track model to send the track circuit to the train model (line, trainId, trackCircuit)
-=======
     train_model_update_direction = pyqtSignal(int, int) # Used by the Track Model to update the direction of a train (trainId, newDirection)
     train_model_receive_beacon_info = pyqtSignal(int, str, DoorSide) # TrainID, Station Name, DoorSide
     train_model_report_sp_failure = pyqtSignal(int, bool) # TrainID, failReport
     train_model_report_sb_failure = pyqtSignal(int, bool) # TrainID, failReport
     train_model_report_e_failure = pyqtSignal(int, bool) # TrainID, failReport
     train_model_resolve_failure = pyqtSignal(int) # TrainID
->>>>>>> origin/master
 
     # SWTrainController Signals
     swtrain_gui_toggle_cabin_lights = pyqtSignal(int) # TrainID
@@ -105,12 +102,7 @@ class SignalsClass(QObject):
 
     # Track Model Signals
     trackmodel_dispatch_train = pyqtSignal(int, int, float, bool, Line, list) # Used by SWTrack Controller to send dispatch Train (train_id, command_speed, authority, Line, switches_arr(boolean))
-<<<<<<< HEAD
-    trackmodel_update_occupancy = pyqtSignal(int, Line, int, bool) # Used by train model to give track model info about a train's status on a particular block (trainId, Line, blockId, trainOrNot)
-=======
     trackmodel_update_occupancy = pyqtSignal(int, Line, int, bool, int) # Used by train model to give track model info about a train's status on a particular block (trainId, Line, blockId, trainOrNot, travelDirection)
-    trackmodel_update_command_speed = pyqtSignal(int, float) # Used by the track controller to update the command speed of a train (trainId, newSpeed)
->>>>>>> origin/master
     trackmodel_update_switch_positions = pyqtSignal(Line, int, bool) # Used by the track controller to update a switch positions (Line, switchNumberFromYard, switchPosition)
     trackmodel_update_authority = pyqtSignal(Line, int, bool) # Used by the track controller to update the authority of a train (trainId, newAuthority)
     trackmodel_update_gui = pyqtSignal() # used by the track model to tell me to update my gui
