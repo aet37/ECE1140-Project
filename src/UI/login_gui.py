@@ -12,6 +12,7 @@ from src.UI.SWTrackController.swtrack_gui import SWTrackControllerUi
 from src.UI.TrackModel.trackmodel_gui import TrackModelUi
 from src.UI.TrainModel.trainmodel_gui import TrainModelUi
 from src.UI.SWTrainController.TrainController import SWTrainUi
+from src.UI.debug_gui import DebugUi
 
 class LoginUi(QtWidgets.QMainWindow):
     """Page shown to user upon application startup"""
@@ -45,6 +46,8 @@ class LoginUi(QtWidgets.QMainWindow):
             window_list.append(SWTrainUi())
         elif username == "timekeeper" and password == "password":
             window_list.append(TimekeeperUi())
+        elif username == "debug" and password == "password":
+            window_list.append(DebugUi())
         else:
             self.alert_login.setStyleSheet("color: red;")
             return

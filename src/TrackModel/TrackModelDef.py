@@ -68,7 +68,7 @@ class Track:
 
     def setTrackHeater(self, heaterBool):
         self.trackHeater = heaterBool
-    
+
     def getStationBlocks(self, stationName):
         for x in self.stationList:
             if (x.stationName == stationName):
@@ -109,7 +109,7 @@ class Block:
 
     def addSwitch(self, switchNumber, block1, block2):
         self.blockSwitch = Switch(switchNumber, block1, block2)
-    
+
     def addBeacon(self, stationName, serviceBrakeBool, exitSide, beaconDirection, lastStation):
         theBeacon = Beacon()
         theBeacon.station_name = stationName
@@ -217,18 +217,59 @@ class SignalHandler:
         self.trainCount = -1
         signals.trackmodel_dispatch_train.connect(self.dispatchTrain)
         signals.trackmodel_update_occupancy.connect(self.updateOccupancy)
-        signals.trackmodel_update_command_speed.connect(self.updateCommandSpeed)
+        #signals.trackmodel_update_command_speed.connect(self.updateCommandSpeed)
         signals.trackmodel_update_authority.connect(self.updateAuthority)
         signals.trackmodel_update_switch_positions.connect(self.updateSwitchPositions)
         signals.trackmodel_update_tickets_sold.connect(self.updateTicketsSold)
         signals.trackmodel_update_passengers_exited.connect(self.updatePassengersExited)
+
+        signals.swtrack_set_block_status.connect(self.setBrokenRailFailure)
+
+    def setBrokenRailFailure(self, line, blockNumber, statusBool, num_fail):
+        if (line == Line.LINE_GREEN):
+            theTrack = getTrack("Green")
+        else:
+            theTrack = getTrack("Red")
+
+        theBlock = theTrack.getBlock(blockNumber)
+
+        if statusBool:
+            theBlock.brokenRailFailure = statusBool
+            signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
+        else:
+            # check how many faliures there were on that block to send Track Controller correct number
+            if num_fail == 1:
+                theBlock.brokenRailFailure = statusBool
+                theBlock.powerFailure = statusBool
+                theBlock.trackCircuitFailure = statusBool
+                signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
+            elif num_fail == 2:
+                theBlock.brokenRailFailure = statusBool
+                theBlock.powerFailure = statusBool
+                theBlock.trackCircuitFailure = statusBool
+                signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
+                signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
+            elif num_fail == 3:
+                theBlock.brokenRailFailure = statusBool
+                theBlock.powerFailure = statusBool
+                theBlock.trackCircuitFailure = statusBool
+                signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
+                signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
+                signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
+
+        signals.trackmodel_update_gui.emit()
+
+        signals.trackmodel_receive_track_circuit.connect(self.receiveTrackCircuit)
+
+    def receiveTrackCircuit(self, line, trainId, trackCircuit):
+        signals.train_model_receive_track_circuit.emit(line, trainId, trackCircuit)
 
     def updatePassengersExited(self, line, trainId, blockNumber, passengersExited, spaceOnTrain, totalSeats):
         if (line == Line.LINE_GREEN):
             theTrack = getTrack("Green")
         else:
             theTrack = getTrack("Red")
-        
+
         theBlock = theTrack.getBlock(blockNumber)
         theStation = theBlock.blockStation
 
@@ -568,8 +609,8 @@ class SignalHandler:
             else:
                 print('error')
 
-    def updateCommandSpeed(self, trainId, newSpeed):
-        signals.train_model_update_command_speed.emit(trainId, newSpeed)
+    # def updateCommandSpeed(self, trainId, newSpeed):
+    #     signals.train_model_update_command_speed.emit(trainId, newSpeed)
 
 # "Green" or "Red"
 def getTrack(trackColor):

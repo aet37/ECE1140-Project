@@ -1,7 +1,7 @@
 """Module for the track controller module"""
 
 from serial.serialutil import SerialException
-from src.common_def import Line, pairwise
+from src.common_def import Line, TrackCircuit, pairwise
 from src.SWTrackController.track_controller import TrackController
 from src.HWTrackController.hw_track_controller_connector import HWTrackCtrlConnector
 from src.signals import signals
@@ -147,22 +147,19 @@ class TrackSystem:
 
         # Emit the final updated authorities for the occupied blocks
         for final_authority, block in zip(final_authorities, occupied_blocks):
-            signals.trackmodel_update_authority.emit(line, block, final_authority)
-
-        # Forward this information to the CTC
-        if block_id != 0:
-            signals.update_occupancy.emit(line, block_id, occupied)
-
-        # Update command speed now since speed limit may have changed
-        if occupied:
-            speed_limit = self.get_speed_limit_of_block(line, block_id)
+            speed_limit = self.get_speed_limit_of_block(line, block)
 
             if self.suggested_speeds[train_id] > speed_limit:
                 command_speed = speed_limit
             else:
                 command_speed = self.suggested_speeds[train_id]
 
-            signals.trackmodel_update_command_speed.emit(train_id, command_speed)
+            track_circuit = TrackCircuit(command_speed, final_authority)
+            signals.trackmodel_receive_track_circuit.emit(line, train_id, track_circuit)
+
+        # Forward this information to the CTC
+        if block_id != 0:
+            signals.update_occupancy.emit(line, block_id, occupied)
 
     def swtrack_set_track_heater(self, line, status):
         """Method connected to the swtrack_set_track_heater signal"""
@@ -181,6 +178,10 @@ class TrackSystem:
         :param int block_id: Block that will be broken
         :param bool status: Whether the track is being broken or fixed
         """
+
+        # Send Faliure to CTC to display
+        signals.update_failure_blocks.emit(line, block_id, status)
+
         # Get the correct list of track controllers based on the line
         track_controllers = self.green_track_controllers if line == Line.LINE_GREEN \
                                                          else self.red_track_controllers
@@ -213,6 +214,13 @@ class TrackSystem:
                     # It only takes one false authority to stop the train
                     if not new_authority:
                         final_authorities[j] = False
+
+        ''' Test '''
+        '''num_maint_mode = 0 TO TEST IF PROBLEMS ARISE (already testd but just in case)
+        for track_controller in track_controllers:
+            if track_controller.number_of_failures > 0:
+                num_maint_mode += 1
+        print('Track Controllers in MM: ', num_maint_mode)'''
 
         # Emit the final updated authorities for the occupied blocks
         for final_authority, block in zip(final_authorities, occupied_blocks):

@@ -12,20 +12,20 @@ class SignalsClass(QObject):
     timer_expired = pyqtSignal(int, int, int, int) # Current day, hours, minutes, seconds
 
     # CTC Signals
-    #update_green_occupancies = pyqtSignal(list)	# Used by SWTrack Controller to send CTC green line occupancies in array of BOOL
-    #update_red_occupancies = pyqtSignal(list)	# Used by SWTrack Controller to send CTC red line occupancies in array of BOOL
     update_occupancy = pyqtSignal(Line, int, bool)	# Used by SWTrack Controller to send CTC updated occupanices
     update_green_switches = pyqtSignal(list)	# Used by SWTrack Controller to send CTC green line switches in array of BOOL
     update_red_switches = pyqtSignal(list)		# Used by SWTrack Controller to send CTC red line switches in array of BOOL
     update_throughput = pyqtSignal(int)			# Used by Track Model to send CTC throughput (ticket sales)
     dispatch_scheduled_train = pyqtSignal(int, Line)	# Used by Timekeeper to send CTC a dispatch commmand
+    update_failure_blocks = pyqtSignal(Line, int, bool) # Used by the swtrack to send blocks that are being closed for maintenance or finished with maintenance (line, blockNumber, failureBool)
+    ctc_update_failure_blocks_gui = pyqtSignal(Line, bool) # Update the GUI to dispaly closed blocks correctly
 
     # Track Controller Signals
     swtrack_dispatch_train = pyqtSignal(int, int, int, int, Line, list) # Used by CTC to send dispatch Train (train_id, destination_block, command_speed, authority, Line, switches_arr(BOOL))
     swtrack_update_authority = pyqtSignal(int, int)	# Used by CTC to update authority of a train (train_id, new_authority)
     swtrack_update_speed = pyqtSignal(int, int)	# Used by CTC to update suggested speed of train (train_id, new_speed)
     swtrack_set_switch_position = pyqtSignal(Line, int, bool)	# Used by CTC to set a switch position in maint mode (sw_number, position)
-    swtrack_set_block_status = pyqtSignal(Line, int, bool)	# Used by CTC to open/close (true/false) a block for mainenence (block_num, status)
+    swtrack_set_block_status = pyqtSignal(Line, int, bool, int)	# Used by CTC to open/close (true/false) a block for mainenence (block_num, status)
     swtrack_force_authority_reevaluation = pyqtSignal(Line) # Used by anyone to force all authorities on a line to be reevaluated
 
     swtrack_update_occupancies = pyqtSignal(int, Line, int, bool) # Used by Track Model to update occupancies (trainId, Line, blockNumber, occupancy) occupancy = 0  for empty, 1 for occupied
@@ -70,6 +70,7 @@ class SignalsClass(QObject):
     train_model_report_sb_failure = pyqtSignal(int, bool) # TrainID, failReport
     train_model_report_e_failure = pyqtSignal(int, bool) # TrainID, failReport
     train_model_resolve_failure = pyqtSignal(int) # TrainID
+    train_model_receive_track_circuit = pyqtSignal(Line, int, TrackCircuit) # Used by the track model to send the track circuit to the train model (line, trainId, trackCircuit)
 
     # SWTrainController Signals
     swtrain_gui_toggle_cabin_lights = pyqtSignal(int) # TrainID
@@ -108,5 +109,6 @@ class SignalsClass(QObject):
     trackmodel_update_gui = pyqtSignal() # used by the track model to tell me to update my gui
     trackmodel_update_passengers_exited = pyqtSignal(Line, int, int, int, int, int) # used by train model to communicate how many passengers left the train (Line, trainId, blockNumberOfStation, passengersExited, spaceAvailable, totalSeats)
     trackmodel_update_tickets_sold = pyqtSignal() # used to tell Track model to generate new tickets
+    trackmodel_receive_track_circuit = pyqtSignal(Line, int, TrackCircuit) # Line, train_id, trackcircuit
 # Single instance to be used by other modules
 signals = SignalsClass()
