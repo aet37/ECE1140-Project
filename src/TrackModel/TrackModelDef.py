@@ -219,8 +219,6 @@ class SignalHandler:
         signals.swtrack_set_block_status.connect(self.setBrokenRailFailure)
 
     def setBrokenRailFailure(self, line, blockNumber, statusBool):
-        print("Inside setBrokenRailFailure")
-        print("status = ", statusBool)
         if (line == Line.LINE_GREEN):
             theTrack = getTrack("Green")
         else:
@@ -229,14 +227,10 @@ class SignalHandler:
         theBlock = theTrack.getBlock(blockNumber)
 
         theBlock.brokenRailFailure = statusBool
-
-        print("theblock = ",theBlock.brokenRailFailure)
         
         signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
 
-        print("sending signal to gui")
         signals.trackmodel_update_gui.emit()
-
 
 
     def receiveTrackCircuit(self, line, trainId, trackCircuit):
