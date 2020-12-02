@@ -42,7 +42,9 @@ class TrackSystem:
         signals.swtrack_dispatch_train.connect(self.swtrack_dispatch_train)
         signals.swtrack_update_occupancies.connect(self.swtrack_update_occupancies)
         signals.swtrack_set_track_heater.connect(self.swtrack_set_track_heater)
-        signals.swtrack_update_broken_rail_failure.connect(self.swtrack_update_broken_rail_failure)
+        signals.swtrack_update_broken_rail_failure.connect(self.swtrack_update_failure)
+        signals.swtrack_update_power_failure.connect(self.swtrack_update_failure)
+        signals.swtrack_update_track_circuit_failure.connect(self.swtrack_update_failure)
         signals.swtrack_force_authority_reevaluation.connect(self.force_authority_reevaluation)
 
     def swtrack_dispatch_train(self, train_id, destination_block, suggested_speed,
@@ -172,7 +174,7 @@ class TrackSystem:
         for track_controller in track_controllers:
             track_controller.set_track_heater(status)
 
-    def swtrack_update_broken_rail_failure(self, line, block_id, status):
+    def swtrack_update_failure(self, line, block_id, status):
         """Simulates a broken or fixed rail
 
         :param Line line: Line on which the block is
@@ -187,9 +189,22 @@ class TrackSystem:
 
         final_authorities = [True for _ in range(len(occupied_blocks))]
         for track_controller in track_controllers:
+            # If this track controller has authority of this block
             if track_controller.get_authority_of_block(block_id) is not None:
-                # This track controller has authority of this block
-                track_controller.set_broken_rail(status)
+
+                # Count that number of failures that have been induced
+                if status:
+                    track_controller.number_of_failures += 1
+
+                    # Only take action if this is the first
+                    if track_controller.number_of_failures == 1:
+                        track_controller.set_broken_rail(status)
+                else:
+                    track_controller.number_of_failures -= 1
+
+                    # Only take action if this is the last
+                    if track_controller.number_of_failures == 0:
+                        track_controller.set_broken_rail(status)
 
             # Go through occupied blocks and update their authorities
             for j, block in enumerate(occupied_blocks):
