@@ -253,6 +253,10 @@ class TrainCatalogue:
         except:
             pass
             return
+
+        if(self.m_trainList[trainId].m_engineFailure):
+            powerStatus = 0
+
         currentTrack = self.m_trainList[trainId].m_currentLine
         currentBlock = self.m_trainList[trainId].m_route[0]
         # LOG_TRAIN_MODEL("currentTrack = %d", currentTrack);
@@ -422,18 +426,15 @@ class TrainCatalogue:
         else:
             # LOG_TRAIN_MODEL("Staying in the same block: currentPosition = %f, blockSize = %f", currentPosition, currentBlockSize)
             # Still in the same block
-            if(not self.m_trainList[trainId].m_engineFailure):
-                self.m_trainList[trainId].m_position = currentPosition
+            self.m_trainList[trainId].m_position = currentPosition
 
         # Set all the parameters in the train object
-        if(not self.m_trainList[trainId].m_engineFailure):
-            self.m_trainList[trainId].m_power = powerStatus
-            self.m_trainList[trainId].m_currentSpeed = velocityCalc * Converters.mps_to_MPH
-            self.m_trainList[trainId].m_acceleration = accelerationCalc
+        self.m_trainList[trainId].m_power = powerStatus
+        self.m_trainList[trainId].m_currentSpeed = velocityCalc * Converters.mps_to_MPH
+        self.m_trainList[trainId].m_acceleration = accelerationCalc
 
         # Send to Collin
-        if(not self.m_trainList[trainId].m_engineFailure):
-            signals.swtrain_update_current_speed.emit(trainId, velocityCalc * Converters.mps_to_MPH)
+        signals.swtrain_update_current_speed.emit(trainId, velocityCalc * Converters.mps_to_MPH)
 
         # if((accelerationCalc/samplePeriod) > 0): # Check for an actual change
         signals.train_model_something_has_been_changed.emit()
