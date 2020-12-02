@@ -216,11 +216,11 @@ class TrackSystem:
                         final_authorities[j] = False
 
         ''' Test '''
-        num_maint_mode = 0
+        '''num_maint_mode = 0 TO TEST IF PROBLEMS ARISE (already testd but just in case)
         for track_controller in track_controllers:
             if track_controller.number_of_failures > 0:
                 num_maint_mode += 1
-        print('Track Controllers in MM: ', num_maint_mode)
+        print('Track Controllers in MM: ', num_maint_mode)'''
 
         # Emit the final updated authorities for the occupied blocks
         for final_authority, block in zip(final_authorities, occupied_blocks):
