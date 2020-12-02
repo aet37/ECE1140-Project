@@ -103,7 +103,7 @@ class Block:
 
     def addSwitch(self, switchNumber, block1, block2):
         self.blockSwitch = Switch(switchNumber, block1, block2)
-    
+
     def addBeacon(self, stationName, serviceBrakeBool, exitSide, beaconDirection):
         theBeacon = Beacon()
         theBeacon.station_name = stationName
@@ -218,7 +218,7 @@ class SignalHandler:
         signals.trackmodel_receive_track_circuit.connect(self.receiveTrackCircuit)
         signals.swtrack_set_block_status.connect(self.setBrokenRailFailure)
 
-    def setBrokenRailFailure(self, line, blockNumber, statusBool):
+    def setBrokenRailFailure(self, line, blockNumber, statusBool, num_fail):
         if (line == Line.LINE_GREEN):
             theTrack = getTrack("Green")
         else:
@@ -226,9 +226,29 @@ class SignalHandler:
 
         theBlock = theTrack.getBlock(blockNumber)
 
-        theBlock.brokenRailFailure = statusBool
-        
-        signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
+        if statusBool:
+            theBlock.brokenRailFailure = statusBool
+            signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
+        else:
+            # check how many faliures there were on that block to send Track Controller correct number
+            if num_fail == 1:
+                theBlock.brokenRailFailure = statusBool
+                theBlock.powerFailure = statusBool
+                theBlock.trackCircuitFailure = statusBool
+                signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
+            elif num_fail == 2:
+                theBlock.brokenRailFailure = statusBool
+                theBlock.powerFailure = statusBool
+                theBlock.trackCircuitFailure = statusBool
+                signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
+                signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
+            elif num_fail == 3:
+                theBlock.brokenRailFailure = statusBool
+                theBlock.powerFailure = statusBool
+                theBlock.trackCircuitFailure = statusBool
+                signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
+                signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
+                signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
 
         signals.trackmodel_update_gui.emit()
 

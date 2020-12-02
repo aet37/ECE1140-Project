@@ -25,7 +25,7 @@ class SignalsClass(QObject):
     swtrack_update_authority = pyqtSignal(int, int)	# Used by CTC to update authority of a train (train_id, new_authority)
     swtrack_update_speed = pyqtSignal(int, int)	# Used by CTC to update suggested speed of train (train_id, new_speed)
     swtrack_set_switch_position = pyqtSignal(Line, int, bool)	# Used by CTC to set a switch position in maint mode (sw_number, position)
-    swtrack_set_block_status = pyqtSignal(Line, int, bool)	# Used by CTC to open/close (true/false) a block for mainenence (block_num, status)
+    swtrack_set_block_status = pyqtSignal(Line, int, bool, int)	# Used by CTC to open/close (true/false) a block for mainenence (block_num, status)
     swtrack_force_authority_reevaluation = pyqtSignal(Line) # Used by anyone to force all authorities on a line to be reevaluated
 
     swtrack_update_occupancies = pyqtSignal(int, Line, int, bool) # Used by Track Model to update occupancies (trainId, Line, blockNumber, occupancy) occupancy = 0  for empty, 1 for occupied

@@ -29,6 +29,7 @@ class Track:
     def __init__(self):
         self.open = True
         self.occupied = False
+        self.num_faliures = 0
 
 class Switch:
     """ Structure that holds data about a single Switch (pointing to) """
