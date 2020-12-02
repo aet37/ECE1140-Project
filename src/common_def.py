@@ -25,9 +25,9 @@ class Converters:
 
 class TrackCircuit:
     """Class to hold attributes of track circuit"""
-    def __init__(self):
-        self.command_speed = 0
-        self.authority = 0
+    def __init__(self, command_speed: float, authority: bool):
+        self.command_speed = command_speed
+        self.authority = authority
 
 class Beacon:
     """Class to hold attributes of beacon"""
