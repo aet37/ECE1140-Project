@@ -71,6 +71,7 @@ class SignalsClass(QObject):
     train_model_report_sb_failure = pyqtSignal(int, bool) # TrainID, failReport
     train_model_report_e_failure = pyqtSignal(int, bool) # TrainID, failReport
     train_model_resolve_failure = pyqtSignal(int) # TrainID
+    train_model_receive_track_circuit = pyqtSignal(Line, int, TrackCircuit) # Used by the track model to send the track circuit to the train model (line, trainId, trackCircuit)
 
     # SWTrainController Signals
     swtrain_gui_toggle_cabin_lights = pyqtSignal(int) # TrainID
