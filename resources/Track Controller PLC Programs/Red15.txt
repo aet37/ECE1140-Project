@@ -27,7 +27,7 @@ TAG b25A = TRUE
 TAG b26A = TRUE
 
 TASK<PERIOD=1000> MainTask
-    ROUTINE
+    ROUTINE Main
         RUNG
             XIO b21O
             XIO b22O
@@ -63,6 +63,7 @@ TASK<PERIOD=1000> MainTask
             OTE b21A
             OTE b22A
             OTE b23A
+        ENDRUNG
         RUNG
             XIO b16O
             OTE switch

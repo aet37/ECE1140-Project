@@ -167,7 +167,7 @@
          <string notr="true">background-color: rgb(236, 236, 236);</string>
         </property>
         <property name="text">
-         <string>100x</string>
+         <string>50x</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -282,7 +282,7 @@
          <string notr="true">background-color: rgb(236, 236, 236);</string>
         </property>
         <property name="text">
-         <string>50x</string>
+         <string>20x</string>
         </property>
         <property name="checkable">
          <bool>true</bool>

@@ -8,16 +8,16 @@ TAG b1A = TRUE
 TAG b2A = TRUE
 TAG b3A = TRUE
 # Section 2
-TAG b4O = TRUE
-TAG b5O = TRUE
-TAG b6O = TRUE
+TAG b4O = FALSE
+TAG b5O = FALSE
+TAG b6O = FALSE
 TAG b4A = TRUE
 TAG b5A = TRUE
 TAG b6A = TRUE
 #Section 3
-TAG b7O = TRUE
-TAG b8O = TRUE
-TAG b9O = TRUE
+TAG b7O = FALSE
+TAG b8O = FALSE
+TAG b9O = FALSE
 TAG b7A = TRUE
 TAG b8A = TRUE
 TAG b9A = TRUE
@@ -56,11 +56,6 @@ TASK<PERIOD=1000> MainTask
             OTE b5A
             OTE b6A
         ENDRUNG
-        RUNG 
-            XIO b9O
-            OTE b7A
-            OTE b8A
-            OTE b9A
         RUNG
             XIO b9O
             OTE switch
