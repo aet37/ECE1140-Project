@@ -61,9 +61,6 @@ class TrainModelUi(QtWidgets.QMainWindow):
         self.menu_train_combo.currentIndexChanged.connect(self.update_current_train_id)
         train_info_button.clicked.connect(self.train_info_1)
 
-        train_parameters_button = self.findChild(QtWidgets.QPushButton, 'train_parameters_button')
-        train_parameters_button.clicked.connect(self.train_parameters)
-
         train_reports_button = self.findChild(QtWidgets.QPushButton, 'train_reports_button')
         train_reports_button.clicked.connect(self.train_reports)
 
@@ -138,27 +135,6 @@ class TrainModelUi(QtWidgets.QMainWindow):
         logoutbutton = self.findChild(QtWidgets.QPushButton, 'page3toM_button')
         logoutbutton.clicked.connect(self.train_menu)
 
-    def train_parameters(self):
-        """Called to display the train parameters page"""
-        # Block the user from reaching this page without a train selected
-        if self.current_train_id == 0:
-            alert = Alert("Please select a train from the drop down menu")
-            alert.exec_()
-            return
-        
-        uic.loadUi('src/UI/TrainModel/train_parameter.ui', self)
-        self.current_page = Page.PARAMETERS
-
-        # Find all the elements and connect the methods
-        logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button_parameters')
-        logout_button.clicked.connect(self.logout)
-
-        param_to_main_page_button = self.findChild(QtWidgets.QPushButton, 'pagePtoM_button')
-        param_to_main_page_button.clicked.connect(self.train_menu)
-
-        save_button = self.findChild(QtWidgets.QPushButton, 'save_button')
-        save_button.clicked.connect(self.save_parameters)
-
     def train_reports(self):
         """Method called when the train reports button is pressed"""
         # Block the user from reaching this page without a train selected
@@ -186,6 +162,9 @@ class TrainModelUi(QtWidgets.QMainWindow):
         report_brake_button = self.findChild(QtWidgets.QPushButton, 'report_brake_button')
         report_brake_button.clicked.connect(self.report_brake)
 
+        murphy_ebrake_button = self.findChild(QtWidgets.QPushButton, 'murphy_ebrake')
+        murphy_ebrake_button.clicked.connect(self.murphy_ebrake_pull)
+
     #######################################################################
     ############################ HELPER METHODS ###########################
     ####################################################################### "{:.2f} MPH".format(str(train_catalogue.m_trainList[self.current_train_id - 1].m_commandSpeed))
@@ -209,13 +188,6 @@ class TrainModelUi(QtWidgets.QMainWindow):
                 self.findChild(QtWidgets.QLabel, 'disp_speed_limit').setText(str(block_catalogue_green.m_blockList[train_catalogue.m_trainList[self.current_train_id - 1].m_route[0]].m_speedLimit) + " km/h")
             else:
                 self.findChild(QtWidgets.QLabel, 'disp_speed_limit').setText(str(block_catalogue_red.m_blockList[train_catalogue.m_trainList[self.current_train_id - 1].m_route[0]].m_speedLimit) + " km/h")
-
-        if str(train_catalogue.m_trainList[self.current_train_id - 1].m_brakeCommand) == "True":
-            self.findChild(QtWidgets.QLabel, 'disp_brake_command').setText("on")
-            self.findChild(QtWidgets.QLabel, 'disp_brake_command').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
-        else:
-            self.findChild(QtWidgets.QLabel, 'disp_brake_command').setText("off")
-            self.findChild(QtWidgets.QLabel, 'disp_brake_command').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
         
         if str(train_catalogue.m_trainList[self.current_train_id - 1].m_serviceBrake) == "True":
             self.findChild(QtWidgets.QLabel, 'disp_service_brake').setText("on")
@@ -231,7 +203,7 @@ class TrainModelUi(QtWidgets.QMainWindow):
             self.findChild(QtWidgets.QLabel, 'disp_emergency_passenger_brake').setText("off")
             self.findChild(QtWidgets.QLabel, 'disp_emergency_passenger_brake').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(220, 44, 44);")
         
-        if str(train_catalogue.m_trainList[self.current_train_id - 1].m_currentLine) == "True":
+        if train_catalogue.m_trainList[self.current_train_id - 1].m_currentLine == Line.LINE_GREEN:
             self.findChild(QtWidgets.QLabel, 'disp_current_line').setText("green")
             self.findChild(QtWidgets.QLabel, 'disp_current_line').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
         else:
@@ -263,7 +235,7 @@ class TrainModelUi(QtWidgets.QMainWindow):
         self.findChild(QtWidgets.QLabel, 'disp_crew_count').setText(str(train_catalogue.m_trainList[self.current_train_id - 1].m_trainCrewCount) + " persons")
 
         if str(train_catalogue.m_trainList[self.current_train_id - 1].m_announcements) == "True":
-            self.findChild(QtWidgets.QLabel, 'disp_announcements').setText("on")
+            self.findChild(QtWidgets.QLabel, 'disp_announcements').setText("Station: " + str(block_catalogue_green.m_blockList[train_catalogue.m_trainList[self.current_train_id - 1].m_route[0]].beacon1.station_name))
             self.findChild(QtWidgets.QLabel, 'disp_announcements').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
         else:
             self.findChild(QtWidgets.QLabel, 'disp_announcements').setText("off")
@@ -294,8 +266,14 @@ class TrainModelUi(QtWidgets.QMainWindow):
         
         self.findChild(QtWidgets.QLabel, 'disp_temperature_control').setText(str(train_catalogue.m_trainList[self.current_train_id - 1].m_tempControl) + " °F")
 
-        if str(train_catalogue.m_trainList[self.current_train_id - 1].m_doors) == "True":
-            self.findChild(QtWidgets.QLabel, 'disp_doors').setText("open")
+        if str(train_catalogue.m_trainList[self.current_train_id - 1].m_doors) == "True" and train_catalogue.m_trainList[self.current_train_id - 1].m_doorSide == DoorSide.SIDE_RIGHT:
+            self.findChild(QtWidgets.QLabel, 'disp_doors').setText("right side doors")
+            self.findChild(QtWidgets.QLabel, 'disp_doors').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
+        elif str(train_catalogue.m_trainList[self.current_train_id - 1].m_doors) == "True" and train_catalogue.m_trainList[self.current_train_id - 1].m_doorSide == DoorSide.SIDE_LEFT:
+            self.findChild(QtWidgets.QLabel, 'disp_doors').setText("left side doors")
+            self.findChild(QtWidgets.QLabel, 'disp_doors').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
+        elif str(train_catalogue.m_trainList[self.current_train_id - 1].m_doors) == "True" and train_catalogue.m_trainList[self.current_train_id - 1].m_doorSide == DoorSide.SIDE_BOTH:
+            self.findChild(QtWidgets.QLabel, 'disp_doors').setText("both side doors")
             self.findChild(QtWidgets.QLabel, 'disp_doors').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
         else:
             self.findChild(QtWidgets.QLabel, 'disp_doors').setText("closed")
@@ -331,30 +309,31 @@ class TrainModelUi(QtWidgets.QMainWindow):
             self.update_gui3()
         else:
             return
-    
-    def save_parameters(self):
-        """Sends all the entered parameters to the cloud"""
-        # TODO(KEM): Implement this
-        self.save_alert.setStyleSheet("color: green;")
-        self.fail_alert.setStyleSheet("color: rgb(133, 158, 166);")
 
     def report_engine(self):
         """Method connected to the report engine failure button"""
+        signals.train_model_report_e_failure.emit(self.current_train_id - 1, True)
         self.alert_sent1.setStyleSheet("color: green;")
         self.alert_sent2.setStyleSheet("color: rgb(133, 158, 166);")
         self.alert_sent3.setStyleSheet("color: rgb(133, 158, 166);")
 
     def report_signal(self):
         """Method connected to the report signal failure button"""
+        signals.train_model_report_sp_failure.emit(self.current_train_id - 1, True)
         self.alert_sent1.setStyleSheet("color: rgb(133, 158, 166);")
         self.alert_sent2.setStyleSheet("color: green;")
         self.alert_sent3.setStyleSheet("color: rgb(133, 158, 166);")
 
     def report_brake(self):
         """Method connected to the report brake failure button"""
+        signals.train_model_report_sb_failure.emit(self.current_train_id - 1, True)
+        signals.swtrain_receive_brake_failure.emit(self.current_train_id - 1, True)
         self.alert_sent1.setStyleSheet("color: rgb(133, 158, 166);")
         self.alert_sent2.setStyleSheet("color: rgb(133, 158, 166);")
         self.alert_sent3.setStyleSheet("color: green;")
+
+    def murphy_ebrake_pull(self):
+        signals.train_model_gui_receive_ebrake.emit(self.current_train_id - 1, True)
 
     def logout(self):
         """Method invoked when the logout button is pressed"""

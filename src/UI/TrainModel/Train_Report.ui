@@ -20,7 +20,7 @@
    <widget class="QPushButton" name="report_signal_button">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>110</x>
       <y>140</y>
       <width>431</width>
       <height>28</height>
@@ -47,7 +47,7 @@
    <widget class="QPushButton" name="report_brake_button">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>110</x>
       <y>180</y>
       <width>431</width>
       <height>28</height>
@@ -137,7 +137,7 @@
    <widget class="QPushButton" name="report_engine_button">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>110</x>
       <y>100</y>
       <width>431</width>
       <height>28</height>
@@ -183,7 +183,7 @@ border-color: rgb(0, 0, 0);</string>
     <widget class="QLabel" name="alert_sent1">
      <property name="geometry">
       <rect>
-       <x>530</x>
+       <x>550</x>
        <y>110</y>
        <width>47</width>
        <height>13</height>
@@ -204,7 +204,7 @@ border-color: rgb(0, 0, 0);</string>
     <widget class="QLabel" name="alert_sent2">
      <property name="geometry">
       <rect>
-       <x>530</x>
+       <x>550</x>
        <y>150</y>
        <width>47</width>
        <height>13</height>
@@ -225,7 +225,7 @@ border-color: rgb(0, 0, 0);</string>
     <widget class="QLabel" name="alert_sent3">
      <property name="geometry">
       <rect>
-       <x>530</x>
+       <x>550</x>
        <y>190</y>
        <width>47</width>
        <height>13</height>
@@ -257,6 +257,33 @@ border-color: rgb(0, 0, 0);</string>
      </property>
      <property name="text">
       <string>&lt;- Menu</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="murphy_ebrake">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>240</y>
+       <width>231</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 70, 70);</string>
+     </property>
+     <property name="text">
+      <string>Murphy Emergency Brake</string>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
      </property>
     </widget>
    </widget>

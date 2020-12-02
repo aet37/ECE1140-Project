@@ -74,7 +74,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         ##########################################
 
         # Define buttons on Failures page ########
-
+        self.brake_failure.clicked.connect(self.resolve_brake_failure)
         ##########################################
 
         # Define buttons on Engineer page #
@@ -162,6 +162,21 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
         # Define buttons on Information Page #
         self.return_button2 = self.findChild(QtWidgets.QPushButton, 'MainMenu3')
+
+        # Define brake failure button
+        self.brake_failure = self.findChild(QtWidgets.QPushButton, 'brake_failure')
+        # Define brake failure status
+        self.brake_failure_status = self.findChild(QtWidgets.QTextBrowser, 'brake_failure_status')
+
+        # Define engine failure button
+        self.engine_failure = self.findChild(QtWidgets.QPushButton, 'engine_failure')
+        # Define engine failure status
+        self.engine_failure_status = self.findChild(QtWidgets.QTextBrowser, 'engine_failure_status')
+
+        # Define signal pickup failure button
+        self.signal_pickup_failure = self.findChild(QtWidgets.QPushButton, 'signal_pickup_failure')
+        # Define engine failure status
+        self.signal_pickup_status = self.findChild(QtWidgets.QTextBrowser, 'signal_pickup_status')
         ###################################
 
         # Define buttons on Engineer Page #
@@ -244,11 +259,15 @@ class SWTrainUi(QtWidgets.QMainWindow):
         self.com_speed = control_system.p_controllers[int(self.current_train_id) - 1].command_speed * Converters.KmHr_to_MPH
         self.setpoint_speed = control_system.p_controllers[int(self.current_train_id) - 1].setpoint_speed
         self.service_brake_status = control_system.p_controllers[int(self.current_train_id) - 1].service_brake
+        self.emergency_brake_status = control_system.p_controllers[int(self.current_train_id) - 1].emergency_brake
         self.mode_status = control_system.p_controllers[int(self.current_train_id) - 1].mode
         self.kp_status = control_system.p_controllers[int(self.current_train_id) - 1].kp
         self.ki_status = control_system.p_controllers[int(self.current_train_id) - 1].ki
         self.power_status = control_system.p_controllers[int(self.current_train_id) - 1].power_command
         self.authority_status = control_system.p_controllers[int(self.current_train_id) - 1].authority
+        self.brake_fail_status = control_system.p_controllers[int(self.current_train_id) - 1].brake_failure
+        self.engine_fail_status = control_system.p_controllers[int(self.current_train_id) - 1].engine_failure
+        self.signal_fail_status = control_system.p_controllers[int(self.current_train_id) - 1].signal_pickup_failure
 
         # Change GUI to reflect current data
         # Update doors
@@ -296,6 +315,12 @@ class SWTrainUi(QtWidgets.QMainWindow):
         else:
             self.service_brake.setStyleSheet("background-color: green;")
 
+        # Update emergency brake
+        if self.emergency_brake_status == 1:
+            self.emergency_brake.setStyleSheet("background-color: rgb(255, 51, 16);")
+        else:
+            self.emergency_brake.setStyleSheet("background-color: green;")
+
         # Update mode buttons
         if self.mode_status == 1:
             self.automatic_mode.setStyleSheet("background-color: rgb(255, 51, 16);")
@@ -303,6 +328,14 @@ class SWTrainUi(QtWidgets.QMainWindow):
         else:
             self.automatic_mode.setStyleSheet("background-color: green;")
             self.manual_mode.setStyleSheet("background-color: rgb(255, 51, 16);")
+
+        # Update failure boxes
+        if self.brake_fail_status == True and self.curr_speed == 0 and self.service_brake_status == 1:
+            self.brake_failure_status.setStyleSheet("background-color: rgb(255, 51, 16);")
+            #alert = Alert("ALERT: A BRAKE FAILURE HAS OCCURRED!")
+            #alert.exec_()
+        else:
+            self.brake_failure_status.setStyleSheet("background-color: green;")
 
         # Update Kp and Ki
         self.KpLabel.setText(str(self.kp_status) + " W/(m/s)")
@@ -525,6 +558,14 @@ class SWTrainUi(QtWidgets.QMainWindow):
             alert.exec_()
             return
 
+        # If no kp and ki have been set, service brake cannot be removed
+        kp = self.findChild(QtWidgets.QLabel, 'KpLabel').text()
+        kp = kp.split()[0]
+        if float(kp) == 0.0:
+            alert = Alert("Error: Must set Kp and Ki in order to remove service brake!")
+            alert.exec_()
+            return
+
         # Check if authority is zero NEED METHOD TO AUTOMATICALLY TURN SERVICE BRAKE ON AUTOMATICALLY
         #if control_system.p_controllers[int(self.current_train_id) - 1].authority == 0:
             #self.service_brake.setStyleSheet("background-color: rgb(255, 51, 16);")
@@ -644,12 +685,31 @@ class SWTrainUi(QtWidgets.QMainWindow):
             return
 
         # Ask for confirmation to ensure values are as desired
-        confirmation = Confirmation("Do you want to use the defualt values?")
+        confirmation = Confirmation("Do you want to use the default values?")
         response = confirmation.exec_()
         if response == False:
             return
 
         signals.swtrain_gui_set_kp_ki.emit(int(self.current_train_id) - 1, float(35000), float(1000))
+        self.update_gui()
+
+    def resolve_brake_failure(self):
+        # If no controllers have been created, button does nothing
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            alert = Alert("Error: No trains have been dispatched!")
+            alert.exec_()
+            return
+        
+        # Check to see if there is a failure occurring
+        if self.brake_failure_status.styleSheet() == "background-color: green;":
+            alert = Alert("Error: No brake failure has occurred!")
+            alert.exec_()
+            return
+
+        # If failure has occurred, resolve the failure
+        alert = Alert("Brake failure is being resolved please wait one minute.")
+        alert.exec_()
+        signals.swtrain_resolve_failure.emit(int(self.current_train_id) - 1)
         self.update_gui()
 
     def logout(self):

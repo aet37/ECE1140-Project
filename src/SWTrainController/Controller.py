@@ -56,6 +56,9 @@ class Controller:
         self.engine_failure = False
         self.brake_failure = False
 
+        # Used for starting and stopping the train's power loop
+        self.hold_power_loop = False
+
     ###############################/
     # VITAL OPERATIONS
     ###############################/
@@ -94,9 +97,11 @@ class Controller:
         else:
             self.uk = self.uk1
 
+        # Check for engine failure
+        if self.power_command > 0 and self.current_speed == 0:
+            self.engine_failure == True
+
         # Find power command
-        #if self.service_brake:
-        #    self.power_command = 0
         if self.service_brake == True or self.emergency_brake == True:
             self.power_command = 0
             self.uk = 0
@@ -129,7 +134,16 @@ class Controller:
 
     def toggle_service_brake(self):
         """ Toggle service brake on and off """
-        self.service_brake = not self.service_brake
+        # Check for potential failure
+        if self.service_brake == True:
+            if self.brake_failure == True:
+                # If brake failure occurs do not change service brake
+                self.service_brake = True
+            else:
+                # If no brake failure toggle brake normally
+                self.service_brake = not self.service_brake
+        else:  
+            self.service_brake = not self.service_brake
 
     def toggle_mode(self, override):
         """ Allows operator to switch between manual and automatic mode """
