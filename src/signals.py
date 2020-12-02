@@ -12,8 +12,6 @@ class SignalsClass(QObject):
     timer_expired = pyqtSignal(int, int, int, int) # Current day, hours, minutes, seconds
 
     # CTC Signals
-    #update_green_occupancies = pyqtSignal(list)	# Used by SWTrack Controller to send CTC green line occupancies in array of BOOL
-    #update_red_occupancies = pyqtSignal(list)	# Used by SWTrack Controller to send CTC red line occupancies in array of BOOL
     update_occupancy = pyqtSignal(Line, int, bool)	# Used by SWTrack Controller to send CTC updated occupanices
     update_green_switches = pyqtSignal(list)	# Used by SWTrack Controller to send CTC green line switches in array of BOOL
     update_red_switches = pyqtSignal(list)		# Used by SWTrack Controller to send CTC red line switches in array of BOOL
