@@ -17,11 +17,11 @@ def test_passing_occupancy(upload_tracks, download_programs):
     # Dispatch a train
     ctc.dispatch_train(38, Line.LINE_GREEN)
 
-    signals.trackmodel_update_occupancy.emit(0, Line.LINE_GREEN, green_route_blocks[0], True)
+    signals.trackmodel_update_occupancy.emit(0, Line.LINE_GREEN, green_route_blocks[0], True, 1)
     for previous_block, current_block in zip(green_route_blocks, green_route_blocks[1:]):
         # Simulate the train changing blocks
-        signals.trackmodel_update_occupancy.emit(0, Line.LINE_GREEN, previous_block, False)
-        signals.trackmodel_update_occupancy.emit(0, Line.LINE_GREEN, current_block, True)
+        signals.trackmodel_update_occupancy.emit(0, Line.LINE_GREEN, previous_block, False, 1)
+        signals.trackmodel_update_occupancy.emit(0, Line.LINE_GREEN, current_block, True, 1)
 
         # Verify it got to the ctc
         assert current_block in track_system.green_occupied_blocks
