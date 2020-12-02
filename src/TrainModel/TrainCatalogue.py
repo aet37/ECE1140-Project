@@ -79,8 +79,6 @@ class TrainCatalogue:
         signals.train_model_report_e_failure.connect(self.train_model_report_e_failure)
         # Resolve failure
         signals.train_model_resolve_failure.connect(self.train_model_resolve_failure)
-        # Receive track circuit
-        signals.train_model_receive_track_circuit.connect(self.train_model_receive_track_circuit)
 
     # print(sys.path)
 
@@ -155,11 +153,6 @@ class TrainCatalogue:
         self.m_trainList[trainId].m_authority = newAuthority
         signals.train_model_something_has_been_changed.emit()
         signals.swtrain_update_authority.emit(trainId, newAuthority)
-    
-    def train_model_receive_track_circuit(self, line, trainId, trackCircuit):
-        if(not self.m_trainList[trainId].m_signalPickupFailure):
-            # signals.swtrain_receive_track_circuit.emit(line, trainId, trackCircuit)
-            pass
 
     # @brief Receives command speed
     def train_model_update_command_speed(self, trainId, newCommandSpeed):

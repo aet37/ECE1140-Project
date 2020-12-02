@@ -99,7 +99,6 @@ class SignalsClass(QObject):
     swtrain_receive_brake_failure = pyqtSignal(int, bool) # TrainID, brake_failure
     swtrain_receive_engine_failure = pyqtSignal(int, bool) # TrainID, engine_failure
     swtrain_resolve_failure = pyqtSignal(int) # TrainID
-    swtrain_receive_track_circuit = pyqtSignal(Line, int, TrackCircuit) # line, trainId, trackCircuit
 
     # Track Model Signals
     trackmodel_dispatch_train = pyqtSignal(int, int, float, bool, Line, list) # Used by SWTrack Controller to send dispatch Train (train_id, command_speed, authority, Line, switches_arr(boolean))
