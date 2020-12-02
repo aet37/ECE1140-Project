@@ -38,7 +38,7 @@ class SignalsClass(QObject):
 
     # Train Model Signals
     train_model_dispatch_train = pyqtSignal(int, int, float, int, Line, list) #  Used by the track model to signify that a new train has been dispatched FORMAT: (train_id, destination_block, command_speed, authority, Line, route)
-    train_model_receive_block = pyqtSignal(int, int, float, float, float, float, int, bool) #  Used by the track model to send a block's information FORMAT: (track_id, block_id, elevation, slope, sizeOfBlock, speedLimit, travelDirection, station)
+    train_model_receive_block = pyqtSignal(int, int, float, float, float, float, int, bool, Beacon, Beacon) #  Used by the track model to send a block's information FORMAT: (track_id, block_id, elevation, slope, sizeOfBlock, speedLimit, travelDirection, station, newBeacon1, newBeacon2)
     # train_model_gui_1_gather_data = 161 #  Used periodically by the gui to update page 1 the user interface
     # train_model_gui_2_gather_data = 162 #  Used periodically by the gui to update page 2 the user interface
     # train_model_gui_3_gather_data = 163 #  Used periodically by the gui to update page 3 the user interface
@@ -64,6 +64,12 @@ class SignalsClass(QObject):
     train_model_update_command_speed = pyqtSignal(int, float) # Used by the track model to update the command speed of a train (trainId, newSpeed)
     train_model_update_authority = pyqtSignal(int, bool) # Used by the Track Model to update the authority of a train (trainId, newAuthority)
     train_model_update_passengers = pyqtSignal(int, int) # Used by the Track Model to update the passenger count of a train (trainId, newPassCount)
+    train_model_update_direction = pyqtSignal(int, int) # Used by the Track Model to update the direction of a train (trainId, newDirection)
+    train_model_receive_beacon_info = pyqtSignal(int, str, DoorSide) # TrainID, Station Name, DoorSide
+    train_model_report_sp_failure = pyqtSignal(int, bool) # TrainID, failReport
+    train_model_report_sb_failure = pyqtSignal(int, bool) # TrainID, failReport
+    train_model_report_e_failure = pyqtSignal(int, bool) # TrainID, failReport
+    train_model_resolve_failure = pyqtSignal(int) # TrainID
 
     # SWTrainController Signals
     swtrain_gui_toggle_cabin_lights = pyqtSignal(int) # TrainID
@@ -86,10 +92,16 @@ class SignalsClass(QObject):
     swtrain_gui_set_kp_ki = pyqtSignal(int, float, float) # TrainID, setKp, setKi
     swtrain_gui_switch_mode = pyqtSignal(int, str) # TrainID, override code
     swtrain_time_trigger = pyqtSignal()
+    swtrain_receive_beacon = pyqtSignal(int, Beacon) # TrainID, beacon
+    swtrain_send_beacon_info = pyqtSignal(int, str, DoorSide) # TrainID, Station Name, DoorSide
+    swtrain_receive_signal_pickup_failure = pyqtSignal(int, bool) # TrainID, signal_pickup_failure
+    swtrain_receive_brake_failure = pyqtSignal(int, bool) # TrainID, brake_failure
+    swtrain_receive_engine_failure = pyqtSignal(int, bool) # TrainID, engine_failure
+    swtrain_resolve_failure = pyqtSignal(int) # TrainID
 
     # Track Model Signals
     trackmodel_dispatch_train = pyqtSignal(int, int, float, bool, Line, list) # Used by SWTrack Controller to send dispatch Train (train_id, command_speed, authority, Line, switches_arr(boolean))
-    trackmodel_update_occupancy = pyqtSignal(int, Line, int, bool) # Used by train model to give track model info about a train's status on a particular block (trainId, Line, blockId, trainOrNot)
+    trackmodel_update_occupancy = pyqtSignal(int, Line, int, bool, int) # Used by train model to give track model info about a train's status on a particular block (trainId, Line, blockId, trainOrNot, travelDirection)
     trackmodel_update_command_speed = pyqtSignal(int, float) # Used by the track controller to update the command speed of a train (trainId, newSpeed)
     trackmodel_update_switch_positions = pyqtSignal(Line, int, bool) # Used by the track controller to update a switch positions (Line, switchNumberFromYard, switchPosition)
     trackmodel_update_authority = pyqtSignal(Line, int, bool) # Used by the track controller to update the authority of a train (trainId, newAuthority)

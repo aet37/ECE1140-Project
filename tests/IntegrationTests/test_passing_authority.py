@@ -18,6 +18,7 @@ def test_passing_authority_green(upload_tracks, download_programs):
     signals.train_model_update_command_speed.disconnect()
     signals.trackmodel_update_authority.disconnect()
     signals.update_occupancy.disconnect()
+    signals.train_model_update_direction.disconnect()
 
     # Connect to signal to verify
     signals.trackmodel_update_authority.connect(verify_authority)
@@ -25,11 +26,11 @@ def test_passing_authority_green(upload_tracks, download_programs):
     # Dispatch a train
     ctc.dispatch_train(38, Line.LINE_GREEN)
 
-    signals.trackmodel_update_occupancy.emit(0, Line.LINE_GREEN, green_route_blocks[0], True)
+    signals.trackmodel_update_occupancy.emit(0, Line.LINE_GREEN, green_route_blocks[0], True, 0)
     for previous_block, current_block in zip(green_route_blocks, green_route_blocks[1:]):
         # Simulate the train changing blocks
-        signals.trackmodel_update_occupancy.emit(0, Line.LINE_GREEN, previous_block, False)
-        signals.trackmodel_update_occupancy.emit(0, Line.LINE_GREEN, current_block, True)
+        signals.trackmodel_update_occupancy.emit(0, Line.LINE_GREEN, previous_block, False, 0)
+        signals.trackmodel_update_occupancy.emit(0, Line.LINE_GREEN, current_block, True, 0)
 
 def test_passing_authority_red(upload_tracks, download_programs):
     """Testing passing authority. It should always be true because only 1 train is being dispatched"""
@@ -38,6 +39,7 @@ def test_passing_authority_red(upload_tracks, download_programs):
         signals.train_model_dispatch_train.disconnect()
         signals.trackmodel_update_authority.disconnect()
         signals.update_occupancy.disconnect()
+        signals.train_model_update_direction.disconnect()
     except Exception:
         pass
 
@@ -47,8 +49,8 @@ def test_passing_authority_red(upload_tracks, download_programs):
     # Dispatch a train
     ctc.dispatch_train(60, Line.LINE_RED)
 
-    signals.trackmodel_update_occupancy.emit(0, Line.LINE_RED, red_route_blocks[0], True)
+    signals.trackmodel_update_occupancy.emit(0, Line.LINE_RED, red_route_blocks[0], True, 0)
     for previous_block, current_block in zip(red_route_blocks, red_route_blocks[1:]):
         # Simulate the train changing blocks
-        signals.trackmodel_update_occupancy.emit(0, Line.LINE_RED, previous_block, False)
-        signals.trackmodel_update_occupancy.emit(0, Line.LINE_RED, current_block, True)
+        signals.trackmodel_update_occupancy.emit(0, Line.LINE_RED, previous_block, False, 0)
+        signals.trackmodel_update_occupancy.emit(0, Line.LINE_RED, current_block, True, 0)
