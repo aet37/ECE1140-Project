@@ -15,6 +15,7 @@ class TrackController:
 
         self.program_name = ""
         self.task_list = []
+        self.number_of_failures = 0
 
     def run_program(self):
         """Runs the plc program"""
@@ -86,6 +87,8 @@ class TrackController:
                 self.run_program()
             else:
                 assert False, "Unknown command from the compiler"
+
+        return True
 
     def get_tag_value(self, tag_name):
         """Gets a tag's value from inside the plc
@@ -175,7 +178,7 @@ class TrackController:
 
     def get_block_status(self, block_id):
         """Method to get a block's status"""
-        return self.get_tag_value("b{}S".format(block_id))
+        return self.get_tag_value("broken".format(block_id))
 
     def get_railway_crossing(self, block_id):
         """Method to get the status of a railway crossing on the given block"""
@@ -190,6 +193,12 @@ class TrackController:
     def get_maintenance_mode(self):
         """Gets whether this block is in maintanence mode"""
         return self.get_tag_value("mmode")
+
+    def set_broken_rail(self, value):
+        """Sets the tag to signify a rail is broken"""
+        self.set_tag_value("broken", value)
+
+        self.run_program()
 
 if __name__ == "__main__":
     raise Exception("Not to be run as a module")

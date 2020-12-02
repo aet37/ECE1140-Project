@@ -21,8 +21,12 @@ class Train:
         self.m_authority = False
         self.m_currentLine = Line.LINE_GREEN # Default green line
         self.m_power = 0.0
+        self.m_trainDirection = 0
         # INTEGERS (self, Nonvital)
-        self.m_tempControl = 0.0
+        self.m_tempControl = 70.0
+
+        # STRING
+        self.m_stationName = ""
 
         # BOOLEANS (self, Vital)
         self.m_emergencyPassengerBrake = False
@@ -34,6 +38,7 @@ class Train:
         self.m_advertisements = False
         self.m_announcements = False
         self.m_doors = False
+        self.m_doorSide = DoorSide.SIDE_RIGHT
 
         # Parameter Inputs
         self.m_trainLength = 32.2 # Meters

@@ -33,17 +33,17 @@ class LoginUi(QtWidgets.QMainWindow):
         username = self.username_in.text()
         password = self.password_in.text()
 
-        if username == "trainmodel" and password == "jerry":
+        if username == "trainmodel" and password == "password":
             window_list.append(TrainModelUi())
-        elif username == "trackmodel" and password == "jerry":
+        elif username == "trackmodel" and password == "password":
             window_list.append(TrackModelUi())
-        elif username == "swtrack" and password == "jerry":
+        elif username == "swtrack" and password == "password":
             window_list.append(SWTrackControllerUi())
-        elif username == "ctc" and password == "jerry":
+        elif username == "ctc" and password == "password":
             window_list.append(CTCUi())
-        elif username == "swtrain" and password == "jerry":
+        elif username == "swtrain" and password == "password":
             window_list.append(SWTrainUi())
-        elif username == "timekeeper" and password == "jerry":
+        elif username == "timekeeper" and password == "password":
             window_list.append(TimekeeperUi())
         else:
             self.alert_login.setStyleSheet("color: red;")

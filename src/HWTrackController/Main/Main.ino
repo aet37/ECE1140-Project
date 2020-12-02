@@ -41,6 +41,7 @@ void setup()
     pinMode(PIN25, OUTPUT);
     pinMode(PIN27, OUTPUT);
     pinMode(PIN29, OUTPUT);
+    pinMode(PIN31, OUTPUT);
     pinMode(PIN23, INPUT);
 
     // Initialize the user program

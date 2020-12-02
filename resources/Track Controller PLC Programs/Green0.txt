@@ -1,4 +1,5 @@
 TAG MyTag = FALSE
+TAG broken = FALSE
 TAG output2 = FALSE
 TAG output4 = FALSE
 TAG heater = FALSE
@@ -48,6 +49,10 @@ TASK<PERIOD=2000> MainTask
         RUNG
             XIC output2
             OTE MyTag
+        ENDRUNG
+        RUNG
+            XIC broken
+            OTU b0A
         ENDRUNG
     ENDROUTINE
 ENDTASK

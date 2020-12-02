@@ -85,6 +85,11 @@ void IoTask(void* pSomething)
         digitalWrite(PIN29, tagValue);
     }
 
+    if (GetTagValue("out31p", tagValue))
+    {
+        digitalWrite(PIN31, tagValue);
+    }
+
     // Switch signal
     if (GetTagValue("out2p", tagValue))
     {
