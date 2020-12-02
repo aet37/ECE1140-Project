@@ -210,11 +210,15 @@ class SignalHandler:
         self.trainCount = -1
         signals.trackmodel_dispatch_train.connect(self.dispatchTrain)
         signals.trackmodel_update_occupancy.connect(self.updateOccupancy)
-        signals.trackmodel_update_command_speed.connect(self.updateCommandSpeed)
+        #signals.trackmodel_update_command_speed.connect(self.updateCommandSpeed)
         signals.trackmodel_update_authority.connect(self.updateAuthority)
         signals.trackmodel_update_switch_positions.connect(self.updateSwitchPositions)
         signals.trackmodel_update_tickets_sold.connect(self.updateTicketsSold)
         signals.trackmodel_update_passengers_exited.connect(self.updatePassengersExited)
+        signals.trackmodel_receive_track_circuit.connect(self.receiveTrackCircuit)
+
+    def receiveTrackCircuit(self, line, trainId, trackCircuit):
+        signals.train_model_receive_track_circuit.emit(line, trainId, trackCircuit)
 
     def updatePassengersExited(self, line, trainId, blockNumber, passengersExited, spaceOnTrain, totalSeats):
         if (line == Line.LINE_GREEN):
@@ -498,8 +502,8 @@ class SignalHandler:
             else:
                 print('error')
 
-    def updateCommandSpeed(self, trainId, newSpeed):
-        signals.train_model_update_command_speed.emit(trainId, newSpeed)
+    # def updateCommandSpeed(self, trainId, newSpeed):
+    #     signals.train_model_update_command_speed.emit(trainId, newSpeed)
 
 # "Green" or "Red"
 def getTrack(trackColor):

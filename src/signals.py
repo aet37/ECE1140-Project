@@ -64,6 +64,7 @@ class SignalsClass(QObject):
     train_model_update_command_speed = pyqtSignal(int, float) # Used by the track model to update the command speed of a train (trainId, newSpeed)
     train_model_update_authority = pyqtSignal(int, bool) # Used by the Track Model to update the authority of a train (trainId, newAuthority)
     train_model_update_passengers = pyqtSignal(int, int) # Used by the Track Model to update the passenger count of a train (trainId, newPassCount)
+    train_model_receive_track_circuit = pyqtSignal(Line, int, TrackCircuit) # Used by the track model to send the track circuit to the train model (line, trainId, trackCircuit)
 
     # SWTrainController Signals
     swtrain_gui_toggle_cabin_lights = pyqtSignal(int) # TrainID
