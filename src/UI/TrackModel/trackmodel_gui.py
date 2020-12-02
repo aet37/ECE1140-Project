@@ -285,6 +285,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
     #         combo2.currentIndexChanged.connect(self.switch_block)
 
     def switch_block(self):
+        print("inside switch block")
         theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
         theIndex = theTabWidget.currentIndex()
         theLine = theTabWidget.tabText(theIndex)
@@ -395,6 +396,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
                     broken_rail_failure_button.toggle()
 
             power_failure_button = self.findChild(QtWidgets.QPushButton, 'power_failure_button')
+            print("broken rail = ",theBlock.brokenRailFailure)
             if (theBlock.powerFailure):
                 power_failure_button.setStyleSheet("background-color: red")
                 if (not power_failure_button.isChecked()):

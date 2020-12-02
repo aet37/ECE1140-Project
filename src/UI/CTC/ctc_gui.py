@@ -586,13 +586,13 @@ class CTCUi(QtWidgets.QMainWindow):
         if ctc.blocks_green_arr[b_num - 1].open:
             self.num_blocks_closed_green += 1
             ctc.blocks_green_arr[b_num - 1].open = False
-            # Altert SW Track
-            signals.swtrack_set_block_status.emit(Line.LINE_GREEN, b_num, False)
+            # Alert SW Track (error is flipped, boolean is for if there is a failure)
+            signals.swtrack_set_block_status.emit(Line.LINE_GREEN, b_num, True)
         else:
             self.num_blocks_closed_green -= 1
             ctc.blocks_green_arr[b_num - 1].open = True
             # Altert SW Track
-            signals.swtrack_set_block_status.emit(Line.LINE_GREEN, b_num, True)
+            signals.swtrack_set_block_status.emit(Line.LINE_GREEN, b_num, False)
 
         if self.num_blocks_closed_green > 0:
             self.maint_mode_green.setText('!!!! IN MAINTENCENCE MODE !!!!')
@@ -716,12 +716,12 @@ class CTCUi(QtWidgets.QMainWindow):
             self.num_blocks_closed_red += 1
             ctc.blocks_red_arr[b_num - 1].open = False
             # Altert SW Track
-            signals.swtrack_set_block_status.emit(Line.LINE_RED, b_num, False)
+            signals.swtrack_set_block_status.emit(Line.LINE_RED, b_num, True)
         else:
             self.num_blocks_closed_red -= 1
             ctc.blocks_red_arr[b_num - 1].open = True
             # Altert SW Track
-            signals.swtrack_set_block_status.emit(Line.LINE_RED, b_num, True)
+            signals.swtrack_set_block_status.emit(Line.LINE_RED, b_num, False)
 
         if self.num_blocks_closed_red > 0:
             self.maint_mode_red.setText('!!!! IN MAINTENCENCE MODE !!!!')

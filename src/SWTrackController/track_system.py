@@ -178,6 +178,7 @@ class TrackSystem:
         :param int block_id: Block that will be broken
         :param bool status: Whether the track is being broken or fixed
         """
+        print("Inside luke method "+ str(block_id))
         # Get the correct list of track controllers based on the line
         track_controllers = self.green_track_controllers if line == Line.LINE_GREEN \
                                                          else self.red_track_controllers
