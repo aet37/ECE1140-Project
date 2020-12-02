@@ -215,6 +215,15 @@ class TrackSystem:
                     if not new_authority:
                         final_authorities[j] = False
 
+        ''' Test '''
+        """ Just for future use if problems
+        num_maint_mode = 0
+        for track_controller in track_controllers:
+            if track_controller.number_of_failures > 0:
+                num_maint_mode += 1
+        print(num_maint_mode)
+        """
+
         # Emit the final updated authorities for the occupied blocks
         for final_authority, block in zip(final_authorities, occupied_blocks):
             signals.trackmodel_update_authority.emit(line, block, final_authority)
