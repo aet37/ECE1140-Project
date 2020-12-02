@@ -178,7 +178,10 @@ class TrackSystem:
         :param int block_id: Block that will be broken
         :param bool status: Whether the track is being broken or fixed
         """
-        print("Inside luke method "+ str(block_id))
+
+        # Send Faliure to CTC to display
+        signals.update_failure_blocks.emit(line, block_id, status)
+
         # Get the correct list of track controllers based on the line
         track_controllers = self.green_track_controllers if line == Line.LINE_GREEN \
                                                          else self.red_track_controllers
@@ -197,14 +200,14 @@ class TrackSystem:
                     # Only take action if this is the first
                     if track_controller.number_of_failures == 1:
                         track_controller.set_broken_rail(status)
-                        signals.update_failure_blocks.emit(line, block_id, True)
+                        #signals.update_failure_blocks.emit(line, block_id, True)
                 else:
                     track_controller.number_of_failures -= 1
 
                     # Only take action if this is the last
                     if track_controller.number_of_failures == 0:
                         track_controller.set_broken_rail(status)
-                        signals.update_failure_blocks.emit(line, block_id, False)
+                        #signals.update_failure_blocks.emit(line, block_id, False)
 
             # Go through occupied blocks and update their authorities
             for j, block in enumerate(occupied_blocks):

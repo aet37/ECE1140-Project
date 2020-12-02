@@ -24,6 +24,7 @@ class CTCUi(QtWidgets.QMainWindow):
         self.setWindowTitle("CTC Main Page")
 
         #init
+        signals.ctc_update_failure_blocks_gui.connect(self.update_blocks_faliure_numbers)
         self.tnum = -1
         self.auto_mode = False
         self.num_blocks_closed_green = 0
@@ -61,6 +62,20 @@ class CTCUi(QtWidgets.QMainWindow):
 
 
         self.show()
+
+    def update_blocks_faliure_numbers(self, ln, failure):
+        """ Update Maintenece Block counts from CTC """
+
+        if ln ==Line.LINE_GREEN:
+            if failure:
+                self.num_blocks_closed_green += 1
+            else:
+                self.num_blocks_closed_green -= 1
+        else:
+            if failure:
+                self.num_blocks_closed_red += 1
+            else:
+                self.num_blocks_closed_red -= 1
 
     def show_throughput(self):
         """ Displays Throughput on main screen """
