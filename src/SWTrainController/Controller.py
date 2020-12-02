@@ -56,6 +56,9 @@ class Controller:
         self.engine_failure = False
         self.brake_failure = False
 
+        # Used for starting and stopping the train's power loop
+        self.hold_power_loop = False
+
     ###############################/
     # VITAL OPERATIONS
     ###############################/

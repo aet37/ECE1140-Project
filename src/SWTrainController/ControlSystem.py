@@ -124,9 +124,10 @@ class ControlSystem:
         """ Calculates new power every sampling period """
         # Create loop to calculate power command of all active controllers
         for train_id in range(0, len(self.p_controllers)):
-            self.p_controllers[train_id].calculate_power()
-            # Send train_id and power to train model
-            signals.train_model_receive_power.emit(train_id, self.p_controllers[train_id].power_command)
+            if not self.p_controllers[train_id].hold_power_loop:
+                self.p_controllers[train_id].calculate_power()
+                # Send train_id and power to train model
+                signals.train_model_receive_power.emit(train_id, self.p_controllers[train_id].power_command)
 
     def swtrain_update_current_speed(self, train_id, curr_speed):
         """ Updates current speed in train controller """
@@ -147,20 +148,37 @@ class ControlSystem:
         # Send train_id and ebrake status to train model
         signals.train_model_gui_receive_ebrake.emit(train_id, self.p_controllers[train_id].emergency_brake)
 
-    def swtrain_update_authority(self, train_id, auth):
+    def swtrain_update_authority(self, train_id, new_authority):
         """Update authority in train controller"""
-        self.p_controllers[train_id].authority = auth
-        if self.p_controllers[train_id].authority:
-            # If service brake is already on or train is dispatching do not turn it off
-            if (self.p_controllers[train_id].current_speed != 0 and self.p_controllers[train_id].service_brake == True) or \
-                (self.p_controllers[train_id].kp == 0 or self.p_controllers[train_id].ki == 0):
-                pass
-            else:
+        if new_authority:
+            if self.p_controllers[train_id].authority:
+                # Service brake should already be off, but just in case
                 self.p_controllers[train_id].service_brake = False
                 signals.train_model_gui_receive_service_brake.emit(train_id, self.p_controllers[train_id].service_brake)
+            else:
+                if (self.p_controllers[train_id].kp == 0) or (self.p_controllers[train_id].ki == 0):
+                    pass
+                else:
+                    self.p_controllers[train_id].authority = new_authority
+                    self.p_controllers[train_id].service_brake = False
+                    signals.train_model_gui_receive_service_brake.emit(train_id, self.p_controllers[train_id].service_brake)
         else:
+            self.p_controllers[train_id].authority = new_authority
             self.p_controllers[train_id].service_brake = True
             signals.train_model_gui_receive_service_brake.emit(train_id, self.p_controllers[train_id].service_brake)
+
+        # self.p_controllers[train_id].authority = auth
+        # if self.p_controllers[train_id].authority:
+        #     # If service brake is already on or train is dispatching do not turn it off
+        #     if (self.p_controllers[train_id].current_speed != 0 and self.p_controllers[train_id].service_brake == True) or \
+        #         (self.p_controllers[train_id].kp == 0 or self.p_controllers[train_id].ki == 0):
+        #         pass
+        #     else:
+        #         self.p_controllers[train_id].service_brake = False
+        #         signals.train_model_gui_receive_service_brake.emit(train_id, self.p_controllers[train_id].service_brake)
+        # else:
+        #     self.p_controllers[train_id].service_brake = True
+        #     signals.train_model_gui_receive_service_brake.emit(train_id, self.p_controllers[train_id].service_brake)
 
         print("Service brake: " + str(self.p_controllers[train_id].service_brake))
 
@@ -184,18 +202,25 @@ class ControlSystem:
         """Function to ensure trains stop properly"""
         # Wait for train to come to a stop
         while(self.p_controllers[train_id].current_speed != 0):
-            pass
             time.sleep(1)
+        
+        # Stop the power loop for this train
+        self.p_controllers[train_id].hold_power_loop = True
+
         # Once train is at stop, toggle nonvitals
         self.swtrain_gui_toggle_cabin_lights(train_id)
         self.swtrain_gui_toggle_damn_doors(train_id)
         self.swtrain_gui_announce_stations(train_id)
         # Wait one minute at stop
-        print("thats the minute")
         current_minute = timekeeper.current_time_min
         while(current_minute == timekeeper.current_time_min):
+            logger.critical("Current speed of train {} is {}".format(train_id, self.p_controllers[train_id].current_speed))
             assert self.p_controllers[train_id].current_speed == 0
             time.sleep(1)
+        logger.critical("A minute has passed for train {}".format(train_id))
+
+        # Restart the power loop for this train
+        self.p_controllers[train_id].hold_power_loop = False
         
         # After a minute, toggle nonvitals again and begin moving
         self.swtrain_gui_toggle_cabin_lights(train_id)
