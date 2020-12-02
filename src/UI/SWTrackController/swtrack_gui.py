@@ -152,7 +152,9 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
 
         # Switch Position
         switch_position = self.current_track_controller.get_switch_position()
-        self.switch_position_label.setText(self.determine_text(switch_position, "0", "1"))
+        track_controller_id = int(self.track_controller_combo_box.currentText().split('#')[1]) - 1
+        (false_position, true_position) = self.get_translated_switch_positions(line, track_controller_id)
+        self.switch_position_label.setText(self.determine_text(switch_position, false_position, true_position))
 
         # Light status
         light_status = self.current_track_controller.get_light_status()
@@ -160,6 +162,9 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
 
         # Occupied
         occupied = self.current_track_controller.get_block_occupancy(self.current_block)
+        mmode = self.current_track_controller.get_maintenance_mode()
+        if mmode and occupied is not None:
+            occupied = False
         self.occupied_label.setText(self.determine_text(occupied, "YES", "NO"))
 
         # Block status
@@ -261,12 +266,48 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
 
     def switch_position_button_clicked(self, event):
         """Method called when the switch position button is pressed"""
-        confirmation = Confirmation("Are you sure you want to change the switch position?")
+        confirmation = Confirmation("Warning! Flipping the switch will place the block into maintanence mode."
+                                    "Would you like to proceed?")
 
         # TODO (ljk): Check for maintenance mode
         if confirmation.exec_():
-            current_switch_position = self.current_track_controller.get_switch_position()
-            self.current_track_controller.set_switch_position(not current_switch_position)
+            if self.current_track_controller.get_maintenance_mode():
+                current_switch_position = self.current_track_controller.get_switch_position()
+                self.current_track_controller.set_switch_position(not current_switch_position)
+
+                self.current_track_controller.set_maintenance_mode(self.current_block, False)
+            else:
+                self.current_track_controller.set_maintenance_mode(self.current_block, True)
+
+                current_switch_position = self.current_track_controller.get_switch_position()
+                self.current_track_controller.set_switch_position(not current_switch_position)
+
+    @staticmethod
+    def get_translated_switch_positions(line, track_controller_id):
+        """Gets the two switch positions based on the given parameters"""
+        green_positions = (
+            ("Yard", "61"),
+            ("101", "76"),
+            ("86", "100"),
+            ("30", "150"),
+            ("1", "12"),
+            ("Yard", "59")
+        )
+
+        red_positions = (
+            ("Yard", "10"),
+            ("1", "15"),
+            ("28", "76"),
+            ("32", "72"),
+            ("39", "71"),
+            ("43", "67"),
+            ("53", "66")
+        )
+
+        if line == Line.LINE_GREEN:
+            return green_positions[int(track_controller_id / 2)]
+        else:
+            return red_positions[int(track_controller_id / 2)]
 
     def logout(self):
         """Method invoked when the logout button is pressed"""

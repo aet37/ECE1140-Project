@@ -8,6 +8,7 @@
 // C++ PROJECT INCLUDE
 #include "../include/TagDatabase.hpp" // Header for functions
 #include "../include/HashMap.hpp" // For HashMap
+#include "../include/Lcd/LcdApi.hpp"
 
 namespace TagDatabase
 {
@@ -53,7 +54,8 @@ static void ReadInputs()
     static bool flipped = false;
     if (!digitalRead(PIN23) && !flipped)
     {
-        SetTag("switch", !digitalRead(PIN3));
+        SetTag("switch", !digitalRead(PIN25));
+        digitalWrite(PIN25, !digitalRead(PIN25));
         flipped = true;
     }
     else if (digitalRead(PIN23))

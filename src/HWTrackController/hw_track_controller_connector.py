@@ -60,7 +60,10 @@ class HWTrackCtrlConnector(TrackController):
 
             self.tags.update({key : bool(int(value))})
 
-        signals.swtrack_update_gui.emit()
+        try:
+            signals.swtrack_update_gui.emit()
+        except RuntimeError:
+            pass
 
         if HWTrackCtrlConnector.run_timer:
             self.timer = threading.Timer(TIMER_PERIOD, self.get_all_tag_values)
