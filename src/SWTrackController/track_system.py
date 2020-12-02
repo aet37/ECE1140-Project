@@ -196,12 +196,14 @@ class TrackSystem:
                     # Only take action if this is the first
                     if track_controller.number_of_failures == 1:
                         track_controller.set_broken_rail(status)
+                        signals.update_failure_blocks.emit(line, block_id, True)
                 else:
                     track_controller.number_of_failures -= 1
 
                     # Only take action if this is the last
                     if track_controller.number_of_failures == 0:
                         track_controller.set_broken_rail(status)
+                        signals.update_failure_blocks.emit(line, block_id, False)
 
             # Go through occupied blocks and update their authorities
             for j, block in enumerate(occupied_blocks):

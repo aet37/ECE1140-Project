@@ -181,6 +181,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
         currentComboBlock = currentComboBlock[6:]
 
         broken_rail_failure_button = self.findChild(QtWidgets.QPushButton, 'broken_rail_failure_button')
+        print("test123")
         if (broken_rail_failure_button.isChecked()):
             broken_rail_failure_button.setStyleSheet("background-color: red")
             theTrack.getBlock(int(currentComboBlock)).brokenRailFailure = True
