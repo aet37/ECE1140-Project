@@ -396,7 +396,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
                     broken_rail_failure_button.toggle()
 
             power_failure_button = self.findChild(QtWidgets.QPushButton, 'power_failure_button')
-            if (theBlock.brokenRailFailure):
+            if (theBlock.powerFailure):
                 power_failure_button.setStyleSheet("background-color: red")
                 if (not power_failure_button.isChecked()):
                     power_failure_button.toggle()
@@ -406,7 +406,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
                     power_failure_button.toggle()
 
             track_circuit_failure_button = self.findChild(QtWidgets.QPushButton, 'track_circuit_failure_button')
-            if (theBlock.brokenRailFailure):
+            if (theBlock.trackCircuitFailure):
                 track_circuit_failure_button.setStyleSheet("background-color: red")
                 if (not track_circuit_failure_button.isChecked()):
                     track_circuit_failure_button.toggle()

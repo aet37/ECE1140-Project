@@ -45,6 +45,7 @@ class DownloadInProgress(QtWidgets.QDialog):
         self.button_box = self.findChild(QtWidgets.QDialogButtonBox, 'button_box')
         self.abort_button = self.button_box.button(QtWidgets.QDialogButtonBox.Abort)
         self.abort_button.clicked.connect(lambda: self.abort_clicked.emit())
+        self.abort_button.clicked.connect(self.close)
 
         self.download_complete.connect(self.close)
         self.progress_updated.connect(lambda value: self.progress_bar.setValue(value))

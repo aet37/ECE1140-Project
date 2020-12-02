@@ -41,6 +41,7 @@ void setup()
     pinMode(PIN25, OUTPUT);
     pinMode(PIN27, OUTPUT);
     pinMode(PIN29, OUTPUT);
+    pinMode(PIN31, OUTPUT);
     pinMode(PIN23, INPUT);
 
     // Initialize the user program
@@ -48,8 +49,8 @@ void setup()
     LcdApi::Write("Blank Program");
 
     // Add tasks to the scheduler
-    Scheduler::GetInstance().AddTask(new SystemTask(toggleTask, nullptr, 1000));
-    Scheduler::GetInstance().AddTask(new SystemTask(LcdApi::ScrollTask, nullptr, 600));
+    Scheduler::GetInstance().AddTask(new SystemTask(toggleTask, nullptr, 2000));
+    Scheduler::GetInstance().AddTask(new SystemTask(LcdApi::ScrollTask, nullptr, 800));
     Scheduler::GetInstance().AddTask(new SystemTask(Communications::CommsTask, static_cast<void*>(pProg), 100));
     Scheduler::GetInstance().AddTask(new SystemTask(TagDatabase::IoTask, nullptr, 130));
 }

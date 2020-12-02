@@ -26,7 +26,7 @@ TAG b75A = TRUE
 TAG b76A = TRUE
 
 TASK<PERIOD=1000> MainTask
-    ROUTINE
+    ROUTINE Main
         RUNG
             XIO b75O
             XIO b74O
@@ -42,10 +42,13 @@ TASK<PERIOD=1000> MainTask
         RUNG
             XIO b33O
             OTE b76A
+        ENDRUNG
         RUNG
             XIO b33O
             OTE switch
         ENDRUNG
+    ENDROUTINE
+ENDTASK
 
 
 
