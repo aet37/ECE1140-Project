@@ -242,6 +242,7 @@ class TrackSystem:
         for final_authority, block in zip(final_authorities, occupied_blocks):
             signals.trackmodel_update_authority.emit(line, block, final_authority)
 
+
     @staticmethod
     def get_speed_limit_of_block(line, block_id):
         """Maps a block number to its speed limit

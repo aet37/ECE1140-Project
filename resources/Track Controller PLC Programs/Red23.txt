@@ -1,20 +1,24 @@
 TAG heater = FALSE
 TAG switch = TRUE
+TAG broken = FALSE
+TAG mmode = FALSE
+TAG rrxing = FALSE
 # Section 1
 TAG b44O = FALSE
 TAG b45O = FALSE
+TAG b44A = TRUE
+TAG b45A = TRUE
+# Section 2
 TAG b46O = FALSE
 TAG b47O = FALSE
 TAG b48O = FALSE
-# Section 2
-TAG b49O = FALSE
-TAG b50O = FALSE
-TAG b51O = FALSE
-TAG b44A = TRUE
-TAG b45A = TRUE
 TAG b46A = TRUE
 TAG b47A = TRUE
 TAG b48A = TRUE
+# Section 3
+TAG b49O = FALSE
+TAG b50O = FALSE
+TAG b51O = FALSE
 TAG b49A = TRUE
 TAG b50A = TRUE
 TAG b51A = TRUE
@@ -25,6 +29,7 @@ TASK<PERIOD=1000> MainTask
             XIO b49O
             XIO b50O
             XIO b51O
+            XIO broken
             OTE b48A
             OTE b47A
             OTE b46A
@@ -37,6 +42,7 @@ TASK<PERIOD=1000> MainTask
             XIO b46O
             XIO b45O
             XIO b44O
+            XIO broken
             OTE b49A
             OTE b50A
             OTE b51A
@@ -44,6 +50,17 @@ TASK<PERIOD=1000> MainTask
         RUNG 
             XIO b44O
             OTE switch
+        ENDRUNG
+        RUNG
+            XIC broken
+            OTU b44A
+            OTU b45A
+            OTU b46A
+            OTU b47A
+            OTU b48A
+            OTU b49A
+            OTU b50A
+            OTU b51A
         ENDRUNG
     ENDROUTINE
 ENDTASK
