@@ -23,7 +23,7 @@ class Train:
         self.m_power = 0.0
         self.m_trainDirection = 0
         # INTEGERS (self, Nonvital)
-        self.m_tempControl = 0.0
+        self.m_tempControl = 70.0
 
         # STRING
         self.m_stationName = ""

@@ -5,6 +5,9 @@
 from random import Random
 import sys
 import random
+import math
+import threading
+import time
 sys.path.append(".")
 
 # Python PROJECT INCLUDES
@@ -14,6 +17,7 @@ from src.TrainModel.BlockCatalogue import block_catalogue_red, block_catalogue_g
 from src.signals import signals
 from src.logger import get_logger
 from src.common_def import *
+from src.timekeeper import timekeeper
 
 logger = get_logger(__name__)
 class TrainCatalogue:
@@ -67,6 +71,14 @@ class TrainCatalogue:
         signals.train_model_update_direction.connect(self.train_model_update_direction)
         # Receive Beacon Info
         signals.train_model_receive_beacon_info.connect(self.train_model_receive_beacon_info)
+        # Receive sp failure
+        signals.train_model_report_sp_failure.connect(self.train_model_report_sp_failure)
+        # Receive sb failure
+        signals.train_model_report_sb_failure.connect(self.train_model_report_sb_failure)
+        # Receive e failure
+        signals.train_model_report_e_failure.connect(self.train_model_report_e_failure)
+        # Resolve failure
+        signals.train_model_resolve_failure.connect(self.train_model_resolve_failure)
 
     # print(sys.path)
 
@@ -144,7 +156,7 @@ class TrainCatalogue:
 
     # @brief Receives command speed
     def train_model_update_command_speed(self, trainId, newCommandSpeed):
-        self.m_trainList[trainId].m_commandSpeed = newCommandSpeed
+        self.m_trainList[trainId].m_commandSpeed = newCommandSpeed * Converters.KmHr_to_MPH
         signals.train_model_something_has_been_changed.emit()
         signals.swtrain_update_command_speed.emit(trainId, newCommandSpeed)
 
@@ -152,6 +164,34 @@ class TrainCatalogue:
     def train_model_receive_doors(self, trainId, doors):
         self.m_trainList[trainId].m_doors = doors
         signals.train_model_something_has_been_changed.emit()
+
+    # @brief Resolve failure
+    def train_model_resolve_failure(self, trainId):
+        if(self.m_trainList[trainId].m_signalPickupFailure):
+            self.m_trainList[trainId].m_signalPickupFailure = False
+        if(self.m_trainList[trainId].m_engineFailure):
+            self.m_trainList[trainId].m_engineFailure = False
+        if(self.m_trainList[trainId].m_brakeFailure):
+            self.m_trainList[trainId].m_brakeFailure = False
+        signals.train_model_something_has_been_changed.emit()
+
+    # @brief Reports sp failure
+    def train_model_report_sp_failure(self, trainId, failReport):
+        self.m_trainList[trainId].m_signalPickupFailure = failReport
+        signals.train_model_something_has_been_changed.emit()
+        print("SP Failure: " + str(failReport))
+    
+    # @brief Reports sb failure
+    def train_model_report_sb_failure(self, trainId, failReport):
+        self.m_trainList[trainId].m_brakeFailure = failReport
+        signals.train_model_something_has_been_changed.emit()
+        print("SB Failure: " + str(failReport))
+    
+    # @brief Reports e failure
+    def train_model_report_e_failure(self, trainId, failReport):
+        self.m_trainList[trainId].m_engineFailure = failReport
+        signals.train_model_something_has_been_changed.emit()
+        print("E Failure: " + str(failReport))
 
     # @brief Toggles the announcements
     def train_model_gui_receive_announce_stations(self, trainId, announcements):
@@ -176,6 +216,15 @@ class TrainCatalogue:
 
     # @brief Sets the temperature
     def train_model_gui_receive_sean_paul(self, trainId, temperature):
+        # Begin train stopping process
+        temp_change_thread = threading.Thread(target = self.train_model_temp_wait, args=(trainId, temperature), daemon=True)
+        temp_change_thread.start()
+    
+    def train_model_temp_wait(self, trainId, temperature):
+        startTime = timekeeper.current_time_sec
+        while(timekeeper.current_time_sec < startTime + 3):
+            pass
+            time.sleep(1)
         self.m_trainList[trainId].m_tempControl = temperature
         signals.train_model_something_has_been_changed.emit()
 
@@ -194,6 +243,8 @@ class TrainCatalogue:
 
     def train_model_update_passengers(self, trainId, newPassCount):
         self.m_trainList[trainId].m_trainPassCount = newPassCount
+        if(newPassCount > 0):
+            self.m_trainList[trainId].m_trainMass = 40.9 + (newPassCount * Converters.avg_person_tons)
         signals.train_model_something_has_been_changed.emit()
 
     def train_model_receive_power(self, trainId, powerStatus):
@@ -237,14 +288,18 @@ class TrainCatalogue:
         
         logger.debug("powerStatus = %f", powerStatus)
 
+        if (currentTrack == Line.LINE_GREEN):
+            slopeAngle = math.tan(block_catalogue_green.m_blockList[self.m_trainList[trainId].m_route[0]].m_slope)
+        else:
+            slopeAngle = math.tan(block_catalogue_red.m_blockList[self.m_trainList[trainId].m_route[0]].m_slope)
         # FORCE
         try:
             forceCalc = (powerStatus/currentSpeed)
-            forceCalc -= self.FRICTION_COEFFICIENT * (trainMass) * self.GRAVITY
+            forceCalc -= self.FRICTION_COEFFICIENT * (trainMass) * self.GRAVITY * math.cos(slopeAngle)
         except ZeroDivisionError:
             if(not serviceBrake):
-                forceCalc = self.FRICTION_COEFFICIENT * (trainMass) * self.GRAVITY + 1000
-                forceCalc -= self.FRICTION_COEFFICIENT * (trainMass) * self.GRAVITY
+                forceCalc = self.FRICTION_COEFFICIENT * (trainMass) * self.GRAVITY * math.cos(slopeAngle) + 1000
+                forceCalc -= self.FRICTION_COEFFICIENT * (trainMass) * self.GRAVITY * math.cos(slopeAngle)
             else:
                 forceCalc = 0.0
 
@@ -367,16 +422,19 @@ class TrainCatalogue:
         else:
             # LOG_TRAIN_MODEL("Staying in the same block: currentPosition = %f, blockSize = %f", currentPosition, currentBlockSize)
             # Still in the same block
-            self.m_trainList[trainId].m_position = currentPosition
+            if(not self.m_trainList[trainId].m_engineFailure):
+                self.m_trainList[trainId].m_position = currentPosition
 
         # Set all the parameters in the train object
-        
-        self.m_trainList[trainId].m_power = powerStatus
-        self.m_trainList[trainId].m_currentSpeed = velocityCalc * Converters.mps_to_MPH
-        self.m_trainList[trainId].m_acceleration = accelerationCalc
+        if(not self.m_trainList[trainId].m_engineFailure):
+            self.m_trainList[trainId].m_power = powerStatus
+            self.m_trainList[trainId].m_currentSpeed = velocityCalc * Converters.mps_to_MPH
+            self.m_trainList[trainId].m_acceleration = accelerationCalc
 
         # Send to Collin
-        signals.swtrain_update_current_speed.emit(trainId, velocityCalc * Converters.mps_to_MPH)
+        if(not self.m_trainList[trainId].m_engineFailure):
+            signals.swtrain_update_current_speed.emit(trainId, velocityCalc * Converters.mps_to_MPH)
+
         # if((accelerationCalc/samplePeriod) > 0): # Check for an actual change
         signals.train_model_something_has_been_changed.emit()
 

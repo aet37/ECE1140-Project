@@ -49,6 +49,12 @@ class ControlSystem:
         signals.swtrain_update_command_speed.connect(self.swtrain_update_command_speed)
         # Receive beacon
         signals.swtrain_receive_beacon.connect(self.swtrain_receive_beacon)
+        # Receive failures
+        #signals.swtrain_receive_signal_pickup_failure.connect(self.swtrain_receive_signal_pickup_failure)
+        signals.swtrain_receive_brake_failure.connect(self.swtrain_receive_brake_failure)
+        #signals.swtrain_receive_engine_failure.connect(self.swtrain_receive_engine_failure)
+        # Receive resolve failure signal
+        signals.swtrain_resolve_failure.connect(self.swtrain_resolve_failure)
 
         ## RECEIVE NONVITAL SIGNALS ##
         # Receive lights signal
@@ -196,6 +202,39 @@ class ControlSystem:
         self.swtrain_gui_toggle_damn_doors(train_id)
         self.swtrain_gui_announce_stations(train_id)
         self.swtrain_gui_press_service_brake(train_id)
+
+    def swtrain_receive_brake_failure(self, train_id, brake_failure):
+        """Sets brake failure variable"""
+        self.p_controllers[train_id].brake_failure = brake_failure
+
+    def swtrain_resolve_failure(self, train_id):
+        """Resolves failure in train controller"""
+        print("Did you try to resolve the failure")
+        # Pull emergency brake
+        self.swtrain_gui_pull_ebrake(train_id)
+        # Begin train failure resolution process
+        beacon_thread = threading.Thread(target = self.swtrain_failure_resolution, args=(train_id,), daemon=True)
+        beacon_thread.start()
+    
+    def swtrain_failure_resolution(self, train_id):
+        """Used to wait one minute to resolve failures"""
+        current_minute = timekeeper.current_time_min
+        while(current_minute == timekeeper.current_time_min):
+            assert self.p_controllers[train_id].current_speed == 0
+            time.sleep(1)
+
+        # After waiting a minute all failures are set to 0
+        self.p_controllers[train_id].signal_pickup_failure = False
+        self.p_controllers[train_id].engine_failure = False
+        self.p_controllers[train_id].brake_failure = False
+
+        print("Failure resolved:")
+        # Release service brake
+        self.swtrain_gui_press_service_brake(train_id)
+
+        # Tell train model failure has been resolved
+        signals.train_model_resolve_failure.emit(train_id)
+        # Train will resume moving once driver pulls emergency brake
 
     ## NonVital Signal Definitions ##
     def swtrain_gui_toggle_cabin_lights(self, train_id):
