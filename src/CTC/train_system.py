@@ -262,7 +262,8 @@ class TrainSystem:
         trains_on_green = []    # Keep running list of blocks a train is on
         trains_on_red = []
 
-        for i in range(len(self.trains_arr)):
+        i = 0
+        while i < len(self.trains_arr):
             if self.trains_arr[i].line_on == Line.LINE_GREEN:
 
                 # If train has not made it out of the yard yet
@@ -273,6 +274,7 @@ class TrainSystem:
                             self.trains_arr[i].index_on_route += 1
                             trains_on_green.append(self.trains_arr[i].route_blocks_arr[1])
                         else:
+                            i += 1
                             continue
                 # If train has reached the yard
                 elif self.trains_arr[i].index_on_route == (len(self.trains_arr[i].route_blocks_arr\
@@ -306,6 +308,7 @@ class TrainSystem:
                         trains_on_green.append(self.trains_arr[i].route_blocks_arr\
                             [self.trains_arr[i].index_on_route])
                     else:
+                        i += 1
                         continue
 
             # If Line on RED
@@ -318,6 +321,7 @@ class TrainSystem:
                             self.trains_arr[i].index_on_route += 1
                             trains_on_red.append(self.trains_arr[i].route_blocks_arr[1])
                         else:
+                            i += 1
                             continue
                 # If train has reached the yard
                 elif self.trains_arr[i].index_on_route == (len(self.trains_arr[i].route_blocks_arr\
@@ -351,7 +355,9 @@ class TrainSystem:
                         trains_on_red.append(self.trains_arr[i].route_blocks_arr\
                             [self.trains_arr[i].index_on_route])
                     else:
+                        i += 1
                         continue
+            i += 1
 
 # Define a TrainSystem object to use; acts as equivalent of singleton class
 ctc = TrainSystem()
