@@ -181,6 +181,10 @@ class TrackSystem:
         :param int block_id: Block that will be broken
         :param bool status: Whether the track is being broken or fixed
         """
+
+        # Send Faliure to CTC to display
+        signals.update_failure_blocks.emit(line, block_id, status)
+
         # Get the correct list of track controllers based on the line
         track_controllers = self.green_track_controllers if line == Line.LINE_GREEN \
                                                          else self.red_track_controllers
@@ -213,6 +217,13 @@ class TrackSystem:
                     # It only takes one false authority to stop the train
                     if not new_authority:
                         final_authorities[j] = False
+
+        ''' Test '''
+        num_maint_mode = 0
+        for track_controller in track_controllers:
+            if track_controller.number_of_failures > 0:
+                num_maint_mode += 1
+        print('Track Controllers in MM: ', num_maint_mode)
 
         # Emit the final updated authorities for the occupied blocks
         for final_authority, block in zip(final_authorities, occupied_blocks):

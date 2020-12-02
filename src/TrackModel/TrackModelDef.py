@@ -68,7 +68,7 @@ class Track:
 
     def setTrackHeater(self, heaterBool):
         self.trackHeater = heaterBool
-    
+
     def getStationBlocks(self, stationName):
         for x in self.stationList:
             if (x.stationName == stationName):
@@ -109,7 +109,7 @@ class Block:
 
     def addSwitch(self, switchNumber, block1, block2):
         self.blockSwitch = Switch(switchNumber, block1, block2)
-    
+
     def addBeacon(self, stationName, serviceBrakeBool, exitSide, beaconDirection, lastStation):
         theBeacon = Beacon()
         theBeacon.station_name = stationName
@@ -222,13 +222,48 @@ class SignalHandler:
         signals.trackmodel_update_switch_positions.connect(self.updateSwitchPositions)
         signals.trackmodel_update_tickets_sold.connect(self.updateTicketsSold)
         signals.trackmodel_update_passengers_exited.connect(self.updatePassengersExited)
+        signals.swtrack_set_block_status.connect(self.setBrokenRailFailure)
+
+    def setBrokenRailFailure(self, line, blockNumber, statusBool, num_fail):
+        if (line == Line.LINE_GREEN):
+            theTrack = getTrack("Green")
+        else:
+            theTrack = getTrack("Red")
+
+        theBlock = theTrack.getBlock(blockNumber)
+
+        if statusBool:
+            theBlock.brokenRailFailure = statusBool
+            signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
+        else:
+            # check how many faliures there were on that block to send Track Controller correct number
+            if num_fail == 1:
+                theBlock.brokenRailFailure = statusBool
+                theBlock.powerFailure = statusBool
+                theBlock.trackCircuitFailure = statusBool
+                signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
+            elif num_fail == 2:
+                theBlock.brokenRailFailure = statusBool
+                theBlock.powerFailure = statusBool
+                theBlock.trackCircuitFailure = statusBool
+                signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
+                signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
+            elif num_fail == 3:
+                theBlock.brokenRailFailure = statusBool
+                theBlock.powerFailure = statusBool
+                theBlock.trackCircuitFailure = statusBool
+                signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
+                signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
+                signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
+
+        signals.trackmodel_update_gui.emit()
 
     def updatePassengersExited(self, line, trainId, blockNumber, passengersExited, spaceOnTrain, totalSeats):
         if (line == Line.LINE_GREEN):
             theTrack = getTrack("Green")
         else:
             theTrack = getTrack("Red")
-        
+
         theBlock = theTrack.getBlock(blockNumber)
         theStation = theBlock.blockStation
 
