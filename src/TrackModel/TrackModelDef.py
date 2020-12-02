@@ -68,6 +68,12 @@ class Track:
 
     def setTrackHeater(self, heaterBool):
         self.trackHeater = heaterBool
+    
+    def getStationBlocks(self, stationName):
+        for x in self.stationList:
+            if (x.stationName == stationName):
+                return x.blockList
+        return 0
 
     def getStationBlocks(self, stationName):
         for x in self.stationList:
@@ -104,11 +110,12 @@ class Block:
     def addSwitch(self, switchNumber, block1, block2):
         self.blockSwitch = Switch(switchNumber, block1, block2)
     
-    def addBeacon(self, stationName, serviceBrakeBool, exitSide, beaconDirection):
+    def addBeacon(self, stationName, serviceBrakeBool, exitSide, beaconDirection, lastStation):
         theBeacon = Beacon()
         theBeacon.station_name = stationName
         theBeacon.service_brake = serviceBrakeBool
         theBeacon.DoorSide = exitSide
+        theBeacon.lastStation = lastStation
         self.blockBeacon = theBeacon
         self.beaconDirection = beaconDirection
 
@@ -225,7 +232,7 @@ class SignalHandler:
             theTrack = getTrack("Green")
         else:
             theTrack = getTrack("Red")
-
+        
         theBlock = theTrack.getBlock(blockNumber)
         theStation = theBlock.blockStation
 
@@ -235,17 +242,18 @@ class SignalHandler:
             theTrack.getBlock(x).blockStation.passengersExited += passengersExited
 
         passengersLeftToBoard = theStation.ticketsSold - theStation.passengersBoarded
-
         if (passengersLeftToBoard > spaceOnTrain):
             for y in blockList:
                 theTrack.getBlock(y).blockStation.passengersBoarded += spaceOnTrain
             totalPassengers = totalSeats
             signals.train_model_update_passengers.emit(trainId, totalPassengers)
+            signals.trackmodel_update_gui.emit()
         else:
             for z in blockList:
                 theTrack.getBlock(z).blockStation.passengersBoarded += passengersLeftToBoard
             totalPassengers = totalSeats - (spaceOnTrain - passengersLeftToBoard)
             signals.train_model_update_passengers.emit(trainId, totalPassengers)
+            signals.trackmodel_update_gui.emit()
 
     def updateSwitchPositions(self, line, number, position):
         if (line == Line.LINE_GREEN):
@@ -303,23 +311,32 @@ class SignalHandler:
     # def updateAuthority(self, trainId, newAuthority):
     #     signals.train_model_update_authority.emit(trainId, newAuthority)
 
-    def updateOccupancy(self, trainId, line, currentBlock, trainOrNot):
+    def updateOccupancy(self, trainId, line, currentBlock, trainOrNot, travelDirection):
         if (line == Line.LINE_GREEN):
             theTrack = getTrack("Green")
+            if (travelDirection == 0):
+                if (currentBlock == 100 or currentBlock == 12):
+                    signals.train_model_update_direction.emit(trainId, 1)
+            else:
+                if (currentBlock == 77 or currentBlock == 29):
+                    signals.train_model_update_direction.emit(trainId, 0)
+
         else:
             theTrack =  getTrack("Red")
+            if (travelDirection == 0):
+                if (currentBlock == 66):
+                    signals.train_model_update_direction.emit(trainId, 1)
+            else:
+                if (currentBlock == 16):
+                    signals.train_model_update_direction.emit(trainId, 0)
 
         if (currentBlock != 0):
             theBlock = theTrack.getBlock(currentBlock)
             if (trainOrNot):
                 theBlock.updateOccupancy(trainId)
-                # if (theBlock.blockStation != None):
-                #     for x in theTrack.stationList:
-                #         if (x.stationName == theBlock.blockStation.stationName):
-                #             for y in x.blockList:
-                #                 theTrack.getBlock(y).blockStation.
             else:
                 theBlock.updateOccupancy(-1)
+
 
         # Tell swtrack the occupancy
         signals.swtrack_update_occupancies.emit(trainId, line, currentBlock, trainOrNot)
@@ -333,13 +350,28 @@ class SignalHandler:
             for i in green_route_blocks:
                 theBlock = theTrack.getBlock(i)
                 #print("Trackmodel block: " + str(theBlock.blockNumber) + " station: " + str(theBlock.blockStation != None))
-                signals.train_model_receive_block.emit(0, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None)
+                theBeacon1 = Beacon()
+                theBeacon2 = Beacon()
+                if (theBlock.blockBeacon != None):
+                    if (theBlock.beaconDirection == 0):
+                        theBeacon1 = theBlock.blockBeacon
+                    else:
+                        theBeacon2 = theBlock.blockBeacon
+
+                signals.train_model_receive_block.emit(0, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None, theBeacon1, theBeacon2)
         else:
             theTrack = getTrack("Red")
             route = red_route_blocks
             for i in red_route_blocks:
                 theBlock = theTrack.getBlock(i)
-                signals.train_model_receive_block.emit(1, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None)
+                theBeacon1 = Beacon()
+                theBeacon2 = Beacon()
+                if (theBlock.blockBeacon != None):
+                    if (theBlock.beaconDirection == 0):
+                        theBeacon1 = theBlock.blockBeacon
+                    else:
+                        theBeacon2 = theBlock.blockBeacon
+                signals.train_model_receive_block.emit(1, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None, theBeacon1, theBeacon2)
 
         signals.train_model_dispatch_train.emit(trainId, destinationBlock, commandSpeed, authority, currentLine, route)
 
@@ -463,14 +495,37 @@ class SignalHandler:
                         theBlock.addSwitch(switchNumber, block1, block2)
                         theTrack.switchList.append(theBlock.blockNumber)
 
+                    theBeacon1 = Beacon()
+                    theBeacon2 = Beacon()
                     if (records.column['Beacon'][x] != ""):
                         if (int(records.column['Beacon'][x]) == 0):
-                            theBeacon = records.column['B0'][x]
+                            theBeaconString = records.column['B0'][x]
                             beaconNum = 0
-                        else:
-                            theBeacon = records.column['B1'][x]
+                        elif (int(records.column['Beacon'][x] == 1)):
+                            theBeaconString = records.column['B1'][x]
                             beaconNum = 1
-                        beaconList = theBeacon.split(',')
+                        else:
+                            theBeaconString = records.column['B0'][x]
+                            theBeacon2String = records.column['B1'][x]
+                            beaconNum = 2
+
+                        beaconList = theBeaconString.split(',')
+                        if (beaconNum == 2):
+                            beaconList2 = theBeacon2String.split(',')
+                            if (beaconList2[1] == "TRUE"):
+                                theBool2 = True
+                            else:
+                                theBool2 = False
+                            if (beaconList2[2] == "RIGHT"):
+                                exitWay2 = DoorSide.SIDE_RIGHT
+                            elif (beaconList2[2] == "LEFT"):
+                                exitWay2 = DoorSide.SIDE_LEFT
+                            else:
+                                exitWay2 = DoorSide.SIDE_BOTH
+                            if (beaconList2[3] == "FALSE"):
+                                lastStation2 = False
+                            else:
+                                lastStation2 = True
                         if (beaconList[1] == "TRUE"):
                             theBool = True
                         else:
@@ -481,16 +536,31 @@ class SignalHandler:
                             exitWay = DoorSide.SIDE_LEFT
                         else:
                             exitWay = DoorSide.SIDE_BOTH
+                        if (beaconList[3] == "FALSE"):
+                            lastStation = False
+                        else:
+                            lastStation = True
 
-                        theBlock.addBeacon(beaconList[0], theBool, exitWay, beaconNum)
+                        theBlock.addBeacon(beaconList[0], theBool, exitWay, beaconNum, lastStation)
+                        if (beaconNum == 0):
+                            theBeacon1 = theBlock.blockBeacon
+                        elif (beaconNum == 1):
+                            theBeacon2 = theBlock.blockBeacon
+                        else:
+                            theBeacon1 = theBlock.blockBeacon
+                            theBeacon2 = Beacon()
+                            theBeacon2.station_name = beaconList2[0]
+                            theBeacon2.service_brake = True
+                            theBeacon2.DoorSide = exitWay2
+                            theBeacon2.lastStation = lastStation2
 
                     newTrack.addBlock(theBlock)
 
                     # add beacon to this
                     if (blockNumber == 1):
-                        signals.train_model_receive_block.emit(trackInfo['tNumber'], 0, 0, 0, 10, blockSpeedLimit, blockDirection, stationBool)
+                        signals.train_model_receive_block.emit(trackInfo['tNumber'], 0, 0, 0, 10, blockSpeedLimit, blockDirection, stationBool, theBeacon1, theBeacon2)
 
-                    signals.train_model_receive_block.emit(trackInfo['tNumber'], blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection, stationBool)
+                    signals.train_model_receive_block.emit(trackInfo['tNumber'], blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection, stationBool, theBeacon1, theBeacon2)
 
 
                     #jsonString = json.dumps(blockInfo)
