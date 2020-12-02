@@ -216,6 +216,23 @@ class SignalHandler:
         signals.trackmodel_update_tickets_sold.connect(self.updateTicketsSold)
         signals.trackmodel_update_passengers_exited.connect(self.updatePassengersExited)
         signals.trackmodel_receive_track_circuit.connect(self.receiveTrackCircuit)
+        signals.swtrack_set_block_status.connect(self.setBrokenRailFailure)
+
+    def setBrokenRailFailure(self, line, blockNumber, statusBool):
+        if (line == Line.LINE_GREEN):
+            theTrack = getTrack("Green")
+        else:
+            theTrack = getTrack("Red")
+
+        theBlock = theTrack.getBlock(blockNumber)
+
+        theBlock.brokenRailFailure = statusBool
+        
+        signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
+
+        signals.trackmodel_update_gui.emit()
+
+
 
     def receiveTrackCircuit(self, line, trainId, trackCircuit):
         signals.train_model_receive_track_circuit.emit(line, trainId, trackCircuit)
