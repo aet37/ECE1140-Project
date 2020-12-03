@@ -24,6 +24,7 @@ class CTCUi(QtWidgets.QMainWindow):
         self.setWindowTitle("CTC Main Page")
 
         #init
+        signals.ctc_update_failure_blocks_gui.connect(self.update_blocks_faliure_numbers)
         self.tnum = -1
         self.auto_mode = False
         self.num_blocks_closed_green = 0
@@ -61,6 +62,20 @@ class CTCUi(QtWidgets.QMainWindow):
 
 
         self.show()
+
+    def update_blocks_faliure_numbers(self, ln, failure):
+        """ Update Maintenece Block counts from CTC """
+
+        if ln ==Line.LINE_GREEN:
+            if failure:
+                self.num_blocks_closed_green += 1
+            else:
+                self.num_blocks_closed_green -= 1
+        else:
+            if failure:
+                self.num_blocks_closed_red += 1
+            else:
+                self.num_blocks_closed_red -= 1
 
     def show_throughput(self):
         """ Displays Throughput on main screen """
@@ -584,15 +599,12 @@ class CTCUi(QtWidgets.QMainWindow):
 
         # Close the block if it is open
         if ctc.blocks_green_arr[b_num - 1].open:
-            self.num_blocks_closed_green += 1
-            ctc.blocks_green_arr[b_num - 1].open = False
-            # Altert SW Track
-            signals.swtrack_set_block_status.emit(Line.LINE_GREEN, b_num, False)
+            signals.swtrack_set_block_status.emit(Line.LINE_GREEN, b_num, True,\
+                ctc.blocks_green_arr[b_num - 1].num_faliures)
         else:
-            self.num_blocks_closed_green -= 1
-            ctc.blocks_green_arr[b_num - 1].open = True
             # Altert SW Track
-            signals.swtrack_set_block_status.emit(Line.LINE_GREEN, b_num, True)
+            signals.swtrack_set_block_status.emit(Line.LINE_GREEN, b_num, False,\
+                ctc.blocks_green_arr[b_num - 1].num_faliures)
 
         if self.num_blocks_closed_green > 0:
             self.maint_mode_green.setText('!!!! IN MAINTENCENCE MODE !!!!')
@@ -713,15 +725,12 @@ class CTCUi(QtWidgets.QMainWindow):
 
         # Close the block if it is open
         if ctc.blocks_red_arr[b_num - 1].open:
-            self.num_blocks_closed_red += 1
-            ctc.blocks_red_arr[b_num - 1].open = False
-            # Altert SW Track
-            signals.swtrack_set_block_status.emit(Line.LINE_RED, b_num, False)
+            signals.swtrack_set_block_status.emit(Line.LINE_RED, b_num, True,\
+                ctc.blocks_red_arr[b_num - 1].num_faliures)
         else:
-            self.num_blocks_closed_red -= 1
-            ctc.blocks_red_arr[b_num - 1].open = True
             # Altert SW Track
-            signals.swtrack_set_block_status.emit(Line.LINE_RED, b_num, True)
+            signals.swtrack_set_block_status.emit(Line.LINE_RED, b_num, False,\
+                ctc.blocks_red_arr[b_num - 1].num_faliures)
 
         if self.num_blocks_closed_red > 0:
             self.maint_mode_red.setText('!!!! IN MAINTENCENCE MODE !!!!')
