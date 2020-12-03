@@ -27,7 +27,7 @@ class SignalsClass(QObject):
     swtrack_set_switch_position = pyqtSignal(Line, int, bool)	# Used by CTC to set a switch position in maint mode (sw_number, position)
     swtrack_set_block_status = pyqtSignal(Line, int, bool, int)	# Used by CTC to open/close (true/false) a block for mainenence (block_num, status)
     swtrack_force_authority_reevaluation = pyqtSignal(Line) # Used by anyone to force all authorities on a line to be reevaluated
-
+    
     swtrack_update_occupancies = pyqtSignal(int, Line, int, bool) # Used by Track Model to update occupancies (trainId, Line, blockNumber, occupancy) occupancy = 0  for empty, 1 for occupied
     swtrack_set_track_heater = pyqtSignal(Line, bool) # Used by the Track Model to turn the heater on/off on a track
     swtrack_update_gui = pyqtSignal() # Used by the swtrack to let that gui know that it needs to update
@@ -97,12 +97,12 @@ class SignalsClass(QObject):
     swtrain_time_trigger = pyqtSignal()
     swtrain_receive_beacon = pyqtSignal(int, Beacon) # TrainID, beacon
     swtrain_send_beacon_info = pyqtSignal(int, str, DoorSide) # TrainID, Station Name, DoorSide
-    swtrain_receive_signal_pickup_failure = pyqtSignal(int, bool) # TrainID, signal_pickup_failure
     swtrain_receive_brake_failure = pyqtSignal(int, bool) # TrainID, brake_failure
     swtrain_receive_engine_failure = pyqtSignal(int, bool) # TrainID, engine_failure
     swtrain_resolve_failure = pyqtSignal(int) # TrainID
-    swtrain_receive_track_circuit = pyqtSignal(int, TrackCircuit) #trainId, trackCircuit
+    swtrain_receive_track_circuit = pyqtSignal(int, TrackCircuit) # TrainID, trackCircuit
     swtrain_update_gui = pyqtSignal()
+    swtrain_gui_receive_signal_failure = pyqtSignal(int) # TrainID
 
     #HWTrainController Signals
     #hwtrain_update_current_speed = pyqtSignal(float)

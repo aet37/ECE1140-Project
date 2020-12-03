@@ -32,7 +32,7 @@ TAG b97O = FALSE
 TAG b98O = FALSE
 TAG b99O = FALSE
 TAG b100O = FALSE
-TAG b = TRUE
+TAG b95A = TRUE
 TAG b96A = TRUE
 TAG b97A = TRUE
 TAG b98A = TRUE
@@ -93,7 +93,7 @@ TASK<PERIOD=2000> MainTask
         RUNG
             XIO b85O
             XIO broken
-            OTE b
+            OTE b95A
             OTE b96A
             OTE b97A
             OTE b98A
@@ -164,6 +164,22 @@ TASK<PERIOD=1800> SwitchTask
         RUNG
             XIO mmode
             XIO b85O
+            OTU b85A
+            OTU b86A
+            OTU b87A
+            OTU b88A
+            OTU b89A
+            OTU b90A
+            OTU b91A
+            OTU b92A
+            OTU b93A
+            OTU b94A
+            OTU b95A
+            OTU b96A
+            OTU b97A
+            OTU b98A
+            OTU b99A
+            OTU b100A
             OTL switch
         ENDRUNG
         RUNG

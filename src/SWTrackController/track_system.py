@@ -46,6 +46,7 @@ class TrackSystem:
         signals.swtrack_update_power_failure.connect(self.swtrack_update_failure)
         signals.swtrack_update_track_circuit_failure.connect(self.swtrack_update_failure)
         signals.swtrack_force_authority_reevaluation.connect(self.force_authority_reevaluation)
+        signals.swtrack_set_switch_position.connect(self.swtrack_manual_set_switch_position)
 
     def swtrack_dispatch_train(self, train_id, destination_block, suggested_speed,
                                suggested_authority, line, route):
@@ -76,7 +77,7 @@ class TrackSystem:
         # Gather all of the switch positions in case they've changed
         switch_positions = []
         for track_controller_1, track_controller_2 in pairwise(track_controllers):
-            # TODO(nns): Add safety architecture here
+            #if track_controller_1.get_switch_position() == track_controller_2.get_switch_position():
             switch_positions.append(track_controller_1.get_switch_position())
 
         # Send the to the track model and ctc
@@ -88,14 +89,9 @@ class TrackSystem:
         else:
             signals.update_red_switches.emit(switch_positions)
 
-        # TODO (ljk): Remove this once plc programs are autouploaded!
-        if authority is None:
-            authority = True
-
         # Pass the dispatch train information to the Track Model
         track_circuit = TrackCircuit(command_speed, authority)
-        signals.trackmodel_dispatch_train.emit(train_id, destination_block, track_circuit,
-                                                line, route)
+        signals.trackmodel_dispatch_train.emit(train_id, destination_block, track_circuit, line, route)
 
     # pylint: disable=too-many-branches
     def swtrack_update_occupancies(self, train_id, line, block_id, occupied):
@@ -119,7 +115,6 @@ class TrackSystem:
         final_authorities = [True for _ in range(len(occupied_blocks))]
         switch_positions = [False for _ in range(int(len(track_controllers) / 2))]
         for i, track_controller in enumerate(track_controllers):
-            # TODO(nns): Possibly add safety architecture here
             track_controller.set_block_occupancy(block_id, occupied)
 
             # Update switch positions
@@ -138,8 +133,8 @@ class TrackSystem:
                     # It only takes one false authority to stop the train
                     if not new_authority:
                         final_authorities[j] = False
-                    logger.debug("New authority of {} found in track controller {} for block "
-                                 "{}".format(new_authority, i, block))
+                    logger.debug("New authority of {} found in track controller {} for train "
+                                 "{} and block {}".format(new_authority, i, train_id, block))
 
         if line == Line.LINE_GREEN:
             signals.update_green_switches.emit(switch_positions)
@@ -250,6 +245,14 @@ class TrackSystem:
         # Emit the final updated authorities for the occupied blocks
         for final_authority, block in zip(final_authorities, occupied_blocks):
             signals.trackmodel_update_authority.emit(line, block, final_authority)
+
+    def swtrack_manual_set_switch_position(self, line, switch, status):
+        """ Recieved signal to manually set switch position from CTC """
+
+        if line == Line.LINE_GREEN:
+            print("SW Track Controller:: Received from CTC to toggle switch ", switch, " on Green line.")
+        else:
+            print("SW Track Controller:: Received from CTC to toggle switch ", switch, " on Red line.")
 
     @staticmethod
     def get_speed_limit_of_block(line, block_id):

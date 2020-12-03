@@ -46,6 +46,7 @@ TASK<PERIOD=1000> MainTask
             XIO b64O
             XIO b65O
             XIO b66O
+            XIO broken
             OTE b62A
         ENDRUNG
         RUNG
@@ -53,6 +54,7 @@ TASK<PERIOD=1000> MainTask
             XIO b68O
             XIO b69O
             XIO b70O
+            XIO broken
             OTE b63A
             OTE b64A
             OTE b65A
@@ -65,6 +67,7 @@ TASK<PERIOD=1000> MainTask
             XIO b74O
             XIO b75O
             XIO b76O
+            XIO broken
             OTE b67A
             OTE b68A
             OTE b69A
@@ -76,6 +79,21 @@ TASK<PERIOD=1000> MainTask
         ENDRUNG
         RUNG
             XIC broken
+            OTU b62A
+            OTU b63A
+            OTU b64A
+            OTU b65A
+            OTU b66A
+            OTU b67A
+            OTU b68A
+            OTU b69A
+            OTU b70A
+            OTU b71A
+            OTU b72A
+            OTU b73A
+            OTU b74A
+            OTU b75A
+            OTU b76A
         ENDRUNG
     ENDROUTINE
 ENDTASK

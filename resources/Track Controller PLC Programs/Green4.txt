@@ -40,17 +40,6 @@ TASK<PERIOD=1000> MainTask
             OTE switch
         ENDRUNG
         RUNG
-            OTL b77A
-            OTL b78A
-            OTL b79A
-            OTL b80A
-            OTL b81A
-            OTL b82A
-            OTL b83A
-            OTL b84A
-            OTL b85A
-        ENDRUNG
-        RUNG
             XIC broken
             OTU b77A
             OTU b78A

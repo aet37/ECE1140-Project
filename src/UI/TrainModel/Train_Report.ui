@@ -116,7 +116,7 @@
      </size>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="report_label">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -291,7 +291,7 @@ border-color: rgb(0, 0, 0);</string>
    <zorder>report_signal_button</zorder>
    <zorder>report_brake_button</zorder>
    <zorder>logout_button_report</zorder>
-   <zorder>label</zorder>
+   <zorder>report_label</zorder>
    <zorder>report_engine_button</zorder>
   </widget>
  </widget>
