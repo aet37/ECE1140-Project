@@ -151,7 +151,7 @@ class TrackSystem:
                 command_speed = self.suggested_speeds[train_id]
 
             track_circuit = TrackCircuit(command_speed, final_authority)
-            signals.trackmodel_receive_track_circuit.emit(line, train_id, track_circuit)
+            signals.trackmodel_receive_track_circuit.emit(line, block, track_circuit)
 
         # Forward this information to the CTC
         if block_id != 0:

@@ -47,6 +47,12 @@ TASK<PERIOD=1000> MainTask
             XIO broken
             OTE b54A
             OTE b53A
+        ENDRUNG
+        RUNG 
+            XIO b65O
+            XIO b66O
+            XIO b53O
+            XIO broken
             OTE b52A
         ENDRUNG
         RUNG   
@@ -75,13 +81,6 @@ TASK<PERIOD=1000> MainTask
             OTE b63A
             OTE b62A
             OTE b61A
-        ENDRUNG
-        RUNG 
-            XIO b52O
-            XIO broken
-            OTE b66A
-            OTE b65A
-            OTE b64A
         ENDRUNG
         RUNG
             XIO b52O

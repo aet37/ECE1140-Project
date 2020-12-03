@@ -30,8 +30,6 @@ TASK<PERIOD=1000> MainTask
             XIO b5O
             XIO b6O
             XIO broken
-            OTE b1A
-            OTE b2A
             OTE b3A
         ENDRUNG
         RUNG

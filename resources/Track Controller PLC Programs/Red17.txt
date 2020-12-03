@@ -29,15 +29,6 @@ TAG b76A = TRUE
 
 TASK<PERIOD=1000> MainTask
     ROUTINE Main
-        RUNG
-            XIO b32O
-            XIO b31O
-            XIO b30O
-            XIO broken
-            OTE b29A
-            OTE b28A
-            OTE b27A
-        ENDRUNG
         RUNG   
             XIO b75O
             XIO b74O
@@ -54,9 +45,9 @@ TASK<PERIOD=1000> MainTask
         ENDRUNG
         RUNG
             XIO b27O
-            XIO b28O
-            XIO b29O
             XIO broken
+            OTE b28A
+            OTE b29A
             OTE b30A
             OTE b31A
             OTE b32A

@@ -20,6 +20,8 @@ TAG b49A = TRUE
 TAG b50A = TRUE
 TAG b51A = TRUE
 TAG b52A = TRUE
+TAG b65A = TRUE
+TAG b66A = TRUE
 
 TASK<PERIOD=1000> MainTask  
     ROUTINE Main
@@ -44,6 +46,19 @@ TASK<PERIOD=1000> MainTask
             OTE b50A
             OTE b51A
             OTE b52A
+        ENDRUNG
+        RUNG
+            XIO b45O
+            XIO b46O
+            XIO b47O
+            XIO b48O
+            XIO b49O
+            XIO b50O
+            XIO b51O
+            XIO b52O
+            XIO broken
+            OTE b66A
+            OTE b65A
         ENDRUNG
         RUNG
             XIO b52O

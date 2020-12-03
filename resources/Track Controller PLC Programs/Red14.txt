@@ -44,15 +44,6 @@ TAG b16A = TRUE
 TASK<PERIOD=1000> MainTask
     ROUTINE Main 
         RUNG
-            XIO b4O
-            XIO b5O
-            XIO b6O
-            XIO broken
-            OTE b1A
-            OTE b2A
-            OTE b3A
-        ENDRUNG
-        RUNG
             XIO b7O
             XIO b8O
             XIO b9O
@@ -82,8 +73,6 @@ TASK<PERIOD=1000> MainTask
         RUNG 
             XIO b16O
             XIO broken
-            OTE b1A
-            OTE b2A
             OTE b3A
         ENDRUNG
         RUNG
@@ -130,7 +119,8 @@ TASK<PERIOD=1000> MainTask
             OTE b14A
         ENDRUNG
         RUNG 
-            XIC b15O
+            XIO b16O
+            XIO b1O
             OTE switch
         ENDRUNG
         RUNG
@@ -150,10 +140,6 @@ TASK<PERIOD=1000> MainTask
             OTU b13A
             OTU b14A
             OTU b15A
-        ENDRUNG
-        RUNG 
-            XIO broken
-            OTU switch
         ENDRUNG
     ENDROUTINE
 ENDTASK

@@ -8,6 +8,7 @@ TAG b34O = FALSE
 TAG b35O = FALSE
 TAG b36O = FALSE
 TAG b37O = FALSE
+TAG b38O = FALSE
 TAG b33A = TRUE
 TAG b34A = TRUE
 TAG b35A = TRUE
@@ -16,22 +17,6 @@ TAG b37A = TRUE
 
 TASK<PERIOD=1000> MainTask
     ROUTINE Main
-        RUNG
-            XIO b37O
-            XIO b36O
-            XIO broken
-            OTE b35A
-            OTE b34A
-            OTE b33A
-        ENDRUNG
-        RUNG
-            XIO b35O
-            XIO b34O
-            XIO b33O
-            XIO broken
-            OTE b37A
-            OTE b36A
-        ENDRUNG
         RUNG
             XIO b33O
             OTE switch
@@ -43,6 +28,15 @@ TASK<PERIOD=1000> MainTask
             OTU b35A
             OTU b36A
             OTU b37A
+        ENDRUNG
+        RUNG
+            XIO b34O
+            XIO b35O
+            XIO b36O
+            XIO b37O
+            XIO b38O
+            XIO broken
+            OTE b33A
         ENDRUNG
     ENDROUTINE
 ENDTASK

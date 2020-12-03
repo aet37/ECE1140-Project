@@ -3,10 +3,12 @@ TAG switch = TRUE
 TAG broken = FALSE
 TAG mmode = FALSE
 # Section 1
+TAG b16O = FALSE
 TAG b17O = FALSE
 TAG b18O = FALSE
 TAG b19O = FALSE
 TAG b20O = FALSE
+TAG b16A = FALSE
 TAG b17A = TRUE
 TAG b18A = TRUE
 TAG b19A = TRUE
@@ -27,6 +29,8 @@ TAG b24A = TRUE
 TAG b25A = TRUE
 TAG b26A = TRUE
 TAG b27A = TRUE
+TAG b28A = TRUE
+TAG b29A = TRUE
 
 TASK<PERIOD=1000> MainTask
     ROUTINE Main
@@ -71,6 +75,38 @@ TASK<PERIOD=1000> MainTask
         RUNG 
             XIO b27O
             OTE switch
+        ENDRUNG
+        RUNG 
+            XIO b16O
+            XIO broken
+            XIO b17O
+            XIO b18O
+            XIO b19O
+            XIO b20O
+            XIO b21O
+            XIO b22O
+            XIO b23O
+            XIO b24O
+            XIO b25O
+            XIO b26O
+            OTE b28A
+            OTE b29A
+            OTE b27A
+        ENDRUNG
+        RUNG 
+            XIO b27O
+            XIO broken
+            XIO b17O
+            XIO b18O
+            XIO b19O
+            XIO b20O
+            XIO b21O
+            XIO b22O
+            XIO b23O
+            XIO b24O
+            XIO b25O
+            XIO b26O
+            OTE b16A
         ENDRUNG
         RUNG
             XIC broken

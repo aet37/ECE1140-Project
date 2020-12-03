@@ -260,7 +260,7 @@ class SignalHandler:
         signals.trackmodel_update_gui.emit() 
 
     def receiveTrackCircuit(self, line, blockNumber, trackCircuit):
-        #print("Track model recieved track circuit blockNumber = ", blockNumber)
+        print("Track model recieved track circuit blockNumber = ", blockNumber)
         if (line == Line.LINE_GREEN):
             theTrack = getTrack("Green")
         else:
