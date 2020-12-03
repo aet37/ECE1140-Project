@@ -180,7 +180,6 @@ class TrainCatalogue:
         signals.train_model_something_has_been_changed.emit()
         print("SP Failure: " + str(failReport))
 
-<<<<<<< HEAD
     def train_model_receive_track_circuit(self, line, trainId, trackCircuit):
         if(not self.m_trainList[trainId].m_signalPickupFailure):
             #print("TrainModel's Authority: " + str(trackCircuit.authority))
@@ -188,8 +187,6 @@ class TrainCatalogue:
             if self.m_trainList[trainId].m_route[0] != 0:
                 signals.swtrain_receive_track_circuit.emit(trainId, trackCircuit)
     
-=======
->>>>>>> origin/master
     # @brief Reports sb failure
     def train_model_report_sb_failure(self, trainId, failReport):
         self.m_trainList[trainId].m_brakeFailure = failReport
