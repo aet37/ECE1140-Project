@@ -85,7 +85,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
         
         length_label = self.findChild(QtWidgets.QLabel, 'length_label')
         try:
-            length = int(length)
+            length = float(length)
             if (length <= 1000 and length >= 10):
                 length_label.setText("Block Length:\n\n"+ str()+ " m")
                 theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
