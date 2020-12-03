@@ -127,6 +127,7 @@ class TrainCatalogue:
 
     # @brief Receives block information
     def train_model_receive_block(self, track_id, block_id, elevation, slope, sizeOfBlock, speedLimit, travelDirection, station, newBeacon1, newBeacon2):
+        
         newBlock = Block(block_id)
         # Parse stuff from Evan (trackId, blockId, elevation, grade, length, speedLimit, travelDirection)
 
@@ -283,7 +284,7 @@ class TrainCatalogue:
 
         # LOG_TRAIN_MODEL("Number of green line blocks = %d", BlockCatalogue::GetInstance().GetNumberOfGreenBlocks());
         # LOG_TRAIN_MODEL("Number of trains = %d", TrainCatalogue::GetInstance().GetNumberOfTrains());
-
+        # print(str(block_catalogue_green.m_blockList[currentBlock]))
         if (currentTrack == Line.LINE_GREEN):
             currentBlockSize = block_catalogue_green.m_blockList[currentBlock].m_sizeOfBlock
             speedLimitBlock = block_catalogue_green.m_blockList[currentBlock].m_speedLimit
