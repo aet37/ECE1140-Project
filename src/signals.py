@@ -21,7 +21,7 @@ class SignalsClass(QObject):
     dispatch_scheduled_train = pyqtSignal(int, Line)	# Used by Timekeeper to send CTC a dispatch commmand
 
     # Track Controller Signals
-    swtrack_dispatch_train = pyqtSignal(int, int, int, int, Line, list) # Used by CTC to send dispatch Train (train_id, destination_block, command_speed, authority, Line, switches_arr(BOOL))
+    swtrack_dispatch_train = pyqtSignal(int, int, int, int, Line, list) # Used by CTC to send dispatch Train (train_id, destination_block, suggested speed, suggested authority, Line, switches_arr(BOOL))
     swtrack_update_authority = pyqtSignal(int, int)	# Used by CTC to update authority of a train (train_id, new_authority)
     swtrack_update_speed = pyqtSignal(int, int)	# Used by CTC to update suggested speed of train (train_id, new_speed)
     swtrack_set_switch_position = pyqtSignal(Line, int, bool)	# Used by CTC to set a switch position in maint mode (sw_number, position)
@@ -37,7 +37,7 @@ class SignalsClass(QObject):
 
 
     # Train Model Signals
-    train_model_dispatch_train = pyqtSignal(int, int, float, int, Line, list) #  Used by the track model to signify that a new train has been dispatched FORMAT: (train_id, destination_block, command_speed, authority, Line, route)
+    train_model_dispatch_train = pyqtSignal(int, int, TrackCircuit, Line, list) #  Used by the track model to signify that a new train has been dispatched FORMAT: (train_id, destination_block, TrackCircuit, Line, route)
     train_model_receive_block = pyqtSignal(int, int, float, float, float, float, int, bool, Beacon, Beacon) #  Used by the track model to send a block's information FORMAT: (track_id, block_id, elevation, slope, sizeOfBlock, speedLimit, travelDirection, station, newBeacon1, newBeacon2)
     # train_model_gui_1_gather_data = 161 #  Used periodically by the gui to update page 1 the user interface
     # train_model_gui_2_gather_data = 162 #  Used periodically by the gui to update page 2 the user interface
@@ -75,7 +75,7 @@ class SignalsClass(QObject):
 
     # SWTrainController Signals
     swtrain_gui_toggle_cabin_lights = pyqtSignal(int) # TrainID
-    swtrain_dispatch_train = pyqtSignal(float, float, bool) # command speed, current speed, authority
+    swtrain_dispatch_train = pyqtSignal(float, TrackCircuit) # current speed, TrackCircuit
     swtrain_update_current_speed = pyqtSignal(int, float) # TrainID, current speed
     swtrain_update_command_speed = pyqtSignal(int, float) # TrainID, command speed
     swtrain_update_authority = pyqtSignal(int, bool) # TrainID, authority
@@ -100,9 +100,11 @@ class SignalsClass(QObject):
     swtrain_receive_brake_failure = pyqtSignal(int, bool) # TrainID, brake_failure
     swtrain_receive_engine_failure = pyqtSignal(int, bool) # TrainID, engine_failure
     swtrain_resolve_failure = pyqtSignal(int) # TrainID
+    swtrain_receive_track_circuit = pyqtSignal(int, TrackCircuit) #trainId, trackCircuit
+    swtrain_update_gui = pyqtSignal()
 
     # Track Model Signals
-    trackmodel_dispatch_train = pyqtSignal(int, int, float, bool, Line, list) # Used by SWTrack Controller to send dispatch Train (train_id, command_speed, authority, Line, switches_arr(boolean))
+    trackmodel_dispatch_train = pyqtSignal(int, int, TrackCircuit, Line, list) # Used by SWTrack Controller to send dispatch Train (train_id, command_speed, authority, Line, switches_arr(boolean))
     trackmodel_update_occupancy = pyqtSignal(int, Line, int, bool, int) # Used by train model to give track model info about a train's status on a particular block (trainId, Line, blockId, trainOrNot, travelDirection)
     trackmodel_update_switch_positions = pyqtSignal(Line, int, bool) # Used by the track controller to update a switch positions (Line, switchNumberFromYard, switchPosition)
     trackmodel_update_authority = pyqtSignal(Line, int, bool) # Used by the track controller to update the authority of a train (trainId, newAuthority)
