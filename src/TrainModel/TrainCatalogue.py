@@ -22,7 +22,7 @@ from src.timekeeper import timekeeper
 logger = get_logger(__name__)
 class TrainCatalogue:
 
-    
+
     # Call "m_trainlist.count()" for amount of trains
     # Call "m_trainlist.append()" to add a train
     # Call "m_trainlist[#]" to load a specific train
@@ -180,6 +180,7 @@ class TrainCatalogue:
         signals.train_model_something_has_been_changed.emit()
         print("SP Failure: " + str(failReport))
 
+<<<<<<< HEAD
     def train_model_receive_track_circuit(self, line, trainId, trackCircuit):
         if(not self.m_trainList[trainId].m_signalPickupFailure):
             #print("TrainModel's Authority: " + str(trackCircuit.authority))
@@ -187,12 +188,14 @@ class TrainCatalogue:
             if self.m_trainList[trainId].m_route[0] != 0:
                 signals.swtrain_receive_track_circuit.emit(trainId, trackCircuit)
     
+=======
+>>>>>>> origin/master
     # @brief Reports sb failure
     def train_model_report_sb_failure(self, trainId, failReport):
         self.m_trainList[trainId].m_brakeFailure = failReport
         signals.train_model_something_has_been_changed.emit()
         print("SB Failure: " + str(failReport))
-    
+
     # @brief Reports e failure
     def train_model_report_e_failure(self, trainId, failReport):
         self.m_trainList[trainId].m_engineFailure = failReport
@@ -225,7 +228,7 @@ class TrainCatalogue:
         # Begin train stopping process
         temp_change_thread = threading.Thread(target = self.train_model_temp_wait, args=(trainId, temperature), daemon=True)
         temp_change_thread.start()
-    
+
     def train_model_temp_wait(self, trainId, temperature):
         startTime = timekeeper.current_time_sec
         while(timekeeper.current_time_sec < startTime + 3):
@@ -242,7 +245,7 @@ class TrainCatalogue:
     def train_model_gui_receive_service_brake(self, trainId, service_brake):
         self.m_trainList[trainId].m_serviceBrake = service_brake
         signals.train_model_something_has_been_changed.emit()
-    
+
     def train_model_gui_receive_ebrake(self, trainId, emergency_brake):
         self.m_trainList[trainId].m_emergencyPassengerBrake = emergency_brake
         signals.train_model_something_has_been_changed.emit()
@@ -295,7 +298,7 @@ class TrainCatalogue:
         serviceBrake = self.m_trainList[trainId].m_serviceBrake
         emergencyBrake = self.m_trainList[trainId].m_emergencyPassengerBrake
         samplePeriod = 1/5 # ASK COLLIN FOR SAMPLE PERIOD
-        
+
         logger.debug("powerStatus = %f", powerStatus)
 
         if (currentTrack == Line.LINE_GREEN):
@@ -321,10 +324,10 @@ class TrainCatalogue:
         if (accelerationCalc > self.ACCELERATION_LIMIT and not serviceBrake and not emergencyBrake):
             # If all brakes are OFF and accelerationCalc is above the limit
             accelerationCalc = self.ACCELERATION_LIMIT
-        elif (serviceBrake and not emergencyBrake): # accelerationCalc < self.DECELERATION_LIMIT_SERVICE and 
+        elif (serviceBrake and not emergencyBrake): # accelerationCalc < self.DECELERATION_LIMIT_SERVICE and
             # If the service brake is ON and accelerationCalc is below the limit
             accelerationCalc = self.DECELERATION_LIMIT_SERVICE
-        elif (not serviceBrake and emergencyBrake): # accelerationCalc < self.DECELERATION_LIMIT_EMERGENCY and 
+        elif (not serviceBrake and emergencyBrake): # accelerationCalc < self.DECELERATION_LIMIT_EMERGENCY and
             # If the emergency brake is ON and accelerationCalc is below the limit
             accelerationCalc = self.DECELERATION_LIMIT_EMERGENCY
 
@@ -418,7 +421,7 @@ class TrainCatalogue:
                     avalibleSpace = 222 - self.m_trainList[trainId].m_trainPassCount
                     signals.trackmodel_update_passengers_exited.emit(self.m_trainList[trainId].m_currentLine, trainId, self.m_trainList[trainId].m_route[0], removedPass, avalibleSpace, 222)
             else:
-                signals.trackmodel_update_occupancy.emit(trainId, Line.LINE_RED, self.m_trainList[trainId].m_route[0], True), self.m_trainList[trainId].m_trainDirection
+                signals.trackmodel_update_occupancy.emit(trainId, Line.LINE_RED, self.m_trainList[trainId].m_route[0], True, self.m_trainList[trainId].m_trainDirection)
                 if (block_catalogue_red.m_blockList[self.m_trainList[trainId].m_route[0]].m_station):
                     if (self.m_trainList[trainId].m_trainPassCount != 0):
                         removedPass = random.randrange(0, self.m_trainList[trainId].m_trainPassCount, 1)
@@ -428,7 +431,7 @@ class TrainCatalogue:
                     avalibleSpace = 222 - self.m_trainList[trainId].m_trainPassCount
                     signals.trackmodel_update_passengers_exited.emit(self.m_trainList[trainId].m_currentLine, trainId, self.m_trainList[trainId].m_route[0], removedPass, avalibleSpace, 222)
 
-            
+
         else:
             # LOG_TRAIN_MODEL("Staying in the same block: currentPosition = %f, blockSize = %f", currentPosition, currentBlockSize)
             # Still in the same block

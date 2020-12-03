@@ -67,6 +67,7 @@ class TrainSystem:
         signals.update_red_switches.connect(self.update_r_switches)
         signals.update_throughput.connect(self.update_throughput)
         signals.dispatch_scheduled_train.connect(self.dispatch_train)
+        signals.update_failure_blocks.connect(self.update_blocks_closure)
 
 
     def import_track_layout(self):
@@ -228,6 +229,60 @@ class TrainSystem:
 
         # Update the location of the train with every block moved
         self.update_train_loc()
+
+    def update_blocks_closure(self, ln, block, fail_bool):
+        """ Fuction which updates track faliures from SW Track """
+
+        if ln == Line.LINE_GREEN:
+            # Check that block isnt already in that state
+            if self.blocks_green_arr[block - 1].open == (not fail_bool):
+                if fail_bool == True:
+                    self.blocks_green_arr[block - 1].num_faliures += 1
+                else:
+                    self.blocks_green_arr[block - 1].num_faliures -= 1
+            else:
+                if fail_bool == True:
+                    self.blocks_green_arr[block - 1].num_faliures += 1
+                else:
+                    self.blocks_green_arr[block - 1].num_faliures -= 1
+
+
+            # Update block if fail
+            if self.blocks_green_arr[block - 1].num_faliures > 0:
+                if self.blocks_green_arr[block - 1].open:
+                    signals.ctc_update_failure_blocks_gui.emit(ln, fail_bool)
+                self.blocks_green_arr[block - 1].open = False
+            else:
+                if not self.blocks_green_arr[block - 1].open:
+                    signals.ctc_update_failure_blocks_gui.emit(ln, fail_bool)
+                self.blocks_green_arr[block - 1].open = True
+
+        elif ln == Line.LINE_RED:
+            # Check that block isnt already in that state
+            if self.blocks_red_arr[block - 1].open == (not fail_bool):
+                if fail_bool == True:
+                    self.blocks_red_arr[block - 1].num_faliures += 1
+                else:
+                    self.blocks_red_arr[block - 1].num_faliures -= 1
+            else:
+                if fail_bool == True:
+                    self.blocks_red_arr[block - 1].num_faliures += 1
+                else:
+                    self.blocks_red_arr[block - 1].num_faliures -= 1
+
+            # Update block if fail
+            if self.blocks_red_arr[block - 1].num_faliures > 0:
+                if self.blocks_red_arr[block - 1].open:
+                    signals.ctc_update_failure_blocks_gui.emit(ln, fail_bool)
+                self.blocks_red_arr[block - 1].open = False
+            else:
+                if not self.blocks_red_arr[block - 1].open:
+                    signals.ctc_update_failure_blocks_gui.emit(ln, fail_bool)
+                self.blocks_red_arr[block - 1].open = True
+
+        else:
+            raise Exception("CTC : UPDATE BLOCK CLOSURES (maint. mode from SWTrack \
+                Cont. Send INVALID Line")
 
     def update_g_switches(self, sw_arr):
         """ Function which updates occupancies on green route """
