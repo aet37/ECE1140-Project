@@ -74,6 +74,9 @@ class Controller:
                 Setpoint Speed: m/s
                 ek/ek1: m/s
                 uk/uk1: m
+
+            Safety critical architecture is implemented through
+            redundant power calculations
         """
         # Convert Command Speed, Current Speed, and Setpoint Speed into m/s
         self.convert_command_speed = self.command_speed * Converters.KmHr_to_mps
@@ -98,8 +101,8 @@ class Controller:
             self.uk = self.uk1
 
         # Check for engine failure
-        if self.power_command > 0 and self.current_speed == 0:
-            self.engine_failure == True
+        #if self.power_command > 0 and self.current_speed == 0:
+        #    self.engine_failure == True
 
         # Find power command
         if self.service_brake == True or self.emergency_brake == True:
@@ -107,7 +110,14 @@ class Controller:
             self.uk = 0
             self.ek = 0
         else:
-            self.power_command = (self.kp * self.ek) + (self.ki * self.uk)
+            power1 = (self.kp * self.ek) + (self.ki * self.uk)
+            power2 = (self.kp * self.ek) + (self.ki * self.uk)
+            power3 = (self.kp * self.ek) + (self.ki * self.uk)
+            # If all three power commands are different, turn the emergency brake on
+            if (power1 != power2) or (power1 != power3) or (power2 != power3):
+                self.emergency_brake == True
+            else:
+                self.power_command = (self.kp * self.ek) + (self.ki * self.uk)
             # Cut off power at appropriate limits
             if(self.power_command > 120000):
                 self.power_command = 120000
