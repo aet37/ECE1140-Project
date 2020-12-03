@@ -131,6 +131,8 @@ class TrackController:
 
         :param bool value: Value to set tag to
         """
+        print("in track controller")
+        print(value)
         self.set_tag_value('switch', value)
 
         self.run_program()
@@ -188,11 +190,11 @@ class TrackController:
         """Puts the block into or out of maintanence mode"""
         self.set_block_occupancy(block_id, value)
 
-        self.set_tag_value("mmode", value)
+        self.set_tag_value("broken", value)
 
     def get_maintenance_mode(self):
         """Gets whether this block is in maintanence mode"""
-        return self.get_tag_value("mmode")
+        return self.get_tag_value("broken")
 
     def set_broken_rail(self, value):
         """Sets the tag to signify a rail is broken"""

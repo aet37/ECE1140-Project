@@ -151,6 +151,10 @@ TASK<PERIOD=1000> MainTask
             OTU b14A
             OTU b15A
         ENDRUNG
+        RUNG 
+            XIO broken
+            OTU switch
+        ENDRUNG
     ENDROUTINE
 ENDTASK
 

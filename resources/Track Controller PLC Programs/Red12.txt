@@ -62,7 +62,7 @@ TASK<PERIOD=1000> MainTask
             OTE b6A
         ENDRUNG
         RUNG
-            XIO b9O
+            XIC b9O
             OTE switch
         ENDRUNG
         RUNG

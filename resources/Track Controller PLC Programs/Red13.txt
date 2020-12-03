@@ -60,7 +60,6 @@ TASK<PERIOD=1000> MainTask
         ENDRUNG
         RUNG
             XIC b9O
-            XIO broken
             OTE switch
         ENDRUNG
         RUNG

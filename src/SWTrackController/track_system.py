@@ -46,6 +46,7 @@ class TrackSystem:
         signals.swtrack_update_power_failure.connect(self.swtrack_update_failure)
         signals.swtrack_update_track_circuit_failure.connect(self.swtrack_update_failure)
         signals.swtrack_force_authority_reevaluation.connect(self.force_authority_reevaluation)
+        signals.swtrack_set_switch_position.connect(self.swtrack_manual_set_switch_position)
 
     def swtrack_dispatch_train(self, train_id, destination_block, suggested_speed,
                                suggested_authority, line, route):
@@ -76,8 +77,8 @@ class TrackSystem:
         # Gather all of the switch positions in case they've changed
         switch_positions = []
         for track_controller_1, track_controller_2 in pairwise(track_controllers):
-            # TODO(nns): Add safety architecture here
-            switch_positions.append(track_controller_1.get_switch_position())
+            if track_controller_1.get_switch_position() == track_controller_2.get_switch_position():
+                switch_positions.append(track_controller_1.get_switch_position())
 
         # Send the to the track model and ctc
         for i, switch_position in enumerate(switch_positions):
@@ -250,7 +251,40 @@ class TrackSystem:
         for final_authority, block in zip(final_authorities, occupied_blocks):
             signals.trackmodel_update_authority.emit(line, block, final_authority)
 
-
+    def swtrack_manual_set_switch_position(self, line, switch, status):
+        "Function that handles manually changing switch positions"
+        if switch == 1:
+            track_con1 = 0
+            track_con2 = 1
+        elif switch == 2:
+            track_con1 = 2
+            track_con2 = 3
+        elif switch == 3:
+            track_con1 = 4
+            track_con2 = 5
+        elif switch == 4:
+            track_con1 = 6
+            track_con2 = 7
+        elif switch == 5:
+            track_con1 = 8
+            track_con2 = 9
+        elif switch == 6:
+            track_con1 = 10
+            track_con2 = 11
+        elif switch == 7:
+            track_con1 = 12
+            track_con2 = 13
+        if line == Line.LINE_GREEN:
+            if self.green_track_controllers[track_con1].get_maintenance_mode():
+                self.green_track_controllers[track_con1].set_switch_position(status)
+                self.green_track_controllers[track_con2].set_switch_position(status)
+        else:
+            if self.red_track_controllers[track_con1].get_maintenance_mode():
+                self.red_track_controllers[track_con1].set_tag_value("toggle",1)
+                self.red_track_controllers[track_con2].set_tag_value("toggle",1)
+                self.red_track_controllers[track_con1].set_switch_position(status)
+                self.red_track_controllers[track_con2].set_switch_position(status)
+   
     @staticmethod
     def get_speed_limit_of_block(line, block_id):
         """Maps a block number to its speed limit

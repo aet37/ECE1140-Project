@@ -216,7 +216,6 @@ class TrainModelUi(QtWidgets.QMainWindow):
         # self.findChild(QtWidgets.QLabel, 'disp_deceleration_limit').setText(dataParsed[1].split(".")[0] + " m/s²")
         self.findChild(QtWidgets.QLabel, 'disp_acceleration_limit').setText("0.5 m/s²")
         self.findChild(QtWidgets.QLabel, 'disp_deceleration_limit').setText("-1.2 m/s²")
-        block_catalogue_green.m_blockList[train_catalogue.m_trainList[self.current_train_id - 1].m_route[0]].m_elevation
         if train_catalogue.m_trainList[self.current_train_id - 1].m_currentLine == Line.LINE_GREEN:
             self.findChild(QtWidgets.QLabel, 'disp_block_elevation').setText(str(block_catalogue_green.m_blockList[train_catalogue.m_trainList[self.current_train_id - 1].m_route[0]].m_elevation) + " m")
             self.findChild(QtWidgets.QLabel, 'disp_block_slope').setText(str(block_catalogue_green.m_blockList[train_catalogue.m_trainList[self.current_train_id - 1].m_route[0]].m_slope) + " m/s")

@@ -412,7 +412,7 @@ class TrainCatalogue:
                     avalibleSpace = 222 - self.m_trainList[trainId].m_trainPassCount
                     signals.trackmodel_update_passengers_exited.emit(self.m_trainList[trainId].m_currentLine, trainId, self.m_trainList[trainId].m_route[0], removedPass, avalibleSpace, 222)
             else:
-                signals.trackmodel_update_occupancy.emit(trainId, Line.LINE_RED, self.m_trainList[trainId].m_route[0], True), self.m_trainList[trainId].m_trainDirection
+                signals.trackmodel_update_occupancy.emit(trainId, Line.LINE_RED, self.m_trainList[trainId].m_route[0], True, self.m_trainList[trainId].m_trainDirection)
                 if (block_catalogue_red.m_blockList[self.m_trainList[trainId].m_route[0]].m_station):
                     if (self.m_trainList[trainId].m_trainPassCount != 0):
                         removedPass = random.randrange(0, self.m_trainList[trainId].m_trainPassCount, 1)
