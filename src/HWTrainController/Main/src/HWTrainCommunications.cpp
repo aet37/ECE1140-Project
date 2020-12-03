@@ -21,6 +21,7 @@ static int menuselect=0;
 static int temp=70, speed=0, kp=0, ki=0, power=0; // power is calculated later
 unsigned long currentTime, previousTime = 0, currentTime1, previousTime1 = 0;
 const long interval = 1000, interval1 = 1500;
+String power_str, setsp_str, brakefail_str, engfail_str, sigfail_str;
 // Determines the request code
 static RequestCode ParseCode(const String& rMsg)
 {
@@ -63,6 +64,11 @@ static RequestCode ParseCode(const String& rMsg)
         // case static_cast<int>(RequestCode::HWTRAIN_GUI_SET_KI):
         // case static_cast<int>(RequestCode::HWTRAIN_BRAKE_FAILURE):
         case static_cast<int>(RequestCode::HWTRAIN_GET_DATA):
+        case static_cast<int>(RequestCode::HWTRAIN_SEND_POWER_DATA):
+        case static_cast<int>(RequestCode::HWTRAIN_SEND_SETSP_DATA):
+        case static_cast<int>(RequestCode::HWTRAIN_SEND_SIGFAIL_DATA):
+        case static_cast<int>(RequestCode::HWTRAIN_SEND_ENGFAIL_DATA):
+        case static_cast<int>(RequestCode::HWTRAIN_SEND_BRAKEFAIL_DATA):
 
 
             return static_cast<RequestCode>(code);
@@ -333,9 +339,9 @@ static void GetSignalFailure()
 
 static void GetEngineFailure()
 {
-    if(Devices::JoystickClick()){
-        engfail = !engfail;
-    }
+    String msg = Serial.readStringUntil('\n');
+    RequestCode code = ParseCode(msg);
+
     SendResponse(ResponseCode::SUCCESS, engfail ? "1" : "0");
     if(engfail==1)
     {
@@ -473,7 +479,11 @@ static void DisplayKp()
 
 static void DisplayPower()
 {
-    // Display the power and the setpoint speed
+    
+    Devices::ClearLCD();
+    String power_speed = "Power: ";
+    power_speed = power_speed + power_str + " Speed: " + setsp_str;
+    Devices::WriteLCD(power_speed);
 
     
     
@@ -627,19 +637,52 @@ void CommsTask()
     {
         return;
     }
-    // print out to LCD screen
 
     // parse whatever's on serial port using parse data
     // if it's get all data request (via the code variable), then send all data back
     // I already have the power loop as child class
     String msg = Serial.readStringUntil('\n');
     RequestCode code = ParseCode(msg);
-    Devices::ClearLCD();
-    Devices::WriteLCD(msg);
     if(code==RequestCode::HWTRAIN_GET_DATA){
         String stri = get_data(); // used to send data over to the python code
         SendResponse(ResponseCode::SUCCESS, stri.c_str());
     }
+    String stris = "A";
+    Devices::ClearLCD();
+    Devices::WriteLCD(stris);
+    if(code==RequestCode::HWTRAIN_SEND_POWER_DATA){
+        //while(Serial.available()){
+            char readchar = Serial.read();
+            power_str += readchar;
+            String stris = "B";
+            Devices::ClearLCD();
+            Devices::WriteLCD(stris);
+    }
+    if(code==RequestCode::HWTRAIN_SEND_SETSP_DATA){
+        while(Serial.available()){
+            char readchar = Serial.read();
+            setsp_str += readchar;
+        }
+    }
+    if(code==RequestCode::HWTRAIN_SEND_SIGFAIL_DATA){
+        while(Serial.available()){
+                char readchar = Serial.read();
+                sigfail_str += readchar;
+        }
+    }
+    if(code==RequestCode::HWTRAIN_SEND_ENGFAIL_DATA){
+        while(Serial.available()){
+            char readchar = Serial.read();
+            engfail_str += readchar;
+        }
+    }
+    if(code==RequestCode::HWTRAIN_SEND_BRAKEFAIL_DATA){
+        while(Serial.available()){
+            char readchar = Serial.read();
+            brakefail_str += readchar;
+        }
+    }
+    
 }
 
 }

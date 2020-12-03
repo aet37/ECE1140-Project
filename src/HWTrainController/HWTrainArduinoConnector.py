@@ -50,7 +50,11 @@ class Codes(Enum):
     # HWTRAIN_GUI_SET_KI = 246
     # HWTRAIN_BRAKE_FAILURE = 247
     HWTRAIN_GET_DATA = 248
-    HWTRAIN_SEND_DATA = 249
+    HWTRAIN_SEND_SIGFAIL_DATA = 249
+    HWTRAIN_SEND_ENGFAIL_DATA = 250
+    HWTRAIN_SEND_BRAKEFAIL_DATA = 251
+    HWTRAIN_SEND_POWER_DATA = 252
+    HWTRAIN_SEND_SETSP_DATA = 253
 
 TIMER_PERIOD = 2
 
@@ -93,29 +97,33 @@ class HWController(Controller):
                 if self.announcements != bool(int(value)):
                     self.announcements = bool(int(value))
                     signals.train_model_gui_receive_announce_stations.emit(0, self.announcements)
-            #if (key == "sigfail"):
-                # when the authority or the command speed is not picked up
-                #receive track circuit, get authority and command speed, throw an if statement and check if either are NONE type.
-            #if (key == "engfail"):
-                # if past speed < current speed 
-                #   if engine failure == True
-                        #display engine failure
-            #if (key == "brakefail"):
-                #if (self.service_brake==True):
-                   # if(self.brake_failure==True):
-                        #Display brake
+            if (key == "sigfail"):
+                if (self.authority == None):
+                    if (self.command_speed == None):
+                        if(self.signal_pickup_failure == True):
+                            self.send_message("{} {}".format(Codes.HWTRAIN_SEND_SIGFAIL_DATA.value, self.signal_pickup_failure))
+            if (key == "engfail"):
+                if (1): #past speed < current speed):
+                    if (1):#engine failure == True):
+                        # display engine failure
+                        self.send_message("{} {}".format(Codes.HWTRAIN_SEND_ENGFAIL_DATA.value, self.engine_failure))
+            if (key == "brakefail"):
+                if (self.service_brake==True):
+                    if(self.brake_failure==True):
+                        self.send_message("{} {}".format(Codes.HWTRAIN_SEND_BRAKEFAIL_DATA.value, self.brake_failure))
             if (key == "temp"):
-                if self.temperature != float(value):
-                    self.temperature = float(value)
+                if self.temperature != int(value):
+                    self.temperature = int(value)
                     signals.train_model_gui_receive_sean_paul.emit(0, self.temperature)
             if (key == "speed"):
                 if self.command_speed != float(value):
-                    self.command_speed = float(value)
+                    self.command_speed = int(value)
                     signals.train_model_update_command_speed.emit(0, self.command_speed)
-            if (key == "power"):
-                if self.kp != float(value):
-                    self.kp = float(value)
-                    signals.train_model_receive_power.emit(0, self.power_command)
+            if (key == "kp"):
+                self.kp = int(value)
+            if (key == "ki"):
+                self.ki = int(value)
+
             
 
 
@@ -138,8 +146,12 @@ class HWController(Controller):
             # need someway to tell if the power and speed change to display on arduino
 
         # send message to arduino with what need be displayed
-        self.send_message("{} {} {}".format(Codes.HWTRAIN_SEND_DATA.value, self.power_command, self.setpoint_speed))
-
+        print(self.power_command)
+        self.send_message("{} {}".format(Codes.HWTRAIN_SEND_POWER_DATA.value, self.power_command))
+        self.send_message("{} {}".format(Codes.HWTRAIN_SEND_SETSP_DATA.value, self.setpoint_speed))
+        self.send_message("{} {}".format(Codes.HWTRAIN_SEND_SIGFAIL_DATA.value, self.signal_pickup_failure))
+        self.send_message("{} {}".format(Codes.HWTRAIN_SEND_BRAKEFAIL_DATA.value, self.brake_failure))
+        self.send_message("{} {}".format(Codes.HWTRAIN_SEND_ENGFAIL_DATA.value, self.engine_failure))
         if HWController.run_timer:
             self.timer = threading.Timer(TIMER_PERIOD, self.get_data)
             self.timer.start()
