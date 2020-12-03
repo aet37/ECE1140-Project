@@ -10,7 +10,7 @@ from src.signals import signals
 from serial.serialutil import SerialException
 from src.HWTrainController.HWTrainArduinoConnector import HWController
 from src.logger import get_logger
-from src.common_def import Beacon
+from src.common_def import Beacon, Converters
 import threading
 
 from src.timekeeper import timekeeper
@@ -192,6 +192,10 @@ class ControlSystem:
     def swtrain_update_command_speed(self, train_id, command_speed):
         """Update command speed in train controller"""
         self.p_controllers[train_id].command_speed = command_speed
+        # If setpoint speed is greater than command speed, make it equal
+        if self.p_controllers[train_id].setpoint_speed > command_speed:
+            print("Train " + str(train_id) + "has a new setpoint speed of " + str(self.p_controllers[train_id].setpoint_speed))
+            self.p_controllers[train_id].setpoint_speed = command_speed
         signals.train_model_update_command_speed.emit(train_id, command_speed)
         #print("Command speed: " + str(command_speed))
 
@@ -221,14 +225,9 @@ class ControlSystem:
         self.swtrain_gui_toggle_damn_doors(train_id)
         self.swtrain_gui_announce_stations(train_id)
         signals.swtrain_update_gui.emit()
-        # Wait one minute at stop
-        # current_minute = timekeeper.current_time_min
-        # current_second = timekeeper.current_time_sec
+
         time.sleep(60 * timekeeper.time_factor)
-        # while(current_minute == timekeeper.current_time_min or current_second != timekeeper.current_time_sec):
-        #     logger.critical("Current speed of train {} is {}".format(train_id, self.p_controllers[train_id].current_speed))
-        #     assert self.p_controllers[train_id].current_speed == 0
-        #     time.sleep(1)
+
         logger.critical("A minute has passed for train {}".format(train_id))
 
         # Restart the power loop for this train
@@ -279,6 +278,8 @@ class ControlSystem:
         #print("Authority received: " + str(track_circuit.authority) )
         #print("Command Speed received: " + str(track_circuit.command_speed) )
         self.p_controllers[train_id].command_speed = track_circuit.command_speed
+        if self.p_controllers[train_id].setpoint_speed > (track_circuit.command_speed * Converters.KmHr_to_MPH ):
+            self.p_controllers[train_id].setpoint_speed = (track_circuit.command_speed * Converters.KmHr_to_MPH)
         self.swtrain_update_authority(train_id, track_circuit.authority)
         # Update command speed in train model
         signals.train_model_update_command_speed.emit(train_id, track_circuit.command_speed)
