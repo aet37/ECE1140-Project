@@ -116,16 +116,16 @@ class HWController(Controller):
                     self.temperature = int(value)
                     signals.train_model_gui_receive_sean_paul.emit(0, self.temperature)
             if (key == "speed"):
-                if self.command_speed != float(value):
+                if self.command_speed != int(value):
                     self.command_speed = int(value)
                     signals.train_model_update_command_speed.emit(0, self.command_speed)
             if (key == "kp"):
                 self.kp = int(value)
             if (key == "ki"):
                 self.ki = int(value)
-
-            
-
+        print("KP: " + str(self.kp))
+        print("KI: " + str(self.ki))
+        print("Command Speed: " + str(self.command_speed))
 
             # def toggle_service_brake(self):
             #     """ Toggle service brake on and off """
@@ -146,12 +146,11 @@ class HWController(Controller):
             # need someway to tell if the power and speed change to display on arduino
 
         # send message to arduino with what need be displayed
-        print(self.power_command)
-        self.send_message("{} {}".format(Codes.HWTRAIN_SEND_POWER_DATA.value, self.power_command))
-        self.send_message("{} {}".format(Codes.HWTRAIN_SEND_SETSP_DATA.value, self.setpoint_speed))
-        self.send_message("{} {}".format(Codes.HWTRAIN_SEND_SIGFAIL_DATA.value, self.signal_pickup_failure))
-        self.send_message("{} {}".format(Codes.HWTRAIN_SEND_BRAKEFAIL_DATA.value, self.brake_failure))
-        self.send_message("{} {}".format(Codes.HWTRAIN_SEND_ENGFAIL_DATA.value, self.engine_failure))
+        # self.send_message("{} {}".format(Codes.HWTRAIN_SEND_POWER_DATA.value, self.power_command))
+        # self.send_message("{} {}".format(Codes.HWTRAIN_SEND_SETSP_DATA.value, self.setpoint_speed))
+        # self.send_message("{} {}".format(Codes.HWTRAIN_SEND_SIGFAIL_DATA.value, self.signal_pickup_failure))
+        # self.send_message("{} {}".format(Codes.HWTRAIN_SEND_BRAKEFAIL_DATA.value, self.brake_failure))
+        # self.send_message("{} {}".format(Codes.HWTRAIN_SEND_ENGFAIL_DATA.value, self.engine_failure))
         if HWController.run_timer:
             self.timer = threading.Timer(TIMER_PERIOD, self.get_data)
             self.timer.start()
@@ -159,6 +158,7 @@ class HWController(Controller):
     def __init__(self, com_sp = 0, curr_sp = 0, auth = 0):
 
         super().__init__(com_sp, curr_sp, auth)
+        print("COmmand: " + str(com_sp))
         # # Safety critical information
         # self.command_speed = com_sp
         # self.current_speed = curr_sp

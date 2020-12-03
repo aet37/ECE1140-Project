@@ -647,41 +647,41 @@ void CommsTask()
         String stri = get_data(); // used to send data over to the python code
         SendResponse(ResponseCode::SUCCESS, stri.c_str());
     }
-    String stris = "A";
-    Devices::ClearLCD();
-    Devices::WriteLCD(stris);
-    if(code==RequestCode::HWTRAIN_SEND_POWER_DATA){
-        //while(Serial.available()){
-            char readchar = Serial.read();
-            power_str += readchar;
-            String stris = "B";
-            Devices::ClearLCD();
-            Devices::WriteLCD(stris);
-    }
-    if(code==RequestCode::HWTRAIN_SEND_SETSP_DATA){
-        while(Serial.available()){
-            char readchar = Serial.read();
-            setsp_str += readchar;
-        }
-    }
-    if(code==RequestCode::HWTRAIN_SEND_SIGFAIL_DATA){
-        while(Serial.available()){
-                char readchar = Serial.read();
-                sigfail_str += readchar;
-        }
-    }
-    if(code==RequestCode::HWTRAIN_SEND_ENGFAIL_DATA){
-        while(Serial.available()){
-            char readchar = Serial.read();
-            engfail_str += readchar;
-        }
-    }
-    if(code==RequestCode::HWTRAIN_SEND_BRAKEFAIL_DATA){
-        while(Serial.available()){
-            char readchar = Serial.read();
-            brakefail_str += readchar;
-        }
-    }
+    // String stris = "A";
+    // Devices::ClearLCD();
+    // Devices::WriteLCD(stris);
+    // if(code==RequestCode::HWTRAIN_SEND_POWER_DATA){
+    //     //while(Serial.available()){
+    //         char readchar = Serial.read();
+    //         power_str += readchar;
+    //         String stris = "B";
+    //         Devices::ClearLCD();
+    //         Devices::WriteLCD(stris);
+    // }
+    // if(code==RequestCode::HWTRAIN_SEND_SETSP_DATA){
+    //     while(Serial.available()){
+    //         char readchar = Serial.read();
+    //         setsp_str += readchar;
+    //     }
+    // }
+    // if(code==RequestCode::HWTRAIN_SEND_SIGFAIL_DATA){
+    //     while(Serial.available()){
+    //             char readchar = Serial.read();
+    //             sigfail_str += readchar;
+    //     }
+    // }
+    // if(code==RequestCode::HWTRAIN_SEND_ENGFAIL_DATA){
+    //     while(Serial.available()){
+    //         char readchar = Serial.read();
+    //         engfail_str += readchar;
+    //     }
+    // }
+    // if(code==RequestCode::HWTRAIN_SEND_BRAKEFAIL_DATA){
+    //     while(Serial.available()){
+    //         char readchar = Serial.read();
+    //         brakefail_str += readchar;
+    //     }
+    // }
     
 }
 
