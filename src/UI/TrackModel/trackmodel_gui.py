@@ -85,7 +85,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
         
         length_label = self.findChild(QtWidgets.QLabel, 'length_label')
         try:
-            length = int(length)
+            length = float(length)
             if (length <= 1000 and length >= 10):
                 length_label.setText("Block Length:\n\n"+ str()+ " m")
                 theTabWidget = self.findChild(QtWidgets.QTabWidget, 'tabWidget_hello')
@@ -105,6 +105,7 @@ class TrackModelUi(QtWidgets.QMainWindow):
 
                 theBlock = theTrack.getBlock(currentComboBlock)
                 theBlock.blockLength = length
+                signals.train_model_edit_block.emit(line, int(currentComboBlock), length)
                 signals.trackmodel_update_gui.emit()
             else:
                 message.setText("Temperature outside of range!\nEnter a value between 10 and 1000, inclusive")
@@ -244,15 +245,24 @@ class TrackModelUi(QtWidgets.QMainWindow):
 
 
     def getFileName(self):
+        message = QMessageBox()
+        message.setIcon(QMessageBox.Critical)
+        message.setWindowTitle("Error")
+        
         dialog = QtWidgets.QFileDialog(self)
         fileInfo = dialog.getOpenFileName(self)
-        records = pyexcel.get_sheet(file_name = fileInfo[0])
-        records.name_columns_by_row(0)
-        line = records.column['Line'][1]
-        totalBlocks = records.number_of_rows()
+        if (".xlsx" in fileInfo[0]):
+            records = pyexcel.get_sheet(file_name = fileInfo[0])
+            records.name_columns_by_row(0)
+            line = records.column['Line'][1]
+            totalBlocks = records.number_of_rows()
 
-        TrackModelDef.SignalHandler.readInData(fileInfo)
-        self.addTab(line, totalBlocks)
+            TrackModelDef.SignalHandler.readInData(fileInfo)
+            self.addTab(line, totalBlocks)
+        else:
+            message.setText("Incorrect file type! Try again")
+            message.exec_()
+
 
     def addTab(self, line, totalBlocks):
         global tabsAdded
