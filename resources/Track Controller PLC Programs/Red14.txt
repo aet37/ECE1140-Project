@@ -1,5 +1,7 @@
 TAG heater = FALSE
-TAG switch = FALSE 
+TAG switch = FALSE
+TAG broken = FALSE
+TAG mmode = FALSE 
 # Section 1
 TAG b1O = FALSE
 TAG b2O = FALSE
@@ -42,17 +44,10 @@ TAG b16A = TRUE
 TASK<PERIOD=1000> MainTask
     ROUTINE Main 
         RUNG
-            XIO b4O
-            XIO b5O
-            XIO b6O
-            OTE b1A
-            OTE b2A
-            OTE b3A
-        ENDRUNG
-        RUNG
             XIO b7O
             XIO b8O
             XIO b9O
+            XIO broken
             OTE b4A
             OTE b5A
             OTE b6A
@@ -61,6 +56,7 @@ TASK<PERIOD=1000> MainTask
             XIO b10O
             XIO b11O
             XIO b12O
+            XIO broken
             OTE b7A
             OTE b8A
             OTE b9A
@@ -69,20 +65,21 @@ TASK<PERIOD=1000> MainTask
             XIO b13O
             XIO b14O
             XIO b15O
+            XIO broken
             OTE b10A
             OTE b11A
             OTE b12A
         ENDRUNG
         RUNG 
             XIO b16O
-            OTE b1A
-            OTE b2A
+            XIO broken
             OTE b3A
         ENDRUNG
         RUNG
             XIO b10O
             XIO b11O
-            XIO b12O 
+            XIO b12O
+            XIO broken 
             OTE b13A
             OTE b14A
             OTE b15A
@@ -90,7 +87,8 @@ TASK<PERIOD=1000> MainTask
         RUNG
             XIO b7O
             XIO b8O
-            XIO b9O 
+            XIO b9O
+            XIO broken 
             OTE b10A
             OTE b11A
             OTE b12A
@@ -99,6 +97,7 @@ TASK<PERIOD=1000> MainTask
             XIO b6O
             XIO b5O
             XIO b4O
+            XIO broken
             OTE b7A
             OTE b8A
             OTE b9A
@@ -106,20 +105,41 @@ TASK<PERIOD=1000> MainTask
         RUNG
             XIO b3O
             XIO b2O
-            XIO b1O 
+            XIO b1O
+            XIO broken 
             OTE b6A
             OTE b5A
             OTE b4A
         ENDRUNG
         RUNG 
             XIO b16O
+            XIO broken
             OTE b12A
             OTE b13A
             OTE b14A
         ENDRUNG
         RUNG 
-            XIC b15O
+            XIO b16O
+            XIO b1O
             OTE switch
+        ENDRUNG
+        RUNG
+            XIC broken
+            OTU b1A
+            OTU b2A
+            OTU b3A
+            OTU b4A
+            OTU b5A
+            OTU b6A
+            OTU b7A
+            OTU b8A
+            OTU b9A
+            OTU b10A
+            OTU b11A
+            OTU b12A
+            OTU b13A
+            OTU b14A
+            OTU b15A
         ENDRUNG
     ENDROUTINE
 ENDTASK

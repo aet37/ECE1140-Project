@@ -1,6 +1,7 @@
 TAG switch = FALSE
 TAG heater = FALSE
 TAG broken = FALSE
+TAG b19RRX = FALSE
 TAG b29O = FALSE
 TAG b28O = FALSE
 TAG b27O = FALSE
@@ -66,6 +67,34 @@ TASK<PERIOD=1000> MainTask
         RUNG
             XIC broken
             OTU b150A
+        ENDRUNG
+        RUNG
+            XIC b17O
+            OTE b19RRX
+        ENDRUNG
+        RUNG 
+            XIC b18O
+            OTE b19RRX
+        ENDRUNG
+        RUNG
+            XIC b19O
+            OTE b19RRX
+        ENDRUNG
+        RUNG
+            XIC b20O
+            OTE b19RRX
+        ENDRUNG
+        RUNG 
+            XIC b21O
+            OTE b19RRX
+        ENDRUNG
+        RUNG 
+            XIO b21O
+            XIO b20O
+            XIO b19O
+            XIO b18O
+            XIO b17O
+            OTU b19RRX
         ENDRUNG
     ENDROUTINE
 ENDTASK
