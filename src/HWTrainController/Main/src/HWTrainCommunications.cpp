@@ -18,7 +18,7 @@ static bool sigfail=0, engfail=0, brakefail=0;
 static bool ads=0;
 static bool menutoggle=1, toggle=1;
 static int menuselect=0;
-static double temp=70, speed=0, kp=0, ki=0, power=0; // power is calculated later
+static int temp=70, speed=0, kp=0, ki=0, power=0; // power is calculated later
 unsigned long currentTime, previousTime = 0, currentTime1, previousTime1 = 0;
 const long interval = 1000, interval1 = 1500;
 // Determines the request code
@@ -99,10 +99,10 @@ int Menu(int menudata){
         if (currentTime1 - previousTime1 >= interval1) {
             previousTime1 = currentTime1;       
             menudata = Devices::JoystickRead(menudata);
-            if(menudata==15){
+            if(menudata==14){
                 menudata=0;
             } else if(menudata==-1){
-                menudata=14;
+                menudata=13;
             }
             if(menudata==0){ // EBrake
                 str="Select EBrake";
@@ -121,16 +121,7 @@ int Menu(int menudata){
                     break;
                 }
             }
-            if(menudata==2){ // Passenger EBrake
-                str="Select Passenger EBrake";
-                Devices::ClearLCD();  
-                Devices::WriteLCD(str);
-                
-                if(whiletoggle){
-                    break;
-                }
-            }
-            if(menudata==3){ // Doors
+            if(menudata==2){ // Doors
                 str="Select Doors";
                 Devices::ClearLCD();
                 Devices::WriteLCD(str);
@@ -139,12 +130,12 @@ int Menu(int menudata){
                     break;
                 }
             }
-            if(menudata==4){ // Lights
+            if(menudata==3){ // Lights
                 str="Select Lights";
                 Devices::ClearLCD();
                 Devices::WriteLCD(str);
             }
-            if(menudata==5){ // Ads
+            if(menudata==4){ // Ads
                 str="Select Ads";
                 Devices::ClearLCD();
                 Devices::WriteLCD(str);
@@ -153,7 +144,7 @@ int Menu(int menudata){
                     break;
                 }
             }
-            if(menudata==6){ // Announce
+            if(menudata==5){ // Announce
                 str="Select Announcements";
                 Devices::ClearLCD();
                 Devices::WriteLCD(str);
@@ -162,7 +153,7 @@ int Menu(int menudata){
                     break;
                 }
             }
-            if(menudata==7){ // Signal Failure
+            if(menudata==6){ // Signal Failure
                 str="Select Signal Failure";
                 Devices::ClearLCD();
                 Devices::WriteLCD(str);
@@ -171,7 +162,7 @@ int Menu(int menudata){
                     break;
                 }
             }
-            if(menudata==8){ // Engine Failure
+            if(menudata==7){ // Engine Failure
                 str="Select Engine Failure";
                 Devices::ClearLCD();
                 Devices::WriteLCD(str);
@@ -180,7 +171,7 @@ int Menu(int menudata){
                     break;
                 }
             }
-            if(menudata==9){ // Brake Failure
+            if(menudata==8){ // Brake Failure
                 str="Select Brake Failure";
                 Devices::ClearLCD();
                 Devices::WriteLCD(str);
@@ -189,7 +180,7 @@ int Menu(int menudata){
                     break;
                 }
             }
-            if(menudata==10){ // Temperature
+            if(menudata==9){ // Temperature
                 str="Select Temperature";
                 Devices::ClearLCD();
                 Devices::WriteLCD(str);
@@ -198,7 +189,7 @@ int Menu(int menudata){
                     break;
                 }
             }
-            if(menudata==11){ // Speed
+            if(menudata==10){ // Speed
                 str="Select Speed";
                 Devices::ClearLCD();
                 Devices::WriteLCD(str);
@@ -207,7 +198,7 @@ int Menu(int menudata){
                     break;
                 }
             }
-            if(menudata==12){ // Kp
+            if(menudata==11){ // Kp
                 str="Select Kp";
                 Devices::ClearLCD();
                 Devices::WriteLCD(str);
@@ -216,7 +207,7 @@ int Menu(int menudata){
                     break;
                 }
             }
-            if(menudata==13){ // Ki
+            if(menudata==12){ // Ki
                 str="Select Ki";
                 Devices::ClearLCD();
                 Devices::WriteLCD(str);
@@ -225,7 +216,7 @@ int Menu(int menudata){
                     break;
                 }
             }
-            if(menudata==14){ // Power
+            if(menudata==13){ // Power
                 str="Select Power";
                 Devices::ClearLCD();
                 Devices::WriteLCD(str);
@@ -431,7 +422,7 @@ static void DisplaySpeed()
     {
         currentTime = millis();
         Serial.println(speed);
-        speed = Devices::JoystickRead(speed);
+        speed = Devices::JoystickReadCharlie(speed);
         if (currentTime - previousTime >= interval) {
             previousTime = currentTime;        
             Devices::ClearLCD();
@@ -482,25 +473,35 @@ static void DisplayKp()
 
 static void DisplayPower()
 {
-    SendResponse(ResponseCode::SUCCESS);
-    bool togglepower = Devices::JoystickClick();
-    while(!togglepower)
-    {
-        currentTime = millis();
-        Serial.println(power);
-        power = Devices::JoystickRead(power);
-        if (currentTime - previousTime >= interval) {
-            previousTime = currentTime;        
-            Devices::ClearLCD();
-            String str = String(power);
-            Devices::WriteLCD(str);
-        }
-        togglepower = Devices::JoystickClick();
-    }
+    // Display the power and the setpoint speed
+
+    
+    
+    
+    
+    
+    
+    
+    // SendResponse(ResponseCode::SUCCESS);
+    // bool togglepower = Devices::JoystickClick();
+    // while(!togglepower)
+    // {
+    //     currentTime = millis();
+    //     Serial.println(power);
+    //     power = Devices::JoystickRead(power);
+    //     if (currentTime - previousTime >= interval) {
+    //         previousTime = currentTime;        
+    //         Devices::ClearLCD();
+    //         String str = String(power);
+    //         Devices::WriteLCD(str);
+    //     }
+    //     togglepower = Devices::JoystickClick();
+    // }
 }
 
 String get_data(){
-    String str=" ebrake " + ebrake + " brake " + brake + " pebrake " + pebrake + " doors " + doors + " lights " + lights + " ads " + ads + " announce " + announce + " sigfail " + sigfail + " engfail " + engfail + " brakefial " + brakefail + " temp " + temp + " speed " + speed + " kp " + kp + " ki " + ki + " power " + power;
+    String str="ebrake ";
+    str = str + ebrake + " brake " + brake + " doors " + doors + " lights " + lights + " ads " + ads + " announce " + announce + " sigfail " + sigfail + " engfail " + engfail + " brakefail " + brakefail + " temp " + temp + " speed " + speed + " kp " + kp + " ki " + ki + " power " + power;
     // LOOK AT RUBRIC
     // Just get lights working first
     // Write a function that gets the data and puts it in a string.
@@ -520,22 +521,33 @@ void CommsTask()
     switch(menuselect)
     {
         case 0: // EBrake
-            SetEBrake();
-            GetEBrake();
+             while(1){
+                toggle = Devices::ButtonClick();
+                GetEBrake();
+                if(toggle){
+                    break;
+                }
+            }
             break;
         case 1: // Service Brake
-            SetBrake();
-            GetBrake();
+             while(1){
+                toggle = Devices::ButtonClick();
+                GetBrake();
+                if(toggle){
+                    break;
+                }
+            }
             break;
-        case 2: // Passenger EBrake
-            SetPEBrake();
-            GetPEBrake();
+        case 2: // Doors
+             while(1){
+                toggle = Devices::ButtonClick();
+                GetDoors();
+                if(toggle){
+                    break;
+                }
+            }
             break;
-        case 3: // Doors
-            SetDoors();
-            GetDoors();
-            break;
-        case 4: // Lights
+        case 3: // Lights
             while(1){
                 toggle = Devices::ButtonClick();
                 GetLights();
@@ -545,39 +557,64 @@ void CommsTask()
             }
             // Figure out how to change the code number to 248 so that I can send the data over to kenny
             break;
-        case 5: // Ads
-            SetAds();
-            GetAds();
+        case 4: // Ads
+             while(1){
+                toggle = Devices::ButtonClick();
+                GetAds();
+                if(toggle){
+                    break;
+                }
+            }
             break;
-        case 6: // Announce
-            SetAnnounce();
-            GetAnnounce();
+        case 5: // Announce
+             while(1){
+                toggle = Devices::ButtonClick();
+                GetAnnounce();
+                if(toggle){
+                    break;
+                }
+            }
             break;
-        case 7: // Signal Failure
-            SetSignalFailure();
-            GetSignalFailure();
+        case 6: // Signal Failure
+             while(1){
+                toggle = Devices::ButtonClick();
+                GetSignalFailure();
+                if(toggle){
+                    break;
+                }
+            }
             break;
-        case 8: // Engine Failure
-            SetEngineFailure();
-            GetEngineFailure();
+        case 7: // Engine Failure
+             while(1){
+                toggle = Devices::ButtonClick();
+                GetEngineFailure();
+                if(toggle){
+                    break;
+                }
+            }
             break;
-        case 9: // Brake Failure
-            SetBrakeFailure();
-            GetBrakeFailure();
+        case 8: // Brake Failure
+             while(1){
+                toggle = Devices::ButtonClick();
+                GetBrakeFailure();
+                if(toggle){
+                    break;
+                }
+            }
             break;
-        case 10: // Temperature
+        case 9: // Temperature
             DisplayTemp();
             break;
-        case 11: // Speed
+        case 10: // Speed
             DisplaySpeed();
             break;
-        case 12: // Kp
+        case 11: // Kp
             DisplayKp();
             break;
-        case 13: // Ki
+        case 12: // Ki
             DisplayKi();
             break;
-        case 14: // Power
+        case 13: // Power and speed
             DisplayPower();
             break;
         default: 

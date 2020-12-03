@@ -102,13 +102,13 @@ namespace Devices
             if(xPosition >= 762){
                 if (current - previous >= inter) {
                     previous = current;
-                    data=data-1000;
+                    data=data-5000;
                 }
                 return data;
             } else if (xPosition <= 262){
                 if (current - previous >= inter) {
                     previous = current;
-                    data=data+1000;
+                    data=data+5000;
                 }
                 return data;
             } else {
@@ -134,6 +134,31 @@ namespace Devices
                 if (current - previous >= inter) {
                     previous = current;
                     data=data+100;
+                }
+                return data;
+            } else {
+                return data;
+            }
+            
+        }
+    }
+
+    int JoystickReadCharlie(int data)
+    {
+        while(1){
+            xPosition = analogRead(VRx);
+            yPosition = analogRead(VRy);
+            current = millis();
+            if(xPosition >= 762){
+                if (current - previous >= inter) {
+                    previous = current;
+                    data=data-5;
+                }
+                return data;
+            } else if (xPosition <= 262){
+                if (current - previous >= inter) {
+                    previous = current;
+                    data=data+5;
                 }
                 return data;
             } else {

@@ -22,6 +22,12 @@ void InitializeJoystick();
 
 int JoystickRead(int data);
 
+int JoystickReadAlpha(int data);
+
+int JoystickReadBeta(int data);
+
+int JoystickReadCharlie(int data);
+
 bool JoystickClick();
 
 void InitializeButton();

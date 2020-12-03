@@ -50,6 +50,7 @@ class Codes(Enum):
     # HWTRAIN_GUI_SET_KI = 246
     # HWTRAIN_BRAKE_FAILURE = 247
     HWTRAIN_GET_DATA = 248
+    HWTRAIN_SEND_DATA = 249
 
 TIMER_PERIOD = 2
 
@@ -66,50 +67,120 @@ class HWController(Controller):
         print(tag_values)
         for key, value in pairwise(splits[1:]):
             print("Key")
+            print (key)
+            
+            if (key == "ebrake"):
+                if self.emergency_brake != bool(int(value)):
+                    self.emergency_brake = bool(int(value))
+                    signals.train_model_gui_receive_ebrake.emit(0, self.emergency_brake)
+            if (key == "brake"):
+                if self.service_brake != bool(int(value)):
+                    self.service_brake = bool(int(value))
+                    signals.train_model_gui_receive_service_brake.emit(0, self.service_brake)
+            if (key == "doors"):
+                if self.doors != bool(int(value)):
+                    self.doors = bool(int(value))
+                    signals.train_model_gui_receive_doors.emit(0, self.doors)
             if (key == "lights"):
-                if self.lights != bool(int(value)):
+                if self.lights != bool(int(value)): # to make sure that there was a change from the hardware to the gui
                     self.lights = bool(int(value))
                     signals.train_model_gui_receive_lights.emit(0, self.lights)
+            if (key == "ads"):
+                if self.advertisements != bool(int(value)):
+                    self.advertisements = bool(int(value))
+                    signals.train_model_gui_receive_ads.emit(0, self.advertisements)
+            if (key == "announce"):
+                if self.announcements != bool(int(value)):
+                    self.announcements = bool(int(value))
+                    signals.train_model_gui_receive_announce_stations.emit(0, self.announcements)
+            #if (key == "sigfail"):
+                # when the authority or the command speed is not picked up
+                #receive track circuit, get authority and command speed, throw an if statement and check if either are NONE type.
+            #if (key == "engfail"):
+                # if past speed < current speed 
+                #   if engine failure == True
+                        #display engine failure
+            #if (key == "brakefail"):
+                #if (self.service_brake==True):
+                   # if(self.brake_failure==True):
+                        #Display brake
+            if (key == "temp"):
+                if self.temperature != float(value):
+                    self.temperature = float(value)
+                    signals.train_model_gui_receive_sean_paul.emit(0, self.temperature)
+            if (key == "speed"):
+                if self.command_speed != float(value):
+                    self.command_speed = float(value)
+                    signals.train_model_update_command_speed.emit(0, self.command_speed)
+            if (key == "power"):
+                if self.kp != float(value):
+                    self.kp = float(value)
+                    signals.train_model_receive_power.emit(0, self.power_command)
+            
+
+
+            # def toggle_service_brake(self):
+            #     """ Toggle service brake on and off """
+            #     # Check for potential failure
+            #     if self.service_brake == True:
+            #         if self.brake_failure == True:
+            #             # If brake failure occurs do not change service brake
+            #             self.service_brake = True
+            #         else:
+            #             # If no brake failure toggle brake normally
+            #             self.service_brake = not self.service_brake
+            #     else:  
+            #         self.service_brake = not self.service_brake
+
+
             # make other if statements here for other variables.
             # get non-vitals working first
             # need someway to tell if the power and speed change to display on arduino
+
+        # send message to arduino with what need be displayed
+        self.send_message("{} {} {}".format(Codes.HWTRAIN_SEND_DATA.value, self.power_command, self.setpoint_speed))
 
         if HWController.run_timer:
             self.timer = threading.Timer(TIMER_PERIOD, self.get_data)
             self.timer.start()
 
     def __init__(self, com_sp = 0, curr_sp = 0, auth = 0):
-        # Safety critical information
-        self.command_speed = com_sp
-        self.current_speed = curr_sp
-        self.setpoint_speed = 0.0
-        self.power_command = 0.0
-        self.authority = auth
-        self.mode = False # 0 = Automatic, 1 = Manual
-        self.service_brake = True
-        self.emergency_brake = False
 
-        # Train Engineer inputs
-        self.kp = 0.0
-        self.ki = 0.0
+        super().__init__(com_sp, curr_sp, auth)
+        # # Safety critical information
+        # self.command_speed = com_sp
+        # self.current_speed = curr_sp
+        # self.setpoint_speed = 0.0
+        # self.power_command = 0.0
+        # self.authority = auth
+        # self.mode = False # 0 = Automatic, 1 = Manual
+        # self.service_brake = True
+        # self.emergency_brake = False
 
-        # Variables for power calculation
-        self.uk = 0.0
-        self.uk1 = 0.0
-        self.ek = 0.0
-        self.ek1 = 0.0
+        # # Train Engineer inputs
+        # self.kp = 0.0
+        # self.ki = 0.0
 
-        # NonVital Operations (0 = ON, 1 = OFF)
-        self.doors = 0
-        self.announcements = 0
-        self.lights = 0
-        self.temperature = 70
-        self.advertisements = 0
+        # # Variables for power calculation
+        # self.uk = 0.0
+        # self.uk1 = 0.0
+        # self.ek = 0.0
+        # self.ek1 = 0.0
 
-        # Failure cases
-        self.signal_pickup_failure = False
-        self.engine_failure = False
-        self.brake_failure = False
+        # # NonVital Operations (0 = ON, 1 = OFF)
+        # self.doors = 0
+        # self.announcements = 0
+        # self.lights = 0
+        # self.temperature = 70
+        # self.advertisements = 0
+
+        # # Used for starting and stopping the train's power loop
+        # self.hold_power_loop = False
+
+        # # Failure cases
+        # self.signal_pickup_failure = False
+        # self.engine_failure = False
+        # self.brake_failure = False
         self.arduino = serial.Serial(SERIAL_PORT, RATE, timeout=5)
         sleep(2)
         self.timer = threading.Timer(TIMER_PERIOD, self.get_data)
