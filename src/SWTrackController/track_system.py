@@ -148,7 +148,7 @@ class TrackSystem:
             if self.suggested_speeds[train_id] > speed_limit:
                 command_speed = speed_limit
             else:
-                command_speed = self.suggested_speeds[traizn_id]
+                command_speed = self.suggested_speeds[train_id]
 
             track_circuit = TrackCircuit(command_speed, final_authority)
             signals.trackmodel_receive_track_circuit.emit(line, train_id, track_circuit)
