@@ -77,8 +77,6 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         self.command_speed_label = self.findChild(QtWidgets.QLabel, 'command_speed_label')
 
         self.switch_position_frame = self.findChild(QtWidgets.QFrame, 'switch_position_frame')
-        self.switch_position_frame.mousePressEvent = self.switch_position_button_clicked
-        self.block_status_label.mousePressEvent = self.block_status_clicked
 
         download_program_button = self.findChild(QtWidgets.QPushButton, 'download_program_button')
         download_program_button.clicked.connect(self.download_program)
@@ -269,87 +267,6 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         """
         return self.current_track_controller.download_program(output_file)
 
-    def switch_position_button_clicked(self, event):
-        """Method called when the switch position button is pressed"""
-
-        if self.current_track_controller.get_maintenance_mode():
-            confirmation = Confirmation("This will flip the switch."
-                                      "Would you like to proceed?")
-
-            if 'Red' in self.track_controller_combo_box.currentText():
-                line = Line.LINE_RED
-            else:
-                line = Line.LINE_GREEN
-
-            # TODO (ljk): Check for maintenance mode
-            if confirmation.exec_():
-            
-                current_switch_position = self.current_track_controller.get_switch_position()
-                print("trying to set it to:")
-                print(not current_switch_position)
-                self.current_track_controller.set_switch_position(not current_switch_position)
-                
-                current_track_controller_id = int(self.track_controller_combo_box.currentText().split('#')[1])
-                
-                if current_track_controller_id == 1:
-                    current_switch = 0
-                elif current_track_controller_id == 2:
-                    current_switch = 0
-                elif current_track_controller_id == 3:
-                    current_switch = 1
-                elif current_track_controller_id == 4:
-                    current_switch = 1
-                elif current_track_controller_id == 5:
-                    current_switch = 2
-                elif current_track_controller_id == 6:
-                    current_switch = 2
-                elif current_track_controller_id == 7:
-                    current_switch = 3
-                elif current_track_controller_id == 8:
-                    current_switch = 3
-                elif current_track_controller_id == 9:
-                    current_switch = 4
-                elif current_track_controller_id == 10:
-                    current_switch = 4
-                elif current_track_controller_id == 11:
-                    current_switch = 5
-                elif current_track_controller_id == 12:
-                    current_switch = 5
-                elif current_track_controller_id == 13:
-                    current_switch = 6
-                elif current_track_controller_id == 14:
-                    current_switch = 6
-                print("DSFSDF")
-                print(current_switch)
-                print(current_track_controller_id )   
-                signals.swtrack_set_switch_position.emit(line, current_switch,not current_switch_position)
-
-        else:
-            warning = Confirmation("The track must be in maintanence mode for a switches position to be manually changed.")
-                
-                
-
-    def block_status_clicked(self,event):
-        confirmation = Confirmation("Warning! This will place the block into maintanence mode."
-                                    "Would you like to proceed?")
-        if 'Red' in self.track_controller_combo_box.currentText():
-            line = Line.LINE_RED
-        else:
-            line = Line.LINE_GREEN
-
-        if self.current_track_controller.get_maintenance_mode():
-            self.current_track_controller.set_maintenance_mode(self.current_block, False)
-            signals.swtrack_update_broken_rail_failure.emit(line,self.current_block, False)
-             
-        else:
-            self.current_track_controller.set_maintenance_mode(self.current_block, True)
-            signals.swtrack_update_broken_rail_failure.emit(line,self.current_block, True)
-                
-
-
-
-
-        
     @staticmethod
     def get_translated_switch_positions(line, track_controller_id):
         """Gets the two switch positions based on the given parameters"""

@@ -121,15 +121,15 @@ TASK<PERIOD=1000> MainTask
             OTE b19RRX
         ENDRUNG
         RUNG
-            XIC 17O
+            XIC b17O
             OTE b19RRX
         ENDRUNG
         RUNG 
-            XIC 21O
+            XIC b21O
             OTE b19RRX
         ENDRUNG
         RUNG
-            XIO 21O
+            XIO b21O
             XIO b20O
             XIO b19O
             XIO b18O

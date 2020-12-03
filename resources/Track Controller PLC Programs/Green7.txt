@@ -71,6 +71,7 @@ TASK<PERIOD=1000> MainTask
         RUNG
             XIC b17O
             OTE b19RRX
+        ENDRUNG
         RUNG 
             XIC b18O
             OTE b19RRX
@@ -84,7 +85,7 @@ TASK<PERIOD=1000> MainTask
             OTE b19RRX
         ENDRUNG
         RUNG 
-            XIC 21O
+            XIC b21O
             OTE b19RRX
         ENDRUNG
         RUNG 

@@ -131,8 +131,6 @@ class TrackController:
 
         :param bool value: Value to set tag to
         """
-        print("in track controller")
-        print(value)
         self.set_tag_value('switch', value)
 
         self.run_program()

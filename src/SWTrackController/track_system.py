@@ -77,8 +77,8 @@ class TrackSystem:
         # Gather all of the switch positions in case they've changed
         switch_positions = []
         for track_controller_1, track_controller_2 in pairwise(track_controllers):
-            if track_controller_1.get_switch_position() == track_controller_2.get_switch_position():
-                switch_positions.append(track_controller_1.get_switch_position())
+            #if track_controller_1.get_switch_position() == track_controller_2.get_switch_position():
+            switch_positions.append(track_controller_1.get_switch_position())
 
         # Send the to the track model and ctc
         for i, switch_position in enumerate(switch_positions):
@@ -95,8 +95,7 @@ class TrackSystem:
 
         # Pass the dispatch train information to the Track Model
         track_circuit = TrackCircuit(command_speed, authority)
-        signals.trackmodel_dispatch_train.emit(train_id, destination_block, track_circuit,
-                                                line, route)
+        signals.trackmodel_dispatch_train.emit(train_id, destination_block, track_circuit, line, route)
 
     # pylint: disable=too-many-branches
     def swtrack_update_occupancies(self, train_id, line, block_id, occupied):
@@ -120,7 +119,6 @@ class TrackSystem:
         final_authorities = [True for _ in range(len(occupied_blocks))]
         switch_positions = [False for _ in range(int(len(track_controllers) / 2))]
         for i, track_controller in enumerate(track_controllers):
-            # TODO(nns): Possibly add safety architecture here
             track_controller.set_block_occupancy(block_id, occupied)
 
             # Update switch positions
@@ -139,8 +137,8 @@ class TrackSystem:
                     # It only takes one false authority to stop the train
                     if not new_authority:
                         final_authorities[j] = False
-                    logger.debug("New authority of {} found in track controller {} for block "
-                                 "{}".format(new_authority, i, block))
+                    logger.debug("New authority of {} found in track controller {} for train "
+                                 "{} and block {}".format(new_authority, i, train_id, block))
 
         if line == Line.LINE_GREEN:
             signals.update_green_switches.emit(switch_positions)
@@ -157,7 +155,7 @@ class TrackSystem:
                 command_speed = self.suggested_speeds[train_id]
 
             track_circuit = TrackCircuit(command_speed, final_authority)
-            signals.trackmodel_receive_track_circuit.emit(line, block, track_circuit)
+            signals.trackmodel_receive_track_circuit.emit(line, train_id, track_circuit)
 
         # Forward this information to the CTC
         if block_id != 0:
@@ -253,39 +251,13 @@ class TrackSystem:
             signals.trackmodel_update_authority.emit(line, block, final_authority)
 
     def swtrack_manual_set_switch_position(self, line, switch, status):
-        "Function that handles manually changing switch positions"
-        if switch == 1:
-            track_con1 = 0
-            track_con2 = 1
-        elif switch == 2:
-            track_con1 = 2
-            track_con2 = 3
-        elif switch == 3:
-            track_con1 = 4
-            track_con2 = 5
-        elif switch == 4:
-            track_con1 = 6
-            track_con2 = 7
-        elif switch == 5:
-            track_con1 = 8
-            track_con2 = 9
-        elif switch == 6:
-            track_con1 = 10
-            track_con2 = 11
-        elif switch == 7:
-            track_con1 = 12
-            track_con2 = 13
+        """ Recieved signal to manually set switch position from CTC """
+
         if line == Line.LINE_GREEN:
-            if self.green_track_controllers[track_con1].get_maintenance_mode():
-                self.green_track_controllers[track_con1].set_switch_position(status)
-                self.green_track_controllers[track_con2].set_switch_position(status)
+            print("SW Track Controller:: Received from CTC to switch ", switch, " on Green line.")
         else:
-            if self.red_track_controllers[track_con1].get_maintenance_mode():
-                self.red_track_controllers[track_con1].set_tag_value("toggle",1)
-                self.red_track_controllers[track_con2].set_tag_value("toggle",1)
-                self.red_track_controllers[track_con1].set_switch_position(status)
-                self.red_track_controllers[track_con2].set_switch_position(status)
-   
+            print("SW Track Controller:: Received from CTC to switch ", switch, " on Red line.")
+
     @staticmethod
     def get_speed_limit_of_block(line, block_id):
         """Maps a block number to its speed limit
