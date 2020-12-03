@@ -89,10 +89,6 @@ class TrackSystem:
         else:
             signals.update_red_switches.emit(switch_positions)
 
-        # TODO (ljk): Remove this once plc programs are autouploaded!
-        if authority is None:
-            authority = True
-
         # Pass the dispatch train information to the Track Model
         track_circuit = TrackCircuit(command_speed, authority)
         signals.trackmodel_dispatch_train.emit(train_id, destination_block, track_circuit, line, route)
@@ -152,7 +148,7 @@ class TrackSystem:
             if self.suggested_speeds[train_id] > speed_limit:
                 command_speed = speed_limit
             else:
-                command_speed = self.suggested_speeds[train_id]
+                command_speed = self.suggested_speeds[traizn_id]
 
             track_circuit = TrackCircuit(command_speed, final_authority)
             signals.trackmodel_receive_track_circuit.emit(line, train_id, track_circuit)
@@ -254,9 +250,9 @@ class TrackSystem:
         """ Recieved signal to manually set switch position from CTC """
 
         if line == Line.LINE_GREEN:
-            print("SW Track Controller:: Received from CTC to switch ", switch, " on Green line.")
+            print("SW Track Controller:: Received from CTC to toggle switch ", switch, " on Green line.")
         else:
-            print("SW Track Controller:: Received from CTC to switch ", switch, " on Red line.")
+            print("SW Track Controller:: Received from CTC to toggle switch ", switch, " on Red line.")
 
     @staticmethod
     def get_speed_limit_of_block(line, block_id):

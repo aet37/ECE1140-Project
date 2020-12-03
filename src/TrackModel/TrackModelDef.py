@@ -261,6 +261,9 @@ class SignalHandler:
 
     def receiveTrackCircuit(self, line, blockNumber, trackCircuit):
         print("Track model recieved track circuit blockNumber = ", blockNumber)
+        print (blockNumber)
+        print(trackCircuit.authority)
+        print(trainId)
         if (line == Line.LINE_GREEN):
             theTrack = getTrack("Green")
         else:
