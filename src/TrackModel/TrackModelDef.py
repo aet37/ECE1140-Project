@@ -459,7 +459,7 @@ class SignalHandler:
                         blockInfo['RailwayCrossing'] = "false"
                         blockRailwayCrossing = False
 
-                    theBlock = Block(blockNumber, float(blockLength), blockGrade, blockSpeedLimit,
+                    theBlock = Block(blockNumber, blockLength, blockGrade, blockSpeedLimit,
                     blockElevation, blockCumulativeElevation, blockDirection, blockUnderground,
                     blockSection, blockRailwayCrossing)
 
