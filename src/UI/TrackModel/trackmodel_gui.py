@@ -97,14 +97,17 @@ class TrackModelUi(QtWidgets.QMainWindow):
                 if (theLine == "Green"):
                     currentComboBlock = str(combo1.currentText())
                     line = Line.LINE_GREEN
+                    lineNumber = 0
                 else:
                     currentComboBlock = str(combo2.currentText())
                     line = Line.LINE_RED
+                    lineNumber = 1
 
                 currentComboBlock = int(currentComboBlock[6:])
 
                 theBlock = theTrack.getBlock(currentComboBlock)
                 theBlock.blockLength = length
+                signals.train_model_receive_block.emit(lineNumber, int(currentComboBlock), length)
                 signals.trackmodel_update_gui.emit()
             else:
                 message.setText("Temperature outside of range!\nEnter a value between 10 and 1000, inclusive")
