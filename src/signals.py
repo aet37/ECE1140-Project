@@ -104,13 +104,6 @@ class SignalsClass(QObject):
     swtrain_update_gui = pyqtSignal()
     swtrain_gui_receive_signal_failure = pyqtSignal(int) # TrainID
 
-    #HWTrainController Signals
-    #hwtrain_update_current_speed = pyqtSignal(float)
-    #hwtrain_update_command_speed = pyqtSignal(float)
-    #hwtrain_update_authority = pyqtSignal(bool)
-
-
-
     # Track Model Signals
     trackmodel_dispatch_train = pyqtSignal(int, int, TrackCircuit, Line, list) # Used by SWTrack Controller to send dispatch Train (train_id, command_speed, authority, Line, switches_arr(boolean))
     trackmodel_update_occupancy = pyqtSignal(int, Line, int, bool, int) # Used by train model to give track model info about a train's status on a particular block (trainId, Line, blockId, trainOrNot, travelDirection)
