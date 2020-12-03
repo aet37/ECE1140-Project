@@ -358,7 +358,7 @@ class SignalHandler:
                     else:
                         theBeacon2 = theBlock.blockBeacon
 
-                signals.train_model_receive_block.emit(0, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None, theBeacon1, theBeacon2)
+                signals.train_model_receive_block.emit(currentLine, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None, theBeacon1, theBeacon2)
         else:
             theTrack = getTrack("Red")
             route = red_route_blocks
@@ -371,7 +371,7 @@ class SignalHandler:
                         theBeacon1 = theBlock.blockBeacon
                     else:
                         theBeacon2 = theBlock.blockBeacon
-                signals.train_model_receive_block.emit(1, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None, theBeacon1, theBeacon2)
+                signals.train_model_receive_block.emit(currentLine, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None, theBeacon1, theBeacon2)
 
         signals.train_model_dispatch_train.emit(trainId, destinationBlock, commandSpeed, authority, currentLine, route)
 
@@ -556,11 +556,15 @@ class SignalHandler:
 
                     newTrack.addBlock(theBlock)
 
+                    if (trackInfo['tNumber'] == 0):
+                        theLine = Line.LINE_GREEN
+                    else:
+                        theLine = Line.LINE_RED
                     # add beacon to this
                     if (blockNumber == 1):
-                        signals.train_model_receive_block.emit(trackInfo['tNumber'], 0, 0, 0, 10, blockSpeedLimit, blockDirection, stationBool, theBeacon1, theBeacon2)
+                        signals.train_model_receive_block.emit(theLine, 0, 0, 0, 10, blockSpeedLimit, blockDirection, stationBool, theBeacon1, theBeacon2)
 
-                    signals.train_model_receive_block.emit(trackInfo['tNumber'], blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection, stationBool, theBeacon1, theBeacon2)
+                    signals.train_model_receive_block.emit(theLine, blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection, stationBool, theBeacon1, theBeacon2)
 
 
                     #jsonString = json.dumps(blockInfo)
