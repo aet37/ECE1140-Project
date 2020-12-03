@@ -9,6 +9,7 @@ mock>=4.0.2
 lml>=0.0.4
 pyexcel>=0.6.5
 pyexcel-xlsx>=0.6.0
+pyexcel_xls>=0.6.1
 texttable>=0.8.2
 pandas>=1.1.4
 xlrd>=1.2.0
