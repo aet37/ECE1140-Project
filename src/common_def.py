@@ -21,19 +21,21 @@ class Converters:
     KmHr_to_MPH = 0.621371
     Tons_to_kg = 907.1850030836
     mps_to_KmHr = 3.6
+    avg_person_tons = 0.089
 
 class TrackCircuit:
     """Class to hold attributes of track circuit"""
-    def __init__(self):
-        self.command_speed = 0
-        self.authority = 0
+    def __init__(self, command_speed: float, authority: bool):
+        self.command_speed = command_speed
+        self.authority = authority
 
 class Beacon:
     """Class to hold attributes of beacon"""
     def __init__(self):
         self.station_name = ""
-        self.service_brake = True
+        self.service_brake = False
         self.DoorSide = None
+        self.lastStation = False
 
 class DoorSide(Enum):
     """Class to tell train model which door sides to open"""

@@ -15,6 +15,7 @@ class TrackController:
 
         self.program_name = ""
         self.task_list = []
+        self.number_of_failures = 0
 
     def run_program(self):
         """Runs the plc program"""

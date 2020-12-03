@@ -152,7 +152,10 @@ class Timekeeper:
                     signals.trackmodel_update_tickets_sold.emit()
 
         # Cancel the timer
-        self.signal_timer.join()
+        try:
+            self.signal_timer.join()
+        except RuntimeError:
+            logger.info("Ignoring exception as app is closing")
         self.signal_timer.cancel()
 
     def start_time(self):

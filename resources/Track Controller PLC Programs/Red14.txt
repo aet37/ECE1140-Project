@@ -59,8 +59,8 @@ TASK<PERIOD=1000> MainTask
         ENDRUNG
         RUNG
             XIO b10O
-            XIO b110
-            XIO b120
+            XIO b11O
+            XIO b12O
             OTE b7A
             OTE b8A
             OTE b9A
@@ -120,6 +120,7 @@ TASK<PERIOD=1000> MainTask
         RUNG 
             XIC b15O
             OTE switch
+        ENDRUNG
     ENDROUTINE
 ENDTASK
 

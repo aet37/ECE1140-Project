@@ -35,8 +35,7 @@ TAG b15A = TRUE
 TAG b14A = TRUE
 TAG b150O = FALSE
 TAG b150A = TRUE
-TAG b1O = FALSE
-TAG b1A = TRUE
+TAG b13O = FALSE
 
 TASK<PERIOD=1000> MainTask
     ROUTINE Main
@@ -57,7 +56,7 @@ TASK<PERIOD=1000> MainTask
             XIO b16O
             XIO b15O
             XIO b14O
-            XIO b1O
+            XIO b13O
             OTE b150A
         ENDRUNG
         RUNG
