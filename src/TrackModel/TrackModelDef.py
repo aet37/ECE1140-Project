@@ -616,6 +616,8 @@ class SignalHandler:
                         signals.train_model_receive_block.emit(theLine, 0, 0, 0, 10, blockSpeedLimit, blockDirection, stationBool, theBeacon1, theBeacon2)
 
                     signals.train_model_receive_block.emit(theLine, blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection, stationBool, theBeacon1, theBeacon2)
+                    
+                    signals.trackmodel_update_tickets_sold.emit()
 
 
                     #jsonString = json.dumps(blockInfo)

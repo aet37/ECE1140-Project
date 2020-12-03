@@ -146,10 +146,10 @@ class Timekeeper:
                         self.ctc_trains_backlog.remove(item)
 
                 # Send signal to Track Model if time is right
-                if (self.current_time_sec == 5) and \
-                   (self.current_time_min == 0) and \
-                   (self.current_time_hour == 0):
-                    signals.trackmodel_update_tickets_sold.emit()
+                # if (self.current_time_sec == 5) and \
+                #    (self.current_time_min == 0) and \
+                #    (self.current_time_hour == 0):
+                #     signals.trackmodel_update_tickets_sold.emit()
 
         # Cancel the timer
         try:
