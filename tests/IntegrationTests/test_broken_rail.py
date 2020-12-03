@@ -29,6 +29,7 @@ def test_broken_rail_green(download_programs):
 
         # Ensure all authorities are true
         track_system.green_track_controllers[2].set_tag_value("b73A",True)
+        track_system.green_track_controllers[2].set_tag_value("b74A",True)
         for track_controller in track_system.green_track_controllers:
             if track_controller.get_authority_of_block(block) is not None:
                 print (track_controller.get_authority_of_block(block))
