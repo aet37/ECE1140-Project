@@ -17,7 +17,7 @@ def test_broken_rail_red(download_programs):
 
         # Ensure some authority is now false
         flag = False
-        for track_controller in track_system.redn_track_controllers:
+        for track_controller in track_system.red_track_controllers:
             if not track_controller.get_authority_of_block(block):
                 flag = True
                 break
