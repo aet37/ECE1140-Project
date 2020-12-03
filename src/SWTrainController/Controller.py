@@ -55,6 +55,12 @@ class Controller:
         self.signal_pickup_failure = False
         self.engine_failure = False
         self.brake_failure = False
+        self.signal_pickup_flag = False
+        self.engine_failure_flag = False
+
+        # Hold onto past power and current speed values to check for engine failure
+        self.previous_power_command = 0.0
+        self.prevoius_current_speed = 0.0
 
         # Used for starting and stopping the train's power loop
         self.hold_power_loop = False
@@ -100,9 +106,8 @@ class Controller:
         else:
             self.uk = self.uk1
 
-        # Check for engine failure
-        #if self.power_command > 0 and self.current_speed == 0:
-        #    self.engine_failure == True
+        # Set previous power command
+        self.previous_power_command = self.power_command
 
         # Find power command
         if self.service_brake == True or self.emergency_brake == True:
@@ -148,7 +153,7 @@ class Controller:
         if self.service_brake == True:
             if self.brake_failure == True:
                 # If brake failure occurs do not change service brake
-                self.service_brake = True
+                pass
             else:
                 # If no brake failure toggle brake normally
                 self.service_brake = not self.service_brake

@@ -70,6 +70,7 @@ class TrainModelUi(QtWidgets.QMainWindow):
             self.current_train_id = 0
         else:
             self.current_train_id = int(self.menu_train_combo.currentText().split('#')[1])
+            print("Train " + str(self.current_train_id - 1) + " is currently selected")
 
     def train_info_1(self):
         """This is executed when the button is pressed"""
@@ -146,6 +147,9 @@ class TrainModelUi(QtWidgets.QMainWindow):
         uic.loadUi('src/UI/TrainModel/Train_Report.ui', self)
         self.current_page = Page.REPORTS
 
+        # Update Label page1_train_label
+        self.findChild(QtWidgets.QLabel, 'report_label').setText("Train #{}".format(self.current_train_id))
+
         # Find all elements and connect them
         logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button_report')
         logout_button.clicked.connect(self.logout)
@@ -182,12 +186,12 @@ class TrainModelUi(QtWidgets.QMainWindow):
         self.findChild(QtWidgets.QLabel, 'disp_current_speed').setText("{:.2f} MPH".format(train_catalogue.m_trainList[self.current_train_id - 1].m_currentSpeed))
         
         if len(train_catalogue.m_trainList[self.current_train_id - 1].m_route) == 0:
-            self.findChild(QtWidgets.QLabel, 'disp_speed_limit').setText(str(0.0) + " km/h")
+            self.findChild(QtWidgets.QLabel, 'disp_speed_limit').setText(str(0.0) + " MPH")
         else:
             if train_catalogue.m_trainList[self.current_train_id - 1].m_currentLine == Line.LINE_GREEN:
-                self.findChild(QtWidgets.QLabel, 'disp_speed_limit').setText(str(block_catalogue_green.m_blockList[train_catalogue.m_trainList[self.current_train_id - 1].m_route[0]].m_speedLimit) + " km/h")
+                self.findChild(QtWidgets.QLabel, 'disp_speed_limit').setText("{:.2f} MPH".format(block_catalogue_green.m_blockList[train_catalogue.m_trainList[self.current_train_id - 1].m_route[0]].m_speedLimit * Converters.KmHr_to_MPH))
             else:
-                self.findChild(QtWidgets.QLabel, 'disp_speed_limit').setText(str(block_catalogue_red.m_blockList[train_catalogue.m_trainList[self.current_train_id - 1].m_route[0]].m_speedLimit) + " km/h")
+                self.findChild(QtWidgets.QLabel, 'disp_speed_limit').setText("{:.2f} MPH".format(block_catalogue_red.m_blockList[train_catalogue.m_trainList[self.current_train_id - 1].m_route[0]].m_speedLimit * Converters.KmHr_to_MPH))
         
         if str(train_catalogue.m_trainList[self.current_train_id - 1].m_serviceBrake) == "True":
             self.findChild(QtWidgets.QLabel, 'disp_service_brake').setText("on")
@@ -313,6 +317,7 @@ class TrainModelUi(QtWidgets.QMainWindow):
     def report_engine(self):
         """Method connected to the report engine failure button"""
         signals.train_model_report_e_failure.emit(self.current_train_id - 1, True)
+        signals.swtrain_receive_engine_failure.emit(self.current_train_id - 1, True)
         self.alert_sent1.setStyleSheet("color: green;")
         self.alert_sent2.setStyleSheet("color: rgb(133, 158, 166);")
         self.alert_sent3.setStyleSheet("color: rgb(133, 158, 166);")
