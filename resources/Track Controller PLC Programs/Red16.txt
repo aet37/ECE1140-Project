@@ -1,10 +1,14 @@
 TAG heater = FALSE
 TAG switch = TRUE
+TAG broken = FALSE
+TAG mmode = FALSE
 # Section 1
+TAG b16O = FALSE
 TAG b17O = FALSE
 TAG b18O = FALSE
 TAG b19O = FALSE
 TAG b20O = FALSE
+TAG b16A = FALSE
 TAG b17A = TRUE
 TAG b18A = TRUE
 TAG b19A = TRUE
@@ -25,6 +29,8 @@ TAG b24A = TRUE
 TAG b25A = TRUE
 TAG b26A = TRUE
 TAG b27A = TRUE
+TAG b28A = TRUE
+TAG b29A = TRUE
 
 TASK<PERIOD=1000> MainTask
     ROUTINE Main
@@ -32,6 +38,7 @@ TASK<PERIOD=1000> MainTask
             XIO b21O
             XIO b22O
             XIO b23O
+            XIO broken
             OTE b17A
             OTE b18A
             OTE b19A
@@ -41,6 +48,7 @@ TASK<PERIOD=1000> MainTask
             XIO b24O
             XIO b25O
             XIO b26O
+            XIO broken
             OTE b21A
             OTE b22A
             OTE b23A
@@ -49,6 +57,7 @@ TASK<PERIOD=1000> MainTask
             XIO b21O
             XIO b22O
             XIO b23O
+            XIO broken
             OTE b24A
             OTE b25A
             OTE b26A
@@ -58,6 +67,7 @@ TASK<PERIOD=1000> MainTask
             XIO b18O
             XIO b19O
             XIO b20O
+            XIO broken
             OTE b21A
             OTE b22A
             OTE b23A
@@ -65,6 +75,52 @@ TASK<PERIOD=1000> MainTask
         RUNG 
             XIO b27O
             OTE switch
+        ENDRUNG
+        RUNG 
+            XIO b16O
+            XIO broken
+            XIO b17O
+            XIO b18O
+            XIO b19O
+            XIO b20O
+            XIO b21O
+            XIO b22O
+            XIO b23O
+            XIO b24O
+            XIO b25O
+            XIO b26O
+            OTE b28A
+            OTE b29A
+            OTE b27A
+        ENDRUNG
+        RUNG 
+            XIO b27O
+            XIO broken
+            XIO b17O
+            XIO b18O
+            XIO b19O
+            XIO b20O
+            XIO b21O
+            XIO b22O
+            XIO b23O
+            XIO b24O
+            XIO b25O
+            XIO b26O
+            OTE b16A
+        ENDRUNG
+        RUNG
+            XIC broken
+            OTU b17A
+            OTU b18A
+            OTU b19A
+            OTU b20A
+            OTU b21A
+            OTU b22A
+            OTU b23A
+            OTU b24A
+            OTU b25A
+            OTU b26A
+            OTU b27A
         ENDRUNG
     ENDROUTINE
 ENDTASK

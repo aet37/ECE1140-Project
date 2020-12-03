@@ -60,6 +60,7 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         # Current track controller and block selected
         self.current_track_controller = None
         self.current_block = None
+        
 
         # Find elements and connect them accordingly
         logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button')
@@ -76,7 +77,6 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         self.command_speed_label = self.findChild(QtWidgets.QLabel, 'command_speed_label')
 
         self.switch_position_frame = self.findChild(QtWidgets.QFrame, 'switch_position_frame')
-        self.switch_position_frame.mousePressEvent = self.switch_position_button_clicked
 
         download_program_button = self.findChild(QtWidgets.QPushButton, 'download_program_button')
         download_program_button.clicked.connect(self.download_program)
@@ -266,24 +266,6 @@ class SWTrackControllerUi(QtWidgets.QMainWindow):
         :param str output_file: Name of the file containing the compiled program
         """
         return self.current_track_controller.download_program(output_file)
-
-    def switch_position_button_clicked(self, event):
-        """Method called when the switch position button is pressed"""
-        confirmation = Confirmation("Warning! Flipping the switch will place the block into maintanence mode."
-                                    "Would you like to proceed?")
-
-        # TODO (ljk): Check for maintenance mode
-        if confirmation.exec_():
-            if self.current_track_controller.get_maintenance_mode():
-                current_switch_position = self.current_track_controller.get_switch_position()
-                self.current_track_controller.set_switch_position(not current_switch_position)
-
-                self.current_track_controller.set_maintenance_mode(self.current_block, False)
-            else:
-                self.current_track_controller.set_maintenance_mode(self.current_block, True)
-
-                current_switch_position = self.current_track_controller.get_switch_position()
-                self.current_track_controller.set_switch_position(not current_switch_position)
 
     @staticmethod
     def get_translated_switch_positions(line, track_controller_id):

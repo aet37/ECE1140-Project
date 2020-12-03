@@ -1,23 +1,32 @@
 TAG heater = FALSE
 TAG switch = TRUE
+TAG broken = FALSE
+TAG mmode = FALSE
+TAG b47RRX = FALSE
+TAG toggle = FALSE
 # Section 1
 TAG b44O = FALSE
 TAG b45O = FALSE
+TAG b44A = TRUE
+TAG b45A = TRUE
+# Section 2
 TAG b46O = FALSE
 TAG b47O = FALSE
 TAG b48O = FALSE
-# Section 2
-TAG b49O = FALSE
-TAG b50O = FALSE
-TAG b51O = FALSE
-TAG b44A = TRUE
-TAG b45A = TRUE
 TAG b46A = TRUE
 TAG b47A = TRUE
 TAG b48A = TRUE
+# Section 3
+TAG b49O = FALSE
+TAG b50O = FALSE
+TAG b51O = FALSE
 TAG b49A = TRUE
 TAG b50A = TRUE
 TAG b51A = TRUE
+TAG b65A = TRUE
+TAG b66A = TRUE
+TAG b67A = TRUE
+TAG b68A = TRUE
 
 TASK<PERIOD=1000> MainTask  
     ROUTINE Main
@@ -25,11 +34,36 @@ TASK<PERIOD=1000> MainTask
             XIO b49O
             XIO b50O
             XIO b51O
+            XIO broken
             OTE b48A
             OTE b47A
             OTE b46A
             OTE b45A
-            OTE b44A
+        ENDRUNG
+        RUNG
+            XIO b44O
+            XIO b45O
+            XIO b46O
+            XIO b47O
+            XIO b48O
+            XIO b49O
+            XIO b50O
+            XIO b51O
+            XIO broken
+            OTE b66A
+            OTE b65A
+        ENDRUNG
+        RUNG
+            XIO b44O
+            XIO b46O
+            XIO b47O
+            XIO b48O
+            XIO b49O
+            XIO b50O
+            XIO b51O
+            XIO broken
+            OTE b67A
+            OTE b68A
         ENDRUNG
         RUNG
             XIO b48O
@@ -37,6 +71,7 @@ TASK<PERIOD=1000> MainTask
             XIO b46O
             XIO b45O
             XIO b44O
+            XIO broken
             OTE b49A
             OTE b50A
             OTE b51A
@@ -44,6 +79,76 @@ TASK<PERIOD=1000> MainTask
         RUNG 
             XIO b44O
             OTE switch
+        ENDRUNG
+        RUNG
+            XIC broken
+            OTU b44A
+            OTU b45A
+            OTU b46A
+            OTU b47A
+            OTU b48A
+            OTU b49A
+            OTU b50A
+            OTU b51A
+        ENDRUNG
+        RUNG    
+            XIC b44O
+            XIC b47O
+            OTU b44A
+            OTU b45A
+            OTU b46A
+            OTU b47A
+            OTU b48A
+            OTU b49A
+            OTU b50A
+            OTU b51A
+        ENDRUNG
+        RUNG 
+            XIC toggle
+            XIC broken
+            XIO switch
+            OTL switch
+            OTU toggle
+        ENDRUNG
+        RUNG 
+            XIC toggle
+            XIC broken
+            XIC switch
+            OTU switch
+            OTU toggle
+        ENDRUNG
+        RUNG
+            XIO toggle
+            XIO broken
+            OTL switch
+        ENDRUNG
+        RUNG 
+            XIC b46O
+            OTE b47RRX
+        ENDRUNG
+        RUNG
+            XIC b47O
+            OTE b47RRX
+        ENDRUNG
+        RUNG
+            XIC b48O
+            OTE b47RRX
+        ENDRUNG
+        RUNG
+            XIC b45O
+            OTE b47RRX
+        ENDRUNG
+        RUNG
+            XIC b49O
+            OTE b47RRX
+        ENDRUNG
+        RUNG 
+            XIO b45O
+            XIO b49O
+            XIO b48O
+            XIO b47O
+            XIO b46O
+            OTU b47RRX
         ENDRUNG
     ENDROUTINE
 ENDTASK
