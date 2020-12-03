@@ -74,8 +74,9 @@ class ControlSystem:
         # TRY TO CONNECT TO ARDUINO
         if len(self.p_controllers) == 0:
             try:
+                print("HW Controller: " + str(auth))
                 # Try appending one of Tyler's objects into p_controllers
-                p_temp = HWController()
+                p_temp = HWController(com_sp, curr_sp, auth)
                 self.p_controllers.append(p_temp)
             except SerialException:
                 # EXCEPT IF NOT CONNECTED
@@ -98,6 +99,7 @@ class ControlSystem:
         """ Handler for swtrain_dispatch_train signal """
         self.create_new_controller(track_circuit.command_speed, curr_sp, track_circuit.authority)
         signals.train_model_update_command_speed.emit( (len(self.p_controllers) - 1), track_circuit.command_speed)
+        #signals.train_model_update_authority.emit( (len(self.p_controllers) - 1), track_circuit.authority)
         logger.critical("Received swtrain_dispatch_train")
 
     def swtrain_gui_switch_mode(self, train_id, override):

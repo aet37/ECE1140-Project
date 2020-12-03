@@ -163,6 +163,7 @@ class TrainCatalogue:
 
     # @brief Receives authority
     def train_model_update_authority(self, trainId, newAuthority):
+        print("SECOND AUTH " + str(newAuthority) + " " + str(trainId))
         self.m_trainList[trainId].m_authority = newAuthority
         signals.train_model_something_has_been_changed.emit()
         signals.swtrain_update_authority.emit(trainId, newAuthority)

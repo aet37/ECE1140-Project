@@ -3,7 +3,6 @@
 from argparse import ArgumentParser
 import sys
 from PyQt5 import QtWidgets
-
 from src.UI.login_gui import LoginUi
 from src.UI.timekeeper_gui import TimekeeperUi
 from src.UI.CTC.ctc_gui import CTCUi
@@ -20,6 +19,7 @@ from src.SWTrackController.Compiler.lexer import Lexer
 from src.SWTrackController.Compiler.emitter import Emitter
 from src.SWTrackController.Compiler.parse import Parser
 from src.logger import get_logger
+from src.HWTrainController.HWTrainArduinoConnector import HWController
 
 logger = get_logger(__name__)
 
@@ -97,6 +97,7 @@ def cleanup():
 
     # Stop any hardware connectors
     HWTrackCtrlConnector.run_timer = False
+    HWController.run_timer = False
 
 def start(arguments):
     """Main entry point for application"""

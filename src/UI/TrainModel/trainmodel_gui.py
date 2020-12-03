@@ -175,7 +175,7 @@ class TrainModelUi(QtWidgets.QMainWindow):
 
     def update_gui1(self):
         self.findChild(QtWidgets.QLabel, 'disp_command_speed').setText("{:.2f} MPH".format(train_catalogue.m_trainList[self.current_train_id - 1].m_commandSpeed)) # Remove trailing zeros from float
-
+        print("AUTH: " + str(train_catalogue.m_trainList[self.current_train_id - 1].m_authority))
         if str(train_catalogue.m_trainList[self.current_train_id - 1].m_authority) == "1":
             self.findChild(QtWidgets.QLabel, 'disp_authority').setText("true")
             self.findChild(QtWidgets.QLabel, 'disp_authority').setStyleSheet("background-color: rgba(255, 255, 255, 0);\ncolor: rgb(26, 171, 0);")
