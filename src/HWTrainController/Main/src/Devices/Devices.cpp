@@ -74,37 +74,86 @@ namespace Devices
             xPosition = analogRead(VRx);
             yPosition = analogRead(VRy);
             current = millis();
-            if(xPosition >= 562){
+            if(xPosition >= 762){
                 if (current - previous >= inter) {
                     previous = current;
                     data--;
-                    Serial.print("Data--\n");
                 }
                 return data;
-            } else if (xPosition <= 462){
+            } else if (xPosition <= 262){
                 if (current - previous >= inter) {
                     previous = current;
                     data++;
-                    Serial.print("Data++\n");
                 }
                 return data;
+            } else {
+                return data;
             }
+            
         }
-        // } else {
-        //     return data;
-        // }
-        
     }
+
+    int JoystickReadAlpha(int data)
+    {
+        while(1){
+            xPosition = analogRead(VRx);
+            yPosition = analogRead(VRy);
+            current = millis();
+            if(xPosition >= 762){
+                if (current - previous >= inter) {
+                    previous = current;
+                    data=data-1000;
+                }
+                return data;
+            } else if (xPosition <= 262){
+                if (current - previous >= inter) {
+                    previous = current;
+                    data=data+1000;
+                }
+                return data;
+            } else {
+                return data;
+            }
+            
+        }
+    }
+
+    int JoystickReadBeta(int data)
+    {
+        while(1){
+            xPosition = analogRead(VRx);
+            yPosition = analogRead(VRy);
+            current = millis();
+            if(xPosition >= 762){
+                if (current - previous >= inter) {
+                    previous = current;
+                    data=data-100;
+                }
+                return data;
+            } else if (xPosition <= 262){
+                if (current - previous >= inter) {
+                    previous = current;
+                    data=data+100;
+                }
+                return data;
+            } else {
+                return data;
+            }
+            
+        }
+    }
+
     bool JoystickClick()
     {
         SW_state = digitalRead(SW);
         //Serial.println(SW_state);
+        bool state;
         if(SW_state == LOW)
         {
-            Serial.print("Pushed");
+            //state = !state;
             return true;
         } else {
-            Serial.print("Not pushed");
+            //return;
             return false;
         }
     }
@@ -116,12 +165,13 @@ namespace Devices
     bool ButtonClick()
     {
         buttonState = digitalRead(buttonPin);
+        bool state;
         if(buttonState == LOW)
         {
-            Serial.print("Pushed");
+            //state = !state;
             return true;
         } else {
-            Serial.print("Not pushed");
+            //return;
             return false;
         }
     }

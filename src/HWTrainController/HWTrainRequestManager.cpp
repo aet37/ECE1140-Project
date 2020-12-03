@@ -15,67 +15,75 @@ void HWTrainRequestManager::HandleRequest(const Common::Request& rRequest, Commo
 {
     switch (rRequest.GetRequestCode())
     {
-        case Common::RequestCode::HWTRAIN_PULL_EBRAKE:
-        {
-            // Add the request to the queue
-            AddRequest(rRequest);
-            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
-            break;
-        }
-        case Common::RequestCode::HWTRAIN_SET_SETPOINT_SPEED:
-        {
-            // Add the request to the queue
-            AddRequest(rRequest);
-            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
-            break;
-        }
-        case Common::RequestCode::HWTRAIN_PRESS_SERVICE_BRAKE:
-        {
-            // Add the request to the queue
-            AddRequest(rRequest);
-            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
-            break;
-        }
-        case Common::RequestCode::HWTRAIN_TOGGLE_DAMN_DOORS:
-        {
-            // Add the request to the queue
-            AddRequest(rRequest);
-            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
-            break;
-        }
-        case Common::RequestCode::HWTRAIN_TOGGLE_CABIN_LIGHTS:
-        {
-            // Add the request to the queue
-            AddRequest(rRequest);
-            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
-           // Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_LIGHTS);
-            //newRequest.AppendData("1");
-           // newRequest.AppendData(lights);
-            LOG_HW_TRAIN_CONTROLLER("HWTrain train toggle lights");
-            break;
-        }
-        case Common::RequestCode::HWTRAIN_SET_TEMPERATURE:
-        {
-            // Add the request to the queue
-            AddRequest(rRequest);
-            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
-            break;
-        }
-        case Common::RequestCode::HWTRAIN_ANNOUNCE_STATIONS:
-        {
-            // Add the request to the queue
-            AddRequest(rRequest);
-            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
-            break;
-        }
-        case Common::RequestCode::HWTRAIN_DISPLAY_ADS:
-        {
-            // Add the request to the queue
-            AddRequest(rRequest);
-            rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
-            break;
-        }
-        case Common::RequestCode::HWTRAIN_DISPATCH_TRAIN:
+        // case Common::RequestCode::HWTRAIN_PULL_EBRAKE:
+        // {
+        //     // Add the request to the queue
+        //     AddRequest(rRequest);
+        //     rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+        //     break;
+        // }
+        // case Common::RequestCode::HWTRAIN_SET_SETPOINT_SPEED:
+        // {
+        //     // Add the request to the queue
+        //     AddRequest(rRequest);
+        //     rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+        //     break;
+        // }
+        // case Common::RequestCode::HWTRAIN_PRESS_SERVICE_BRAKE:
+        // {
+        //     // Add the request to the queue
+        //     AddRequest(rRequest);
+        //     rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+        //     break;
+        // }
+        // case Common::RequestCode::HWTRAIN_TOGGLE_DAMN_DOORS:
+        // {
+        //     // Add the request to the queue
+        //     AddRequest(rRequest);
+        //     rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+        //     break;
+        // }
+        // case Common::RequestCode::HWTRAIN_TOGGLE_CABIN_LIGHTS:
+        // {
+        //     // Add the request to the queue
+        //     AddRequest(rRequest);
+        //     rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+        //    // Common::Request newRequest(Common::RequestCode::TRAIN_MODEL_GUI_RECEIVE_LIGHTS);
+        //     //newRequest.AppendData("1");
+        //    // newRequest.AppendData(lights);
+        //     LOG_HW_TRAIN_CONTROLLER("HWTrain train toggle lights");
+        //     break;
+        // }
+        // case Common::RequestCode::HWTRAIN_SET_TEMPERATURE:
+        // {
+        //     // Add the request to the queue
+        //     AddRequest(rRequest);
+        //     rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+        //     break;
+        // }
+        // case Common::RequestCode::HWTRAIN_ANNOUNCE_STATIONS:
+        // {
+        //     // Add the request to the queue
+        //     AddRequest(rRequest);
+        //     rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+        //     break;
+        // }
+        // case Common::RequestCode::HWTRAIN_DISPLAY_ADS:
+        // {
+        //     // Add the request to the queue
+        //     AddRequest(rRequest);
+        //     rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+        //     break;
+        // }
+        // case Common::RequestCode::HWTRAIN_DISPATCH_TRAIN:
+        // {
+        //     // Add the request to the queue
+        //     AddRequest(rRequest);
+        //     rResponse.SetResponseCode(Common::ResponseCode::SUCCESS);
+        //     break;
+        // }
+
+        case Common::RequestCode::HWTRAIN_GET_DATA:
         {
             // Add the request to the queue
             AddRequest(rRequest);

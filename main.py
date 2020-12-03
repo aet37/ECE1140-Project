@@ -3,8 +3,6 @@
 from argparse import ArgumentParser
 import sys
 from PyQt5 import QtWidgets
-from HWTrainController.HWTrainArduinoConnector import HWController
-
 from src.UI.login_gui import LoginUi
 from src.UI.timekeeper_gui import TimekeeperUi
 from src.UI.CTC.ctc_gui import CTCUi

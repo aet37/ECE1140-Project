@@ -34,6 +34,7 @@ enum class RequestCode
     HWTRAIN_GUI_DISPLAY_POWER = 245, // Displays power
     HWTRAIN_GUI_SET_KI = 246, // Set Ki
     HWTRAIN_BRAKE_FAILURE = 247,
+    HWTRAIN_GET_DATA = 248,
 
 };
 
