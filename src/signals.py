@@ -97,12 +97,12 @@ class SignalsClass(QObject):
     swtrain_time_trigger = pyqtSignal()
     swtrain_receive_beacon = pyqtSignal(int, Beacon) # TrainID, beacon
     swtrain_send_beacon_info = pyqtSignal(int, str, DoorSide) # TrainID, Station Name, DoorSide
-    swtrain_receive_signal_pickup_failure = pyqtSignal(int, bool) # TrainID, signal_pickup_failure
     swtrain_receive_brake_failure = pyqtSignal(int, bool) # TrainID, brake_failure
     swtrain_receive_engine_failure = pyqtSignal(int, bool) # TrainID, engine_failure
     swtrain_resolve_failure = pyqtSignal(int) # TrainID
-    swtrain_receive_track_circuit = pyqtSignal(int, TrackCircuit) #trainId, trackCircuit
+    swtrain_receive_track_circuit = pyqtSignal(int, TrackCircuit) # TrainID, trackCircuit
     swtrain_update_gui = pyqtSignal()
+    swtrain_gui_receive_signal_failure = pyqtSignal(int) # TrainID
 
     # Track Model Signals
     trackmodel_dispatch_train = pyqtSignal(int, int, TrackCircuit, Line, list) # Used by SWTrack Controller to send dispatch Train (train_id, command_speed, authority, Line, switches_arr(boolean))
