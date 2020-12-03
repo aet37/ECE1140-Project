@@ -79,8 +79,12 @@ class TrainCatalogue:
         signals.train_model_report_e_failure.connect(self.train_model_report_e_failure)
         # Resolve failure
         signals.train_model_resolve_failure.connect(self.train_model_resolve_failure)
+        # Edit block
+        signals.train_model_edit_block.connect(self.train_model_edit_block)
+
         # Receive track circuit
         signals.train_model_receive_track_circuit.connect(self.train_model_receive_track_circuit)
+
 
     # print(sys.path)
 
@@ -123,6 +127,7 @@ class TrainCatalogue:
 
     # @brief Receives block information
     def train_model_receive_block(self, track_id, block_id, elevation, slope, sizeOfBlock, speedLimit, travelDirection, station, newBeacon1, newBeacon2):
+        
         newBlock = Block(block_id)
         # Parse stuff from Evan (trackId, blockId, elevation, grade, length, speedLimit, travelDirection)
 
@@ -136,12 +141,20 @@ class TrainCatalogue:
         newBlock.beacon2 = newBeacon2
 
         # Add the block to the catalogue
-        if (track_id == 0):
+        if (track_id == Line.LINE_GREEN):
             block_catalogue_green.m_blockList.append(newBlock)
             logger.debug("Received a green block. There are now " + str(len(block_catalogue_green.m_blockList)))
         else:
             block_catalogue_red.m_blockList.append(newBlock)
             logger.debug("Received a red block. There are now " + str(len(block_catalogue_red.m_blockList)))
+
+    # @brief Edits block information
+    def train_model_edit_block(self, track_id, block_id, sizeOfBlock):
+        # Parse stuff from Evan (trackId, blockId, sizeOfBlock)
+        if (track_id == Line.LINE_GREEN):
+            block_catalogue_green.m_blockList[block_id].m_sizeOfBlock = sizeOfBlock
+        else:
+            block_catalogue_red.m_blockList[block_id].m_sizeOfBlock = sizeOfBlock
 
     # @brief Toggles the train lights
     def train_model_receive_lights(self, trainId, cabinLights):
@@ -186,7 +199,7 @@ class TrainCatalogue:
             #print("TrainModel's ID: " + str(trainId))
             if self.m_trainList[trainId].m_route[0] != 0:
                 signals.swtrain_receive_track_circuit.emit(trainId, trackCircuit)
-    
+
     # @brief Reports sb failure
     def train_model_report_sb_failure(self, trainId, failReport):
         self.m_trainList[trainId].m_brakeFailure = failReport
@@ -271,7 +284,7 @@ class TrainCatalogue:
 
         # LOG_TRAIN_MODEL("Number of green line blocks = %d", BlockCatalogue::GetInstance().GetNumberOfGreenBlocks());
         # LOG_TRAIN_MODEL("Number of trains = %d", TrainCatalogue::GetInstance().GetNumberOfTrains());
-
+        # print(str(block_catalogue_green.m_blockList[currentBlock]))
         if (currentTrack == Line.LINE_GREEN):
             currentBlockSize = block_catalogue_green.m_blockList[currentBlock].m_sizeOfBlock
             speedLimitBlock = block_catalogue_green.m_blockList[currentBlock].m_speedLimit
