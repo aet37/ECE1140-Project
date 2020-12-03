@@ -75,6 +75,8 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
         # Define buttons on Failures page ########
         self.brake_failure.clicked.connect(self.resolve_brake_failure)
+        self.signal_pickup_failure.clicked.connect(self.resolve_signal_pickup_failure)
+        self.engine_failure.clicked.connect(self.resolve_engine_failure)
         ##########################################
 
         # Define buttons on Engineer page #
@@ -175,7 +177,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
 
         # Define signal pickup failure button
         self.signal_pickup_failure = self.findChild(QtWidgets.QPushButton, 'signal_pickup_failure')
-        # Define engine failure status
+        # Define signal pickup failure status
         self.signal_pickup_status = self.findChild(QtWidgets.QTextBrowser, 'signal_pickup_status')
         ###################################
 
@@ -332,10 +334,18 @@ class SWTrainUi(QtWidgets.QMainWindow):
         # Update failure boxes
         if self.brake_fail_status == True and self.curr_speed == 0 and self.service_brake_status == 1:
             self.brake_failure_status.setStyleSheet("background-color: rgb(255, 51, 16);")
-            #alert = Alert("ALERT: A BRAKE FAILURE HAS OCCURRED!")
-            #alert.exec_()
         else:
             self.brake_failure_status.setStyleSheet("background-color: green;")
+
+        if self.signal_fail_status == True:
+            self.signal_pickup_status.setStyleSheet("background-color: rgb(255, 51, 16);")
+        else:
+            self.signal_pickup_status.setStyleSheet("background-color: green;")
+        
+        if self.engine_fail_status == True:
+            self.engine_failure_status.setStyleSheet("background-color: rgb(255, 51, 16);")
+        else:
+            self.engine_failure_status.setStyleSheet("background-color: green;")
 
         # Update Kp and Ki
         self.KpLabel.setText(str(self.kp_status) + " W/(m/s)")
@@ -565,6 +575,18 @@ class SWTrainUi(QtWidgets.QMainWindow):
             alert = Alert("Error: Must set Kp and Ki in order to remove service brake!")
             alert.exec_()
             return
+        
+        # If service brake failure has occurred don't allow user to attempt releasing brake
+        if control_system.p_controllers[int(self.current_train_id) - 1].brake_failure == True:
+            alert = Alert("ALERT: A BRAKE FAILURE HAS OCCURRED")
+            alert.exec_()
+            return
+        
+        # Don't let user release service brake if authority is 0
+        if control_system.p_controllers[int(self.current_train_id) - 1].authority == False:
+            alert = Alert("Error: Authority is False")
+            alert.exec_()
+            return
 
         # Check if authority is zero NEED METHOD TO AUTOMATICALLY TURN SERVICE BRAKE ON AUTOMATICALLY
         #if control_system.p_controllers[int(self.current_train_id) - 1].authority == 0:
@@ -601,6 +623,22 @@ class SWTrainUi(QtWidgets.QMainWindow):
         # If no controllers have been created, button does nothing
         if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
             alert = Alert("Error: No trains have been dispatched!")
+            alert.exec_()
+            return
+        
+        # If a failure hasn't been resolved, don't allow brake to be toggled
+        if control_system.p_controllers[int(self.current_train_id) - 1].signal_pickup_failure == True:
+            alert = Alert("ALERT: EMERGENCY BRAKE CAN NOT BE RELEASED UNTIL SIGNAL PICKUP FAILURE HAS BEEN RESOLVED")
+            alert.exec_()
+            return
+
+        if control_system.p_controllers[int(self.current_train_id) - 1].brake_failure == True:
+            alert = Alert("ALERT: EMERGENCY BRAKE CAN NOT BE RELEASED UNTIL BRAKE FAILURE HAS BEEN RESOLVED")
+            alert.exec_()
+            return
+        
+        if control_system.p_controllers[int(self.current_train_id) - 1].engine_failure == True:
+            alert = Alert("ALERT: EMERGENCY BRAKE CAN NOT BE RELEASED UNTIL ENGINE FAILURE HAS BEEN RESOLVED")
             alert.exec_()
             return
         
@@ -711,6 +749,52 @@ class SWTrainUi(QtWidgets.QMainWindow):
         alert.exec_()
         signals.swtrain_resolve_failure.emit(int(self.current_train_id) - 1)
         self.update_gui()
+
+    def resolve_signal_pickup_failure(self):
+        # If no controllers have been created, button does nothing
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            alert = Alert("Error: No trains have been dispatched!")
+            alert.exec_()
+            return
+        
+        # Check to see if there is a failure occurring
+        if self.signal_pickup_status.styleSheet() == "background-color: green;":
+            alert = Alert("Error: No signal pickup failure has occurred!")
+            alert.exec_()
+            return
+
+        # Check if failure has been resolved
+        if control_system.p_controllers[int(self.current_train_id) - 1].signal_pickup_flag == False:
+            alert = Alert("Error: Please wait a minute for the failure to resolve!")
+            alert.exec_()
+            return
+        else:
+            control_system.p_controllers[int(self.current_train_id) - 1].signal_pickup_failure = False
+            control_system.p_controllers[int(self.current_train_id) - 1].signal_pickup_flag = False
+            self.toggle_emergency_brake()
+
+    def resolve_engine_failure(self):
+        # If no controllers have been created, button does nothing
+        if self.findChild(QtWidgets.QComboBox, 'TrainIDBox').currentText() == "":
+            alert = Alert("Error: No trains have been dispatched!")
+            alert.exec_()
+            return
+        
+        # Check to see if there is a failure occurring
+        if self.engine_failure_status.styleSheet() == "background-color: green;":
+            alert = Alert("Error: No engine failure has occurred!")
+            alert.exec_()
+            return
+
+        # Check if failure has been resolved
+        if control_system.p_controllers[int(self.current_train_id) - 1].engine_failure_flag == False:
+            alert = Alert("Error: Please wait a minute for the failure to resolve!")
+            alert.exec_()
+            return
+        else:
+            control_system.p_controllers[int(self.current_train_id) - 1].engine_failure = False
+            control_system.p_controllers[int(self.current_train_id) - 1].engine_failure_flag = False
+            self.toggle_emergency_brake()
 
     def logout(self):
         # This is executed when the button is pressed

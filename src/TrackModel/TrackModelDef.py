@@ -16,6 +16,8 @@ from src.logger import get_logger
 import random
 import pyexcel
 import pyexcel_io
+import pyexcel_xlsx
+import pyexcel_xls
 from traceback import print_stack
 from src.timekeeper import timekeeper
 
@@ -379,9 +381,6 @@ class SignalHandler:
             if (travelDirection == 0):
                 if (currentBlock == 66):
                     signals.train_model_update_direction.emit(trainId, 1)
-            else:
-                if (currentBlock == 16):
-                    signals.train_model_update_direction.emit(trainId, 0)
 
         if (currentBlock != 0):
             theBlock = theTrack.getBlock(currentBlock)
@@ -619,6 +618,8 @@ class SignalHandler:
                         signals.train_model_receive_block.emit(theLine, 0, 0, 0, 10, blockSpeedLimit, blockDirection, stationBool, theBeacon1, theBeacon2)
 
                     signals.train_model_receive_block.emit(theLine, blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection, stationBool, theBeacon1, theBeacon2)
+                    
+                    signals.trackmodel_update_tickets_sold.emit()
 
 
                     #jsonString = json.dumps(blockInfo)

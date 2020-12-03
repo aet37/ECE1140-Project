@@ -199,6 +199,11 @@ class TrainCatalogue:
             #print("TrainModel's ID: " + str(trainId))
             if self.m_trainList[trainId].m_route[0] != 0:
                 signals.swtrain_receive_track_circuit.emit(trainId, trackCircuit)
+        else:
+            if self.m_trainList[trainId].m_route[0] != 0:
+                trackCircuit.command_speed = None
+                trackCircuit.authority = None
+                signals.swtrain_receive_track_circuit.emit(trainId, trackCircuit)
 
     # @brief Reports sb failure
     def train_model_report_sb_failure(self, trainId, failReport):
@@ -340,6 +345,8 @@ class TrainCatalogue:
         elif (not serviceBrake and emergencyBrake): # accelerationCalc < self.DECELERATION_LIMIT_EMERGENCY and
             # If the emergency brake is ON and accelerationCalc is below the limit
             accelerationCalc = self.DECELERATION_LIMIT_EMERGENCY
+        elif (serviceBrake and emergencyBrake): # Edge case if both emergency brake and service brake are turned on
+            accelerationCalc = self.DECELERATION_LIMIT_EMERGENCY # Emergency brake takes priority
 
         # VELOCITY
         velocityCalc = currentSpeed + ( (samplePeriod / 2) * (accelerationCalc + previousAcceleration) ) # Velocity Limit: 19.4444 m/s
