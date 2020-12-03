@@ -31,4 +31,4 @@ def test_broken_rail_green(download_programs):
         for track_controller in track_system.green_track_controllers:
             if track_controller.get_authority_of_block(block) is not None:
                 print (track_controller.get_authority_of_block(block))
-                #assert track_controller.get_authority_of_block(block)
+                assert track_controller.get_authority_of_block(block)
