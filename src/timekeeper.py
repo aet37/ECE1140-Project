@@ -151,6 +151,7 @@ class Timekeeper:
                 #    (self.current_time_hour == 0):
                 #     signals.trackmodel_update_tickets_sold.emit()
 
+
         # Cancel the timer
         try:
             self.signal_timer.join()
