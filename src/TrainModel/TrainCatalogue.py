@@ -79,6 +79,8 @@ class TrainCatalogue:
         signals.train_model_report_e_failure.connect(self.train_model_report_e_failure)
         # Resolve failure
         signals.train_model_resolve_failure.connect(self.train_model_resolve_failure)
+        # Edit block
+        signals.train_model_edit_block.connect(self.train_model_edit_block)
 
     # print(sys.path)
 
@@ -136,12 +138,20 @@ class TrainCatalogue:
         newBlock.beacon2 = newBeacon2
 
         # Add the block to the catalogue
-        if (track_id == 0):
+        if (track_id == Line.LINE_GREEN):
             block_catalogue_green.m_blockList.append(newBlock)
             logger.debug("Received a green block. There are now " + str(len(block_catalogue_green.m_blockList)))
         else:
             block_catalogue_red.m_blockList.append(newBlock)
             logger.debug("Received a red block. There are now " + str(len(block_catalogue_red.m_blockList)))
+
+    # @brief Edits block information
+    def train_model_edit_block(self, track_id, block_id, sizeOfBlock):
+        # Parse stuff from Evan (trackId, blockId, sizeOfBlock)
+        if (track_id == Line.LINE_GREEN):
+            block_catalogue_green.m_blockList[block_id].m_sizeOfBlock = sizeOfBlock
+        else:
+            block_catalogue_red.m_blockList[block_id].m_sizeOfBlock = sizeOfBlock
 
     # @brief Toggles the train lights
     def train_model_receive_lights(self, trainId, cabinLights):
