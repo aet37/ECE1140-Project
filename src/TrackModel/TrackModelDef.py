@@ -16,6 +16,8 @@ from src.logger import get_logger
 import random
 import pyexcel
 import pyexcel_io
+import pyexcel_xlsx
+import pyexcel_xls
 from traceback import print_stack
 from src.timekeeper import timekeeper
 
