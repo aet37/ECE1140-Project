@@ -222,7 +222,7 @@ class SignalHandler:
         signals.trackmodel_update_switch_positions.connect(self.updateSwitchPositions)
         signals.trackmodel_update_tickets_sold.connect(self.updateTicketsSold)
         signals.trackmodel_update_passengers_exited.connect(self.updatePassengersExited)
-
+        signals.trackmodel_receive_track_circuit.connect(self.receiveTrackCircuit)
         signals.swtrack_set_block_status.connect(self.setBrokenRailFailure)
 
     def setBrokenRailFailure(self, line, blockNumber, statusBool, num_fail):
@@ -257,11 +257,26 @@ class SignalHandler:
                 signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
                 signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
 
-        signals.trackmodel_update_gui.emit()
+        signals.trackmodel_update_gui.emit() 
 
-        signals.trackmodel_receive_track_circuit.connect(self.receiveTrackCircuit)
+    def receiveTrackCircuit(self, line, blockNumber, trackCircuit):
+        #print("Track model recieved track circuit blockNumber = ", blockNumber)
+        if (line == Line.LINE_GREEN):
+            theTrack = getTrack("Green")
+        else:
+            theTrack = getTrack("Red")
 
-    def receiveTrackCircuit(self, line, trainId, trackCircuit):
+        theBlock = theTrack.getBlock(blockNumber)
+
+        if blockNumber != 0:
+            theBlock = theTrack.getBlock(blockNumber)
+            trainId = theBlock.blockOccupied
+
+            if (trainId == -1):
+                assert False
+        else:
+            trainId = self.trainCount
+        
         signals.train_model_receive_track_circuit.emit(line, trainId, trackCircuit)
 
     def updatePassengersExited(self, line, trainId, blockNumber, passengersExited, spaceOnTrain, totalSeats):
@@ -349,6 +364,7 @@ class SignalHandler:
     #     signals.train_model_update_authority.emit(trainId, newAuthority)
 
     def updateOccupancy(self, trainId, line, currentBlock, trainOrNot, travelDirection):
+        #print("TrainId in Track Model is " + str(trainId))
         if (line == Line.LINE_GREEN):
             theTrack = getTrack("Green")
             if (travelDirection == 0):
@@ -378,7 +394,7 @@ class SignalHandler:
         # Tell swtrack the occupancy
         signals.swtrack_update_occupancies.emit(trainId, line, currentBlock, trainOrNot)
 
-    def dispatchTrain(self, trainId, destinationBlock, commandSpeed, authority, currentLine, switch_arr):
+    def dispatchTrain(self, trainId, destinationBlock, track_circuit, currentLine, switch_arr):
         logger.debug("Received trackmodel_dispatch_train")
         self.trainCount += 1
         if (currentLine == Line.LINE_GREEN):
@@ -395,7 +411,7 @@ class SignalHandler:
                     else:
                         theBeacon2 = theBlock.blockBeacon
 
-                signals.train_model_receive_block.emit(0, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None, theBeacon1, theBeacon2)
+                signals.train_model_receive_block.emit(currentLine, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None, theBeacon1, theBeacon2)
         else:
             theTrack = getTrack("Red")
             route = red_route_blocks
@@ -408,9 +424,9 @@ class SignalHandler:
                         theBeacon1 = theBlock.blockBeacon
                     else:
                         theBeacon2 = theBlock.blockBeacon
-                signals.train_model_receive_block.emit(1, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None, theBeacon1, theBeacon2)
+                signals.train_model_receive_block.emit(currentLine, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None, theBeacon1, theBeacon2)
 
-        signals.train_model_dispatch_train.emit(trainId, destinationBlock, commandSpeed, authority, currentLine, route)
+        signals.train_model_dispatch_train.emit(trainId, destinationBlock, track_circuit, currentLine, route)
 
     # Examples of fileInfo inputs below
     #('C:/Users/Evan/OneDrive/Documents/GitHub/ECE1140-Project/resources/Green Line.xlsx', 'All Files (*)')
@@ -520,6 +536,7 @@ class SignalHandler:
                     if (records.column['Switches'][x] != ""):
                         switchList = records.column['Switches'][x]
                         switchList = switchList.split(',')
+                        theTrack = getTrack(trackInfo['Track'])
                         if (line == "Green"):
                             greenSwitchNumber = greenSwitchNumber + 1
                             switchNumber = greenSwitchNumber
@@ -593,11 +610,15 @@ class SignalHandler:
 
                     newTrack.addBlock(theBlock)
 
+                    if (trackInfo['tNumber'] == 0):
+                        theLine = Line.LINE_GREEN
+                    else:
+                        theLine = Line.LINE_RED
                     # add beacon to this
                     if (blockNumber == 1):
-                        signals.train_model_receive_block.emit(trackInfo['tNumber'], 0, 0, 0, 10, blockSpeedLimit, blockDirection, stationBool, theBeacon1, theBeacon2)
+                        signals.train_model_receive_block.emit(theLine, 0, 0, 0, 10, blockSpeedLimit, blockDirection, stationBool, theBeacon1, theBeacon2)
 
-                    signals.train_model_receive_block.emit(trackInfo['tNumber'], blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection, stationBool, theBeacon1, theBeacon2)
+                    signals.train_model_receive_block.emit(theLine, blockNumber, blockElevation, blockGrade, blockLength, blockSpeedLimit, blockDirection, stationBool, theBeacon1, theBeacon2)
 
 
                     #jsonString = json.dumps(blockInfo)

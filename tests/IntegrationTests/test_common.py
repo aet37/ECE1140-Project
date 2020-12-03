@@ -30,7 +30,7 @@ def test_dispatch_train(upload_tracks, download_programs):
 
     # Assert received authority and command speed
     assert train_catalogue.m_trainList[0].m_commandSpeed == 24.85484
-    assert train_catalogue.m_trainList[0].m_authority
+    assert not train_catalogue.m_trainList[0].m_authority
 
     assert control_system.p_controllers[0].command_speed == 40.0
     assert control_system.p_controllers[0].authority
