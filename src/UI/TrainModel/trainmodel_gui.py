@@ -147,6 +147,9 @@ class TrainModelUi(QtWidgets.QMainWindow):
         uic.loadUi('src/UI/TrainModel/Train_Report.ui', self)
         self.current_page = Page.REPORTS
 
+        # Update Label page1_train_label
+        self.findChild(QtWidgets.QLabel, 'report_label').setText("Train #{}".format(self.current_train_id))
+
         # Find all elements and connect them
         logout_button = self.findChild(QtWidgets.QPushButton, 'logout_button_report')
         logout_button.clicked.connect(self.logout)
