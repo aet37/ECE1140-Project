@@ -222,7 +222,7 @@ class SignalHandler:
         signals.trackmodel_update_switch_positions.connect(self.updateSwitchPositions)
         signals.trackmodel_update_tickets_sold.connect(self.updateTicketsSold)
         signals.trackmodel_update_passengers_exited.connect(self.updatePassengersExited)
-        signals.trackmodel_receive_track_circuit.connect(self.receiveTrackCircuit)
+
         signals.swtrack_set_block_status.connect(self.setBrokenRailFailure)
 
     def setBrokenRailFailure(self, line, blockNumber, statusBool, num_fail):
@@ -257,26 +257,11 @@ class SignalHandler:
                 signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
                 signals.swtrack_update_broken_rail_failure.emit(line, blockNumber, statusBool)
 
-        signals.trackmodel_update_gui.emit() 
+        signals.trackmodel_update_gui.emit()
 
-    def receiveTrackCircuit(self, line, blockNumber, trackCircuit):
-        print("Track model recieved track circuit blockNumber = ", blockNumber)
-        if (line == Line.LINE_GREEN):
-            theTrack = getTrack("Green")
-        else:
-            theTrack = getTrack("Red")
+        signals.trackmodel_receive_track_circuit.connect(self.receiveTrackCircuit)
 
-        theBlock = theTrack.getBlock(blockNumber)
-
-        if blockNumber != 0:
-            theBlock = theTrack.getBlock(blockNumber)
-            trainId = theBlock.blockOccupied
-
-            if (trainId == -1):
-                assert False
-        else:
-            trainId = self.trainCount
-        
+    def receiveTrackCircuit(self, line, trainId, trackCircuit):
         signals.train_model_receive_track_circuit.emit(line, trainId, trackCircuit)
 
     def updatePassengersExited(self, line, trainId, blockNumber, passengersExited, spaceOnTrain, totalSeats):
@@ -364,7 +349,6 @@ class SignalHandler:
     #     signals.train_model_update_authority.emit(trainId, newAuthority)
 
     def updateOccupancy(self, trainId, line, currentBlock, trainOrNot, travelDirection):
-        #print("TrainId in Track Model is " + str(trainId))
         if (line == Line.LINE_GREEN):
             theTrack = getTrack("Green")
             if (travelDirection == 0):
@@ -394,7 +378,7 @@ class SignalHandler:
         # Tell swtrack the occupancy
         signals.swtrack_update_occupancies.emit(trainId, line, currentBlock, trainOrNot)
 
-    def dispatchTrain(self, trainId, destinationBlock, track_circuit, currentLine, switch_arr):
+    def dispatchTrain(self, trainId, destinationBlock, commandSpeed, authority, currentLine, switch_arr):
         logger.debug("Received trackmodel_dispatch_train")
         self.trainCount += 1
         if (currentLine == Line.LINE_GREEN):
@@ -426,7 +410,7 @@ class SignalHandler:
                         theBeacon2 = theBlock.blockBeacon
                 signals.train_model_receive_block.emit(1, i, theBlock.blockElevation, theBlock.blockGrade, theBlock.blockLength, theBlock.blockSpeedLimit, theBlock.blockDirection, theBlock.blockStation != None, theBeacon1, theBeacon2)
 
-        signals.train_model_dispatch_train.emit(trainId, destinationBlock, track_circuit, currentLine, route)
+        signals.train_model_dispatch_train.emit(trainId, destinationBlock, commandSpeed, authority, currentLine, route)
 
     # Examples of fileInfo inputs below
     #('C:/Users/Evan/OneDrive/Documents/GitHub/ECE1140-Project/resources/Green Line.xlsx', 'All Files (*)')

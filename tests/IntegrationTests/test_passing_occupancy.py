@@ -13,7 +13,6 @@ def test_passing_occupancy(upload_tracks, download_programs):
     signals.train_model_update_authority.disconnect()
     signals.train_model_update_command_speed.disconnect()
     signals.train_model_update_direction.disconnect()
-    signals.train_model_receive_track_circuit.disconnect()
 
     # Dispatch a train
     ctc.dispatch_train(38, Line.LINE_GREEN)

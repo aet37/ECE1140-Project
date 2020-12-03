@@ -88,7 +88,7 @@ class SWTrainUi(QtWidgets.QMainWindow):
         signals.swtrain_update_current_speed.connect(self.update_gui)
         signals.swtrain_update_authority.connect(self.update_gui)
         signals.swtrain_update_command_speed.connect(self.update_gui)
-        signals.swtrain_update_gui.connect(self.update_gui)
+
         # Update controllers if received before opening
         for _ in range(0, len(control_system.p_controllers) ):
             self.update_controller_list()

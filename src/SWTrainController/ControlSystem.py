@@ -55,8 +55,6 @@ class ControlSystem:
         #signals.swtrain_receive_engine_failure.connect(self.swtrain_receive_engine_failure)
         # Receive resolve failure signal
         signals.swtrain_resolve_failure.connect(self.swtrain_resolve_failure)
-        # Receive track circuit
-        signals.swtrain_receive_track_circuit.connect(self.swtrain_receive_track_circuit)
 
         ## RECEIVE NONVITAL SIGNALS ##
         # Receive lights signal
@@ -95,10 +93,9 @@ class ControlSystem:
         return len(self.p_controllers)
 
     ### SIGNAL DEFINITIONS ###
-    def swtrain_dispatch_train(self, curr_sp, track_circuit):
+    def swtrain_dispatch_train(self, com_sp, curr_sp, auth):
         """ Handler for swtrain_dispatch_train signal """
-        self.create_new_controller(track_circuit.command_speed, curr_sp, track_circuit.authority)
-        signals.train_model_update_command_speed.emit( (len(self.p_controllers) - 1), track_circuit.command_speed)
+        self.create_new_controller(com_sp, curr_sp, auth)
         logger.critical("Received swtrain_dispatch_train")
 
     def swtrain_gui_switch_mode(self, train_id, override):
@@ -112,7 +109,6 @@ class ControlSystem:
 
     def swtrain_gui_press_service_brake(self, train_id):
         """ Handler for swtrain_gui_press_service_brake """
-        #print("Train " + str(train_id) + " toggled its service brake")
         self.p_controllers[train_id].toggle_service_brake()
         signals.train_model_gui_receive_service_brake.emit(train_id, self.p_controllers[train_id].service_brake)
 
@@ -141,26 +137,24 @@ class ControlSystem:
         """ Pulls ebrake on train to stop as quickly as possible """
         # Activate ebrake
         self.p_controllers[train_id].activate_emergency_brake()
+        print("What about here")
         # Send train_id and ebrake status to train model
         signals.train_model_gui_receive_ebrake.emit(train_id, self.p_controllers[train_id].emergency_brake)
 
     def swtrain_gui_release_ebrake(self, train_id):
         """ Releases ebrake so train can begin moving again """
         self.p_controllers[train_id].reset_emergency_brake()
+        print("Do you get here?")
         # Send train_id and ebrake status to train model
         signals.train_model_gui_receive_ebrake.emit(train_id, self.p_controllers[train_id].emergency_brake)
 
     def swtrain_update_authority(self, train_id, new_authority):
         """Update authority in train controller"""
-        print("Train " + str(train_id) + " received authority: " + str(int(new_authority)) )
         if new_authority:
             if self.p_controllers[train_id].authority:
-                if self.p_controllers[train_id].service_brake:
-                    pass
-                else:
-                    # Service brake should already be off, but just in case
-                    self.p_controllers[train_id].service_brake = False
-                    signals.train_model_gui_receive_service_brake.emit(train_id, self.p_controllers[train_id].service_brake)
+                # Service brake should already be off, but just in case
+                self.p_controllers[train_id].service_brake = False
+                signals.train_model_gui_receive_service_brake.emit(train_id, self.p_controllers[train_id].service_brake)
             else:
                 if (self.p_controllers[train_id].kp == 0) or (self.p_controllers[train_id].ki == 0):
                     pass
@@ -169,12 +163,11 @@ class ControlSystem:
                     self.p_controllers[train_id].service_brake = False
                     signals.train_model_gui_receive_service_brake.emit(train_id, self.p_controllers[train_id].service_brake)
         else:
-            #print("Train " + str(train_id) + " turned its service brake on")
             self.p_controllers[train_id].authority = new_authority
             self.p_controllers[train_id].service_brake = True
             signals.train_model_gui_receive_service_brake.emit(train_id, self.p_controllers[train_id].service_brake)
 
-        # self.p_controllers[train_id].authority = new_authority
+        # self.p_controllers[train_id].authority = auth
         # if self.p_controllers[train_id].authority:
         #     # If service brake is already on or train is dispatching do not turn it off
         #     if (self.p_controllers[train_id].current_speed != 0 and self.p_controllers[train_id].service_brake == True) or \
@@ -187,17 +180,15 @@ class ControlSystem:
         #     self.p_controllers[train_id].service_brake = True
         #     signals.train_model_gui_receive_service_brake.emit(train_id, self.p_controllers[train_id].service_brake)
 
-        #print("Service brake: " + str(self.p_controllers[train_id].service_brake))
+        print("Service brake: " + str(self.p_controllers[train_id].service_brake))
 
     def swtrain_update_command_speed(self, train_id, command_speed):
         """Update command speed in train controller"""
         self.p_controllers[train_id].command_speed = command_speed
-        signals.train_model_update_command_speed.emit(train_id, command_speed)
-        #print("Command speed: " + str(command_speed))
+        print("Command speed: " + str(command_speed))
 
     def swtrain_receive_beacon(self, train_id, beacon):
         """Receive beacon from train model"""
-        #print("Train received beacon")
         # Turn service brake on and notify train model
         self.p_controllers[train_id].service_brake = beacon.service_brake
         signals.train_model_gui_receive_service_brake.emit(train_id, self.p_controllers[train_id].service_brake)
@@ -220,15 +211,12 @@ class ControlSystem:
         self.swtrain_gui_toggle_cabin_lights(train_id)
         self.swtrain_gui_toggle_damn_doors(train_id)
         self.swtrain_gui_announce_stations(train_id)
-        signals.swtrain_update_gui.emit()
         # Wait one minute at stop
-        # current_minute = timekeeper.current_time_min
-        # current_second = timekeeper.current_time_sec
-        time.sleep(60 * timekeeper.time_factor)
-        # while(current_minute == timekeeper.current_time_min or current_second != timekeeper.current_time_sec):
-        #     logger.critical("Current speed of train {} is {}".format(train_id, self.p_controllers[train_id].current_speed))
-        #     assert self.p_controllers[train_id].current_speed == 0
-        #     time.sleep(1)
+        current_minute = timekeeper.current_time_min
+        while(current_minute == timekeeper.current_time_min):
+            logger.critical("Current speed of train {} is {}".format(train_id, self.p_controllers[train_id].current_speed))
+            assert self.p_controllers[train_id].current_speed == 0
+            time.sleep(1)
         logger.critical("A minute has passed for train {}".format(train_id))
 
         # Restart the power loop for this train
@@ -246,7 +234,7 @@ class ControlSystem:
 
     def swtrain_resolve_failure(self, train_id):
         """Resolves failure in train controller"""
-        #print("Did you try to resolve the failure")
+        print("Did you try to resolve the failure")
         # Pull emergency brake
         self.swtrain_gui_pull_ebrake(train_id)
         # Begin train failure resolution process
@@ -265,23 +253,13 @@ class ControlSystem:
         self.p_controllers[train_id].engine_failure = False
         self.p_controllers[train_id].brake_failure = False
 
-        #print("Failure resolved:")
+        print("Failure resolved:")
         # Release service brake
         self.swtrain_gui_press_service_brake(train_id)
 
         # Tell train model failure has been resolved
         signals.train_model_resolve_failure.emit(train_id)
         # Train will resume moving once driver pulls emergency brake
-
-    def swtrain_receive_track_circuit(self, train_id, track_circuit):
-        """ Decode track circuit to find command speed and authority """
-        #print("Track circuit received for train " + str(train_id))
-        #print("Authority received: " + str(track_circuit.authority) )
-        #print("Command Speed received: " + str(track_circuit.command_speed) )
-        self.p_controllers[train_id].command_speed = track_circuit.command_speed
-        self.swtrain_update_authority(train_id, track_circuit.authority)
-        # Update command speed in train model
-        signals.train_model_update_command_speed.emit(train_id, track_circuit.command_speed)
 
     ## NonVital Signal Definitions ##
     def swtrain_gui_toggle_cabin_lights(self, train_id):

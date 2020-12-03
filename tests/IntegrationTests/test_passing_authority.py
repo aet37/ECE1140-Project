@@ -19,7 +19,6 @@ def test_passing_authority_green(upload_tracks, download_programs):
     signals.trackmodel_update_authority.disconnect()
     signals.update_occupancy.disconnect()
     signals.train_model_update_direction.disconnect()
-    signals.train_model_receive_track_circuit.disconnect()
 
     # Connect to signal to verify
     signals.trackmodel_update_authority.connect(verify_authority)

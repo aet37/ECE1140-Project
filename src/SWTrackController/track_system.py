@@ -94,9 +94,8 @@ class TrackSystem:
             authority = True
 
         # Pass the dispatch train information to the Track Model
-        track_circuit = TrackCircuit(command_speed, authority)
-        signals.trackmodel_dispatch_train.emit(train_id, destination_block, track_circuit,
-                                                line, route)
+        signals.trackmodel_dispatch_train.emit(train_id, destination_block, command_speed,
+                                               authority, line, route)
 
     # pylint: disable=too-many-branches
     def swtrack_update_occupancies(self, train_id, line, block_id, occupied):
@@ -139,8 +138,8 @@ class TrackSystem:
                     # It only takes one false authority to stop the train
                     if not new_authority:
                         final_authorities[j] = False
-                    logger.debug("New authority of {} found in track controller {} for block "
-                                 "{}".format(new_authority, i, block))
+                    logger.debug("New authority of {} found in track controller {} for train "
+                                 "{} and block {}".format(new_authority, i, train_id, block))
 
         if line == Line.LINE_GREEN:
             signals.update_green_switches.emit(switch_positions)
@@ -157,7 +156,7 @@ class TrackSystem:
                 command_speed = self.suggested_speeds[train_id]
 
             track_circuit = TrackCircuit(command_speed, final_authority)
-            signals.trackmodel_receive_track_circuit.emit(line, block, track_circuit)
+            signals.trackmodel_receive_track_circuit.emit(line, train_id, track_circuit)
 
         # Forward this information to the CTC
         if block_id != 0:

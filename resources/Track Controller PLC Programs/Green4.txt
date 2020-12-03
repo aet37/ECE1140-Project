@@ -1,7 +1,6 @@
 TAG switch = FALSE
 TAG heater = FALSE
 TAG broken = FALSE
-TAG b77O = FALSE
 TAG b78O = FALSE
 TAG b79O = FALSE
 TAG b80O = FALSE
@@ -24,7 +23,6 @@ TAG b100A = TRUE
 TASK<PERIOD=1000> MainTask
     ROUTINE Main
         RUNG
-            XIO b77O
             XIO b78O
             XIO b79O
             XIO b80O
