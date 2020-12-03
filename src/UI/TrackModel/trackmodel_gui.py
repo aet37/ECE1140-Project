@@ -245,15 +245,24 @@ class TrackModelUi(QtWidgets.QMainWindow):
 
 
     def getFileName(self):
+        message = QMessageBox()
+        message.setIcon(QMessageBox.Critical)
+        message.setWindowTitle("Error")
+        
         dialog = QtWidgets.QFileDialog(self)
         fileInfo = dialog.getOpenFileName(self)
-        records = pyexcel.get_sheet(file_name = fileInfo[0])
-        records.name_columns_by_row(0)
-        line = records.column['Line'][1]
-        totalBlocks = records.number_of_rows()
+        if (".xlsx" in fileInfo[0]):
+            records = pyexcel.get_sheet(file_name = fileInfo[0])
+            records.name_columns_by_row(0)
+            line = records.column['Line'][1]
+            totalBlocks = records.number_of_rows()
 
-        TrackModelDef.SignalHandler.readInData(fileInfo)
-        self.addTab(line, totalBlocks)
+            TrackModelDef.SignalHandler.readInData(fileInfo)
+            self.addTab(line, totalBlocks)
+        else:
+            message.setText("Incorrect file type! Try again")
+            message.exec_()
+
 
     def addTab(self, line, totalBlocks):
         global tabsAdded
